@@ -1,0 +1,359 @@
+[
+    {
+        "name": "USD"
+    },
+    {
+        "name": "CAD"
+    },
+    {
+        "name": "EUR"
+    },
+    {
+        "name": "AED"
+    },
+    {
+        "name": "AFN"
+    },
+    {
+        "name": "ALL"
+    },
+    {
+        "name": "AMD"
+    },
+    {
+        "name": "ARS"
+    },
+    {
+        "name": "AUD"
+    },
+    {
+        "name": "AZN"
+    },
+    {
+        "name": "BAM"
+    },
+    {
+        "name": "BDT"
+    },
+    {
+        "name": "BGN"
+    },
+    {
+        "name": "BHD"
+    },
+    {
+        "name": "BIF"
+    },
+    {
+        "name": "BND"
+    },
+    {
+        "name": "BOB"
+    },
+    {
+        "name": "BRL"
+    },
+    {
+        "name": "BWP"
+    },
+    {
+        "name": "BYN"
+    },
+    {
+        "name": "BZD"
+    },
+    {
+        "name": "CDF"
+    },
+    {
+        "name": "CHF"
+    },
+    {
+        "name": "CLP"
+    },
+    {
+        "name": "CNY"
+    },
+    {
+        "name": "COP"
+    },
+    {
+        "name": "CRC"
+    },
+    {
+        "name": "CVE"
+    },
+    {
+        "name": "CZK"
+    },
+    {
+        "name": "DJF"
+    },
+    {
+        "name": "DKK"
+    },
+    {
+        "name": "DOP"
+    },
+    {
+        "name": "DZD"
+    },
+    {
+        "name": "EEK"
+    },
+    {
+        "name": "EGP"
+    },
+    {
+        "name": "ERN"
+    },
+    {
+        "name": "ETB"
+    },
+    {
+        "name": "GBP"
+    },
+    {
+        "name": "GEL"
+    },
+    {
+        "name": "GHS"
+    },
+    {
+        "name": "GNF"
+    },
+    {
+        "name": "GTQ"
+    },
+    {
+        "name": "HKD"
+    },
+    {
+        "name": "HNL"
+    },
+    {
+        "name": "HRK"
+    },
+    {
+        "name": "HUF"
+    },
+    {
+        "name": "IDR"
+    },
+    {
+        "name": "ILS"
+    },
+    {
+        "name": "INR"
+    },
+    {
+        "name": "IQD"
+    },
+    {
+        "name": "IRR"
+    },
+    {
+        "name": "ISK"
+    },
+    {
+        "name": "JMD"
+    },
+    {
+        "name": "JOD"
+    },
+    {
+        "name": "JPY"
+    },
+    {
+        "name": "KES"
+    },
+    {
+        "name": "KHR"
+    },
+    {
+        "name": "KMF"
+    },
+    {
+        "name": "KRW"
+    },
+    {
+        "name": "KWD"
+    },
+    {
+        "name": "KZT"
+    },
+    {
+        "name": "LBP"
+    },
+    {
+        "name": "LKR"
+    },
+    {
+        "name": "LTL"
+    },
+    {
+        "name": "LVL"
+    },
+    {
+        "name": "LYD"
+    },
+    {
+        "name": "MAD"
+    },
+    {
+        "name": "MDL"
+    },
+    {
+        "name": "MGA"
+    },
+    {
+        "name": "MKD"
+    },
+    {
+        "name": "MMK"
+    },
+    {
+        "name": "MOP"
+    },
+    {
+        "name": "MUR"
+    },
+    {
+        "name": "MXN"
+    },
+    {
+        "name": "MYR"
+    },
+    {
+        "name": "MZN"
+    },
+    {
+        "name": "NAD"
+    },
+    {
+        "name": "NGN"
+    },
+    {
+        "name": "NIO"
+    },
+    {
+        "name": "NOK"
+    },
+    {
+        "name": "NPR"
+    },
+    {
+        "name": "NZD"
+    },
+    {
+        "name": "OMR"
+    },
+    {
+        "name": "PAB"
+    },
+    {
+        "name": "PEN"
+    },
+    {
+        "name": "PHP"
+    },
+    {
+        "name": "PKR"
+    },
+    {
+        "name": "PLN"
+    },
+    {
+        "name": "PYG"
+    },
+    {
+        "name": "QAR"
+    },
+    {
+        "name": "RON"
+    },
+    {
+        "name": "RSD"
+    },
+    {
+        "name": "RUB"
+    },
+    {
+        "name": "RWF"
+    },
+    {
+        "name": "SAR"
+    },
+    {
+        "name": "SDG"
+    },
+    {
+        "name": "SEK"
+    },
+    {
+        "name": "SGD"
+    },
+    {
+        "name": "SOS"
+    },
+    {
+        "name": "SYP"
+    },
+    {
+        "name": "THB"
+    },
+    {
+        "name": "TND"
+    },
+    {
+        "name": "TOP"
+    },
+    {
+        "name": "TRY"
+    },
+    {
+        "name": "TTD"
+    },
+    {
+        "name": "TWD"
+    },
+    {
+        "name": "TZS"
+    },
+    {
+        "name": "UAH"
+    },
+    {
+        "name": "UGX"
+    },
+    {
+        "name": "UYU"
+    },
+    {
+        "name": "UZS"
+    },
+    {
+        "name": "VEF"
+    },
+    {
+        "name": "VND"
+    },
+    {
+        "name": "XAF"
+    },
+    {
+        "name": "XOF"
+    },
+    {
+        "name": "YER"
+    },
+    {
+        "name": "ZAR"
+    },
+    {
+        "name": "ZMK"
+    },
+    {
+        "name": "ZWL"
+    }
+]
