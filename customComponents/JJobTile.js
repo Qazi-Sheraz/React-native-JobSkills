@@ -1,5 +1,12 @@
-import {StyleSheet, Image, View, TouchableOpacity} from 'react-native';
-import React from 'react';
+import {
+  StyleSheet,
+  Image,
+  View,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
+
+import React, {memo, useContext} from 'react';
 import {
   heightPercentageToDP,
   widthPercentageToDP,
@@ -9,7 +16,12 @@ import {RFPercentage} from 'react-native-responsive-fontsize';
 import JText from './JText';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import JStatusChecker from './JStatusChecker';
-export default function JJobTile({
+import {useState} from 'react';
+import {StoreContext} from '../mobx/store';
+import {_saveToFavoriteList} from '../functions/Candidate/BottomTab.js';
+import {observer} from 'mobx-react';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+function JJobTile({
   isempty = false,
   img,
   title,
@@ -21,7 +33,12 @@ export default function JJobTile({
   bookmarked,
   onIconPress,
   status,
+  favouriteData = [],
+  jobId,
 }) {
+  const [loader, setLoader] = useState();
+  const store = useContext(StoreContext);
+
   return isempty === true ? (
     <View
       style={{
@@ -94,18 +111,38 @@ export default function JJobTile({
               {category}
             </JText>
           </View>
-          <FontAwesome
-            onPress={onIconPress}
-            style={{
-              alignSelf: 'flex-start',
-              paddingTop: RFPercentage(2),
-              zIndex: 9999,
-              width: '10%',
-            }}
-            name={bookmarked ? 'heart' : 'heart-o'}
-            size={RFPercentage(3)}
-            color={colors.purple[0]}
-          />
+
+          {loader ? (
+            <ActivityIndicator
+              style={{
+                fontSize: RFPercentage(3.5),
+                alignSelf: 'flex-start',
+                paddingTop: RFPercentage(2),
+                zIndex: 9999,
+                width: '10%',
+              }}
+              color={colors.purple[0]}
+            />
+          ) : (
+            <MaterialCommunityIcons
+              onPress={() => {
+                _saveToFavoriteList(store, setLoader, jobId);
+              }}
+              style={{
+                alignSelf: 'flex-start',
+                paddingTop: RFPercentage(2),
+                zIndex: 9999,
+                width: '10%',
+              }}
+              name={
+                favouriteData.some(item => item.job_id === jobId)
+                  ? 'star'
+                  : 'star-outline'
+              }
+              size={RFPercentage(3.5)}
+              color={colors.purple[0]}
+            />
+          )}
         </View>
       ) : type === 'company' ? (
         <View
@@ -183,5 +220,5 @@ export default function JJobTile({
     </View>
   );
 }
-
+export default memo(observer(JJobTile));
 const styles = StyleSheet.create({});

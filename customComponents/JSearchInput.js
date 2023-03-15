@@ -4,47 +4,52 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import {heightPercentageToDP} from 'react-native-responsive-screen';
 import colors from '../config/colors';
+import JShadowView from './JShadowView';
 
 export default function JSearchInput({
   onChangeText,
   containerStyle,
   inputStyle,
-  placeholderTextColor = colors.searchPlaceholder[0],
+  placeholderTextColor = colors.placeHolderColor[0],
   placeholder = 'Search',
   iconContainerStyle,
   onPressIcon,
+  autoFocus = false,
+  length,
 }) {
-  return (
-    <View
-      style={[
+  return length > 0 ? (
+    <JShadowView
+      shadowColor={colors.purple[0]}
+      containerStyle={[
         {
-          height: heightPercentageToDP(5),
+          height: heightPercentageToDP(6),
           marginVertical: RFPercentage(3),
-          backgroundColor: colors.searchBackground[0],
+          backgroundColor: colors.white[0],
           borderWidth: RFPercentage(0.1),
-          borderColor: colors.inputBorder[0],
+          borderColor: `${colors.purple[0]}50`,
           flexDirection: 'row',
           alignItems: 'center',
           paddingHorizontal: RFPercentage(2),
         },
         containerStyle,
       ]}>
+      <AntDesign
+        style={{marginRight: RFPercentage(1)}}
+        name="search1"
+        color={colors.placeHolderColor[0]}
+        size={RFPercentage(2.5)}
+      />
+
       <TextInput
-        style={[{width: '90%'}, inputStyle]}
+        autoFocus={autoFocus}
+        style={[{width: '100%'}, inputStyle]}
         placeholder={placeholder}
         placeholderTextColor={placeholderTextColor}
         onChangeText={onChangeText}
       />
-      <Pressable
-        onPress={onPressIcon}
-        style={[{alignItems: 'flex-end', width: '10%'}, iconContainerStyle]}>
-        <AntDesign
-          name="search1"
-          color={colors.searchPlaceholder[0]}
-          size={RFPercentage(3.5)}
-        />
-      </Pressable>
-    </View>
+    </JShadowView>
+  ) : (
+    <View style={{marginTop: RFPercentage(2)}} />
   );
 }
 

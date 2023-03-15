@@ -18,15 +18,9 @@ export default function CLHome() {
         }}>
         <View
           style={{
-            width: widthPercentageToDP(80),
+            width: widthPercentageToDP(90),
             height: heightPercentageToDP(5),
             marginRight: RFPercentage(1),
-          }}
-        />
-        <View
-          style={{
-            width: widthPercentageToDP(10),
-            height: heightPercentageToDP(5),
           }}
         />
       </View>

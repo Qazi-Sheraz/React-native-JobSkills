@@ -5,6 +5,7 @@ import {
   View,
   TouchableOpacity,
   Image,
+  Platform,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import colors from '../config/colors';
@@ -46,7 +47,7 @@ export default function JScreen({
     <SafeAreaView
       style={{
         flex: 1,
-        backgroundColor: colors.screenBackground[0],
+        backgroundColor: '#ffffff',
       }}>
       {headerShown && header}
 
@@ -137,7 +138,10 @@ export default function JScreen({
         <View style={[styles.container, style]}>{children}</View>
       )}
 
-      <StatusBar barStyle="dark-content" hidden={false} />
+      <StatusBar
+        barStyle={Platform.OS === 'ios' ? 'dark-content' : 'default'}
+        hidden={false}
+      />
     </SafeAreaView>
   );
 }

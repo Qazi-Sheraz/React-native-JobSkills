@@ -6,7 +6,7 @@ export default function JGradientView({
   children,
   flexDirection = 'column',
   onPress,
-  colors = ['#9400ff90', 'rgba(0, 0, 0, 1)'],
+  colors = ['#9A67C6', '#800FD2', '#6E2F9B', '#3A1257'],
 }) {
   return (
     <Pressable onPress={onPress}>

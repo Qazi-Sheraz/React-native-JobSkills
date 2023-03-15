@@ -4,9 +4,16 @@ import JScreen from '../../customComponents/JScreen';
 
 import {StoreContext} from '../../mobx/store';
 import {observer} from 'mobx-react';
-function Notification({navigation}) {
+import JText from '../../customComponents/JText';
+function Notification({navigation, route}) {
   const store = useContext(StoreContext);
-  return <JScreen></JScreen>;
+  const params = route.params || {};
+  const {id} = params;
+  return (
+    <JScreen>
+      <JText>{id}</JText>
+    </JScreen>
+  );
 }
 
 export default observer(Notification);

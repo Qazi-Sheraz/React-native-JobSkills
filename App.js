@@ -1,15 +1,20 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StoreProvider} from './mobx/store';
 import {NavigationContainer} from '@react-navigation/native';
 import MyDrawer from './drawer/MyDrawer';
 import {MenuProvider} from 'react-native-popup-menu';
-import Login from './screens/Login/Login';
+
 import Toast from 'react-native-toast-message';
-import Home from './screens/Home/Home';
+
+import {linking} from './linking';
+
 export default function App() {
   return (
     <StoreProvider>
-      <NavigationContainer>
+      <NavigationContainer
+        linking={linking}
+        //fallback={<ActivityIndicator color={colors.primary[0]} size="small" />}
+      >
         <MenuProvider>
           <MyDrawer />
 

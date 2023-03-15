@@ -1,9 +1,9 @@
 import {StyleSheet, FlatList, RefreshControl} from 'react-native';
-import React, {useEffect, useContext, useCallback, useState} from 'react';
+import React, {useContext, useCallback} from 'react';
 import JScreen from '../../customComponents/JScreen';
 import JText from '../../customComponents/JText';
 import {StoreContext} from '../../mobx/store';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 import JJobTile from '../../customComponents/JJobTile';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 
@@ -13,61 +13,25 @@ import JSearchInput from '../../customComponents/JSearchInput';
 import CLFavouriteJob from '../../loaders/Candidate/FavouriteJob/CLFavouriteJob';
 import JEmpty from '../../customComponents/JEmpty';
 import JGradientHeader from '../../customComponents/JGradientHeader';
-import url from '../../config/url';
-import Toast from 'react-native-toast-message';
-function Favourite() {
+import {_getFavouriteJobData} from '../../functions/Candidate/BottomTab';
+function Favourite({navigation}) {
   const store = useContext(StoreContext);
-
-  const [input, setInput] = useState('');
-  const [error, setError] = useState(false);
-  const [loader, setLoader] = useState(true);
-  const getFavouriteJobList = () => {
-    var myHeaders = new Headers();
-    myHeaders.append('Authorization', `Bearer ${store.token}`);
-
-    var requestOptions = {
-      method: 'GET',
-      headers: myHeaders,
-      redirect: 'follow',
-    };
-
-    fetch(`${url.baseUrl}/favourite-jobs`, requestOptions)
-      .then(response => response.json())
-      .then(res => {
-        setLoader(true);
-        setError(false);
-        setInput('');
-        store.setFavouriteList(res.data);
-        setLoader(false);
-      })
-      .catch(error => {
-        Toast.show({
-          type: 'error',
-          text1: 'Error',
-          text2: error.response && error.response.data,
-        });
-        setError(true);
-      });
-  };
 
   const onRefresh = useCallback(() => {
     store.setIsRefreshing(true);
-    getFavouriteJobList();
-    store.setIsRefreshing(false);
-  }, []);
 
-  useEffect(() => {
-    getFavouriteJobList();
-
-    return () => {};
+    setTimeout(() => {
+      _getFavouriteJobData(store);
+      store.setIsRefreshing(false);
+    }, 2000);
   }, []);
 
   return (
     <JScreen
-      onTryAgainPress={() => getFavouriteJobList()}
-      isError={error}
+      onTryAgainPress={() => _getFavouriteJobData(store)}
+      isError={store.favouriteApiError}
       errorText={'Reload Screen!'}
-      onReloadPress={() => getFavouriteJobList()}
+      onReloadPress={() => _getFavouriteJobData(store)}
       header={
         <JGradientHeader
           center={
@@ -81,13 +45,14 @@ function Favourite() {
         />
       }
       style={{marginHorizontal: RFPercentage(2)}}>
-      {loader === true ? (
+      {store.favouriteApiLoader === true ? (
         <CLFavouriteJob />
       ) : (
         <React.Fragment>
           <JSearchInput
+            length={store.favouriteList.length}
             onChangeText={e => {
-              setInput(e);
+              store.setFavouriteInput(e);
             }}
             onPressIcon={() => alert('Icon Pressed')}
           />
@@ -99,25 +64,34 @@ function Favourite() {
               />
             }
             data={
-              input.length === 0
+              store.favouriteInput.length === 0
                 ? store.favouriteList
                 : store.favouriteList.filter(e =>
-                    e.job.job_title.toLowerCase().includes(input.toLowerCase()),
+                    e.job_title
+                      .toLowerCase()
+                      .includes(store.favouriteInput.toLowerCase()),
                   )
             }
             ListEmptyComponent={() => <JEmpty />}
             showsVerticalScrollIndicator={false}
             renderItem={({item}) => (
               <JJobTile
+                favouriteData={store.favouriteList}
+                jobId={item.job_id}
+                onPress={() =>
+                  navigation.navigate('CSelectedJob', {
+                    id: item.job_unique_id,
+                  })
+                }
                 type="job"
                 containerStyle={{marginBottom: RFPercentage(2)}}
-                img={item.job.company.company_url}
-                title={item.job.job_title}
-                location={item.job.city.name}
-                category={item.job.job_category.name}
+                img={item.company_url}
+                title={item.job_title}
+                location={item.country_name}
+                category={item.job_category}
               />
             )}
-            keyExtractor={data => data.id}
+            keyExtractor={(item, index) => index}
           />
         </React.Fragment>
       )}

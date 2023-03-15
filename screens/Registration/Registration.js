@@ -23,60 +23,63 @@ export default function Registration({navigation, route}) {
   const [loader, setLoader] = useState(false);
 
   const _register = values => {
-    var FormData = require('form-data');
-    var data = new FormData();
-    data.append('email', values.email);
-    data.append('password', values.password);
+    var myHeaders = new Headers();
+    myHeaders.append('Accept', 'application/json');
 
-    var config = {
-      method: 'post',
-      url: `${url.baseUrl}/users/login`,
+    var formdata = new FormData();
+    formdata.append('type', route.params?.type == 1 ? '1' : '0');
+    formdata.append('email', values.email);
+    formdata.append('password', values.password);
+    formdata.append('first_name', values.name);
+    formdata.append('password_confirmation', values.confirmPassword);
+    formdata.append('privacyPolicy', values.policy ? '1' : '0');
 
-      data: data,
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: formdata,
+      redirect: 'follow',
     };
     setLoader(true);
-    var FormData = require('form-data');
-    var data = new FormData();
-    data.append('first_name', values.name);
-    data.append('email', values.email);
-    data.append('password_confirmation', values.confirmPassword);
-    data.append('password', values.password);
-    data.append('type', values.type);
-    data.append('privacyPolicy', values.policy ? 1 : 0);
+    fetch('https://dev.jobskills.digital/api/users/register', requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        console.log(result);
+        // console.log('Response', JSON.stringify(response.token));
+        if (result.success == false) {
+          Toast.show({
+            type: 'error',
+            text1: 'Register Error',
+            text2: result.message,
+          });
+        } else {
+          Toast.show({
+            type: 'success',
+            text1: 'Register Successfully',
+            text2: 'Kindly check your Email',
+          });
+          navigation.navigate('CLogin', {
+            type: route.params,
+            email: values.email,
+            password: values.password,
+          });
+        }
 
-    var config = {
-      method: 'post',
-      url: `${url.baseUrl}/users/register`,
-
-      data: data,
-    };
-
-    axios(config)
-      .then(function (response) {
-        console.log('Response', JSON.stringify(response.data.token));
-
-        Toast.show({
-          type: 'success',
-          text1: 'Register Successfully',
-          text2: 'Kindly check your Email',
-        });
         setLoader(false);
         // navigation.navigate('CVerifiedEmail', {
         //   email: values.email,
         //   password: values.password,
         //   type: route.params.type,
         // });
-        navigation.navigate('CLogin');
       })
-
-      .catch(function (error) {
+      .catch(error => {
+        console.log('Error', error);
         Toast.show({
           type: 'error',
           text1: 'Error',
           text2: error.response && error.response.data,
         });
         setLoader(false);
-        // console.log(error.response.data);
       });
   };
   return (
@@ -92,7 +95,7 @@ export default function Registration({navigation, route}) {
       </View>
       <Formik
         initialValues={{
-          type: route.params.type.type,
+          // type: route.params.type.type,
           email: '',
           password: '',
           name: '',
@@ -116,7 +119,7 @@ export default function Registration({navigation, route}) {
             .required('Email is a required field'),
           password: yup
             .string()
-            .min(6, 'Password Must be at least 6 characters')
+            .min(8, 'Password Must be at least 8 characters')
             .max(10, 'Password must be at most 10 characters')
             .required('Password is a required field'),
           confirmPassword: yup
@@ -253,6 +256,7 @@ export default function Registration({navigation, route}) {
                   paddingLeft: RFPercentage(1),
                 }}>
                 <CheckBox
+                  tintColors={{true: colors.purple[0], false: 'black'}}
                   boxType="square"
                   value={values.policy}
                   onValueChange={value => setFieldValue('policy', value)}
@@ -275,7 +279,13 @@ export default function Registration({navigation, route}) {
                 isValid={isValid}
                 style={{marginTop: RFPercentage(3)}}
                 onPress={() => handleSubmit()}
-                children={loader ? 'Loading...' : 'Register'}
+                children={
+                  loader
+                    ? 'Loading...'
+                    : `Register as ${
+                        route.params?.type === 1 ? 'Candidate' : 'Emplyee'
+                      }`
+                }
               />
             </ScrollView>
           </View>
@@ -303,7 +313,9 @@ export default function Registration({navigation, route}) {
       </View>
 
       <JFooter
-        onPress={() => navigation.navigate('CLogin')}
+        onPress={() =>
+          navigation.navigate('CLogin', {type: route.params?.type})
+        }
         children={'Already have an account? Login'}
       />
     </JScreen>

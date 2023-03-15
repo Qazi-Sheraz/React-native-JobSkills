@@ -1,10 +1,14 @@
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Image,
+  Linking,
+  StyleSheet,
+  View,
+} from 'react-native';
 import React, {useEffect, useRef} from 'react';
 import JScreen from '../../../customComponents/JScreen';
-import JGradientHeader from '../../../customComponents/JGradientHeader';
 import {heightPercentageToDP} from 'react-native-responsive-screen';
 import {useState} from 'react';
-import axios from 'axios';
 import url from '../../../config/url';
 import Toast from 'react-native-toast-message';
 import JGradientView from '../../../customComponents/JGradientView';
@@ -28,28 +32,43 @@ import {
 import Entypo from 'react-native-vector-icons/Entypo';
 import CLSelectedJob from '../../../loaders/Candidate/SelectedJob/CLSelectedJob';
 import JTagText from '../../../customComponents/JTagText';
-export default function SelectedJob({route, navigation}) {
+import {useCallback} from 'react';
+import {useContext} from 'react';
+import {StoreContext} from '../../../mobx/store';
+import JApplyJob from '../../../customComponents/JApplyJob';
+import JRow from '../../../customComponents/JRow';
+import {_saveToFavoriteList} from '../../../functions/Candidate/BottomTab';
+import {observer, useObserver} from 'mobx-react';
+function SelectedJob({route, navigation}) {
   const [jobData, setJobData] = useState({});
   const [loader, setLoader] = useState(true);
+  const [starLoader, setStarLoader] = useState(false);
+  const [status, setStatus] = useState({});
   const [error, setError] = useState();
-  const [id, setId] = useState(route.params.id);
   const refRBSheet = useRef();
   const simpleText = RFPercentage(2);
+  const store = useContext(StoreContext);
+
   const headingWeight = {
     weight: 'bold',
     size: RFPercentage(3),
   };
 
   const _getDetail = () => {
-    var config = {
-      method: 'get',
-      url: `${url.baseUrl}/job-details/${id}`,
+    var myHeaders = new Headers();
+    myHeaders.append('Authorization', `Bearer ${store.token.token}`);
+
+    var requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow',
     };
 
-    axios(config)
+    fetch(`${url.baseUrl}/job-details/${route.params.id}`, requestOptions)
+      .then(response => response.json())
       .then(function (response) {
-        //console.log(response.data);
-        setJobData(response.data);
+        console.log('Get Selected Job Data', response.data);
+        setJobData(response);
         setLoader(false);
       })
       .catch(function (error) {
@@ -63,11 +82,12 @@ export default function SelectedJob({route, navigation}) {
         setLoader(false);
       });
   };
+
   useEffect(() => {
     _getDetail();
 
     return () => {};
-  }, []);
+  }, [route.params.id]);
 
   return loader ? (
     <CLSelectedJob />
@@ -96,13 +116,27 @@ export default function SelectedJob({route, navigation}) {
               flexDirection: 'row',
               alignItems: 'center',
             }}>
-            <FontAwesome
-              style={{marginRight: RFPercentage(2)}}
-              onPress={() => alert('Star')}
-              name="star-o"
-              size={RFPercentage(3.5)}
-              color={colors.white[0]}
-            />
+            {starLoader ? (
+              <ActivityIndicator
+                size={RFPercentage(3.5)}
+                style={{marginRight: RFPercentage(2)}}
+                color={colors.white[0]}
+              />
+            ) : (
+              <FontAwesome
+                style={{marginRight: RFPercentage(2)}}
+                onPress={() =>
+                  _saveToFavoriteList(store, setStarLoader, jobData.job.id)
+                }
+                name={
+                  store.favouriteList.some(e => e.job_id === jobData.job.id)
+                    ? 'star'
+                    : 'star-o'
+                }
+                size={RFPercentage(3.5)}
+                color={colors.white[0]}
+              />
+            )}
 
             <Menu>
               <MenuTrigger>
@@ -232,22 +266,82 @@ export default function SelectedJob({route, navigation}) {
               />
               <JText fontColor={colors.white[0]} fontSize={simpleText}>
                 Posted :
-                {moment(jobData.job.job_publish_date).format('DD MMMM YYYY')}
+                {moment(jobData.job.job_publish_date).format('DD MMM YYYY')}
               </JText>
             </View>
           </View>
           <JText fontColor={colors.white[0]} fontSize={simpleText}>
-            Expiry :{moment(jobData.job.job_expiry_date).format('DD MMMM YYYY')}
+            Expiry :{moment(jobData.job.job_expiry_date).format('DD MMM YYYY')}
           </JText>
         </View>
         <JText
           fontAlign="right"
           fontWeight={headingWeight.weight}
           fontColor={colors.white[0]}>
-          Open Jobs:{jobData.data.jobsCount}
+          Open Jobs: {jobData.data.jobsCount}
         </JText>
       </JGradientView>
-      <JScrollView style={{paddingHorizontal: RFPercentage(3)}} enable={false}>
+      {status.success == false && status.message === '3' ? (
+        <JRow
+          style={{
+            paddingHorizontal: RFPercentage(1),
+            paddingVertical: RFPercentage(1),
+            backgroundColor: colors.danger[0],
+            justifyContent: 'center',
+          }}>
+          <JText fontColor={colors.white[0]} fontWeight="bold">
+            Assessment Required
+          </JText>
+          <JText
+            onPress={() =>
+              Linking.openURL(
+                `https://dev.jobskills.digital/job-details/${jobData.job.job_id}`,
+              )
+            }
+            style={{marginLeft: RFPercentage(1)}}
+            fontColor={colors.primary[0]}
+            fontWeight="bold">
+            {'Click Here'}
+          </JText>
+        </JRow>
+      ) : status.success == false && status.message === '2' ? (
+        <JRow
+          style={{
+            paddingHorizontal: RFPercentage(1),
+            paddingVertical: RFPercentage(1),
+            backgroundColor: colors.danger[0],
+            justifyContent: 'center',
+          }}>
+          <JText fontColor={colors.white[0]} fontWeight="bold">
+            Upload Your CV
+          </JText>
+          <JText
+            onPress={() => navigation.navigate('Resume')}
+            style={{marginLeft: RFPercentage(1)}}
+            fontColor={colors.primary[0]}
+            fontWeight="bold">
+            {'Click Here'}
+          </JText>
+        </JRow>
+      ) : status.success == false && status.message === '1' ? (
+        <JRow
+          style={{
+            paddingHorizontal: RFPercentage(1),
+            paddingVertical: RFPercentage(1),
+            backgroundColor: colors.green[0],
+            justifyContent: 'center',
+          }}>
+          <JText fontColor={colors.white[0]} fontWeight="bold">
+            Already Applied
+          </JText>
+        </JRow>
+      ) : null}
+      <JScrollView
+        contentContainerStyle={{
+          paddingBottom: RFPercentage(10),
+        }}
+        style={{paddingHorizontal: RFPercentage(3)}}
+        enable={false}>
         <JText
           style={{marginTop: RFPercentage(1.5)}}
           fontSize={headingWeight.size}>
@@ -397,14 +491,13 @@ export default function SelectedJob({route, navigation}) {
           </JText>
         )}
       </JScrollView>
-      <JButton
-        onPress={() => alert('Apply')}
-        style={{
-          width: '60%',
-          height: heightPercentageToDP(5),
-          marginBottom: RFPercentage(2),
-        }}
-        children={'Apply Job'}
+
+      <JApplyJob
+        status={status}
+        setStatus={setStatus}
+        id={jobData.job.id}
+        token={store.token.token}
+        jobId={jobData.job.job_id}
       />
 
       <RBSheet
@@ -453,7 +546,7 @@ export default function SelectedJob({route, navigation}) {
     </JScreen>
   );
 }
-
+export default observer(SelectedJob);
 const styles = StyleSheet.create({
   jobDetails: {
     flexDirection: 'row',

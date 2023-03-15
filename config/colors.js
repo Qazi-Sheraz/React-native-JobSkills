@@ -23,4 +23,7 @@ export default {
   selected: ['#17A2B8'],
   shortlisted: ['#28A745'],
   interview_scheduled: ['#E7AE02'],
+  searchIcon: ['#411661'],
+  border: ['#EBEBEB'],
+  green: ['#3BB557'],
 };

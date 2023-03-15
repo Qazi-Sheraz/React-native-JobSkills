@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View, TouchableOpacity} from 'react-native';
+import {StyleSheet, View, TouchableOpacity, Image} from 'react-native';
 import {
   DrawerContentScrollView,
   DrawerItemList,
@@ -19,104 +19,165 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import pkg from '../package.json';
-export default function CustomDrawerContent(props) {
+import {useContext} from 'react';
+import {StoreContext} from '../mobx/store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message';
+import {observer, Observer} from 'mobx-react';
+function CustomDrawerContent(props) {
+  const store = useContext(StoreContext);
+  const user = store.token?.user;
+  const _navigateToScreen = index => {
+    props.navigation.closeDrawer();
+    index === 0
+      ? props.navigation.navigate('Profile')
+      : index === 1
+      ? props.navigation.navigate('CAllJobs')
+      : index === 2
+      ? props.navigation.navigate('DJobAlert')
+      : index === 3
+      ? props.navigation.navigate('DFollowings')
+      : index === 4
+      ? props.navigation.navigate('DHelpCenter')
+      : AsyncStorage.removeItem('@login')
+          .then(res => {
+            store.setToken({
+              token: null,
+            });
+
+            Toast.show({
+              type: 'success',
+              text1: 'Logout Successfully',
+            });
+          })
+          .catch(error => {
+            Toast.show({
+              type: 'error',
+              text1: 'Error',
+              text2: 'Error while removing token',
+            });
+          });
+  };
+
+  const _navigationIcons = index =>
+    index === 0 ? (
+      <Ionicons
+        color={colors.black[0]}
+        name="settings-outline"
+        size={RFPercentage(3.5)}
+      />
+    ) : index === 1 ? (
+      <Ionicons
+        color={colors.black[0]}
+        name="ios-briefcase-outline"
+        size={RFPercentage(3.5)}
+      />
+    ) : index === 2 ? (
+      <MaterialCommunityIcons
+        color={colors.black[0]}
+        name="bell-ring-outline"
+        size={RFPercentage(3.5)}
+      />
+    ) : index === 3 ? (
+      <Feather color={colors.black[0]} name="users" size={RFPercentage(3.5)} />
+    ) : index === 5 ? (
+      <MaterialIcons
+        color={colors.black[0]}
+        name="logout"
+        size={RFPercentage(3.5)}
+      />
+    ) : (
+      <Feather
+        color={colors.black[0]}
+        name="help-circle"
+        size={RFPercentage(3.5)}
+      />
+    );
   return (
     <DrawerContentScrollView {...props}>
       {/* <DrawerItemList {...props} /> */}
       {/* <DrawerItem label="Help" onPress={() => alert('Link to help')} /> */}
-      <View
-        style={{
-          paddingVertical: RFPercentage(3),
-
-          alignItems: 'center',
-          borderBottomColor: colors.inputBorder[0],
-          borderBottomWidth: RFPercentage(0.1),
-          flexDirection: 'row',
-        }}>
+      <View style={{height: heightPercentageToDP(100)}}>
         <View
           style={{
-            width: '30%',
-            justifyContent: 'center',
+            paddingVertical: RFPercentage(2),
+
             alignItems: 'center',
+            borderBottomColor: colors.inputBorder[0],
+            borderBottomWidth: RFPercentage(0.1),
           }}>
           <View
             style={{
               height: RFPercentage(8),
               width: RFPercentage(8),
-
-              borderRadius: RFPercentage(4),
-              backgroundColor: colors.isValid[0],
-            }}></View>
-        </View>
-        <View style={{width: '80%'}}>
-          <JText style={styles.text} fontSize={RFPercentage(2.4)}>
-            Mutahira Syed
-          </JText>
-          <JText style={styles.text}>mutahira.syed@bftech.io</JText>
-          <JText style={styles.text}>Ui/Ux Designer</JText>
-        </View>
-      </View>
-      <View
-        style={{
-          paddingHorizontal: RFPercentage(2),
-          marginTop: RFPercentage(3),
-        }}>
-        {getDrawerItems().map((item, index) => (
-          <TouchableOpacity
-            onPress={() => {
-              props.navigation.navigate('Profile');
-              props.navigation.closeDrawer();
-            }}
-            style={{
-              flexDirection: 'row',
+              backgroundColor: colors.black[0],
+              borderRadius: RFPercentage(8),
+              justifyContent: 'center',
               alignItems: 'center',
-              marginVertical: RFPercentage(1.7),
-            }}
-            key={index}>
-            {index === 0 ? (
-              <Ionicons name="settings-outline" size={RFPercentage(3.5)} />
-            ) : index === 1 ? (
-              <AntDesign name="user" size={RFPercentage(3.8)} />
-            ) : index === 2 ? (
-              <Ionicons name="ios-briefcase-outline" size={RFPercentage(3.5)} />
-            ) : index === 3 ? (
-              <MaterialCommunityIcons
-                name="bell-ring-outline"
-                size={RFPercentage(3.5)}
-              />
-            ) : index === 4 ? (
-              <Feather name="users" size={RFPercentage(3.5)} />
-            ) : index === 6 ? (
-              <MaterialIcons name="logout" size={RFPercentage(3.5)} />
-            ) : (
-              <Feather name="help-circle" size={RFPercentage(3.5)} />
-            )}
-            <JText
-              fontWeight="bold"
-              fontSize={RFPercentage(2)}
-              style={{marginLeft: RFPercentage(2)}}>
-              {item}
-            </JText>
-          </TouchableOpacity>
-        ))}
+              marginBottom: RFPercentage(1),
+            }}>
+            <Image
+              style={{
+                height: RFPercentage(8),
+                width: RFPercentage(8),
+                borderRadius: RFPercentage(8),
+              }}
+              resizeMode="contain"
+              source={{
+                uri: user?.avatar,
+              }}
+            />
+          </View>
+          <JText style={styles.text} fontSize={RFPercentage(2.4)}>
+            {user?.full_name}
+          </JText>
+          <JText style={styles.text}>{user?.email}</JText>
+          {/* <JText style={styles.text}>Ui/Ux Designer</JText> */}
+        </View>
+        <View
+          style={{
+            paddingHorizontal: RFPercentage(2),
+            marginTop: RFPercentage(3),
+          }}>
+          {getDrawerItems().map((item, index) => (
+            <TouchableOpacity
+              onPress={() => _navigateToScreen(index)}
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginVertical: RFPercentage(1.7),
+              }}
+              key={index}>
+              {_navigationIcons(index)}
+              <JText
+                fontWeight="bold"
+                fontSize={RFPercentage(2)}
+                style={{marginLeft: RFPercentage(2)}}>
+                {item}
+              </JText>
+            </TouchableOpacity>
+          ))}
+        </View>
+        <JText
+          fontWeight="bold"
+          fontSize={RFPercentage(2)}
+          fontColor={colors.placeHolderColor[0]}
+          style={{
+            textAlign: 'center',
+            position: 'absolute',
+            bottom: RFPercentage(5),
+            alignSelf: 'center',
+          }}>
+          Version: {pkg.version}
+        </JText>
       </View>
-
-      <JText
-        fontWeight="bold"
-        fontSize={RFPercentage(2)}
-        fontColor={colors.placeHolderColor[0]}
-        style={{
-          marginLeft: RFPercentage(2),
-          textAlign: 'center',
-          marginTop: heightPercentageToDP(25),
-        }}>
-        Version: {pkg.version}
-      </JText>
     </DrawerContentScrollView>
   );
 }
+export default observer(CustomDrawerContent);
 const styles = StyleSheet.create({
   text: {
     marginVertical: RFPercentage(0.3),
+    // color: colors.black[1],
   },
 });

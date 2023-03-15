@@ -25,13 +25,15 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function Login({navigation, route}) {
   const store = useContext(StoreContext);
   const [loader, setLoader] = useState(false);
-  console.log(route);
+  console.log(route?.params?.type);
 
+  const type = route?.params?.type;
   const _storeToken = (token, remember) => {
     if (remember === true) {
-      AsyncStorage.setItem('@login', token)
+      AsyncStorage.setItem('@login', JSON.stringify(token))
         .then(res => {
           store.setToken(token);
+          navigation.navigate('CHome');
         })
         .catch(error => {
           Toast.show({
@@ -46,71 +48,92 @@ export default function Login({navigation, route}) {
   };
 
   const _login = values => {
-    var FormData = require('form-data');
-    var data = new FormData();
-    data.append('email', values.email);
-    data.append('password', values.password);
+    var formdata = new FormData();
+    formdata.append('email', values.email);
+    formdata.append('password', values.password);
 
-    var config = {
-      method: 'post',
-      url: `${url.baseUrl}/users/login`,
-
-      data: data,
+    var requestOptions = {
+      method: 'POST',
+      body: formdata,
+      redirect: 'follow',
     };
+
     setLoader(true);
-    axios(config)
-      .then(function (response) {
-        console.log('Response', JSON.stringify(response.data));
-        _storeToken(response.data.token, values.remember);
+    fetch('https://dev.jobskills.digital/api/users/login', requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        console.log(result);
+        if (result.token) {
+          _storeToken(result, values.remember);
 
-        Toast.show({
-          type: 'success',
-          text1: 'Login Successfully',
-          text2: 'Welcome',
-        });
-        setLoader(false);
-      })
-      .catch(function (error) {
-        console.log(error.response.data);
-
-        if (error.response.data === 'Please verify your Email!') {
-          _verifyEmail(values.email);
-        } else {
           Toast.show({
-            type: 'error',
-            text1: 'Error',
-            text2: error.response && error.response.data,
+            type: 'success',
+            text1: 'Login Successfully',
+            text2: 'Welcome',
           });
+        } else {
+          if (result === 'Incorrect Password!') {
+            Toast.show({
+              type: 'error',
+              text1: 'Error',
+              text2: result,
+            });
+          } else if (result === 'Incorrect Email') {
+            Toast.show({
+              type: 'error',
+              text1: 'Error',
+              text2: result,
+            });
+          } else if (result === 'Please verify your Email!') {
+            _verifyEmail(values.email);
+          }
         }
         setLoader(false);
-        // console.log(error.response.data);
+      })
+      .catch(error => {
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: 'Cannot proceed your request at this moment.Try Again!',
+        });
+        setLoader(false);
       });
   };
 
   const _verifyEmail = email => {
-    var FormData = require('form-data');
-    var data = new FormData();
-    data.append('email', email);
+    var formdata = new FormData();
+    formdata.append('email', email);
 
-    var config = {
-      method: 'post',
-      url: `${url.baseUrl}/users/verifyEmail`,
-      data: data,
+    var requestOptions = {
+      method: 'POST',
+      body: formdata,
+      redirect: 'follow',
     };
 
-    axios(config)
-      .then(function (response) {
-        Toast.show({
-          type: 'success',
-          text1: 'Verify Email Sent',
-          text2: 'Kindly check your Email',
-        });
+    fetch(`${url.baseUrl}/users/verifyEmail`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        console.log(result);
+        if (result === 'No Email Found') {
+          Toast.show({
+            type: 'error',
+            text1: 'No Email Found',
+            text2: 'Kindly register with that email address',
+          });
+        } else {
+          Toast.show({
+            type: 'success',
+            text1: 'Verify Email Send',
+            text2:
+              'Kindly check your email address and verify your email address',
+          });
+        }
       })
-      .catch(function (error) {
-        console.log(error.response.data);
+      .catch(error => {
         Toast.show({
           type: 'error',
-          text1: error.response && error.response.data,
+          text1: 'Error',
+          text2: 'Cannot proceed your request at this moment.Try Again!',
         });
       });
   };
@@ -127,8 +150,8 @@ export default function Login({navigation, route}) {
       </View>
       <Formik
         initialValues={{
-          email: '',
-          password: '',
+          email: route.params?.email,
+          password: route.params?.password,
           hide: true,
           remember: true,
         }}
@@ -219,6 +242,7 @@ export default function Login({navigation, route}) {
               }}>
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <CheckBox
+                  tintColors={{true: colors.purple[0], false: 'black'}}
                   boxType="square"
                   value={values.remember}
                   onValueChange={value => setFieldValue('remember', value)}
@@ -233,7 +257,13 @@ export default function Login({navigation, route}) {
               isValid={isValid}
               style={{marginTop: RFPercentage(3)}}
               onPress={() => handleSubmit()}
-              children={loader ? 'Loading...' : 'Login as Canidate'}
+              children={
+                loader
+                  ? 'Loading...'
+                  : type === 1
+                  ? 'Login as Canidate'
+                  : 'Login as Employee'
+              }
             />
           </View>
         )}
@@ -260,7 +290,7 @@ export default function Login({navigation, route}) {
       </View>
 
       <JFooter
-        onPress={() => navigation.navigate('CRegister', {type: route.params})}
+        onPress={() => navigation.navigate('CRegister', {type: type})}
         children={' Don’t have an account? Register'}
       />
     </JScreen>

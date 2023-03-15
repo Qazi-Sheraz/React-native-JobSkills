@@ -95,7 +95,7 @@ export default function CustomCandidateBottomTab({
             ) : (
               <FontAwesome
                 color={isFocused ? colors.purple[0] : colors.inputBorder[0]}
-                name={isFocused ? 'user-circle' : 'user-circle-o'}
+                name={isFocused ? 'user' : 'user-o'}
                 size={RFPercentage(3.5)}
               />
             )}

@@ -1,17 +1,17 @@
 import {
   Image,
   StyleSheet,
-  Text,
   View,
-  Linking,
   TouchableOpacity,
+  Linking,
+  ActivityIndicator,
 } from 'react-native';
-import React, {useEffect, useRef} from 'react';
+import React, {useContext, useEffect, useRef} from 'react';
 import JScreen from '../../../customComponents/JScreen';
-import JGradientHeader from '../../../customComponents/JGradientHeader';
+
 import {heightPercentageToDP} from 'react-native-responsive-screen';
 import {useState} from 'react';
-import axios from 'axios';
+
 import url from '../../../config/url';
 import Toast from 'react-native-toast-message';
 import JGradientView from '../../../customComponents/JGradientView';
@@ -20,7 +20,6 @@ import JButton from '../../../customComponents/JButton';
 import JScrollView from '../../../customComponents/JScrollView';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import colors from '../../../config/colors';
-import moment from 'moment';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -37,11 +36,17 @@ import CLSelectedJob from '../../../loaders/Candidate/SelectedJob/CLSelectedJob'
 import JTagText from '../../../customComponents/JTagText';
 import JJobTile from '../../../customComponents/JJobTile';
 import JEmpty from '../../../customComponents/JEmpty';
-export default function SelectedJob({route, navigation}) {
+import {StoreContext} from '../../../mobx/store';
+import {observer} from 'mobx-react';
+import {_saveToFollowing} from '../../../functions/Candidate/DFollowing';
+
+function SelectedJob({route, navigation}) {
   const [companyData, setCompanyData] = useState({});
   const [loader, setLoader] = useState(true);
+  const [apiLoader, setApiLoader] = useState(false);
   const [error, setError] = useState();
-  const [id, setId] = useState(route.params.id);
+  const store = useContext(StoreContext);
+
   const refRBSheet = useRef();
   const simpleText = RFPercentage(2);
   const headingWeight = {
@@ -50,16 +55,20 @@ export default function SelectedJob({route, navigation}) {
   };
 
   const _getDetail = () => {
-    console.log(id);
-    var config = {
-      method: 'get',
-      url: `${url.baseUrl}/company-details/${id}`,
+    var myHeaders = new Headers();
+    myHeaders.append('Authorization', `Bearer ${store.token.token}`);
+
+    var requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow',
     };
 
-    axios(config)
+    fetch(`${url.baseUrl}/company-details/${route.params.id}`, requestOptions)
+      .then(response => response.json())
       .then(function (response) {
-        console.log(response.data);
-        setCompanyData(response.data);
+        console.log('Selected Company', response);
+        setCompanyData(response);
         setLoader(false);
       })
       .catch(function (error) {
@@ -106,13 +115,13 @@ export default function SelectedJob({route, navigation}) {
               flexDirection: 'row',
               alignItems: 'center',
             }}>
-            <FontAwesome
+            {/* <FontAwesome
               style={{marginRight: RFPercentage(2)}}
               onPress={() => alert('Star')}
               name="star-o"
               size={RFPercentage(3.5)}
               color={colors.white[0]}
-            />
+            /> */}
 
             <Menu>
               <MenuTrigger>
@@ -198,19 +207,40 @@ export default function SelectedJob({route, navigation}) {
               {companyData.company.ceo}
             </JText>
           </View>
-          <TouchableOpacity
-            onPress={() => alert('Follow')}
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              paddingHorizontal: RFPercentage(4),
-              paddingVertical: RFPercentage(1),
-              backgroundColor: 'rgba(149, 145, 145, 0.35)',
-            }}>
-            <JText fontColor={colors.white[0]} fontSize={simpleText}>
-              Follow
-            </JText>
-          </TouchableOpacity>
+          {apiLoader ? (
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                paddingHorizontal: RFPercentage(4),
+                paddingVertical: RFPercentage(1),
+                backgroundColor: 'rgba(149, 145, 145, 0.35)',
+              }}>
+              <JText fontColor={colors.white[0]} fontSize={simpleText}>
+                Loading...
+              </JText>
+            </View>
+          ) : (
+            <TouchableOpacity
+              onPress={() =>
+                _saveToFollowing(store, setApiLoader, companyData.company.id)
+              }
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                paddingHorizontal: RFPercentage(4),
+                paddingVertical: RFPercentage(1),
+                backgroundColor: 'rgba(149, 145, 145, 0.35)',
+              }}>
+              <JText fontColor={colors.white[0]} fontSize={simpleText}>
+                {store.followingList.some(
+                  item => item.company_id === companyData.company.id,
+                )
+                  ? 'Followed'
+                  : 'Follow'}
+              </JText>
+            </TouchableOpacity>
+          )}
         </View>
         <View
           style={{
@@ -331,6 +361,8 @@ export default function SelectedJob({route, navigation}) {
           companyData.data.jobDetails.map((item, index) => (
             <React.Fragment key={index}>
               <JJobTile
+                favouriteData={store.favouriteList}
+                jobId={item.id}
                 onPress={() =>
                   navigation.navigate('CSelectedJob', {
                     id: item.job_id,
@@ -352,7 +384,7 @@ export default function SelectedJob({route, navigation}) {
       </JScrollView>
 
       <JButton
-        onPress={() => alert('Visit')}
+        onPress={() => Linking.openURL(companyData.company.website)}
         style={{
           width: '60%',
           height: heightPercentageToDP(5),
@@ -408,6 +440,7 @@ export default function SelectedJob({route, navigation}) {
   );
 }
 
+export default observer(SelectedJob);
 const styles = StyleSheet.create({
   jobDetails: {
     flexDirection: 'row',

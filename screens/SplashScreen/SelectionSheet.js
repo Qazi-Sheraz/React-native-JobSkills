@@ -12,7 +12,7 @@ export default function SelectionSheet({navigation}) {
       <View style={styles.sheetItemContainer}>
         <JButton
           fontStyle={styles.buttonStyle}
-          onPress={() => alert('Employer')}>
+          onPress={() => navigation.navigate('CLogin', {type: 2})}>
           Employer
         </JButton>
         <JDivider

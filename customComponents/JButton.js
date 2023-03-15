@@ -27,17 +27,16 @@ export default function JButton({
           justifyContent: 'center',
           alignItems: 'center',
           alignSelf: 'center',
-          backgroundColor: colors.isValid[0],
-          paddingVertical: RFPercentage(1),
-          paddingHorizontal: RFPercentage(16),
-          borderWidth: borderWidth ? borderWidth : RFPercentage(0.1),
-          borderColor: borderColor ? borderColor : colors.placeHolderColor[0],
+          backgroundColor: colors.border[0],
           height: heightPercentageToDP(5),
           width: '100%',
+          borderWidth: borderWidth ? borderWidth : RFPercentage(0.1),
+          borderColor: borderColor ? borderColor : colors.border[0],
         },
         style,
       ]}>
-      <JText style={[{color: colors.placeHolderColor[0]}, fontStyle]}>
+      <JText
+        style={[{color: colors.placeHolderColor[0], opacity: 0.5}, fontStyle]}>
         {children}
       </JText>
     </View>

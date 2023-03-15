@@ -22,6 +22,7 @@ export default function JInput({
   eye = false,
   error,
   defaultValue,
+  isRequired = false,
 }) {
   return (
     <View style={[{flexDirection: 'column'}, containerStyle]}>
@@ -30,6 +31,15 @@ export default function JInput({
         <JText fontWeight={headingWeight} fontSize={RFPercentage(2.5)}>
           {heading}
         </JText>
+        {isRequired && (
+          <JText
+            style={{marginLeft: RFPercentage(0.5)}}
+            fontColor={colors.danger[0]}
+            fontWeight={headingWeight}
+            fontSize={RFPercentage(2.5)}>
+            *
+          </JText>
+        )}
       </View>
       <View
         style={{
@@ -47,6 +57,7 @@ export default function JInput({
             paddingBottom: RFPercentage(0.5),
             fontSize: RFPercentage(2.5),
             width: forPassword ? '90%' : '100%',
+            color: colors.black[0],
           }}
           placeholder={placeholder}
           placeholderTextColor={placeHolderColor}

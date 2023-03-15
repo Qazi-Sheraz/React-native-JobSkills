@@ -22,10 +22,10 @@ export default function JGradientHeader({
         paddingHorizontal: RFPercentage(2),
         alignItems: alignItems,
         paddingTop: paddingTop,
+        justifyContent: 'space-between',
       }}>
       <View
         style={{
-          width: '33.3333%',
           justifyContent: 'center',
 
           alignItems: 'flex-start',
@@ -34,7 +34,6 @@ export default function JGradientHeader({
       </View>
       <View
         style={{
-          width: '33.3333%',
           justifyContent: 'center',
           alignItems: 'center',
         }}>
@@ -42,7 +41,6 @@ export default function JGradientHeader({
       </View>
       <View
         style={{
-          width: '33.3333%',
           justifyContent: 'center',
           alignItems: 'flex-end',
         }}>

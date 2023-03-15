@@ -1,5 +1,5 @@
-import {StyleSheet, FlatList, RefreshControl, View} from 'react-native';
-import React, {useEffect, useContext, useCallback, useState} from 'react';
+import {StyleSheet, FlatList, RefreshControl} from 'react-native';
+import React, {useContext, useCallback, useState} from 'react';
 import JScreen from '../../customComponents/JScreen';
 import JText from '../../customComponents/JText';
 import {StoreContext} from '../../mobx/store';
@@ -13,69 +13,33 @@ import JSearchInput from '../../customComponents/JSearchInput';
 import CLFavouriteJob from '../../loaders/Candidate/FavouriteJob/CLFavouriteJob';
 import JEmpty from '../../customComponents/JEmpty';
 import JGradientHeader from '../../customComponents/JGradientHeader';
-import url from '../../config/url';
 import {
   Menu,
   MenuOptions,
   MenuOption,
   MenuTrigger,
 } from 'react-native-popup-menu';
-import {getAppliedJobsMenuItems} from '../../data/appliedJobs';
-import {heightPercentageToDP} from 'react-native-responsive-screen';
-import Toast from 'react-native-toast-message';
+
+import {_getAppliedJobData} from '../../functions/Candidate/BottomTab';
 function AppliedJobs({navigation}) {
   const store = useContext(StoreContext);
-  const [input, setInput] = useState('');
-  const [error, setError] = useState(false);
-  const [loader, setLoader] = useState(true);
-  const [select, setSelect] = useState('All');
-  const getAppliedJobList = () => {
-    var myHeaders = new Headers();
-    myHeaders.append('Authorization', `Bearer ${store.token}`);
-
-    var requestOptions = {
-      method: 'GET',
-      headers: myHeaders,
-      redirect: 'follow',
-    };
-
-    fetch(`${url.baseUrl}/applied-jobs`, requestOptions)
-      .then(response => response.json())
-      .then(res => {
-        setLoader(true);
-        setError(false);
-        setInput('');
-        setSelect('');
-        store.setAppliedJobList(res);
-        setLoader(false);
-      })
-      .catch(error => {
-        Toast.show({
-          type: 'error',
-          text1: 'Error',
-          text2: error.response && error.response.data,
-        });
-        setError(true);
-      });
-  };
 
   const onRefresh = useCallback(() => {
     store.setIsRefreshing(true);
-    getAppliedJobList();
-    store.setIsRefreshing(false);
+
+    setTimeout(() => {
+      _getAppliedJobData(store);
+      store.setIsRefreshing(false);
+    }, 2000);
   }, []);
 
-  useEffect(() => {
-    getAppliedJobList();
-
-    return () => {};
-  }, []);
+  console.log(store.appliedJobList.appliedJob);
 
   return (
     <JScreen
-      isError={error}
+      isError={store.appliedJobError}
       errorText={'Reload Screen!'}
-      onReloadPress={() => getAppliedJobList()}
+      onReloadPress={() => _getAppliedJobData(store)}
       header={
         <JGradientHeader
           center={
@@ -87,7 +51,8 @@ function AppliedJobs({navigation}) {
             </JText>
           }
           right={
-            loader === false && (
+            store.appliedJobList.appliedJob.length > 0 &&
+            store.appliedJobApiLoader === false && (
               <Menu>
                 <MenuTrigger>
                   <Entypo
@@ -107,7 +72,7 @@ function AppliedJobs({navigation}) {
                         }}
                         key={index}
                         onSelect={() => {
-                          setSelect(item);
+                          store.setAppliedJobSelect(item);
                         }}>
                         <JText>{item}</JText>
                       </MenuOption>
@@ -120,16 +85,18 @@ function AppliedJobs({navigation}) {
         />
       }
       style={{marginHorizontal: RFPercentage(2)}}>
-      {loader === true ? (
+      {store.appliedJobApiLoader === true ? (
         <CLFavouriteJob />
       ) : (
         <React.Fragment>
           <JSearchInput
+            length={store.appliedJobList.appliedJob.length}
             onChangeText={e => {
-              setInput(e);
+              store.setAppliedJobInput(e);
             }}
             onPressIcon={() => alert('Icon Pressed')}
           />
+
           <FlatList
             refreshControl={
               <RefreshControl
@@ -138,34 +105,41 @@ function AppliedJobs({navigation}) {
               />
             }
             data={
-              input.length > 0
-                ? store.appliedJobList[0].filter(e =>
-                    e.job.job_title.toLowerCase().includes(input.toLowerCase()),
+              store.appliedJobInput.length > 0
+                ? store.appliedJobList.appliedJob.filter(e =>
+                    e.job_title
+                      .toLowerCase()
+                      .includes(store.appliedJobInput.toLowerCase()),
                   )
-                : select.length > 0 && select !== 'All'
-                ? store.appliedJobList[0].filter(
+                : store.appliedJobSelect.length > 0 &&
+                  store.appliedJobSelect !== 'All'
+                ? store.appliedJobList.appliedJob.filter(
                     e =>
-                      store.appliedJobList.statusArray[
-                        e.status
-                      ].toLowerCase() === select.toLowerCase(),
+                      e.application_status.toLowerCase() ===
+                      store.appliedJobSelect.toLowerCase(),
                   )
-                : store.appliedJobList[0]
+                : store.appliedJobList.appliedJob
             }
             ListEmptyComponent={() => <JEmpty />}
             showsVerticalScrollIndicator={false}
             renderItem={({item}) => (
               <JJobTile
+                onPress={() =>
+                  navigation.navigate('CSelectedJob', {
+                    id: item.job_unique_id,
+                  })
+                }
                 type="appliedjob"
                 containerStyle={{marginBottom: RFPercentage(2)}}
                 // isJob={true}
-                //img={item.job.company.company_url}
-                title={item.job.job_title}
-                location={item.job.city.name}
-                category={item.job.job_category.name}
-                status={store.appliedJobList.statusArray[item.status]}
+                img={item.company_url}
+                title={item.job_title}
+                location={item.city_name}
+                category={item.job_category}
+                status={item.application_status}
               />
             )}
-            keyExtractor={data => data.id}
+            keyExtractor={(data, index) => index}
           />
         </React.Fragment>
       )}

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "970988747590",
+    "project_id": "jobskills-17a1f",
+    "storage_bucket": "jobskills-17a1f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:970988747590:android:520cb1c354802e3b130347",
+        "android_client_info": {
+          "package_name": "com.jobskills"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "970988747590-g5jusq04capuuckri1452f7fdtu5nb36.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jobskills",
+            "certificate_hash": "b3647fc98447fe8ef3b4ffc713face9b1006d6ca"
+          }
+        },
+        {
+          "client_id": "970988747590-cfgdfnuvlbp68986nr7i5oefb948d3t0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6o64Yw51eFRhsibCKnQOsTR03gs7OINo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "970988747590-cfgdfnuvlbp68986nr7i5oefb948d3t0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
