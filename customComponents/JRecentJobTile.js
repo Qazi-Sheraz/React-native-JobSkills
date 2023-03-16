@@ -33,6 +33,7 @@ import {
 function JRecentJobTile({
   isempty = false,
   img,
+  image=true,
   title,
   location,
   category,
@@ -73,7 +74,7 @@ function JRecentJobTile({
         },
         containerStyle,
       ]}>
-      <View
+        {image && <View
         style={{
           width: '28%',
           justifyContent: 'center',
@@ -98,11 +99,12 @@ function JRecentJobTile({
             source={{uri: img}}
           />
         </TouchableOpacity>
-      </View>
+      </View>}
+    
 
       <View
         style={{
-          width: '72%',
+          width: image ? '72%' :'100%',
           justifyContent: 'center',
           paddingHorizontal: RFPercentage(1),
         }}>
@@ -157,7 +159,6 @@ function JRecentJobTile({
                   style={{
                     flexDirection: 'row',
                     alignItems: 'center',
-
                     backgroundColor: colors.green[0],
                     paddingVertical: RFPercentage(0.5),
                     paddingHorizontal: RFPercentage(0.8),

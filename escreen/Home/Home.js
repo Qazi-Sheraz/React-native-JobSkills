@@ -1,5 +1,5 @@
 import {FlatList, StyleSheet, Image, View, Pressable} from 'react-native';
-import React from 'react';
+import React  ,{useRef} from 'react';
 import JScreen from '../../customComponents/JScreen';
 import JHeader from '../../customComponents/JHeader';
 import Feather from 'react-native-vector-icons/Feather';
@@ -24,7 +24,11 @@ import JGradientView from '../../customComponents/JGradientView';
 import JSideHeading from '../../customComponents/JSideHeading';
 import moment from 'moment';
 import JRecentJobTile from '../../customComponents/JRecentJobTile';
+import JFindTitle from '../../customComponents/JFindTitle';
+import RBSheet from 'react-native-raw-bottom-sheet';
+
 const Home = ({navigation}) => {
+  const refRBSheet = useRef();
   const store = useContext(StoreContext);
   return (
     <JScreen
@@ -58,26 +62,8 @@ const Home = ({navigation}) => {
         />
       }>
       <React.Fragment>
-        <Pressable
-          onPress={() => navigation.navigate('CSearch')}
-          style={{
-            height: '7%',
-            borderColor: `${colors.searchIcon[0]}50`,
-            borderWidth: RFPercentage(0.1),
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            paddingHorizontal: RFPercentage(1),
-            alignItems: 'center',
-          }}>
-          <JText fontColor={colors.searchIcon[0]} fontSize={RFPercentage(2)}>
-            Job Tile
-          </JText>
-          <AntDesign
-            name="search1"
-            color={colors.searchIcon[0]}
-            size={RFPercentage(2.5)}
-          />
-        </Pressable>
+        <JFindTitle JobTitle={"Job Title"} />
+       
         <JScrollView>
           <FlatList
             style={{alignSelf: 'center', marginVertical: RFPercentage(2)}}
@@ -92,12 +78,12 @@ const Home = ({navigation}) => {
                 count: 9,
               },
               {
-                name: 'Close',
+                name: 'Paused',
                 count: 10,
               },
 
               {
-                name: 'Paused',
+                name: 'Close ',
                 count: 27,
               },
             ]}
@@ -161,7 +147,8 @@ const Home = ({navigation}) => {
             Upcoming Meetings
           </JText>
 
-          <View
+          <Pressable
+          onPress={()=> refRBSheet.current.open()}
             style={{
               flexDirection: 'row',
               marginTop: RFPercentage(1),
@@ -243,7 +230,7 @@ const Home = ({navigation}) => {
                 <Entypo name="controller-play" size={RFPercentage(2)} />
               </View>
             </View>
-          </View>
+          </Pressable>
 
           <JText
             style={{marginVertical: RFPercentage(1)}}
@@ -258,12 +245,45 @@ const Home = ({navigation}) => {
           ))}
 
           <View></View>
-        </JScrollView>
+        </JScrollView> 
       </React.Fragment>
+      <RBSheet
+        ref={refRBSheet}
+        // closeOnDragDown={true}
+        closeOnPressMask={true}
+        height={heightPercentageToDP(23)}
+
+        customStyles={{
+          container:{borderTopLeftRadius:RFPercentage(2.5),borderTopRightRadius:RFPercentage(2.5)},
+          wrapper: {
+            backgroundColor: '#00000080',
+          },
+          draggableIcon: {
+            backgroundColor: colors.black[0],
+            display: 'none',
+          },
+        }}><View style={{paddingLeft:RFPercentage(3),paddingTop:RFPercentage(1)}}>
+          <JText style={{
+            marginVertical: RFPercentage(1),
+            fontSize:RFPercentage(2.5),
+            fontWeight:'bold'}}>Meating Info</JText>
+          <JText style={styles.rbtxt}>Meating ID</JText>
+          <JText style={styles.rbtxt2}>3457654</JText>
+          <JText style={styles.rbtxt}>Password</JText>
+          <JText style={styles.rbtxt2}>34fgg654</JText>
+          </View></RBSheet>
     </JScreen>
   );
 };
 
 export default Home;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  rbtxt:{
+    marginVertical: RFPercentage(0.5),
+    fontSize:RFPercentage(2),
+  fontWeight:'bold'},
+  rbtxt2:{
+    marginVertical: RFPercentage(0.5),
+    fontSize:RFPercentage(2)},
+});

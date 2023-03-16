@@ -12,19 +12,23 @@ export default function JGradientHeader({
   height = heightPercentageToDP(10),
   alignItems = 'center',
   paddingTop,
+  children,
 }) {
   return (
     <JGradientView
-      flexDirection="row"
+      flexDirection="column"
       containerStyle={{
         height: height,
         width: '100%',
         paddingHorizontal: RFPercentage(2),
         alignItems: alignItems,
         paddingTop: paddingTop,
-        justifyContent: 'space-between',
       }}>
-      <View
+      <View style={{flexDirection:"row",
+        width: '100%',
+        alignItems: alignItems,
+        paddingTop: paddingTop,
+        justifyContent: 'space-between',}}><View
         style={{
           justifyContent: 'center',
 
@@ -45,7 +49,9 @@ export default function JGradientHeader({
           alignItems: 'flex-end',
         }}>
         {right}
-      </View>
+      </View></View>
+      
+      {children}
     </JGradientView>
   );
 }

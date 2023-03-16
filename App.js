@@ -7,6 +7,7 @@ import {MenuProvider} from 'react-native-popup-menu';
 import Toast from 'react-native-toast-message';
 
 import {linking} from './linking';
+import JobDetails from './escreen/Jobs/JobDetails';
 
 export default function App() {
   return (
@@ -17,7 +18,6 @@ export default function App() {
       >
         <MenuProvider>
           <MyDrawer />
-
           {/* <Login /> */}
           <Toast />
         </MenuProvider>

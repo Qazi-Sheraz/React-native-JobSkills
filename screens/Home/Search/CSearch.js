@@ -22,6 +22,7 @@ import JScrollView from '../../../customComponents/JScrollView';
 import JJobTile from '../../../customComponents/JJobTile';
 import {_search} from '../../../functions/CFilter';
 import {heightPercentageToDP} from 'react-native-responsive-screen';
+import JRecentJob from '../../../customComponents/JRecentJob';
 
 const CSearch = ({navigation}) => {
   const store = useContext(StoreContext);
@@ -168,23 +169,12 @@ const CSearch = ({navigation}) => {
               fontSize={RFPercentage(3)}>
               Recent Searches
             </JText>
-
-            <Pressable
-              onPress={() => alert('UI/UX Designer')}
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                paddingVertical: RFPercentage(1),
-                borderBottomWidth: RFPercentage(0.1),
-              }}>
-              <Feather
-                name="clock"
-                size={RFPercentage(3.5)}
-                color={colors.black[0]}
-                style={{marginRight: RFPercentage(1)}}
-              />
-              <JText fontSize={RFPercentage(2.5)}>UI/UX Designer</JText>
-            </Pressable>
+           <JRecentJob JobName={"UI/UX Designer"}/>
+           <JRecentJob JobName={"Motion Graphic Designer"}/>
+           <JRecentJob JobName={"Laraval Developer"}/>
+           <JRecentJob JobName={"Interior Designer"}/>
+          
+            
           </>
         )}
       </JScrollView>
