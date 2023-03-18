@@ -51,7 +51,7 @@ function AppliedJobs({navigation}) {
             </JText>
           }
           right={
-            store.appliedJobList.appliedJob.length > 0 &&
+            // store.appliedJobList.appliedJob.length > 0 &&
             store.appliedJobApiLoader === false && (
               <Menu>
                 <MenuTrigger>

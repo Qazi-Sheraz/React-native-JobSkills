@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import JGradientView from './JGradientView';
 import {RFPercentage} from 'react-native-responsive-fontsize';
@@ -11,8 +11,10 @@ export default function JGradientHeader({
   right,
   height = heightPercentageToDP(10),
   alignItems = 'center',
+  justifyContent='center',
   paddingTop,
   children,
+  onPress,
 }) {
   return (
     <JGradientView
@@ -22,20 +24,22 @@ export default function JGradientHeader({
         width: '100%',
         paddingHorizontal: RFPercentage(2),
         alignItems: alignItems,
+        justifyContent:justifyContent,
         paddingTop: paddingTop,
       }}>
-      <View style={{flexDirection:"row",
+      <View  style={{flexDirection:"row",
         width: '100%',
         alignItems: alignItems,
         paddingTop: paddingTop,
-        justifyContent: 'space-between',}}><View
+        justifyContent: 'space-between',}}><Pressable
+        onPress={onPress}
         style={{
           justifyContent: 'center',
 
           alignItems: 'flex-start',
         }}>
         {left}
-      </View>
+      </Pressable >
       <View
         style={{
           justifyContent: 'center',

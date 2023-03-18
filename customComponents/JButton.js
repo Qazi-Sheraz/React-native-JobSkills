@@ -53,7 +53,7 @@ export default function JButton({
             ? backgroundColor
             : colors.primary[0],
           height: heightPercentageToDP(5),
-          width: '100%',
+          paddingHorizontal:RFPercentage(2),
           borderWidth: borderWidth ? borderWidth : RFPercentage(0.1),
           borderColor: borderColor ? borderColor : colors.primary[0],
           shadowColor: colors.black[0],

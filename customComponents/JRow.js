@@ -3,7 +3,7 @@ import React from 'react';
 
 const JRow = ({style, children}) => {
   return (
-    <View style={[{flexDirection: 'row', alignItems: 'center'}, style]}>
+    <View style={[{flexDirection: 'row', alignItems: 'center',}, style]}>
       {children}
     </View>
   );

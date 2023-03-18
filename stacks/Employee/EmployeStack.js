@@ -29,6 +29,7 @@ import HelpCenter from '../../screens/Drawer/HelpCenter';
 import CFilter from '../../screens/Home/Search/CFilter';
 import EBottomTab from '../../escreen/Home/EBottomTab';
 import JobDetails from '../../escreen/Jobs/JobDetails';
+import AddNew_Job from '../../escreen/Jobs/AddNew_Job';
 
 const Stack = createStackNavigator();
 
@@ -203,7 +204,7 @@ function CHomeStack({navigation}) {
           headerShown: false,
           // gestureEnabled: false,
         }}
-        initialRouteName={store?.token?.token ? 'JobDetails' : 'SelectionScreen'}>
+        initialRouteName={store?.token?.token ? 'CHome' : 'SelectionScreen'}>
         <Stack.Screen name="CHome" component={EBottomTab} />
         <Stack.Screen name="CAllJobs" component={AllJobs} />
         <Stack.Screen name="CFeatureCompany" component={FeatureCompany} />
@@ -213,6 +214,7 @@ function CHomeStack({navigation}) {
         <Stack.Screen name="CSearch" component={CSearch} />
         <Stack.Screen name="CFilter" component={CFilter} />
         <Stack.Screen name="JobDetails" component={JobDetails} />
+        <Stack.Screen name="AddNew_Job" component={AddNew_Job} />
         <Stack.Screen
           name="CContacttInformation"
           component={CContactInformation}

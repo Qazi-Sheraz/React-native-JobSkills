@@ -282,7 +282,7 @@ function JSelectInput({
             setOpen(true);
           }
         }}
-        style={[{flexDirection: 'column'}, containerStyle]}>
+        style={[{flexDirection: 'column',}, containerStyle]}>
         <View
           style={{
             flexDirection: 'row',

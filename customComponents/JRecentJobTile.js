@@ -30,6 +30,7 @@ import {
   MenuOption,
   MenuTrigger,
 } from 'react-native-popup-menu';
+import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
 function JRecentJobTile({
   isempty = false,
   img,
@@ -51,6 +52,7 @@ function JRecentJobTile({
 
   return isempty === true ? (
     <View
+   
       style={{
         height: heightPercentageToDP(14),
         backgroundColor: colors.tileColor[0],
@@ -64,7 +66,8 @@ function JRecentJobTile({
       <JText style={{marginTop: RFPercentage(1)}}>Not Found !</JText>
     </View>
   ) : (
-    <View
+    <Pressable
+    onPress={onPress}
       style={[
         {
           height: heightPercentageToDP(14),
@@ -247,7 +250,7 @@ function JRecentJobTile({
           />
         )}
       </View>
-    </View>
+    </Pressable>
   );
 }
 export default memo(observer(JRecentJobTile));
