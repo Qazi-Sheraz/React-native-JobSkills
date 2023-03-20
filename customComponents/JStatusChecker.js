@@ -3,12 +3,13 @@ import React from 'react';
 import JText from './JText';
 import colors from '../config/colors';
 import {RFPercentage} from 'react-native-responsive-fontsize';
-export default function JStatusChecker({status}) {
+export default function JStatusChecker({status,onPress}) {
   return (
     <JText
+   
       style={{
-        paddingHorizontal: RFPercentage(1),
-        paddingVertical: RFPercentage(0.5),
+        paddingHorizontal: RFPercentage(1.5),
+        paddingVertical: RFPercentage(1),
         backgroundColor:
           status === 'Drafted'
             ? colors.drafted[0]

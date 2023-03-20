@@ -131,7 +131,7 @@ function AppliedJobs({navigation}) {
                 }
                 type="appliedjob"
                 containerStyle={{marginBottom: RFPercentage(2)}}
-                // isJob={true}
+                isJob={true}
                 img={item.company_url}
                 title={item.job_title}
                 location={item.city_name}

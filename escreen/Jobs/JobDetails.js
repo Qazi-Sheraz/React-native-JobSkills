@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import React from 'react';
 import JScreen from '../../customComponents/JScreen';
-import JHeader from '../../customComponents/JHeader';
+import moment from 'moment';
 import JGradientHeader from '../../customComponents/JGradientHeader';
 import JText from '../../customComponents/JText';
 import colors from '../../config/colors';
@@ -36,7 +36,7 @@ import {Pressable} from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
 import {useNavigation} from '@react-navigation/native';
 import PhoneInput from 'react-native-phone-number-input';
-import { useRef } from 'react';
+import {useRef} from 'react';
 
 const JobDetails = () => {
   const phoneInput = useRef(null);
@@ -88,9 +88,11 @@ const JobDetails = () => {
             <View style={{marginTop: RFPercentage(2)}}>
               <JRow style={{justifyContent: 'space-between', width: '100%'}}>
                 <JText style={styles.headertxt}>Project Manager</JText>
-                <JText style={{fontSize: RFPercentage(1.8), color: '#ffff'}}>
-                  Date posted: 09 Sep 2021
-                </JText>
+                
+                  <JText style={{fontSize: RFPercentage(1.8), color: '#ffff'}}>
+                    Date posted:  {moment().format('DD MMM,YYYY')}
+                  </JText>
+                 
               </JRow>
               <JRow>
                 <DEVOTEAM />
@@ -105,7 +107,10 @@ const JobDetails = () => {
               <JRow style={{justifyContent: 'space-between', width: '100%'}}>
                 <JRow>
                   <Calendar />
-                  <JText style={styles.txt}>Expires On: 09 Dec 2021</JText>
+
+                  <JText style={styles.txt}>
+                    Expire on: {moment().format('DD MMM,YYYY')}
+                  </JText>
                 </JRow>
                 <JText style={styles.txt}>5 open jobs</JText>
               </JRow>
@@ -267,39 +272,39 @@ const JobDetails = () => {
                     // onBlur={() => setFieldTouched('name')}
                   />
 
-<View style={{marginBottom:RFPercentage(2)}}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  marginTop: RFPercentage(1),
-                }}>
-                <JText fontWeight="500" fontSize={RFPercentage(2.5)}>
-                  Phone:
-                </JText>
-              </View>
-              <PhoneInput
-                ref={phoneInput}
-                defaultValue={values.phone}
-                defaultCode="PK"
-                containerStyle={{
-                  width: '100%',
-                  borderBottomWidth: RFPercentage(0.1),
-                  paddingVertical: 0,
-                }}
-                textContainerStyle={{
-                  paddingVertical: 0,
-                  backgroundColor: 'transparent',
-                }}
-                onChangeFormattedText={text => {
-                  setFieldValue('phone', text);
-                }}
-              />
-              {touched.phone && errors.phone && (
-                <JErrorText>{errors.phone}</JErrorText>
-              )}
-            </View>
-                  <JRow >
+                  <View style={{marginBottom: RFPercentage(2)}}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        marginTop: RFPercentage(1),
+                      }}>
+                      <JText fontWeight="500" fontSize={RFPercentage(2.5)}>
+                        Phone:
+                      </JText>
+                    </View>
+                    <PhoneInput
+                      ref={phoneInput}
+                      defaultValue={values.phone}
+                      defaultCode="PK"
+                      containerStyle={{
+                        width: '100%',
+                        borderBottomWidth: RFPercentage(0.1),
+                        paddingVertical: 0,
+                      }}
+                      textContainerStyle={{
+                        paddingVertical: 0,
+                        backgroundColor: 'transparent',
+                      }}
+                      onChangeFormattedText={text => {
+                        setFieldValue('phone', text);
+                      }}
+                    />
+                    {touched.phone && errors.phone && (
+                      <JErrorText>{errors.phone}</JErrorText>
+                    )}
+                  </View>
+                  <JRow>
                     <JText fontSize={RFPercentage(2.5)}>Resume</JText>
                     <JText
                       fontColor={colors.danger[0]}
@@ -376,7 +381,7 @@ const JobDetails = () => {
                   <JRow
                     style={{
                       marginTop: RFPercentage(5),
-                      justifyContent:'center',
+                      justifyContent: 'center',
                       borderColor: colors.primary[1],
                     }}>
                     <JButton
@@ -386,7 +391,6 @@ const JobDetails = () => {
                       }}
                       style={{
                         width: '46%',
-
                       }}
                       children={'Add'}
                     />

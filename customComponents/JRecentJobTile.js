@@ -4,6 +4,7 @@ import {
   View,
   TouchableOpacity,
   ActivityIndicator,
+  Pressable
 } from 'react-native';
 
 import React, {memo, useContext} from 'react';
@@ -30,7 +31,8 @@ import {
   MenuOption,
   MenuTrigger,
 } from 'react-native-popup-menu';
-import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
+import { useNavigation } from '@react-navigation/native';
+
 function JRecentJobTile({
   isempty = false,
   img,
@@ -49,7 +51,7 @@ function JRecentJobTile({
 }) {
   const [loader, setLoader] = useState();
   const store = useContext(StoreContext);
-
+const navigation=useNavigation();
   return isempty === true ? (
     <View
    
@@ -127,14 +129,15 @@ function JRecentJobTile({
             justifyContent: 'space-between',
             marginTop: RFPercentage(0.5),
           }}>
-          <View
+          <Pressable
+          onPress={()=> navigation.navigate('JobApplication')}
             style={{
               flexDirection: 'row',
               alignItems: 'center',
             }}>
             <EvilIcons name="user" size={RFPercentage(3)} />
             <JText> 2 Applicates</JText>
-          </View>
+          </Pressable>
 
           {!status == 'closed' ? (
             <View
