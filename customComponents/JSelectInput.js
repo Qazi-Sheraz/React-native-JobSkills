@@ -268,7 +268,7 @@ function JSelectInput({
       <Pressable
         onPress={() => {
           if (isDate === false) {
-            refRBSheet.current.open();
+            refeet.current.open();
             header === 'Country'
               ? _getCountryList()
               : header === 'City'

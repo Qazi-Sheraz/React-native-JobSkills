@@ -26,4 +26,5 @@ export default {
   searchIcon: ['#411661'],
   border: ['#EBEBEB'],
   green: ['#3BB557'],
+  redish: ['#F84A4A'],
 };

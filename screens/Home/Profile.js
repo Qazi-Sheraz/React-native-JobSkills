@@ -322,6 +322,7 @@ function Profile({navigation}) {
                     (item, index) => (
                       <JRow
                         key={index}
+                        
                         style={{
                           borderBottomColor: colors.border[0],
                           borderBottomWidth: RFPercentage(0.1),

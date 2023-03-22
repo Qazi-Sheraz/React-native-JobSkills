@@ -6,6 +6,7 @@ import colors from '../config/colors';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import JRow from './JRow';
 export default function JProfileSections({
   heading,
   icon = 'pencil',
@@ -37,7 +38,9 @@ export default function JProfileSections({
           elevation: 4,
         }}>
         <JText fontSize={RFPercentage(2.5)}>{heading}</JText>
-        {icon === 'pencil' ? (
+
+        {icon === 'pencil' 
+        ? (
           <SimpleLineIcons
             onPress={onIconPress}
             name="pencil"
@@ -51,8 +54,26 @@ export default function JProfileSections({
             color={colors.black[0]}
             size={RFPercentage(3.2)}
           />
+        ) :
+         icon === '1' ? (
+          <JRow>
+            <SimpleLineIcons
+            style={{marginRight:RFPercentage(1)}}
+              onPress={onIconPress}
+              name="pencil"
+              color={colors.black[0]}
+              size={RFPercentage(3)}
+            />
+            <Ionicons
+              onPress={onIconPress}
+              name="add-circle-outline"
+              color={colors.black[0]}
+              size={RFPercentage(3.2)}
+            />
+          </JRow>
         ) : null}
       </View>
+
       {loader === true ? (
         <View
           style={{

@@ -1,6 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import Notification from '../../screens/Notification/Notification';
 import CBottomTab from '../../screens/Home/CBottomTab';
 import CGeneralInformation from '../../screens/Home/ProfileScreen/CGeneralInformation';
 import CExperienceInformation from '../../screens/Home/ProfileScreen/CExperienceInformation';
@@ -32,6 +31,7 @@ import CareerInformation from '../../screens/Home/ProfileScreen/CareerInformatio
 import Assessment from '../../screens/Home/ProfileScreen/Assessment';
 import Profile from '../../screens/Home/Profile';
 import EditProfile from '../../screens/Home/ProfileScreen/EditProfile';
+import Notification from '../../screens/Notification/Notification';
 
 const Stack = createStackNavigator();
 

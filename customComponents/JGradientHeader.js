@@ -11,7 +11,7 @@ export default function JGradientHeader({
   right,
   height = heightPercentageToDP(10),
   alignItems = 'center',
-  justifyContent='center',
+  justifyContent = 'center',
   paddingTop,
   children,
   onPress,
@@ -24,37 +24,42 @@ export default function JGradientHeader({
         width: '100%',
         paddingHorizontal: RFPercentage(2),
         alignItems: alignItems,
-        justifyContent:justifyContent,
+        justifyContent: justifyContent,
         paddingTop: paddingTop,
       }}>
-      <View  style={{flexDirection:"row",
-        width: '100%',
-        alignItems: alignItems,
-        paddingTop: paddingTop,
-        justifyContent: 'space-between',}}><Pressable
-        onPress={onPress}
+      <View
         style={{
-          justifyContent: 'center',
+          flexDirection: 'row',
+          width: '100%',
+          alignItems: alignItems,
+          paddingTop: paddingTop,
+          justifyContent: 'space-between',
+        }}>
+        <Pressable
+          onPress={onPress}
+          style={{
+            justifyContent: 'center',
 
-          alignItems: 'flex-start',
-        }}>
-        {left}
-      </Pressable >
-      <View
-        style={{
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        {center}
+            alignItems: 'flex-start',
+          }}>
+          {left}
+        </Pressable>
+        <View
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          {center}
+        </View>
+        <View
+          style={{
+            justifyContent: 'center',
+            alignItems: 'flex-end',
+          }}>
+          {right}
+        </View>
       </View>
-      <View
-        style={{
-          justifyContent: 'center',
-          alignItems: 'flex-end',
-        }}>
-        {right}
-      </View></View>
-      
+
       {children}
     </JGradientView>
   );

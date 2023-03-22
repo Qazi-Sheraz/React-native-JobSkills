@@ -143,7 +143,8 @@ export default function JProfileContent({src, name, email, jd}) {
           alignItems: 'center',
           marginTop: RFPercentage(1),
         }}>
-        <JText fontSize={RFPercentage(3)}>{name}</JText>
+        <JText style={{ fontSize:RFPercentage(3),fontWeight:'bold',color:colors.purple[0]}}>{name}</JText>
+
         {email && <JText style={styles.text}>{email}</JText>}
         {jd && <JText style={styles.text}>{jd}</JText>}
       </View>

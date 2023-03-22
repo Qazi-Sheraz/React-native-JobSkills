@@ -15,7 +15,20 @@ import JAssessmentResult from '../../customComponents/JAssessmentResult';
 import JButton from '../../customComponents/JButton';
 import JStatusbar from '../../customComponents/JStatusbar';
 import JSkills from '../../customComponents/JSkills';
+import RBSheet from 'react-native-raw-bottom-sheet';
+import {useRef} from 'react';
+import {heightPercentageToDP} from 'react-native-responsive-screen';
+
 const ProfileJobApplication = () => {
+  const data = [
+    {name: 'Personal Assessment'},
+    {name: 'Cognitive Assessment'},
+    {name: 'Professional Assessment'},
+    {name: 'Cultural Assessment'},
+    {name: 'Cognitive Assessment'},
+  ];
+
+  const refRBSheet = useRef();
   const navigation = useNavigation();
   return (
     <View style={styles.maincontainer}>
@@ -76,7 +89,11 @@ const ProfileJobApplication = () => {
               percent="65%"
               color={colors.purple[0]}
             />
-            <JButton children={'See more'} />
+            <JButton
+              style={{marginTop: RFPercentage(0.5)}}
+              onPress={() => refRBSheet.current.open()}
+              children={'See more'}
+            />
           </View>
           <JSkills
             title={'Experience'}
@@ -85,21 +102,17 @@ const ProfileJobApplication = () => {
             txt={'Alshamel ,Saudia Arabia'}
             txt2={'Lorem Ipsum is simply dummy '}
           />
+
           <JSkills
-          
             title={'Education'}
             JobTitle={'BS (CS)'}
-            JobTitle1={'BS (CS)'}
-          
             date={'2016- 20'}
             txt={'Dar Al Uloom University ,Saudia Arabia'}
             txt2={'Lorem Ipsum is simply dummy  '}
           />
+
           <JSkills
-          
             JobTitle={'BS (CS)'}
-            JobTitle1={'BS (CS)'}
-          
             date={'2016- 20'}
             txt={'Dar Al Uloom University ,Saudia Arabia'}
             txt2={'Lorem Ipsum is simply dummy  '}
@@ -128,7 +141,43 @@ const ProfileJobApplication = () => {
               percent="65%"
               color={'#B7834A'}
             />
+            <JButton
+              style={{marginTop: RFPercentage(0.5)}}
+              onPress={() => refRBSheet.current.open()}
+              children={'See more'}
+            />
           </View>
+          <RBSheet
+            ref={refRBSheet}
+            // closeOnDragDown={false}
+            closeOnPressMask={true}
+            height={heightPercentageToDP(32)}
+            customStyles={{
+              container: {
+                borderTopLeftRadius: RFPercentage(2.5),
+                borderTopRightRadius: RFPercentage(2.5),
+              },
+              wrapper: {
+                backgroundColor: '#00000080',
+              },
+              draggableIcon: {
+                backgroundColor: colors.black[0],
+                display: 'none',
+              },
+            }}>
+            <View style={styles.RBView}>
+              <JText style={styles.RBHeader}>Assessment Result</JText>
+
+              {data.map((item, index) => (
+                <JAssessmentResult
+                  key={index}
+                  title={item.name}
+                  percent="75%"
+                  color={colors.purple[0]}
+                />
+              ))}
+            </View>
+          </RBSheet>
         </ScrollView>
       </View>
     </View>
@@ -166,5 +215,17 @@ const styles = StyleSheet.create({
     fontSize: RFPercentage(2),
     fontWeight: 'bold',
     marginVertical: RFPercentage(1),
+  },
+  RBView: {paddingHorizontal: RFPercentage(2.5), paddingTop: RFPercentage(2)},
+  RBHeader: {
+    fontSize: RFPercentage(2.8),
+    fontWeight: 'bold',
+    marginVertical: RFPercentage(0.5),
+  },
+  RBtxt: {
+    fontSize: RFPercentage(2.4),
+    fontWeight: '600',
+    marginVertical: RFPercentage(0.7),
+    width: '100%',
   },
 });

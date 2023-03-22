@@ -1,6 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import Notification from '../../screens/Notification/Notification';
 import CBottomTab from '../../screens/Home/CBottomTab';
 import CGeneralInformation from '../../screens/Home/ProfileScreen/CGeneralInformation';
 import CExperienceInformation from '../../screens/Home/ProfileScreen/CExperienceInformation';
@@ -32,6 +31,8 @@ import JobDetails from '../../escreen/Jobs/JobDetails';
 import AddNew_Job from '../../escreen/Jobs/AddNew_Job';
 import JobApplication from '../../escreen/Jobs/JobApplication';
 import ProfileJobApplication from '../../escreen/Jobs/ProfileJobApplication';
+import EditProfile from '../../screens/Home/ProfileScreen/EditProfile';
+import Notification from '../../screens/Notification/Notification';
 
 const Stack = createStackNavigator();
 
@@ -206,7 +207,7 @@ function CHomeStack({navigation}) {
           headerShown: false,
           // gestureEnabled: false,
         }}
-        initialRouteName={store?.token?.token ? 'EBottomTab' : 'SelectionScreen'}>
+        initialRouteName={store?.token?.token ? 'ProfileApplication' : 'SelectionScreen'}>
         <Stack.Screen name="CHome" component={EBottomTab} />
         <Stack.Screen name="CAllJobs" component={AllJobs} />
         <Stack.Screen name="CFeatureCompany" component={FeatureCompany} />
@@ -219,6 +220,7 @@ function CHomeStack({navigation}) {
         <Stack.Screen name="AddNew_Job" component={AddNew_Job} />
         <Stack.Screen name="JobApplication" component={JobApplication} />
         <Stack.Screen name="ProfileApplication" component={ProfileJobApplication} />
+        <Stack.Screen name="CEditProfile" component={EditProfile} />
         <Stack.Screen
           name="CContacttInformation"
           component={CContactInformation}
