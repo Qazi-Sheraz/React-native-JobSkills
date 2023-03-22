@@ -24,11 +24,11 @@ import {heightPercentageToDP} from 'react-native-responsive-screen';
 import {color} from 'react-native-reanimated';
 
 const data = [
-  {id: 1, name: 'Taqi Haider', status: 'Applied', Date: '2022-03-15'},
-  {id: 2, name: 'Hamza', status: 'Rejected', Date: '2022-04-16'},
-  {id: 3, name: 'Sadia', status: 'Shortlisted', Date: '2022-08-05'},
-  {id: 4, name: 'Usman', status: 'Interview Scheduled', Date: '2023-03-25'},
-  {id: 5, name: 'Yasir', status: 'Drafted', Date: '2023-05-10'},
+  {id: 0, name: 'Taqi Haider', status: 'Applied', Date: '2022-03-15'},
+  {id: 1, name: 'Hamza', status: 'Rejected', Date: '2022-04-16'},
+  {id: 2, name: 'Sadia', status: 'Shortlisted', Date: '2022-08-05'},
+  {id: 3, name: 'Usman', status: 'Interview Scheduled', Date: '2023-03-25'},
+  {id: 4, name: 'Yasir', status: 'Drafted', Date: '2023-05-10'},
 ];
 const data1 = [
   {id: 0, name: 'All'},
@@ -39,10 +39,24 @@ const data1 = [
   {id: 5, name: 'Interview Scheduled'},
 ];
 const JobApplication = () => {
-  const [isSelected, setSelected] = useState();
+  
+  const [selectedItem, setSelectedItem] = useState(data.status);
+  const handleSelect = (status) => {
+    setSelectedItem(data);
+  };
+  
   const refRBSheet = useRef();
   const store = useContext(StoreContext);
   const [items, setItems] = useState(data);
+  const filterData=(status)=>{
+    if(status === 'All'){
+      setItems(data)
+    }else{
+
+      setItems(data.filter((e)=> e.status === status ))
+    }
+    refRBSheet.current.close()
+  }
 
   const sortByNameAscending = () => {
     setItems([...items].sort((a, b) => a.name.localeCompare(b.name)));
@@ -54,6 +68,7 @@ const JobApplication = () => {
   const sortByRecentApplyDateDescending = () => {
     setItems([...items].sort((a, b) => new Date(b.Date) - new Date(a.Date)));
   };
+
   return (
     <JScreen>
       <JGradientHeader
@@ -112,7 +127,8 @@ const JobApplication = () => {
       <ScrollView style={{flex: 1}}>
         {items.map((item, index) => (
           <JApplication
-            Hname={item.name}
+         onSelect={handleSelect}
+           Hname={item.name}
             status={item.status}
             ApplyDate={item.Date}
           />
@@ -140,7 +156,7 @@ const JobApplication = () => {
           <JText style={styles.RBHeader}>Status of Applications</JText>
 
           {data1.map((item, index) => (
-            <JText  style={styles.RBtxt}>{item.name}</JText>
+            <JText key={index} onPress={()=>filterData(item.name)}    style={styles.RBtxt}>{item.name}</JText>
           ))}
         </View>
        
@@ -173,7 +189,7 @@ const styles = StyleSheet.create({
   RBtxt: {
     fontSize: RFPercentage(2.4),
     fontWeight: '600',
-    marginVertical: RFPercentage(0.5),
+    marginVertical: RFPercentage(0.7),
     width: '100%',
   },
 });

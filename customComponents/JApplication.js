@@ -11,10 +11,11 @@ import { date } from 'yup';
 import { Menu, MenuOption, MenuOptions, MenuTrigger } from 'react-native-popup-menu';
 import { useState } from 'react';
 
-export default function JApplication({Hname,status,ApplyDate}) {
-  const[isStatus,setStatus]=useState('Drafted');
+export default function JApplication({Hname,status,ApplyDate,onSelect,value}) {
+  
+ 
   return (
-    <View style={{backgroundColor: colors.tileColor[0]}}>
+    <View style={{backgroundColor: colors.tileColor[0],marginVertical: RFPercentage(0.2),}}>
       <JRow
         style={{
           justifyContent: 'space-between',
@@ -48,24 +49,31 @@ export default function JApplication({Hname,status,ApplyDate}) {
 
       <MenuOptions>
         <MenuOption 
-        // onSelect={setStatus('Drafted')}
+        onSelect={onSelect}
+        
         >
           <JText style={styles.menutxt}>Drafted</JText>
         </MenuOption>
         <MenuOption 
+       onSelect={onSelect}
+       
         >
           <JText style={styles.menutxt}>Applied</JText>
         </MenuOption>
-        <MenuOption>
+        <MenuOption onSelect={onSelect}
+       >
           <JText style={styles.menutxt}>Rejected</JText>
         </MenuOption>
-        <MenuOption  >
+        <MenuOption  onSelect={onSelect}
+       >
           <JText style={styles.menutxt}>Selected</JText>
         </MenuOption>
-        <MenuOption  >
+        <MenuOption  onSelect={onSelect}
+       >
           <JText style={styles.menutxt}>Shortlisted</JText>
         </MenuOption>
-        <MenuOption  >
+        <MenuOption onSelect={onSelect}
+       >
           <JText style={styles.menutxt}>Interview Scheduled</JText>
         </MenuOption>
        

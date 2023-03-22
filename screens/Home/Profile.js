@@ -35,7 +35,9 @@ import JRow from '../../customComponents/JRow';
 import moment from 'moment';
 import FontAwesome5Brands from 'react-native-vector-icons/FontAwesome5';
 import {_getProfile} from '../../functions/Candidate/MyProfile';
+
 function Profile({navigation}) {
+
   const store = useContext(StoreContext);
   console.log(store.myProfile?.user[0]);
   const [update, setUpdate] = useState(false);

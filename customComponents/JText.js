@@ -6,7 +6,7 @@ import colors from '../config/colors';
 export default function JText({
   children,
   style,
-  fontSize = RFPercentage(1.7),
+  fontSize = RFPercentage(1.9),
   fontColor = colors.black[0],
   textDecorationLine = 'none',
   fontWeight = 'normal',

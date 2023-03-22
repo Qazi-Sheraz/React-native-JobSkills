@@ -18,7 +18,7 @@ import Zocial from 'react-native-vector-icons/Zocial'
 import { RFPercentage } from 'react-native-responsive-fontsize'
 export default function JIcon(
     {
-
+      onPress,
         icon,
         name,
         color='#737D67',
@@ -76,7 +76,7 @@ export default function JIcon(
    icon === 'io' ?
 
  
-   <Ionicons name={name} color={color} size={size} style={style}/>
+   <Ionicons onPress={onPress} name={name} color={color} size={size} style={style}/>
    :
    icon === 'ma' ?
 

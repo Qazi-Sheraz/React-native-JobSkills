@@ -26,7 +26,7 @@ export default function EBottomTab() {
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName={'Home'}
+      initialRouteName={'Profile'}
       tabBar={({state, descriptors, navigation}) => (
         <CustomEmployeeBottomTab
           state={state}

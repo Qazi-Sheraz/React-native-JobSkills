@@ -206,7 +206,7 @@ function CHomeStack({navigation}) {
           headerShown: false,
           // gestureEnabled: false,
         }}
-        initialRouteName={store?.token?.token ? 'JobApplication' : 'SelectionScreen'}>
+        initialRouteName={store?.token?.token ? 'EBottomTab' : 'SelectionScreen'}>
         <Stack.Screen name="CHome" component={EBottomTab} />
         <Stack.Screen name="CAllJobs" component={AllJobs} />
         <Stack.Screen name="CFeatureCompany" component={FeatureCompany} />
