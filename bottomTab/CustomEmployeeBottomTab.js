@@ -26,7 +26,7 @@ export default function CustomEmployeeBottomTab({
         shadowOpacity: 0.26,
         shadowOffset: {width: 0, height: 2},
         shadowRadius: 10,
-        elevation: 3,
+        elevation: 5,
         borderTopLeftRadius: RFPercentage(2),
         borderTopRightRadius: RFPercentage(2),
       }}>

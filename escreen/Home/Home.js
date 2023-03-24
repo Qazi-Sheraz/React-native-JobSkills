@@ -26,6 +26,7 @@ import moment from 'moment';
 import JRecentJobTile from '../../customComponents/JRecentJobTile';
 import JFindTitle from '../../customComponents/JFindTitle';
 import RBSheet from 'react-native-raw-bottom-sheet';
+import EDrawerContent from '../../drawer/EDrawerContent';
 
 const Home = ({navigation}) => {
   const refRBSheet = useRef();
@@ -40,7 +41,7 @@ const Home = ({navigation}) => {
         <JHeader
           left={
             <Feather
-              onPress={() => navigation.openDrawer()}
+              onPress={() => navigation.openDrawer(EDrawerContent)}
               name="menu"
               size={RFPercentage(3.5)}
             />

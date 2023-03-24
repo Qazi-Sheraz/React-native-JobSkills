@@ -26,7 +26,7 @@ function Notification ({navigation, route}) {
           color={colors.white[0]}
         />
       }
-      children={
+      center={
         <JText 
         fontColor={colors.white[0]}
         fontWeight="bold"

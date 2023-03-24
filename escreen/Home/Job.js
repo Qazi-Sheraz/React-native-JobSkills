@@ -50,7 +50,7 @@ const Job = () => {
         onPressIcon={() => alert('Icon Pressed')}
       />
       <JScrollView >
-        {[0, 1, 2, 3, 4, 5].map((item, index) => (
+        {[0, 1, 2, ].map((item, index) => (
           <>
             <JRecentJobTile
               onPress={() => navigation.navigate('JobDetails')}
@@ -61,14 +61,14 @@ const Job = () => {
           </>
         ))}
       </JScrollView>
-      <View style={{height:heightPercentageToDP(6),paddingTop:RFPercentage(0.3)}}>
+      {/* <View style={{height:heightPercentageToDP(6),paddingTop:RFPercentage(0.3),backgroundColor:'transparent'}}>
       <JButton
        style={{paddingHorizontal:RFPercentage(5),}}
         onPress={() => {
          navigation.navigate('AddNew_Job')
         }}
         children={'Add New Job'}
-      /></View>
+      /></View> */}
     </JScreen>
   );
 };

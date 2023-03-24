@@ -33,6 +33,8 @@ import JobApplication from '../../escreen/Jobs/JobApplication';
 import ProfileJobApplication from '../../escreen/Jobs/ProfileJobApplication';
 import EditProfile from '../../screens/Home/ProfileScreen/EditProfile';
 import Notification from '../../screens/Notification/Notification';
+import Followers from '../../escreen/edrawer/Followers';
+import Applicants from '../../escreen/edrawer/Applicants';
 
 const Stack = createStackNavigator();
 
@@ -207,7 +209,7 @@ function CHomeStack({navigation}) {
           headerShown: false,
           // gestureEnabled: false,
         }}
-        initialRouteName={store?.token?.token ? 'ProfileApplication' : 'SelectionScreen'}>
+        initialRouteName={store?.token?.token ? 'Applicants' : 'SelectionScreen'}>
         <Stack.Screen name="CHome" component={EBottomTab} />
         <Stack.Screen name="CAllJobs" component={AllJobs} />
         <Stack.Screen name="CFeatureCompany" component={FeatureCompany} />
@@ -221,6 +223,9 @@ function CHomeStack({navigation}) {
         <Stack.Screen name="JobApplication" component={JobApplication} />
         <Stack.Screen name="ProfileApplication" component={ProfileJobApplication} />
         <Stack.Screen name="CEditProfile" component={EditProfile} />
+        <Stack.Screen name="Followers" component={Followers} />
+        <Stack.Screen name="Applicants" component={Applicants} />
+
         <Stack.Screen
           name="CContacttInformation"
           component={CContactInformation}
@@ -242,7 +247,6 @@ function CHomeStack({navigation}) {
         <Stack.Screen name="CRegister" component={Registration} />
         <Stack.Screen name="DAccountSetting" component={AccountSetting} />
         <Stack.Screen name="DFollowings" component={Followings} />
-
         <Stack.Screen name="DJobAlert" component={JobAlert} />
         <Stack.Screen name="DHelpCenter" component={HelpCenter} />
       </Stack.Navigator>

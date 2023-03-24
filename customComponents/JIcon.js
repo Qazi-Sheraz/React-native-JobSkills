@@ -16,6 +16,7 @@ import Octicons from 'react-native-vector-icons/Octicons'
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons'
 import Zocial from 'react-native-vector-icons/Zocial'
 import { RFPercentage } from 'react-native-responsive-fontsize'
+
 export default function JIcon(
     {
       onPress,
@@ -30,47 +31,47 @@ export default function JIcon(
     icon === 'an' ?
 
  
-   <AntDesign name={name} color={color} size={size} style={style}/>
+   <AntDesign onPress={onPress} name={name} color={color} size={size} style={style}/>
    :
    icon === 'en' ?
 
  
-   <Entypo name={name} color={color} size={size} style={style}/>
+   <Entypo onPress={onPress} name={name} color={color} size={size} style={style}/>
    :
    icon === 'ev' ?
 
  
-   <EvilIcons name={name} color={color} size={size} style={style}/>
+   <EvilIcons onPress={onPress} name={name} color={color} size={size} style={style}/>
    :
 
    icon === 'fe' ?
 
  
-   <Feather name={name} color={color} size={size} style={style}/>
+   <Feather onPress={onPress} name={name} color={color} size={size} style={style}/>
    :
    icon === 'fa' ?
 
  
-   <FontAwesome name={name} color={color} size={size} style={style}/>
+   <FontAwesome onPress={onPress} name={name} color={color} size={size} style={style}/>
    :  icon === 'fa5' ?
 
  
-   <FontAwesome5 name={name} color={color} size={size} style={style}/>
+   <FontAwesome5 onPress={onPress} name={name} color={color} size={size} style={style}/>
    :
    icon === 'fa5pro' ?
 
  
-   <FontAwesome5Pro name={name} color={color} size={size} style={style}/>
+   <FontAwesome5Pro onPress={onPress} name={name} color={color} size={size} style={style}/>
    :
    icon === 'ft' ?
 
  
-   <Fontisto name={name} color={color} size={size} style={style}/>
+   <Fontisto onPress={onPress} name={name} color={color} size={size} style={style}/>
    :
    icon === 'fd' ?
 
  
-   <Foundation name={name} color={color} size={size} style={style}/>
+   <Foundation onPress={onPress} name={name} color={color} size={size} style={style}/>
    :
 
    icon === 'io' ?
@@ -81,24 +82,24 @@ export default function JIcon(
    icon === 'ma' ?
 
  
-   <MaterialCommunityIcons name={name} color={color} size={size} style={style}/>
+   <MaterialCommunityIcons onPress={onPress} name={name} color={color} size={size} style={style}/>
    :
    icon === 'mi' ?
 
  
-   <MaterialIcons name={name} color={color} size={size} style={style}/>
+   <MaterialIcons onPress={onPress} name={name} color={color} size={size} style={style}/>
    :
    icon === 'oc' ?
 
  
-   <Octicons name={name} color={color} size={size} style={style}/>
+   <Octicons onPress={onPress} name={name} color={color} size={size} style={style}/>
    :
    icon === 'sm' ?
 
  
-   <SimpleLineIcons name={name} color={color} size={size} style={style}/>
+   <SimpleLineIcons onPress={onPress} name={name} color={color} size={size} style={style}/>
    :
-   <Zocial name={name} color={color} size={size} style={style}/>
+   <Zocial onPress={onPress} name={name} color={color} size={size} style={style}/>
 
 
   )

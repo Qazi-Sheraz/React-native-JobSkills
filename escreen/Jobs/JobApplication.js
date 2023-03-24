@@ -1,4 +1,11 @@
-import {StyleSheet, FlatList, View, ScrollView, Pressable} from 'react-native';
+import {
+  StyleSheet,
+  FlatList,
+  View,
+  ScrollView,
+  Pressable,
+  Modal,
+} from 'react-native';
 import React, {useContext, useRef, useState} from 'react';
 import JScreen from '../../customComponents/JScreen';
 import JGradientHeader from '../../customComponents/JGradientHeader';
@@ -39,24 +46,22 @@ const data1 = [
   {id: 5, name: 'Interview Scheduled'},
 ];
 const JobApplication = () => {
-  
   const [selectedItem, setSelectedItem] = useState(data.status);
-  const handleSelect = (status) => {
+  const handleSelect = status => {
     setSelectedItem(data);
   };
-  
+  const [modalVisible, setModalVisible] = useState(false);
   const refRBSheet = useRef();
   const store = useContext(StoreContext);
   const [items, setItems] = useState(data);
-  const filterData=(status)=>{
-    if(status === 'All'){
-      setItems(data)
-    }else{
-
-      setItems(data.filter((e)=> e.status === status ))
+  const filterData = status => {
+    if (status === 'All') {
+      setItems(data);
+    } else {
+      setItems(data.filter(e => e.status === status));
     }
-    refRBSheet.current.close()
-  }
+    refRBSheet.current.close();
+  };
 
   const sortByNameAscending = () => {
     setItems([...items].sort((a, b) => a.name.localeCompare(b.name)));
@@ -123,12 +128,13 @@ const JobApplication = () => {
         </Menu>
       </JRow>
 
-      {/* <JApplication Hname={'Taqi Haider'} /> */}
+      
       <ScrollView style={{flex: 1}}>
         {items.map((item, index) => (
           <JApplication
-         onSelect={handleSelect}
-           Hname={item.name}
+            onPress={() => setModalVisible(true)}
+            onSelect={handleSelect}
+            Hname={item.name}
             status={item.status}
             ApplyDate={item.Date}
           />
@@ -156,11 +162,31 @@ const JobApplication = () => {
           <JText style={styles.RBHeader}>Status of Applications</JText>
 
           {data1.map((item, index) => (
-            <JText key={index} onPress={()=>filterData(item.name)}    style={styles.RBtxt}>{item.name}</JText>
+            <JText
+              key={index}
+              onPress={() => filterData(item.name)}
+              style={styles.RBtxt}>
+              {item.name}
+            </JText>
           ))}
         </View>
-       
       </RBSheet>
+      <Modal animationType="fade" transparent={true} visible={modalVisible}>
+        <Pressable
+          onPress={() => setModalVisible(!modalVisible)}
+          style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <JText fontColor={colors.white[0]} fontSize={RFPercentage(1.8)}>
+              Candidate Fit Score calculates how a participant{'\n'}scores in
+              relation to the “ideal profile” for a given{'\n'}role. The Fit
+              Score is categorised to help with ease{'\n'}of interpretation and
+              use during the hiring process.{'\n'}Typically, 76-100 indicates a
+              good fit to the role,{'\n'}25-75 indicates a possible fit, and
+              1-24 indicates a{'\n'}low fit.
+            </JText>
+          </View>
+        </Pressable>
+      </Modal>
     </JScreen>
   );
 };
@@ -191,5 +217,26 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginVertical: RFPercentage(0.7),
     width: '100%',
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: RFPercentage(2.5),
+    backgroundColor: '#747474',
+    borderRadius: RFPercentage(2),
+    padding: RFPercentage(1.5),
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
 });
