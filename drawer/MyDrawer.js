@@ -11,13 +11,14 @@ export default function MyDrawer() {
         screenOptions={{headerShown: false}}
         initialRouteName={'CHomeStack'}
         drawerContent={(props) =>
-          <>
           
-    {/* <CustomDrawerContent {...props} />  */}
+          
+//  <CustomDrawerContent {...props} />
     <EDrawerContent {...props}/>
-    </>
-      // 
-      }>
+   
+      
+      } 
+      >
         {/* <Drawer.Screen name="CHomeStack" component={CHomeStack} /> */}
         <Drawer.Screen name="EHomeStack" component={EmployeStack} />
       </Drawer.Navigator>

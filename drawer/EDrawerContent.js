@@ -32,7 +32,7 @@ function EDrawerContent (props) {
   const _navigateToScreen = index => {
     props.navigation.closeDrawer();
     index === 0
-      ? props.navigation.navigate('AccountSetting')
+      ? props.navigation.navigate('DAccountSetting')
       : index === 1
       ? props.navigation.navigate('Followers')
       : index === 2

@@ -35,6 +35,10 @@ import EditProfile from '../../screens/Home/ProfileScreen/EditProfile';
 import Notification from '../../screens/Notification/Notification';
 import Followers from '../../escreen/edrawer/Followers';
 import Applicants from '../../escreen/edrawer/Applicants';
+import EAccountSetting from '../../escreen/edrawer/EAccountSetting';
+import ResetPassword from '../../screens/ResetPassword/ResetPassword';
+import ChangePassword from '../../screens/ChangePassword/ChangePassword';
+import ChangeLanguage from '../../screens/ChangeLanguage/ChangeLanguage';
 
 const Stack = createStackNavigator();
 
@@ -209,7 +213,7 @@ function CHomeStack({navigation}) {
           headerShown: false,
           // gestureEnabled: false,
         }}
-        initialRouteName={store?.token?.token ? 'Applicants' : 'SelectionScreen'}>
+        initialRouteName={store?.token?.token ? 'ChangeLanguage' : 'SelectionScreen'}>
         <Stack.Screen name="CHome" component={EBottomTab} />
         <Stack.Screen name="CAllJobs" component={AllJobs} />
         <Stack.Screen name="CFeatureCompany" component={FeatureCompany} />
@@ -245,10 +249,12 @@ function CHomeStack({navigation}) {
         <Stack.Screen name="CVerifiedEmail" component={VerifiedEmail} />
         <Stack.Screen name="CLogin" component={Login} />
         <Stack.Screen name="CRegister" component={Registration} />
-        <Stack.Screen name="DAccountSetting" component={AccountSetting} />
+        <Stack.Screen name="EAccountSetting" component={EAccountSetting} />
         <Stack.Screen name="DFollowings" component={Followings} />
         <Stack.Screen name="DJobAlert" component={JobAlert} />
         <Stack.Screen name="DHelpCenter" component={HelpCenter} />
+        <Stack.Screen name="ChangePassword" component={ChangePassword} />
+        <Stack.Screen name="ChangeLanguage" component={ChangeLanguage} />
       </Stack.Navigator>
     </React.Fragment>
   );

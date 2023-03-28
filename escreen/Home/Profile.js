@@ -82,6 +82,7 @@ const Profile = () => {
         }}>
         <JProfileSections
           // loader={store.myProfileApiLoader}
+          
           onIconPress={() => {
             navigation.navigate('CEditProfile', {selected: 0});
           }}

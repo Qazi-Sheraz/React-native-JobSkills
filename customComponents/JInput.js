@@ -46,7 +46,9 @@ export default function JInput({
           flexDirection: 'row',
           alignItems: 'center',
           marginTop: RFPercentage(0.3),
+          marginBottom: RFPercentage(1),
           borderBottomWidth: RFPercentage(0.2),
+          
           borderBottomColor: error ? colors.danger[0] : colors.inputBorder[0],
         }}>
         <TextInput
