@@ -14,7 +14,10 @@ import Feather from 'react-native-vector-icons/Feather'
 import JButton from '../../customComponents/JButton'
 import JProfileInfo from '../../customComponents/JProfileInfo'
 import { StoreContext } from '../../mobx/store'
+import JIcon from '../../customComponents/JIcon'
+import { useNavigation } from '@react-navigation/native'
 const AddNew_Job = () => {
+  const {navigate,goBack}=useNavigation();
     const [selected, setSelected] = useState(0);
   return (
     <JScreen
@@ -28,6 +31,15 @@ const AddNew_Job = () => {
               fontSize={RFPercentage(2.5)}>
               {'Job Detail'}
             </JText>
+          }
+          left={
+            <JIcon
+              icon="fe"
+              onPress={() => goBack()}
+              name="chevron-left"
+              size={RFPercentage(3.5)}
+              color={colors.white[0]}
+            />
           }
         />
       }>

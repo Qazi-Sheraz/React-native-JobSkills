@@ -26,23 +26,26 @@ import Toast from 'react-native-toast-message';
 import {observer, Observer} from 'mobx-react';
 import { getDrawerItem } from '../data/edrawer';
 import JIcon from '../customComponents/JIcon';
+import { useNavigation } from '@react-navigation/native';
+
 function EDrawerContent (props) {
+  const {navigate}=useNavigation()
   const store = useContext(StoreContext);
   const user = store.token?.user;
   const _navigateToScreen = index => {
     props.navigation.closeDrawer();
     index === 0
-      ? props.navigation.navigate('DAccountSetting')
+      ? navigate('EAccountSetting')
       : index === 1
-      ? props.navigation.navigate('Followers')
+      ? navigate('Followers')
       : index === 2
-      ? props.navigation.navigate('Applicants')
+      ? navigate('Employes')
       : index === 3
-      ? props.navigation.navigate('Applicants')
+      ? navigate('Applicants')
       : index === 4
-      ? props.navigation.navigate('DHelpCenter')
+      ? navigate('Assessment')
       : index === 5
-      ? props.navigation.navigate('DHelpCenter')
+      ? navigate('DHelpCenter')
       : AsyncStorage.removeItem('@login')
           .then(res => {
             store.setToken({

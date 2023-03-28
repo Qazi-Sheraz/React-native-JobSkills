@@ -21,7 +21,6 @@ import FeatureJob from '../../screens/Home/FeatureJob/FeatureJob';
 import CSearch from '../../screens/Home/Search/CSearch';
 import messaging from '@react-native-firebase/messaging';
 import {Alert} from 'react-native';
-import AccountSetting from '../../screens/Drawer/AccountSetting';
 import Followings from '../../screens/Drawer/Followings';
 import JobAlert from '../../screens/Drawer/JobAlert';
 import HelpCenter from '../../screens/Drawer/HelpCenter';
@@ -39,6 +38,9 @@ import EAccountSetting from '../../escreen/edrawer/EAccountSetting';
 import ResetPassword from '../../screens/ResetPassword/ResetPassword';
 import ChangePassword from '../../screens/ChangePassword/ChangePassword';
 import ChangeLanguage from '../../screens/ChangeLanguage/ChangeLanguage';
+import Transaction from '../../escreen/edrawer/AccountSettings/Transaction';
+import Assessment from '../../screens/Home/ProfileScreen/Assessment';
+import Employes from '../../escreen/edrawer/Employes';
 
 const Stack = createStackNavigator();
 
@@ -213,8 +215,10 @@ function CHomeStack({navigation}) {
           headerShown: false,
           // gestureEnabled: false,
         }}
-        initialRouteName={store?.token?.token ? 'ChangeLanguage' : 'SelectionScreen'}>
+        initialRouteName={store?.token?.token ? 'CHome' : 'SelectionScreen'}>
+          
         <Stack.Screen name="CHome" component={EBottomTab} />
+        <Stack.Screen name="Assessment" component={Assessment} />
         <Stack.Screen name="CAllJobs" component={AllJobs} />
         <Stack.Screen name="CFeatureCompany" component={FeatureCompany} />
         <Stack.Screen name="CFeatureJob" component={FeatureJob} />
@@ -229,6 +233,8 @@ function CHomeStack({navigation}) {
         <Stack.Screen name="CEditProfile" component={EditProfile} />
         <Stack.Screen name="Followers" component={Followers} />
         <Stack.Screen name="Applicants" component={Applicants} />
+        <Stack.Screen name="Transaction" component={Transaction} />
+        <Stack.Screen name="Employes" component={Employes} />
 
         <Stack.Screen
           name="CContacttInformation"

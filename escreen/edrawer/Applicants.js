@@ -14,7 +14,9 @@ import JErrorText from '../../customComponents/JErrorText';
 import JRow from '../../customComponents/JRow';
 import Entypo from 'react-native-vector-icons/Entypo';
 import JButton from '../../customComponents/JButton';
+import { useNavigation } from '@react-navigation/native';
 const Applicants = () => {
+  const {navigate,goBack}=useNavigation();
   const phoneInput = useRef(null);
   return (
     <JScreen
@@ -28,7 +30,7 @@ const Applicants = () => {
           left={
             <JIcon
               icon="fe"
-              onPress={() => navigation.goBack()}
+              onPress={() => goBack()}
               name="chevron-left"
               size={RFPercentage(3.5)}
               color={colors.white[0]}

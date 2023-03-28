@@ -41,17 +41,18 @@ const EAccountSetting = () => {
     }>
     <View style={{flex:1,marginTop:RFPercentage(4)}}>
       <JPasswordSetting
-      onPress={navigation.navigate('ChangePassword')}
+      onPress={()=>navigation.navigate('ChangePassword')}
         Svg={<Password />}
         Header="Change Password"
         txt={'********'}
       />
       <JPasswordSetting
+      onPress={()=> navigation.navigate('ChangeLanguage')}
         Svg={<Network />}
         Header="Change Language"
         txt={'English'}
       />
-      <JPasswordSetting Svg={<Transactions />} Header="Transactions" />
+      <JPasswordSetting onPress={()=>navigation.navigate('Transaction')} Svg={<Transactions />} Header="Transactions" />
       <JPasswordSetting
         Svg={<Notification />}
         Header="Notifications"

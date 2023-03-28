@@ -13,7 +13,6 @@ import colors from '../../config/colors';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import JShadowView from '../../customComponents/JShadowView';
 import {heightPercentageToDP} from 'react-native-responsive-screen';
-import Feather from 'react-native-vector-icons/Feather';
 import {useContext} from 'react';
 import {StoreContext} from '../../mobx/store';
 import {useState} from 'react';
@@ -61,14 +60,14 @@ const Job = () => {
           </>
         ))}
       </JScrollView>
-      {/* <View style={{height:heightPercentageToDP(6),paddingTop:RFPercentage(0.3),backgroundColor:'transparent'}}>
+      <View style={{height:heightPercentageToDP(6),paddingTop:RFPercentage(0.3),backgroundColor:'transparent'}}>
       <JButton
        style={{paddingHorizontal:RFPercentage(5),}}
         onPress={() => {
          navigation.navigate('AddNew_Job')
         }}
         children={'Add New Job'}
-      /></View> */}
+      /></View>
     </JScreen>
   );
 };

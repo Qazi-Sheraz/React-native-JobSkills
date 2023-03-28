@@ -1,17 +1,18 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-import JScreen from '../../customComponents/JScreen';
-import JGradientHeader from '../../customComponents/JGradientHeader';
-import JText from '../../customComponents/JText';
-import JIcon from '../../customComponents/JIcon';
-import colors from '../../config/colors';
+import JScreen from '../../../customComponents/JScreen';
+import JGradientHeader from '../../../customComponents/JGradientHeader';
+import JText from '../../../customComponents/JText';
+import colors from '../../../config/colors';
 import {RFPercentage} from 'react-native-responsive-fontsize';
-import {useNavigation} from '@react-navigation/native';
-import JSearchInput from '../../customComponents/JSearchInput';
-import JEmployeUser from '../../customComponents/JEmployeUser';
+import JIcon from '../../../customComponents/JIcon';
+import JSearchInput from '../../../customComponents/JSearchInput';
+import JTransaction from '../../../customComponents/JTransaction';
+import { useNavigation } from '@react-navigation/native';
 
-const Employes = () => {
-  const {navigate, goBack} = useNavigation();
+const Transaction = () => {
+  const navigation = useNavigation();
+
   return (
     <JScreen
       style={{paddingHorizontal: RFPercentage(2)}}
@@ -22,13 +23,13 @@ const Employes = () => {
               fontColor={colors.white[0]}
               fontWeight="bold"
               fontSize={RFPercentage(2.5)}>
-              Employe User
+              Transaction
             </JText>
           }
           left={
             <JIcon
               icon="fe"
-              onPress={() => goBack()}
+              onPress={() => navigation.goBack()}
               name="chevron-left"
               size={RFPercentage(3.5)}
               color={colors.white[0]}
@@ -43,20 +44,17 @@ const Employes = () => {
         }}
         onPressIcon={() => alert('Icon Pressed')}
       />
-      <View style={{ marginVertical: RFPercentage(2)}}>
-        {[0, 1, 2].map((item, index) => (
-          <JEmployeUser
-            name={'Taqi Haider'}
-            email={'OfficeAdministration@gmail.com'}
-            text={'Reviewer Interviewer'}
-            status={'Active'}
-          />
-        ))}
+      <View style={{flex: 1, marginVertical: RFPercentage(2)}}>
+        {[0,1,2,].map((item,index)=>(
+          <JTransaction text={'invoice'} date={'12-33-44'} />
+        )
+        )}
+        
       </View>
     </JScreen>
   );
 };
 
-export default Employes;
+export default Transaction;
 
 const styles = StyleSheet.create({});

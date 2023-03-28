@@ -6,16 +6,17 @@ import JScreen from '../../customComponents/JScreen';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import colors from '../../config/colors';
 import JGradientHeader from '../../customComponents/JGradientHeader';
-import JLanguages from '../../customComponents/JLanguages';
 import JButton from '../../customComponents/JButton';
 import {useState} from 'react';
 import JCircleCheck from '../../customComponents/JCircleCheck';
+import { useNavigation } from '@react-navigation/native';
 
 const ChangeLanguage = () => {
+  const navigation=useNavigation();
   const [data, setData] = useState([
     {id: 0, lang: 'English (United Kingdom)', selected: false},
     {id: 1, lang: 'اردو', selected: false},
-    {id: 2, lang: ' ة  يبرعلا', selected: false},
+    {id: 2, lang:  'العربية', selected: false},
   ]);
   return (
     <JScreen

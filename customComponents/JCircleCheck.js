@@ -7,8 +7,8 @@ import { useState } from 'react';
 import JRow from './JRow';
 import JText from './JText';
 
-const JCircleCheck = ({language}) => {
-    const [check,setCheck]= useState(false)
+const JCircleCheck = ({language,isSelected,onPress}) => {
+    // const [check,setCheck]= useState(false)
   return (
     <JRow
     style={{
@@ -21,8 +21,7 @@ const JCircleCheck = ({language}) => {
     }}>
     <JText>{language}</JText>
     <Pressable
-    onPress={()=> setCheck(!check)
-    }
+    onPress={onPress}
       style={{
         height: RFPercentage(3),
         width: RFPercentage(3),
@@ -32,13 +31,14 @@ const JCircleCheck = ({language}) => {
         alignItems: 'center',
         justifyContent: 'center',
       }}>
+        {isSelected &&
       <View
         style={{
           height: RFPercentage(2.2),
           width: RFPercentage(2.2),
           borderRadius: RFPercentage(1.25),
-          backgroundColor: check===true? colors.purple[0]:'transparent',
-        }}></View>
+          backgroundColor: colors.purple[0],
+        }}/>}
     </Pressable>
   </JRow>
     

@@ -11,7 +11,9 @@ import Key from '../../assets/svg/Icon/Key.svg';
 import CurrentP from '../../assets/svg/Icon/CurrentP.svg';
 import JButton from '../../customComponents/JButton';
 import JRow from '../../customComponents/JRow';
+import { useNavigation } from '@react-navigation/native';
 const ChangePassword = () => {
+  const navigation=useNavigation();
   return (
     <JScreen
       style={{paddingHorizontal: RFPercentage(2)}}
