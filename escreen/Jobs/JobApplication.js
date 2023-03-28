@@ -29,6 +29,7 @@ import {StoreContext} from '../../mobx/store';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {heightPercentageToDP} from 'react-native-responsive-screen';
 import {color} from 'react-native-reanimated';
+import { useNavigation } from '@react-navigation/native';
 
 const data = [
   {id: 0, name: 'Taqi Haider', status: 'Applied', Date: '2022-03-15'},
@@ -46,6 +47,7 @@ const data1 = [
   {id: 5, name: 'Interview Scheduled'},
 ];
 const JobApplication = () => {
+  const{navigate,goBack}=useNavigation();
   const [selectedItem, setSelectedItem] = useState(data.status);
   const handleSelect = status => {
     setSelectedItem(data);
@@ -85,7 +87,7 @@ const JobApplication = () => {
             {'Laraval Job Applicantes'}
           </JText>
         }
-        left={<Chevron onPress={() => navigation.goBack()} />}
+        left={<Chevron onPress={() => goBack()} />}
       />
       <JRow
         style={{

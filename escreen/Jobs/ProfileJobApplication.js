@@ -16,8 +16,13 @@ import JButton from '../../customComponents/JButton';
 import JStatusbar from '../../customComponents/JStatusbar';
 import JSkills from '../../customComponents/JSkills';
 import RBSheet from 'react-native-raw-bottom-sheet';
+import Download from '../../assets/svg/Icon/Download.svg';
+import Eyes from '../../assets/svg/Icon/Eyes.svg';
+import Flag from '../../assets/svg/Icon/Flag.svg';
 import {useRef} from 'react';
 import {heightPercentageToDP} from 'react-native-responsive-screen';
+import { Menu, MenuOption, MenuOptions, MenuTrigger } from 'react-native-popup-menu';
+
 
 const ProfileJobApplication = () => {
   const data = [
@@ -41,7 +46,32 @@ const ProfileJobApplication = () => {
             color={colors.black[0]}
           />
         }
-        right={<JIcon icon={'sm'} name={'options-vertical'} size={20} />}
+        right={ <Menu >
+          <MenuTrigger
+            style={{
+              width: RFPercentage(3),
+              height: RFPercentage(4),
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <JIcon icon={'sm'} name={'options-vertical'} size={20} />
+          </MenuTrigger>
+          <MenuOptions >
+            <MenuOption style={{flexDirection:'row',alignItems:'center',}}>
+            <Flag/>
+              <JText style={styles.menutxt}>Report Candidate</JText>
+            </MenuOption>
+            <MenuOption style={{flexDirection:'row',alignItems:'center'}}>
+              <Download/>
+              <JText style={styles.menutxt}>Download Resume</JText>
+            </MenuOption>
+            <MenuOption style={{flexDirection:'row',alignItems:'center'}}>
+              <Eyes/>
+              <JText style={styles.menutxt}>View Resume</JText>
+            </MenuOption>
+          </MenuOptions>
+        </Menu>
+        }
       />
       <View style={styles.main}>
         <Image
@@ -227,5 +257,10 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginVertical: RFPercentage(0.7),
     width: '100%',
+  },
+  menutxt: {
+    fontSize: RFPercentage(2.2),
+    marginVertical: RFPercentage(0.5),
+    paddingHorizontal: RFPercentage(1),
   },
 });

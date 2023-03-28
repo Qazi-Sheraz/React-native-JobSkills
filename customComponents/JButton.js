@@ -8,7 +8,7 @@ import {
   widthPercentageToDP,
 } from 'react-native-responsive-screen';
 
-export default function JButton({
+export default function  JButton({
   children,
   style,
   backgroundColor,

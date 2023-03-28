@@ -48,10 +48,12 @@ function JRecentJobTile({
   status,
   favouriteData = [],
   jobId,
+  onSelect,
 }) {
   const [loader, setLoader] = useState();
   const store = useContext(StoreContext);
 const navigation=useNavigation();
+
   return isempty === true ? (
     <View
    
@@ -200,9 +202,7 @@ const navigation=useNavigation();
                       marginLeft: RFPercentage(1),
                     }}
                     key={index}
-                    onSelect={() => {
-                      alert(item);
-                    }}>
+                    onSelect={onSelect}>
                     <View
                       style={{
                         flexDirection: 'row',

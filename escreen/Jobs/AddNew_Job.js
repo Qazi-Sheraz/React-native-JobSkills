@@ -18,7 +18,6 @@ import JIcon from '../../customComponents/JIcon'
 import { useNavigation } from '@react-navigation/native'
 const AddNew_Job = () => {
   const {navigate,goBack}=useNavigation();
-    const [selected, setSelected] = useState(0);
   return (
     <JScreen
       style={{paddingHorizontal: RFPercentage(2)}}
