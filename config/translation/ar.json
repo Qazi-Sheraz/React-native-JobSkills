@@ -1,0 +1,31 @@
+{
+    
+    "id":2,
+    "error":"Error",
+    "job_title":"مسمى وظيفي",
+    "upcoming_Meetings":"الاجتماعات القادمة",
+    "project_Manager":"مدير المشروع",
+    "start":"يبدأ",
+    "Recent_Jobs":"الوظائف الحديثة",
+    "not_found":"غير معثور عليه !",
+    "expire_on":"تنتهي في",
+    "applicates":"ينطبق",
+    "closed":"مغلق",
+    "close":"يغلق",
+    "live":"يعيش",
+    "paused":"متوقف مؤقتًا",
+    "job":"وظيفة",
+    "jobs":"وظائف",
+    "total":"المجموع",
+    "meetings":"الاجتماعات",
+    "meeting":"مقابلة",
+    "meeting_Info":"معلومات أكل",
+    "meeting_ID":"معرف الاجتماع",
+    "password":"كلمة المرور",
+    "home":"بيت",
+    "profile":"حساب تعريفي",
+    "profile":"بيت",
+    "profile":"بيت"
+
+
+    }

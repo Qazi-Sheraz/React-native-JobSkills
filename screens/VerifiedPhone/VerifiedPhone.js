@@ -9,7 +9,8 @@ import JButton from '../../customComponents/JButton';
 
 import JReload from '../../customComponents/JReload';
 import Toast from 'react-native-toast-message';
-export default function VerifiedEmail({route, navigation}) {
+
+export default function VerifiedPhone({ navigation}) {
   const [value, setValue] = useState({
     d1: '',
     d2: '',
@@ -17,14 +18,7 @@ export default function VerifiedEmail({route, navigation}) {
     d4: '',
   });
 
-  let _hideEmail = function (email) {
-    return email.replace(/(.{2})(.*)(?=@)/, function (gp1, gp2, gp3) {
-      for (let i = 0; i < gp3.length; i++) {
-        gp2 += '*';
-      }
-      return gp2;
-    });
-  };
+
   const d1 = useRef();
   const d2 = useRef();
   const d3 = useRef();
@@ -46,16 +40,13 @@ export default function VerifiedEmail({route, navigation}) {
         <JText
           fontSize={RFPercentage(2.8)}
           fontWeight={'bold'}
-          children="Verify your Email"
+          children="Confirmed Your Number"
           style={{marginTop: RFPercentage(2)}}
         />
         <JText
           fontWeight={'500'}
           fontAlign="center"
-          children={`Enter 4 digit code that you received on this email 
-          ${_hideEmail(route.params.email,)}
-          
-          ` }
+          children={'Enter 4 digit code that you received on this phone no +966*******777'}
           style={{marginTop: RFPercentage(0.5), width: '70%'}}
         />
       </View>

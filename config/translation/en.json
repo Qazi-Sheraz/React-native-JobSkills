@@ -1,0 +1,31 @@
+{
+    
+    "id":0,
+    "error":"Error",
+    "job_title":"Job Title",
+    "upcoming_Meetings":"Upcoming Meetings",
+    "project_Manager":"Project Manager",
+    "start":"Start",
+    "Recent_Jobs":"Recent Jobs",
+    "not_found":"Not Found !",
+    "expire_on":"Expire on",
+    "applicates":"Applicates",
+    "closed":"Closed",
+    "close":"Close",
+    "live":"Live",
+    "paused":"Paused",
+    "job":"Job",
+    "jobs":"Jobs",
+    "total":"Total",
+    "meetings":"Meetings",
+    "meeting":"Meeting",
+    "meeting_Info":"Meeting Info",
+    "meeting_ID":"Meeting ID",
+    "password":"Password",
+    "home":"Home",
+    "profile":"Profile",
+    "home":"Home"
+
+
+    
+    }

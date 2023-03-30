@@ -66,8 +66,8 @@ name2:"Hisham "},
           <JText style={{
             marginVertical: RFPercentage(1),
             fontSize:RFPercentage(2.5),
-            fontWeight:'bold'}}>Meating Info</JText>
-          <JText style={styles.rbtxt}>Meating ID</JText>
+            fontWeight:'bold'}}>Meeting Info</JText>
+          <JText style={styles.rbtxt}>Meeting ID</JText>
           <JText style={styles.rbtxt2}>3457654</JText>
           <JText style={styles.rbtxt}>Password</JText>
           <JText style={styles.rbtxt2}>34fgg654</JText>
@@ -78,4 +78,12 @@ name2:"Hisham "},
 
 export default Meeting;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  rbtxt:{
+    marginVertical: RFPercentage(0.5),
+    fontSize:RFPercentage(2),
+  fontWeight:'bold'},
+  rbtxt2:{
+    marginVertical: RFPercentage(0.5),
+    fontSize:RFPercentage(2)},
+});

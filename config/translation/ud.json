@@ -1,0 +1,30 @@
+{
+    
+    "id":1,
+    "error":"Error",
+    "job_title":"ملازمت کا عنوان",
+    "upcoming_Meetings":"آنے والی ملاقاتیں",
+    "project_Manager":"پروجیکٹ مینیجر",
+    "start":"شروع کریں",
+    "Recent_Jobs":"حالیہ نوکریاں",
+    "not_found":"نہیں ملا !",
+    "expire_on":"پر ختم",
+    "applicates":"درخواستیں",
+    "closed":"بند",
+    "close":"بند کریں ",
+    "live":"زندہ",
+    "paused":"روک دیا گیا",
+    "job":"نوکری",
+    "jobs":"نوکریاں",
+    "total":"کل",
+    "meetings":"ملاقاتیں",
+    "meeting":"ملاقات",
+    "meeting_Info":"میٹنگ کی معلومات",
+    "meeting_ID":"ملاقات Id",
+    "password":"پاس ورڈ",
+    "home":"گھر",
+    "profile":"پروفائل",
+    "home":"گھر"
+
+
+    }

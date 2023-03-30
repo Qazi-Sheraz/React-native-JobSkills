@@ -35,12 +35,14 @@ import Notification from '../../screens/Notification/Notification';
 import Followers from '../../escreen/edrawer/Followers';
 import Applicants from '../../escreen/edrawer/Applicants';
 import EAccountSetting from '../../escreen/edrawer/EAccountSetting';
-import ResetPassword from '../../screens/ResetPassword/ResetPassword';
 import ChangePassword from '../../screens/ChangePassword/ChangePassword';
 import ChangeLanguage from '../../screens/ChangeLanguage/ChangeLanguage';
 import Transaction from '../../escreen/edrawer/AccountSettings/Transaction';
 import Assessment from '../../screens/Home/ProfileScreen/Assessment';
 import Employes from '../../escreen/edrawer/Employes';
+import JobPreference from '../../escreen/Jobs/JobPreference';
+import JobRequirement from '../../escreen/Jobs/JobRequirement';
+import VerifiedPhone from '../../screens/VerifiedPhone/VerifiedPhone';
 
 const Stack = createStackNavigator();
 
@@ -215,7 +217,7 @@ function CHomeStack({navigation}) {
           headerShown: false,
           // gestureEnabled: false,
         }}
-        initialRouteName={store?.token?.token ? 'CHome' : 'SelectionScreen'}>
+        initialRouteName={store?.token?.token ? 'EBottomTab' : 'SelectionScreen'}>
           
         <Stack.Screen name="CHome" component={EBottomTab} />
         <Stack.Screen name="Assessment" component={Assessment} />
@@ -228,6 +230,8 @@ function CHomeStack({navigation}) {
         <Stack.Screen name="CFilter" component={CFilter} />
         <Stack.Screen name="JobDetails" component={JobDetails} />
         <Stack.Screen name="AddNew_Job" component={AddNew_Job} />
+        <Stack.Screen name="JobPreference" component={JobPreference} />
+        <Stack.Screen name="JobRequirement" component={JobRequirement} />
         <Stack.Screen name="JobApplication" component={JobApplication} />
         <Stack.Screen name="ProfileApplication" component={ProfileJobApplication} />
         <Stack.Screen name="CEditProfile" component={EditProfile} />
@@ -235,6 +239,7 @@ function CHomeStack({navigation}) {
         <Stack.Screen name="Applicants" component={Applicants} />
         <Stack.Screen name="Transaction" component={Transaction} />
         <Stack.Screen name="Employes" component={Employes} />
+        
 
         <Stack.Screen
           name="CContacttInformation"
@@ -261,6 +266,8 @@ function CHomeStack({navigation}) {
         <Stack.Screen name="DHelpCenter" component={HelpCenter} />
         <Stack.Screen name="ChangePassword" component={ChangePassword} />
         <Stack.Screen name="ChangeLanguage" component={ChangeLanguage} />
+        <Stack.Screen name="VerifiedPhone" component={VerifiedPhone} />
+        <Stack.Screen name="VerifiedEmail" component={VerifiedEmail} />
       </Stack.Navigator>
     </React.Fragment>
   );

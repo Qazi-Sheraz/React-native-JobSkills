@@ -51,8 +51,9 @@ const Profile = () => {
       header={
         <JGradientHeader
           height={heightPercentageToDP(22)}
-          alignItems={'flex-start'}
-          paddingTop={RFPercentage(3)}
+          // alignItems={'flex-start'}
+          justifyContent={'flex-start'}
+          paddingTop={RFPercentage(2)}
           left={
             <Feather
               onPress={() => navigation.goBack()}
@@ -106,7 +107,7 @@ const Profile = () => {
                    '+923876545679'
                   }
                 />
-                <JText fontColor={colors.redish[0]}>Confirm Your Number</JText>
+                <JText onPress={()=> navigation.navigate('VerifiedEmail')} fontColor={colors.redish[0]}>Confirm Your Number</JText>
               </BorderView>
             // )
           }

@@ -3,6 +3,7 @@ import {
   TextInput,
   Pressable,
   ActivityIndicator,
+  SafeAreaView,
 } from 'react-native';
 import React from 'react';
 import JScreen from '../../../customComponents/JScreen';
@@ -23,8 +24,20 @@ import JJobTile from '../../../customComponents/JJobTile';
 import {_search} from '../../../functions/CFilter';
 import {heightPercentageToDP} from 'react-native-responsive-screen';
 import JRecentJob from '../../../customComponents/JRecentJob';
+import RBSheet from 'react-native-raw-bottom-sheet';
+import {useRef} from 'react';
+import JGradientHeader from '../../../customComponents/JGradientHeader';
+import JRecentJobTile from '../../../customComponents/JRecentJobTile';
 
 const CSearch = ({navigation}) => {
+  const refRBSheet = useRef();
+  const [name, setName] = useState('');
+  const data = [
+    {id: 0, JobName: 'UI/UX Designer'},
+    {id: 1, JobName: 'Motion Graphic Designer'},
+    {id: 2, JobName: 'Laraval Developer'},
+    {id: 3, JobName: 'Interior Designer'},
+  ];
   const store = useContext(StoreContext);
   const [search, setSearch] = useState('');
 
@@ -169,15 +182,68 @@ const CSearch = ({navigation}) => {
               fontSize={RFPercentage(3)}>
               Recent Searches
             </JText>
-           <JRecentJob JobName={"UI/UX Designer"}/>
-           <JRecentJob JobName={"Motion Graphic Designer"}/>
-           <JRecentJob JobName={"Laraval Developer"}/>
-           <JRecentJob JobName={"Interior Designer"}/>
-          
-            
+            {data.map((item, index) => (
+              <JRecentJob
+                onPress={() => {
+                  setName(item.JobName);
+                  refRBSheet.current.open();
+                }}
+                JobName={item.JobName}
+              />
+            ))}
           </>
         )}
       </JScrollView>
+      <RBSheet
+        ref={refRBSheet}
+        closeOnDragDown={false}
+        closeOnPressMask={false}
+        height={heightPercentageToDP(100)}
+        customStyles={{
+          wrapper: {
+            backgroundColor: '#00000080',
+          },
+          draggableIcon: {
+            backgroundColor: colors.black[0],
+            display: 'none',
+          },
+        }}>
+        <SafeAreaView>
+          <JGradientHeader
+            center={
+              <JText
+                fontColor={colors.white[0]}
+                fontWeight="bold"
+                fontSize={RFPercentage(2.5)}>
+                {name}
+              </JText>
+            }
+            left={
+              <Feather
+                onPress={() => {
+                  refRBSheet.current.close();
+                }}
+                name="chevron-left"
+                size={RFPercentage(3.5)}
+                color={colors.white[0]}
+              />
+            }
+          />
+          <JScrollView style={{padding: RFPercentage(2)}}>
+            {[0, 1, 2].map((item, index) => (
+              <>
+                <JRecentJobTile
+                  onSelect={() => setModalVisible(true)}
+                  onPress={() => navigation.navigate('JobDetails')}
+                  image={false}
+                  title={name}
+                  key={index}
+                />
+              </>
+            ))}
+          </JScrollView>
+        </SafeAreaView>
+      </RBSheet>
     </JScreen>
   );
 };

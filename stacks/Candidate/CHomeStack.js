@@ -230,6 +230,7 @@ function CHomeStack({navigation}) {
           <Stack.Screen name="Assessment" component={Assessment} />
           {/* AUTHENTICATION */}
           <Stack.Screen name="CNotification" component={Notification} />
+          <Stack.Screen name="VerifiedEmail" component={VerifiedEmail} />
 
           <Stack.Screen name="DAccountSetting" component={AccountSetting} />
           <Stack.Screen name="DFollowings" component={Followings} />

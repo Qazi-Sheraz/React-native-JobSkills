@@ -30,7 +30,7 @@ export default function Login({navigation, route}) {
   const type = route?.params?.type;
   const _storeToken = (token, remember) => {
     if (remember === true) {
-      AsyncStorage.setItem('@login', JSON.stringify(token))
+      AsyncStorage.setItem('@login',JSON.stringify(token))
         .then(res => {
           store.setToken(token);
           navigation.navigate('CHome');
