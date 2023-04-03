@@ -2,6 +2,8 @@ import {Text} from 'react-native';
 import React from 'react';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import colors from '../config/colors';
+import { useContext } from 'react';
+import { StoreContext } from '../mobx/store';
 
 export default function JText({
   children,
@@ -11,10 +13,12 @@ export default function JText({
   textDecorationLine = 'none',
   fontWeight = 'normal',
   onPress,
-  fontAlign = 'auto',
+  fontAlign ,
   numberOfLines,
   ellipsizeMode,
 }) {
+  const store=useContext(StoreContext)
+  
   return (
     <Text
       numberOfLines={numberOfLines}
@@ -27,7 +31,7 @@ export default function JText({
           color: fontColor,
           textDecorationLine: textDecorationLine,
           fontWeight: fontWeight,
-          textAlign: fontAlign,
+          textAlign:fontAlign ? fontAlign: store.lang.id== 0? 'left' :'right',
         },
         style,
       ]}>

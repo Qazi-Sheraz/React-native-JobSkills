@@ -22,9 +22,14 @@ import Flag from '../../assets/svg/Icon/Flag.svg';
 import {useRef} from 'react';
 import {heightPercentageToDP} from 'react-native-responsive-screen';
 import { Menu, MenuOption, MenuOptions, MenuTrigger } from 'react-native-popup-menu';
+import { useContext } from 'react';
+import { StoreContext } from '../../mobx/store';
+import { observer } from 'mobx-react';
+import JChevronIcon from '../../customComponents/JChevronIcon';
 
 
 const ProfileJobApplication = () => {
+  const store = useContext(StoreContext);
   const data = [
     {name: 'Personal Assessment'},
     {name: 'Cognitive Assessment'},
@@ -38,14 +43,7 @@ const ProfileJobApplication = () => {
   return (
     <View style={styles.maincontainer}>
       <JHeader
-        left={
-          <Feather
-            onPress={() => navigation.goBack()}
-            name="chevron-left"
-            size={RFPercentage(3.5)}
-            color={colors.black[0]}
-          />
-        }
+        left={<JChevronIcon color={'Black'}/>}
         right={ <Menu >
           <MenuTrigger
             style={{
@@ -57,17 +55,17 @@ const ProfileJobApplication = () => {
             <JIcon icon={'sm'} name={'options-vertical'} size={20} />
           </MenuTrigger>
           <MenuOptions >
-            <MenuOption style={{flexDirection:'row',alignItems:'center',}}>
+            <MenuOption style={{flexDirection:store.lang.id=0?'row':'row-reverse',alignItems:'center',}}>
             <Flag/>
-              <JText style={styles.menutxt}>Report Candidate</JText>
+              <JText style={styles.menutxt}>{store.lang.report_candidate}</JText>
             </MenuOption>
-            <MenuOption style={{flexDirection:'row',alignItems:'center'}}>
+            <MenuOption style={{flexDirection:store.lang.id=0?'row':'row-reverse',alignItems:'center'}}>
               <Download/>
-              <JText style={styles.menutxt}>Download Resume</JText>
+              <JText style={styles.menutxt}>{store.lang.download_resume}</JText>
             </MenuOption>
-            <MenuOption style={{flexDirection:'row',alignItems:'center'}}>
+            <MenuOption style={{flexDirection:store.lang.id=0?'row':'row-reverse',alignItems:'center'}}>
               <Eyes/>
-              <JText style={styles.menutxt}>View Resume</JText>
+              <JText style={styles.menutxt}>{store.lang.view_resume}</JText>
             </MenuOption>
           </MenuOptions>
         </Menu>
@@ -103,7 +101,7 @@ const ProfileJobApplication = () => {
               paddingVertical: RFPercentage(2),
               marginBottom: RFPercentage(1),
             }}>
-            <JText style={styles.result}>Assessment Result</JText>
+            <JText style={styles.result}>{store.lang.assessment_result}</JText>
             <JAssessmentResult
               title={'Personal Assessment'}
               percent="75%"
@@ -122,11 +120,11 @@ const ProfileJobApplication = () => {
             <JButton
               style={{marginTop: RFPercentage(0.5)}}
               onPress={() => refRBSheet.current.open()}
-              children={'See more'}
+              children={store.lang.see_more}
             />
           </View>
           <JSkills
-            title={'Experience'}
+            title={store.lang.experience}
             JobTitle={'Ui Ux Designer'}
             date={'Oct 2021- Present'}
             txt={'Alshamel ,Saudia Arabia'}
@@ -134,7 +132,7 @@ const ProfileJobApplication = () => {
           />
 
           <JSkills
-            title={'Education'}
+            title={store.lang.education}
             JobTitle={'BS (CS)'}
             date={'2016- 20'}
             txt={'Dar Al Uloom University ,Saudia Arabia'}
@@ -155,7 +153,7 @@ const ProfileJobApplication = () => {
               paddingVertical: RFPercentage(2),
               marginBottom: RFPercentage(1),
             }}>
-            <JText style={styles.result}>Skills</JText>
+            <JText style={styles.result}>{store.lang.skills}</JText>
             <JAssessmentResult
               title={'Personal Assessment'}
               percent="75%"
@@ -174,7 +172,7 @@ const ProfileJobApplication = () => {
             <JButton
               style={{marginTop: RFPercentage(0.5)}}
               onPress={() => refRBSheet.current.open()}
-              children={'See more'}
+              children={store.lang.see_more}
             />
           </View>
           <RBSheet
@@ -196,7 +194,7 @@ const ProfileJobApplication = () => {
               },
             }}>
             <View style={styles.RBView}>
-              <JText style={styles.RBHeader}>Assessment Result</JText>
+              <JText style={styles.RBHeader}>{store.lang.assessment_result}</JText>
 
               {data.map((item, index) => (
                 <JAssessmentResult
@@ -214,7 +212,7 @@ const ProfileJobApplication = () => {
   );
 };
 
-export default ProfileJobApplication;
+export default observer(ProfileJobApplication);
 
 const styles = StyleSheet.create({
   maincontainer: {flex: 1, backgroundColor: colors.tileColor[0]},

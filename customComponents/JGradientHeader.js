@@ -4,6 +4,7 @@ import JGradientView from './JGradientView';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import {heightPercentageToDP} from 'react-native-responsive-screen';
 import JText from './JText';
+import JRow from './JRow';
 
 export default function JGradientHeader({
   left,
@@ -27,9 +28,8 @@ export default function JGradientHeader({
         justifyContent: justifyContent,
         paddingTop: paddingTop,
       }}>
-      <View
+      <JRow
         style={{
-          flexDirection: 'row',
           width: '100%',
           alignItems: alignItems,
           paddingTop: paddingTop,
@@ -39,7 +39,6 @@ export default function JGradientHeader({
           onPress={onPress}
           style={{
             justifyContent: 'center',
-
             alignItems: 'flex-start',
           }}>
           {left}
@@ -58,7 +57,7 @@ export default function JGradientHeader({
           }}>
           {right}
         </View>
-      </View>
+      </JRow>
 
       {children}
     </JGradientView>

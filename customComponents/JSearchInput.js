@@ -5,19 +5,25 @@ import {RFPercentage} from 'react-native-responsive-fontsize';
 import {heightPercentageToDP} from 'react-native-responsive-screen';
 import colors from '../config/colors';
 import JShadowView from './JShadowView';
+import JRow from './JRow';
+import { useContext } from 'react';
+import { StoreContext } from '../mobx/store';
+import { Observer, observer } from 'mobx-react';
 
-export default function JSearchInput({
+ const JSearchInput =  ({
   onChangeText,
   containerStyle,
   inputStyle,
   placeholderTextColor = colors.placeHolderColor[0],
-  placeholder = 'Search',
+  placeholder ,
   iconContainerStyle,
   onPressIcon,
   autoFocus = false,
   length,
-}) {
+}) => {
+  const store = useContext(StoreContext);
   return length > 0 ? (
+    
     <JShadowView
       shadowColor={colors.purple[0]}
       containerStyle={[
@@ -27,30 +33,30 @@ export default function JSearchInput({
           backgroundColor: colors.white[0],
           borderWidth: RFPercentage(0.1),
           borderColor: `${colors.purple[0]}50`,
-          flexDirection: 'row',
-          alignItems: 'center',
           paddingHorizontal: RFPercentage(2),
         },
         containerStyle,
       ]}>
-      <AntDesign
-        style={{marginRight: RFPercentage(1)}}
-        name="search1"
-        color={colors.placeHolderColor[0]}
-        size={RFPercentage(2.5)}
-      />
+      <JRow>
+        <AntDesign
+          style={{marginRight: RFPercentage(1)}}
+          name="search1"
+          color={colors.placeHolderColor[0]}
+          size={RFPercentage(2.5)}
+        />
 
-      <TextInput
-        autoFocus={autoFocus}
-        style={[{width: '100%'}, inputStyle]}
-        placeholder={placeholder}
-        placeholderTextColor={placeholderTextColor}
-        onChangeText={onChangeText}
-      />
+        <TextInput
+          autoFocus={autoFocus}
+          style={[{width: '100%'}, inputStyle]}
+          placeholder={store.lang.search}
+          placeholderTextColor={placeholderTextColor}
+          onChangeText={onChangeText}
+        />
+      </JRow>
     </JShadowView>
   ) : (
     <View style={{marginTop: RFPercentage(2)}} />
   );
 }
-
+export default observer(JSearchInput);
 const styles = StyleSheet.create({});

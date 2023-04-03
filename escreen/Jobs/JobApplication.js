@@ -30,6 +30,8 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import {heightPercentageToDP} from 'react-native-responsive-screen';
 import {color} from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
+import JChevronIcon from '../../customComponents/JChevronIcon';
+import { observer } from 'mobx-react';
 
 const data = [
   {id: 0, name: 'Taqi Haider', status: 'Applied', Date: '2022-03-15'},
@@ -87,7 +89,7 @@ const JobApplication = () => {
             {'Laraval Job Applicantes'}
           </JText>
         }
-        left={<Chevron onPress={() => goBack()} />}
+        left={JChevronIcon}
       />
       <JRow
         style={{
@@ -107,24 +109,24 @@ const JobApplication = () => {
             <Sort height={RFPercentage(7)} width={RFPercentage(8)} />
           </MenuTrigger>
           <MenuOptions>
-            <JText style={styles.menuhead}>Sort by </JText>
+            <JText style={styles.menuhead}>{store.lang.sort_by}</JText>
             <MenuOption onSelect={sortByNameAscending}>
               <JRow>
-                <JText style={styles.menutxt}>Candidate Fit Score </JText>
+                <JText style={styles.menutxt}>{store.lang.candidate_fit_score}</JText>
                 <Arrow_Up />
               </JRow>
             </MenuOption>
             <MenuOption onSelect={sortByNameDescending}>
               <JRow>
-                <JText style={styles.menutxt}>Candidate Fit Score </JText>
+                <JText style={styles.menutxt}>{store.lang.candidate_fit_score}</JText>
                 <Arrow_Down />
               </JRow>
             </MenuOption>
             <MenuOption onSelect={sortByRecentApplyDateDescending}>
-              <JText style={styles.menutxt}>Recent Apply Date</JText>
+              <JText style={styles.menutxt}>{store.lang.recent_apply_date}</JText>
             </MenuOption>
             <MenuOption onSelect={() => refRBSheet.current.open()}>
-              <JText style={styles.menutxt}>Status of Application</JText>
+              <JText style={styles.menutxt}>{store.lang.status_of_application}</JText>
             </MenuOption>
           </MenuOptions>
         </Menu>
@@ -161,7 +163,7 @@ const JobApplication = () => {
           },
         }}>
         <View style={styles.RBView}>
-          <JText style={styles.RBHeader}>Status of Applications</JText>
+          <JText style={styles.RBHeader}>{store.lang.status_of_application}</JText>
 
           {data1.map((item, index) => (
             <JText
@@ -193,7 +195,7 @@ const JobApplication = () => {
   );
 };
 
-export default JobApplication;
+export default observer(JobApplication);
 
 const styles = StyleSheet.create({
   menu: {marginTop: RFPercentage(5)},

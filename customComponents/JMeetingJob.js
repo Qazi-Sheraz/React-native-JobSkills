@@ -6,12 +6,17 @@ import JText from './JText'
 import moment from 'moment'
 import Entypo from 'react-native-vector-icons/Entypo';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import JRow from './JRow'
+import { useContext } from 'react'
+import { StoreContext } from '../mobx/store'
+import { observer } from 'mobx-react-lite'
 const JMeetingJob = ({HeadingName,name2,onPress}) => {
+  const store = useContext(StoreContext);
   return (
-    <Pressable
+    <JRow
+    disabled={false}
     onPress={onPress}
       style={{
-        flexDirection: 'row',
         justifyContent:'space-between',
         marginTop: RFPercentage(2),
         marginHorizontal: RFPercentage(2),
@@ -30,46 +35,41 @@ const JMeetingJob = ({HeadingName,name2,onPress}) => {
             }}>
             {name2}
           </JText>
-        <View
+        <JRow
             style={{
-              flexDirection:'row',
               marginVertical: RFPercentage(1),
             }}>
                 <EvilIcons name="calendar" size={RFPercentage(2.5)} />
 
-             <JText style={{marginRight:RFPercentage(1)}}>
+             <JText style={{marginHorizontal:RFPercentage(1)}}>
              {moment().format('DD MMM,YYYY')}
         </JText>
              <JText >
             
           {moment().format('HH:MM A')}
         </JText>
-          </View>
+          </JRow>
         
       </View> 
-      <View
+      <JRow
           style={styles.startBtn}>
           <JText
-            style={{marginRight: RFPercentage(0.5), color:colors.white[0] }}
+            style={{marginHorizontal: RFPercentage(0.5), color:colors.white[0] }}
             fontWeight="bold">
-            Start
+            {store.lang.start}
           </JText>
           <Entypo name="controller-play" size={RFPercentage(2)} color={colors.white[0]}/>
-        </View>
-    </Pressable>
+        </JRow>
+    </JRow>
   )
 }
 
-export default JMeetingJob
+export default observer(JMeetingJob)
 
 const styles = StyleSheet.create({
     startBtn:{
-        flexDirection:'row',
-        alignSelf:'center',
         borderRadius:RFPercentage(1),
         padding:RFPercentage(1),
-        alignItems: 'center',
-        justifyContent:'center',
         backgroundColor: colors.purple[0],
       },
 })

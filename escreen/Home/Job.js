@@ -24,6 +24,7 @@ import JScrollView from '../../customComponents/JScrollView';
 import {useNavigation} from '@react-navigation/native';
 import JButton from '../../customComponents/JButton';
 import JRow from '../../customComponents/JRow';
+import {observer} from 'mobx-react';
 const Job = () => {
   const navigation = useNavigation();
   const store = useContext(StoreContext);
@@ -40,7 +41,7 @@ const Job = () => {
               fontColor={colors.white[0]}
               fontWeight="bold"
               fontSize={RFPercentage(2.5)}>
-              {'Jobs'}
+              {store.lang.jobs}
             </JText>
           }
         />
@@ -51,6 +52,12 @@ const Job = () => {
           store.setAllFeatureCompanyInput(e);
         }}
         onPressIcon={() => alert('Icon Pressed')}
+      />
+      <JButton
+        onPress={() => {
+          console.log(store.lang);
+          store.lang.id == 0 ? store.setLang('ud') : store.setLang('en');
+        }}
       />
       <JScrollView>
         {[0, 1, 2].map((item, index) => (
@@ -76,20 +83,27 @@ const Job = () => {
           onPress={() => {
             navigation.navigate('AddNew_Job');
           }}
-          children={'Add New Job'}
+          children={store.lang.add_new_job}
         />
       </View>
-      
       <Modal animationType="fade" transparent={true} visible={modalVisible}>
         <SafeAreaView style={styles.container}>
           <View style={styles.modal}>
             <JText style={styles.header}>Attention!</JText>
-            <JText style={styles.msg}>Are you sure want to change the status?</JText>
-            <JRow style={{justifyContent:'space-between',}}>
-              <JButton onPress={()=> setModalVisible(false)} style={{backgroundColor:'#E5E5E5',width:'50%',borderWidth:RFPercentage(0)}} 
-              children={'No'}/>
-              <JButton style={{width:'50%'}}children={'Yes'}/>
-             
+            <JText style={styles.msg}>
+              Are you sure want to change the status?
+            </JText>
+            <JRow style={{justifyContent: 'space-between'}}>
+              <JButton
+                onPress={() => setModalVisible(false)}
+                style={{
+                  backgroundColor: '#E5E5E5',
+                  width: '50%',
+                  borderWidth: RFPercentage(0),
+                }}
+                children={'No'}
+              />
+              <JButton style={{width: '50%'}} children={'Yes'} />
             </JRow>
           </View>
         </SafeAreaView>
@@ -98,7 +112,7 @@ const Job = () => {
   );
 };
 
-export default Job;
+export default observer(Job);
 
 const styles = StyleSheet.create({
   container: {flex: 1, alignItems: 'center', justifyContent: 'center'},
@@ -106,18 +120,23 @@ const styles = StyleSheet.create({
     height: RFPercentage(25),
     width: '80%',
     backgroundColor: '#ffff',
-    alignItems:'center',
-    padding:RFPercentage(2),
-    justifyContent:'space-between',shadowColor: "#000",
+    alignItems: 'center',
+    padding: RFPercentage(2),
+    justifyContent: 'space-between',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    
+
     elevation: 5,
   },
-  header:{fontSize:RFPercentage(2.3),fontWeight:'bold',textAlign:'center'},
-  msg:{fontSize:RFPercentage(2),textAlign:'center'},
+  header: {
+    fontSize: RFPercentage(2.3),
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  msg: {fontSize: RFPercentage(2), textAlign: 'center'},
 });

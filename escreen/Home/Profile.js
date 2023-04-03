@@ -19,6 +19,8 @@ import JRow from '../../customComponents/JRow';
 import FontAwesome5Brands from 'react-native-vector-icons/FontAwesome5';
 import {_getProfile} from '../../functions/Candidate/MyProfile';
 import { useEffect } from 'react';
+import JChevronIcon from '../../customComponents/JChevronIcon';
+import { observer } from 'mobx-react';
 
 const Profile = () => {
   const navigation = useNavigation();
@@ -54,14 +56,7 @@ const Profile = () => {
           // alignItems={'flex-start'}
           justifyContent={'flex-start'}
           paddingTop={RFPercentage(2)}
-          left={
-            <Feather
-              onPress={() => navigation.goBack()}
-              name="chevron-left"
-              size={RFPercentage(3.5)}
-              color={colors.white[0]}
-            />
-          }
+          left={JChevronIcon}
           right={
             <AntDesign
               name="poweroff"
@@ -88,26 +83,26 @@ const Profile = () => {
             navigation.navigate('CEditProfile', {selected: 0});
           }}
           isEmpty={false}
-          heading={'Contact Information'}
+          heading={store.lang.contact_info}
           icon="pencil"
-          emptyMsg={'Contact Information Not Available'}
+          emptyMsg={store.lang.contact_Info_not_available}
           children={
             // store.myProfileApiLoader === false && (
               <BorderView>
                 <JProfileInfo
-                  title="Email Address:"
+                  title={store.lang.email_address}
                   text={
                    "sheraz.qazi@bftech.io"
                   }
                 />
-                <JText fontColor={colors.shortlisted[0]}>Confirmed</JText>
+                <JText fontColor={colors.shortlisted[0]}>{store.lang.confirmed}</JText>
                 <JProfileInfo
-                  title="Phone Number:"
+                  title={store.lang.phone_number}
                   text={
                    '+923876545679'
                   }
                 />
-                <JText onPress={()=> navigation.navigate('VerifiedEmail')} fontColor={colors.redish[0]}>Confirm Your Number</JText>
+                <JText onPress={()=> navigation.navigate('VerifiedEmail')} fontColor={colors.redish[0]}>{store.lang.confirm_your_num}</JText>
               </BorderView>
             // )
           }
@@ -122,18 +117,18 @@ const Profile = () => {
           }}
           isEmpty={false}
           icon='1'
-          heading={'Company Information'}
-          emptyMsg={'Company Information Not Available'}
+          heading={store.lang.company_info}
+          emptyMsg={store.lang.company_info_not_available}
           children={
           <BorderView>
                 <JProfileInfo
-                  title="CEO Name :"
+                  title={store.lang.CEO_name}
                   text={''
                     // store.myProfile?.user[0].general_information?.father_name
                   }
                 />
                 <JProfileInfo
-                  title="Ownership Type :"
+                  title={store.lang.ownership_type}
                   text={''
                     // store.myProfileApiLoader === false &&
                     // moment(
@@ -143,7 +138,7 @@ const Profile = () => {
                   }
                 />
                 <JProfileInfo
-                  title="Industry :"
+                  title={store.lang.Industry}
                   text={''
                     // store.myProfile?.user[0].general_information?.gender == '1'
                     //   ? 'Female'
@@ -154,7 +149,7 @@ const Profile = () => {
                 
 
                 <JProfileInfo
-                  title="Size : "
+                  title={store.lang.size}
                   text={''
                     // store.myProfile?.user[0].general_information?.city_name &&
                     // store.myProfile?.user[0].general_information?.country_name
@@ -164,14 +159,14 @@ const Profile = () => {
                 />
 
                 <JProfileInfo
-                  title="Location :"
+                  title={store.lang.location}
                   text={''
                     // store.myProfile?.user[0].general_information?.language[0]
                     //   ?.language
                   }
                 />
                 <JProfileInfo
-                  title="No of Office :"
+                  title={store.lang.no_of_office}
                   text={''
                     // store.myProfile?.user[0].general_information?.language[0]
                     //   ?.language
@@ -190,8 +185,8 @@ const Profile = () => {
           }}
           isEmpty={false}
           icon='1'
-          heading={'Social Media Liks'}
-          emptyMsg={'Social Media Liks Not Available'}
+          heading={store.lang.social_media_links}
+          emptyMsg={store.lang.social_links_not_available}
           children={
            
               <View
@@ -261,6 +256,6 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default observer(Profile);
 
 const styles = StyleSheet.create({});

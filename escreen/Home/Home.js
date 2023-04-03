@@ -27,11 +27,15 @@ import JRecentJobTile from '../../customComponents/JRecentJobTile';
 import JFindTitle from '../../customComponents/JFindTitle';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import EDrawerContent from '../../drawer/EDrawerContent';
+import { Observer, observer, useObserver } from 'mobx-react';
+import JRow from '../../customComponents/JRow';
 
 const Home = ({navigation}) => {
   const refRBSheet = useRef();
   const store = useContext(StoreContext);
   return (
+
+   
     <JScreen
       //   isError={store.homeApiError}
       //   onTryAgainPress={() => _getHomeData(store)}
@@ -55,7 +59,10 @@ const Home = ({navigation}) => {
           }
           right={
             <MaterialCommunityIcons
-              onPress={() => navigation.navigate('CNotification')}
+              // onPress={() => navigation.navigate('CNotification')}
+              onPress={() =>{
+                console.log(store.lang)
+              store.lang.id == 0 ?   store.setLang('ud'): store.setLang('en')}}
               name="bell-badge-outline"
               size={RFPercentage(3.5)}
             />
@@ -63,28 +70,29 @@ const Home = ({navigation}) => {
         />
       }>
       <React.Fragment>
-        <JFindTitle JobTitle={"Job Title"} />
+        <JFindTitle JobTitle={store.lang.job_title} />
        
-        <JScrollView>
+        <JScrollView  >
           <FlatList
-            style={{alignSelf: 'center', marginVertical: RFPercentage(2)}}
-            horizontal
+            style={{ alignSelf: 'center', marginVertical: RFPercentage(2)}}
+            horizontal 
+            
             data={[
               {
-                name: 'Total',
+                name: store.lang.total,
                 count: 18,
               },
               {
-                name: 'Open',
+                name: store.lang.open,
                 count: 9,
               },
               {
-                name: 'Paused',
+                name: store.lang.paused,
                 count: 10,
               },
 
               {
-                name: 'Close ',
+                name: store.lang.close,
                 count: 27,
               },
             ]}
@@ -129,29 +137,30 @@ const Home = ({navigation}) => {
                     />
                   )}
 
-                  <JText fontColor={colors.white[0]}>{item.count}</JText>
+                  <JText fontColor={colors.white[0]} fontAlign= {'center'}>{item.count}</JText>
                 </JGradientView>
                 <JText
-                  fontSize={RFPercentage(2)}
+                  // fontSize={RFPercentage(2)}
                   fontAlign="center"
                   fontColor={colors.black[0]}>
-                  {`${item.name} \n Jobs`}
+                  {`${item.name}\n${store.lang.jobs}`}
                 </JText>
               </View>
             )}
             keyExtractor={data => data.name}
+            inverted={store.lang.id== 0? false:true}
           />
           <JText
             fontSize={RFPercentage(2)}
             fontWeight="bold"
             fontColor={colors.black[0]}>
-            Upcoming Meetings
+            {store.lang.upcoming_Meetings}
           </JText>
 
-          <Pressable
+          <JRow
+          disabled={false}
           onPress={()=> refRBSheet.current.open()}
             style={{
-              flexDirection: 'row',
               marginTop: RFPercentage(1),
               borderBottomWidth: RFPercentage(0.1),
               borderBottomColor: colors.border[0],
@@ -162,8 +171,10 @@ const Home = ({navigation}) => {
                 width: '25%',
                 alignItems: 'center',
                 paddingVertical: RFPercentage(3),
-                borderTopEndRadius: RFPercentage(2),
-                borderBottomEndRadius: RFPercentage(2),
+                borderTopEndRadius: store.lang.id== 0? RFPercentage(2):RFPercentage(0),
+                borderBottomEndRadius: store.lang.id== 0? RFPercentage(2):RFPercentage(0),
+                borderTopStartRadius: store.lang.id== 0? RFPercentage(0):RFPercentage(2),
+                borderBottomStartRadius: store.lang.id== 0? RFPercentage(0):RFPercentage(2),
                 shadowColor: '#000000',
                 shadowOpacity: 0.3,
                 shadowRadius: 2,
@@ -183,14 +194,12 @@ const Home = ({navigation}) => {
                 {moment().format('MMM YYYY')}
               </JText>
             </View>
-            <View style={{paddingLeft: RFPercentage(2), width: '75%'}}>
+            <View style={{paddingHorizontal: RFPercentage(2), width: '75%'}}>
               <JText fontWeight="bold" fontSize={RFPercentage(2.2)}>
-                Project Manager
+                {store.lang.project_Manager}
               </JText>
-              <View
+              <JRow
                 style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
                   marginTop: RFPercentage(1),
                 }}>
                 <Image
@@ -205,19 +214,17 @@ const Home = ({navigation}) => {
                 />
                 <JText
                   style={{
-                    marginLeft: RFPercentage(1),
+                    marginHorizontal: RFPercentage(1),
                     fontSize: RFPercentage(1.9),
                   }}>
                   Taqi Haider
                 </JText>
-              </View>
+              </JRow>
 
-              <View
+              <JRow
+              disabled={false}
                 style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-
-                  alignSelf: 'flex-end',
+                  alignSelf: store.lang.id== 0? 'flex-end':'flex-start',
                   borderWidth: RFPercentage(0.2),
                   borderColor: colors.purple[0],
                   paddingVertical: RFPercentage(0.5),
@@ -226,26 +233,24 @@ const Home = ({navigation}) => {
                 <JText
                   style={{marginRight: RFPercentage(0.5)}}
                   fontWeight="bold">
-                  Start
+                  {store.lang.start}
                 </JText>
                 <Entypo name="controller-play" size={RFPercentage(2)} />
-              </View>
+              </JRow>
             </View>
-          </Pressable>
+          </JRow>
 
           <JText
             style={{marginVertical: RFPercentage(1)}}
             fontSize={RFPercentage(2)}
-            fontWeight="bold"
+            fontWeight = "bold"
             fontColor={colors.black[0]}>
-            Recent Jobs
+            {store.lang.Recent_Jobs}
           </JText>
 
           {[0, 1, 2, 3, 4, 5].map((item, index) => (
-            <JRecentJobTile title={'Project Manager'} key={index} />
+            <JRecentJobTile title={store.lang.project_Manager} key={index} />
           ))}
-
-          <View></View>
         </JScrollView> 
       </React.Fragment>
       <RBSheet
@@ -263,21 +268,21 @@ const Home = ({navigation}) => {
             backgroundColor: colors.black[0],
             display: 'none',
           },
-        }}><View style={{paddingLeft:RFPercentage(3),paddingTop:RFPercentage(1)}}>
+        }}><View style={{paddingHorizontal:RFPercentage(3),paddingTop:RFPercentage(1)}}>
           <JText style={{
             marginVertical: RFPercentage(1),
             fontSize:RFPercentage(2.5),
-            fontWeight:'bold'}}>Meating Info</JText>
-          <JText style={styles.rbtxt}>Meating ID</JText>
+            fontWeight:'bold'}}>{store.lang.meeting_Info}</JText>
+          <JText style={styles.rbtxt}>{store.lang.meeting_ID}</JText>
           <JText style={styles.rbtxt2}>3457654</JText>
-          <JText style={styles.rbtxt}>Password</JText>
+          <JText style={styles.rbtxt}>{store.lang.password}</JText>
           <JText style={styles.rbtxt2}>34fgg654</JText>
           </View></RBSheet>
     </JScreen>
   );
 };
 
-export default Home;
+export default observer(Home);
 
 const styles = StyleSheet.create({
   rbtxt:{

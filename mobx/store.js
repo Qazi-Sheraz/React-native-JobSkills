@@ -2,6 +2,9 @@ import React from 'react';
 // import { useLocalStore, useObserver } from "mobx-react";
 import {useLocalObservable} from 'mobx-react-lite';
 import {action} from 'mobx';
+import ar from '../config/translation/ar.json'
+import en from '../config/translation/en.json'
+import ud from '../config/translation/ud.json'
 export const StoreContext = React.createContext();
 
 export const StoreProvider = props => {
@@ -158,6 +161,9 @@ export const StoreProvider = props => {
     setFeatureApiError: action(e => (store.featureCompanyApiError = e)),
     allFeatureCompanyInput: '',
     setAllFeatureCompanyInput: action(e => (store.allFeatureCompanyInput = e)),
+    lang:en,
+    setLang: action(e => (store.lang = e == 'en' ? en : e == 'ud' ? ud :ar)),
+
   }));
   return (
     <StoreContext.Provider value={store}>

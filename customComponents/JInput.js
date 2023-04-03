@@ -4,6 +4,8 @@ import JText from './JText';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import colors from '../config/colors';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { useContext } from 'react';
+import { StoreContext } from '../mobx/store';
 export default function JInput({
   containerStyle,
   heading,
@@ -24,9 +26,10 @@ export default function JInput({
   defaultValue,
   isRequired = false,
 }) {
+  const store = useContext(StoreContext);
   return (
     <View style={[{flexDirection: 'column'}, containerStyle]}>
-      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+      <View style={{flexDirection: store.lang.id == 0 ?'row':'row-reverse', alignItems: 'center'}}>
         {icon}
         <JText fontWeight={headingWeight} fontSize={RFPercentage(2.5)}>
           {heading}

@@ -2,6 +2,7 @@ import {StyleSheet, View} from 'react-native';
 import React from 'react';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import {widthPercentageToDP} from 'react-native-responsive-screen';
+import JRow from './JRow';
 export default function JHeader({
   left,
   center,
@@ -12,13 +13,12 @@ export default function JHeader({
   view3Style,
 }) {
   return (
-    <View
+    <JRow
       style={[
         {
           flex: 1,
 
-          flexDirection: 'row',
-          alignItems: 'center',
+       
           justifyContent: 'space-between',
           paddingHorizontal: widthPercentageToDP(5),
         },
@@ -27,7 +27,7 @@ export default function JHeader({
       <View style={[styles.views, view1Style]}>{left}</View>
       <View style={[styles.views, view2Style]}>{center}</View>
       <View style={[styles.views, view3Style]}>{right}</View>
-    </View>
+    </JRow>
   );
 }
 

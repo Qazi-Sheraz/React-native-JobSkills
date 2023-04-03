@@ -9,8 +9,13 @@ import JText from '../../customComponents/JText';
 import JGradientHeader from '../../customComponents/JGradientHeader';
 import JMeetingJob from '../../customComponents/JMeetingJob';
 import RBSheet from 'react-native-raw-bottom-sheet';
+import { observer } from 'mobx-react';
+import { StoreContext } from '../../mobx/store';
+import { useContext } from 'react';
+import JButton from '../../customComponents/JButton';
 
 const Meeting = () => {
+  const store = useContext(StoreContext);
   const data=[
 {HeadingName:'Project Manager',
 name2:"Taqi Haider"},
@@ -31,7 +36,7 @@ name2:"Hisham "},
               fontColor={colors.white[0]}
               fontWeight="bold"
               fontSize={RFPercentage(2.5)}>
-              {'Meetings'}
+              {store.lang.meeting}
             </JText>
           }
         />
@@ -46,6 +51,9 @@ name2:"Hisham "},
         onPress={()=> refRBSheet.current.open()}
         HeadingName={item.HeadingName} name2={item.name2}/>
         } />
+        <JButton onPress={() =>{
+                console.log(store.lang)
+              store.lang.id == 0 ?   store.setLang('ud'): store.setLang('en')}}/>
        </View> 
         <RBSheet
         ref={refRBSheet}
@@ -62,21 +70,21 @@ name2:"Hisham "},
             backgroundColor: colors.black[0],
             display: 'none',
           },
-        }}><View style={{paddingLeft:RFPercentage(3),paddingTop:RFPercentage(1)}}>
-          <JText style={{
+        }}><View style={{paddingHorizontal:RFPercentage(3),paddingTop:RFPercentage(1)}}>
+           <JText style={{
             marginVertical: RFPercentage(1),
             fontSize:RFPercentage(2.5),
-            fontWeight:'bold'}}>Meeting Info</JText>
-          <JText style={styles.rbtxt}>Meeting ID</JText>
+            fontWeight:'bold'}}>{store.lang.meeting_Info}</JText>
+          <JText style={styles.rbtxt}>{store.lang.meeting_ID}</JText>
           <JText style={styles.rbtxt2}>3457654</JText>
-          <JText style={styles.rbtxt}>Password</JText>
+          <JText style={styles.rbtxt}>{store.lang.password}</JText>
           <JText style={styles.rbtxt2}>34fgg654</JText>
           </View></RBSheet>
       </JScreen>
   );
 };
 
-export default Meeting;
+export default observer(Meeting);
 
 const styles = StyleSheet.create({
   rbtxt:{

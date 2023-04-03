@@ -9,8 +9,9 @@ import Meeting from './Meeting';
 import Job from './Job';
 import Profile from './Profile';
 import CustomEmployeeBottomTab from '../../bottomTab/CustomEmployeeBottomTab';
+import { observer } from 'mobx-react';
 
-export default function EBottomTab() {
+ function EBottomTab() {
   const Tab = createBottomTabNavigator();
   const store = useContext(StoreContext);
 
@@ -26,7 +27,7 @@ export default function EBottomTab() {
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName={'Home'}
+      initialRouteName="Home"
       tabBar={({state, descriptors, navigation}) => (
         <CustomEmployeeBottomTab
           state={state}
@@ -34,12 +35,20 @@ export default function EBottomTab() {
           navigation={navigation}
         />
       )}>
-      <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Meeting" component={Meeting} />
-      <Tab.Screen name="Job" component={Job} />
-      <Tab.Screen name="Profile" component={Profile} />
+      <Tab.Screen options={{
+        tabBarLabel:store.lang.home
+      }} name="Home" component={Home} />
+      <Tab.Screen options={{
+        tabBarLabel:store.lang.meeting
+      }} name="Meeting" component={Meeting} />
+      <Tab.Screen options={{
+        tabBarLabel:store.lang.job
+      }} name="Job" component={Job} />
+      <Tab.Screen options={{
+        tabBarLabel:store.lang.profile
+      }} name="Profile" component={Profile} />
     </Tab.Navigator>
   );
 }
-
+export default observer(EBottomTab)
 const styles = StyleSheet.create({});

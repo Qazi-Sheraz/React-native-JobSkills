@@ -22,7 +22,6 @@ import JRow from '../../customComponents/JRow';
 import DEVOTEAM from '../../assets/svg/Icon/DEVOTEAM.svg';
 import Placeholder from '../../assets/svg/Icon/Placeholder.svg';
 import Calendar from '../../assets/svg/Icon/Calendar.svg';
-import Chevron from '../../assets/svg/Icon/Chevron.svg';
 import Star from '../../assets/svg/Icon/Star.svg';
 import JScrollView from '../../customComponents/JScrollView';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -37,8 +36,12 @@ import DocumentPicker from 'react-native-document-picker';
 import {useNavigation} from '@react-navigation/native';
 import PhoneInput from 'react-native-phone-number-input';
 import {useRef} from 'react';
+import JChevronIcon from '../../customComponents/JChevronIcon';
+import {useContext} from 'react';
+import { observer } from 'mobx-react';
 
 const JobDetails = () => {
+  const store = useContext(StoreContext);
   const phoneInput = useRef(null);
   const navigation = useNavigation();
   const _selectOneFile = async setFieldValue => {
@@ -80,23 +83,24 @@ const JobDetails = () => {
       header={
         <JGradientHeader
           height={heightPercentageToDP(25)}
-          alignItems={'flex-start'}
+          alignItems={store.lang.id == 0 ? 'flex-start' : 'flex-end'}
           paddingTop={RFPercentage(1)}
-          left={<Chevron onPress={() => navigation.goBack()} />}
+          left={JChevronIcon }
           right={<Star />}
           children={
-            <View style={{marginTop: RFPercentage(2)}}>
-              <JRow style={{justifyContent: 'space-between', width: '100%'}}>
-                <JText style={styles.headertxt}>Project Manager</JText>
-                
-                  <JText style={{fontSize: RFPercentage(1.8), color: '#ffff'}}>
-                    Date posted:  {moment().format('DD MMM,YYYY')}
-                  </JText>
-                 
+            <View style={{marginTop: RFPercentage(2), width: '100%'}}>
+              <JRow style={{justifyContent: 'space-between'}}>
+                <JText style={styles.headertxt}>
+                  {store.lang.project_Manager}
+                </JText>
+
+                <JText style={{fontSize: RFPercentage(1.8), color: '#ffff'}}>
+                  {store.lang.date_posted} {moment().format('DD MMM,YYYY')}
+                </JText>
               </JRow>
               <JRow>
                 <DEVOTEAM />
-                <JText style={styles.txt}>Devoteam</JText>
+                <JText style={styles.txt}>{store.lang.devoteam}</JText>
               </JRow>
               <JRow>
                 <Placeholder />
@@ -104,78 +108,82 @@ const JobDetails = () => {
                   Ar-Riyad, Ar-Riyad, Saudi Arabia
                 </JText>
               </JRow>
-              <JRow style={{justifyContent: 'space-between', width: '100%'}}>
+              <JRow style={{justifyContent: 'space-between'}}>
                 <JRow>
                   <Calendar />
 
                   <JText style={styles.txt}>
-                    Expire on: {moment().format('DD MMM,YYYY')}
+                    {store.lang.expire_on} {moment().format('DD MMM,YYYY')}
                   </JText>
                 </JRow>
-                <JText style={styles.txt}>5 open jobs</JText>
+                <JText style={styles.txt}>5 {store.lang.open_jobs}</JText>
               </JRow>
             </View>
           }
         />
       }>
       <JScrollView style={styles.container}>
-        <JText style={styles.headertxt1}>Jobs Requirement :</JText>
+        <JText style={styles.headertxt1}>{store.lang.job_Requirement}</JText>
         <View style={{marginHorizontal: RFPercentage(1.3)}}>
-          <JText style={styles.headertxt2}>Job Skills:</JText>
+          <JText style={styles.headertxt2}>{store.lang.job_skills}</JText>
 
           <JText style={styles.txt1}>
             Computer Skill, Leadership Skill, Problem-solving {'\n'} Skill, Time
             management Skill
           </JText>
-          <JText style={styles.headertxt2}>Degree Level:</JText>
-
-          <JText style={styles.dg}>Bachelor of Science (B.S.)</JText>
-          <JText style={styles.headertxt2}>Assessment Required :</JText>
-          <JText style={styles.txt1}>Personal Assessment |</JText>
+          <JText style={styles.headertxt2}>{store.lang.degree_level}</JText>
+          <JRow>
+            <JText style={styles.dg}>Bachelor of Science (B.S.)</JText>
+          </JRow>
+          <JText style={styles.headertxt2}>
+            {store.lang.assessment_Required}
+          </JText>
+          <JText style={styles.txt1}>{store.lang.personal_Assessment}</JText>
         </View>
-        <JText style={styles.headertxt1}>Job Details:</JText>
+        <JText style={styles.headertxt1}>{store.lang.job_Details}</JText>
         {/* <JText style={{textAlign:'center',fontSize:RFPercentage(2),marginTop: RFPercentage(-2),marginLeft: RFPercentage(-4),}}></JText> */}
         <JRow>
-          <JText style={styles.headertxt3}>Job Category:</JText>
+          <JText style={styles.headertxt3}>{store.lang.job_category}</JText>
           <JText style={styles.txt2}>Actuaries</JText>
         </JRow>
         <JRow>
-          <JText style={styles.headertxt3}>Career Level:</JText>
+          <JText style={styles.headertxt3}>{store.lang.career_level}</JText>
           <JText style={styles.txt2}>Advanced</JText>
         </JRow>
         <JRow>
-          <JText style={styles.headertxt3}>Job Tag:</JText>
+          <JText style={styles.headertxt3}>{store.lang.job_tag}</JText>
           <JText style={styles.txt2}>N/A</JText>
         </JRow>
         <JRow>
-          <JText style={styles.headertxt3}>Job Type:</JText>
-          <JText style={styles.txt2}>Architecture and Engineering</JText>
+          <JText style={styles.headertxt3}>{store.lang.job_type}</JText>
+          <JText numberOfLines={3} style={styles.txt2}>Architecture and Engineering
+          </JText>
         </JRow>
         <JRow>
-          <JText style={styles.headertxt3}>Job Shift:</JText>
+          <JText style={styles.headertxt3}>{store.lang.job_Shift}</JText>
           <JText style={styles.txt2}>First Shift</JText>
         </JRow>
         <JRow>
-          <JText style={styles.headertxt3}>Functional Area:</JText>
+          <JText style={styles.headertxt3}>{store.lang.functional_Area}</JText>
           <JText style={styles.txt2}>Customer Service Support</JText>
         </JRow>
         <JRow>
-          <JText style={styles.headertxt3}>Position:</JText>
+          <JText style={styles.headertxt3}>{store.lang.position}</JText>
           <JText style={styles.txt2}>1</JText>
         </JRow>
         <JRow>
-          <JText style={styles.headertxt3}>Job Experience:</JText>
+          <JText style={styles.headertxt3}>{store.lang.job_Experience}</JText>
           <JText style={styles.txt2}>5 Year</JText>
         </JRow>
         <JRow>
-          <JText style={styles.headertxt3}>Salary Period:</JText>
+          <JText style={styles.headertxt3}>{store.lang.Salary_Period}</JText>
           <JText style={styles.txt2}>Monthly Pay Period</JText>
         </JRow>
         <JRow>
-          <JText style={styles.headertxt3}>Is Freelance:</JText>
+          <JText style={styles.headertxt3}>{store.lang.Is_Freelance}</JText>
           <JText style={styles.txt2}>Yes</JText>
         </JRow>
-        <JText style={styles.headertxt1}>Job Description: </JText>
+        <JText style={styles.headertxt1}>{store.lang.description} </JText>
         <JText style={styles.txt2}>
           Lorem Ipsum is simply dummy text of the printing and typesetting
           industry. Lorem Ipsum has been the industry's standard dummy text ever
@@ -196,7 +204,7 @@ const JobDetails = () => {
             fontWeight: 'bold',
             paddingHorizontal: RFPercentage(5),
           }}
-          children={'Add Candidate'}
+          children={store.lang.add_candidate}
         />
       </View>
       <Modal animationType="fade" transparent={true} visible={modalVisible}>
@@ -239,15 +247,16 @@ const JobDetails = () => {
                       fontColor={colors.white[0]}
                       fontWeight="bold"
                       fontSize={RFPercentage(2.5)}>
-                      {'Add Candidate'}
+                      {store.lang.add_candidate}
                     </JText>
                   }
                 />
+                
                 <View style={{padding: RFPercentage(2)}}>
                   <JInput
-                    containerStyle={{marginTop: RFPercentage(1)}}
+                    containerStyle={{marginTop: RFPercentage(1),}}
                     isRequired
-                    heading={'First Name: '}
+                    heading={store.lang.first_name}
                     // value={values.name}
                     // error={touched.name && errors.name && true}
                     // onChangeText={handleChange('name')}
@@ -256,7 +265,7 @@ const JobDetails = () => {
                   <JInput
                     containerStyle={{marginTop: RFPercentage(1)}}
                     isRequired
-                    heading={'Last Name: '}
+                    heading={store.lang.last_name}
                     // value={values.name}
                     // error={touched.name && errors.name && true}
                     // onChangeText={handleChange('name')}
@@ -265,7 +274,7 @@ const JobDetails = () => {
                   <JInput
                     containerStyle={{marginTop: RFPercentage(1)}}
                     isRequired
-                    heading={'Email: '}
+                    heading={store.lang.email}
                     // value={values.name}
                     // error={touched.name && errors.name && true}
                     // onChangeText={handleChange('name')}
@@ -273,16 +282,14 @@ const JobDetails = () => {
                   />
 
                   <View style={{marginBottom: RFPercentage(2)}}>
-                    <View
+                    <JRow
                       style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
                         marginTop: RFPercentage(1),
                       }}>
-                      <JText fontWeight="500" fontSize={RFPercentage(2.5)}>
-                        Phone:
+                      <JText  fontWeight="500" fontSize={RFPercentage(2.5)}>
+                      {store.lang.phone}
                       </JText>
-                    </View>
+                    </JRow>
                     <PhoneInput
                       ref={phoneInput}
                       defaultValue={values.phone}
@@ -305,7 +312,7 @@ const JobDetails = () => {
                     )}
                   </View>
                   <JRow>
-                    <JText fontSize={RFPercentage(2.5)}>Resume</JText>
+                    <JText fontSize={RFPercentage(2.5)}>{store.lang.resume}</JText>
                     <JText
                       fontColor={colors.danger[0]}
                       fontSize={RFPercentage(2.5)}>
@@ -320,7 +327,7 @@ const JobDetails = () => {
                       marginBottom: RFPercentage(2),
                       marginTop: RFPercentage(1),
                     }}>
-                    Be sure to include an updated resume
+                    {store.lang.sure_updated_resume}
                   </JText>
 
                   {values.resume?.uri ? (
@@ -373,7 +380,7 @@ const JobDetails = () => {
                           backgroundColor: colors.white[0],
                           borderColor: colors.black[1],
                         }}
-                        children={'Upload Resume'}
+                        children={store.lang.upload_resume}
                       />
                     </JRow>
                   )}
@@ -392,7 +399,7 @@ const JobDetails = () => {
                       style={{
                         width: '46%',
                       }}
-                      children={'Add'}
+                      children={store.lang.add}
                     />
                   </JRow>
                 </View>
@@ -409,7 +416,7 @@ const JobDetails = () => {
   );
 };
 
-export default JobDetails;
+export default observer(JobDetails);
 
 const styles = StyleSheet.create({
   headertxt: {fontSize: RFPercentage(3), fontWeight: 'bold', color: '#ffff'},
@@ -418,6 +425,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginVertical: RFPercentage(1),
   },
+
   headertxt2: {
     fontSize: RFPercentage(2),
     fontWeight: '700',
@@ -438,6 +446,7 @@ const styles = StyleSheet.create({
   txt2: {
     fontSize: RFPercentage(1.9),
     fontWeight: '500',
+    
   },
 
   container: {paddingVertical: RFPercentage(2)},

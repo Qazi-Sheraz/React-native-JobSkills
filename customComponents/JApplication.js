@@ -13,6 +13,8 @@ import {
   MenuTrigger,
 } from 'react-native-popup-menu';
 import { useNavigation } from '@react-navigation/native';
+import { StoreContext } from '../mobx/store';
+import { useContext } from 'react';
 
 export default function JApplication({
   Hname,
@@ -21,6 +23,7 @@ export default function JApplication({
   onSelect,
   onPress,
 }) {
+  const store = useContext(StoreContext);
   const navigation=useNavigation();
   return (
     <Pressable onPress={()=> navigation.navigate('ProfileApplication')}
@@ -35,9 +38,9 @@ export default function JApplication({
         }}>
         <View>
           <JText style={styles.Hname}>{Hname}</JText>
-          <JText style={styles.txt}>Apply Date : {ApplyDate}</JText>
+          <JText style={styles.txt}>{store.lang.apply_date} {ApplyDate}</JText>
           <JRow>
-            <JText style={styles.txt}>Fit Score : 90% </JText>
+            <JText style={styles.txt}>{store.lang.fit_score} 90% </JText>
             <Pressable onPress={onPress} style={styles.info}>
               <JIcon icon="fe" name={'info'} />
             </Pressable>
@@ -48,7 +51,7 @@ export default function JApplication({
             paddingVertical: RFPercentage(1),
             flexDirection: 'column',
             height: RFPercentage(13),
-            alignItems: 'flex-end',
+            alignItems: store.lang.id=0?'flex-end':'flex-start',
             justifyContent: 'space-between',
           }}>
           <Menu >
@@ -59,22 +62,22 @@ export default function JApplication({
 
             <MenuOptions>
               <MenuOption onSelect={onSelect}>
-                <JText style={styles.menutxt}>Drafted</JText>
+                <JText style={styles.menutxt}>{store.lang.drafted}</JText>
               </MenuOption>
               <MenuOption onSelect={onSelect}>
-                <JText style={styles.menutxt}>Applied</JText>
+                <JText style={styles.menutxt}>{store.lang.applied}</JText>
               </MenuOption>
               <MenuOption onSelect={onSelect}>
-                <JText style={styles.menutxt}>Rejected</JText>
+                <JText style={styles.menutxt}>{store.lang.rejected}</JText>
               </MenuOption>
               <MenuOption onSelect={onSelect}>
-                <JText style={styles.menutxt}>Selected</JText>
+                <JText style={styles.menutxt}>{store.lang.selected}</JText>
               </MenuOption>
               <MenuOption onSelect={onSelect}>
-                <JText style={styles.menutxt}>Shortlisted</JText>
+                <JText style={styles.menutxt}>{store.lang.shortlisted}</JText>
               </MenuOption>
               <MenuOption onSelect={onSelect}>
-                <JText style={styles.menutxt}>Interview Scheduled</JText>
+                <JText style={styles.menutxt}>{store.lang.interview_scheduled}</JText>
               </MenuOption>
             </MenuOptions>
           </Menu>

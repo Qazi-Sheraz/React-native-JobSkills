@@ -18,9 +18,8 @@ export default function JProfileSections({
 }) {
   return (
     <React.Fragment>
-      <View
+      <JRow
         style={{
-          flexDirection: 'row',
           justifyContent: 'space-between',
           marginBottom: RFPercentage(1),
           alignItems: 'center',
@@ -58,7 +57,7 @@ export default function JProfileSections({
          icon === '1' ? (
           <JRow>
             <SimpleLineIcons
-            style={{marginRight:RFPercentage(1)}}
+            style={{marginHorizontal:RFPercentage(1)}}
               onPress={onIconPress}
               name="pencil"
               color={colors.black[0]}
@@ -72,7 +71,7 @@ export default function JProfileSections({
             />
           </JRow>
         ) : null}
-      </View>
+      </JRow>
 
       {loader === true ? (
         <View
