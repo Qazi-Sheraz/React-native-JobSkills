@@ -1,3 +1,3 @@
-export default {
-  baseUrl: 'https://dev.jobskills.digital/api',
-};
+// export default {
+//   baseUrl: 'https://dev.jobskills.digital/api',
+// };

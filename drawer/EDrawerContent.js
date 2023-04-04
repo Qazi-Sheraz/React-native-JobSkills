@@ -27,6 +27,7 @@ import {observer, Observer} from 'mobx-react';
 import { getDrawerItem } from '../data/edrawer';
 import JIcon from '../customComponents/JIcon';
 import { useNavigation } from '@react-navigation/native';
+import JRow from '../customComponents/JRow';
 
 function EDrawerContent (props) {
   const {navigate}=useNavigation()
@@ -163,11 +164,10 @@ function EDrawerContent (props) {
             marginTop: RFPercentage(3),
           }}>
           {getDrawerItem().map((item, index) => (
-            <TouchableOpacity
+            <JRow
+            disabled={false}
               onPress={() => _navigateToScreen(index)}
               style={{
-                flexDirection: 'row',
-                alignItems: 'center',
                 marginVertical: RFPercentage(1.7),
               }}
               key={index}>
@@ -175,10 +175,10 @@ function EDrawerContent (props) {
               <JText
                 fontWeight="bold"
                 fontSize={RFPercentage(2)}
-                style={{marginLeft: RFPercentage(2)}}>
+                style={{marginHorizontal: RFPercentage(2)}}>
                 {item}
               </JText>
-            </TouchableOpacity>
+            </JRow>
           ))}
         </View>
       

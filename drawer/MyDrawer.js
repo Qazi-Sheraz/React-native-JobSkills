@@ -8,10 +8,10 @@ export default function MyDrawer() {
   const Drawer = createDrawerNavigator();
   return (
     <Drawer.Navigator
+    drawerPosition={'right'}
         screenOptions={{headerShown: false}}
         initialRouteName={'CHomeStack'}
-        drawerContent={(props) =>
-          
+        drawerContent={ (props) =>
           
 //  <CustomDrawerContent {...props} />
     <EDrawerContent {...props}/>

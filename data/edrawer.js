@@ -1,7 +1,11 @@
+import { useContext } from "react";
+import { StoreContext } from "../mobx/store";
+
 export const getDrawerItem = () => {
+  const store = useContext(StoreContext);
     return [
       'Account Setting',
-      'Followers',
+      store.lang.followers,
       'Employees',
       'Applicants',
       'Assessments',

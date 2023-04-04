@@ -1,22 +1,25 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import { useNavigation } from '@react-navigation/native'
-import { useContext } from 'react';
-import { StoreContext } from '../mobx/store';
+import {StyleSheet, Text, View} from 'react-native';
+import React from 'react';
+import {useNavigation} from '@react-navigation/native';
+import {useContext} from 'react';
+import {StoreContext} from '../mobx/store';
 import JIcon from './JIcon';
-import { RFPercentage } from 'react-native-responsive-fontsize';
+import {RFPercentage} from 'react-native-responsive-fontsize';
 
-const JChevronIcon = ({color='#fff',}) => {
-    const store = useContext(StoreContext);
-    const navigation=useNavigation();
+const JChevronIcon = ({color = '#fff'}) => {
+  const store = useContext(StoreContext);
+  const navigation = useNavigation();
   return (
-    
-    <JIcon onPress={()=> navigation.goBack()} icon={'io'} name={store.lang.id == 0 ? "chevron-back" : 'chevron-forward' } size = {RFPercentage(3)} color={color}/>
+    <JIcon
+      onPress={() => navigation.goBack()}
+      icon={'io'}
+      name={store.lang.id == 0 ? 'chevron-back' : 'chevron-forward'}
+      size={RFPercentage(3)}
+      color={color}
+    />
+  );
+};
 
-    
-  )
-}
+export default JChevronIcon;
 
-export default JChevronIcon
-
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});
