@@ -38,11 +38,11 @@ import EAccountSetting from '../../escreen/edrawer/EAccountSetting';
 import ChangePassword from '../../screens/ChangePassword/ChangePassword';
 import ChangeLanguage from '../../screens/ChangeLanguage/ChangeLanguage';
 import Transaction from '../../escreen/edrawer/AccountSettings/Transaction';
-import Assessment from '../../screens/Home/ProfileScreen/Assessment';
 import Employes from '../../escreen/edrawer/Employes';
 import JobPreference from '../../escreen/Jobs/JobPreference';
 import JobRequirement from '../../escreen/Jobs/JobRequirement';
 import VerifiedPhone from '../../screens/VerifiedPhone/VerifiedPhone';
+import Assessments from '../../escreen/edrawer/Assessments';
 
 const Stack = createStackNavigator();
 
@@ -220,7 +220,7 @@ function CHomeStack({navigation}) {
         initialRouteName={store?.token?.token ? 'EBottomTab' : 'SelectionScreen'}>
           
         <Stack.Screen name="CHome" component={EBottomTab} />
-        <Stack.Screen name="Assessment" component={Assessment} />
+        <Stack.Screen name="Assessments" component={Assessments} />
         <Stack.Screen name="CAllJobs" component={AllJobs} />
         <Stack.Screen name="CFeatureCompany" component={FeatureCompany} />
         <Stack.Screen name="CFeatureJob" component={FeatureJob} />

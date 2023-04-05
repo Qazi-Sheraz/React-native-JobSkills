@@ -8,7 +8,7 @@ export const getDrawerItem = () => {
       store.lang.followers,
       'Employees',
       'Applicants',
-      'Assessments',
+      store.lang.assessments,
       'Help & Center',
       'Logout',
     ];

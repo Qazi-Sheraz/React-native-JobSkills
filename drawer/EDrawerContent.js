@@ -44,7 +44,7 @@ function EDrawerContent (props) {
       : index === 3
       ? navigate('Applicants')
       : index === 4
-      ? navigate('Assessment')
+      ? navigate('Assessments')
       : index === 5
       ? navigate('DHelpCenter')
       : AsyncStorage.removeItem('@login')

@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import JScreen from '../../customComponents/JScreen';
 import JGradientHeader from '../../customComponents/JGradientHeader';
@@ -15,23 +15,24 @@ import {useContext} from 'react';
 import {useEffect} from 'react';
 import {useState} from 'react';
 import {Image} from 'react-native';
-import { baseUrl } from '../../ApiUrls';
+import {baseUrl} from '../../ApiUrls';
 
 const Followers = () => {
   const store = useContext(StoreContext);
   const navigation = useNavigation();
   const [followerdata, setFollowersData] = useState([]);
+  const [error, setError] = useState(false);
+  const [loader, setLoader] = useState(true);
 
   const _followers = () => {
+    
     var myHeaders = new Headers();
     myHeaders.append(
       'Authorization',
-      `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZDZjZDg5MzZkNmQ0ZWE3NTQ5N2RlZDZhMDgwNjliNzM1NmRmYmQ5YzZlODRmZmFiZTE2NjQ4N2VkN2ExMWFkMzk1YzgyZjZkNGRkNWZkMGUiLCJpYXQiOjE2ODAyNTA2NDYuNzg0NjAxLCJuYmYiOjE2ODAyNTA2NDYuNzg0NjA0LCJleHAiOjE3MTE4NzMwNDYuNzc3NzY2LCJzdWIiOiI4NCIsInNjb3BlcyI6W119.XQA1UjOHQZkuqkLbAY0V8quXIn6dBY_ZIl8Igkko0Kv1ODdOrVXmUsnbUu59jeIg_I8mVgcnH3XGRSoEDAXb5YSocyD1POwDo7_ED1dc4TYeniS7RrBwoJ4ZTyLFdc0rWo7inelD9n2HoLHquTsh6_tz4QAyc8xaB4_58H3LvKo86FEWoBTY4NsP3CAGzylD-8-SEIHze-HfeYjaaRoVlDeQpY6d3mfqzmBummF7nKHtkLSgTCEEaEsIx2yhZTrapWL-5GKdx-aj1qmKbTE5WYGUgMVu-39Mz7GCvYMryN5HF-9Y4guufDMT0atrXnc7BkyRe0lIVfNE3ga9GcSePLDkzMrCbBjmfTmvKuxoT-sXyXFb7_vu8FogA6Pc7v77LTciuuc9duwRSpK3_fxMy4dZucnFTGx7tTWSwlipQWthwa3wd0gVs5F9cXpgVxLk4Pndxuq-PF8_DvpbWNOCXsm0KWO59zbPgSVyil18KUv4F9NduT49z3MQgzfY9yjE1rkSgRW5Va4PGQhVEle5f2Dce-bysgPhWWK0wrQtLd1AVpbhLIIqI4obDo-2OFdK62GwLor1RfKU0Qc_WiP-8UOljUnVBskGVRVlqvDL8yblrM7ro73JbgpJPlV4Uz67FaC22iyhLbJsRnbQpJVKWgfcw6jyGqjKPaspsFYpPoM`,
+      'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMDQyOTYxYTYzYTU0NmZjNjNhZGY4MWFiNmI0N2I4MDNhNzMwMmMxZWRhNDMyMDk5ZGM1ZmNlMjNiZDUyYzY4ODBlN2I4ZDdlZDQ5MWI2YzMiLCJpYXQiOjE2ODAyMTI2NzQuOTE2NzE5LCJuYmYiOjE2ODAyMTI2NzQuOTE2NzIzLCJleHAiOjE3MTE4MzUwNzQuOTA5NzQxLCJzdWIiOiI4NCIsInNjb3BlcyI6W119.aay7JchvkClUeAV79bQQ4fgTa8gRkgoM01y82G7eC1-JrtLnZTbnhQX4q0FJ_OhhDDxcoK00IMTpwmE1mKHNyVxwrw8yrAM8fRoXk0nRJOtVfNBVZ8R88uv8MBqHcREPjPRV3b-UmlaiC8Yv-2tOk4Kd4E79JfAkdyHaaFVmL8YHayifKmKBkECTY8SyaehOlFSn2cvw951aq2T0m_U1xcZsm2IL0gAOdVO_rdB4Ch0AOcEOpCyoCv8QZH7ZKrB26gSVv6IBtbLc_e_dYtV1OJCok-W8JFGiGafhQhc5RRFqTdot6R5WwfiwkqOf2tVNoLNNE06G7lPRzfpNhx7k6qV9OTYl2otef_yBhKr95gO9nr_L5WbjuazUHwYEBEqb53LwVu4-F0ncsr7epuL9oeL_XHa2t71hBqJRXuxS2djKwlKe9dkq6yPBNJQH7SNjAFlF4oDNqH-fqzmu41iKnmRBCxMGycwRUAqXbXoo6v3YJWqtTe6v6tHgTH4UdhQ6h3NrIwzozvNMLK6tMlHEunlZcMuPEUhvQRaGRu2ZQN54KowDDLEV9XmMbbXH2TkTA1LSEKQp-gA1D9w1s7-JHNHs2-rBi7-Vj_TLx5Yzoa-5ry55QIejufts2R48a4ino_lOgeG9a7W4dpPns69cUCL79g6ffe1cJyUYk2sr3mc',
     );
 
-    
-    fetch(`${baseUrl}/employerFollowers`,
-     {
+    fetch(`${baseUrl}/employerFollowers`, {
       method: 'GET',
       headers: myHeaders,
       redirect: 'follow',
@@ -41,15 +42,24 @@ const Followers = () => {
         console.log(result);
         setFollowersData(result.followers);
       })
-      .catch(error => console.log('error', error));
+      .catch(error => {
+        console.log('error', error);
+        setError(true);
+      })
+      .finally(() => {
+        setLoader(false);
+      });
   };
 
   useEffect(() => {
     _followers();
-  }, []);
+  }, [loader]);
 
   return (
     <JScreen
+    
+      onTryAgainPress={()=> _followers()}
+      isError={error}
       style={{paddingHorizontal: RFPercentage(2)}}
       header={
         <JGradientHeader
@@ -64,39 +74,47 @@ const Followers = () => {
           left={JChevronIcon}
         />
       }>
-      <JSearchInput
-        length={1}
-        onChangeText={e => {
-          store.setAllFeatureCompanyInput(e);
-        }}
-        onPressIcon={() => alert('Icon Pressed')}
-      />
-      <View style={{marginVertical: RFPercentage(2)}}>
-        {followerdata.map((item, index) => (
-          <JRow key={index} style={{marginVertical: RFPercentage(1)}}>
-            <Image
-              style={{
-                width: RFPercentage(6),
-                height: RFPercentage(6),
-                borderRadius: RFPercentage(3),
-                backgroundColor: 'red',
-              }}
-              source={{uri: item.avatar}}
-            />
+      {loader === true ? (
+        <ActivityIndicator />
+      ) : (
+        <>
+          <JSearchInput
+            length={1}
+            onChangeText={e => {
+              store.setAllFeatureCompanyInput(e);
+            }}
+            onPressIcon={() => alert('Icon Pressed')}
+          />
+          <View style={{marginVertical: RFPercentage(2)}}>
+            {followerdata.map((item, index) => (
+              <JRow key={index} style={{marginVertical: RFPercentage(1)}}>
+                <Image
+                  style={{
+                    width: RFPercentage(6),
+                    height: RFPercentage(6),
+                    borderRadius: RFPercentage(3),
+                    backgroundColor: 'red',
+                  }}
+                  source={{uri: item.avatar}}
+                />
 
-            <View style={styles.mainView}>
-              <JText style={{fontWeight: 'bold'}}>{item.candidate_name}</JText>
-              <JText>{item.candidate_email}</JText>
-              <JRow style={{justifyContent: 'space-between'}}>
-                <JText>
-                  {item.regional_code}-{item.phone_number}
-                </JText>
-                <JText>Immediate Available</JText>
+                <View style={styles.mainView}>
+                  <JText style={{fontWeight: 'bold'}}>
+                    {item.candidate_name}
+                  </JText>
+                  <JText>{item.candidate_email}</JText>
+                  <JRow style={{justifyContent: 'space-between'}}>
+                    <JText>
+                      {item.regional_code}-{item.phone_number}
+                    </JText>
+                    <JText>Immediate Available</JText>
+                  </JRow>
+                </View>
               </JRow>
-            </View>
-          </JRow>
-        ))}
-      </View>
+            ))}
+          </View>
+        </>
+      )}
     </JScreen>
   );
 };

@@ -38,6 +38,7 @@ function JRecentJobTile({
   isempty = false,
   img,
   image=true,
+  item,
   title,
   location,
   category,
@@ -106,7 +107,7 @@ const navigation=useNavigation();
                   width: RFPercentage(10),
                 }}
                 resizeMode="contain"
-                source={{uri: img}}
+                source={{uri: item.company_url}}
               />
             </TouchableOpacity>
           </View>}
@@ -118,14 +119,14 @@ const navigation=useNavigation();
               justifyContent: 'center',
               paddingHorizontal: RFPercentage(1),
             }}>
-            <JText fontWeight="bold">{title}</JText>
+            <JText fontWeight="bold">{item?.job_title}</JText>
             <JRow
               style={{
                
                 marginTop: RFPercentage(0.5),
               }}>
               <JText fontColor={colors.danger[0]}>{store.lang.expire_on}</JText>
-              <JText >{moment().format('DD MMM,YYYY')}</JText>
+              <JText >{moment(item.company_url,'DD-MM-YYYY').format('DD MMM,YYYY')}</JText>
             </JRow>
             <JRow
               style={{
@@ -138,7 +139,7 @@ const navigation=useNavigation();
               onPress={()=> navigation.navigate('JobApplication')}
                >
                 <EvilIcons name="user" size={RFPercentage(3)} />
-                <JText> 2 {store.lang.applicates}</JText>
+                <JText> {item.applicant} {store.lang.applicates}</JText>
               </JRow>
     
               {!status == store.lang.closed ? 

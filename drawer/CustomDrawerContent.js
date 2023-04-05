@@ -94,7 +94,7 @@ function CustomDrawerContent(props) {
       />
     );
   return (
-    <DrawerContentScrollView {...props}>
+    <DrawerContentScrollView  {...props}>
       {/* <DrawerItemList {...props} /> */}
       {/* <DrawerItem label="Help" onPress={() => alert('Link to help')} /> */}
       <View style={{height: heightPercentageToDP(100)}}>
