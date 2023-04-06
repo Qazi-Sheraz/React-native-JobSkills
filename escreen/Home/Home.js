@@ -122,7 +122,7 @@ const Home = () => {
                 },
                 {
                   name: store.lang.open,
-                  count: data.counts.jobApplicationsCount,
+                  count: data.counts.jobCount,
                 },
                 {
                   name: store.lang.paused,
@@ -133,18 +133,7 @@ const Home = () => {
                   name: store.lang.close,
                   count: data.counts.closedJobCount,
                 },
-                {
-                  name: 'Application',
-                  count: data.counts.jobApplicationsCount,
-                },
-                {
-                  name: 'jobCount',
-                  count: data.counts.jobCount,
-                },
-                {
-                  name: 'followers',
-                  count: data.counts.followersCount,
-                },
+                
               ]}
               showsHorizontalScrollIndicator={false}
               renderItem={({item, index}) => (
@@ -310,7 +299,7 @@ const Home = () => {
             </JText>
 
             {data.recentJobs.map((item, index) => (
-              <JRecentJobTile item={item} key={index} />
+              <JRecentJobTile item={item} date={moment(item.expire_on,'DD-MM-YYYY').format('DD MMM,YYYY')} key={index} />
             ))}
           </JScrollView>
         </React.Fragment>

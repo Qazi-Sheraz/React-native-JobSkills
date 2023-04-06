@@ -51,7 +51,7 @@ export default function Login({navigation, route}) {
     var formdata = new FormData();
     formdata.append('email', values.email);
     formdata.append('password', values.password);
-
+console.log(formdata)
     var requestOptions = {
       method: 'POST',
       body: formdata,

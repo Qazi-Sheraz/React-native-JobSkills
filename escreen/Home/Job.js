@@ -7,7 +7,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import JText from '../../customComponents/JText';
 import JGradientHeader from '../../customComponents/JGradientHeader';
 import JScreen from '../../customComponents/JScreen';
@@ -25,14 +25,52 @@ import {useNavigation} from '@react-navigation/native';
 import JButton from '../../customComponents/JButton';
 import JRow from '../../customComponents/JRow';
 import {observer} from 'mobx-react';
+import { baseUrl } from '../../ApiUrls';
+
 const Job = () => {
+
   const navigation = useNavigation();
   const store = useContext(StoreContext);
-  const [search, setSearch] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
+const [jobData, setJobData] = useState([]);
+  const [error, setError] = useState(false);
+  const [loader, setLoader] = useState(true);
+
+  const _getjobs = () => {
+    var myHeaders = new Headers();
+    myHeaders.append(
+      'Authorization',
+      'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMDQyOTYxYTYzYTU0NmZjNjNhZGY4MWFiNmI0N2I4MDNhNzMwMmMxZWRhNDMyMDk5ZGM1ZmNlMjNiZDUyYzY4ODBlN2I4ZDdlZDQ5MWI2YzMiLCJpYXQiOjE2ODAyMTI2NzQuOTE2NzE5LCJuYmYiOjE2ODAyMTI2NzQuOTE2NzIzLCJleHAiOjE3MTE4MzUwNzQuOTA5NzQxLCJzdWIiOiI4NCIsInNjb3BlcyI6W119.aay7JchvkClUeAV79bQQ4fgTa8gRkgoM01y82G7eC1-JrtLnZTbnhQX4q0FJ_OhhDDxcoK00IMTpwmE1mKHNyVxwrw8yrAM8fRoXk0nRJOtVfNBVZ8R88uv8MBqHcREPjPRV3b-UmlaiC8Yv-2tOk4Kd4E79JfAkdyHaaFVmL8YHayifKmKBkECTY8SyaehOlFSn2cvw951aq2T0m_U1xcZsm2IL0gAOdVO_rdB4Ch0AOcEOpCyoCv8QZH7ZKrB26gSVv6IBtbLc_e_dYtV1OJCok-W8JFGiGafhQhc5RRFqTdot6R5WwfiwkqOf2tVNoLNNE06G7lPRzfpNhx7k6qV9OTYl2otef_yBhKr95gO9nr_L5WbjuazUHwYEBEqb53LwVu4-F0ncsr7epuL9oeL_XHa2t71hBqJRXuxS2djKwlKe9dkq6yPBNJQH7SNjAFlF4oDNqH-fqzmu41iKnmRBCxMGycwRUAqXbXoo6v3YJWqtTe6v6tHgTH4UdhQ6h3NrIwzozvNMLK6tMlHEunlZcMuPEUhvQRaGRu2ZQN54KowDDLEV9XmMbbXH2TkTA1LSEKQp-gA1D9w1s7-JHNHs2-rBi7-Vj_TLx5Yzoa-5ry55QIejufts2R48a4ino_lOgeG9a7W4dpPns69cUCL79g6ffe1cJyUYk2sr3mc',
+    );
+    fetch(`${baseUrl}/employer/jobs`, {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow',
+    })
+      .then(response => response.json())
+      .then(result => {
+        console.log(result.jobs);
+        setJobData(result.jobs);
+      })
+      .catch(error => {
+        console.log('error', error);
+        setError(true);
+      })
+      .finally(() => {
+        setLoader(false);
+      });
+  };
+
+  useEffect(() => {
+    _getjobs();
+  }, [loader]);
 
   return (
+
     <JScreen
+    isError={error}
+    onTryAgainPress={()=> _getjobs()}
+
       style={{paddingHorizontal: RFPercentage(2)}}
       header={
         <JGradientHeader
@@ -46,6 +84,11 @@ const Job = () => {
           }
         />
       }>
+        
+ {loader ? (
+        <ActivityIndicator />
+      ) : (
+        <>
       <JSearchInput
         length={1}
         onChangeText={e => {
@@ -53,20 +96,14 @@ const Job = () => {
         }}
         onPressIcon={() => alert('Icon Pressed')}
       />
-      <JButton
-        onPress={() => {
-          console.log(store.lang);
-          store.lang.id == 0 ? store.setLang('ud') : store.setLang('en');
-        }}
-      />
       <JScrollView>
-        {[0, 1, 2].map((item, index) => (
+        {jobData.map((item, index) => (
           <>
             <JRecentJobTile
               onSelect={() => setModalVisible(true)}
               onPress={() => navigation.navigate('JobDetails')}
               image={false}
-              title={'Project Manager'}
+              item={item}
               key={index}
             />
           </>
@@ -108,6 +145,8 @@ const Job = () => {
           </View>
         </SafeAreaView>
       </Modal>
+      </>
+      )}
     </JScreen>
   );
 };

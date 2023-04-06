@@ -27,7 +27,7 @@ import { observer } from 'mobx-react';
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName="Home"
+      initialRouteName="Job"
       tabBar={({state, descriptors, navigation}) => (
         <CustomEmployeeBottomTab
           state={state}

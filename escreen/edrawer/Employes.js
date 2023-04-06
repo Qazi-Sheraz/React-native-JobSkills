@@ -49,7 +49,7 @@ const Employes = () => {
             name={'Taqi Haider'}
             email={'OfficeAdministration@gmail.com'}
             text={'Reviewer Interviewer'}
-            status={'Active'}
+            status={'pending'}
           />
         ))}
       </View>

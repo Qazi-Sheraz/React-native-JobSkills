@@ -33,6 +33,7 @@ export default function Registration({navigation, route}) {
     formdata.append('first_name', values.name);
     formdata.append('password_confirmation', values.confirmPassword);
     formdata.append('privacyPolicy', values.policy ? '1' : '0');
+    console.log(formdata)
 
     var requestOptions = {
       method: 'POST',

@@ -10,7 +10,7 @@ import JRow from './JRow'
 import { useContext } from 'react'
 import { StoreContext } from '../mobx/store'
 import { observer } from 'mobx-react-lite'
-const JMeetingJob = ({HeadingName,name2,onPress}) => {
+const JMeetingJob = ({item,startonPress,onPress}) => {
   const store = useContext(StoreContext);
   return (
     <JRow
@@ -27,13 +27,13 @@ const JMeetingJob = ({HeadingName,name2,onPress}) => {
      
       <View >
         <JText fontWeight="bold" fontSize={RFPercentage(2.2)}>
-         {HeadingName}
+         {item.job_title}
         </JText>
         <JText
             style={{
               fontSize: RFPercentage(1.9),marginVertical:RFPercentage(0.5)
             }}>
-            {name2}
+            {item.candidate_name}
           </JText>
         <JRow
             style={{
@@ -42,16 +42,17 @@ const JMeetingJob = ({HeadingName,name2,onPress}) => {
                 <EvilIcons name="calendar" size={RFPercentage(2.5)} />
 
              <JText style={{marginHorizontal:RFPercentage(1)}}>
-             {moment().format('DD MMM,YYYY')}
+             {moment(item.start_date_and_time).format('DD MMM,YYYY')}
         </JText>
              <JText >
             
-          {moment().format('HH:MM A')}
+          {moment(item.start_date_and_time).format('HH:MM' )}{'\r'}{item.meridiem}
         </JText>
           </JRow>
         
       </View> 
       <JRow
+      onPress={startonPress}
           style={styles.startBtn}>
           <JText
             style={{marginHorizontal: RFPercentage(0.5), color:colors.white[0] }}

@@ -39,9 +39,8 @@ function JRecentJobTile({
   img,
   image=true,
   item,
-  title,
-  location,
-  category,
+  date,
+  
   type = 'job',
   onPress,
   containerStyle,
@@ -125,8 +124,8 @@ const navigation=useNavigation();
                
                 marginTop: RFPercentage(0.5),
               }}>
-              <JText fontColor={colors.danger[0]}>{store.lang.expire_on}</JText>
-              <JText >{moment(item.company_url,'DD-MM-YYYY').format('DD MMM,YYYY')}</JText>
+              <JText fontColor={colors.danger[0]}>{store.lang.expire_on} </JText>
+              <JText >{moment(item.expire_on,'DD-MM-YYYY').format('DD MMM,YYYY')}</JText>
             </JRow>
             <JRow
               style={{
@@ -139,7 +138,7 @@ const navigation=useNavigation();
               onPress={()=> navigation.navigate('JobApplication')}
                >
                 <EvilIcons name="user" size={RFPercentage(3)} />
-                <JText> {item.applicant} {store.lang.applicates}</JText>
+                <JText> {item? item.applicant:2} {store.lang.applicant}</JText>
               </JRow>
     
               {!status == store.lang.closed ? 
