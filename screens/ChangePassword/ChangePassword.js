@@ -118,7 +118,8 @@ const ChangePassword = () => {
                 children={'Cancel'}
               />
               <JButton isValid={isValid}
-              onPress={() => handleSubmit()} style={styles.btn} children={'Update'} />
+              onPress={() => handleSubmit()}
+               style={styles.btn} children={'Update'} />
             </JRow>
           </>
         )}
@@ -129,4 +130,4 @@ const ChangePassword = () => {
 
 export default ChangePassword;
 
-const styles = StyleSheet.create({btn: {paddingHorizontal: RFPercentage(7)}});
+const styles = StyleSheet.create({btn: {width:'48%'}},);

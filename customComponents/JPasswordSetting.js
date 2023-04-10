@@ -29,8 +29,8 @@ const JPasswordSetting = ({Svg, Header, txt, onPress ,Sw='0'}) => {
           }}>
           {Svg}
         </View>
-        <View style={{marginLeft: RFPercentage(1), justifyContent: 'center'}}>
-          <JText style={{fontSize: RFPercentage(2.4), fontWeight: 'bold'}}>
+        <View style={{marginHorizontal: RFPercentage(1), justifyContent: 'center'}}>
+          <JText style={{fontSize: RFPercentage(2.3), fontWeight: 'bold'}}>
             {Header}
           </JText>
           {txt && (

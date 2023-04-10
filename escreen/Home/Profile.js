@@ -79,9 +79,9 @@ const Profile = () => {
         <JProfileSections
           // loader={store.myProfileApiLoader}
           
-          onIconPress={() => {
-            navigation.navigate('CEditProfile', {selected: 0});
-          }}
+          // onIconPress={() => {
+          //   navigation.navigate('CEditProfile', {selected: 0});
+          // }}
           isEmpty={false}
           heading={store.lang.contact_info}
           icon="pencil"
@@ -102,7 +102,7 @@ const Profile = () => {
                    '+923876545679'
                   }
                 />
-                <JText onPress={()=> navigation.navigate('VerifiedEmail')} fontColor={colors.redish[0]}>{store.lang.confirm_your_num}</JText>
+                <JText onPress={()=> navigation.navigate('VerifiedPhone')} fontColor={colors.redish[0]}>{store.lang.confirm_your_num}</JText>
               </BorderView>
             // )
           }
@@ -110,11 +110,11 @@ const Profile = () => {
 
         <JProfileSections
           // loader={store.myProfileApiLoader}
-          onIconPress={() => {
-            navigation.navigate('CEditProfile', {selected: 4});
+          // onIconPress={() => {
+          //   navigation.navigate('CEditProfile', {selected: 4});
 
-            // refRBSheet.current.open();
-          }}
+          //   // refRBSheet.current.open();
+          // }}
           isEmpty={false}
           icon='1'
           heading={store.lang.company_info}
@@ -178,11 +178,11 @@ const Profile = () => {
         />
         <JProfileSections
           // loader={store.myProfileApiLoader}
-          onIconPress={() => {
-            navigation.navigate('CEditProfile', {selected: 4});
+          // onIconPress={() => {
+          //   navigation.navigate('CEditProfile', {selected: 4});
 
-            refRBSheet.current.open();
-          }}
+          //   refRBSheet.current.open();
+          // }}
           isEmpty={false}
           icon='1'
           heading={store.lang.social_media_links}
@@ -203,9 +203,9 @@ const Profile = () => {
                       >
                         <JRow>
                           <FontAwesome5Brands
-                            onPress={() =>''
-                              // console.log(store.myProfile?.user[0].social_links)
-                            }
+                            // onPress={() =>''
+                            //   // console.log(store.myProfile?.user[0].social_links)
+                            // }
                             size={RFPercentage(3)}
                             name={
                               item == 'facebook_url'
@@ -227,13 +227,13 @@ const Profile = () => {
                           </JText>
                         </JRow>
                         <JText
-                          onPress={() =>
-                            Linking.openURL(
-                              // store.myProfile?.user[0].social_links[item],
-                            ).catch(err => {
-                              alert(err);
-                            })
-                          }
+                          // onPress={() =>
+                          //   Linking.openURL(
+                          //     // store.myProfile?.user[0].social_links[item],
+                          //   ).catch(err => {
+                          //     alert(err);
+                          //   })
+                          // }
                           fontWeight="600"
                           fontColor={'grey'}
                           style={{textDecorationLine: 'underline'}}

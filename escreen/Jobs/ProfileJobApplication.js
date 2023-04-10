@@ -21,12 +21,16 @@ import Eyes from '../../assets/svg/Icon/Eyes.svg';
 import Flag from '../../assets/svg/Icon/Flag.svg';
 import {useRef} from 'react';
 import {heightPercentageToDP} from 'react-native-responsive-screen';
-import { Menu, MenuOption, MenuOptions, MenuTrigger } from 'react-native-popup-menu';
-import { useContext } from 'react';
-import { StoreContext } from '../../mobx/store';
-import { observer } from 'mobx-react';
+import {
+  Menu,
+  MenuOption,
+  MenuOptions,
+  MenuTrigger,
+} from 'react-native-popup-menu';
+import {useContext} from 'react';
+import {StoreContext} from '../../mobx/store';
+import {observer} from 'mobx-react';
 import JChevronIcon from '../../customComponents/JChevronIcon';
-
 
 const ProfileJobApplication = () => {
   const store = useContext(StoreContext);
@@ -41,174 +45,191 @@ const ProfileJobApplication = () => {
   const refRBSheet = useRef();
   const navigation = useNavigation();
   return (
-    <View style={styles.maincontainer}>
-      <JHeader
-        left={<JChevronIcon color={'Black'}/>}
-        right={ <Menu >
-          <MenuTrigger
-            style={{
-              width: RFPercentage(3),
-              height: RFPercentage(4),
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            <JIcon icon={'sm'} name={'options-vertical'} size={20} />
-          </MenuTrigger>
-          <MenuOptions >
-            <MenuOption style={{flexDirection:store.lang.id=0?'row':'row-reverse',alignItems:'center',}}>
-            <Flag/>
-              <JText style={styles.menutxt}>{store.lang.report_candidate}</JText>
-            </MenuOption>
-            <MenuOption style={{flexDirection:store.lang.id=0?'row':'row-reverse',alignItems:'center'}}>
-              <Download/>
-              <JText style={styles.menutxt}>{store.lang.download_resume}</JText>
-            </MenuOption>
-            <MenuOption style={{flexDirection:store.lang.id=0?'row':'row-reverse',alignItems:'center'}}>
-              <Eyes/>
-              <JText style={styles.menutxt}>{store.lang.view_resume}</JText>
-            </MenuOption>
-          </MenuOptions>
-        </Menu>
-        }
-      />
-      <View style={styles.main}>
-        <Image
-          style={styles.img}
-          source={require('../../assets/images/Taqi.png')}
+   
+    (
+      <View style={styles.maincontainer}>
+        <JHeader
+          left={<JChevronIcon color={'Black'} />}
+          right={
+            <Menu>
+              <MenuTrigger
+                style={{
+                  width: RFPercentage(3),
+                  height: RFPercentage(4),
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <JIcon icon={'sm'} name={'options-vertical'} size={20} />
+              </MenuTrigger>
+              <MenuOptions>
+                <MenuOption>
+                  <JRow>
+                    <Flag />
+                  <JText style={styles.menutxt}>
+                    {store.lang.report_candidate}
+                  </JText></JRow>
+                </MenuOption>
+                <MenuOption >
+                  <JRow>
+                  <Download />
+                  <JText style={styles.menutxt}>
+                    {store.lang.download_resume}
+                  </JText>
+                  </JRow>
+                </MenuOption>
+                <MenuOption>
+                  <JRow>
+                  <Eyes />
+                  <JText style={styles.menutxt}>{store.lang.view_resume}</JText>
+                  </JRow>
+                </MenuOption>
+              </MenuOptions>
+            </Menu>
+          }
         />
-        <JText style={styles.headertxt}>Taqi Haider</JText>
-        <JText style={styles.titleJob}>Laravel Developer</JText>
-        <JText style={styles.txt}>Taqi.haider@bftech.io</JText>
-        <JText style={styles.txt}>Ar-Riyad, Ar-Riyad, Saudi Arabia</JText>
-        <JRow
-          style={{
-            width: '60%',
-            justifyContent: 'space-between',
-            marginVertical: RFPercentage(1),
-          }}>
-          <JText style={styles.txt}>+923161424024</JText>
-          <JText style={styles.txt}>Dec 25, 2021</JText>
-        </JRow>
-
-        <JStatusbar />
-
-        <ScrollView style={{width: '100%'}}>
-          <View
+        <View style={styles.main}>
+          <Image
+            style={styles.img}
+            source={require('../../assets/images/Taqi.png')}
+          />
+          <JText style={styles.headertxt}>Taqi Haider</JText>
+          <JText style={styles.titleJob}>Laravel Developer</JText>
+          <JText style={styles.txt}>Taqi.haider@bftech.io</JText>
+          <JText style={styles.txt}>Ar-Riyad, Ar-Riyad, Saudi Arabia</JText>
+          <JRow
             style={{
-              // width: '100%',
-              backgroundColor: '#ffff',
-              paddingHorizontal: RFPercentage(3),
-              paddingVertical: RFPercentage(2),
-              marginBottom: RFPercentage(1),
+              width: '60%',
+              justifyContent: 'space-between',
+              marginVertical: RFPercentage(1),
             }}>
-            <JText style={styles.result}>{store.lang.assessment_result}</JText>
-            <JAssessmentResult
-              title={'Personal Assessment'}
-              percent="75%"
-              color={colors.purple[0]}
-            />
-            <JAssessmentResult
-              title={'Cognitive Assessment'}
-              percent="45%"
-              color={colors.purple[0]}
-            />
-            <JAssessmentResult
-              title={'Professional Assessment'}
-              percent="65%"
-              color={colors.purple[0]}
-            />
-            <JButton
-              style={{marginTop: RFPercentage(0.5)}}
-              onPress={() => refRBSheet.current.open()}
-              children={store.lang.see_more}
-            />
-          </View>
-          <JSkills
-            title={store.lang.experience}
-            JobTitle={'Ui Ux Designer'}
-            date={'Oct 2021- Present'}
-            txt={'Alshamel ,Saudia Arabia'}
-            txt2={'Lorem Ipsum is simply dummy '}
-          />
+            <JText style={styles.txt}>+923161424024</JText>
+            <JText style={styles.txt}>Dec 25, 2021</JText>
+          </JRow>
 
-          <JSkills
-            title={store.lang.education}
-            JobTitle={'BS (CS)'}
-            date={'2016- 20'}
-            txt={'Dar Al Uloom University ,Saudia Arabia'}
-            txt2={'Lorem Ipsum is simply dummy  '}
-          />
+          <JStatusbar />
 
-          <JSkills
-            JobTitle={'BS (CS)'}
-            date={'2016- 20'}
-            txt={'Dar Al Uloom University ,Saudia Arabia'}
-            txt2={'Lorem Ipsum is simply dummy  '}
-          />
-          <View
-            style={{
-              width: '100%',
-              backgroundColor: '#ffff',
-              paddingHorizontal: RFPercentage(3),
-              paddingVertical: RFPercentage(2),
-              marginBottom: RFPercentage(1),
-            }}>
-            <JText style={styles.result}>{store.lang.skills}</JText>
-            <JAssessmentResult
-              title={'Personal Assessment'}
-              percent="75%"
-              color={'#B7834A'}
-            />
-            <JAssessmentResult
-              title={'Cognitive Assessment'}
-              percent="45%"
-              color={'#B7834A'}
-            />
-            <JAssessmentResult
-              title={'Professional Assessment'}
-              percent="65%"
-              color={'#B7834A'}
-            />
-            <JButton
-              style={{marginTop: RFPercentage(0.5)}}
-              onPress={() => refRBSheet.current.open()}
-              children={store.lang.see_more}
-            />
-          </View>
-          <RBSheet
-            ref={refRBSheet}
-            // closeOnDragDown={false}
-            closeOnPressMask={true}
-            height={heightPercentageToDP(32)}
-            customStyles={{
-              container: {
-                borderTopLeftRadius: RFPercentage(2.5),
-                borderTopRightRadius: RFPercentage(2.5),
-              },
-              wrapper: {
-                backgroundColor: '#00000080',
-              },
-              draggableIcon: {
-                backgroundColor: colors.black[0],
-                display: 'none',
-              },
-            }}>
-            <View style={styles.RBView}>
-              <JText style={styles.RBHeader}>{store.lang.assessment_result}</JText>
-
-              {data.map((item, index) => (
-                <JAssessmentResult
-                  key={index}
-                  title={item.name}
-                  percent="75%"
-                  color={colors.purple[0]}
-                />
-              ))}
+          <ScrollView style={{width: '100%'}}>
+            <View
+              style={{
+                // width: '100%',
+                backgroundColor: '#ffff',
+                paddingHorizontal: RFPercentage(3),
+                paddingVertical: RFPercentage(2),
+                marginBottom: RFPercentage(1),
+              }}>
+              <JText style={styles.result}>
+                {store.lang.assessment_result}
+              </JText>
+              <JAssessmentResult
+                title={'Personal Assessment'}
+                percent="75%"
+                color={colors.purple[0]}
+              />
+              <JAssessmentResult
+                title={'Cognitive Assessment'}
+                percent="45%"
+                color={colors.purple[0]}
+              />
+              <JAssessmentResult
+                title={'Professional Assessment'}
+                percent="65%"
+                color={colors.purple[0]}
+              />
+              <JButton
+                style={{marginTop: RFPercentage(0.5)}}
+                onPress={() => refRBSheet.current.open()}
+                children={store.lang.see_more}
+              />
             </View>
-          </RBSheet>
-        </ScrollView>
+            <JSkills
+              title={store.lang.experience}
+              JobTitle={'Ui Ux Designer'}
+              date={'Oct 2021- Present'}
+              txt={'Alshamel ,Saudia Arabia'}
+              txt2={'Lorem Ipsum is simply dummy '}
+            />
+
+            <JSkills
+              title={store.lang.education}
+              JobTitle={'BS (CS)'}
+              date={'2016- 20'}
+              txt={'Dar Al Uloom University ,Saudia Arabia'}
+              txt2={'Lorem Ipsum is simply dummy  '}
+            />
+
+            <JSkills
+              JobTitle={'BS (CS)'}
+              date={'2016- 20'}
+              txt={'Dar Al Uloom University ,Saudia Arabia'}
+              txt2={'Lorem Ipsum is simply dummy  '}
+            />
+            <View
+              style={{
+                width: '100%',
+                backgroundColor: '#ffff',
+                paddingHorizontal: RFPercentage(3),
+                paddingVertical: RFPercentage(2),
+                marginBottom: RFPercentage(1),
+              }}>
+              <JText style={styles.result}>{store.lang.skills}</JText>
+              <JAssessmentResult
+                title={'Personal Assessment'}
+                percent="75%"
+                color={'#B7834A'}
+              />
+              <JAssessmentResult
+                title={'Cognitive Assessment'}
+                percent="45%"
+                color={'#B7834A'}
+              />
+              <JAssessmentResult
+                title={'Professional Assessment'}
+                percent="65%"
+                color={'#B7834A'}
+              />
+              <JButton
+                style={{marginTop: RFPercentage(0.5)}}
+                onPress={() => refRBSheet.current.open()}
+                children={store.lang.see_more}
+              />
+            </View>
+            <RBSheet
+              ref={refRBSheet}
+              // closeOnDragDown={false}
+              closeOnPressMask={true}
+              height={heightPercentageToDP(32)}
+              customStyles={{
+                container: {
+                  borderTopLeftRadius: RFPercentage(2.5),
+                  borderTopRightRadius: RFPercentage(2.5),
+                },
+                wrapper: {
+                  backgroundColor: '#00000080',
+                },
+                draggableIcon: {
+                  backgroundColor: colors.black[0],
+                  display: 'none',
+                },
+              }}>
+              <View style={styles.RBView}>
+                <JText style={styles.RBHeader}>
+                  {store.lang.assessment_result}
+                </JText>
+
+                {data.map((item, index) => (
+                  <JAssessmentResult
+                    key={index}
+                    title={item.name}
+                    percent="75%"
+                    color={colors.purple[0]}
+                  />
+                ))}
+              </View>
+            </RBSheet>
+          </ScrollView>
+        </View>
       </View>
-    </View>
+    )
   );
 };
 

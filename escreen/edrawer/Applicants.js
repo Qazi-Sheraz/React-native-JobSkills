@@ -25,7 +25,7 @@ const Applicants = () => {
         <JGradientHeader  center={
           <JText  fontColor={colors.white[0]}
           fontWeight="bold"
-          fontSize={RFPercentage(2.5)}>Applicants</JText>
+          fontSize={RFPercentage(2.5)}>Add Applicants</JText>
         }
           left={
             <JIcon
@@ -198,7 +198,7 @@ const Applicants = () => {
                       <JButton
 
                     
-                        onPress={() => _selectOneFile(setFieldValue)}
+                        // onPress={() => _selectOneFile(setFieldValue)}
                         style={{
                           width: '46%',
                           backgroundColor: colors.white[0],

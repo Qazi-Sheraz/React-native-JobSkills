@@ -6,6 +6,7 @@ import colors from '../config/colors';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import JText from './JText';
 const JTransaction = ({text, image,date}) => {
+  
   return (
     <JRow style={styles.container}>
         <JRow>

@@ -1,5 +1,5 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, { useContext } from 'react';
 import JScreen from '../../../customComponents/JScreen';
 import JGradientHeader from '../../../customComponents/JGradientHeader';
 import JText from '../../../customComponents/JText';
@@ -9,10 +9,11 @@ import JIcon from '../../../customComponents/JIcon';
 import JSearchInput from '../../../customComponents/JSearchInput';
 import JTransaction from '../../../customComponents/JTransaction';
 import { useNavigation } from '@react-navigation/native';
+import { StoreContext } from '../../../mobx/store';
 
 const Transaction = () => {
   const navigation = useNavigation();
-
+const store=useContext(StoreContext);
   return (
     <JScreen
       style={{paddingHorizontal: RFPercentage(2)}}

@@ -12,12 +12,7 @@ import {
 import JText from '../customComponents/JText';
 import colors from '../config/colors';
 import {RFPercentage} from 'react-native-responsive-fontsize';
-import {getDrawerItems} from '../data/drawer';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import Feather from 'react-native-vector-icons/Feather';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+
 import pkg from '../package.json';
 import {useContext} from 'react';
 import {StoreContext} from '../mobx/store';

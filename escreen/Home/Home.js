@@ -118,20 +118,20 @@ const Home = () => {
               data={[
                 {
                   name: store.lang.total,
-                  count: data.counts.totalJobs,
+                  count: data?.counts?.totalJobs,
                 },
                 {
                   name: store.lang.open,
-                  count: data.counts.jobCount,
+                  count: data?.counts?.jobCount,
                 },
                 {
                   name: store.lang.paused,
-                  count: data.counts.pausedJobCount,
+                  count: data?.counts?.pausedJobCount,
                 },
 
                 {
                   name: store.lang.close,
-                  count: data.counts.closedJobCount,
+                  count: data?.counts?.closedJobCount,
                 },
                 
               ]}
@@ -191,7 +191,7 @@ const Home = () => {
               inverted={store.lang.id == 0 ? false : true}
             />
 
-            {data.meetings.length > 0 ? (
+            {data?.meetings?.length > -1 && (
               <>
                 <JText
                   fontSize={RFPercentage(2)}
@@ -289,7 +289,8 @@ const Home = () => {
                   </View>
                 </JRow>
               </>
-            ) : null}
+            ) }
+            
             <JText
               style={{marginVertical: RFPercentage(1)}}
               fontSize={RFPercentage(2)}
@@ -298,8 +299,9 @@ const Home = () => {
               {store.lang.Recent_Jobs}
             </JText>
 
-            {data.recentJobs.map((item, index) => (
-              <JRecentJobTile item={item} date={moment(item.expire_on,'DD-MM-YYYY').format('DD MMM,YYYY')} key={index} />
+            {data?.recentJobs?.map((item, index) => (
+              <JRecentJobTile  
+              item={item}  key={index} />
             ))}
           </JScrollView>
         </React.Fragment>

@@ -50,9 +50,7 @@ const CFilter = ({navigation}) => {
             }}>
             {({
               values,
-
               errors,
-
               touched,
               handleSubmit,
               setFieldValue,

@@ -15,6 +15,7 @@ import { useNavigation } from '@react-navigation/native';
 
 const EAccountSetting = () => {
     const navigation=useNavigation();
+    
   return (
     <JScreen
     style={{paddingHorizontal: RFPercentage(2)}}

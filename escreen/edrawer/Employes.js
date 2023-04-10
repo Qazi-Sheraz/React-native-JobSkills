@@ -1,5 +1,5 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, { useContext } from 'react';
 import JScreen from '../../customComponents/JScreen';
 import JGradientHeader from '../../customComponents/JGradientHeader';
 import JText from '../../customComponents/JText';
@@ -9,9 +9,11 @@ import {RFPercentage} from 'react-native-responsive-fontsize';
 import {useNavigation} from '@react-navigation/native';
 import JSearchInput from '../../customComponents/JSearchInput';
 import JEmployeUser from '../../customComponents/JEmployeUser';
+import { StoreContext } from '../../mobx/store';
 
 const Employes = () => {
   const {navigate, goBack} = useNavigation();
+  const store=useContext(StoreContext);
   return (
     <JScreen
       style={{paddingHorizontal: RFPercentage(2)}}

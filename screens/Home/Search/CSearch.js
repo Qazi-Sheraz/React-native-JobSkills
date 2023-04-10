@@ -233,10 +233,11 @@ const CSearch = ({navigation}) => {
             {[0, 1, 2].map((item, index) => (
               <>
                 <JRecentJobTile
+              // disabled={true}
                   onSelect={() => setModalVisible(true)}
-                  onPress={() => navigation.navigate('JobDetails')}
+                  // onPress={() => navigation.navigate('JobDetails')}
                   image={false}
-                  title={name}
+                  title={'Project'}
                   key={index}
                 />
               </>

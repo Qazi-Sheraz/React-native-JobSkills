@@ -217,7 +217,7 @@ function CHomeStack({navigation}) {
           headerShown: false,
           // gestureEnabled: false,
         }}
-        initialRouteName={store?.token?.token ? 'JobDetails' : 'SelectionScreen'}>
+        initialRouteName={store?.token?.token ? 'EBottomTab' : 'SelectionScreen'}>
           
         <Stack.Screen name="CHome" component={EBottomTab} />
         <Stack.Screen name="Assessments" component={Assessments} />
@@ -267,7 +267,7 @@ function CHomeStack({navigation}) {
         <Stack.Screen name="ChangePassword" component={ChangePassword} />
         <Stack.Screen name="ChangeLanguage" component={ChangeLanguage} />
         <Stack.Screen name="VerifiedPhone" component={VerifiedPhone} />
-        <Stack.Screen name="VerifiedEmail" component={VerifiedEmail} />
+        {/* <Stack.Screen name="VerifiedEmail" component={VerifiedEmail} /> */}
       </Stack.Navigator>
     </React.Fragment>
   );
