@@ -69,7 +69,7 @@ const Meeting = () => {
     })
       .then(response => response.json())
       .then(result => {
-        console.log(result.meeting_info);
+        // console.log(result.meeting_info);
         setData1(result.meeting_info[0]);
         refRBSheet.current.open();
       })

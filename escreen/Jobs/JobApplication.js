@@ -28,18 +28,19 @@ import {
 import {StoreContext} from '../../mobx/store';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {heightPercentageToDP} from 'react-native-responsive-screen';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import JChevronIcon from '../../customComponents/JChevronIcon';
-import {observer } from 'mobx-react';
+import {observer} from 'mobx-react';
 import JButton from '../../customComponents/JButton';
-import { baseUrl } from '../../ApiUrls';
+import {baseUrl} from '../../ApiUrls';
+import moment from 'moment';
 
 const data = [
-  {id: 0, name: 'Taqi Haider', status: 'Applied', Date: '2022-03-15'},
-  {id: 1, name: 'Hamza', status: 'Rejected', Date: '2022-04-16'},
-  {id: 2, name: 'Sadia', status: 'Shortlisted', Date: '2022-08-05'},
-  {id: 3, name: 'Usman', status: 'Interview Scheduled', Date: '2023-03-25'},
-  {id: 4, name: 'Yasir', status: 'Drafted', Date: '2023-05-10'},
+  {status: 'Applied'},
+  {status: 'Rejected'},
+  {status: 'Shortlisted'},
+  {status: 'Interview Scheduled'},
+  {status: 'Drafted'},
 ];
 const data1 = [
   {id: 0, name: 'All'},
@@ -49,48 +50,70 @@ const data1 = [
   {id: 4, name: 'Shortlisted'},
   {id: 5, name: 'Interview Scheduled'},
 ];
-const JobApplication = ({route}) => {
 
-  const{navigate,goBack}=useNavigation();
-  const [selectedItem, setSelectedItem] = useState([jApplication.status]);
+const JobApplication = ({route}) => {
+  const {navigate, goBack} = useNavigation();
+  const [selectedItem, setSelectedItem] = useState(data.status);
+  const [jApplication, setJApplication] = useState();
   const handleSelect = status => {
-    setSelectedItem(jApplication);
+    setSelectedItem(data);
   };
+
   const [modalVisible, setModalVisible] = useState(false);
   const refRBSheet = useRef();
   const store = useContext(StoreContext);
-  const [items, setItems] = useState([jApplication]);
+
   const filterData = status => {
     if (status === 'All') {
-      setItems(jApplication);
+      setJApplication(jApplication);
     } else {
-      setItems(jApplication.filter(e => e.status === status));
+      setJApplication(jApplication.filter(e => e.status === status));
     }
     refRBSheet.current.close();
   };
 
   const sortByNameAscending = () => {
-    setItems([...items].sort((a, b) => a.name.localeCompare(b.name)));
+    setJApplication(
+      [...jApplication].sort((a, b) =>
+        a.candidate_name.localeCompare(b.candidate_name),
+      ),
+    );
   };
 
   const sortByNameDescending = () => {
-    setItems([...items].sort((a, b) => b.name.localeCompare(a.name)));
-  };
-  const sortByRecentApplyDateDescending = () => {
-    setItems([...items].sort((a, b) => new Date(b.Date) - new Date(a.Date)));
+    setJApplication(
+      [...jApplication].sort((a, b) =>
+        b.candidate_name.localeCompare(a.candidate_name),
+      ),
+    );
   };
 
-  const [jApplication, setJApplication] = useState();
+  const sortByRecentApplyDateDescending = () => {
+    setJApplication(
+      [...jApplication].sort(
+        (a, b) => new Date(b.apply_date) - new Date(a.apply_date),
+      ),
+    );
+  };
+  // const sortedData = [...jApplication].sort((a, b) => new Date(b?.apply_date) - new Date(a?.apply_date));
+
+  // const latestDate = sortedData[0].date;
+
+  // // Format the latest date to your desired output
+  // const formattedDate = new Date(latestDate).toLocaleDateString();
+
+  // console.log("formattedDate",formattedDate);
+
+
   const [error, setError] = useState(false);
   const [loader, setLoader] = useState(true);
   const _jobApplication = () => {
-
     var myHeaders = new Headers();
     myHeaders.append(
       'Authorization',
       'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMDQyOTYxYTYzYTU0NmZjNjNhZGY4MWFiNmI0N2I4MDNhNzMwMmMxZWRhNDMyMDk5ZGM1ZmNlMjNiZDUyYzY4ODBlN2I4ZDdlZDQ5MWI2YzMiLCJpYXQiOjE2ODAyMTI2NzQuOTE2NzE5LCJuYmYiOjE2ODAyMTI2NzQuOTE2NzIzLCJleHAiOjE3MTE4MzUwNzQuOTA5NzQxLCJzdWIiOiI4NCIsInNjb3BlcyI6W119.aay7JchvkClUeAV79bQQ4fgTa8gRkgoM01y82G7eC1-JrtLnZTbnhQX4q0FJ_OhhDDxcoK00IMTpwmE1mKHNyVxwrw8yrAM8fRoXk0nRJOtVfNBVZ8R88uv8MBqHcREPjPRV3b-UmlaiC8Yv-2tOk4Kd4E79JfAkdyHaaFVmL8YHayifKmKBkECTY8SyaehOlFSn2cvw951aq2T0m_U1xcZsm2IL0gAOdVO_rdB4Ch0AOcEOpCyoCv8QZH7ZKrB26gSVv6IBtbLc_e_dYtV1OJCok-W8JFGiGafhQhc5RRFqTdot6R5WwfiwkqOf2tVNoLNNE06G7lPRzfpNhx7k6qV9OTYl2otef_yBhKr95gO9nr_L5WbjuazUHwYEBEqb53LwVu4-F0ncsr7epuL9oeL_XHa2t71hBqJRXuxS2djKwlKe9dkq6yPBNJQH7SNjAFlF4oDNqH-fqzmu41iKnmRBCxMGycwRUAqXbXoo6v3YJWqtTe6v6tHgTH4UdhQ6h3NrIwzozvNMLK6tMlHEunlZcMuPEUhvQRaGRu2ZQN54KowDDLEV9XmMbbXH2TkTA1LSEKQp-gA1D9w1s7-JHNHs2-rBi7-Vj_TLx5Yzoa-5ry55QIejufts2R48a4ino_lOgeG9a7W4dpPns69cUCL79g6ffe1cJyUYk2sr3mc',
     );
-
+    //  console.log(route.params.id)
     fetch(
       `${baseUrl}/employer/jobs/${route.params.id}/applications`,
 
@@ -102,8 +125,8 @@ const JobApplication = ({route}) => {
     )
       .then(response => response.json())
       .then(result => {
-        console.log(result.job_application);
-        setJApplication(result.job_application[0]);
+        // console.log(result.job_application);
+        setJApplication(result.job_application);
       })
       .catch(error => {
         console.log('error', error);
@@ -113,15 +136,12 @@ const JobApplication = ({route}) => {
         setLoader(false);
       });
   };
-useEffect(() => {
-  _jobApplication();
-}, [loader])
+  useEffect(() => {
+    _jobApplication();
+  }, [loader]);
 
   return (
-   
-    <JScreen
-    isError={error}
-    onTryAgainPress={()=>  _jobApplication()} >
+    <JScreen isError={error} onTryAgainPress={() => _jobApplication()}>
       <JGradientHeader
         center={
           <JText
@@ -134,60 +154,72 @@ useEffect(() => {
         left={JChevronIcon}
       />
 
-      {loader==true ?(<ActivityIndicator/>) :(
+      {loader == true ? (
+        <ActivityIndicator />
+      ) : (
         <>
-      <JRow
-        style={{
-          paddingHorizontal: RFPercentage(2),
-          justifyContent: 'space-between',
-        }}>
-        
-        <JSearchInput
-          inputStyle={{width: '75%', alignSelf: 'center'}}
-          length={1}
-          onChangeText={e => {
-            store.setAllFeatureCompanyInput(e);
-          }}
-          onPressIcon={() => alert('Icon Pressed')}
-        />
-        <Menu>
-          <MenuTrigger style={{alignItems: 'center', justifyContent: 'center'}}>
-            <Sort height={RFPercentage(7)} width={RFPercentage(8)} />
-          </MenuTrigger>
-          <MenuOptions>
-            <JText style={styles.menuhead}>{store.lang.sort_by}</JText>
-            <MenuOption onSelect={sortByNameAscending}>
-              <JRow>
-                <JText style={styles.menutxt}>{store.lang.candidate_fit_score}</JText>
-                <Arrow_Up />
-              </JRow>
-            </MenuOption>
-            <MenuOption onSelect={sortByNameDescending}>
-              <JRow>
-                <JText style={styles.menutxt}>{store.lang.candidate_fit_score}</JText>
-                <Arrow_Down />
-              </JRow>
-            </MenuOption>
-            <MenuOption onSelect={sortByRecentApplyDateDescending}>
-              <JText style={styles.menutxt}>{store.lang.recent_apply_date}</JText>
-            </MenuOption>
-            <MenuOption onSelect={() => refRBSheet.current.open()}>
-              <JText style={styles.menutxt}>{store.lang.status_of_application}</JText>
-            </MenuOption>
-          </MenuOptions>
-        </Menu>
-      </JRow>
+          <JRow
+            style={{
+              paddingHorizontal: RFPercentage(2),
+              justifyContent: 'space-between',
+            }}>
+            <JSearchInput
+              inputStyle={{width: '75%', alignSelf: 'center'}}
+              length={1}
+              onChangeText={e => {
+                store.setAllFeatureCompanyInput(e);
+              }}
+              onPressIcon={() => alert('Icon Pressed')}
+            />
+            <Menu>
+              <MenuTrigger
+                style={{alignItems: 'center', justifyContent: 'center'}}>
+                <Sort height={RFPercentage(7)} width={RFPercentage(8)} />
+              </MenuTrigger>
+              <MenuOptions>
+                <JText style={styles.menuhead}>{store.lang.sort_by}</JText>
+                <MenuOption onSelect={sortByNameAscending}>
+                  <JRow>
+                    <JText style={styles.menutxt}>
+                      {store.lang.candidate_fit_score}
+                    </JText>
+                    <Arrow_Up />
+                  </JRow>
+                </MenuOption>
+                <MenuOption onSelect={sortByNameDescending}>
+                  <JRow>
+                    <JText style={styles.menutxt}>
+                      {store.lang.candidate_fit_score}
+                    </JText>
+                    <Arrow_Down />
+                  </JRow>
+                </MenuOption>
+                <MenuOption onSelect={sortByRecentApplyDateDescending}>
+                  <JText style={styles.menutxt}>
+                    {store.lang.recent_apply_date}
+                  </JText>
+                </MenuOption>
+                <MenuOption onSelect={() => refRBSheet.current.open()}>
+                  <JText style={styles.menutxt}>
+                    {store.lang.status_of_application}
+                  </JText>
+                </MenuOption>
+              </MenuOptions>
+            </Menu>
+          </JRow>
 
-      
-      <ScrollView style={{flex: 1}}>
-        {(jApplication).map((item, index) => (
-          <JApplication
-            onPress={() => setModalVisible(true)}
-            onSelect={handleSelect}
-            item={item}
-          />
-        ))}
-      </ScrollView></>
+          <ScrollView style={{flex: 1, paddingHorizontal: RFPercentage(2)}}>
+            {jApplication.map((item, index) => (
+              <JApplication
+                key={index}
+                onPress={() => setModalVisible(true)}
+                onSelect={handleSelect}
+                item={item}
+                // date={moment(item.apply_date, 'DD-MM-YYYY').format('DD MMM,YYYY')}
+              />
+            ))}
+          </ScrollView>
+        </>
       )}
       <RBSheet
         ref={refRBSheet}
@@ -208,7 +240,9 @@ useEffect(() => {
           },
         }}>
         <View style={styles.RBView}>
-          <JText style={styles.RBHeader}>{store.lang.status_of_application}</JText>
+          <JText style={styles.RBHeader}>
+            {store.lang.status_of_application}
+          </JText>
 
           {data1.map((item, index) => (
             <JText

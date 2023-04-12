@@ -49,7 +49,7 @@ const [jobData, setJobData] = useState([]);
     })
       .then(response => response.json())
       .then(result => {
-        console.log(result.jobs);
+        // console.log(result.jobs);
         setJobData(result.jobs);
       })
       .catch(error => {
@@ -100,8 +100,9 @@ const [jobData, setJobData] = useState([]);
         {jobData.map((item, index) => (
           <>
             <JRecentJobTile
+            option={true}
               onSelect={() => setModalVisible(true)}
-              onPress={() => navigation.navigate('JobDetails')}
+              onPress={() => navigation.navigate('JobDetails',{id:item.job_id})}
               image={false}
               item={item}
               key={index}

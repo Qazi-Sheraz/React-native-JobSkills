@@ -4,7 +4,7 @@ import {
   View,
   TouchableOpacity,
   ActivityIndicator,
-  Pressable
+  Pressable,
 } from 'react-native';
 
 import React, {memo, useContext} from 'react';
@@ -31,16 +31,18 @@ import {
   MenuOption,
   MenuTrigger,
 } from 'react-native-popup-menu';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import JRow from './JRow';
+import JIcon from './JIcon';
+import JButton from './JButton';
 
 function JRecentJobTile({
   isempty = false,
   img,
-  image=true,
+  image = true,
   item,
-  date,
-  
+  index,
+  option = false,
   type = 'job',
   onPress,
   containerStyle,
@@ -50,10 +52,11 @@ function JRecentJobTile({
   favouriteData = [],
   jobId,
   onSelect,
+  disabled=false,
 }) {
   const [loader, setLoader] = useState();
   const store = useContext(StoreContext);
-const navigation=useNavigation();
+  const navigation = useNavigation();
 
   return isempty === true ? (
     <View
@@ -71,10 +74,10 @@ const navigation=useNavigation();
     </View>
   ) : (
     <Observer>
-      {
-        ()=> <JRow
-        disabled={false}
-        onPress={onPress}
+      {() => (
+        <JRow
+          disabled={false}
+          onPress={onPress}
           style={[
             {
               height: heightPercentageToDP(14),
@@ -84,65 +87,74 @@ const navigation=useNavigation();
             },
             containerStyle,
           ]}>
-            {image && <View
-            style={{
-              width: '28%',
-              justifyContent: 'center',
-              paddingHorizontal: store.lang.id== 0?RFPercentage(1):RFPercentage(0),
-            }}>
-            <TouchableOpacity
-              onPress={onPress}
+          {image && (
+            <View
               style={{
-                height: RFPercentage(12),
-                width: RFPercentage(12),
-                borderWidth: RFPercentage(0.1),
-                borderColor: colors.inputBorder[0],
+                width: '28%',
                 justifyContent: 'center',
-                alignItems: 'center',
+                paddingHorizontal:
+                  store.lang.id == 0 ? RFPercentage(1) : RFPercentage(0),
               }}>
-              <Image
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('JobDetails', {id: item.job_id})
+                }
                 style={{
-                  height: RFPercentage(10),
-                  width: RFPercentage(10),
-                }}
-                resizeMode="contain"
-                source={{uri: item.company_url}}
-              />
-            </TouchableOpacity>
-          </View>}
-        
-    
+                  height: RFPercentage(12),
+                  width: RFPercentage(12),
+                  borderWidth: RFPercentage(0.1),
+                  borderColor: colors.inputBorder[0],
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Image
+                  style={{
+                    height: RFPercentage(10),
+                    width: RFPercentage(10),
+                  }}
+                  resizeMode="contain"
+                  source={{uri: item.company_url}}
+                />
+              </TouchableOpacity>
+            </View>
+          )}
+
           <View
             style={{
-              width: image ? '72%' :'100%',
+              width: image ? '72%' : '100%',
               justifyContent: 'center',
               paddingHorizontal: RFPercentage(1),
             }}>
             <JText fontWeight="bold">{item?.job_title}</JText>
             <JRow
               style={{
-               
                 marginTop: RFPercentage(0.5),
               }}>
-              <JText fontColor={colors.danger[0]}>{store.lang.expire_on} </JText>
-              <JText >{moment(item.expire_on,'DD-MM-YYYY').format('DD MMM,YYYY')}</JText>
+              <JText fontColor={colors.danger[0]}>
+                {store.lang.expire_on}
+              </JText>
+              <JText>
+                {/* 12 MAR 2023 */}
+                {moment(item.expire_on, 'DD-MM-YYYY').format('DD MMM,YYYY')}
+              
+              </JText>
             </JRow>
             <JRow
               style={{
-               
                 justifyContent: 'space-between',
                 marginTop: RFPercentage(0.5),
               }}>
               <JRow
-              disabled={false}
-              onPress={()=> navigation.navigate('JobApplication')}
-               >
+                disabled={false}
+                onPress={() => navigation.navigate('JobApplication',{id:item.id})}>
                 <EvilIcons name="user" size={RFPercentage(3)} />
-                <JText> {item? item.applicant:2} {store.lang.applicant}</JText>
+                <JText>
+                  
+                  {item ? item.applicant : 2} {store.lang.applicant}
+                </JText>
               </JRow>
-    
-              {!status == store.lang.closed ? 
-              (
+
+              {!status == store.lang.closed ? (
                 <JRow
                   style={{
                     backgroundColor: colors.danger[0],
@@ -190,30 +202,31 @@ const navigation=useNavigation();
                       />
                     </JRow>
                   </MenuTrigger>
-    
+
                   <MenuOptions>
-                    {[store.lang.paused, store.lang.closed].map((item, index) => (
-                      <MenuOption
-                        style={{
-                          marginLeft: RFPercentage(1),
-                        }}
-                        key={index}
-                        onSelect={onSelect}>
-                        <JRow
-                       >
-                          <JText
-                            style={{marginLeft: RFPercentage(2)}}
-                            fontSize={RFPercentage(2)}>
-                            {item}
-                          </JText>
-                        </JRow>
-                      </MenuOption>
-                    ))}
+                    {[store.lang.paused, store.lang.closed].map(
+                      (item, index) => (
+                        <MenuOption
+                          style={{
+                            marginLeft: RFPercentage(1),
+                          }}
+                          key={index}
+                          onSelect={onSelect}>
+                          <JRow>
+                            <JText
+                              style={{marginLeft: RFPercentage(2)}}
+                              fontSize={RFPercentage(2)}>
+                              {item}
+                            </JText>
+                          </JRow>
+                        </MenuOption>
+                      ),
+                    )}
                   </MenuOptions>
                 </Menu>
               )}
             </JRow>
-    
+
             {loader ? (
               <ActivityIndicator
                 style={{
@@ -234,11 +247,8 @@ const navigation=useNavigation();
                   position: 'absolute',
                   padding: RFPercentage(0.4),
                   top: 0,
-                  right:store.lang.id==0? 0:null,
-                   
-
-                 
-
+                  right: store.lang.id == 0 ? 0 :null ,
+                 marginHorizontal: option===true ? RFPercentage(3) :null,
                 }}
                 name={
                   favouriteData.some(item => item.job_id === jobId)
@@ -249,11 +259,38 @@ const navigation=useNavigation();
                 color={colors.purple[0]}
               />
             )}
+            {option===true && (
+              <Menu
+                style={{
+                  position: 'absolute',
+                  right: store.lang.id == 0 ? 0 : null,
+                  top: 0,
+                }}>
+                <MenuTrigger
+                  style={{
+                    width: RFPercentage(3),
+                    height: RFPercentage(4),
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <JIcon icon={'sm'} name={'options-vertical'} size={20} />
+                </MenuTrigger>
+
+                <MenuOptions>
+                  <MenuOption onSelect={onSelect}>
+                    <JText style={styles.menutxt}> Preview </JText>
+                  </MenuOption>
+                  <MenuOption onSelect={onSelect}>
+                    <JText style={styles.menutxt}> Share</JText>
+                  </MenuOption>
+                 
+                </MenuOptions>
+              </Menu>
+            )}
           </View>
         </JRow>
-      }
+      )}
     </Observer>
-   
   );
 }
 export default JRecentJobTile;

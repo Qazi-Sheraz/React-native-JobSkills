@@ -25,6 +25,7 @@ import {useContext} from 'react';
 import {StoreContext} from '../mobx/store';
 import JShadowView from './JShadowView';
 import {memo} from 'react';
+
 function JSelectInput({
   containerStyle,
   heading,
@@ -67,6 +68,13 @@ function JSelectInput({
   const [jobType, setJobType] = useState([]);
   const [categories, setCategories] = useState([]);
   const [skills, setSkills] = useState([]);
+  const [title, setTitle] = useState([]);
+  const [shift, setShift] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [Assessments, setAssessments] = useState([]);
+  const [periods, setPeriods] = useState([]);
+  const [preference, setPreference] = useState([]);
+  const [degreeLevel, setDegreeLevel] = useState([]);
 
   const _years = startYear => {
     setLoader(true);
@@ -94,6 +102,13 @@ function JSelectInput({
     let jobType = [];
     let categories = [];
     let skill = [];
+    let titleArr = [];
+    let shiftArr = [];
+    let tag = [];
+    let assessment = [];
+    let period = [];
+    let preferenceArr = [];
+    let degree = [];
 
     if (header === 'Job Skill') {
       Object.keys(data).forEach(function (key, index) {
@@ -202,6 +217,69 @@ function JSelectInput({
       });
       setMartial(martialArr);
     }
+    if (header === 'Job Title') {
+      Object.keys(data).forEach(function (key, index) {
+        titleArr.push({
+          id: key,
+          name: data[key],
+        });
+      });
+      setTitle(titleArr);
+    }
+    if (header === 'Job Shift') {
+      Object.keys(data).forEach(function (key, index) {
+        shiftArr.push({
+          id: key,
+          name: data[key],
+        });
+      });
+      setShift(shiftArr);
+    }
+    if (header === 'Job Tag') {
+      Object.keys(data).forEach(function (key, index) {
+        tag.push({
+          id: key,
+          name: data[key],
+        });
+      });
+      setTags(tag);
+    }
+    if (header === 'Required Assessment') {
+      Object.keys(data).forEach(function (key, index) {
+        assessment.push({
+          id: key,
+          name: data[key],
+        });
+      });
+      setAssessments(assessment);
+    }
+    if (header === 'Salary Period') {
+      Object.keys(data).forEach(function (key, index) {
+        period.push({
+          id: key,
+          name: data[key],
+        });
+      });
+      setPeriods(period);
+    }
+    if (header === 'Gender Preference') {
+      Object.keys(data).forEach(function (key, index) {
+        preferenceArr.push({
+          id: key,
+          name: data[key],
+        });
+      });
+      setPreference(preferenceArr);
+    }
+    if (header === 'Degree Level') {
+      Object.keys(data).forEach(function (key, index) {
+        degree.push({
+          id: key,
+          name: data[key],
+        });
+      });
+      setDegreeLevel(degree);
+    }
 
     // setCountry(arr);
     setLoader(false);
@@ -228,11 +306,12 @@ function JSelectInput({
       redirect: 'follow',
     };
     setLoader(true);
+    
     fetch(`https://dev.jobskills.digital/api/city-list/${id}`, requestOptions)
       .then(response => response.json())
       .then(result => {
         var myObject = result.city;
-        console.log('cITY', myObject, id);
+        // console.log('cITY', myObject, id);
 
         setCity(myObject);
         setLoader(false);
@@ -417,6 +496,34 @@ function JSelectInput({
                   ? skills.filter(e =>
                       e.name.toLowerCase().includes(query.toLowerCase()),
                     )
+                  : header === 'Job Title'
+                  ? title.filter(e =>
+                      e.name.toLowerCase().includes(query.toLowerCase()),
+                    )
+                  : header === 'Job Shift'
+                  ? shift.filter(e =>
+                      e.name.toLowerCase().includes(query.toLowerCase()),
+                    )
+                  : header === 'Job Tag'
+                  ? tags.filter(e =>
+                      e.name.toLowerCase().includes(query.toLowerCase()),
+                    )
+                  : header === 'Required Assessment'
+                  ? Assessments.filter(e =>
+                      e.name.toLowerCase().includes(query.toLowerCase()),
+                    )
+                  : header === 'Salary Period'
+                  ? periods.filter(e =>
+                      e.name.toLowerCase().includes(query.toLowerCase()),
+                    )
+                  : header === 'Gender Preference'
+                  ? preference.filter(e =>
+                      e.name.toLowerCase().includes(query.toLowerCase()),
+                    )
+                  : header === 'Degree Level'
+                  ? degreeLevel.filter(e =>
+                      e.name.toLowerCase().includes(query.toLowerCase()),
+                    )
                   : header === 'Experience'
                   ? experience
                   : state.filter(e =>
@@ -439,6 +546,7 @@ function JSelectInput({
                       marginHorizontal: RFPercentage(2),
                     }}
                     isPressable={false}>
+                      
                     <TextInput
                       onChangeText={e => setQuery(e)}
                       placeholderTextColor={colors.placeHolderColor[0]}
@@ -458,7 +566,6 @@ function JSelectInput({
                   style={{
                     paddingVertical: RFPercentage(2),
                     marginHorizontal: RFPercentage(2),
-
                     marginBottom: RFPercentage(1),
                     borderBottomColor: colors.border[0],
                     borderBottomWidth: RFPercentage(0.1),

@@ -217,7 +217,7 @@ function CHomeStack({navigation}) {
           headerShown: false,
           // gestureEnabled: false,
         }}
-        initialRouteName={store?.token?.token ? 'EBottomTab' : 'SelectionScreen'}>
+        initialRouteName={store?.token?.token ? 'CHome' : 'SelectionScreen'}>
           
         <Stack.Screen name="CHome" component={EBottomTab} />
         <Stack.Screen name="Assessments" component={Assessments} />

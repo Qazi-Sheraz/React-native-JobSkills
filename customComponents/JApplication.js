@@ -15,6 +15,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { StoreContext } from '../mobx/store';
 import { useContext } from 'react';
+import moment from 'moment';
 
 export default function JApplication({
   Hname,
@@ -22,6 +23,7 @@ export default function JApplication({
   ApplyDate,
   onSelect,
   onPress,
+  item,
 }) {
   const store = useContext(StoreContext);
   const navigation=useNavigation();
@@ -30,31 +32,15 @@ export default function JApplication({
       style={{
         backgroundColor: colors.tileColor[0],
         marginVertical: RFPercentage(0.2),
+        paddingHorizontal:RFPercentage(1),
+        
       }}>
-      <JRow
-        style={{
+
+        <JRow style={{
           justifyContent: 'space-between',
-          marginHorizontal: RFPercentage(3),
         }}>
-        <View>
-          <JText style={styles.Hname}>{Hname}</JText>
-          <JText style={styles.txt}>{store.lang.apply_date} {ApplyDate}</JText>
-          <JRow>
-            <JText style={styles.txt}>{store.lang.fit_score} 90% </JText>
-            <Pressable onPress={onPress} style={styles.info}>
-              <JIcon icon="fe" name={'info'} />
-            </Pressable>
-          </JRow>
-        </View>
-        <View
-          style={{
-            paddingVertical: RFPercentage(1),
-            flexDirection: 'column',
-            height: RFPercentage(13),
-            alignItems: store.lang.id=0?'flex-end':'flex-start',
-            justifyContent: 'space-between',
-          }}>
-          <Menu >
+        <JText style={styles.Hname}>{item.candidate_name}</JText>
+        <Menu >
             <MenuTrigger
               style={{width:RFPercentage(3),height:RFPercentage(4),alignItems: 'center', justifyContent: 'center'}}>
               <JIcon icon={'sm'} name={'options-vertical'} size={20} />
@@ -81,9 +67,28 @@ export default function JApplication({
               </MenuOption>
             </MenuOptions>
           </Menu>
-
-          <JStatusChecker status={status} />
+        </JRow>
+      <JRow
+        style={{
+          justifyContent: 'space-between',
+          paddingVertical:RFPercentage(1)
+        }}>
+          <View>
+          <JText style={styles.txt}>{store.lang.apply_date} {moment(item.apply_date, 'DD-MM-YYYY').format('DD MMM,YYYY')}</JText>
+          <JRow >
+            <JText style={styles.txt}>{store.lang.fit_score} {item.fit_scores==null?'N/A':item.fit_scores} </JText>
+              <JIcon onPress={onPress} style={styles.info} icon="fe" name={'info'} />
+             </JRow></View>
+          <View
+          style={{
+            marginTop: RFPercentage(2),
+            alignItems: store.lang.id == 0 ? 'flex-end': null,
+            justifyContent: 'flex-end',
+          }}>
+          <JStatusChecker status={item.status} />
         </View>
+         
+       
       </JRow>
     </Pressable>
   );
@@ -94,12 +99,14 @@ const styles = StyleSheet.create({
     fontSize: RFPercentage(2.5),
     fontWeight: 'bold',
     marginVertical: RFPercentage(0.5),
+    width:'80%'
   },
   info: {
     height: RFPercentage(3),
     width: RFPercentage(4),
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems:'center',
+    margin:RFPercentage(1)
+    
   },
   txt: {fontSize: RFPercentage(2), marginVertical: RFPercentage(0.3)},
   menutxt: {
