@@ -328,7 +328,7 @@ function JSelectInput({
       redirect: 'follow',
     };
     setLoader(true);
-    fetch(`https://dev.jobskills.digital/api/state-list/${id}`, requestOptions)
+    fetch (`https://dev.jobskills.digital/api/state-list/${id}` , requestOptions)
       .then(response => response.json())
       .then(result => {
         var myObject = result.state;

@@ -134,8 +134,8 @@ function JRecentJobTile({
                 {store.lang.expire_on}
               </JText>
               <JText>
-                {/* 12 MAR 2023 */}
-                {moment(item.expire_on, 'DD-MM-YYYY').format('DD MMM,YYYY')}
+                12 MAR 2023
+                {/* {moment(item.expire_on, 'DD-MM-YYYY').format('DD MMM,YYYY')} */}
               
               </JText>
             </JRow>
