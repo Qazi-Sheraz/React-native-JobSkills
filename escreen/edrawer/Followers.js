@@ -39,7 +39,6 @@ const Followers = () => {
     })
       .then(response => response.json())
       .then(result => {
-        console.log(result);
         setFollowersData(result.followers);
       })
       .catch(error => {
@@ -93,21 +92,20 @@ const Followers = () => {
                     width: RFPercentage(6),
                     height: RFPercentage(6),
                     borderRadius: RFPercentage(3),
-                    backgroundColor: 'red',
                   }}
                   source={{uri: item.avatar}}
                 />
 
                 <View style={styles.mainView}>
-                  <JText style={{fontWeight: 'bold'}}>
+                  <JText style={{fontWeight:'bold' ,marginVertical: RFPercentage(0.5),}}>
                     {item.candidate_name}
                   </JText>
                   <JText>{item.candidate_email}</JText>
-                  <JRow style={{justifyContent: 'space-between'}}>
+                  <JRow style={{justifyContent: 'space-between',marginVertical: RFPercentage(0.5),}}>
                     <JText>
                       {item.regional_code}-{item.phone_number}
                     </JText>
-                    <JText>Immediate Available</JText>
+                    <JText>{item.immediate_available===0  ? 'Immediate Available': <JText fontColor='red'> Not Immediate Available</JText>}</JText>
                   </JRow>
                 </View>
               </JRow>

@@ -54,6 +54,7 @@ const Home = () => {
     })
       .then(response => response.json())
       .then(result => {
+     
         // console.log(result);
         setData(result);
       })
@@ -192,7 +193,7 @@ const Home = () => {
               inverted={store.lang.id == 0 ? false : true}
             />
 
-            {data?.meetings?.length > -1 && (
+            {data?.meetings?.length > 0 && (
               <>
                 <JText
                   fontSize={RFPercentage(2)}
@@ -302,7 +303,7 @@ const Home = () => {
 
             {data?.recentJobs?.map((item, index) => (
               <JRecentJobTile  
-              item={item}  key={index} />
+              item={item}   key={index} />
             ))}
           </JScrollView>
         </React.Fragment>

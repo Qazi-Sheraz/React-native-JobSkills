@@ -31,8 +31,8 @@ const Job = () => {
 
   const navigation = useNavigation();
   const store = useContext(StoreContext);
-  const [modalVisible, setModalVisible] = useState(false);
-const [jobData, setJobData] = useState([]);
+  // const [modalVisible, setModalVisible] = useState(false);
+  const [jobData, setJobData] = useState([]);
   const [error, setError] = useState(false);
   const [loader, setLoader] = useState(true);
 
@@ -61,6 +61,7 @@ const [jobData, setJobData] = useState([]);
       });
   };
 
+
   useEffect(() => {
     _getjobs();
   }, [loader]);
@@ -72,7 +73,9 @@ const [jobData, setJobData] = useState([]);
     onTryAgainPress={()=> _getjobs()}
 
       style={{paddingHorizontal: RFPercentage(2)}}
+     
       header={
+        
         <JGradientHeader
           center={
             <JText
@@ -83,7 +86,8 @@ const [jobData, setJobData] = useState([]);
             </JText>
           }
         />
-      }>
+      }
+      >
         
  {loader ? (
         <ActivityIndicator />
@@ -124,7 +128,7 @@ const [jobData, setJobData] = useState([]);
           children={store.lang.add_new_job}
         />
       </View>
-      <Modal animationType="fade" transparent={true} visible={modalVisible}>
+      {/* <Modal animationType="fade" transparent={true} visible={modalVisible}>
         <SafeAreaView style={styles.container}>
           <View style={styles.modal}>
             <JText style={styles.header}>Attention!</JText>
@@ -145,7 +149,7 @@ const [jobData, setJobData] = useState([]);
             </JRow>
           </View>
         </SafeAreaView>
-      </Modal>
+      </Modal> */}
       </>
       )}
     </JScreen>

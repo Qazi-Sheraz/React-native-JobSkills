@@ -102,7 +102,7 @@ const JobDetails = ({route}) => {
     )
       .then(response => response.json())
       .then(result => {
-        console.log(result.job);
+        // console.log(result.job);
         setJobDetail(result.job[0]);
       })
       .catch(error => {
@@ -193,7 +193,8 @@ const JobDetails = ({route}) => {
       onTryAgainPress={() => _getjobDetail()}
       style={{paddingHorizontal: RFPercentage(2)}}
       header={
-        <JGradientHeader
+        loader ? null :
+       ( <JGradientHeader
           height={heightPercentageToDP(25)}
           alignItems={store.lang.id == 0 ? 'flex-start' : 'flex-end'}
           paddingTop={RFPercentage(1)}
@@ -238,7 +239,7 @@ const JobDetails = ({route}) => {
               </JRow>
             </View>
           }
-        />
+        />)
       }>
       {loader ? (
         <ActivityIndicator />

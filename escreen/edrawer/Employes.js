@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, FlatList, View} from 'react-native';
 import React, { useContext } from 'react';
 import JScreen from '../../customComponents/JScreen';
 import JGradientHeader from '../../customComponents/JGradientHeader';
@@ -46,14 +46,18 @@ const Employes = () => {
         onPressIcon={() => alert('Icon Pressed')}
       />
       <View style={{ marginVertical: RFPercentage(2)}}>
-        {[0, 1, 2].map((item, index) => (
+
+        <FlatList
+        data={[1,2,3]}
+        renderItem ={({item, index}) => (
           <JEmployeUser
             name={'Taqi Haider'}
             email={'OfficeAdministration@gmail.com'}
             text={'Reviewer Interviewer'}
             status={'pending'}
           />
-        ))}
+        )}
+        />
       </View>
     </JScreen>
   );
