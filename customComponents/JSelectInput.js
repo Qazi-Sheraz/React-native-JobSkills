@@ -25,6 +25,8 @@ import {useContext} from 'react';
 import {StoreContext} from '../mobx/store';
 import JShadowView from './JShadowView';
 import {memo} from 'react';
+import JChevronIcon from './JChevronIcon';
+import JIcon from './JIcon';
 
 function JSelectInput({
   containerStyle,
@@ -38,7 +40,7 @@ function JSelectInput({
   forPassword = false,
 
   error,
-
+  isMultiple=false,
   isRequired = false,
   rightIcon,
   header,
@@ -64,7 +66,7 @@ function JSelectInput({
   const [careerLevel, setCareerLevel] = useState([]);
   const [industry, setIndustry] = useState([]);
   const [area, setArea] = useState([]);
-  const [currency, setCurrency] = useState([]);
+  const [currencies, setCurrencies] = useState([]);
   const [jobType, setJobType] = useState([]);
   const [categories, setCategories] = useState([]);
   const [skills, setSkills] = useState([]);
@@ -75,6 +77,21 @@ function JSelectInput({
   const [periods, setPeriods] = useState([]);
   const [preference, setPreference] = useState([]);
   const [degreeLevel, setDegreeLevel] = useState([]);
+  const [nationality, setNationality] = useState([]);
+
+  const [selectedItems, setSelectedItems] = useState(id);
+  const handleSelectItem = item => {
+    if (selectedItems.includes(item)) {
+      setSelectedItems(selectedItems.filter(i => i !== item));
+    } else {
+      setSelectedItems([...selectedItems, item]);
+    }
+  };
+  const handleSetSelectedItems = () => {
+    // do something with the selected items, such as sending them to a server
+    setValue(selectedItems);
+    console.log(selectedItems);
+  };
 
   const _years = startYear => {
     setLoader(true);
@@ -109,6 +126,7 @@ function JSelectInput({
     let period = [];
     let preferenceArr = [];
     let degree = [];
+    let nationalityArr = [];
 
     if (header === 'Job Skill') {
       Object.keys(data).forEach(function (key, index) {
@@ -195,7 +213,7 @@ function JSelectInput({
           name: data[key],
         });
       });
-      setCurrency(currency);
+      setCurrencies(currency);
     }
 
     if (header === 'Language') {
@@ -280,6 +298,15 @@ function JSelectInput({
       });
       setDegreeLevel(degree);
     }
+    if (header === 'job Nationality') {
+      Object.keys(data).forEach(function (key, index) {
+        nationalityArr.push({
+          id: key,
+          name: data[key],
+        });
+      });
+      setNationality(nationalityArr);
+    }
 
     // setCountry(arr);
     setLoader(false);
@@ -306,7 +333,7 @@ function JSelectInput({
       redirect: 'follow',
     };
     setLoader(true);
-    
+
     fetch(`https://dev.jobskills.digital/api/city-list/${id}`, requestOptions)
       .then(response => response.json())
       .then(result => {
@@ -328,7 +355,7 @@ function JSelectInput({
       redirect: 'follow',
     };
     setLoader(true);
-    fetch (`https://dev.jobskills.digital/api/state-list/${id}` , requestOptions)
+    fetch(`https://dev.jobskills.digital/api/state-list/${id}`, requestOptions)
       .then(response => response.json())
       .then(result => {
         var myObject = result.state;
@@ -361,7 +388,7 @@ function JSelectInput({
             setOpen(true);
           }
         }}
-        style={[{flexDirection: 'column',}, containerStyle]}>
+        style={[{flexDirection: 'column'}, containerStyle]}>
         <View
           style={{
             flexDirection: 'row',
@@ -375,7 +402,7 @@ function JSelectInput({
             </JText>
             {isRequired && (
               <JText
-                style={{marginLeft: RFPercentage(0.5)}}
+                style={{marginHorizontal: RFPercentage(0.5)}}
                 fontColor={colors.danger[0]}
                 fontWeight={headingWeight}
                 fontSize={RFPercentage(2.5)}>
@@ -385,11 +412,9 @@ function JSelectInput({
           </JRow>
           {rightIcon}
         </View>
-        <View
+        <JRow
           style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginTop: RFPercentage(0.3),
+            marginTop:RFPercentage(1),
             borderBottomWidth: RFPercentage(0.2),
             borderBottomColor: error ? colors.danger[0] : colors.inputBorder[0],
           }}>
@@ -401,8 +426,10 @@ function JSelectInput({
               color: colors.black[0],
             }}>
             <JText>{value}</JText>
+            
           </View>
-        </View>
+          
+        </JRow>
       </Pressable>
 
       <RBSheet
@@ -430,15 +457,25 @@ function JSelectInput({
               </JText>
             }
             left={
-              <Feather
+              <JChevronIcon
                 onPress={() => {
                   setQuery('');
                   refRBSheet.current.close();
                 }}
-                name="chevron-left"
-                size={RFPercentage(3.5)}
-                color={colors.white[0]}
               />
+            }
+            right={
+              isMultiple && (
+                <JText
+                  onPress={() => {
+                    handleSetSelectedItems();
+                    refRBSheet.current.close();
+                  }}
+                  fontColor="#ffff"
+                  fontSize={RFPercentage(2)}>
+                  Done
+                </JText>
+              )
             }
           />
           {loader ? (
@@ -481,7 +518,7 @@ function JSelectInput({
                       e.name.toLowerCase().includes(query.toLowerCase()),
                     )
                   : header === 'Salary Currency'
-                  ? currency.filter(e =>
+                  ? currencies.filter(e =>
                       e.name.toLowerCase().includes(query.toLowerCase()),
                     )
                   : header === 'Job Type'
@@ -524,6 +561,10 @@ function JSelectInput({
                   ? degreeLevel.filter(e =>
                       e.name.toLowerCase().includes(query.toLowerCase()),
                     )
+                  : header === 'job Nationality'
+                  ? nationality.filter(e =>
+                      e.name.toLowerCase().includes(query.toLowerCase()),
+                    )
                   : header === 'Experience'
                   ? experience
                   : state.filter(e =>
@@ -546,7 +587,6 @@ function JSelectInput({
                       marginHorizontal: RFPercentage(2),
                     }}
                     isPressable={false}>
-                      
                     <TextInput
                       onChangeText={e => setQuery(e)}
                       placeholderTextColor={colors.placeHolderColor[0]}
@@ -560,8 +600,13 @@ function JSelectInput({
               renderItem={({item, index}) => (
                 <TouchableOpacity
                   onPress={() => {
-                    setValue(item);
-                    refRBSheet.current.close();
+                    if (isMultiple === true) {
+                      handleSelectItem(item);
+                    } else {
+                      setValue(item);
+                      refRBSheet.current.close();
+                    }
+                    console.log(item);
                   }}
                   style={{
                     paddingVertical: RFPercentage(2),
@@ -570,7 +615,13 @@ function JSelectInput({
                     borderBottomColor: colors.border[0],
                     borderBottomWidth: RFPercentage(0.1),
                   }}>
-                  <JText fontSize={RFPercentage(1.8)}>{item.name}</JText>
+                  <JRow>
+                    <JText fontSize={RFPercentage(1.8)}>{item.name}</JText>
+
+                    {isMultiple === true && selectedItems?.includes(item) && (
+                      <JIcon icon="fe" name="check" size={RFPercentage(2)} />
+                    )}
+                  </JRow>
                 </TouchableOpacity>
               )}
               keyExtractor={(item, index) => index}

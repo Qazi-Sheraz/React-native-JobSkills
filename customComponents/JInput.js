@@ -49,7 +49,7 @@ export default function JInput({
           flexDirection: 'row',
           alignItems: 'center',
           marginTop: RFPercentage(0.3),
-          marginBottom: RFPercentage(1),
+          marginBottom: RFPercentage(0.5),
           borderBottomWidth: RFPercentage(0.2),
           
           borderBottomColor: error ? colors.danger[0] : colors.inputBorder[0],
@@ -60,7 +60,7 @@ export default function JInput({
           defaultValue={defaultValue}
           style={{
             paddingBottom: RFPercentage(0.5),
-            fontSize: RFPercentage(2.5),
+            fontSize: RFPercentage(2.3),
             width: forPassword ? '90%' : '100%',
             color: colors.black[0],
           }}

@@ -14,63 +14,70 @@ const JMeetingJob = ({item,startonPress,onPress}) => {
   const store = useContext(StoreContext);
   return (
     <JRow
-    disabled={false}
-    onPress={onPress}
+      disabled={false}
+      onPress={onPress}
       style={{
-        justifyContent:'space-between',
-        marginTop: RFPercentage(2),
+        justifyContent: 'space-between',
         marginHorizontal: RFPercentage(2),
-        paddingBottom:RFPercentage(2),
+        paddingVertical: RFPercentage(1),
         borderBottomWidth: RFPercentage(0.1),
         borderColor: '#969696',
       }}>
-     
-      <View >
+      <View>
         <JText fontWeight="bold" fontSize={RFPercentage(2.2)}>
-         {item.job_title}
+          {item.job_title}
         </JText>
         <JText
-            style={{
-              fontSize: RFPercentage(1.9),marginVertical:RFPercentage(0.5)
-            }}>
-            {item.candidate_name}
-          </JText>
+          style={{
+            fontSize: RFPercentage(1.9),
+            marginVertical: RFPercentage(0.5),
+          }}>
+          {item.candidate_name}
+        </JText>
         <JRow
-            style={{
-              marginVertical: RFPercentage(1),
-            }}>
-                <EvilIcons name="calendar" size={RFPercentage(2.5)} />
+          style={{
+            marginVertical: RFPercentage(1),
+          }}>
+          <EvilIcons name="calendar" size={RFPercentage(2.5)} />
 
-             <JText style={{marginHorizontal:RFPercentage(1)}}>
-             {moment(item.start_date_and_time).format('DD MMM,YYYY')}
-        </JText>
-             <JText >
-            
-          {moment(item.start_date_and_time).format('HH:MM' )}{'\r'}{item.meridiem}
-        </JText>
-          </JRow>
-        
-      </View> 
-      <JRow
-      onPress={startonPress}
-          style={styles.startBtn}>
+          <JText style={{marginHorizontal: RFPercentage(1)}}>
+            {moment(item.start_date_and_time).format('DD MMM,YYYY')}
+          </JText>
+          <JText>
+            {moment(item.start_date_and_time).format('HH:MM')}
+            {'\r'}
+            {item.meridiem}
+          </JText>
+        </JRow>
+      </View>
+      <View style={{height:RFPercentage(10),justifyContent:'flex-end'}}>
+        <JRow onPress={startonPress} style={styles.startBtn}>
           <JText
-            style={{marginHorizontal: RFPercentage(0.5), color:colors.white[0] }}
+            style={{
+              marginHorizontal: RFPercentage(0.5),
+              color: colors.white[0],
+            }}
             fontWeight="bold">
             {store.lang.start}
           </JText>
-          <Entypo name="controller-play" size={RFPercentage(2)} color={colors.white[0]}/>
+          <Entypo
+            name="controller-play"
+            size={RFPercentage(2)}
+            color={colors.white[0]}
+          />
         </JRow>
+      </View>
     </JRow>
-  )
+  );
 }
 
 export default observer(JMeetingJob)
 
 const styles = StyleSheet.create({
-    startBtn:{
-        borderRadius:RFPercentage(1),
-        padding:RFPercentage(1),
-        backgroundColor: colors.purple[0],
-      },
-})
+  startBtn: {
+    
+    borderRadius: RFPercentage(1),
+    padding: RFPercentage(1),
+    backgroundColor: colors.purple[0],
+  },
+});

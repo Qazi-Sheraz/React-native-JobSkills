@@ -6,20 +6,21 @@ import {StoreContext} from '../mobx/store';
 import JIcon from './JIcon';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 
-const JChevronIcon = ({color = '#fff',onPress}) => {
+const JNewJobIcon = ({color='black',onPress}) => {
   const store = useContext(StoreContext);
   const navigation = useNavigation();
   return (
     <JIcon
-      onPress={onPress? onPress:() => navigation.goBack()}
+    //   onPress={onPress? onPress:() => navigation.goBack()}
+    
       icon={'io'}
-      name={store.lang.id == 0 ? 'chevron-back' : 'chevron-forward'}
-      size={RFPercentage(3)}
+      name={store.lang.id == 0 ?'chevron-forward':'chevron-back'}
+      size={RFPercentage(2.5)}
       color={color}
     />
   );
 };
 
-export default JChevronIcon;
+export default JNewJobIcon;
 
 const styles = StyleSheet.create({});

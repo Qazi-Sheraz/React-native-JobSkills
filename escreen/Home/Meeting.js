@@ -42,7 +42,7 @@ const Meeting = () => {
     })
       .then(response => response.json())
       .then(result => {
-        console.log(result.Meetings);
+        // console.log(result.Meetings);
         setData(result.Meetings);
       })
 
@@ -100,7 +100,7 @@ const Meeting = () => {
               fontColor={colors.white[0]}
               fontWeight="bold"
               fontSize={RFPercentage(2.5)}>
-              {store.lang.meeting}
+              {store.lang.meetings}
             </JText>
           }
         />

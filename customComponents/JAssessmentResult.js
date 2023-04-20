@@ -14,6 +14,7 @@ const JAssessmentResult = ({title,percent,color}) => {
       borderBottomWidth: RFPercentage(0.1),
       borderColor:'#929292' ,
       paddingVertical: RFPercentage(1),
+      marginBottom: RFPercentage(0.2),
     }}>
     <JRow>
       <JIcon icon="fa" name={'circle'} color={color} />

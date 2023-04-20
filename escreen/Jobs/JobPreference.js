@@ -15,16 +15,15 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 import colors from '../../config/colors';
 import Feather from 'react-native-vector-icons/Feather';
 import { baseUrl } from '../../ApiUrls';
-import { Calendar } from 'react-native-calendars';
+import JNewJobIcon from '../../customComponents/JNewJobIcon';
+import { values } from 'mobx';
 
 const JobPreference = () => {
   const {navigate, goBack} = useNavigation();
   const {params}=useRoute()
-  const [selected, setSelected] = useState('');
-  const [modalVisible, setModalVisible] = useState(false);
   const [error, setError] = useState(false);
   const [loader, setLoader] = useState(true);
-  const [preference, setPreference] = useState();
+  const [preferences, setPreferences] = useState();
 
   const _addJobPreference = () => {
     var myHeaders = new Headers();
@@ -43,7 +42,7 @@ const JobPreference = () => {
     )
       .then(response => response.json())
       .then(result => {
-        setPreference(result.data);
+        setPreferences(result.data);
 
       })
       .catch(error => {
@@ -60,6 +59,7 @@ const JobPreference = () => {
   useEffect(() => {
     _addJobPreference();
   }, [loader]);
+
   return (
     <JScreen
       isError={error}
@@ -97,16 +97,17 @@ const JobPreference = () => {
         <Formik
           initialValues={{
             preference: '',
-            currency: '',
-            SalaryPeriod: '',
-            country: '',
+            currencies: '',
+            salaryPeriods: '',
+            countries: '',
             state: '',
             city: '',
-            expiry: new Date().toDateString(),
+           
             salaryFrom: '',
             salaryTo: '',
           }}
           onSubmit={values => {
+            // console.log(...params, ...values)
             navigate('JobRequirement', {...params, ...values});
             
           }}
@@ -138,48 +139,20 @@ const JobPreference = () => {
                 <JSelectInput
                   containerStyle={styles.container}
                   value={values.preference.name}
-                  data={preference?.preference}
+                  data={preferences?.preference}
                   header={'Gender Preference'}
                   heading={'Gender Preference:'}
                   setValue={e => setFieldValue('preference', e)}
                   error={touched.preference && errors.preference && true}
                   rightIcon={
-                    <Feather
-                      name="chevron-right"
-                      size={RFPercentage(2.5)}
-                      color={colors.black[0]}
-                    />
+                    <JNewJobIcon/>
                   }
                 />
                 {touched.preference && errors.preference && (
                   <JErrorText>{errors.preference}</JErrorText>
                 )}
 
-                <View
-                  style={{
-                    justifyContent: 'space-between',
-                    paddingTop: RFPercentage(2),
-                    marginBottom: RFPercentage(1),
-                  }}>
-                  <JText
-                    style={{fontSize: RFPercentage(2.5), fontWeight: '500'}}>
-                    Job Expiry Date:
-                  </JText>
-                  <Pressable
-                    onPress={() => setModalVisible(true)}
-                    style={{
-                      height: RFPercentage(6),
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      borderBottomWidth: RFPercentage(0.2),
-                      // backgroundColor: 'red',
-                      borderBottomColor: error
-                        ? colors.danger[0]
-                        : colors.inputBorder[0],
-                    }}>
-                    <JText fontSize={RFPercentage(2)}>{values.expiry}</JText>
-                  </Pressable>
-                </View>
+                
 
                 <JInput
                   isRequired
@@ -209,77 +182,61 @@ const JobPreference = () => {
 
                 <JSelectInput
                   containerStyle={styles.container}
-                  value={values.currency.name}
-                  data={preference?.currencies}
-                  setValue={e => setFieldValue('currency', e)}
+                  value={values.currencies.name}
+                  data={preferences?.currencies}
+                  setValue={e => setFieldValue('currencies', e)}
                   header={'Salary Currency'}
                   heading={'Currency:'}
-                  error={touched.currency && errors.currency && true}
+                  error={touched.currencies && errors.currencies && true}
                   rightIcon={
-                    <Feather
-                      name="chevron-right"
-                      size={RFPercentage(2.5)}
-                      color={colors.black[0]}
-                    />
+                    <JNewJobIcon/>
                   }
                 />
-                {touched.currency && errors.currency && (
-                  <JErrorText>{errors.currency}</JErrorText>
+                {touched.currencies && errors.currencies && (
+                  <JErrorText>{errors.currencies}</JErrorText>
                 )}
 
                 <JSelectInput
                   containerStyle={styles.container}
-                  value={values.SalaryPeriod.name}
-                  data={preference?.salaryPeriods}
-                  setValue={e => setFieldValue('SalaryPeriod', e)}
+                  value={values.salaryPeriods.name}
+                  data={preferences?.salaryPeriods}
+                  setValue={e => setFieldValue('salaryPeriods', e)}
                   header={'Salary Period'}
                   heading={'Salary Period:'}
-                  error={touched.SalaryPeriod && errors.SalaryPeriod && true}
+                  error={touched.salaryPeriods && errors.salaryPeriods && true}
                   rightIcon={
-                    <Feather
-                      name="chevron-right"
-                      size={RFPercentage(2.5)}
-                      color={colors.black[0]}
-                    />
+                    <JNewJobIcon/>
                   }
                 />
-                {touched.SalaryPeriod && errors.SalaryPeriod && (
-                  <JErrorText>{errors.SalaryPeriod}</JErrorText>
+                {touched.salaryPeriods && errors.salaryPeriods && (
+                  <JErrorText>{errors.salaryPeriods}</JErrorText>
                 )}
                 <JSelectInput
                   containerStyle={styles.container}
-                  value={values.country.name}
-                  data={preference?.countries}
-                  setValue={e => setFieldValue('country', e)}
+                  value={values.countries.name}
+                  data={preferences?.countries}
+                  setValue={e => setFieldValue('countries', e)}
                   header={'Country'}
                   heading={'Country:'}
-                  id={values.country.id}
-                  error={touched.country && errors.country && true}
+                  id={values.countries.id}
+                  error={touched.countries && errors.countries && true}
                   rightIcon={
-                    <Feather
-                      name="chevron-right"
-                      size={RFPercentage(2.5)}
-                      color={colors.black[0]}
-                    />
+                    <JNewJobIcon/>
                   }
                 />
-                {touched.country && errors.country && (
-                  <JErrorText>{errors.country}</JErrorText>
+                {touched.countries && errors.countries && (
+                  <JErrorText>{errors.countries}</JErrorText>
                 )}
                 <JSelectInput
                   containerStyle={styles.container}
                   value={values.state.name}
-                  id={values.country?.id}
+                  id={values.countries?.id}
                   setValue={e => setFieldValue('state', e)}
                   header={'State'}
                   heading={'State:'}
                   error={touched.state && errors.state && true}
                   rightIcon={
-                    <Feather
-                      name="chevron-right"
-                      size={RFPercentage(2.5)}
-                      color={colors.black[0]}
-                    />
+                    <JNewJobIcon/>
                   }
                 />
                 {touched.state && errors.state && (
@@ -294,11 +251,7 @@ const JobPreference = () => {
                   id={values.state?.id}
                   error={touched.city && errors.city && true}
                   rightIcon={
-                    <Feather
-                      name="chevron-right"
-                      size={RFPercentage(2.5)}
-                      color={colors.black[0]}
-                    />
+                    <JNewJobIcon/>
                   }
                 />
                 {touched.city && errors.city && (
@@ -315,26 +268,7 @@ const JobPreference = () => {
                 }}>
                 {'Next'}
               </JButton>
-              <Modal animationType="fade" transparent={true} visible={modalVisible}>
-        <Pressable
-          onPress={() => setModalVisible(!modalVisible)}
-          style={styles.modal}>
-          <Calendar
-            style={styles.date}
-            onDayPress={day => {
-              setFieldValue('expiry',day.dateString);
-            }}
-            markedDates={{
-              [selected]: {
-                selected: true,
-                disableTouchEvent: true,
-                selectedDotColor: 'orange',
-              },
-            }}
-          />
-          
-        </Pressable>
-      </Modal>
+              
             </>
           )}
         </Formik>

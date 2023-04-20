@@ -1,10 +1,7 @@
-import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import {ActivityIndicator, Image, ScrollView, StyleSheet, FlatList, View} from 'react-native';
+import React ,{useState,useRef,useContext,useEffect}from 'react';
 import JScreen from '../../customComponents/JScreen';
 import JHeader from '../../customComponents/JHeader';
-import JGradientHeader from '../../customComponents/JGradientHeader';
-import Feather from 'react-native-vector-icons/Feather';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import JText from '../../customComponents/JText';
 import colors from '../../config/colors';
@@ -19,7 +16,6 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import Download from '../../assets/svg/Icon/Download.svg';
 import Eyes from '../../assets/svg/Icon/Eyes.svg';
 import Flag from '../../assets/svg/Icon/Flag.svg';
-import {useRef} from 'react';
 import {heightPercentageToDP} from 'react-native-responsive-screen';
 import {
   Menu,
@@ -27,13 +23,55 @@ import {
   MenuOptions,
   MenuTrigger,
 } from 'react-native-popup-menu';
-import {useContext} from 'react';
 import {StoreContext} from '../../mobx/store';
 import {observer} from 'mobx-react';
 import JChevronIcon from '../../customComponents/JChevronIcon';
+import { baseUrl } from '../../ApiUrls';
 
-const ProfileJobApplication = () => {
+const ProfileJobApplication = ({ass}) => {
   const store = useContext(StoreContext);
+  const [details, setDetails] = useState();
+  const [loader, setLoader] = useState(true);
+  const [buttonPressed, setButtonPressed] = useState(null);
+
+  const handleButtonPress = (button) => {
+    setButtonPressed(button);
+    bottomSheetRef.current.open();
+  };
+  const bottomSheetRef = useRef();
+  const navigation = useNavigation();
+
+  const _candidateDetails = () => {
+    var myHeaders = new Headers();
+    myHeaders.append(
+      'Authorization',
+      'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZDZjZDg5MzZkNmQ0ZWE3NTQ5N2RlZDZhMDgwNjliNzM1NmRmYmQ5YzZlODRmZmFiZTE2NjQ4N2VkN2ExMWFkMzk1YzgyZjZkNGRkNWZkMGUiLCJpYXQiOjE2ODAyNTA2NDYuNzg0NjAxLCJuYmYiOjE2ODAyNTA2NDYuNzg0NjA0LCJleHAiOjE3MTE4NzMwNDYuNzc3NzY2LCJzdWIiOiI4NCIsInNjb3BlcyI6W119.XQA1UjOHQZkuqkLbAY0V8quXIn6dBY_ZIl8Igkko0Kv1ODdOrVXmUsnbUu59jeIg_I8mVgcnH3XGRSoEDAXb5YSocyD1POwDo7_ED1dc4TYeniS7RrBwoJ4ZTyLFdc0rWo7inelD9n2HoLHquTsh6_tz4QAyc8xaB4_58H3LvKo86FEWoBTY4NsP3CAGzylD-8-SEIHze-HfeYjaaRoVlDeQpY6d3mfqzmBummF7nKHtkLSgTCEEaEsIx2yhZTrapWL-5GKdx-aj1qmKbTE5WYGUgMVu-39Mz7GCvYMryN5HF-9Y4guufDMT0atrXnc7BkyRe0lIVfNE3ga9GcSePLDkzMrCbBjmfTmvKuxoT-sXyXFb7_vu8FogA6Pc7v77LTciuuc9duwRSpK3_fxMy4dZucnFTGx7tTWSwlipQWthwa3wd0gVs5F9cXpgVxLk4Pndxuq-PF8_DvpbWNOCXsm0KWO59zbPgSVyil18KUv4F9NduT49z3MQgzfY9yjE1rkSgRW5Va4PGQhVEle5f2Dce-bysgPhWWK0wrQtLd1AVpbhLIIqI4obDo-2OFdK62GwLor1RfKU0Qc_WiP-8UOljUnVBskGVRVlqvDL8yblrM7ro73JbgpJPlV4Uz67FaC22iyhLbJsRnbQpJVKWgfcw6jyGqjKPaspsFYpPoM',
+    );
+
+    fetch(`${baseUrl}/candidate-details/oQLBXwVKkTKn`, {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow',
+    })
+      .then(response => response.json())
+      .then(result => {
+        // console.log(result);
+        setDetails(result);
+       
+      })
+
+      .catch(error => {
+        // console.log('error', error);
+        alert('error', error);
+      })
+      .finally(() => {
+        setLoader(false);
+      });
+  };
+  useEffect(() => {
+    _candidateDetails();
+  }, [loader]);
+
   const data = [
     {name: 'Personal Assessment'},
     {name: 'Cognitive Assessment'},
@@ -42,194 +80,210 @@ const ProfileJobApplication = () => {
     {name: 'Cognitive Assessment'},
   ];
 
-  const refRBSheet = useRef();
-  const navigation = useNavigation();
-  return (
-   
-    (
-      <View style={styles.maincontainer}>
-        <JHeader
-          left={<JChevronIcon color={'Black'} />}
-          right={
-            <Menu>
-              <MenuTrigger
-                style={{
-                  width: RFPercentage(3),
-                  height: RFPercentage(4),
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                <JIcon icon={'sm'} name={'options-vertical'} size={20} />
-              </MenuTrigger>
-              <MenuOptions>
-                <MenuOption>
-                  <JRow>
-                    <Flag />
+  return loader ? (
+    <ActivityIndicator />
+  ) : (
+    <View style={styles.maincontainer}>
+      <JHeader
+        left={<JChevronIcon color={'Black'} />}
+        right={
+          <Menu>
+            <MenuTrigger
+              style={{
+                width: RFPercentage(3),
+                height: RFPercentage(4),
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <JIcon icon={'sm'} name={'options-vertical'} size={20} />
+            </MenuTrigger>
+            <MenuOptions>
+              <MenuOption>
+                <JRow>
+                  <Flag />
                   <JText style={styles.menutxt}>
                     {store.lang.report_candidate}
-                  </JText></JRow>
-                </MenuOption>
-                <MenuOption >
-                  <JRow>
+                  </JText>
+                </JRow>
+              </MenuOption>
+              <MenuOption>
+                <JRow>
                   <Download />
                   <JText style={styles.menutxt}>
                     {store.lang.download_resume}
                   </JText>
-                  </JRow>
-                </MenuOption>
-                <MenuOption>
-                  <JRow>
+                </JRow>
+              </MenuOption>
+              <MenuOption>
+                <JRow>
                   <Eyes />
                   <JText style={styles.menutxt}>{store.lang.view_resume}</JText>
-                  </JRow>
-                </MenuOption>
-              </MenuOptions>
-            </Menu>
-          }
+                </JRow>
+              </MenuOption>
+            </MenuOptions>
+          </Menu>
+        }
+      />
+
+      <View style={styles.main}>
+        <Image
+          style={styles.img}
+          source={{uri: details?.candidateDetails[0].profile_image}}
         />
-        <View style={styles.main}>
-          <Image
-            style={styles.img}
-            source={require('../../assets/images/Taqi.png')}
-          />
-          <JText style={styles.headertxt}>Taqi Haider</JText>
-          <JText style={styles.titleJob}>Laravel Developer</JText>
-          <JText style={styles.txt}>Taqi.haider@bftech.io</JText>
-          <JText style={styles.txt}>Ar-Riyad, Ar-Riyad, Saudi Arabia</JText>
-          <JRow
-            style={{
-              width: '60%',
-              justifyContent: 'space-between',
-              marginVertical: RFPercentage(1),
+
+        <JText style={styles.headertxt}>
+          {details?.candidateDetails[0].full_name}
+        </JText>
+        <JText style={styles.titleJob}>{details?.lastestExperience}</JText>
+        <JText style={styles.txt}>{details?.candidateDetails[0].email}</JText>
+        <JText style={styles.txt}>
+          {details?.candidateDetails[0].full_location}
+        </JText>
+        <JRow
+          style={{
+            width: '60%',
+            justifyContent: 'space-between',
+            marginVertical: RFPercentage(1),
+          }}>
+          <JText style={styles.txt}>
+            +{details?.candidateDetails[0].region_code}-
+            {details?.candidateDetails[0].phone}
+          </JText>
+          <JText style={styles.txt}>{details?.candidateDetails[0].dob}</JText>
+        </JRow>
+
+        <JStatusbar />
+
+        <ScrollView style={{width: '100%'}}>
+          <View style={styles.rView}>
+            <JText style={styles.results}>{store.lang.assessment_result}</JText>
+
+            <FlatList
+              data={details?.candidateAssessment.slice(0, 4)}
+              renderItem={({item, index}) => (
+                <JAssessmentResult
+                  title={item.assessment_name}
+                  percent={item.percentage}
+                  color={colors.purple[0]}
+                />
+              )}
+              keyExtractor={item => item.toString()}
+            />
+           
+              <JButton
+                style={{marginTop: RFPercentage(0.5)}}
+                onPress={() => handleButtonPress('button1') }
+                children={store.lang.see_more}
+              />
+           
+          </View>
+
+          <View style={styles.experience}>
+            <JText style={styles.title}>{store.lang.experience}</JText>
+            <JSkills
+              JobTitle={details?.candidateExperiences[0].experience_title}
+              date={`${details?.candidateExperiences[0].start_date}-Present`}
+              Locate={`${details?.candidateExperiences[0].country_name}, ${details?.candidateExperiences[0].state_name}, ${details?.candidateExperiences[0].city_name}`}
+              txt={details?.candidateExperiences[0].description}
+            />
+          </View>
+
+          <View style={styles.experience}>
+            <JText style={styles.title}>{store.lang.education}</JText>
+
+            <FlatList
+              data={details?.candidateEducation}
+              renderItem={({item, index}) => (
+                <JSkills
+                  JobTitle={item.degree_title}
+                  date={item.year}
+                  Locate={`${item.institute}, ${item.country_name}`}
+                  txt={item.degree_level}
+                />
+              )}
+              keyExtractor={(item, index) => index}
+            />
+          </View>
+
+          <View style={styles.rView}>
+            <JText style={styles.results}>{store.lang.skills}</JText>
+
+            <FlatList
+              data={details?.candidateSkill.slice(0, 4)}
+              renderItem={({item, index}) => (
+                <JAssessmentResult
+                  title={item.skill_name}
+                  // percent={item.percentage}
+                  color={'#B7834A'}
+                />
+              )}
+              keyExtractor={item => item.toString()}
+            />
+
+            <JButton
+              style={{marginTop: RFPercentage(0.5)}}
+              onPress={() => handleButtonPress('button2')}
+              children={store.lang.see_more}
+            />
+          </View>
+          <RBSheet
+            ref={bottomSheetRef}
+            // closeOnDragDown={false}
+            closeOnPressMask={true}
+            // height={heightPercentageToDP(40)}
+            customStyles={{
+              container: {
+                borderTopLeftRadius: RFPercentage(2.5),
+                borderTopRightRadius: RFPercentage(2.5),
+                paddingBottom: RFPercentage(-3),
+              },
+              wrapper: {
+                backgroundColor: '#00000080',
+              },
+              draggableIcon: {
+                backgroundColor: colors.black[0],
+                display: 'none',
+              },
             }}>
-            <JText style={styles.txt}>+923161424024</JText>
-            <JText style={styles.txt}>Dec 25, 2021</JText>
-          </JRow>
-
-          <JStatusbar />
-
-          <ScrollView style={{width: '100%'}}>
-            <View
-              style={{
-                // width: '100%',
-                backgroundColor: '#ffff',
-                paddingHorizontal: RFPercentage(3),
-                paddingVertical: RFPercentage(2),
-                marginBottom: RFPercentage(1),
-              }}>
-              <JText style={styles.result}>
-                {store.lang.assessment_result}
-              </JText>
-              <JAssessmentResult
-                title={'Personal Assessment'}
-                percent="75%"
-                color={colors.purple[0]}
-              />
-              <JAssessmentResult
-                title={'Cognitive Assessment'}
-                percent="45%"
-                color={colors.purple[0]}
-              />
-              <JAssessmentResult
-                title={'Professional Assessment'}
-                percent="65%"
-                color={colors.purple[0]}
-              />
-              <JButton
-                style={{marginTop: RFPercentage(0.5)}}
-                onPress={() => refRBSheet.current.open()}
-                children={store.lang.see_more}
-              />
-            </View>
-            <JSkills
-              title={store.lang.experience}
-              JobTitle={'Ui Ux Designer'}
-              date={'Oct 2021- Present'}
-              txt={'Alshamel ,Saudia Arabia'}
-              txt2={'Lorem Ipsum is simply dummy '}
-            />
-
-            <JSkills
-              title={store.lang.education}
-              JobTitle={'BS (CS)'}
-              date={'2016- 20'}
-              txt={'Dar Al Uloom University ,Saudia Arabia'}
-              txt2={'Lorem Ipsum is simply dummy  '}
-            />
-
-            <JSkills
-              JobTitle={'BS (CS)'}
-              date={'2016- 20'}
-              txt={'Dar Al Uloom University ,Saudia Arabia'}
-              txt2={'Lorem Ipsum is simply dummy  '}
-            />
-            <View
-              style={{
-                width: '100%',
-                backgroundColor: '#ffff',
-                paddingHorizontal: RFPercentage(3),
-                paddingVertical: RFPercentage(2),
-                marginBottom: RFPercentage(1),
-              }}>
-              <JText style={styles.result}>{store.lang.skills}</JText>
-              <JAssessmentResult
-                title={'Personal Assessment'}
-                percent="75%"
-                color={'#B7834A'}
-              />
-              <JAssessmentResult
-                title={'Cognitive Assessment'}
-                percent="45%"
-                color={'#B7834A'}
-              />
-              <JAssessmentResult
-                title={'Professional Assessment'}
-                percent="65%"
-                color={'#B7834A'}
-              />
-              <JButton
-                style={{marginTop: RFPercentage(0.5)}}
-                onPress={() => refRBSheet.current.open()}
-                children={store.lang.see_more}
-              />
-            </View>
-            <RBSheet
-              ref={refRBSheet}
-              // closeOnDragDown={false}
-              closeOnPressMask={true}
-              height={heightPercentageToDP(32)}
-              customStyles={{
-                container: {
-                  borderTopLeftRadius: RFPercentage(2.5),
-                  borderTopRightRadius: RFPercentage(2.5),
-                },
-                wrapper: {
-                  backgroundColor: '#00000080',
-                },
-                draggableIcon: {
-                  backgroundColor: colors.black[0],
-                  display: 'none',
-                },
-              }}>
+            {buttonPressed === 'button1' && (
               <View style={styles.RBView}>
                 <JText style={styles.RBHeader}>
                   {store.lang.assessment_result}
                 </JText>
 
-                {data.map((item, index) => (
-                  <JAssessmentResult
-                    key={index}
-                    title={item.name}
-                    percent="75%"
-                    color={colors.purple[0]}
-                  />
-                ))}
+                <FlatList
+                  data={details?.candidateAssessment}
+                  renderItem={({item, index}) => (
+                    <JAssessmentResult
+                      title={item.assessment_name}
+                      percent={item.percentage}
+                      color={colors.purple[0]}
+                    />
+                  )}
+                  keyExtractor={item => item.toString()}
+                />
               </View>
-            </RBSheet>
-          </ScrollView>
-        </View>
+            )}  
+            {buttonPressed === 'button2' && (
+              <View style={styles.RBView}>
+                <JText style={styles.RBHeader}>{store.lang.skills}</JText>
+                <FlatList
+                  data={details?.candidateSkill}
+                  renderItem={({item, index}) => (
+                    <JAssessmentResult
+                      title={item.skill_name}
+                      // percent={item.percentage}
+                      color={'#B7834A'}
+                    />
+                  )}
+                  keyExtractor={item => item.toString()}
+                />
+              </View>
+            )}
+          </RBSheet>
+        </ScrollView>
       </View>
-    )
+    </View>
   );
 };
 
@@ -249,18 +303,25 @@ const styles = StyleSheet.create({
     marginTop: RFPercentage(-5),
   },
   headertxt: {
-    fontSize: RFPercentage(3.5),
+    fontSize: RFPercentage(2.7),
     fontWeight: 'bold',
     color: colors.purple[0],
     marginVertical: RFPercentage(0.5),
   },
   titleJob: {
-    fontSize: RFPercentage(2.5),
+    fontSize: RFPercentage(2),
     fontWeight: 'bold',
     marginVertical: RFPercentage(0.5),
   },
-  txt: {marginVertical: RFPercentage(0.5)},
-  result: {
+  txt: {fontSize:RFPercentage(2),marginVertical: RFPercentage(0.5)},
+  rView:{
+    // width: '100%',
+    backgroundColor: '#ffff',
+    paddingHorizontal: RFPercentage(2),
+    paddingVertical: RFPercentage(2),
+    marginBottom: RFPercentage(1),
+  },
+  results: {
     fontSize: RFPercentage(2),
     fontWeight: 'bold',
     marginVertical: RFPercentage(1),
@@ -281,5 +342,15 @@ const styles = StyleSheet.create({
     fontSize: RFPercentage(2.2),
     marginVertical: RFPercentage(0.5),
     paddingHorizontal: RFPercentage(1),
+  },
+  experience:{
+    backgroundColor: '#ffff',
+    paddingHorizontal: RFPercentage(2),
+    paddingVertical: RFPercentage(2),
+    marginBottom: RFPercentage(1),
+  },
+  title: {
+    fontSize: RFPercentage(2),
+    fontWeight: 'bold',
   },
 });

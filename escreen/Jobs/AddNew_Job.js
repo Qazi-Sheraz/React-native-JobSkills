@@ -24,6 +24,7 @@ import {StoreContext} from '../../mobx/store';
 import JIcon from '../../customComponents/JIcon';
 import {useNavigation} from '@react-navigation/native';
 import {baseUrl} from '../../ApiUrls';
+import JNewJobIcon from '../../customComponents/JNewJobIcon';
 
 const AddNew_Job = () => {
   const {navigate, goBack} = useNavigation();
@@ -96,15 +97,15 @@ const AddNew_Job = () => {
       ) : (
         <Formik
           initialValues={{
-            title: '',
-            type: '',
-            category: '',
-            city: '',
-            required: '',
-            shift: '',
-            skill: '',
-            tag: '',
-            description: '',
+            jobTilte: '',
+            // jobType: [],
+            jobCategory: [],
+            // functionalArea: '',
+            assessment: [],
+            jobShift: '',
+            jobSkill: [],
+            jobTag: [],
+            jobDescription: '',
           }}
           onSubmit={values => {
             console.log(values);
@@ -140,37 +141,49 @@ const AddNew_Job = () => {
                 style={{
                   marginHorizontal: RFPercentage(2),
                 }}>
-                  
+                 <JSelectInput
+                  containerStyle={styles.container}
+                  value={values.jobCategory?.id}
+                  data={addJob?.jobCategory}
+                  setValue={e => setFieldValue('jobCategory', e)}
+                  header={'Job Category'}
+                  heading={'Job Category:'}
+                  id={values.jobCategory.id}
+                  error={touched.jobCategory && errors.jobCategory && true}
+                  rightIcon={
+                    <JNewJobIcon/>
+                  }
+                />
+                {touched.jobCategory && errors.jobCategory && (
+                  <JErrorText>{errors.jobCategory}</JErrorText>
+                )} 
+
                 <JSelectInput
                   containerStyle={styles.container}
                   header={'Job Title'}
                   heading={'Job Title:'}
-                  value={values.title.name}
+                  value={values.jobTilte.name}
                   data={addJob?.jobTilte}
-                  id={values.title.id}
-                  setValue={e => setFieldValue('title', e)}
-                  error={touched.title && errors.title && true}
+                  id={values.jobTilte.id}
+                  setValue={e => setFieldValue('jobTilte', e)}
+                  error={touched.jobTilte && errors.jobTilte && true}
                   rightIcon={
-                    <Feather
-                      name="chevron-right"
-                      size={RFPercentage(2.5)}
-                      color={colors.black[0]}
-                    />
+                    <JNewJobIcon/>
                   }
                 />
-                {touched.title && errors.title && (
-                  <JErrorText>{errors.title}</JErrorText>
+                {touched.jobTilte && errors.jobTilte && (
+                  <JErrorText>{errors.jobTilte}</JErrorText>
                 )}
 
-                <JSelectInput
+                {/* <JSelectInput
                   containerStyle={styles.container}
                   header={'Job Type'}
                   heading={'Job Type:'}
-                  value={values.type.name}
-                  id={values.type.id}
+                  value={values.jobType.toString()}
+                  id={values.jobType.id}
                   data={addJob?.jobType}
-                  setValue={e => setFieldValue('type', e)}
-                  error={touched.type && errors.type && true}
+                  setValue={e => setFieldValue('jobType', e)}
+                  error={touched.jobType && errors.jobType && true}
                   rightIcon={
                     <Feather
                       name="chevron-right"
@@ -179,39 +192,21 @@ const AddNew_Job = () => {
                     />
                   }
                 />
-                {touched.type && errors.type && (
-                  <JErrorText>{errors.type}</JErrorText>
-                )}
+                {console.log(values.jobType)}
+                {touched.jobType && errors.jobType && (
+                  <JErrorText>{errors.jobType}</JErrorText>
+                )} */}
 
-                <JSelectInput
+                
+                {/* <JSelectInput
                   containerStyle={styles.container}
-                  value={values.category.name}
-                  data={addJob?.jobCategory}
-                  setValue={e => setFieldValue('category', e)}
-                  header={'Job Category'}
-                  heading={'Job Category:'}
-                  id={values.category.id}
-                  error={touched.category && errors.category && true}
-                  rightIcon={
-                    <Feather
-                      name="chevron-right"
-                      size={RFPercentage(2.5)}
-                      color={colors.black[0]}
-                    />
-                  }
-                />
-                {touched.category && errors.category && (
-                  <JErrorText>{errors.city}</JErrorText>
-                )}
-                <JSelectInput
-                  containerStyle={styles.container}
-                  value={values.city.name}
+                  value={values.functionalArea.name}
                   data={addJob?.functionalArea}
-                  setValue={e => setFieldValue('city', e)}
+                  setValue={e => setFieldValue('functionalArea', e)}
                   header={'Functional Area'}
                   heading={'Functional Area:'}
-                  id={values.city.id}
-                  error={touched.city && errors.city && true}
+                  id={values.functionalArea.id}
+                  error={touched.functionalArea && errors.functionalArea && true}
                   rightIcon={
                     <Feather
                       name="chevron-right"
@@ -220,101 +215,90 @@ const AddNew_Job = () => {
                     />
                   }
                 />
-                {touched.city && errors.city && (
-                  <JErrorText>{errors.city}</JErrorText>
-                )}
+                {touched.functionalArea && errors.functionalArea && (
+                  <JErrorText>{errors.functionalArea}</JErrorText>
+                )} */}
+
                 <JSelectInput
+               isMultiple={true}
                   containerStyle={styles.container}
                   header={'Required Assessment'}
                   heading={'Required Assessment:'} 
-                  id={values.required.id}
+                  id={values.assessment}
                   data={addJob?.assessment}
-                  value={values.required.name}
-                  setValue={e => setFieldValue('required', e)}
-                  error={touched.required && errors.required && true}
+                  value={values.assessment?.map((item )=> item.id).join(', ')}
+                  setValue={e => setFieldValue('assessment', e)}
+                  error={touched.assessment && errors.assessment && true}
                   rightIcon={
-                    <Feather
-                      name="chevron-right"
-                      size={RFPercentage(2.5)}
-                      color={colors.black[0]}
-                    />
+                    <JNewJobIcon/>
                   }
                 />
-                {touched.required && errors.required && (
-                  <JErrorText>{errors.required}</JErrorText>
+                {touched.assessment && errors.assessment && (
+                  <JErrorText>{errors.assessment}</JErrorText>
                 )}
                 <JSelectInput
                   containerStyle={styles.container}
-                  value={values.shift.name}
+                  value={values.jobShift.name}
                   data={addJob?.jobShift}
-                  setValue={e => setFieldValue('shift', e)}
+                  setValue={e => setFieldValue('jobShift', e)}
                   header={'Job Shift'}
                   heading={'Job Shift:'}
-                  id={values.shift.id}
-                  error={touched.shift && errors.shift && true}
+                  id={values.jobShift.id}
+                  error={touched.jobShift && errors.jobShift && true}
                   rightIcon={
-                    <Feather
-                      name="chevron-right"
-                      size={RFPercentage(2.5)}
-                      color={colors.black[0]}
-                    />
+                    <JNewJobIcon/>
                   }
                 />
-                {touched.shift && errors.shift && (
-                  <JErrorText>{errors.shift}</JErrorText>
+                {touched.jobShift && errors.jobShift && (
+                  <JErrorText>{errors.jobShift}</JErrorText>
                 )}
                 <JSelectInput
+                isMultiple={true}
                   containerStyle={styles.container}
-                  value={values.skill.name}
+                  value={values.jobSkill?.map((item )=> item.id).join(', ')}
                   data={addJob?.jobSkill}
-                  setValue={e => setFieldValue('skill', e)}
+                  setValue={e => setFieldValue('jobSkill', e)}
                   header={'Job Skill'}
                   heading={'Job Skill:'}
-                  id={values.skill.id}
-                  error={touched.skill && errors.skill && true}
+                  id={values.jobSkill}
+                  error={touched.jobSkill && errors.jobSkill && true}
                   rightIcon={
-                    <Feather
-                      name="chevron-right"
-                      size={RFPercentage(2.5)}
-                      color={colors.black[0]}
-                    />
+                    <JNewJobIcon/>
                   }
                 />
-                {touched.skill && errors.skill && (
-                  <JErrorText>{errors.skill}</JErrorText>
+                {touched.jobSkill && errors.jobSkill && (
+                  <JErrorText>{errors.jobSkill}</JErrorText>
                 )}
                 <JSelectInput
+                isMultiple={true}
                   containerStyle={styles.container}
-                  value={values.tag.name}
+                  value={values.jobTag?.map((item )=> item.id).join(', ')}
                   data={addJob?.jobTag}
-                  setValue={e => setFieldValue('tag', e)}
+                  setValue={e => setFieldValue('jobTag', e)}
                   header={'Job Tag'}
                   heading={'Job Tag:'}
-                  id={values.tag.id}
-                  error={touched.tag && errors.tag && true}
+                  id={values.jobTag}
+                  error={touched.jobTag && errors.jobTag && true}
                   rightIcon={
-                    <Feather
-                      name="chevron-right"
-                      size={RFPercentage(2.5)}
-                      color={colors.black[0]}
-                    />
+                    <JNewJobIcon/>
                   }
                 />
-                {touched.tag && errors.tag && (
-                  <JErrorText>{errors.tag}</JErrorText>
+                {touched.jobTag && errors.jobTag && (
+                  <JErrorText>{errors.jobTag}</JErrorText>
                 )}
 
                 <JInput
                   isRequired
                   containerStyle={styles.container}
                   heading={'Description:'}
-                  value={values.description}
-                  error={touched.description && errors.description && true}
-                  onChangeText={handleChange('description')}
-                  onBlur={() => setFieldTouched('description')}
+                  data={addJob?.jobDescription}
+                  value={values.jobDescription}
+                  error={touched.jobDescription && errors.jobDescription && true}
+                  onChangeText={handleChange('jobDescription')}
+                  onBlur={() => setFieldTouched('jobDescription')}
                 />
-                {touched.description && errors.description && (
-                  <JErrorText>{errors.description}</JErrorText>
+                {touched.jobDescription && errors.jobDescription && (
+                  <JErrorText>{errors.jobDescription}</JErrorText>
                 )}
               </ScrollView>
               <JButton

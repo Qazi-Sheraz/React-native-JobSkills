@@ -51,7 +51,7 @@ export default function Login({navigation, route}) {
     var formdata = new FormData();
     formdata.append('email', values.email);
     formdata.append('password', values.password);
-console.log(formdata)
+// console.log(formdata)
     var requestOptions = {
       method: 'POST',
       body: formdata,
@@ -261,7 +261,7 @@ console.log(formdata)
                 loader
                   ? 'Loading...'
                   : type === 1
-                  ? 'Login as Canidate'
+                  ? 'Login as Candidate'
                   : 'Login as Employee'
               }
             />

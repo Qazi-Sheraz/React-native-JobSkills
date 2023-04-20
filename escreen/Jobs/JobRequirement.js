@@ -17,9 +17,11 @@ import JInput from '../../customComponents/JInput';
 import JRow from '../../customComponents/JRow';
 import { baseUrl } from '../../ApiUrls';
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
-import {Calendar, LocaleConfig} from 'react-native-calendars';
+import {Calendar} from 'react-native-calendars';
+import { Toast } from 'react-native-toast-message/lib/src/Toast';
+import JNewJobIcon from '../../customComponents/JNewJobIcon';
 
-const JobRequirement = () => {
+const JobRequirement = ({calendar='0',}) => {
 
   const {params,values}=useRoute()
   // console.log(
@@ -28,51 +30,59 @@ const JobRequirement = () => {
   //   'values==============>',
   //   values,
   // );
+
   const {navigate, goBack} = useNavigation();
-  const [isEnabled, setIsEnabled] = useState(false);
-  const [isEnabled1, setIsEnabled1] = useState(false);
-  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
-  const toggleSwitch1 = () => setIsEnabled1(previousState => !previousState);
+  const [isEnabled, setIsEnabled] = useState('0');
+  const [isEnabled1, setIsEnabled1] = useState('0');
+  const toggleSwitch = () => setIsEnabled(previousState => previousState === '0' ? '1' : '0');
+  const toggleSwitch1 = () => setIsEnabled1(previousState => previousState === '0' ? '1' : '0');
   const [selected, setSelected] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible1, setModalVisible1] = useState(false);
   const [error, setError] = useState(false);
   const [loader, setLoader] = useState(true);
   const [requirements, setRequirements] = useState();
 
+console.log(JSON.stringify(values?.expiry));
 
-  // console.log(isEnabled)
   
   const _handleSubmit = values => {
-   
-    let formdata = new FormData();
-    formdata.append('job_category_id', params?.category?.id);
-    formdata.append('job_title', params?.title?.name);
-    formdata.append('assessment', params?.required?.name);
-    formdata.append('job_shift_id', params?.shift?.id);
-    formdata.append('jobsSkill', params?.skill?.name);
-    formdata.append('jobTag', params?.tag?.name);
-    formdata.append('description', params?.description);
-    formdata.append('no_preference', params?.preference);
-    formdata.append('salary_from', params?.salaryFrom);
-    formdata.append('salary_to', params?.salaryTo);
-    formdata.append('currency_id', params?.currency.id);
-    formdata.append('salary_period_id', params?.SalaryPeriod.id);
-    formdata.append('country_id', params?.currency.id);
-    formdata.append('state_id', params?.state.id);
-    formdata.append('city_id', params?.city.id);
-    formdata.append('career_level_id', values?.career.id);
-    formdata.append('degree_level_id', values?.degree.id);
-    formdata.append('jobsNationality', '[4,5,6,7]');
-    formdata.append('jobsLanguage', '[1,10,6]');
-    formdata.append('position', values?.position);
-    formdata.append('experience', values?.experience);
-    formdata.append('job_publish_date', values?.publishDate);
-    formdata.append('job_expiry_date', params?.expiry);
-    formdata.append('hide_salary', isEnabled);
-    formdata.append('is_freelance', isEnabled1);
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZDZjZDg5MzZkNmQ0ZWE3NTQ5N2RlZDZhMDgwNjliNzM1NmRmYmQ5YzZlODRmZmFiZTE2NjQ4N2VkN2ExMWFkMzk1YzgyZjZkNGRkNWZkMGUiLCJpYXQiOjE2ODAyNTA2NDYuNzg0NjAxLCJuYmYiOjE2ODAyNTA2NDYuNzg0NjA0LCJleHAiOjE3MTE4NzMwNDYuNzc3NzY2LCJzdWIiOiI4NCIsInNjb3BlcyI6W119.XQA1UjOHQZkuqkLbAY0V8quXIn6dBY_ZIl8Igkko0Kv1ODdOrVXmUsnbUu59jeIg_I8mVgcnH3XGRSoEDAXb5YSocyD1POwDo7_ED1dc4TYeniS7RrBwoJ4ZTyLFdc0rWo7inelD9n2HoLHquTsh6_tz4QAyc8xaB4_58H3LvKo86FEWoBTY4NsP3CAGzylD-8-SEIHze-HfeYjaaRoVlDeQpY6d3mfqzmBummF7nKHtkLSgTCEEaEsIx2yhZTrapWL-5GKdx-aj1qmKbTE5WYGUgMVu-39Mz7GCvYMryN5HF-9Y4guufDMT0atrXnc7BkyRe0lIVfNE3ga9GcSePLDkzMrCbBjmfTmvKuxoT-sXyXFb7_vu8FogA6Pc7v77LTciuuc9duwRSpK3_fxMy4dZucnFTGx7tTWSwlipQWthwa3wd0gVs5F9cXpgVxLk4Pndxuq-PF8_DvpbWNOCXsm0KWO59zbPgSVyil18KUv4F9NduT49z3MQgzfY9yjE1rkSgRW5Va4PGQhVEle5f2Dce-bysgPhWWK0wrQtLd1AVpbhLIIqI4obDo-2OFdK62GwLor1RfKU0Qc_WiP-8UOljUnVBskGVRVlqvDL8yblrM7ro73JbgpJPlV4Uz67FaC22iyhLbJsRnbQpJVKWgfcw6jyGqjKPaspsFYpPoM");
 
+    var formdata = new FormData();
+    formdata.append('job_category_id', JSON.stringify(params?.jobCategory?.id));
+    formdata.append('job_title', JSON.stringify(params?.jobTilte?.name));
+    formdata.append('assessment', JSON.stringify(params?.assessment?.id));
+    formdata.append('job_shift_id', JSON.stringify(params?.jobShift?.id));
+    formdata.append('jobsSkill', JSON.stringify(params?.jobSkill?.name));
+    formdata.append('jobTag', JSON.stringify(params?.jobTag?.name));
+    formdata.append('description', JSON.stringify(params?.jobDescription));
+    formdata.append('no_preference', JSON.stringify(params?.preference));
+    formdata.append('salary_from', JSON.stringify(params?.salaryFrom));
+    formdata.append('salary_to',JSON.stringify( params?.salaryTo));
+    formdata.append('currency_id', JSON.stringify(params?.currencies.id));
+    formdata.append('salary_period_id', JSON.stringify(params?.salaryPeriods.id));
+    formdata.append('country_id', JSON.stringify(params?.countries.id));
+    formdata.append('state_id',JSON.stringify( params?.state.id));
+    formdata.append('city_id', JSON.stringify(params?.city.id));
+    formdata.append('career_level_id',JSON.stringify( values?.careerLevels.id));
+    formdata.append('degree_level_id', JSON.stringify(values?.requiredDegreeLevel.id));
+    formdata.append('jobsNationality', JSON.stringify(values?.jobNationality?.name));
+    formdata.append('jobsLanguage', JSON.stringify(values.jobLanguage?.name));
+    formdata.append('position', JSON.stringify(values?.position));
+    formdata.append('experience',JSON.stringify( values?.experience));
+    formdata.append('job_publish_date', JSON.stringify(values?.publishDate));
+    formdata.append('job_expiry_date', JSON.stringify(values?.expiry));
+    formdata.append('hide_salary', JSON.stringify(isEnabled));
+    formdata.append('is_freelance',JSON.stringify(isEnabled1));
+   
     fetch(`${baseUrl}/employer/jobs/store`, {
       method: 'POST',
+      // headers: myHeaders,
+      // body: formdata,
+      redirect: 'follow',
+
       headers: {
         Authorization:
           'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZDZjZDg5MzZkNmQ0ZWE3NTQ5N2RlZDZhMDgwNjliNzM1NmRmYmQ5YzZlODRmZmFiZTE2NjQ4N2VkN2ExMWFkMzk1YzgyZjZkNGRkNWZkMGUiLCJpYXQiOjE2ODAyNTA2NDYuNzg0NjAxLCJuYmYiOjE2ODAyNTA2NDYuNzg0NjA0LCJleHAiOjE3MTE4NzMwNDYuNzc3NzY2LCJzdWIiOiI4NCIsInNjb3BlcyI6W119.XQA1UjOHQZkuqkLbAY0V8quXIn6dBY_ZIl8Igkko0Kv1ODdOrVXmUsnbUu59jeIg_I8mVgcnH3XGRSoEDAXb5YSocyD1POwDo7_ED1dc4TYeniS7RrBwoJ4ZTyLFdc0rWo7inelD9n2HoLHquTsh6_tz4QAyc8xaB4_58H3LvKo86FEWoBTY4NsP3CAGzylD-8-SEIHze-HfeYjaaRoVlDeQpY6d3mfqzmBummF7nKHtkLSgTCEEaEsIx2yhZTrapWL-5GKdx-aj1qmKbTE5WYGUgMVu-39Mz7GCvYMryN5HF-9Y4guufDMT0atrXnc7BkyRe0lIVfNE3ga9GcSePLDkzMrCbBjmfTmvKuxoT-sXyXFb7_vu8FogA6Pc7v77LTciuuc9duwRSpK3_fxMy4dZucnFTGx7tTWSwlipQWthwa3wd0gVs5F9cXpgVxLk4Pndxuq-PF8_DvpbWNOCXsm0KWO59zbPgSVyil18KUv4F9NduT49z3MQgzfY9yjE1rkSgRW5Va4PGQhVEle5f2Dce-bysgPhWWK0wrQtLd1AVpbhLIIqI4obDo-2OFdK62GwLor1RfKU0Qc_WiP-8UOljUnVBskGVRVlqvDL8yblrM7ro73JbgpJPlV4Uz67FaC22iyhLbJsRnbQpJVKWgfcw6jyGqjKPaspsFYpPoM',
@@ -82,10 +92,30 @@ const JobRequirement = () => {
       body: JSON.stringify(formdata),
     })
       .then(response => response.json())
-      .then(result => console.log('result', result))
+      .then(result => { 
+        
+      if (result === 'true'){
+             Toast.show({
+               type: 'success',
+               text1: 'Successfully Job created',
+             });
+
+        navigate('Job', {...params, ...values})   
+      }
+      else{ 
+        Toast.show({
+        type: 'error',
+        text1: 'message',
+      });}
+  })
 
       .catch(error => console.log('error', error));
+      Toast.show({
+        type: 'error',
+        text1: 'error',
+      });
   };
+  
 
   const _addRequirement= () => {
     var myHeaders = new Headers();
@@ -153,16 +183,21 @@ const JobRequirement = () => {
       }>
       <Formik
         initialValues={{
-          career: '',
-          degree: '',
+          careerLevels: '',
+          requiredDegreeLevel: [],
+          jobNationality: [],
+          jobLanguage: [],
           position: '',
           experience: '',
           publishDate: new Date().toDateString(),
+          expiry: new Date().toDateString(),
+         
         }}
         onSubmit={values => {
           console.log({...params, ...values});
-          console.log(values);
+          // console.log(values);
           _handleSubmit(values);
+          
         }}
         // validationSchema={yup.object().shape({
         //   career: yup.string().required().label('Career Level'),
@@ -186,46 +221,73 @@ const JobRequirement = () => {
             <ScrollView
               contentContainerStyle={{paddingBottom: RFPercentage(8)}}>
               <JSelectInput
+             
                 containerStyle={styles.container}
-                value={values.career.name}
+                value={values.careerLevels.id}
                 data={requirements?.careerLevels}
-                id={values.career.id}
+                id={values.careerLevels}
                 header={'Carrer Level'}
                 heading={'Career Level:'}
-                setValue={e => setFieldValue('career', e)}
-                error={touched.career && errors.career && true}
+                setValue={e => setFieldValue('careerLevels', e)}
+                error={touched.careerLevels && errors.careerLevels && true}
                 rightIcon={
-                  <Feather
-                    name="chevron-right"
-                    size={RFPercentage(2.5)}
-                    color={colors.black[0]}
-                  />
+                  <JNewJobIcon/>
                 }
               />
-              {touched.career && errors.career && (
-                <JErrorText>{errors.career}</JErrorText>
+              {touched.careerLevels && errors.careerLevels && (
+                <JErrorText>{errors.careerLevels}</JErrorText>
               )}
               <JSelectInput
+               isMultiple={true}
                 containerStyle={styles.container}
-                value={values.degree.name}
+                value={values.requiredDegreeLevel?.map((item )=> item.id).join(', ')}
                 data={requirements?.requiredDegreeLevel}
-                id={values.degree.id}
+                id={values.requiredDegreeLevel}
                 header={'Degree Level'}
                 heading={'Degree Level:'}
-                setValue={e => setFieldValue('degree', e)}
-                error={touched.degree && errors.degree && true}
+                setValue={e => setFieldValue('requiredDegreeLevel', e)}
+                error={touched.requiredDegreeLevel && errors.requiredDegreeLevel && true}
                 rightIcon={
-                  <Feather
-                    name="chevron-right"
-                    size={RFPercentage(2.5)}
-                    color={colors.black[0]}
-                  />
+                  <JNewJobIcon/>
                 }
               />
-              {touched.degree && errors.degree && (
-                <JErrorText>{errors.degree}</JErrorText>
+              {touched.requiredDegreeLevel && errors.requiredDegreeLevel && (
+                <JErrorText>{errors.requiredDegreeLevel}</JErrorText>
               )}
-
+              <JSelectInput
+               isMultiple={true}
+                containerStyle={styles.container}
+                value={values.jobNationality?.map((item )=> item.id).join(', ')}
+                data={requirements?.jobNationality}
+                id={values.jobNationality}
+                header={'job Nationality'}
+                heading={'job Nationality:'}
+                setValue={e => setFieldValue('jobNationality', e)}
+                error={touched.jobNationality && errors.jobNationality && true}
+                rightIcon={
+                  <JNewJobIcon/>
+                }
+              />
+              {touched.jobNationality && errors.jobNationality && (
+                <JErrorText>{errors.jobNationality}</JErrorText>
+              )}
+              <JSelectInput
+               isMultiple={true}
+                containerStyle={styles.container}
+                value={values.jobLanguage?.map((item )=> item.id).join(', ')}
+                data={requirements?.jobLanguage}
+                id={values.jobLanguage}
+                header={'Language'}
+                heading={'Job Language:'}
+                setValue={e => setFieldValue('jobLanguage', e)}
+                error={touched.jobLanguage && errors.jobLanguage && true}
+                rightIcon={
+                  <JNewJobIcon/>
+                }
+              />
+              {touched.jobLanguage && errors.jobLanguage && (
+                <JErrorText>{errors.jobLanguage}</JErrorText>
+              )}
               <JInput
                 isRequired
                 containerStyle={styles.container}
@@ -238,7 +300,6 @@ const JobRequirement = () => {
               {touched.position && errors.position && (
                 <JErrorText>{errors.position}</JErrorText>
               )}
-
               <JInput
                 isRequired
                 containerStyle={styles.container}
@@ -251,8 +312,32 @@ const JobRequirement = () => {
               {touched.experience && errors.experience && (
                 <JErrorText>{errors.experience}</JErrorText>
               )}
-
-              <View
+             <View
+                  style={{
+                    justifyContent: 'space-between',
+                    paddingTop: RFPercentage(2),
+                    marginBottom: RFPercentage(1),
+                  }}>
+                  <JText
+                    style={{fontSize: RFPercentage(2.5), fontWeight: '500'}}>
+                    Job Expiry Date:`
+                  </JText>
+                  <Pressable
+                    onPress={() => setModalVisible1(true)}
+                    style={{
+                      height: RFPercentage(6),
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      borderBottomWidth: RFPercentage(0.2),
+                      // backgroundColor: 'red',
+                      borderBottomColor: error
+                        ? colors.danger[0]
+                        : colors.inputBorder[0],
+                    }}>
+                    <JText fontSize={RFPercentage(2)}>{values.expiry}</JText>
+                  </Pressable>
+                </View>
+                <View
                 style={{
                   justifyContent: 'space-between',
                   paddingTop: RFPercentage(1),
@@ -275,7 +360,6 @@ const JobRequirement = () => {
                   <JText fontSize={RFPercentage(2)}>{values.publishDate}</JText>
                 </Pressable>
               </View>
-
               <View style={{marginVertical: RFPercentage(2)}}>
                 <JRow style={styles.switch}>
                   <JText style={styles.txtSwitch}>Hide Salary</JText>
@@ -284,7 +368,7 @@ const JobRequirement = () => {
                     thumbColor="#f4f3f4"
                     ios_backgroundColor="#3e3e3e"
                     onValueChange={toggleSwitch}
-                    value={isEnabled}
+                    value={isEnabled === '1'}
                   />
                 </JRow>
                 <JRow style={styles.switch}>
@@ -294,7 +378,7 @@ const JobRequirement = () => {
                     thumbColor="#f4f3f4"
                     ios_backgroundColor="#3e3e3e"
                     onValueChange={toggleSwitch1}
-                    value={isEnabled1}
+                    value={isEnabled1 === '1'}
                   />
                 </JRow>
               </View>
@@ -310,7 +394,7 @@ const JobRequirement = () => {
                 bottom: RFPercentage(3),
                 width: RFPercentage(20),
               }}>
-              {'Save'}
+              {'Post Job'}
             </JButton>
             <Modal
               animationType="fade"
@@ -322,7 +406,29 @@ const JobRequirement = () => {
                 <Calendar
                   style={styles.date}
                   onDayPress={day => {
-                    setFieldValue('publishDate', day.dateString);
+                    setFieldValue('publishDate', day.dateString)
+                  }}
+                  markedDates={{
+                    [selected]: {
+                      selected: true,
+                      disableTouchEvent: true,
+                      selectedDotColor: 'orange',
+                    },
+                  }}
+                />
+              </Pressable>
+            </Modal>
+            <Modal
+              animationType="fade"
+              transparent={true}
+              visible={modalVisible1}>
+              <Pressable
+                onPress={() => setModalVisible1(!modalVisible1)}
+                style={styles.modal}>
+                <Calendar
+                  style={styles.date}
+                  onDayPress={day => {
+                    setFieldValue('expiry', day.dateString)
                   }}
                   markedDates={{
                     [selected]: {

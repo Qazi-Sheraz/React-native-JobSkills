@@ -1,4 +1,4 @@
-import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {Pressable, StyleSheet, View} from 'react-native';
 import React from 'react';
 import JText from './JText';
 import {RFPercentage} from 'react-native-responsive-fontsize';
@@ -16,6 +16,7 @@ import { useNavigation } from '@react-navigation/native';
 import { StoreContext } from '../mobx/store';
 import { useContext } from 'react';
 import moment from 'moment';
+import { useState } from 'react';
 
 export default function JApplication({
   Hname,
@@ -24,9 +25,22 @@ export default function JApplication({
   onSelect,
   onPress,
   item,
+  jobApplications,
 }) {
+  
   const store = useContext(StoreContext);
   const navigation=useNavigation();
+
+  const [selectedStatus, setSelectedStatus] = useState(item.status);
+  const handleStatusSelect = (status) => {
+    setSelectedStatus(status);
+    console.log(first)
+  };
+
+  // const filteredApplications = selectedStatus
+  //   ? jobApplications.filter(item => item.status === selectedStatus)
+  //   : jobApplications;
+
   return (
     <Pressable onPress={()=> navigation.navigate('ProfileApplication')}
       style={{
@@ -47,22 +61,22 @@ export default function JApplication({
             </MenuTrigger>
 
             <MenuOptions>
-              <MenuOption onSelect={onSelect}>
+              <MenuOption onSelect={() => handleStatusSelect(store.lang.drafted)}>
                 <JText style={styles.menutxt}>{store.lang.drafted}</JText>
               </MenuOption>
-              <MenuOption onSelect={onSelect}>
+              <MenuOption onSelect={() => handleStatusSelect(store.lang.applied)}>
                 <JText style={styles.menutxt}>{store.lang.applied}</JText>
               </MenuOption>
-              <MenuOption onSelect={onSelect}>
+              <MenuOption onSelect={() => handleStatusSelect(store.lang.rejected)}>
                 <JText style={styles.menutxt}>{store.lang.rejected}</JText>
               </MenuOption>
-              <MenuOption onSelect={onSelect}>
+              <MenuOption onSelect={() => handleStatusSelect(store.lang.selected)}>
                 <JText style={styles.menutxt}>{store.lang.selected}</JText>
               </MenuOption>
-              <MenuOption onSelect={onSelect}>
+              <MenuOption onSelect={() => handleStatusSelect(store.lang.shortlisted)}>
                 <JText style={styles.menutxt}>{store.lang.shortlisted}</JText>
               </MenuOption>
-              <MenuOption onSelect={onSelect}>
+              <MenuOption onSelect={() => handleStatusSelect(store.lang.interview_scheduled)}>
                 <JText style={styles.menutxt}>{store.lang.interview_scheduled}</JText>
               </MenuOption>
             </MenuOptions>
@@ -85,6 +99,7 @@ export default function JApplication({
             alignItems: store.lang.id == 0 ? 'flex-end': null,
             justifyContent: 'flex-end',
           }}>
+            
           <JStatusChecker status={item.status} />
         </View>
          

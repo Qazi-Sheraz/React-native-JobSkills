@@ -284,7 +284,7 @@ export default function Registration({navigation, route}) {
                   loader
                     ? 'Loading...'
                     : `Register as ${
-                        route.params?.type === 1 ? 'Candidate' : 'Emplyee'
+                        route.params?.type === 1 ? 'Candidate' : 'Employee'
                       }`
                 }
               />
