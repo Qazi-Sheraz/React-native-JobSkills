@@ -68,13 +68,13 @@ function Profile({navigation}) {
           text1: 'Logout Successfully',
         });
       })
-      .catch(error => {
-        Toast.show({
-          type: 'error',
-          text1: 'Error',
-          text2: 'Error while removing token',
-        });
-      });
+      // .catch(error => {
+      //   Toast.show({
+      //     type: 'error',
+      //     text1: 'Error',
+      //     text2: 'Error while removing token',
+      //   });
+      // });
   };
 
   useEffect(() => {

@@ -43,11 +43,11 @@ function CHomeStack({navigation}) {
         }, 2000);
       })
       .catch(error => {
-        Toast.show({
-          type: 'error',
-          text1: 'Error',
-          text2: 'Error while getting token',
-        });
+      //   Toast.show({
+      //     type: 'error',
+      //     text1: 'Error',
+      //     text2: 'Error while getting token',
+      //   });
 
         setLoader(false);
       });

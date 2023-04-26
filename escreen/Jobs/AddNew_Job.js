@@ -68,8 +68,8 @@ const AddNew_Job = () => {
 
   return (
     <JScreen
-    isError={error}
-    onTryAgainPress={()=> _addnewJob()}
+      isError={error}
+      onTryAgainPress={() => _addnewJob()}
       style={{paddingHorizontal: RFPercentage(2)}}
       header={
         <JGradientHeader
@@ -109,9 +109,9 @@ const AddNew_Job = () => {
           }}
           onSubmit={values => {
             console.log(values);
-            navigate('JobPreference',{...values})
+            navigate('JobPreference', {...values});
           }}
-         
+
           // validationSchema={yup.object()({
           //   title: yup.string().required().label('Job Title'),
           //   type: yup.string().required().label('Job Type'),
@@ -123,7 +123,7 @@ const AddNew_Job = () => {
           //   tag: yup.string().required().label('Job Tag'),
           //   description: yup.string().required().label('Description'),
           // })}
-          >
+        >
           {({
             values,
             handleChange,
@@ -135,30 +135,36 @@ const AddNew_Job = () => {
             setFieldValue,
           }) => (
             <>
-            
               <ScrollView
-                contentContainerStyle={{paddingBottom: RFPercentage(8)}}
-                style={{
-                  marginHorizontal: RFPercentage(2),
-                }}>
-                 <JSelectInput
+                contentContainerStyle={{paddingBottom: RFPercentage(8)}}>
+                <JSelectInput
                   containerStyle={styles.container}
-                  value={values.jobCategory?.id}
+                  value={values.jobCategory?.name}
                   data={addJob?.jobCategory}
                   setValue={e => setFieldValue('jobCategory', e)}
                   header={'Job Category'}
                   heading={'Job Category:'}
                   id={values.jobCategory.id}
                   error={touched.jobCategory && errors.jobCategory && true}
-                  rightIcon={
-                    <JNewJobIcon/>
-                  }
+                  rightIcon={<JNewJobIcon />}
                 />
                 {touched.jobCategory && errors.jobCategory && (
                   <JErrorText>{errors.jobCategory}</JErrorText>
-                )} 
-
-                <JSelectInput
+                )}
+                <JInput
+                  isRequired
+                  containerStyle={styles.container}
+                  heading={'Job Title:'}
+                  data={addJob?.jobTilte}
+                  value={values.jobTilte}
+                  error={touched.jobTilte && errors.jobTilte && true}
+                  onChangeText={handleChange('jobTilte')}
+                  onBlur={() => setFieldTouched('jobTilte')}
+                />
+                {touched.jobTilte && errors.jobTilte && (
+                  <JErrorText>{errors.jobTilte}</JErrorText>
+                )}
+                {/* <JSelectInput
                   containerStyle={styles.container}
                   header={'Job Title'}
                   heading={'Job Title:'}
@@ -173,7 +179,7 @@ const AddNew_Job = () => {
                 />
                 {touched.jobTilte && errors.jobTilte && (
                   <JErrorText>{errors.jobTilte}</JErrorText>
-                )}
+                )} */}
 
                 {/* <JSelectInput
                   containerStyle={styles.container}
@@ -197,7 +203,6 @@ const AddNew_Job = () => {
                   <JErrorText>{errors.jobType}</JErrorText>
                 )} */}
 
-                
                 {/* <JSelectInput
                   containerStyle={styles.container}
                   value={values.functionalArea.name}
@@ -220,18 +225,16 @@ const AddNew_Job = () => {
                 )} */}
 
                 <JSelectInput
-               isMultiple={true}
+                  isMultiple={true}
                   containerStyle={styles.container}
                   header={'Required Assessment'}
-                  heading={'Required Assessment:'} 
-                  id={values.assessment}
+                  heading={'Required Assessment:'}
+                  id={values.assessment?.map(item => item.id).join(', ')}
                   data={addJob?.assessment}
-                  value={values.assessment?.map((item )=> item.id).join(', ')}
+                  value={values.assessment?.map(item => item.name).join(', ')}
                   setValue={e => setFieldValue('assessment', e)}
                   error={touched.assessment && errors.assessment && true}
-                  rightIcon={
-                    <JNewJobIcon/>
-                  }
+                  rightIcon={<JNewJobIcon />}
                 />
                 {touched.assessment && errors.assessment && (
                   <JErrorText>{errors.assessment}</JErrorText>
@@ -245,43 +248,37 @@ const AddNew_Job = () => {
                   heading={'Job Shift:'}
                   id={values.jobShift.id}
                   error={touched.jobShift && errors.jobShift && true}
-                  rightIcon={
-                    <JNewJobIcon/>
-                  }
+                  rightIcon={<JNewJobIcon />}
                 />
                 {touched.jobShift && errors.jobShift && (
                   <JErrorText>{errors.jobShift}</JErrorText>
                 )}
                 <JSelectInput
-                isMultiple={true}
+                  isMultiple={true}
                   containerStyle={styles.container}
-                  value={values.jobSkill?.map((item )=> item.id).join(', ')}
+                  value={values.jobSkill?.map(item => item.name).join(', ')}
                   data={addJob?.jobSkill}
                   setValue={e => setFieldValue('jobSkill', e)}
                   header={'Job Skill'}
                   heading={'Job Skill:'}
-                  id={values.jobSkill}
+                  id={values.jobSkill?.map(item => item.id).join(', ')}
                   error={touched.jobSkill && errors.jobSkill && true}
-                  rightIcon={
-                    <JNewJobIcon/>
-                  }
+                  rightIcon={<JNewJobIcon />}
                 />
                 {touched.jobSkill && errors.jobSkill && (
                   <JErrorText>{errors.jobSkill}</JErrorText>
                 )}
                 <JSelectInput
-                isMultiple={true}
+                  isMultiple={true}
                   containerStyle={styles.container}
-                  value={values.jobTag?.map((item )=> item.id).join(', ')}
+                  value={values.jobTag?.map(item => item.name).join(', ')}
                   data={addJob?.jobTag}
                   setValue={e => setFieldValue('jobTag', e)}
                   header={'Job Tag'}
                   heading={'Job Tag:'}
-                  id={values.jobTag}
+                  id={values.jobTag?.map(item => item.id).join(', ')}
                   error={touched.jobTag && errors.jobTag && true}
-                  rightIcon={
-                    <JNewJobIcon/>
-                  }
+                  rightIcon={<JNewJobIcon />}
                 />
                 {touched.jobTag && errors.jobTag && (
                   <JErrorText>{errors.jobTag}</JErrorText>
@@ -292,8 +289,12 @@ const AddNew_Job = () => {
                   containerStyle={styles.container}
                   heading={'Description:'}
                   data={addJob?.jobDescription}
-                  value={values.jobDescription}
-                  error={touched.jobDescription && errors.jobDescription && true}
+                  value={values.jobDescription.id}
+                  // id={values.jobDescription.id}
+
+                  error={
+                    touched.jobDescription && errors.jobDescription && true
+                  }
                   onChangeText={handleChange('jobDescription')}
                   onBlur={() => setFieldTouched('jobDescription')}
                 />
@@ -303,15 +304,13 @@ const AddNew_Job = () => {
               </ScrollView>
               <JButton
                 isValid={isValid}
-                onPress={() =>  
-                  handleSubmit()
-                }
+                onPress={() => handleSubmit()}
                 style={{
                   position: 'absolute',
                   bottom: RFPercentage(3),
                   width: RFPercentage(20),
                 }}>
-                 {loader ? 'Loading' : 'Next'}
+                {loader ? 'Loading' : 'Next'}
               </JButton>
             </>
           )}

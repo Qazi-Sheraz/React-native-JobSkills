@@ -43,77 +43,75 @@ const JobRequirement = ({calendar='0',}) => {
   const [loader, setLoader] = useState(true);
   const [requirements, setRequirements] = useState();
 
-console.log(JSON.stringify(values?.expiry));
-
+// const arry=params.assessment.map((item)=>item.id).map(Number)
+// // const arr1= arry.map(Number);
+// console.log(params?.preference?.id)
+// params.assessment.map((item)=>console.log("id",item.id))
   
   const _handleSubmit = values => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZDZjZDg5MzZkNmQ0ZWE3NTQ5N2RlZDZhMDgwNjliNzM1NmRmYmQ5YzZlODRmZmFiZTE2NjQ4N2VkN2ExMWFkMzk1YzgyZjZkNGRkNWZkMGUiLCJpYXQiOjE2ODAyNTA2NDYuNzg0NjAxLCJuYmYiOjE2ODAyNTA2NDYuNzg0NjA0LCJleHAiOjE3MTE4NzMwNDYuNzc3NzY2LCJzdWIiOiI4NCIsInNjb3BlcyI6W119.XQA1UjOHQZkuqkLbAY0V8quXIn6dBY_ZIl8Igkko0Kv1ODdOrVXmUsnbUu59jeIg_I8mVgcnH3XGRSoEDAXb5YSocyD1POwDo7_ED1dc4TYeniS7RrBwoJ4ZTyLFdc0rWo7inelD9n2HoLHquTsh6_tz4QAyc8xaB4_58H3LvKo86FEWoBTY4NsP3CAGzylD-8-SEIHze-HfeYjaaRoVlDeQpY6d3mfqzmBummF7nKHtkLSgTCEEaEsIx2yhZTrapWL-5GKdx-aj1qmKbTE5WYGUgMVu-39Mz7GCvYMryN5HF-9Y4guufDMT0atrXnc7BkyRe0lIVfNE3ga9GcSePLDkzMrCbBjmfTmvKuxoT-sXyXFb7_vu8FogA6Pc7v77LTciuuc9duwRSpK3_fxMy4dZucnFTGx7tTWSwlipQWthwa3wd0gVs5F9cXpgVxLk4Pndxuq-PF8_DvpbWNOCXsm0KWO59zbPgSVyil18KUv4F9NduT49z3MQgzfY9yjE1rkSgRW5Va4PGQhVEle5f2Dce-bysgPhWWK0wrQtLd1AVpbhLIIqI4obDo-2OFdK62GwLor1RfKU0Qc_WiP-8UOljUnVBskGVRVlqvDL8yblrM7ro73JbgpJPlV4Uz67FaC22iyhLbJsRnbQpJVKWgfcw6jyGqjKPaspsFYpPoM");
 
     var formdata = new FormData();
-    formdata.append('job_category_id', JSON.stringify(params?.jobCategory?.id));
-    formdata.append('job_title', JSON.stringify(params?.jobTilte?.name));
-    formdata.append('assessment', JSON.stringify(params?.assessment?.id));
-    formdata.append('job_shift_id', JSON.stringify(params?.jobShift?.id));
-    formdata.append('jobsSkill', JSON.stringify(params?.jobSkill?.name));
-    formdata.append('jobTag', JSON.stringify(params?.jobTag?.name));
-    formdata.append('description', JSON.stringify(params?.jobDescription));
-    formdata.append('no_preference', JSON.stringify(params?.preference));
-    formdata.append('salary_from', JSON.stringify(params?.salaryFrom));
-    formdata.append('salary_to',JSON.stringify( params?.salaryTo));
-    formdata.append('currency_id', JSON.stringify(params?.currencies.id));
-    formdata.append('salary_period_id', JSON.stringify(params?.salaryPeriods.id));
-    formdata.append('country_id', JSON.stringify(params?.countries.id));
-    formdata.append('state_id',JSON.stringify( params?.state.id));
-    formdata.append('city_id', JSON.stringify(params?.city.id));
-    formdata.append('career_level_id',JSON.stringify( values?.careerLevels.id));
-    formdata.append('degree_level_id', JSON.stringify(values?.requiredDegreeLevel.id));
-    formdata.append('jobsNationality', JSON.stringify(values?.jobNationality?.name));
-    formdata.append('jobsLanguage', JSON.stringify(values.jobLanguage?.name));
-    formdata.append('position', JSON.stringify(values?.position));
-    formdata.append('experience',JSON.stringify( values?.experience));
-    formdata.append('job_publish_date', JSON.stringify(values?.publishDate));
-    formdata.append('job_expiry_date', JSON.stringify(values?.expiry));
-    formdata.append('hide_salary', JSON.stringify(isEnabled));
-    formdata.append('is_freelance',JSON.stringify(isEnabled1));
-   
+    
+    formdata.append('job_category_id', params?.jobCategory?.id);
+    formdata.append('job_title', params?.jobTilte);
+    formdata.append('assessment', JSON.stringify(params?.assessment?.map((item)=>item.id).map(Number)));
+    formdata.append('job_shift_id', params?.jobShift?.id);
+    formdata.append('jobsSkill', JSON.stringify(params?.jobSkill?.map((item)=>item.id).map(Number)));
+    formdata.append('jobTag', JSON.stringify(params?.jobTag?.map((item)=>item.id).map(Number)));
+    formdata.append('description', params?.jobDescription);
+    formdata.append('no_preference',params?.preference?.id);
+    formdata.append('salary_from', params?.salaryFrom);
+    formdata.append('salary_to',params?.salaryTo);
+    formdata.append('currency_id',params?.currencies.id);
+    formdata.append('salary_period_id', params?.salaryPeriods.id);
+    formdata.append('country_id',params?.countries.id);
+    formdata.append('state_id', `${params?.state.id}`);
+    formdata.append('city_id',`${params?.city.id}`);
+    formdata.append('career_level_id',values?.careerLevels.id);
+    formdata.append('degree_level_id', JSON.stringify(values?.requiredDegreeLevel.map((item)=>item.id).map(Number)));
+    formdata.append('jobsNationality', JSON.stringify(values?.jobNationality?.map((item)=>item.id).map(Number)));
+    formdata.append('jobsLanguage', JSON.stringify(values?.jobLanguage?.map((item)=>item.id).map(Number)));
+    formdata.append('position', values?.position);
+    formdata.append('experience',values?.experience);
+    formdata.append('job_publish_date', values?.publishDate);
+    formdata.append('job_expiry_date', values?.expiry);
+    formdata.append('hide_salary',isEnabled);
+    formdata.append('is_freelance',isEnabled1);
+   console.log('formdata',formdata)
+
+
     fetch(`${baseUrl}/employer/jobs/store`, {
       method: 'POST',
-      // headers: myHeaders,
-      // body: formdata,
-      redirect: 'follow',
+      headers: myHeaders,
+      body: formdata,
 
-      headers: {
-        Authorization:
-          'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZDZjZDg5MzZkNmQ0ZWE3NTQ5N2RlZDZhMDgwNjliNzM1NmRmYmQ5YzZlODRmZmFiZTE2NjQ4N2VkN2ExMWFkMzk1YzgyZjZkNGRkNWZkMGUiLCJpYXQiOjE2ODAyNTA2NDYuNzg0NjAxLCJuYmYiOjE2ODAyNTA2NDYuNzg0NjA0LCJleHAiOjE3MTE4NzMwNDYuNzc3NzY2LCJzdWIiOiI4NCIsInNjb3BlcyI6W119.XQA1UjOHQZkuqkLbAY0V8quXIn6dBY_ZIl8Igkko0Kv1ODdOrVXmUsnbUu59jeIg_I8mVgcnH3XGRSoEDAXb5YSocyD1POwDo7_ED1dc4TYeniS7RrBwoJ4ZTyLFdc0rWo7inelD9n2HoLHquTsh6_tz4QAyc8xaB4_58H3LvKo86FEWoBTY4NsP3CAGzylD-8-SEIHze-HfeYjaaRoVlDeQpY6d3mfqzmBummF7nKHtkLSgTCEEaEsIx2yhZTrapWL-5GKdx-aj1qmKbTE5WYGUgMVu-39Mz7GCvYMryN5HF-9Y4guufDMT0atrXnc7BkyRe0lIVfNE3ga9GcSePLDkzMrCbBjmfTmvKuxoT-sXyXFb7_vu8FogA6Pc7v77LTciuuc9duwRSpK3_fxMy4dZucnFTGx7tTWSwlipQWthwa3wd0gVs5F9cXpgVxLk4Pndxuq-PF8_DvpbWNOCXsm0KWO59zbPgSVyil18KUv4F9NduT49z3MQgzfY9yjE1rkSgRW5Va4PGQhVEle5f2Dce-bysgPhWWK0wrQtLd1AVpbhLIIqI4obDo-2OFdK62GwLor1RfKU0Qc_WiP-8UOljUnVBskGVRVlqvDL8yblrM7ro73JbgpJPlV4Uz67FaC22iyhLbJsRnbQpJVKWgfcw6jyGqjKPaspsFYpPoM',
-        'Content-Type': 'multipart/form-data',
-        Accept: 'application/json',
-      },
-      body: JSON.stringify(formdata),
+      
     })
       .then(response => response.json())
       .then(result => { 
         
-      if (result === 'true'){
+      if (result.success == true ){
              Toast.show({
                type: 'success',
                text1: 'Successfully Job created',
              });
-
+             
+        
         navigate('Job', {...params, ...values})   
       }
+      
       else{ 
+        console.log('error',message);
         Toast.show({
         type: 'error',
         text1: 'message',
-      });}
-  })
-
-      .catch(error => console.log('error', error));
-      Toast.show({
-        type: 'error',
-        text1: 'error',
       });
+    }
+  }).catch(error => 
+      console.log('error', error));
+   
   };
   
 
@@ -223,9 +221,9 @@ console.log(JSON.stringify(values?.expiry));
               <JSelectInput
              
                 containerStyle={styles.container}
-                value={values.careerLevels.id}
+                value={values.careerLevels?.name}
                 data={requirements?.careerLevels}
-                id={values.careerLevels}
+                id={values.careerLevels?.id}
                 header={'Carrer Level'}
                 heading={'Career Level:'}
                 setValue={e => setFieldValue('careerLevels', e)}
@@ -240,9 +238,9 @@ console.log(JSON.stringify(values?.expiry));
               <JSelectInput
                isMultiple={true}
                 containerStyle={styles.container}
-                value={values.requiredDegreeLevel?.map((item )=> item.id).join(', ')}
+                value={values.requiredDegreeLevel?.map((item )=> item.name).join(', ')}
                 data={requirements?.requiredDegreeLevel}
-                id={values.requiredDegreeLevel}
+                id={values.requiredDegreeLevel?.map((item )=> item.id).join(', ')}
                 header={'Degree Level'}
                 heading={'Degree Level:'}
                 setValue={e => setFieldValue('requiredDegreeLevel', e)}
@@ -257,9 +255,9 @@ console.log(JSON.stringify(values?.expiry));
               <JSelectInput
                isMultiple={true}
                 containerStyle={styles.container}
-                value={values.jobNationality?.map((item )=> item.id).join(', ')}
+                value={values.jobNationality?.map((item )=> item.name).join(', ')}
                 data={requirements?.jobNationality}
-                id={values.jobNationality}
+                id={values.jobNationality?.map((item )=> item.id).join(', ')}
                 header={'job Nationality'}
                 heading={'job Nationality:'}
                 setValue={e => setFieldValue('jobNationality', e)}
@@ -274,9 +272,9 @@ console.log(JSON.stringify(values?.expiry));
               <JSelectInput
                isMultiple={true}
                 containerStyle={styles.container}
-                value={values.jobLanguage?.map((item )=> item.id).join(', ')}
+                value={values.jobLanguage?.map((item )=> item.name).join(', ')}
                 data={requirements?.jobLanguage}
-                id={values.jobLanguage}
+                id={values.jobLanguage?.map((item )=> item.id).join(', ')}
                 header={'Language'}
                 heading={'Job Language:'}
                 setValue={e => setFieldValue('jobLanguage', e)}

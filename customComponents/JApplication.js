@@ -42,7 +42,8 @@ export default function JApplication({
   //   : jobApplications;
 
   return (
-    <Pressable onPress={()=> navigation.navigate('ProfileApplication')}
+    <Pressable
+    //  onPress={()=> navigation.navigate('ProfileApplication', {candidate_id:item.candidate_id})}
       style={{
         backgroundColor: colors.tileColor[0],
         marginVertical: RFPercentage(0.2),

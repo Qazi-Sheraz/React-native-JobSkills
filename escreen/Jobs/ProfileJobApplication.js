@@ -5,7 +5,7 @@ import JHeader from '../../customComponents/JHeader';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import JText from '../../customComponents/JText';
 import colors from '../../config/colors';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import JIcon from '../../customComponents/JIcon';
 import JRow from '../../customComponents/JRow';
 import JAssessmentResult from '../../customComponents/JAssessmentResult';
@@ -16,7 +16,6 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import Download from '../../assets/svg/Icon/Download.svg';
 import Eyes from '../../assets/svg/Icon/Eyes.svg';
 import Flag from '../../assets/svg/Icon/Flag.svg';
-import {heightPercentageToDP} from 'react-native-responsive-screen';
 import {
   Menu,
   MenuOption,
@@ -28,12 +27,13 @@ import {observer} from 'mobx-react';
 import JChevronIcon from '../../customComponents/JChevronIcon';
 import { baseUrl } from '../../ApiUrls';
 
-const ProfileJobApplication = ({ass}) => {
+const ProfileJobApplication = ({route}) => {
   const store = useContext(StoreContext);
+  const {params}= useRoute()
   const [details, setDetails] = useState();
   const [loader, setLoader] = useState(true);
   const [buttonPressed, setButtonPressed] = useState(null);
-
+  console.log(params.candidate_id)
   const handleButtonPress = (button) => {
     setButtonPressed(button);
     bottomSheetRef.current.open();
@@ -48,20 +48,20 @@ const ProfileJobApplication = ({ass}) => {
       'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZDZjZDg5MzZkNmQ0ZWE3NTQ5N2RlZDZhMDgwNjliNzM1NmRmYmQ5YzZlODRmZmFiZTE2NjQ4N2VkN2ExMWFkMzk1YzgyZjZkNGRkNWZkMGUiLCJpYXQiOjE2ODAyNTA2NDYuNzg0NjAxLCJuYmYiOjE2ODAyNTA2NDYuNzg0NjA0LCJleHAiOjE3MTE4NzMwNDYuNzc3NzY2LCJzdWIiOiI4NCIsInNjb3BlcyI6W119.XQA1UjOHQZkuqkLbAY0V8quXIn6dBY_ZIl8Igkko0Kv1ODdOrVXmUsnbUu59jeIg_I8mVgcnH3XGRSoEDAXb5YSocyD1POwDo7_ED1dc4TYeniS7RrBwoJ4ZTyLFdc0rWo7inelD9n2HoLHquTsh6_tz4QAyc8xaB4_58H3LvKo86FEWoBTY4NsP3CAGzylD-8-SEIHze-HfeYjaaRoVlDeQpY6d3mfqzmBummF7nKHtkLSgTCEEaEsIx2yhZTrapWL-5GKdx-aj1qmKbTE5WYGUgMVu-39Mz7GCvYMryN5HF-9Y4guufDMT0atrXnc7BkyRe0lIVfNE3ga9GcSePLDkzMrCbBjmfTmvKuxoT-sXyXFb7_vu8FogA6Pc7v77LTciuuc9duwRSpK3_fxMy4dZucnFTGx7tTWSwlipQWthwa3wd0gVs5F9cXpgVxLk4Pndxuq-PF8_DvpbWNOCXsm0KWO59zbPgSVyil18KUv4F9NduT49z3MQgzfY9yjE1rkSgRW5Va4PGQhVEle5f2Dce-bysgPhWWK0wrQtLd1AVpbhLIIqI4obDo-2OFdK62GwLor1RfKU0Qc_WiP-8UOljUnVBskGVRVlqvDL8yblrM7ro73JbgpJPlV4Uz67FaC22iyhLbJsRnbQpJVKWgfcw6jyGqjKPaspsFYpPoM',
     );
 
-    fetch(`${baseUrl}/candidate-details/oQLBXwVKkTKn`, {
+    fetch(`${baseUrl}/candidate-details/${params.candidate_id}`, {
       method: 'GET',
       headers: myHeaders,
       redirect: 'follow',
     })
       .then(response => response.json())
       .then(result => {
-        // console.log(result);
+        console.log(result);
         setDetails(result);
        
       })
 
       .catch(error => {
-        // console.log('error', error);
+         console.log('error', error);
         alert('error', error);
       })
       .finally(() => {
@@ -72,13 +72,7 @@ const ProfileJobApplication = ({ass}) => {
     _candidateDetails();
   }, [loader]);
 
-  const data = [
-    {name: 'Personal Assessment'},
-    {name: 'Cognitive Assessment'},
-    {name: 'Professional Assessment'},
-    {name: 'Cultural Assessment'},
-    {name: 'Cognitive Assessment'},
-  ];
+ 
 
   return loader ? (
     <ActivityIndicator />
@@ -128,16 +122,29 @@ const ProfileJobApplication = ({ass}) => {
       <View style={styles.main}>
         <Image
           style={styles.img}
-          source={{uri: details?.candidateDetails[0].profile_image}}
+          source={{
+            uri: details?.candidateDetails[0]?.profile_image
+              ? details?.candidateDetails[0]?.profile_image
+              : 'N/A',
+          }}
         />
 
         <JText style={styles.headertxt}>
-          {details?.candidateDetails[0].full_name}
+          {details?.candidateDetails[0]?.full_name
+            ? details?.candidateDetails[0]?.full_name
+            : 'N/A'}
         </JText>
-        <JText style={styles.titleJob}>{details?.lastestExperience}</JText>
-        <JText style={styles.txt}>{details?.candidateDetails[0].email}</JText>
+        <JText style={styles.titleJob}>
+          {details?.lastestExperience ? details?.lastestExperience : 'N/A'}
+        </JText>
         <JText style={styles.txt}>
-          {details?.candidateDetails[0].full_location}
+          {details?.candidateDetails[0]?.email
+            ? details?.candidateDetails[0]?.email
+            : 'N/A'}
+        </JText>
+        <JText style={styles.txt}>
+          {details?.candidateDetails[0]?.full_location
+            && `${details?.candidateDetails[0]?.full_location}`}
         </JText>
         <JRow
           style={{
@@ -146,10 +153,12 @@ const ProfileJobApplication = ({ass}) => {
             marginVertical: RFPercentage(1),
           }}>
           <JText style={styles.txt}>
-            +{details?.candidateDetails[0].region_code}-
-            {details?.candidateDetails[0].phone}
+            {details?.candidateDetails[0]?.region_code &&
+            details?.candidateDetails[0]?.phone
+              && `+${details?.candidateDetails[0]?.region_code}-${details?.candidateDetails[0]?.phone}`
+              }
           </JText>
-          <JText style={styles.txt}>{details?.candidateDetails[0].dob}</JText>
+          <JText style={styles.txt}>{details?.candidateDetails[0]?.dob}</JText>
         </JRow>
 
         <JStatusbar />
@@ -159,7 +168,7 @@ const ProfileJobApplication = ({ass}) => {
             <JText style={styles.results}>{store.lang.assessment_result}</JText>
 
             <FlatList
-              data={details?.candidateAssessment.slice(0, 4)}
+              data={details?.candidateAssessment?.slice(0, 4)}
               renderItem={({item, index}) => (
                 <JAssessmentResult
                   title={item.assessment_name}
@@ -167,25 +176,25 @@ const ProfileJobApplication = ({ass}) => {
                   color={colors.purple[0]}
                 />
               )}
-              keyExtractor={item => item.toString()}
+              keyExtractor={(item, index) => index}
             />
-           
-              <JButton
-                style={{marginTop: RFPercentage(0.5)}}
-                onPress={() => handleButtonPress('button1') }
-                children={store.lang.see_more}
-              />
-           
+
+            <JButton
+              style={{marginTop: RFPercentage(0.5)}}
+              onPress={() => handleButtonPress('button1')}
+              children={store.lang.see_more}
+            />
           </View>
 
           <View style={styles.experience}>
             <JText style={styles.title}>{store.lang.experience}</JText>
+            {details?.candidateExperiences[0]?.experience_title&& (
             <JSkills
-              JobTitle={details?.candidateExperiences[0].experience_title}
-              date={`${details?.candidateExperiences[0].start_date}-Present`}
-              Locate={`${details?.candidateExperiences[0].country_name}, ${details?.candidateExperiences[0].state_name}, ${details?.candidateExperiences[0].city_name}`}
-              txt={details?.candidateExperiences[0].description}
-            />
+              JobTitle={details?.candidateExperiences[0]?.experience_title && details?.candidateExperiences[0]?.experience_title}
+              date={details?.candidateExperiences[0]?.start_date}
+              Locate={details?.candidateExperiences[0]?.country_name=== undefined && details?.candidateExperiences[0]?.state_name=== undefined && details?.candidateExperiences[0]?.city_name === undefined ? '---' :`${details?.candidateExperiences[0]?.country_name }, ${details?.candidateExperiences[0]?.state_name}, ${details?.candidateExperiences[0]?.city_name}`}
+              txt={details?.candidateExperiences[0]?.description}
+            />)}
           </View>
 
           <View style={styles.experience}>
@@ -209,7 +218,7 @@ const ProfileJobApplication = ({ass}) => {
             <JText style={styles.results}>{store.lang.skills}</JText>
 
             <FlatList
-              data={details?.candidateSkill.slice(0, 4)}
+              data={details?.candidateSkill?.slice(0, 4)}
               renderItem={({item, index}) => (
                 <JAssessmentResult
                   title={item.skill_name}
@@ -263,7 +272,7 @@ const ProfileJobApplication = ({ass}) => {
                   keyExtractor={item => item.toString()}
                 />
               </View>
-            )}  
+            )}
             {buttonPressed === 'button2' && (
               <View style={styles.RBView}>
                 <JText style={styles.RBHeader}>{store.lang.skills}</JText>

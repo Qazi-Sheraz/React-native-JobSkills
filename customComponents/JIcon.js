@@ -22,7 +22,7 @@ export default function JIcon(
       onPress,
         icon,
         name,
-        color='',
+        color,
         size=RFPercentage(2.5),
         style
     }

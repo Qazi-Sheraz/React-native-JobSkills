@@ -102,13 +102,12 @@ const JobPreference = () => {
             countries: '',
             state: '',
             city: '',
-           
             salaryFrom: '',
             salaryTo: '',
           }}
           onSubmit={values => {
             // console.log(...params, ...values)
-            navigate('JobRequirement', {...params, ...values});
+            navigate('JobRequirement',{...params,...values});
             
           }}
           // validationSchema={yup.object().shape({
@@ -139,6 +138,7 @@ const JobPreference = () => {
                 <JSelectInput
                   containerStyle={styles.container}
                   value={values.preference.name}
+                  id={values.preference?.id}
                   data={preferences?.preference}
                   header={'Gender Preference'}
                   heading={'Gender Preference:'}
@@ -183,6 +183,7 @@ const JobPreference = () => {
                 <JSelectInput
                   containerStyle={styles.container}
                   value={values.currencies.name}
+                  id={values.currencies.id}
                   data={preferences?.currencies}
                   setValue={e => setFieldValue('currencies', e)}
                   header={'Salary Currency'}
@@ -199,6 +200,7 @@ const JobPreference = () => {
                 <JSelectInput
                   containerStyle={styles.container}
                   value={values.salaryPeriods.name}
+                  id={values.salaryPeriods.id}
                   data={preferences?.salaryPeriods}
                   setValue={e => setFieldValue('salaryPeriods', e)}
                   header={'Salary Period'}
@@ -266,7 +268,7 @@ const JobPreference = () => {
                   bottom: RFPercentage(3),
                   width: RFPercentage(20),
                 }}>
-                {'Next'}
+                {loader ? 'Loading' : 'Next'}
               </JButton>
               
             </>

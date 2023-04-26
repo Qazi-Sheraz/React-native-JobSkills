@@ -35,13 +35,13 @@ export default function Login({navigation, route}) {
           store.setToken(token);
           navigation.navigate('CHome');
         })
-        .catch(error => {
-          Toast.show({
-            type: 'error',
-            text1: 'Error',
-            text2: error,
-          });
-        });
+        // .catch(error => {
+        //   Toast.show({
+        //     type: 'error',
+        //     text1: 'Error',
+        //     text2: error,
+        //   });
+        // });
     } else {
       store.setToken(token);
     }

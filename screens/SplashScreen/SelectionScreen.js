@@ -8,12 +8,12 @@ import {
 import colors from '../../config/colors';
 
 import SelectionSheet from './SelectionSheet';
-import JSkip from '../../customComponents/JSkip';
+// import JSkip from '../../customComponents/JSkip';
 
 export default function SelectionScreen({navigation}) {
   return (
     <JGradientScreen>
-      <JSkip children="Skip" onPress={() => alert('Skip')} />
+      {/* <JSkip children="Skip" onPress={() => alert('Skip')} /> */}
       <View style={styles.logo}>
         <Image
           source={require('../../assets/images/logo/logo.png')}
