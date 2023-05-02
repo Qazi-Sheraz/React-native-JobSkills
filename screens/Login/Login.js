@@ -35,13 +35,13 @@ export default function Login({navigation, route}) {
           store.setToken(token);
           navigation.navigate('CHome');
         })
-        // .catch(error => {
-        //   Toast.show({
-        //     type: 'error',
-        //     text1: 'Error',
-        //     text2: error,
-        //   });
-        // });
+        .catch(error => {
+          Toast.show({
+            type: 'error',
+            text1: 'Error',
+            text2: error,
+          });
+        });
     } else {
       store.setToken(token);
     }
@@ -161,6 +161,8 @@ export default function Login({navigation, route}) {
         validationSchema={yup.object().shape({
           email: yup
             .string()
+            .min(0, 'Email address cannot be empty')
+            .max(25, 'Email address must be at most 25 characters long')
             .email('Must be a valid email')
             .required('Email is a required field'),
           password: yup

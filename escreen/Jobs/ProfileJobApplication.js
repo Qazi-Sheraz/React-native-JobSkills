@@ -33,7 +33,7 @@ const ProfileJobApplication = ({route}) => {
   const [details, setDetails] = useState();
   const [loader, setLoader] = useState(true);
   const [buttonPressed, setButtonPressed] = useState(null);
-  console.log(params.candidate_id)
+  // console.log(params.candidate_id)
   const handleButtonPress = (button) => {
     setButtonPressed(button);
     bottomSheetRef.current.open();
@@ -55,7 +55,7 @@ const ProfileJobApplication = ({route}) => {
     })
       .then(response => response.json())
       .then(result => {
-        console.log(result);
+        // console.log(result);
         setDetails(result);
        
       })
@@ -134,36 +134,35 @@ const ProfileJobApplication = ({route}) => {
             ? details?.candidateDetails[0]?.full_name
             : 'N/A'}
         </JText>
+        {details?.lastestExperience[0].id &&
         <JText style={styles.titleJob}>
-          {details?.lastestExperience ? details?.lastestExperience : 'N/A'}
-        </JText>
+           {details?.lastestExperience [0].id}
+        </JText>}
+        {details?.candidateDetails[0]?.email&&
         <JText style={styles.txt}>
-          {details?.candidateDetails[0]?.email
-            ? details?.candidateDetails[0]?.email
-            : 'N/A'}
-        </JText>
+          {details?.candidateDetails[0]?.email}
+        </JText>}
+        {details?.candidateDetails[0]?.full_location &&
         <JText style={styles.txt}>
-          {details?.candidateDetails[0]?.full_location
-            && `${details?.candidateDetails[0]?.full_location}`}
-        </JText>
+           {details?.candidateDetails[0]?.full_location}
+        </JText>}
         <JRow
           style={{
             width: '60%',
             justifyContent: 'space-between',
             marginVertical: RFPercentage(1),
           }}>
+            {details?.candidateDetails[0]?.region_code && details?.candidateDetails[0]?.phone &&
           <JText style={styles.txt}>
-            {details?.candidateDetails[0]?.region_code &&
-            details?.candidateDetails[0]?.phone
-              && `+${details?.candidateDetails[0]?.region_code}-${details?.candidateDetails[0]?.phone}`
-              }
-          </JText>
+             {`+${details?.candidateDetails[0]?.region_code}-${details?.candidateDetails[0]?.phone}`}
+              
+          </JText>}
           <JText style={styles.txt}>{details?.candidateDetails[0]?.dob}</JText>
         </JRow>
 
         <JStatusbar />
 
-        <ScrollView style={{width: '100%'}}>
+        <ScrollView style={{width: '100%',marginVertical: RFPercentage(1.5),}}>
           <View style={styles.rView}>
             <JText style={styles.results}>{store.lang.assessment_result}</JText>
 
@@ -172,7 +171,7 @@ const ProfileJobApplication = ({route}) => {
               renderItem={({item, index}) => (
                 <JAssessmentResult
                   title={item.assessment_name}
-                  percent={item.percentage}
+                  percent={item.percentage && `${item.percentage} %`}
                   color={colors.purple[0]}
                 />
               )}
@@ -192,9 +191,10 @@ const ProfileJobApplication = ({route}) => {
             <JSkills
               JobTitle={details?.candidateExperiences[0]?.experience_title && details?.candidateExperiences[0]?.experience_title}
               date={details?.candidateExperiences[0]?.start_date}
-              Locate={details?.candidateExperiences[0]?.country_name=== undefined && details?.candidateExperiences[0]?.state_name=== undefined && details?.candidateExperiences[0]?.city_name === undefined ? '---' :`${details?.candidateExperiences[0]?.country_name }, ${details?.candidateExperiences[0]?.state_name}, ${details?.candidateExperiences[0]?.city_name}`}
+              Locate={details?.candidateExperiences[0]?.country_name && details?.candidateExperiences[0]?.state_name && details?.candidateExperiences[0]?.city_name === undefined ? '---' :`${details?.candidateExperiences[0]?.country_name }, ${details?.candidateExperiences[0]?.state_name}, ${details?.candidateExperiences[0]?.city_name}`}
               txt={details?.candidateExperiences[0]?.description}
-            />)}
+            />
+            )}
           </View>
 
           <View style={styles.experience}>
@@ -222,7 +222,7 @@ const ProfileJobApplication = ({route}) => {
               renderItem={({item, index}) => (
                 <JAssessmentResult
                   title={item.skill_name}
-                  // percent={item.percentage}
+                  percent={item.percentage && `${item.percentage} %`}
                   color={'#B7834A'}
                 />
               )}
@@ -265,7 +265,7 @@ const ProfileJobApplication = ({route}) => {
                   renderItem={({item, index}) => (
                     <JAssessmentResult
                       title={item.assessment_name}
-                      percent={item.percentage}
+                      percent={item.percentage && `${item.percentage} %`}
                       color={colors.purple[0]}
                     />
                   )}
@@ -281,7 +281,7 @@ const ProfileJobApplication = ({route}) => {
                   renderItem={({item, index}) => (
                     <JAssessmentResult
                       title={item.skill_name}
-                      // percent={item.percentage}
+                      percent={item.percentage && `${item.percentage} %`}
                       color={'#B7834A'}
                     />
                   )}

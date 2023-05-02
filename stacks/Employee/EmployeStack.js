@@ -43,6 +43,10 @@ import JobPreference from '../../escreen/Jobs/JobPreference';
 import JobRequirement from '../../escreen/Jobs/JobRequirement';
 import VerifiedPhone from '../../screens/VerifiedPhone/VerifiedPhone';
 import Assessments from '../../escreen/edrawer/Assessments';
+import EContactInformation from '../../escreen/Profiles/EContactInformation';
+import ECompanyInformation from '../../escreen/Profiles/ECompanyInformation';
+import ESocialLink from '../../escreen/Profiles/ESocialLink';
+import CSocialMediaLink from '../../screens/Home/ProfileScreen/CSocialMediaLink';
 
 const Stack = createStackNavigator();
 
@@ -239,20 +243,19 @@ function CHomeStack({navigation}) {
         <Stack.Screen name="Applicants" component={Applicants} />
         <Stack.Screen name="Transaction" component={Transaction} />
         <Stack.Screen name="Employes" component={Employes} />
-        
-
         <Stack.Screen
-          name="CContacttInformation"
-          component={CContactInformation}
+          name="CSocialMediaLink"
+          component={CSocialMediaLink}
         />
         <Stack.Screen
-          name="CGeneralInformation"
-          component={CGeneralInformation}
+          name="EContactInformation"
+          component={EContactInformation}
         />
         <Stack.Screen
-          name="CExperienceInformation"
-          component={CExperienceInformation}
+          name="ECompanyInformation"
+          component={ECompanyInformation}
         />
+       
 
         {/* AUTHENTICATION */}
         <Stack.Screen name="CNotification" component={Notification} />

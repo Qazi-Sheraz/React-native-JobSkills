@@ -8,6 +8,7 @@ import {
   View,
   ScrollView,
   ActivityIndicator,
+  FlatList,
 } from 'react-native';
 import React, {useEffect} from 'react';
 import JScreen from '../../customComponents/JScreen';
@@ -41,6 +42,8 @@ import JChevronIcon from '../../customComponents/JChevronIcon';
 import {useContext} from 'react';
 import {observer} from 'mobx-react';
 import {baseUrl} from '../../ApiUrls';
+import Toast from 'react-native-toast-message';
+import JErrorText from '../../customComponents/JErrorText';
 
 const JobDetails = ({route}) => {
   const store = useContext(StoreContext);
@@ -78,11 +81,79 @@ const JobDetails = ({route}) => {
       }
     }
   };
-
+  // console.log(route.params.jid)
   const [modalVisible, setModalVisible] = useState(false);
   const [jobDetail, setJobDetail] = useState([]);
+  const [add, setAdd] = useState();
   const [error, setError] = useState(false);
   const [loader, setLoader] = useState(true);
+
+  const _addCandidate = (values) => {
+
+    var myHeaders = new Headers();
+    myHeaders.append(
+      'Authorization',
+      'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZDZjZDg5MzZkNmQ0ZWE3NTQ5N2RlZDZhMDgwNjliNzM1NmRmYmQ5YzZlODRmZmFiZTE2NjQ4N2VkN2ExMWFkMzk1YzgyZjZkNGRkNWZkMGUiLCJpYXQiOjE2ODAyNTA2NDYuNzg0NjAxLCJuYmYiOjE2ODAyNTA2NDYuNzg0NjA0LCJleHAiOjE3MTE4NzMwNDYuNzc3NzY2LCJzdWIiOiI4NCIsInNjb3BlcyI6W119.XQA1UjOHQZkuqkLbAY0V8quXIn6dBY_ZIl8Igkko0Kv1ODdOrVXmUsnbUu59jeIg_I8mVgcnH3XGRSoEDAXb5YSocyD1POwDo7_ED1dc4TYeniS7RrBwoJ4ZTyLFdc0rWo7inelD9n2HoLHquTsh6_tz4QAyc8xaB4_58H3LvKo86FEWoBTY4NsP3CAGzylD-8-SEIHze-HfeYjaaRoVlDeQpY6d3mfqzmBummF7nKHtkLSgTCEEaEsIx2yhZTrapWL-5GKdx-aj1qmKbTE5WYGUgMVu-39Mz7GCvYMryN5HF-9Y4guufDMT0atrXnc7BkyRe0lIVfNE3ga9GcSePLDkzMrCbBjmfTmvKuxoT-sXyXFb7_vu8FogA6Pc7v77LTciuuc9duwRSpK3_fxMy4dZucnFTGx7tTWSwlipQWthwa3wd0gVs5F9cXpgVxLk4Pndxuq-PF8_DvpbWNOCXsm0KWO59zbPgSVyil18KUv4F9NduT49z3MQgzfY9yjE1rkSgRW5Va4PGQhVEle5f2Dce-bysgPhWWK0wrQtLd1AVpbhLIIqI4obDo-2OFdK62GwLor1RfKU0Qc_WiP-8UOljUnVBskGVRVlqvDL8yblrM7ro73JbgpJPlV4Uz67FaC22iyhLbJsRnbQpJVKWgfcw6jyGqjKPaspsFYpPoM',
+    );
+  
+    var formdata = new FormData();
+    formdata.append('first_name', values?.firstName);
+    formdata.append('last_name', values?.lastName);
+    formdata.append('email', values?.email);
+    formdata.append('phone',values?.phone);
+    formdata.append('file',
+      {
+        uri: values.resume.uri,
+        name: values.resume.name,
+        filename: values.resume.name,
+        type: values.resume.type,
+      },
+      // values?.resume?.uri,
+    );
+    formdata.append('no_preference', '1');
+    formdata.append('jobid', JSON.stringify(route.params.jid));
+    formdata.append('is_default', '1');
+    formdata.append('title', values.resume?.name);
+    formdata.append('type', '1');
+
+
+console.log(formdata)
+    fetch(
+      `${baseUrl}/employer/add-candidate`,
+
+      {
+        method: 'POST',
+        headers: myHeaders,
+        body: formdata,
+        redirect: 'follow',
+      },
+    )
+      .then(response => response.json())
+      .then(result => {
+        console.log(result)
+       
+        if (result.success === true) {
+          Toast.show({
+            type: 'success',
+            text1: 'success',
+          });
+
+          //  console.log(values)
+        } else {
+          Toast.show({
+            type: 'error',
+            text1:result.message
+           
+          });
+        }
+      })
+      .catch(error => {
+        console.log('error===>>>>>', error);
+      })
+      .finally(() => {
+        setLoader(false);
+      });
+  };
 
   const _getjobDetail = () => {
     var myHeaders = new Headers();
@@ -140,13 +211,7 @@ const JobDetails = ({route}) => {
           ? 'N/A'
           : jobDetail.job_details?.job_tag,
     },
-    {
-      heading: store.lang.job_type,
-      name:
-        jobDetail?.job_details?.job_type === null
-          ? 'N/A'
-          : jobDetail.job_details?.job_type,
-    },
+
     {
       heading: store.lang.job_Shift,
       name:
@@ -154,13 +219,7 @@ const JobDetails = ({route}) => {
           ? 'N/A'
           : jobDetail.job_details?.job_shift,
     },
-    {
-      heading: store.lang.functional_Area,
-      name:
-        jobDetail?.job_details?.functional_area === null
-          ? 'N/A'
-          : jobDetail.job_details?.functional_area,
-    },
+
     {
       heading: store.lang.position,
       name:
@@ -193,53 +252,54 @@ const JobDetails = ({route}) => {
       onTryAgainPress={() => _getjobDetail()}
       style={{paddingHorizontal: RFPercentage(2)}}
       header={
-        loader ? null :
-       ( <JGradientHeader
-          height={heightPercentageToDP(25)}
-          alignItems={store.lang.id == 0 ? 'flex-start' : 'flex-end'}
-          paddingTop={RFPercentage(1)}
-          left={JChevronIcon}
-          right={<Star />}
-          children={
-            <View style={{marginTop: RFPercentage(2), width: '100%'}}>
-              <JRow style={{justifyContent: 'space-between'}}>
-                <JText style={styles.headertxt}>{jobDetail.job_title}</JText>
+        loader ? null : (
+          <JGradientHeader
+            height={heightPercentageToDP(25)}
+            alignItems={store.lang.id == 0 ? 'flex-start' : 'flex-end'}
+            paddingTop={RFPercentage(1)}
+            left={JChevronIcon}
+            right={<Star />}
+            children={
+              <View style={{marginTop: RFPercentage(2), width: '100%'}}>
+                <JRow style={{justifyContent: 'space-between'}}>
+                  <JText style={styles.headertxt}>{jobDetail.job_title}</JText>
 
-                <JText style={{fontSize: RFPercentage(1.8), color: '#ffff'}}>
-                  {'\r'}
-                  {store.lang.date_posted}
-                  {moment(jobDetail.job_publish_date, 'DD,MM,YYYY').format(
-                    'DD MMM,YYYY',
-                  )}
-                </JText>
-              </JRow>
-              <JRow>
-                <DEVOTEAM />
-                <JText style={styles.txt}>{jobDetail.company_name}</JText>
-              </JRow>
-              <JRow>
-                <Placeholder />
-                <JText style={styles.txt}>
-                  {jobDetail.city_name},{jobDetail.state_name}{' '}
-                  {jobDetail.country_name}
-                </JText>
-              </JRow>
-              <JRow style={{justifyContent: 'space-between'}}>
-                <JRow>
-                  <Calendar />
-
-                  <JText style={styles.txt}>
-                    {store.lang.expire_on}{' '}
-                    {moment(jobDetail.job_expiry_date, 'DD,MM,YYYY').format(
+                  <JText style={{fontSize: RFPercentage(1.8), color: '#ffff'}}>
+                    {'\r'}
+                    {store.lang.date_posted}
+                    {moment(jobDetail.job_publish_date, 'DD,MM,YYYY').format(
                       'DD MMM,YYYY',
                     )}
                   </JText>
                 </JRow>
-                <JText style={styles.txt}>5 {store.lang.open_jobs}</JText>
-              </JRow>
-            </View>
-          }
-        />)
+                <JRow>
+                  <DEVOTEAM />
+                  <JText style={styles.txt}>{jobDetail.company_name}</JText>
+                </JRow>
+                <JRow>
+                  <Placeholder />
+                  <JText style={styles.txt}>
+                    {jobDetail.city_name},{jobDetail.state_name}{' '}
+                    {jobDetail.country_name}
+                  </JText>
+                </JRow>
+                <JRow style={{justifyContent: 'space-between'}}>
+                  <JRow>
+                    <Calendar />
+
+                    <JText style={styles.txt}>
+                      {store.lang.expire_on}{' '}
+                      {moment(jobDetail.job_expiry_date, 'DD,MM,YYYY').format(
+                        'DD MMM,YYYY',
+                      )}
+                    </JText>
+                  </JRow>
+                  <JText style={styles.txt}>5 {store.lang.open_jobs}</JText>
+                </JRow>
+              </View>
+            }
+          />
+        )
       }>
       {loader ? (
         <ActivityIndicator />
@@ -255,12 +315,15 @@ const JobDetails = ({route}) => {
               <JText style={styles.txt1}>
                 {jobDetail?.job_requirement?.job_skills}
               </JText>
+
               <JText style={styles.headertxt2}>{store.lang.degree_level}</JText>
+
               <JRow>
                 <JText style={styles.dg}>
                   {jobDetail?.job_requirement?.degree_level}
                 </JText>
               </JRow>
+
               <JText style={styles.headertxt2}>
                 {store.lang.assessment_Required}
               </JText>
@@ -300,29 +363,49 @@ const JobDetails = ({route}) => {
           <Modal animationType="fade" transparent={true} visible={modalVisible}>
             <Formik
               initialValues={{
-                FirstName: '',
-                LastName: '',
-                Email: '',
+                firstName: '',
+                lastName: '',
+                email: '',
+                phone: '',
                 is_default: false,
               }}
               onSubmit={values => {
-                console.log(values);
+                // console.log(values);
 
-                var myHeaders = new Headers();
-                myHeaders.append(
-                  'Authorization',
-                  `Bearer ${store.token.token}`,
-                );
-
-                //  setModalVisible(!modalVisible);
+                _addCandidate(values);
+                setModalVisible(!modalVisible);
               }}
               validationSchema={yup.object().shape({
                 resume: yup.object().shape({
                   uri: yup.string().required('PDF'),
                 }),
-                name: yup.string().required().label('Name'),
+                firstName: yup.string().required().label('First Name'),
+                lastName: yup.string().required().label('Last Name'),
+                email: yup
+                  .string()
+                  .min(0, 'Email address cannot be empty')
+                  .max(25, 'Email address must be at most 25 characters long')
+                  .email('Must be a valid email')
+                  .required()
+                  .label('Email'),
+                phone: yup
+                  .string()
+                  .matches(
+                    /^[0-9]+$/,
+                    'Phone number must contain only numeric values',
+                  )
+                  .required()
+                  .label('Phone'),
               })}>
-              {({values, errors, touched, handleSubmit, setFieldValue}) => (
+              {({
+                values,
+                errors,
+                touched,
+                handleSubmit,
+                handleChange,
+                setFieldTouched,
+                setFieldValue,
+              }) => (
                 <SafeAreaView style={styles.centeredView}>
                   <ScrollView style={styles.modalView}>
                     <JGradientHeader
@@ -341,28 +424,28 @@ const JobDetails = ({route}) => {
                         containerStyle={{marginTop: RFPercentage(1)}}
                         isRequired
                         heading={store.lang.first_name}
-                        // value={values.name}
-                        // error={touched.name && errors.name && true}
-                        // onChangeText={handleChange('name')}
-                        // onBlur={() => setFieldTouched('name')}
+                        value={values.firstName.name}
+                        error={touched.firstName && errors.firstName && true}
+                        onChangeText={handleChange('firstName')}
+                        onBlur={() => setFieldTouched('firstName')}
                       />
                       <JInput
                         containerStyle={{marginTop: RFPercentage(1)}}
                         isRequired
                         heading={store.lang.last_name}
-                        // value={values.name}
-                        // error={touched.name && errors.name && true}
-                        // onChangeText={handleChange('name')}
-                        // onBlur={() => setFieldTouched('name')}
+                        value={values.lastName}
+                        error={touched.lastName && errors.lastName && true}
+                        onChangeText={handleChange('lastName')}
+                        onBlur={() => setFieldTouched('lastName')}
                       />
                       <JInput
                         containerStyle={{marginTop: RFPercentage(1)}}
                         isRequired
                         heading={store.lang.email}
-                        // value={values.name}
-                        // error={touched.name && errors.name && true}
-                        // onChangeText={handleChange('name')}
-                        // onBlur={() => setFieldTouched('name')}
+                        value={values.email}
+                        error={touched.email && errors.email && true}
+                        onChangeText={handleChange('email')}
+                        onBlur={() => setFieldTouched('email')}
                       />
 
                       <View style={{marginBottom: RFPercentage(2)}}>
@@ -485,7 +568,7 @@ const JobDetails = ({route}) => {
                           style={{
                             width: '46%',
                           }}
-                          children={store.lang.add}
+                          children={loader ? 'Loading' : store.lang.add}
                         />
                       </JRow>
                     </View>

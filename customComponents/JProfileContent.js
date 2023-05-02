@@ -126,7 +126,7 @@ export default function JProfileContent({src, name, email, jd}) {
               alignItems: 'center',
               justifyContent: 'center',
               position: 'absolute', //Here is the trick
-              bottom: 0,
+              bottom: 1,
               alignSelf: 'flex-end',
             }}>
             <Feather

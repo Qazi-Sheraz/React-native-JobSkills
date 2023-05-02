@@ -22,6 +22,7 @@ export default function JStatusChecker({status,onPress}) {
             : status === 'Shortlisted'
             ? colors.shortlisted[0]
             : colors.interview_scheduled[0],
+            
         color: colors.white[0],
         textAlign: 'center',
       }}>

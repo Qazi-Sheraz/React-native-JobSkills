@@ -39,7 +39,7 @@ import JIcon from './JIcon';
 import JButton from './JButton';
 import {useEffect} from 'react';
 import {baseUrl} from '../ApiUrls';
-import { Toast } from 'react-native-toast-message/lib/src/Toast';
+import Toast from 'react-native-toast-message';
 
 function JRecentJobTile({
   isempty = false,
@@ -74,7 +74,7 @@ function JRecentJobTile({
       'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMDQyOTYxYTYzYTU0NmZjNjNhZGY4MWFiNmI0N2I4MDNhNzMwMmMxZWRhNDMyMDk5ZGM1ZmNlMjNiZDUyYzY4ODBlN2I4ZDdlZDQ5MWI2YzMiLCJpYXQiOjE2ODAyMTI2NzQuOTE2NzE5LCJuYmYiOjE2ODAyMTI2NzQuOTE2NzIzLCJleHAiOjE3MTE4MzUwNzQuOTA5NzQxLCJzdWIiOiI4NCIsInNjb3BlcyI6W119.aay7JchvkClUeAV79bQQ4fgTa8gRkgoM01y82G7eC1-JrtLnZTbnhQX4q0FJ_OhhDDxcoK00IMTpwmE1mKHNyVxwrw8yrAM8fRoXk0nRJOtVfNBVZ8R88uv8MBqHcREPjPRV3b-UmlaiC8Yv-2tOk4Kd4E79JfAkdyHaaFVmL8YHayifKmKBkECTY8SyaehOlFSn2cvw951aq2T0m_U1xcZsm2IL0gAOdVO_rdB4Ch0AOcEOpCyoCv8QZH7ZKrB26gSVv6IBtbLc_e_dYtV1OJCok-W8JFGiGafhQhc5RRFqTdot6R5WwfiwkqOf2tVNoLNNE06G7lPRzfpNhx7k6qV9OTYl2otef_yBhKr95gO9nr_L5WbjuazUHwYEBEqb53LwVu4-F0ncsr7epuL9oeL_XHa2t71hBqJRXuxS2djKwlKe9dkq6yPBNJQH7SNjAFlF4oDNqH-fqzmu41iKnmRBCxMGycwRUAqXbXoo6v3YJWqtTe6v6tHgTH4UdhQ6h3NrIwzozvNMLK6tMlHEunlZcMuPEUhvQRaGRu2ZQN54KowDDLEV9XmMbbXH2TkTA1LSEKQp-gA1D9w1s7-JHNHs2-rBi7-Vj_TLx5Yzoa-5ry55QIejufts2R48a4ino_lOgeG9a7W4dpPns69cUCL79g6ffe1cJyUYk2sr3mc',
     );
   
-console.log(`${baseUrl}/employer/job/${item.id}/status/${id}`,item)
+// console.log(`${baseUrl}/employer/job/${item.id}/status/${id}`,item)
     fetch(`${baseUrl}/employer/job/${item.id}/status/${id}`, {
       method: 'GET',
       headers: myHeaders,
@@ -183,8 +183,8 @@ console.log(`${baseUrl}/employer/job/${item.id}/status/${id}`,item)
               }}>
               <JText fontColor={colors.danger[0]}>{store.lang.expire_on}</JText>
               <JText>
-                12 MAR 2023
-                {/* {moment(item.expire_on, 'DD-MM-YYYY').format('DD MMM,YYYY')} */}
+                {/* 12 MAR 2023 */}
+                {moment(item.expire_on, 'DD-MM-YYYY').format('DD MMM,YYYY')}
               </JText>
             </JRow>
             <JRow

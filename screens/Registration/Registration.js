@@ -116,6 +116,8 @@ export default function Registration({navigation, route}) {
             .required('Name is a required field'),
           email: yup
             .string()
+            .min(0, 'Email address cannot be empty')
+            .max(25, 'Email address must be at most 25 characters long')
             .email('Must be a valid email')
             .required('Email is a required field'),
           password: yup

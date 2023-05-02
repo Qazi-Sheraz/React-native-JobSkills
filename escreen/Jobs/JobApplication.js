@@ -35,20 +35,20 @@ import JButton from '../../customComponents/JButton';
 import {baseUrl} from '../../ApiUrls';
 import moment from 'moment';
 
+
 const data = [
-  {status: 'Applied'},
-  {status: 'Rejected'},
-  {status: 'Shortlisted'},
-  {status: 'Interview Scheduled'},
-  {status: 'Drafted'},
-];
-const data1 = [
+
   {id: 0, name: 'All'},
   {id: 1, name: 'Drafted'},
   {id: 2, name: 'Applied'},
-  {id: 3, name: 'Selected'},
-  {id: 4, name: 'Shortlisted'},
-  {id: 5, name: 'Interview Scheduled'},
+  {id: 3, name: 'Rejected'},
+  {id: 4, name: 'Selected'},
+  {id: 5, name: 'Shortlisted'},
+  {id: 6, name: 'Invitation Sent'},
+  {id: 7, name: 'Interview Scheduled'},
+  {id: 8, name: 'Interview Accepted'},
+  {id: 9, name: 'Interview Rescheduled'},
+  {id: 10, name: 'Interview Completed'},
 ];
 
 const JobApplication = ({route}) => {
@@ -65,7 +65,7 @@ const JobApplication = ({route}) => {
 
   const filterData = status => {
     if (status === 'All') {
-      setJApplication(jApplication);
+      setJApplication(jApplication.status);
     } else {
       setJApplication(jApplication.filter(e => e.status === status));
     }
@@ -212,6 +212,7 @@ const JobApplication = ({route}) => {
             {jApplication.map((item, index) => (
               <JApplication
                 key={index}
+                
                 onPress={() => setModalVisible(true)}
                 onSelect={handleSelect}
                 item={item}
@@ -225,7 +226,7 @@ const JobApplication = ({route}) => {
         ref={refRBSheet}
         // closeOnDragDown={false}
         closeOnPressMask={true}
-        height={heightPercentageToDP(33)}
+        height={heightPercentageToDP(46)}
         customStyles={{
           container: {
             borderTopLeftRadius: RFPercentage(2.5),
@@ -243,15 +244,16 @@ const JobApplication = ({route}) => {
           <JText style={styles.RBHeader}>
             {store.lang.status_of_application}
           </JText>
-
-          {data1.map((item, index) => (
-            <JText
-              key={index}
-              onPress={() => filterData(item.name)}
-              style={styles.RBtxt}>
-              {item.name}
-            </JText>
-          ))}
+          <ScrollView showsVerticalScrollIndicator={false}>
+            {data.map((item, index) => (
+              <JText
+                key={index}
+                onPress={() => filterData(item.name)}
+                style={styles.RBtxt}>
+                {item.name}
+              </JText>
+            ))}
+          </ScrollView>
         </View>
       </RBSheet>
       <Modal animationType="fade" transparent={true} visible={modalVisible}>
@@ -298,7 +300,7 @@ const styles = StyleSheet.create({
   RBtxt: {
     fontSize: RFPercentage(2.4),
     fontWeight: '600',
-    marginVertical: RFPercentage(0.7),
+    marginVertical: RFPercentage(0.8),
     width: '100%',
   },
   centeredView: {

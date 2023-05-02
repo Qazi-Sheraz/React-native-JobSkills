@@ -182,7 +182,7 @@ const CSearch = ({navigation}) => {
               fontSize={RFPercentage(3)}>
               Recent Searches
             </JText>
-            {/* {data.map((item, index) => (
+            {data.map((item, index) => (
               <JRecentJob
                 onPress={() => {
                   setName(item.JobName);
@@ -190,7 +190,7 @@ const CSearch = ({navigation}) => {
                 }}
                 JobName={item.JobName}
               />
-            ))} */}
+            ))}
           </>
         )}
       </JScrollView>
@@ -230,7 +230,7 @@ const CSearch = ({navigation}) => {
             }
           />
           <JScrollView style={{padding: RFPercentage(2)}}>
-            {[0, 1, 2].map((item, index) => (
+            {/* {[0, 1, 2].map((item, index) => (
               <>
                 <JRecentJobTile
               // disabled={true}
@@ -241,7 +241,7 @@ const CSearch = ({navigation}) => {
                   key={index}
                 />
               </>
-            ))}
+            ))} */}
           </JScrollView>
         </SafeAreaView>
       </RBSheet>

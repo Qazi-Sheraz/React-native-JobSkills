@@ -13,6 +13,7 @@ export default function JProfileSections({
   isEmpty = true,
   children,
   onIconPress,
+  IconPress2,
   emptyMsg,
   loader,
 }) {
@@ -48,7 +49,7 @@ export default function JProfileSections({
           />
         ) : icon === 'add' ? (
           <Ionicons
-            onPress={onIconPress}
+            onPress={IconPress2}
             name="add-circle-outline"
             color={colors.black[0]}
             size={RFPercentage(3.2)}
@@ -64,7 +65,7 @@ export default function JProfileSections({
               size={RFPercentage(3)}
             />
             <Ionicons
-              onPress={onIconPress}
+              onPress={IconPress2}
               name="add-circle-outline"
               color={colors.black[0]}
               size={RFPercentage(3.2)}
