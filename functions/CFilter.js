@@ -1,7 +1,16 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {JToast} from './Toast';
+const storeData = async (value,store) => {
+  try {
+    store.pushSearch(value)
+    const jsonValue = JSON.stringify(store.recentSearch)
+    await AsyncStorage.setItem('@recent', jsonValue)
+  } catch (e) {
+    // saving error
+  }
+}
 
-export const _search = (e, store) => {
+export const _search = (e, store,isSearch) => {
   var myHeaders = new Headers();
   myHeaders.append('Authorization', `Bearer ${store.token.token}`);
 
@@ -27,6 +36,10 @@ export const _search = (e, store) => {
         });
         store.setFilterDataApiLoader(false);
       } else {
+        if(isSearch){
+
+          storeData(e,store);
+        }
         store.setFilterData(result.data);
         store.setFilterDataApiLoader(false);
       }

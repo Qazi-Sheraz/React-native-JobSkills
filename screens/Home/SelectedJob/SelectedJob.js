@@ -39,6 +39,9 @@ import JApplyJob from '../../../customComponents/JApplyJob';
 import JRow from '../../../customComponents/JRow';
 import {_saveToFavoriteList} from '../../../functions/Candidate/BottomTab';
 import {observer, useObserver} from 'mobx-react';
+
+
+ 
 function SelectedJob({route, navigation}) {
   const [jobData, setJobData] = useState({});
   const [loader, setLoader] = useState(true);

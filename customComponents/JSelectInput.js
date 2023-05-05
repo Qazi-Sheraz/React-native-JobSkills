@@ -78,6 +78,8 @@ function JSelectInput({
   const [preference, setPreference] = useState([]);
   const [degreeLevel, setDegreeLevel] = useState([]);
   const [nationality, setNationality] = useState([]);
+  const [ownership, setOwnership] = useState([]);
+  const [companySize, setCompanySize] = useState([]);
 
   const [selectedItems, setSelectedItems] = useState(id);
   const handleSelectItem = item => {
@@ -127,6 +129,8 @@ function JSelectInput({
     let preferenceArr = [];
     let degree = [];
     let nationalityArr = [];
+    let ownerArr = [];
+    let sizeArr = [];
 
     if (header === 'Job Skill') {
       Object.keys(data).forEach(function (key, index) {
@@ -297,6 +301,24 @@ function JSelectInput({
         });
       });
       setDegreeLevel(degree);
+    }
+    if (header === 'Owner Ship') {
+      Object.keys(data).forEach(function (key, index) {
+        ownerArr.push({
+          id: key,
+          name: data[key],
+        });
+      });
+      setOwnership(ownerArr);
+    }
+    if (header === 'Size') {
+      Object.keys(data).forEach(function (key, index) {
+        sizeArr.push({
+          id: key,
+          name: data[key],
+        });
+      });
+      setCompanySize(sizeArr);
     }
     if (header === 'job Nationality') {
       Object.keys(data).forEach(function (key, index) {
@@ -563,6 +585,14 @@ function JSelectInput({
                     )
                   : header === 'job Nationality'
                   ? nationality.filter(e =>
+                      e.name.toLowerCase().includes(query.toLowerCase()),
+                    )
+                  : header === 'Owner Ship'
+                  ? ownership.filter(e =>
+                      e.name.toLowerCase().includes(query.toLowerCase()),
+                    )
+                  : header === 'Size'
+                  ? companySize.filter(e =>
                       e.name.toLowerCase().includes(query.toLowerCase()),
                     )
                   : header === 'Experience'

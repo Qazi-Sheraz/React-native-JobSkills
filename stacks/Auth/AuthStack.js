@@ -73,7 +73,6 @@ function AuthStack({navigation}) {
         }}
         initialRouteName={'SelectionScreen'}>
         <Stack.Screen name="SelectionScreen" component={SelectionScreen} />
-
         <Stack.Screen name="CLogin" component={Login} />
         <Stack.Screen name="CRegister" component={Registration} />
       </Stack.Navigator>

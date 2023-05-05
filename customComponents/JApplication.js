@@ -94,11 +94,11 @@ const [stat,setStat]=useState(item.status);
 
   return (
     <Pressable
-     onPress={()=> navigation.navigate('ProfileApplication', {candidate_id:item.candidate_id,job_id:item.job_id})}
+     onPress={()=> navigation.navigate('ProfileApplication', {candidate_id:item.candidate_id,job_id:item.job_id,id:item.id})}
       style={{
-        backgroundColor: colors.tileColor[0],
-        marginVertical: RFPercentage(0.2),
-        paddingHorizontal:RFPercentage(1),
+        marginVertical: RFPercentage(0.8),
+        borderBottomWidth: RFPercentage(0.1),
+        borderBottomColor: colors.border[0],
         
       }}>
 

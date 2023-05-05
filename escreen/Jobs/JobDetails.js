@@ -390,10 +390,7 @@ console.log(formdata)
                   .label('Email'),
                 phone: yup
                   .string()
-                  .matches(
-                    /^[0-9]+$/,
-                    'Phone number must contain only numeric values',
-                  )
+                  .max(14)
                   .required()
                   .label('Phone'),
               })}>

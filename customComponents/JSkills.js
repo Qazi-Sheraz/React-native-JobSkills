@@ -3,6 +3,7 @@ import React from 'react';
 import JText from './JText';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import JRow from './JRow';
+import colors from '../config/colors';
 
 const JSkills = ({JobTitle,date,Locate,txt}) => {
   
@@ -14,7 +15,7 @@ const JSkills = ({JobTitle,date,Locate,txt}) => {
           paddingHorizontal: RFPercentage(1),
           borderBottomWidth: RFPercentage(0.1),
           marginBottom: RFPercentage(1),
-          borderColor: 'grey',
+          borderBottomColor: colors.border[0],
           paddingVertical: RFPercentage(1),
         }}>
         <JRow

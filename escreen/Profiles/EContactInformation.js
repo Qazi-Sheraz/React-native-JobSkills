@@ -1,5 +1,5 @@
 import {ActivityIndicator, ScrollView, StyleSheet, Switch} from 'react-native';
-import React ,{useState,useRef}from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {observer} from 'mobx-react';
 import JInput from '../../customComponents/JInput';
 import {Formik} from 'formik';
@@ -13,14 +13,70 @@ import JGradientHeader from '../../customComponents/JGradientHeader';
 import {_getProfile} from '../../functions/Candidate/MyProfile';
 import {useNavigation} from '@react-navigation/native';
 import JScreen from '../../customComponents/JScreen';
-
+import * as yup from 'yup';
 import PhoneInput from 'react-native-phone-number-input';
+import JNewJobIcon from '../../customComponents/JNewJobIcon';
+import JChevronIcon from '../../customComponents/JChevronIcon';
+import { baseUrl } from '../../ApiUrls';
+
 function EContactInformation({refRBSheet, data, user}) {
-//   const store = useContext(StoreContext);
+  //   const store = useContext(StoreContext);
   const [loader, setLoader] = useState(false);
+  const [info, setInfo] = useState();
   const navigation = useNavigation();
   const phoneInput = useRef(null);
- 
+
+  const _contactInfo = values => {
+    var myHeaders = new Headers();
+    myHeaders.append(
+      'Authorization',
+      'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZDZjZDg5MzZkNmQ0ZWE3NTQ5N2RlZDZhMDgwNjliNzM1NmRmYmQ5YzZlODRmZmFiZTE2NjQ4N2VkN2ExMWFkMzk1YzgyZjZkNGRkNWZkMGUiLCJpYXQiOjE2ODAyNTA2NDYuNzg0NjAxLCJuYmYiOjE2ODAyNTA2NDYuNzg0NjA0LCJleHAiOjE3MTE4NzMwNDYuNzc3NzY2LCJzdWIiOiI4NCIsInNjb3BlcyI6W119.XQA1UjOHQZkuqkLbAY0V8quXIn6dBY_ZIl8Igkko0Kv1ODdOrVXmUsnbUu59jeIg_I8mVgcnH3XGRSoEDAXb5YSocyD1POwDo7_ED1dc4TYeniS7RrBwoJ4ZTyLFdc0rWo7inelD9n2HoLHquTsh6_tz4QAyc8xaB4_58H3LvKo86FEWoBTY4NsP3CAGzylD-8-SEIHze-HfeYjaaRoVlDeQpY6d3mfqzmBummF7nKHtkLSgTCEEaEsIx2yhZTrapWL-5GKdx-aj1qmKbTE5WYGUgMVu-39Mz7GCvYMryN5HF-9Y4guufDMT0atrXnc7BkyRe0lIVfNE3ga9GcSePLDkzMrCbBjmfTmvKuxoT-sXyXFb7_vu8FogA6Pc7v77LTciuuc9duwRSpK3_fxMy4dZucnFTGx7tTWSwlipQWthwa3wd0gVs5F9cXpgVxLk4Pndxuq-PF8_DvpbWNOCXsm0KWO59zbPgSVyil18KUv4F9NduT49z3MQgzfY9yjE1rkSgRW5Va4PGQhVEle5f2Dce-bysgPhWWK0wrQtLd1AVpbhLIIqI4obDo-2OFdK62GwLor1RfKU0Qc_WiP-8UOljUnVBskGVRVlqvDL8yblrM7ro73JbgpJPlV4Uz67FaC22iyhLbJsRnbQpJVKWgfcw6jyGqjKPaspsFYpPoM',
+    );
+    var formdata = new FormData();
+    formdata.append('name', 'Hamza');
+    formdata.append('phone', '9999999999');
+    formdata.append('industry_id', '2');
+    formdata.append('country_id', '191');
+    formdata.append('state_id', '3147');
+    formdata.append('city_id', '37410');
+    formdata.append('email', 'employer@jobskills.digital');
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: formdata,
+      redirect: 'follow',
+    };
+    fetch(`${baseUrl}/companyUpdate/8`, requestOptions)
+      .then(response => response.json())
+      .then(result => {console.log(result)})
+      .catch(error => console.log('error', error));
+  };
+
+  const _getcountry = () => {
+    var myHeaders = new Headers();
+    myHeaders.append(
+      'Authorization',
+      'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZDZjZDg5MzZkNmQ0ZWE3NTQ5N2RlZDZhMDgwNjliNzM1NmRmYmQ5YzZlODRmZmFiZTE2NjQ4N2VkN2ExMWFkMzk1YzgyZjZkNGRkNWZkMGUiLCJpYXQiOjE2ODAyNTA2NDYuNzg0NjAxLCJuYmYiOjE2ODAyNTA2NDYuNzg0NjA0LCJleHAiOjE3MTE4NzMwNDYuNzc3NzY2LCJzdWIiOiI4NCIsInNjb3BlcyI6W119.XQA1UjOHQZkuqkLbAY0V8quXIn6dBY_ZIl8Igkko0Kv1ODdOrVXmUsnbUu59jeIg_I8mVgcnH3XGRSoEDAXb5YSocyD1POwDo7_ED1dc4TYeniS7RrBwoJ4ZTyLFdc0rWo7inelD9n2HoLHquTsh6_tz4QAyc8xaB4_58H3LvKo86FEWoBTY4NsP3CAGzylD-8-SEIHze-HfeYjaaRoVlDeQpY6d3mfqzmBummF7nKHtkLSgTCEEaEsIx2yhZTrapWL-5GKdx-aj1qmKbTE5WYGUgMVu-39Mz7GCvYMryN5HF-9Y4guufDMT0atrXnc7BkyRe0lIVfNE3ga9GcSePLDkzMrCbBjmfTmvKuxoT-sXyXFb7_vu8FogA6Pc7v77LTciuuc9duwRSpK3_fxMy4dZucnFTGx7tTWSwlipQWthwa3wd0gVs5F9cXpgVxLk4Pndxuq-PF8_DvpbWNOCXsm0KWO59zbPgSVyil18KUv4F9NduT49z3MQgzfY9yjE1rkSgRW5Va4PGQhVEle5f2Dce-bysgPhWWK0wrQtLd1AVpbhLIIqI4obDo-2OFdK62GwLor1RfKU0Qc_WiP-8UOljUnVBskGVRVlqvDL8yblrM7ro73JbgpJPlV4Uz67FaC22iyhLbJsRnbQpJVKWgfcw6jyGqjKPaspsFYpPoM',
+    );
+    var requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow',
+    };
+    fetch(`${baseUrl}/company/company-information`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        console.log(result);
+        setInfo(result)})
+      .catch(error => console.log('error', error))
+      .finally(() => {
+        setLoader(false);
+      });
+  };
+
+  useEffect(() => {
+    _getcountry();
+  }, [loader]);
 
   return (
     <JScreen headerShown={false}>
@@ -28,25 +84,33 @@ function EContactInformation({refRBSheet, data, user}) {
         initialValues={{
           name: '',
           email: '',
-          country: '',
+          countries: '',
           state: '',
           city: '',
+          phone: '',
         }}
-        // onSubmit={values => {
-        //   console.log(values);
-        //   _postData(values);
-        // }}
-        // validationSchema={yup.object().shape({
-        //   title: yup.string().required().label('Title'),
-        //   company: yup.string().required().label('Company'),
-        //   county: yup.string().required().label('Country'),
-        //   city: yup.string().required().label('City'),
-        //   state: yup.string().required().label('State'),
-        //   start: yup.string().required().label('Start'),
-        //   end: yup.string().required().label('End'),
-        //   description: yup.string().required().label('Description'),
-        // })}
-      >
+        onSubmit={values => {
+          console.log(values);
+          _contactInfo(values);
+        }}
+        validationSchema={yup.object().shape({
+          // name: yup.string().required().label('Title'),
+          email: yup
+            .string()
+            .min(0, 'Email address cannot be empty')
+            .max(30, 'Email address must be at most 30 characters long')
+            .email('Must be a valid email')
+            .required()
+            .label('Company'),
+          // countries: yup.string().required().label('Country'),
+          // city: yup.string().required().label('City'),
+          // state: yup.string().required().label('State'),
+          phone: yup
+            .string()
+           .max(14)
+            .required()
+            .label('Phone'),
+        })}>
         {({
           values,
           handleChange,
@@ -75,7 +139,7 @@ function EContactInformation({refRBSheet, data, user}) {
                   />
                 ) : (
                   <JText
-                    onPress={() => isValid && handleSubmit()}
+                    onPress={() => handleSubmit()}
                     fontColor={
                       !isValid ? `${colors.white[0]}70` : colors.white[0]
                     }>
@@ -83,14 +147,7 @@ function EContactInformation({refRBSheet, data, user}) {
                   </JText>
                 )
               }
-              left={
-                <Feather
-                  onPress={() => navigation.goBack()}
-                  name="chevron-left"
-                  size={RFPercentage(3.5)}
-                  color={colors.white[0]}
-                />
-              }
+              left={JChevronIcon}
             />
             <ScrollView
               contentContainerStyle={{paddingBottom: RFPercentage(8)}}
@@ -128,7 +185,7 @@ function EContactInformation({refRBSheet, data, user}) {
                   width: '100%',
                   borderBottomWidth: RFPercentage(0.1),
                   paddingTop: 15,
-
+                  marginBottom: RFPercentage(2),
                 }}
                 textContainerStyle={{
                   paddingVertical: 5,
@@ -143,43 +200,28 @@ function EContactInformation({refRBSheet, data, user}) {
               )}
               <JSelectInput
                 containerStyle={{marginTop: RFPercentage(2)}}
-                value={values.country?.name}
-                // data={data.countries}
+                value={values.countries?.name}
+                id={values.countries?.id}
+                data={info?.countries}
+                setValue={e => setFieldValue('countries', e)}
                 header={'Country'}
                 heading={'Country :'}
-                setValue={e => {
-                  setFieldValue('country', e);
-                  setFieldValue('state', null);
-                  setFieldValue('city', null);
-                }}
-                error={touched.country && errors.country && true}
-                rightIcon={
-                  <Feather
-                    name="chevron-down"
-                    size={RFPercentage(2.5)}
-                    color={colors.black[0]}
-                  />
-                }
+                error={touched.countries && errors.countries && true}
+                rightIcon={<JNewJobIcon />}
               />
-              {touched.country && errors.country && (
-                <JErrorText>{errors.country}</JErrorText>
+              {touched.countries && errors.countries && (
+                <JErrorText>{errors.countries}</JErrorText>
               )}
 
               <JSelectInput
                 containerStyle={{marginTop: RFPercentage(2)}}
                 value={values.state?.name}
-                id={values.country?.id}
+                id={values.countries?.id}
                 setValue={e => setFieldValue('state', e)}
                 header={'State'}
                 heading={'State :'}
                 error={touched.state && errors.state && true}
-                rightIcon={
-                  <Feather
-                    name="chevron-down"
-                    size={RFPercentage(2.5)}
-                    color={colors.black[0]}
-                  />
-                }
+                rightIcon={<JNewJobIcon />}
               />
               {touched.state && errors.state && (
                 <JErrorText>{errors.state}</JErrorText>
@@ -193,13 +235,7 @@ function EContactInformation({refRBSheet, data, user}) {
                 heading={'City :'}
                 id={values.state?.id}
                 error={touched.city && errors.city && true}
-                rightIcon={
-                  <Feather
-                    name="chevron-down"
-                    size={RFPercentage(2.5)}
-                    color={colors.black[0]}
-                  />
-                }
+                rightIcon={<JNewJobIcon />}
               />
               {touched.city && errors.city && (
                 <JErrorText>{errors.city}</JErrorText>

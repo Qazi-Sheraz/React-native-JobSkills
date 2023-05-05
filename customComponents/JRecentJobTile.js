@@ -112,10 +112,11 @@ function JRecentJobTile({
   return isempty === true ? (
     <View
       style={{
-        height: heightPercentageToDP(14),
-        backgroundColor: colors.tileColor[0],
+        height: heightPercentageToDP(12),
+        // backgroundColor: colors.tileColor[0],
         justifyContent: 'center',
         alignItems: 'center',
+       
       }}>
       <Image
         style={{width: RFPercentage(6), height: RFPercentage(6)}}
@@ -131,28 +132,29 @@ function JRecentJobTile({
           onPress={onPress}
           style={[
             {
-              height: heightPercentageToDP(14),
-              backgroundColor: colors.tileColor[0],
-
-              marginBottom: RFPercentage(1),
+              height: heightPercentageToDP(12),
+              borderBottomWidth:RFPercentage(0.1),
+              borderBottomColor: colors.border[0],
+              // marginBottom: RFPercentage(1),
             },
             containerStyle,
           ]}>
           {image && (
             <View
               style={{
-                width: '28%',
+                // width: '28%',
                 justifyContent: 'center',
-                paddingHorizontal:
-                  store.lang.id == 0 ? RFPercentage(1) : RFPercentage(0),
+                alignItems:'center',
+              paddingHorizontal:RFPercentage(0.5),
+              // backgroundColor:'green',
               }}>
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate('JobDetails', {id: item.job_id})
                 }
                 style={{
-                  height: RFPercentage(12),
-                  width: RFPercentage(12),
+                  // height: RFPercentage(12),
+                  // width: RFPercentage(12),
                   borderWidth: RFPercentage(0.1),
                   borderColor: colors.inputBorder[0],
                   justifyContent: 'center',
@@ -162,6 +164,7 @@ function JRecentJobTile({
                   style={{
                     height: RFPercentage(10),
                     width: RFPercentage(10),
+                    
                   }}
                   resizeMode="contain"
                   source={{uri: item.company_url}}
@@ -173,16 +176,16 @@ function JRecentJobTile({
           <View
             style={{
               width: image ? '72%' : '100%',
-              justifyContent: 'center',
-              paddingHorizontal: RFPercentage(1),
+              paddingVertical: RFPercentage(1),
+              // justifyContent: 'center',
             }}>
-            <JText fontWeight="bold">{item?.job_title}</JText>
+            <JText style={{width:'80%',}} fontWeight="bold">{item?.job_title}</JText>
             <JRow
               style={{
                 marginTop: RFPercentage(0.5),
               }}>
               <JText fontColor={colors.danger[0]}>{store.lang.expire_on}</JText>
-              <JText>
+              <JText >
                 {/* 12 MAR 2023 */}
                 {moment(item.expire_on, 'DD-MM-YYYY').format('DD MMM,YYYY')}
               </JText>
@@ -405,13 +408,13 @@ function JRecentJobTile({
                 </MenuTrigger>
 
                 <MenuOptions>
-                  <MenuOption onSelect={onSelect}>
+                  <MenuOption >
                     <JRow>
                       <JIcon icon="io" name={'eye-outline'} />
                       <JText style={styles.menutxt}> Preview </JText>
                     </JRow>
                   </MenuOption>
-                  <MenuOption onSelect={onSelect}>
+                  <MenuOption >
                     <JRow>
                       <JIcon icon="io" name={'share-social-outline'} />
                       <JText style={styles.menutxt}> Share</JText>

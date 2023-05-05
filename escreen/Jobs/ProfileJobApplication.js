@@ -30,17 +30,18 @@ import { baseUrl } from '../../ApiUrls';
 const ProfileJobApplication = ({route}) => {
   const store = useContext(StoreContext);
   const {params}= useRoute()
+  console.log(params)
   const [details, setDetails] = useState();
   const [loader, setLoader] = useState(true);
   const [buttonPressed, setButtonPressed] = useState(null);
-  // console.log(params.candidate_id)
+  // console.log(params.id)
   const handleButtonPress = (button) => {
     setButtonPressed(button);
     bottomSheetRef.current.open();
   };
   const bottomSheetRef = useRef();
   const navigation = useNavigation();
-
+ 
   const _candidateDetails = () => {
     var myHeaders = new Headers();
     myHeaders.append(
@@ -108,7 +109,8 @@ const ProfileJobApplication = ({route}) => {
                   </JText>
                 </JRow>
               </MenuOption>
-              <MenuOption>
+              <MenuOption onSelect={()=> {navigation.navigate('ViewResume',{...params})}}>
+
                 <JRow>
                   <Eyes />
                   <JText style={styles.menutxt}>{store.lang.view_resume}</JText>

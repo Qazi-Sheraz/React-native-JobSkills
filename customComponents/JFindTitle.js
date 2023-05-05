@@ -11,7 +11,7 @@ const JFindTitle = ({JobTitle}) => {
   return (
     <JRow
     disabled={false}
-          onPress={() => navigation.navigate('CSearch')}
+          onPress={() => navigation.navigate('ESearch')}
           style={{
            paddingVertical:RFPercentage
            (1.2),

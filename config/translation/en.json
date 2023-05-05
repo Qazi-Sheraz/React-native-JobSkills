@@ -97,7 +97,10 @@
     "confirmed":"Confirmed",
     "confirm_your_num":"Confirm Your Number",
     "followers":"Followers",
-    "assessments":"Assessments"
+    "assessments":"Assessments",
+    "test_CV":"Test CV",
+    "langButtons":"Data and notifications will be shown based on your language",
+    "Choose_language": "Choose a language",
 
 
 

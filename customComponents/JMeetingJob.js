@@ -13,34 +13,34 @@ import { observer } from 'mobx-react-lite'
 const JMeetingJob = ({item,startonPress,onPress}) => {
   const store = useContext(StoreContext);
   return (
-    <JRow
-      disabled={false}
+    <Pressable
+      // disabled={false}
       onPress={onPress}
       style={{
-        justifyContent: 'space-between',
-        marginHorizontal: RFPercentage(2),
+        // justifyContent: 'space-between',
+        marginBottom: RFPercentage(1),
         paddingVertical: RFPercentage(1),
         borderBottomWidth: RFPercentage(0.1),
-        borderColor: '#969696',
-      }}>
-      <View>
+        borderBottomColor: colors.border[0],  }}>
+      
         <JText fontWeight="bold" fontSize={RFPercentage(2.2)}>
           {item.job_title}
         </JText>
-        <JText
+          <JRow style={{justifyContent: 'space-between',paddingVertical: RFPercentage(0.5),alignItems: 'flex-end',}}>
+        <View>
+         <JText
           style={{
             fontSize: RFPercentage(1.9),
-            marginVertical: RFPercentage(0.5),
           }}>
           {item.candidate_name}
         </JText>
-        <JRow
-          style={{
-            marginVertical: RFPercentage(1),
-          }}>
+
+        <JRow style={{marginTop: RFPercentage(0.5),}}>
+
+            
           <EvilIcons name="calendar" size={RFPercentage(2.5)} />
 
-          <JText style={{marginHorizontal: RFPercentage(1)}}>
+          <JText style={{marginHorizontal: RFPercentage(0.5)}}>
             {moment(item.start_date_and_time).format('DD MMM,YYYY')}
           </JText>
           <JText>
@@ -49,9 +49,9 @@ const JMeetingJob = ({item,startonPress,onPress}) => {
             {item.meridiem}
           </JText>
         </JRow>
-      </View>
-      <View style={{height:RFPercentage(10),justifyContent:'flex-end'}}>
-        <JRow onPress={startonPress} style={styles.startBtn}>
+
+        </View>
+      <JRow onPress={startonPress} style={styles.startBtn}>
           <JText
             style={{
               marginHorizontal: RFPercentage(0.5),
@@ -66,8 +66,8 @@ const JMeetingJob = ({item,startonPress,onPress}) => {
             color={colors.white[0]}
           />
         </JRow>
-      </View>
-    </JRow>
+        </JRow>  
+    </Pressable>
   );
 }
 

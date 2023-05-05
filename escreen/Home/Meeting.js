@@ -93,6 +93,7 @@ const Meeting = () => {
     <JScreen
       isError={error}
       onTryAgainPress={() => {_getmeeting()}}
+      style={{marginHorizontal: RFPercentage(2),}}
       header={
         <JGradientHeader
           center={

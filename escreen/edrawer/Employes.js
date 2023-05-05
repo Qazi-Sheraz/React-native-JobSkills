@@ -12,6 +12,7 @@ import JEmployeUser from '../../customComponents/JEmployeUser';
 import { StoreContext } from '../../mobx/store';
 import { baseUrl } from '../../ApiUrls';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
+import { SearchBar } from 'react-native-screens';
 
 const Employes = () => {
   const {navigate, goBack} = useNavigation();
@@ -19,6 +20,7 @@ const Employes = () => {
   const [loader, setLoader] = useState(true);
   const [employeeData, setEmployeeData] = useState([]);
   const [error,setError]=useState(false)
+  const [search, setSearch] = useState('');
 
   const _getEmployeData = () => {
 
@@ -84,10 +86,12 @@ const Employes = () => {
         <>
           <JSearchInput
             length={1}
-            onChangeText={e => {
-              store.setAllFeatureCompanyInput(e);
-            }}
-            onPressIcon={() => alert('Icon Pressed')}
+            // onChangeText={e => {
+            //   search.filter(e =>
+            //     e.name.toLowerCase().includes(search.toLowerCase()),
+            //   )
+            // }}
+            // onPressIcon={() => alert('Icon Pressed')}
           />
           <View>
             <FlatList

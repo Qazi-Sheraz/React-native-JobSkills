@@ -83,14 +83,7 @@ const Profile = () => {
           // alignItems={'flex-start'}
           justifyContent={'flex-start'}
           paddingTop={RFPercentage(2)}
-          left={
-            <JIcon
-              icon="an"
-              name={'setting'}
-              color={'#fff'}
-              size={RFPercentage(3.5)}
-            />
-          }
+         
           right={
             <AntDesign
               name="poweroff"
@@ -152,9 +145,9 @@ const Profile = () => {
         />
 
         <JProfileSections
-        //  onIconPress={() => {
-        //   navigation.navigate('ECompanyInformation',);
-        // }}
+         onIconPress={() => {
+          navigation.navigate('ECompanyInformation',);
+        }}
           isEmpty={false}
           icon="1"
           heading={store.lang.company_info}
@@ -192,11 +185,11 @@ const Profile = () => {
         />
         <JProfileSections
           // loader={store.myProfileApiLoader}
-          // onIconPress={() => {
-          //   navigation.navigate('CSocialMediaLink');
+          onIconPress={() => {
+            navigation.navigate('ESocialLink');
 
-          //   // refRBSheet.current.open();
-          // }}
+            // refRBSheet.current.open();
+          }}
           IconPress2={() => {
             navigation.navigate('ESocialLink');
 

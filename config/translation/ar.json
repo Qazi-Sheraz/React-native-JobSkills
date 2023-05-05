@@ -98,7 +98,10 @@
     "confirmed":"مؤكد",
     "confirm_your_num":"قم بتاكيد رقمك",
     "followers":"متابعون",
-    "assessments":"التقييمات"
+    "assessments":"التقييمات",
+    "test_CV":"اختبار السيرة الذاتية",
+    "langButtons": "سيتم عرض البيانات والإشعارات بناءً على لغتك",
+    "Choose_language": "اختر لغة"
 
 
 

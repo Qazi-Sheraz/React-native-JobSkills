@@ -36,40 +36,38 @@ import {baseUrl} from '../../ApiUrls';
 import moment from 'moment';
 
 
-const data = [
 
-  {id: 0, name: 'All'},
-  {id: 1, name: 'Drafted'},
-  {id: 2, name: 'Applied'},
-  {id: 3, name: 'Rejected'},
-  {id: 4, name: 'Selected'},
-  {id: 5, name: 'Shortlisted'},
-  {id: 6, name: 'Invitation Sent'},
-  {id: 7, name: 'Interview Scheduled'},
-  {id: 8, name: 'Interview Accepted'},
-  {id: 9, name: 'Interview Rescheduled'},
-  {id: 10, name: 'Interview Completed'},
-];
 
 const JobApplication = ({route}) => {
   const {navigate, goBack} = useNavigation();
-  const [selectedItem, setSelectedItem] = useState(data.status);
+  const [selectedItem, setSelectedItem] = useState();
   const [jApplication, setJApplication] = useState();
   const handleSelect = status => {
-    setSelectedItem(data);
-  };
+    setSelectedItem(status);
 
+  };
   const [modalVisible, setModalVisible] = useState(false);
   const refRBSheet = useRef();
   const store = useContext(StoreContext);
+const data = [
 
+  {status: 'All'},
+  {id:0,status: store.lang.drafted},
+  {id:1,status: store.lang.applied},
+  {id:2,status: store.lang.rejected},
+  {id:3,status: store.lang.selected},
+  {id:4,status: store.lang.shortlisted},
+  {id:5,status: store.lang.invitation_Sent},
+  {id:6,status: store.lang.interview_scheduled},
+  {id:7,status: store.lang.interview_accepted},
+  {id:8,status: store.lang.interview_rescheduled},
+  {id:9,status: store.lang.interview_completed},
+];
   const filterData = status => {
-    if (status === 'All') {
-      setJApplication(jApplication.status);
-    } else {
-      setJApplication(jApplication.filter(e => e.status === status));
-    }
-    refRBSheet.current.close();
+   
+      setJApplication(jApplication.filter(e => e.status == status));
+
+        refRBSheet.current.close();
   };
 
   const sortByNameAscending = () => {
@@ -130,7 +128,7 @@ const JobApplication = ({route}) => {
       })
       .catch(error => {
         console.log('error', error);
-        setError(true);
+        // setError(true);
       })
       .finally(() => {
         setLoader(false);
@@ -245,12 +243,13 @@ const JobApplication = ({route}) => {
             {store.lang.status_of_application}
           </JText>
           <ScrollView showsVerticalScrollIndicator={false}>
-            {data.map((item, index) => (
+            {data?.map((item, index) => (
               <JText
                 key={index}
-                onPress={() => filterData(item.name)}
+                onPress={() => filterData(item.status)}
                 style={styles.RBtxt}>
-                {item.name}
+                {item.status}
+                
               </JText>
             ))}
           </ScrollView>

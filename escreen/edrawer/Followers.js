@@ -56,8 +56,7 @@ const Followers = () => {
 
   return (
     <JScreen
-    
-      onTryAgainPress={()=> _followers()}
+      onTryAgainPress={() => _followers()}
       isError={error}
       style={{paddingHorizontal: RFPercentage(2)}}
       header={
@@ -84,7 +83,12 @@ const Followers = () => {
             }}
             onPressIcon={() => alert('Icon Pressed')}
           />
-          <View style={{marginVertical: RFPercentage(2)}}>
+          <View
+            style={{
+              marginVertical: RFPercentage(1),
+              borderBottomWidth: RFPercentage(0.1),
+              borderBottomColor: colors.border[0],
+            }}>
             {followerdata.map((item, index) => (
               <JRow key={index} style={{marginVertical: RFPercentage(1)}}>
                 <Image
@@ -97,15 +101,29 @@ const Followers = () => {
                 />
 
                 <View style={styles.mainView}>
-                  <JText style={{fontWeight:'bold' ,marginVertical: RFPercentage(0.5),}}>
+                  <JText
+                    style={{
+                      fontWeight: 'bold',
+                      marginVertical: RFPercentage(0.5),
+                    }}>
                     {item.candidate_name}
                   </JText>
                   <JText>{item.candidate_email}</JText>
-                  <JRow style={{justifyContent: 'space-between',marginVertical: RFPercentage(0.5),}}>
+                  <JRow
+                    style={{
+                      justifyContent: 'space-between',
+                      marginVertical: RFPercentage(0.5),
+                    }}>
                     <JText>
                       {item.regional_code}-{item.phone_number}
                     </JText>
-                    <JText>{item.immediate_available===0  ? 'Immediate Available': <JText fontColor='red'> Not Immediate Available</JText>}</JText>
+                    <JText>
+                      {item.immediate_available === 0 ? (
+                        'Immediate Available'
+                      ) : (
+                        <JText fontColor="red"> Not Immediate Available</JText>
+                      )}
+                    </JText>
                   </JRow>
                 </View>
               </JRow>

@@ -16,28 +16,22 @@ const JEmployeUser = ({item}) => {
   return (
     <Pressable
       style={{
-        backgroundColor: colors.tileColor[0],
-        marginBottom: RFPercentage(0.5),
-        paddingHorizontal:RFPercentage(1),
+        
+        marginVertical: RFPercentage(1),
+        borderBottomWidth: RFPercentage(0.1),
+        borderBottomColor: colors.border[0],
+        // marginBottom: RFPercentage(1),
       }}>
+
+        <JText style={styles.Hname}>{item.name}</JText>
+
       <JRow
         style={{
+          alignItems: 'flex-end',
           justifyContent: 'space-between',
+          paddingVertical: RFPercentage(0.8),
         }}>
-        <View>
-          <JText style={styles.Hname}>{item.name}</JText>
-          <JText style={styles.txt}>{item.email}</JText>
-          <JText style={styles.txt}>{item.role}</JText>
-        </View>
-        <View
-          style={{
-            paddingVertical: RFPercentage(1),
-            flexDirection: 'column',
-            height: RFPercentage(13),
-            alignItems: 'flex-end',
-            justifyContent: 'space-between',
-          }}>
-          <Menu>
+        {/* <Menu>
             <MenuTrigger
               style={{
                 width: RFPercentage(3),
@@ -62,11 +56,14 @@ const JEmployeUser = ({item}) => {
                 </JRow>
               </MenuOption>
             </MenuOptions>
-          </Menu>
-
-          <JStatus status={item.status} />
+          </Menu> */}
+        <View>
+          <JText style={styles.txt}>{item.email}</JText>
+          <JText style={styles.txt}>{item.role}</JText>
         </View>
+        <JStatus status={item.status} />
       </JRow>
+      {/* </JRow> */}
     </Pressable>
   );
 };
@@ -76,6 +73,7 @@ export default JEmployeUser;
 const styles = StyleSheet.create({ Hname: {
     fontSize: RFPercentage(2.3),
     fontWeight: 'bold',
+    width:'75%'
   },
   info: {
     height: RFPercentage(3),

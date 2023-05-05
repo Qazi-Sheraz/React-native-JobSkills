@@ -111,9 +111,8 @@ const AddNew_Job = () => {
             console.log(values);
             navigate('JobPreference', {...values});
           }}
-
-          // validationSchema={yup.object()({
-          //   title: yup.string().required().label('Job Title'),
+          validationSchema={yup.object().shape({
+            jobTilte: yup.string().max(25,'Title must be at most 25 characters long').required().label('Job Title'),
           //   type: yup.string().required().label('Job Type'),
           //   category: yup.string().required().label('Job Category'),
           //   city: yup.string().required().label('Functional Area'),
@@ -122,8 +121,8 @@ const AddNew_Job = () => {
           //   skill: yup.string().required().label('Job Skills'),
           //   tag: yup.string().required().label('Job Tag'),
           //   description: yup.string().required().label('Description'),
-          // })}
-        >
+          })}>
+          
           {({
             values,
             handleChange,

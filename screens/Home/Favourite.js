@@ -14,6 +14,7 @@ import CLFavouriteJob from '../../loaders/Candidate/FavouriteJob/CLFavouriteJob'
 import JEmpty from '../../customComponents/JEmpty';
 import JGradientHeader from '../../customComponents/JGradientHeader';
 import {_getFavouriteJobData} from '../../functions/Candidate/BottomTab';
+
 function Favourite({navigation}) {
   const store = useContext(StoreContext);
 

@@ -47,6 +47,9 @@ import EContactInformation from '../../escreen/Profiles/EContactInformation';
 import ECompanyInformation from '../../escreen/Profiles/ECompanyInformation';
 import ESocialLink from '../../escreen/Profiles/ESocialLink';
 import CSocialMediaLink from '../../screens/Home/ProfileScreen/CSocialMediaLink';
+import ViewResume from '../../escreen/Jobs/ViewResume';
+import LngTranslation from '../../screens/LngTranslation/LngTranslation';
+import ESearch from '../../escreen/Jobs/ESearch';
 
 const Stack = createStackNavigator();
 
@@ -224,13 +227,14 @@ function CHomeStack({navigation}) {
         initialRouteName={store?.token?.token ? 'CHome' : 'SelectionScreen'}>
           
         <Stack.Screen name="CHome" component={EBottomTab} />
+        <Stack.Screen name="LngTranslation" component={LngTranslation} />
         <Stack.Screen name="Assessments" component={Assessments} />
         <Stack.Screen name="CAllJobs" component={AllJobs} />
         <Stack.Screen name="CFeatureCompany" component={FeatureCompany} />
         <Stack.Screen name="CFeatureJob" component={FeatureJob} />
         <Stack.Screen name="CSelectedJob" component={SelectedJob} />
         <Stack.Screen name="CSelectedCompany" component={SelectedCompany} />
-        <Stack.Screen name="CSearch" component={CSearch} />
+        <Stack.Screen name="ESearch" component={ESearch} />
         <Stack.Screen name="CFilter" component={CFilter} />
         <Stack.Screen name="JobDetails" component={JobDetails} />
         <Stack.Screen name="AddNew_Job" component={AddNew_Job} />
@@ -243,6 +247,7 @@ function CHomeStack({navigation}) {
         <Stack.Screen name="Applicants" component={Applicants} />
         <Stack.Screen name="Transaction" component={Transaction} />
         <Stack.Screen name="Employes" component={Employes} />
+        <Stack.Screen name="ViewResume" component={ViewResume} />
         <Stack.Screen
           name="CSocialMediaLink"
           component={CSocialMediaLink}
