@@ -12,8 +12,6 @@ import JGradientHeader from '../../customComponents/JGradientHeader';
 import {heightPercentageToDP} from 'react-native-responsive-screen';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import colors from '../../config/colors';
 import JProfileContent from '../../customComponents/JProfileContent';
 import JProfileSections from '../../customComponents/JProfileSections';
@@ -22,14 +20,7 @@ import {observer} from 'mobx-react';
 import {StoreContext} from '../../mobx/store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
-import RBSheet from 'react-native-raw-bottom-sheet';
 import Feather from 'react-native-vector-icons/Feather';
-
-import CContactInformation from './ProfileScreen/CContactInformation';
-import CGeneralInformation from './ProfileScreen/CGeneralInformation';
-import CExperienceInformation from './ProfileScreen/CExperienceInformation';
-import CSkills from './ProfileScreen/CSkills';
-import CSocialMediaLink from './ProfileScreen/CSocialMediaLink';
 import JProfileInfo from '../../customComponents/JProfileInfo';
 import JRow from '../../customComponents/JRow';
 import moment from 'moment';
@@ -68,12 +59,12 @@ function Profile({navigation}) {
           text1: 'Logout Successfully',
         });
       })
-      .catch(error => {''
-        // Toast.show({
-        //   type: 'error',
-        //   text1: 'Error',
-        //   text2: 'Error while removing token',
-        // });
+      .catch(error => {
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: 'Error while removing token',
+        });
       });
   };
 

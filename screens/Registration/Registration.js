@@ -1,5 +1,5 @@
 import {StyleSheet, TouchableOpacity, View, ScrollView} from 'react-native';
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import JScreen from '../../customComponents/JScreen';
 import JCircularLogo from '../../customComponents/JCircularLogo';
 import JText from '../../customComponents/JText';
@@ -19,9 +19,11 @@ import JFooter from '../../customComponents/JFooter';
 import CheckBox from '@react-native-community/checkbox';
 import url from '../../config/url';
 import Toast from 'react-native-toast-message';
+import JIcon from '../../customComponents/JIcon';
+import { StoreContext } from '../../mobx/store';
 export default function Registration({navigation, route}) {
   const [loader, setLoader] = useState(false);
-
+  const store = useContext(StoreContext);
   const _register = values => {
     var myHeaders = new Headers();
     myHeaders.append('Accept', 'application/json');
@@ -30,7 +32,9 @@ export default function Registration({navigation, route}) {
     formdata.append('type', route.params?.type == 1 ? '1' : '0');
     formdata.append('email', values.email);
     formdata.append('password', values.password);
-    formdata.append('first_name', values.name);
+    formdata.append('first_name', values.first_name);
+    formdata.append('last_name', values.last_name);
+    formdata.append('company_name', values.company_name);
     formdata.append('password_confirmation', values.confirmPassword);
     formdata.append('privacyPolicy', values.policy ? '1' : '0');
     console.log(formdata)
@@ -99,7 +103,9 @@ export default function Registration({navigation, route}) {
           // type: route.params.type.type,
           email: '',
           password: '',
-          name: '',
+          first_name: '',
+          last_name: '',
+          company_name: '',
           confirmPassword: '',
           hide: true,
           chide: true,
@@ -110,20 +116,28 @@ export default function Registration({navigation, route}) {
           _register(values);
         }}
         validationSchema={yup.object().shape({
-          name: yup
+          first_name: yup
             .string()
-            .min(3, 'Name Must be at least 3 characters')
-            .required('Name is a required field'),
+            .min(3, 'First Name ame Must be at least 3 characters')
+            .required('First Name is a required field'),
+            last_name: yup
+            .string()
+            .min(3, 'Last Name Must be at least 3 characters')
+            .required('Last Name is a required field'),
+            company_name: yup
+            .string()
+            .min(3, 'Company Name Must be at least 3 characters')
+            .required('Company Name is a required field'),
           email: yup
             .string()
             .min(0, 'Email address cannot be empty')
-            .max(25, 'Email address must be at most 25 characters long')
+            
             .email('Must be a valid email')
             .required('Email is a required field'),
           password: yup
             .string()
             .min(8, 'Password Must be at least 8 characters')
-            .max(10, 'Password must be at most 10 characters')
+            
             .required('Password is a required field'),
           confirmPassword: yup
             .string()
@@ -152,25 +166,49 @@ export default function Registration({navigation, route}) {
             }}>
             <ScrollView showsVerticalScrollIndicator={false}>
               <JInput
-                value={values.name}
-                heading={'Name'}
-                error={touched.name && errors.name && true}
+                value={values.first_name}
+                heading={'First Name'}
+                error={touched.first_name && errors.first_name && true}
                 icon={
                   <Feather
                     name="user"
                     style={{
-                      marginRight: RFPercentage(2),
+                      marginRight:store.lang.id == 0 ? RFPercentage(1.5):RFPercentage(0),
+                      marginLeft:store.lang.id == 0 ? RFPercentage(0):RFPercentage(1.5),
                     }}
                     size={RFPercentage(2.8)}
                     color={colors.purple[0]}
                   />
                 }
-                placeholder="Name"
-                onChangeText={handleChange('name')}
-                onBlur={() => setFieldTouched('name')}
+                placeholder="First Name"
+                onChangeText={handleChange('first_name')}
+                onBlur={() => setFieldTouched('first_name')}
               />
-              {touched.name && errors.name && (
-                <JErrorText>{errors.name}</JErrorText>
+              {touched.first_name && errors.first_name && (
+                <JErrorText>{errors.first_name}</JErrorText>
+              )}
+              <JInput
+                value={values.last_name}
+                heading={'Last Name'}
+                error={touched.last_name && errors.last_name && true}
+                icon={
+                  <Feather
+                    name="user"
+                    style={{
+                      marginRight:store.lang.id == 0 ? RFPercentage(1.5):RFPercentage(0),
+                      marginLeft:store.lang.id == 0 ? RFPercentage(0):RFPercentage(1.5),
+                    }}
+                    size={RFPercentage(2.8)}
+                    color={colors.purple[0]}
+                  />
+                }
+                placeholder="Last Name"
+                onChangeText={handleChange('last_name')}
+                onBlur={() => setFieldTouched('last_name')}
+                containerStyle={{marginTop: RFPercentage(3)}}
+              />
+              {touched.last_name && errors.last_name && (
+                <JErrorText>{errors.last_name}</JErrorText>
               )}
               <JInput
                 value={values.email}
@@ -180,9 +218,10 @@ export default function Registration({navigation, route}) {
                   <Feather
                     name="mail"
                     style={{
-                      marginRight: RFPercentage(2),
+                      marginRight:store.lang.id == 0 ? RFPercentage(1.5):RFPercentage(0),
+                      marginLeft:store.lang.id == 0 ? RFPercentage(0):RFPercentage(1.5),
                     }}
-                    size={RFPercentage(2.8)}
+                    size={RFPercentage(2.7)}
                     color={colors.purple[0]}
                   />
                 }
@@ -193,6 +232,30 @@ export default function Registration({navigation, route}) {
               />
               {touched.email && errors.email && (
                 <JErrorText>{errors.email}</JErrorText>
+              )}
+              <JInput
+                value={values.company_name}
+                error={touched.company_name && errors.company_name && true}
+                heading={'Company Name'}
+                icon={
+                  <JIcon
+                  icon={'an'}
+                    name="home"
+                    style={{
+                      marginRight:store.lang.id == 0 ? RFPercentage(1.3):RFPercentage(0),
+                      marginLeft:store.lang.id == 0 ? RFPercentage(0):RFPercentage(1.3),
+                    }}
+                    size={RFPercentage(3)}
+                    color={colors.purple[0]}
+                  />
+                }
+                placeholder="Company Name"
+                onChangeText={handleChange('company_name')}
+                onBlur={() => setFieldTouched('company_name')}
+                containerStyle={{marginTop: RFPercentage(3)}}
+              />
+              {touched.company_name && errors.company_name && (
+                <JErrorText>{errors.company_name}</JErrorText>
               )}
 
               <JInput
@@ -207,7 +270,8 @@ export default function Registration({navigation, route}) {
                     name="shield-key-outline"
                     shield-key-outline
                     style={{
-                      marginRight: RFPercentage(2),
+                      marginRight:store.lang.id == 0 ? RFPercentage(1.3):RFPercentage(0),
+                      marginLeft:store.lang.id == 0 ? RFPercentage(0):RFPercentage(1.3),
                     }}
                     size={RFPercentage(3.2)}
                     color={colors.purple[0]}
@@ -215,7 +279,7 @@ export default function Registration({navigation, route}) {
                 }
                 placeholder="Password"
                 onChangeText={handleChange('password')}
-                containerStyle={{marginTop: RFPercentage(3)}}
+                containerStyle={{marginTop: RFPercentage(2)}}
                 onBlur={() => setFieldTouched('password')}
               />
               {touched.password && errors.password && (
@@ -228,7 +292,7 @@ export default function Registration({navigation, route}) {
                 onPressEye={() => setFieldValue('chide', !values.chide)}
                 error={
                   touched.confirmPassword && errors.confirmPassword && true
-                }
+                } 
                 value={values.confirmPassword}
                 heading={'Confirm Password'}
                 icon={
@@ -236,7 +300,8 @@ export default function Registration({navigation, route}) {
                     name="shield-key-outline"
                     shield-key-outline
                     style={{
-                      marginRight: RFPercentage(2),
+                      marginRight:store.lang.id == 0 ? RFPercentage(1.3):RFPercentage(0),
+                      marginLeft:store.lang.id == 0 ? RFPercentage(0):RFPercentage(1.3),
                     }}
                     size={RFPercentage(3.2)}
                     color={colors.purple[0]}

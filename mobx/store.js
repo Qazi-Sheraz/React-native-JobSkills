@@ -161,11 +161,15 @@ export const StoreProvider = props => {
     setFeatureApiError: action(e => (store.featureCompanyApiError = e)),
     allFeatureCompanyInput: '',
     setAllFeatureCompanyInput: action(e => (store.allFeatureCompanyInput = e)),
+
     lang:en,
     setLang: action(e => (store.lang = e == 'en' ? en : e == 'ud' ? ud :ar)),
+
     recentSearch:[],
     setRecentSearch: action(e => (store.recentSearch =e )),
     pushSearch:action(e => (store.recentSearch = [...store.recentSearch,e] )),
+    
+   
     
 
   }));

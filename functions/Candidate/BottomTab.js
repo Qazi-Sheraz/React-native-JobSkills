@@ -130,6 +130,7 @@ export const _getAppliedJobData = store => {
       store.setAppliedJobApiLoader(false);
     })
     .catch(error => {
+      console.log('Applied Job Error',error)
       JToast.show({
         type: 'error',
         text1: 'Error',

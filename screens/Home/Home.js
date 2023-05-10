@@ -30,6 +30,7 @@ function Home({navigation}) {
   const store = useContext(StoreContext);
   const data = store.homeData;
 
+  
   const onRefresh = useCallback(() => {
     store.setIsRefreshing(true);
     setTimeout(() => {

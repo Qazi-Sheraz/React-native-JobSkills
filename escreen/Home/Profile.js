@@ -2,7 +2,6 @@ import {StyleSheet, Linking, View, ActivityIndicator} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import JScreen from '../../customComponents/JScreen';
 import JGradientHeader from '../../customComponents/JGradientHeader';
-import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import JProfileContent from '../../customComponents/JProfileContent';
@@ -19,8 +18,10 @@ import JRow from '../../customComponents/JRow';
 import FontAwesome5Brands from 'react-native-vector-icons/FontAwesome5';
 import {_getProfile} from '../../functions/Candidate/MyProfile';
 import {observer} from 'mobx-react';
-import JIcon from '../../customComponents/JIcon';
-import { baseUrl } from '../../ApiUrls';
+import url from '../../config/url';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message';
+// import token from '../../mobx/store';
 
 const Profile = () => {
   const navigation = useNavigation();
@@ -28,9 +29,31 @@ const Profile = () => {
   const [profile, setProfile] = useState();
   const [error, setError] = useState(false);
   const [loader, setLoader] = useState(true);
+  // console.log('store====>>> ',store.token?.user?.owner_id);
+
   const onRefresh = useCallback(() => {
     _getProfile(store);
   }, []);
+  const _removeToken = () => {
+    AsyncStorage.removeItem('@login')
+      .then(res => {
+        store.setToken({
+          token: null,
+        });
+        navigation.replace('SelectionScreen');
+        Toast.show({
+          type: 'success',
+          text1: 'Logout Successfully',
+        });
+      })
+      .catch(error => {
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: 'Error while removing token',
+        });
+      });
+  };
 
   const BorderView = ({children}) => {
     return (
@@ -48,16 +71,16 @@ const Profile = () => {
 
   const _jobProfile = () => {
     var myHeaders = new Headers();
-    myHeaders.append(
-      'Authorization',
-      'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMDQyOTYxYTYzYTU0NmZjNjNhZGY4MWFiNmI0N2I4MDNhNzMwMmMxZWRhNDMyMDk5ZGM1ZmNlMjNiZDUyYzY4ODBlN2I4ZDdlZDQ5MWI2YzMiLCJpYXQiOjE2ODAyMTI2NzQuOTE2NzE5LCJuYmYiOjE2ODAyMTI2NzQuOTE2NzIzLCJleHAiOjE3MTE4MzUwNzQuOTA5NzQxLCJzdWIiOiI4NCIsInNjb3BlcyI6W119.aay7JchvkClUeAV79bQQ4fgTa8gRkgoM01y82G7eC1-JrtLnZTbnhQX4q0FJ_OhhDDxcoK00IMTpwmE1mKHNyVxwrw8yrAM8fRoXk0nRJOtVfNBVZ8R88uv8MBqHcREPjPRV3b-UmlaiC8Yv-2tOk4Kd4E79JfAkdyHaaFVmL8YHayifKmKBkECTY8SyaehOlFSn2cvw951aq2T0m_U1xcZsm2IL0gAOdVO_rdB4Ch0AOcEOpCyoCv8QZH7ZKrB26gSVv6IBtbLc_e_dYtV1OJCok-W8JFGiGafhQhc5RRFqTdot6R5WwfiwkqOf2tVNoLNNE06G7lPRzfpNhx7k6qV9OTYl2otef_yBhKr95gO9nr_L5WbjuazUHwYEBEqb53LwVu4-F0ncsr7epuL9oeL_XHa2t71hBqJRXuxS2djKwlKe9dkq6yPBNJQH7SNjAFlF4oDNqH-fqzmu41iKnmRBCxMGycwRUAqXbXoo6v3YJWqtTe6v6tHgTH4UdhQ6h3NrIwzozvNMLK6tMlHEunlZcMuPEUhvQRaGRu2ZQN54KowDDLEV9XmMbbXH2TkTA1LSEKQp-gA1D9w1s7-JHNHs2-rBi7-Vj_TLx5Yzoa-5ry55QIejufts2R48a4ino_lOgeG9a7W4dpPns69cUCL79g6ffe1cJyUYk2sr3mc',
-    );
+    myHeaders.append('Authorization', `Bearer ${store.token.token}`);
 
-    fetch(`${baseUrl}/company/1/editEmployer`, {
-      method: 'GET',
-      headers: myHeaders,
-      redirect: 'follow',
-    })
+    fetch(
+      `${url.baseUrl}/company/${store.token?.user?.owner_id}/editEmployer`,
+      {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow',
+      },
+    )
       .then(response => response.json())
       .then(result => {
         // console.log(result);
@@ -65,17 +88,18 @@ const Profile = () => {
       })
       .catch(error => console.log('error', error))
 
-      .finally (() => {
+      .finally(() => {
         setLoader(false);
-      })
+      });
   };
 
   useEffect(() => {
     _jobProfile();
   }, [loader]);
 
-  return (
-    loader?(<ActivityIndicator/>):(
+  return loader ? (
+    <ActivityIndicator />
+  ) : (
     <JScreen
       header={
         <JGradientHeader
@@ -83,11 +107,10 @@ const Profile = () => {
           // alignItems={'flex-start'}
           justifyContent={'flex-start'}
           paddingTop={RFPercentage(2)}
-         
           right={
             <AntDesign
               name="poweroff"
-              // onPress={() => _removeToken()}
+              onPress={() => _removeToken()}
               color={colors.white[0]}
               size={RFPercentage(3)}
             />
@@ -95,7 +118,7 @@ const Profile = () => {
         />
       }>
       <JProfileContent
-      src={profile?.company[0]?.profile_picture?.profile_picture}
+        src={profile?.company[0]?.profile_picture?.profile_picture}
         name={profile?.company[0]?.name}
         email={profile?.company[0]?.contact_information?.email}
       />
@@ -110,7 +133,7 @@ const Profile = () => {
           // loader={store.myProfileApiLoader}
 
           onIconPress={() => {
-            navigation.navigate('EContactInformation',);
+            navigation.navigate('EContactInformation');
           }}
           isEmpty={false}
           heading={store.lang.contact_info}
@@ -129,7 +152,8 @@ const Profile = () => {
               <JProfileInfo
                 title={store.lang.phone_number}
                 text={
-                  profile?.company[0]?.contact_information?.regional_code !== null
+                  profile?.company[0]?.contact_information?.regional_code !==
+                  null
                     ? `${profile?.company[0]?.contact_information?.regional_code}${profile?.company[0]?.contact_information?.phone_number}`
                     : profile?.company[0]?.contact_information?.phone_number
                 }
@@ -145,9 +169,9 @@ const Profile = () => {
         />
 
         <JProfileSections
-         onIconPress={() => {
-          navigation.navigate('ECompanyInformation',);
-        }}
+          onIconPress={() => {
+            navigation.navigate('ECompanyInformation');
+          }}
           isEmpty={false}
           icon="1"
           heading={store.lang.company_info}
@@ -205,67 +229,71 @@ const Profile = () => {
                 marginVertical: RFPercentage(2),
                 padding: RFPercentage(1),
               }}>
-              
               {/* // ['facebook_url', 'twitter_url', 'linkedin-in'] */}
-           {profile?.company?.map(
-                (item, index) => (
-                  <View style={{marginBottom: RFPercentage(2)}} key={index}>
-                    <JRow>
-                      <FontAwesome5Brands
-                        // onPress={() =>''
-                        //   // console.log(store.myProfile?.user[0].social_links)
-                        // }
-                        size={RFPercentage(3)}
-                        name={
-                          
-                          item.profile?.company[0]?.social_media_link?.facebook_url ==null 
-                            ? 'facebook-f'
-                            : item.profile?.company?.social_media_link?.twitter_url
-                            ? 'twitter'
-                            : 'linkedin-in'
-                        }
-                        color={colors.purple[0]}
-                        style={{marginRight: RFPercentage(2)}}
-                      />
-                      <JText fontWeight="600" fontSize={RFPercentage(2)}>
-                       { item.profile?.company[0]?.social_media_link?.facebook_url == null ? 'N/A':'Facebook'
-                      
-                          && item.profile?.company[0]?.social_media_link?.twitter_url == null? 'N/A': 'Twitter'
-                          
-                          && item.profile?.company[0]?.social_media_link?.linkedin_url==null? 'N/A':'LinkedIn'}
-                         
-                      </JText>
-                    </JRow>
-                    <JText
-                      // onPress={() =>
-                      //   Linking.openURL(
-                      //     // store.myProfile?.user[0].social_links[item],
-                      //   ).catch(err => {
-                      //     alert(err);
-                      //   })
+              {profile?.company?.map((item, index) => (
+                <View style={{marginBottom: RFPercentage(2)}} key={index}>
+                  <JRow>
+                    <FontAwesome5Brands
+                      // onPress={() =>''
+                      //   // console.log(store.myProfile?.user[0].social_links)
                       // }
-                      fontWeight="600"
-                      fontColor={'grey'}
-                      style={{textDecorationLine: 'underline'}}
-                      fontSize={RFPercentage(2)}>
-                      www.{' '}
-                      {item == 'facebook_url'
-                        ? 'Facebook'
-                        : item == 'twitter_url'
-                        ? 'Twitter'
-                        : 'LinkedIn'}{' '}
-                      .com
-                      {/* {store.myProfile?.user[0].social_links[item]} */}
+                      size={RFPercentage(3)}
+                      name={
+                        item.profile?.company[0]?.social_media_link
+                          ?.facebook_url == null
+                          ? 'facebook-f'
+                          : item.profile?.company?.social_media_link
+                              ?.twitter_url
+                          ? 'twitter'
+                          : 'linkedin-in'
+                      }
+                      color={colors.purple[0]}
+                      style={{marginRight: RFPercentage(2)}}
+                    />
+                    <JText fontWeight="600" fontSize={RFPercentage(2)}>
+                      {item.profile?.company[0]?.social_media_link
+                        ?.facebook_url == null
+                        ? 'N/A'
+                        : 'Facebook' &&
+                          item.profile?.company[0]?.social_media_link
+                            ?.twitter_url == null
+                        ? 'N/A'
+                        : 'Twitter' &&
+                          item.profile?.company[0]?.social_media_link
+                            ?.linkedin_url == null
+                        ? 'N/A'
+                        : 'LinkedIn'}
                     </JText>
-                  </View>
-                ),
-              )}
+                  </JRow>
+                  <JText
+                    // onPress={() =>
+                    //   Linking.openURL(
+                    //     // store.myProfile?.user[0].social_links[item],
+                    //   ).catch(err => {
+                    //     alert(err);
+                    //   })
+                    // }
+                    fontWeight="600"
+                    fontColor={'grey'}
+                    style={{textDecorationLine: 'underline'}}
+                    fontSize={RFPercentage(2)}>
+                    www.{' '}
+                    {item == 'facebook_url'
+                      ? 'Facebook'
+                      : item == 'twitter_url'
+                      ? 'Twitter'
+                      : 'LinkedIn'}{' '}
+                    .com
+                    {/* {store.myProfile?.user[0].social_links[item]} */}
+                  </JText>
+                </View>
+              ))}
             </View>
             // )
           }
         />
       </JScrollView>
-    </JScreen>)
+    </JScreen>
   );
 };
 

@@ -1,7 +1,7 @@
 import {StyleSheet, Pressable, View, TouchableOpacity} from 'react-native';
 import React, {useContext, useState} from 'react';
-import JScreen from '../../customComponents/JScreen';
-import JCircularLogo from '../../customComponents/JCircularLogo';
+import JScreen from '../../customComponents/JScreen';  
+import JCircularLogo from '../../customComponents/JCircularLogo'; 
 import JText from '../../customComponents/JText';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import {Formik} from 'formik';
@@ -22,18 +22,23 @@ import Toast from 'react-native-toast-message';
 import {StoreContext} from '../../mobx/store';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
 export default function Login({navigation, route}) {
   const store = useContext(StoreContext);
   const [loader, setLoader] = useState(false);
   console.log(route?.params?.type);
-
   const type = route?.params?.type;
+
+
+  
+  
   const _storeToken = (token, remember) => {
     if (remember === true) {
-      AsyncStorage.setItem('@login',JSON.stringify(token))
+      AsyncStorage.setItem('@login', JSON.stringify(token))
         .then(res => {
           store.setToken(token);
-          navigation.navigate('CHome');
+          console.log('res', token);
         })
         .catch(error => {
           Toast.show({
@@ -51,7 +56,7 @@ export default function Login({navigation, route}) {
     var formdata = new FormData();
     formdata.append('email', values.email);
     formdata.append('password', values.password);
-// console.log(formdata)
+console.log(formdata)
     var requestOptions = {
       method: 'POST',
       body: formdata,
@@ -59,32 +64,34 @@ export default function Login({navigation, route}) {
     };
 
     setLoader(true);
-    fetch('https://dev.jobskills.digital/api/users/login', requestOptions)
+
+    fetch(type == 1 ? 'https://dev.jobskills.digital/api/users/login':'https://dev.jobskills.digital/api/employer/login', requestOptions)
       .then(response => response.json())
       .then(result => {
-        console.log(result);
+        console.log('Result===>',result);
+
         if (result.token) {
           _storeToken(result, values.remember);
-
+          
           Toast.show({
             type: 'success',
             text1: 'Login Successfully',
             text2: 'Welcome',
           });
         } else {
-          if (result === 'Incorrect Password!') {
+          if (result == "Error Incorrect Password!"|| result== "Incorrect Password!") {
             Toast.show({
               type: 'error',
               text1: 'Error',
               text2: result,
             });
-          } else if (result === 'Incorrect Email') {
+          } else if (result == 'Error Incorrect Email!' || result =="Incorrect Email") {
             Toast.show({
               type: 'error',
               text1: 'Error',
               text2: result,
             });
-          } else if (result === 'Please verify your Email!') {
+          } else if (result == 'Please verify your Email!') {
             _verifyEmail(values.email);
           }
         }
@@ -162,8 +169,8 @@ export default function Login({navigation, route}) {
           email: yup
             .string()
             .min(0, 'Email address cannot be empty')
-            .max(25, 'Email address must be at most 25 characters long')
-            .email('Must be a valid email')
+         
+            // .email('Must be a valid email')
             .required('Email is a required field'),
           password: yup
             .string()
@@ -195,7 +202,8 @@ export default function Login({navigation, route}) {
                 <Feather
                   name="mail"
                   style={{
-                    marginRight: RFPercentage(2),
+                    marginRight:store.lang.id == 0 ? RFPercentage(1.6): RFPercentage(0),
+                    marginLeft:store.lang.id == 0 ? RFPercentage(0): RFPercentage(1.6),
                   }}
                   size={RFPercentage(2.8)}
                   color={colors.purple[0]}
@@ -220,9 +228,10 @@ export default function Login({navigation, route}) {
                   name="shield-key-outline"
                   shield-key-outline
                   style={{
-                    marginRight: RFPercentage(2),
+                    marginRight:store.lang.id == 0 ? RFPercentage(1.5):RFPercentage(0),
+                    marginLeft:store.lang.id == 0 ? RFPercentage(0):RFPercentage(1.5),
                   }}
-                  size={RFPercentage(3.2)}
+                  size={RFPercentage(3)}
                   color={colors.purple[0]}
                 />
               }

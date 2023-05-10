@@ -26,11 +26,12 @@ import {StoreContext} from '../../mobx/store';
 import {observer} from 'mobx-react';
 import JChevronIcon from '../../customComponents/JChevronIcon';
 import { baseUrl } from '../../ApiUrls';
+import url from '../../config/url';
 
 const ProfileJobApplication = ({route}) => {
   const store = useContext(StoreContext);
   const {params}= useRoute()
-  console.log(params)
+  // console.log(params)
   const [details, setDetails] = useState();
   const [loader, setLoader] = useState(true);
   const [buttonPressed, setButtonPressed] = useState(null);
@@ -46,10 +47,10 @@ const ProfileJobApplication = ({route}) => {
     var myHeaders = new Headers();
     myHeaders.append(
       'Authorization',
-      'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZDZjZDg5MzZkNmQ0ZWE3NTQ5N2RlZDZhMDgwNjliNzM1NmRmYmQ5YzZlODRmZmFiZTE2NjQ4N2VkN2ExMWFkMzk1YzgyZjZkNGRkNWZkMGUiLCJpYXQiOjE2ODAyNTA2NDYuNzg0NjAxLCJuYmYiOjE2ODAyNTA2NDYuNzg0NjA0LCJleHAiOjE3MTE4NzMwNDYuNzc3NzY2LCJzdWIiOiI4NCIsInNjb3BlcyI6W119.XQA1UjOHQZkuqkLbAY0V8quXIn6dBY_ZIl8Igkko0Kv1ODdOrVXmUsnbUu59jeIg_I8mVgcnH3XGRSoEDAXb5YSocyD1POwDo7_ED1dc4TYeniS7RrBwoJ4ZTyLFdc0rWo7inelD9n2HoLHquTsh6_tz4QAyc8xaB4_58H3LvKo86FEWoBTY4NsP3CAGzylD-8-SEIHze-HfeYjaaRoVlDeQpY6d3mfqzmBummF7nKHtkLSgTCEEaEsIx2yhZTrapWL-5GKdx-aj1qmKbTE5WYGUgMVu-39Mz7GCvYMryN5HF-9Y4guufDMT0atrXnc7BkyRe0lIVfNE3ga9GcSePLDkzMrCbBjmfTmvKuxoT-sXyXFb7_vu8FogA6Pc7v77LTciuuc9duwRSpK3_fxMy4dZucnFTGx7tTWSwlipQWthwa3wd0gVs5F9cXpgVxLk4Pndxuq-PF8_DvpbWNOCXsm0KWO59zbPgSVyil18KUv4F9NduT49z3MQgzfY9yjE1rkSgRW5Va4PGQhVEle5f2Dce-bysgPhWWK0wrQtLd1AVpbhLIIqI4obDo-2OFdK62GwLor1RfKU0Qc_WiP-8UOljUnVBskGVRVlqvDL8yblrM7ro73JbgpJPlV4Uz67FaC22iyhLbJsRnbQpJVKWgfcw6jyGqjKPaspsFYpPoM',
+      `Bearer ${store.token.token}`,
     );
 
-    fetch(`${baseUrl}/candidate-details/${params.candidate_id}`, {
+    fetch(`${url.baseUrl}/candidate-details/${params.candidate_id}`, {
       method: 'GET',
       headers: myHeaders,
       redirect: 'follow',

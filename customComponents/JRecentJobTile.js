@@ -38,22 +38,18 @@ import JRow from './JRow';
 import JIcon from './JIcon';
 import JButton from './JButton';
 import {useEffect} from 'react';
-import {baseUrl} from '../ApiUrls';
 import Toast from 'react-native-toast-message';
+import url from '../config/url';
 
 function JRecentJobTile({
   isempty = false,
-  img,
   image = true,
   item,
-  index,
   option = false,
   type = 'job',
   onPress,
   containerStyle,
-  bookmarked,
-  onIconPress,
-  status,
+ 
   favouriteData = [],
   jobId,
   onSelect,
@@ -71,11 +67,11 @@ function JRecentJobTile({
     var myHeaders = new Headers();
     myHeaders.append(
       'Authorization',
-      'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMDQyOTYxYTYzYTU0NmZjNjNhZGY4MWFiNmI0N2I4MDNhNzMwMmMxZWRhNDMyMDk5ZGM1ZmNlMjNiZDUyYzY4ODBlN2I4ZDdlZDQ5MWI2YzMiLCJpYXQiOjE2ODAyMTI2NzQuOTE2NzE5LCJuYmYiOjE2ODAyMTI2NzQuOTE2NzIzLCJleHAiOjE3MTE4MzUwNzQuOTA5NzQxLCJzdWIiOiI4NCIsInNjb3BlcyI6W119.aay7JchvkClUeAV79bQQ4fgTa8gRkgoM01y82G7eC1-JrtLnZTbnhQX4q0FJ_OhhDDxcoK00IMTpwmE1mKHNyVxwrw8yrAM8fRoXk0nRJOtVfNBVZ8R88uv8MBqHcREPjPRV3b-UmlaiC8Yv-2tOk4Kd4E79JfAkdyHaaFVmL8YHayifKmKBkECTY8SyaehOlFSn2cvw951aq2T0m_U1xcZsm2IL0gAOdVO_rdB4Ch0AOcEOpCyoCv8QZH7ZKrB26gSVv6IBtbLc_e_dYtV1OJCok-W8JFGiGafhQhc5RRFqTdot6R5WwfiwkqOf2tVNoLNNE06G7lPRzfpNhx7k6qV9OTYl2otef_yBhKr95gO9nr_L5WbjuazUHwYEBEqb53LwVu4-F0ncsr7epuL9oeL_XHa2t71hBqJRXuxS2djKwlKe9dkq6yPBNJQH7SNjAFlF4oDNqH-fqzmu41iKnmRBCxMGycwRUAqXbXoo6v3YJWqtTe6v6tHgTH4UdhQ6h3NrIwzozvNMLK6tMlHEunlZcMuPEUhvQRaGRu2ZQN54KowDDLEV9XmMbbXH2TkTA1LSEKQp-gA1D9w1s7-JHNHs2-rBi7-Vj_TLx5Yzoa-5ry55QIejufts2R48a4ino_lOgeG9a7W4dpPns69cUCL79g6ffe1cJyUYk2sr3mc',
+      `Bearer ${store.token.token}`,
     );
-  
+    
 // console.log(`${baseUrl}/employer/job/${item.id}/status/${id}`,item)
-    fetch(`${baseUrl}/employer/job/${item.id}/status/${id}`, {
+    fetch(`${url.baseUrl}/employer/job/${item.id}/status/${id}`, {
       method: 'GET',
       headers: myHeaders,
       redirect: 'follow',

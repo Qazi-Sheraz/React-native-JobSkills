@@ -25,7 +25,8 @@ import { useNavigation } from '@react-navigation/native';
 import JRow from '../customComponents/JRow';
 
 function EDrawerContent (props) {
-  const {navigate}=useNavigation()
+  
+  const {navigate} = useNavigation();
   const store = useContext(StoreContext);
   const user = store.token?.user;
   const _navigateToScreen = index => {
@@ -42,12 +43,13 @@ function EDrawerContent (props) {
       ? navigate('Assessments')
       : index === 5
       ? navigate('DHelpCenter')
-      : AsyncStorage.removeItem('@login')
+      : index === 6
+      ? AsyncStorage.removeItem('@login')
           .then(res => {
             store.setToken({
               token: null,
             });
-
+            navigate('SelectionScreen');
             Toast.show({
               type: 'success',
               text1: 'Logout Successfully',
@@ -59,7 +61,8 @@ function EDrawerContent (props) {
               text1: 'Error',
               text2: 'Error while removing token',
             });
-          });
+          })
+      : null;
   };
 
   const _navigationIcons = index =>

@@ -141,11 +141,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
                 <JJobTile
                   favouriteData={store.favouriteList}
                   jobId={item.id}
-                //   onPress={() =>
-                //     navigation.navigate('CSelectedJob', {
-                //       id: item.job_id,
-                //     })
-                //   }
+                  onPress={() =>
+                    navigation.navigate('JobDetails', {
+                      id: item.job_id,
+                    })
+                  }
                   onIconPress={() => alert('Icon Press')}
                   type="job"
                   title={item.job_title}
