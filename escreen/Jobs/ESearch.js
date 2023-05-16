@@ -40,7 +40,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
           const jsonValue = await AsyncStorage.getItem('@recent')
        
          store.setRecentSearch(jsonValue != null ? JSON.parse(jsonValue) : [])
-         console.log("job===>>>",store.recentSearch)
+        //  console.log("job===>>>",store.recentSearch)
         } catch(e) {
           // error reading value
         }

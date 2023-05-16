@@ -48,12 +48,12 @@ const JobRequirement = ({calendar='0',}) => {
 
 // const arry=params.assessment.map((item)=>item.id).map(Number)
 // // const arr1= arry.map(Number);
-// console.log(params?.preference?.id)
+console.log((params?.jobTag?.map((item)=>item.id).map(Number)))
 // params.assessment.map((item)=>console.log("id",item.id))
   
   const _handleSubmit = values => {
     var myHeaders = new Headers();
-    myHeaders.append("Authorization",`Bearer ${store.token.token}`);
+    myHeaders.append("Authorization",`Bearer ${store.token?.token}`);
 
     var formdata = new FormData();
     
@@ -63,6 +63,7 @@ const JobRequirement = ({calendar='0',}) => {
     formdata.append('job_shift_id', params?.jobShift?.id);
     formdata.append('jobsSkill', JSON.stringify(params?.jobSkill?.map((item)=>item.id).map(Number)));
     formdata.append('jobTag', JSON.stringify(params?.jobTag?.map((item)=>item.id).map(Number)));
+    
     formdata.append('description', params?.jobDescription);
     formdata.append('no_preference',params?.preference?.id);
     formdata.append('salary_from', params?.salaryFrom);
@@ -122,7 +123,7 @@ const JobRequirement = ({calendar='0',}) => {
     var myHeaders = new Headers();
     myHeaders.append(
       'Authorization',
-      `Bearer ${store.token.token}`,
+      `Bearer ${store.token?.token}`,
     );
     fetch(
       `${url.baseUrl}/employer/jobs/create`,

@@ -121,6 +121,7 @@ const Job = () => {
         {(searchQuery.length > 0 ?filteredData :jobData).map((item, index) => (
           <>
             <JRecentJobTile
+            star={false}
             option={true}
               onSelect={() => setModalVisible(true)}
               onPress={() => navigation.navigate('JobDetails',{id:item.job_id,jid:item.id})}

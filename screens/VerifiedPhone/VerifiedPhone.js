@@ -4,13 +4,18 @@ import JScreen from '../../customComponents/JScreen';
 import JText from '../../customComponents/JText';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import colors from '../../config/colors';
-
 import JButton from '../../customComponents/JButton';
-
+import { useContext } from 'react';
 import JReload from '../../customComponents/JReload';
 import Toast from 'react-native-toast-message';
+import url from '../../config/url';
+import { StoreContext } from '../../mobx/store';
+import { values } from 'mobx';
+import { useRoute } from '@react-navigation/native';
 
 export default function VerifiedPhone({ navigation}) {
+  const store = useContext(StoreContext);
+  const{params}=useRoute();
   const [value, setValue] = useState({
     d1: '',
     d2: '',
@@ -23,7 +28,42 @@ export default function VerifiedPhone({ navigation}) {
   const d2 = useRef();
   const d3 = useRef();
   const d4 = useRef();
+  const _verify =(value)=>{
+    var myHeaders = new Headers();
+myHeaders.append("Authorization",  `Bearer ${store.token?.token}`);
 
+var formdata = new FormData();
+formdata.append("phone", params?.phone);
+formdata.append("code",`${value.d1}${value.d2}${value.d3}${value.d4}`
+ );
+ console.log(formdata)
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: formdata,
+  redirect: 'follow'
+};
+
+fetch(`${url.baseUrl}/phone-code-verification`, requestOptions)
+  .then(response => response.json())
+  .then(result =>{ console.log(result)
+  if(result.success===true){
+    Toast.show({
+      type: 'success',
+      text1: result.message,
+    
+    });
+    navigation.goBack();
+  }
+  else{Toast.show({
+    type: 'error',
+    text1: result.message,
+  });}
+  }
+  )
+  .catch(error => console.log('error', error));
+  }
   return (
     <JScreen>
       <View style={{flex: 0.5, justifyContent: 'center', alignItems: 'center'}}>
@@ -144,6 +184,7 @@ export default function VerifiedPhone({ navigation}) {
         </View>
 
         <JButton
+        onPress={()=>_verify(value)}
           isValid={
             value.d1.concat(value.d2).concat(value.d3).concat(value.d4)
               .length === 4

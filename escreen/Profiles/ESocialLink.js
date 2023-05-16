@@ -21,13 +21,14 @@ const ESocialLink = () => {
       tw: user.twitter_url,
     }}
     onSubmit={values => {
-      console.log(values);
+      // console.log(values);
       var myHeaders = new Headers();
       myHeaders.append('Authorization', `Bearer ${store.token.token}`,);
       var formdata = new FormData();
       formdata.append('facebook_url', values.fb);
       formdata.append('twitter_url', values.tw);
       formdata.append('linkedin_url', values.ln);
+      console.log(formdata)
       var requestOptions = {
         method: 'POST',
         headers: myHeaders,

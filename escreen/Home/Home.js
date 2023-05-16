@@ -31,6 +31,7 @@ import {Observer, observer, useObserver} from 'mobx-react';
 import JRow from '../../customComponents/JRow';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import url from '../../config/url';
+import JIcon from '../../customComponents/JIcon';
 
 const Home = ({isempty = false,}) => {
   const navigation=useNavigation();
@@ -83,10 +84,12 @@ const Home = ({isempty = false,}) => {
       header={
         <JHeader
           left={
-            <Feather
+            <JIcon
+            icon='fe'
               onPress={() => navigation.openDrawer(EDrawerContent)}
               name="menu"
               size={RFPercentage(3.5)}
+              color={'#000000'}
             />
           }
           center={
@@ -97,14 +100,16 @@ const Home = ({isempty = false,}) => {
             />
           }
           right={
-            <MaterialCommunityIcons
+            <JIcon
+            icon={'ma'}
               // onPress={() => navigation.navigate('CNotification')}
               onPress={() => {
-                console.log(store.lang);
+                // console.log(store.lang);
                 store.lang.id == 0 ? store.setLang('ud') : store.setLang('en');
               }}
               name="bell-badge-outline"
               size={RFPercentage(3.5)}
+              color={'#000000'}
             />
           }
         />
@@ -321,7 +326,7 @@ const Home = ({isempty = false,}) => {
             </JText>
             {data?.recentJobs?.length > 0 ? (
               data?.recentJobs?.map((item, index) => (
-                <JRecentJobTile item={item} key={index} />
+                <JRecentJobTile star={false} item={item} key={index} />
               ))
             ) : (
               <View

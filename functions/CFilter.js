@@ -12,7 +12,7 @@ const storeData = async (value,store) => {
 
 export const _search = (e, store,isSearch) => {
   var myHeaders = new Headers();
-  myHeaders.append('Authorization', `Bearer ${store.token.token}`);
+  myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
 
   var formdata = new FormData();
 
@@ -52,7 +52,7 @@ export const _search = (e, store,isSearch) => {
 
 export const _searchFilter = (values, store, navigation) => {
   var myHeaders = new Headers();
-  myHeaders.append('Authorization', `Bearer ${store.token.token}`);
+  myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
 
   var formdata = new FormData();
 

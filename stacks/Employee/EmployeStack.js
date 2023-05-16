@@ -53,7 +53,7 @@ import ESearch from '../../escreen/Jobs/ESearch';
 
 const Stack = createStackNavigator();
 
-function CHomeStack({navigation}) {
+function EmployeStack({navigation}) {
   const store = useContext(StoreContext);
   const [loader, setLoader] = useState(true);
 
@@ -248,6 +248,7 @@ function CHomeStack({navigation}) {
         <Stack.Screen name="Transaction" component={Transaction} />
         <Stack.Screen name="Employes" component={Employes} />
         <Stack.Screen name="ViewResume" component={ViewResume} />
+        <Stack.Screen name="ESocialLink" component={ESocialLink} />
         <Stack.Screen
           name="CSocialMediaLink"
           component={CSocialMediaLink}
@@ -275,9 +276,8 @@ function CHomeStack({navigation}) {
         <Stack.Screen name="ChangePassword" component={ChangePassword} />
         <Stack.Screen name="ChangeLanguage" component={ChangeLanguage} />
         <Stack.Screen name="VerifiedPhone" component={VerifiedPhone} />
-        {/* <Stack.Screen name="VerifiedEmail" component={VerifiedEmail} /> */}
       </Stack.Navigator>
     </React.Fragment>
   );
 }
-export default observer(CHomeStack);
+export default observer(EmployeStack);

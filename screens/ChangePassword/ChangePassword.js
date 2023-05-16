@@ -1,5 +1,5 @@
-import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import {StyleSheet, View} from 'react-native';
+import React, {useContext, useState} from 'react';
 import JInput from '../../customComponents/JInput';
 import JScreen from '../../customComponents/JScreen';
 import JGradientHeader from '../../customComponents/JGradientHeader';
@@ -15,9 +15,62 @@ import {useNavigation} from '@react-navigation/native';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import JErrorText from '../../customComponents/JErrorText';
-
+import url from '../../config/url';
+import Toast from 'react-native-toast-message';
+import { StoreContext } from '../../mobx/store';
 const ChangePassword = () => {
   const navigation = useNavigation();
+  const [reset, setReset] = useState();
+  const [loader, setLoader] = useState();
+  const store = useContext(StoreContext);
+  const _resetPassword = values => {
+    var formdata = new FormData();
+    formdata.append('password_current', values.password_current);
+    formdata.append('password', values.password);
+    formdata.append('password_confirmation', values.password_confirmation);
+    console.log(formdata);
+
+    var myHeaders = new Headers();
+
+    myHeaders.append('Authorization', `Bearer ${store?.token?.token}`);
+
+    fetch(`${url.baseUrl}/change-password`, {
+      method: 'POST',
+      headers: myHeaders,
+      body: formdata,
+      redirect: 'follow',
+    })
+      .then(response => response.json())
+      .then(result => {
+        console.log(result);
+        if (result?.success == true) {
+          setReset(result);
+          Toast.show({
+            type: 'success',
+            text1: result.message,
+          });
+          navigation.navigate('EAccountSetting');
+        } else {
+          Toast.show({
+            type: 'error',
+            text1: result?.message,
+          });
+        }
+      })
+
+      .catch(error => {
+        console.log('error', error);
+        Toast.show({
+          type: 'error',
+          text1: error,
+        });
+      })
+
+      .finally(() => {
+        setLoader(false);
+      });
+  };
+
   return (
     <JScreen
       style={{paddingHorizontal: RFPercentage(2)}}
@@ -44,18 +97,24 @@ const ChangePassword = () => {
       }>
       <Formik
         initialValues={{
-          currentP: '',
-          newP: '',
-          confirm: '',
+          password_current: '',
+          password: '',
+          password_confirmation: '',
         }}
         onSubmit={values => {
           console.log(values);
-          _addEducation(values);
+          _resetPassword(values);
         }}
         validationSchema={yup.object().shape({
-          currentP: yup.string().required().label('Current Password'),
-          newP: yup.string().required().label('New Password'),
-          confirm: yup.string().required().label('Password'),
+          password_current: yup.string().required().label('Current Password'),
+          password: yup
+            .string()
+            .min(8, 'Password Must be at least 8 characters')
+            .required('Password is a required field'),
+          password_confirmation: yup
+            .string()
+            .required('Confirm Password is a required field')
+            .oneOf([yup.ref('password'), null], 'Passwords must match'),
         })}>
         {({
           values,
@@ -65,7 +124,6 @@ const ChangePassword = () => {
           touched,
           isValid,
           handleSubmit,
-          setFieldValue,
         }) => (
           <>
             <View style={{flex: 1, marginTop: RFPercentage(4)}}>
@@ -73,38 +131,46 @@ const ChangePassword = () => {
                 headingWeight="bold"
                 heading={'Current Password'}
                 icon={<CurrentP marginRight={RFPercentage(2)} />}
-                value={values.currentP}
-                error={touched.currentP && errors.currentP && true}
-                onChangeText={handleChange('currentP')}
-                onBlur={() => setFieldTouched('currentP')}
+                value={values.password_current}
+                error={
+                  touched.password_current && errors.password_current && true
+                }
+                onChangeText={handleChange('password_current')}
+                onBlur={() => setFieldTouched('password_current')}
               />
-              {touched.currentP && errors.currentP && (
-                <JErrorText>{errors.currentP}</JErrorText>
+              {touched.password_current && errors.password_current && (
+                <JErrorText>{errors.password_current}</JErrorText>
               )}
               <JInput
                 headingWeight="bold"
                 heading={'New Password'}
                 icon={<Key marginRight={RFPercentage(2)} />}
-                value={values.newP}
-                error={touched.newP && errors.newP && true}
-                onChangeText={handleChange('newP')}
-                onBlur={() => setFieldTouched('newP')}
+                value={values.password}
+                error={touched.password && errors.password && true}
+                onChangeText={handleChange('password')}
+                onBlur={() => setFieldTouched('password')}
+                containerStyle={{marginVertical: RFPercentage(2)}}
               />
-              {touched.newP && errors.newP && (
-                <JErrorText>{errors.newP}</JErrorText>
+              {touched.password && errors.password && (
+                <JErrorText>{errors.password}</JErrorText>
               )}
               <JInput
                 headingWeight="bold"
                 heading={'Confirm Password'}
                 icon={<Key marginRight={RFPercentage(2)} />}
-                value={values.confirm}
-                error={touched.expiry && errors.confirm && true}
-                onChangeText={handleChange('confirm')}
-                onBlur={() => setFieldTouched('confirm')}
+                value={values.password_confirmation}
+                error={
+                  touched.password_confirmation &&
+                  errors.password_confirmation &&
+                  true
+                }
+                onChangeText={handleChange('password_confirmation')}
+                onBlur={() => setFieldTouched('password_confirmation')}
               />
-              {touched.confirm && errors.confirm && (
-                <JErrorText>{errors.confirm}</JErrorText>
-              )}
+              {touched.password_confirmation &&
+                errors.password_confirmation && (
+                  <JErrorText>{errors.password_confirmation}</JErrorText>
+                )}
             </View>
             <JRow
               style={{
@@ -117,9 +183,12 @@ const ChangePassword = () => {
                 borderColor={colors.black[0]}
                 children={'Cancel'}
               />
-              <JButton isValid={isValid}
-              onPress={() => handleSubmit()}
-               style={styles.btn} children={'Update'} />
+              <JButton
+                isValid={isValid}
+                onPress={() => handleSubmit()}
+                style={styles.btn}
+                children={loader ? 'Loading' : 'Update'}
+              />
             </JRow>
           </>
         )}
@@ -130,4 +199,4 @@ const ChangePassword = () => {
 
 export default ChangePassword;
 
-const styles = StyleSheet.create({btn: {width:'48%'}},);
+const styles = StyleSheet.create({btn: {width: '48%'}});

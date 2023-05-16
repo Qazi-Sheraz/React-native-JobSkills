@@ -20,7 +20,6 @@ import JErrorText from '../../customComponents/JErrorText';
 import url from '../../config/url';
 import Toast from 'react-native-toast-message';
 import {StoreContext} from '../../mobx/store';
-import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -38,7 +37,8 @@ export default function Login({navigation, route}) {
       AsyncStorage.setItem('@login', JSON.stringify(token))
         .then(res => {
           store.setToken(token);
-          console.log('res', token);
+          // console.log('res', token);
+          navigation.navigate('CHome');
         })
         .catch(error => {
           Toast.show({
@@ -79,7 +79,7 @@ console.log(formdata)
             text2: 'Welcome',
           });
         } else {
-          if (result == "Error Incorrect Password!"|| result== "Incorrect Password!") {
+          if (result == "Error Incorrect Password!" || result== "Incorrect Password!") {
             Toast.show({
               type: 'error',
               text1: 'Error',
@@ -91,7 +91,7 @@ console.log(formdata)
               text1: 'Error',
               text2: result,
             });
-          } else if (result == 'Please verify your Email!') {
+          } else if  (result == 'Please verify your Email!') {
             _verifyEmail(values.email);
           }
         }

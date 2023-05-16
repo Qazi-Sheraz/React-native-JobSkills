@@ -120,11 +120,11 @@ const data = [
     var myHeaders = new Headers();
     myHeaders.append(
       'Authorization',
-      `Bearer ${store.token.token}`,
+      `Bearer ${store.token?.token}`,
     );
     //  console.log(route.params.id)
     fetch(
-      `${url.baseUrl}/employer/jobs/${route.params.id}/applications`,
+      `${url.baseUrl}/employer/jobs/${route?.params?.id}/applications`,
 
       {
         method: 'GET',
@@ -135,7 +135,7 @@ const data = [
       .then(response => response.json())
       .then(result => {
         // console.log(result.job_application);
-        setJApplication(result.job_application);
+        setJApplication(result?.job_application);
       })
       .catch(error => {
         console.log('error', error);
@@ -207,11 +207,11 @@ const data = [
                     {store.lang.recent_apply_date}
                   </JText>
                 </MenuOption>
-                <MenuOption onSelect={() => refRBSheet.current.open()}>
+                {/* <MenuOption onSelect={() => refRBSheet.current.open()}>
                   <JText style={styles.menutxt}>
                     {store.lang.status_of_application}
                   </JText>
-                </MenuOption>
+                </MenuOption> */}
               </MenuOptions>
             </Menu>
           </JRow>

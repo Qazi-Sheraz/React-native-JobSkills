@@ -3,8 +3,11 @@ import React from 'react'
 import { heightPercentageToDP } from 'react-native-responsive-screen'
 import { RFPercentage } from 'react-native-responsive-fontsize'
 import JText from './JText'
+import { useContext } from 'react'
+import { StoreContext } from '../mobx/store'
 
 const JNotfoundData = () => {
+  const store = useContext(StoreContext);
   return (
     <View
     style={{

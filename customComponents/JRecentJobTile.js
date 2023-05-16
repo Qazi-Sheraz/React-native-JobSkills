@@ -46,6 +46,7 @@ function JRecentJobTile({
   image = true,
   item,
   option = false,
+  star = true,
   type = 'job',
   onPress,
   containerStyle,
@@ -112,7 +113,6 @@ function JRecentJobTile({
         // backgroundColor: colors.tileColor[0],
         justifyContent: 'center',
         alignItems: 'center',
-       
       }}>
       <Image
         style={{width: RFPercentage(6), height: RFPercentage(6)}}
@@ -129,7 +129,7 @@ function JRecentJobTile({
           style={[
             {
               height: heightPercentageToDP(12),
-              borderBottomWidth:RFPercentage(0.1),
+              borderBottomWidth: RFPercentage(0.1),
               borderBottomColor: colors.border[0],
               // marginBottom: RFPercentage(1),
             },
@@ -140,9 +140,9 @@ function JRecentJobTile({
               style={{
                 // width: '28%',
                 justifyContent: 'center',
-                alignItems:'center',
-              paddingHorizontal:RFPercentage(0.5),
-              // backgroundColor:'green',
+                alignItems: 'center',
+                paddingHorizontal: RFPercentage(0.5),
+                // backgroundColor:'green',
               }}>
               <TouchableOpacity
                 onPress={() =>
@@ -160,7 +160,6 @@ function JRecentJobTile({
                   style={{
                     height: RFPercentage(10),
                     width: RFPercentage(10),
-                    
                   }}
                   resizeMode="contain"
                   source={{uri: item.company_url}}
@@ -175,13 +174,17 @@ function JRecentJobTile({
               paddingVertical: RFPercentage(1),
               // justifyContent: 'center',
             }}>
-            <JText style={{width:'80%',}} fontWeight="bold">{item?.job_title}</JText>
+              <JRow>
+            <JText style={{width: '80%'}} fontWeight="bold">
+              {item?.job_title}
+            </JText>
+            </JRow>
             <JRow
               style={{
                 marginTop: RFPercentage(0.5),
               }}>
               <JText fontColor={colors.danger[0]}>{store.lang.expire_on}</JText>
-              <JText >
+              <JText>
                 {/* 12 MAR 2023 */}
                 {moment(item.expire_on, 'DD-MM-YYYY').format('DD MMM,YYYY')}
               </JText>
@@ -201,7 +204,7 @@ function JRecentJobTile({
                   {item ? item.applicant : 2} {store.lang.applicant}
                 </JText>
               </JRow>
- {/* {respponce.condition === close ? ( */}
+              {/* {respponce.condition === close ? ( */}
               {stat === store.lang.closed ? (
                 <JRow
                   style={{
@@ -218,7 +221,6 @@ function JRecentJobTile({
                     {store.lang.closed}
                   </JText>
                 </JRow>
-              
               ) : stat === store.lang.live ? (
                 <Menu>
                   <MenuTrigger>
@@ -242,7 +244,7 @@ function JRecentJobTile({
                           color: colors.white[0],
                         }}
                         fontWeight="bold">
-                       {store.lang.live }
+                        {store.lang.live}
                       </JText>
                       <Entypo
                         name="chevron-small-down"
@@ -253,7 +255,7 @@ function JRecentJobTile({
                   </MenuTrigger>
 
                   <MenuOptions style={{paddingVertical: RFPercentage(0.5)}}>
-                    {[{name:store.lang.paused,}, {name:store.lang.closed,},].map(
+                    {[{name: store.lang.paused}, {name: store.lang.closed}].map(
                       (item, index) => (
                         <MenuOption
                           style={{
@@ -261,8 +263,8 @@ function JRecentJobTile({
                           }}
                           key={index}
                           onSelect={() => {
-                           setStatus1(item.name)
-                           setModalVisible(true);
+                            setStatus1(item.name);
+                            setModalVisible(true);
                           }}>
                           <JRow>
                             <JText
@@ -276,7 +278,7 @@ function JRecentJobTile({
                     )}
                   </MenuOptions>
                 </Menu>
-              ) : stat === store.lang.paused? (
+              ) : stat === store.lang.paused ? (
                 <Menu>
                   <MenuTrigger>
                     <JRow
@@ -310,32 +312,30 @@ function JRecentJobTile({
                   </MenuTrigger>
 
                   <MenuOptions style={{paddingVertical: RFPercentage(0.5)}}>
-                    {[
-                      {name:store.lang.live,}, {name:store.lang.closed,}].map((item, index) => (
-                      <MenuOption
-                        style={{
-                          marginLeft: RFPercentage(1),
-                        }}
-                        key={index}
-                        onSelect={() => {
-                          setStatus1(item.name); 
-                          setModalVisible(true);
-                         
-                        }}>
-                        <JRow>
-                          <JText
-                            style={{marginLeft: RFPercentage(2)}}
-                            fontSize={RFPercentage(2)}>
-                            {item.name}
-                          </JText>
-                        </JRow>
-                      </MenuOption>
-                    ))}
+                    {[{name: store.lang.live}, {name: store.lang.closed}].map(
+                      (item, index) => (
+                        <MenuOption
+                          style={{
+                            marginLeft: RFPercentage(1),
+                          }}
+                          key={index}
+                          onSelect={() => {
+                            setStatus1(item.name);
+                            setModalVisible(true);
+                          }}>
+                          <JRow>
+                            <JText
+                              style={{marginLeft: RFPercentage(2)}}
+                              fontSize={RFPercentage(2)}>
+                              {item.name}
+                            </JText>
+                          </JRow>
+                        </MenuOption>
+                      ),
+                    )}
                   </MenuOptions>
                 </Menu>
-              )
-              :
-              (
+              ) : (
                 <JRow
                   style={{
                     backgroundColor: colors.drafted[0],
@@ -366,6 +366,7 @@ function JRecentJobTile({
                 color={colors.purple[0]}
               />
             ) : (
+              star===true?
               <MaterialCommunityIcons
                 onPress={() => {
                   _saveToFavoriteList(store, setLoader, jobId);
@@ -384,40 +385,52 @@ function JRecentJobTile({
                 }
                 size={RFPercentage(3)}
                 color={colors.purple[0]}
-              />
+              />:null
             )}
             {option === true && (
-              <Menu
+              // <Menu
+              //   style={{
+              //     position: 'absolute',
+              //     right: store.lang.id == 0 ? 0 : null,
+              //     top: 0,
+              //   }}>
+              //   <MenuTrigger
+              //     style={{
+              //       width: RFPercentage(3),
+              //       height: RFPercentage(4),
+              //       alignItems: 'center',
+              //       justifyContent: 'center',
+              //     }}>
+              //     <JIcon icon={'sm'} name={'options-vertical'} size={20} />
+              //   </MenuTrigger>
+
+              //   <MenuOptions>
+              //     <MenuOption >
+              //       <JRow>
+              //         <JIcon icon="io" name={'eye-outline'} />
+              //         <JText style={styles.menutxt}> Preview </JText>
+              //       </JRow>
+              //     </MenuOption>
+              //     <MenuOption >
+              //       <JRow>
+              //         <JIcon icon="io" name={'share-social-outline'} />
+              //         <JText style={styles.menutxt}> Share</JText>
+              //       </JRow>
+              //     </MenuOption>
+              //   </MenuOptions>
+              // // </Menu>
+              <JRow
                 style={{
+                  width: RFPercentage(3),
+                  height: RFPercentage(4),
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   position: 'absolute',
                   right: store.lang.id == 0 ? 0 : null,
-                  top: 0,
+                  top: 2,
                 }}>
-                <MenuTrigger
-                  style={{
-                    width: RFPercentage(3),
-                    height: RFPercentage(4),
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}>
-                  <JIcon icon={'sm'} name={'options-vertical'} size={20} />
-                </MenuTrigger>
-
-                <MenuOptions>
-                  <MenuOption >
-                    <JRow>
-                      <JIcon icon="io" name={'eye-outline'} />
-                      <JText style={styles.menutxt}> Preview </JText>
-                    </JRow>
-                  </MenuOption>
-                  <MenuOption >
-                    <JRow>
-                      <JIcon icon="io" name={'share-social-outline'} />
-                      <JText style={styles.menutxt}> Share</JText>
-                    </JRow>
-                  </MenuOption>
-                </MenuOptions>
-              </Menu>
+                <JIcon icon="io" name={'share-social-outline'} size={25} color={colors.purple[0]} />
+              </JRow>
             )}
           </View>
           <Modal animationType="fade" transparent={true} visible={modalVisible}>
@@ -439,18 +452,17 @@ function JRecentJobTile({
                   />
                   <JButton
                     onPress={() => {
-                    
-                     {
-                      status1 === store.lang.drafted
-                         ? _getjobStatus(0,'Drafted')
-                         : status1 === store.lang.live
-                         ? _getjobStatus(1,'Live')
-                         : status1 === store.lang.closed
-                         ? _getjobStatus(2,'Closed')
-                         : _getjobStatus(3,'Paused');
-                     }
-                     
-                    setModalVisible(!modalVisible);
+                      {
+                        status1 === store.lang.drafted
+                          ? _getjobStatus(0, 'Drafted')
+                          : status1 === store.lang.live
+                          ? _getjobStatus(1, 'Live')
+                          : status1 === store.lang.closed
+                          ? _getjobStatus(2, 'Closed')
+                          : _getjobStatus(3, 'Paused');
+                      }
+
+                      setModalVisible(!modalVisible);
                     }}
                     style={{width: '50%'}}
                     children={'Yes'}
@@ -488,5 +500,6 @@ const styles = StyleSheet.create({
     fontSize: RFPercentage(2),
     marginVertical: RFPercentage(0.5),
     paddingHorizontal: RFPercentage(1),
+    
   },
 });

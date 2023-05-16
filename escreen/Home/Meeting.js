@@ -113,6 +113,7 @@ const Meeting = ({isempty=false,}) => {
         <>
             <FlatList
               data={data}
+              showsVerticalScrollIndicator={false}
               renderItem={({item, index}) => (
                 <JMeetingJob
                 key={index}

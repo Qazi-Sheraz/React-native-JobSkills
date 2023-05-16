@@ -38,12 +38,10 @@ function EDrawerContent (props) {
       : index === 2
       ? navigate('Employes')
       : index === 3
-      ? navigate('Applicants')
-      : index === 4
       ? navigate('Assessments')
-      : index === 5
+      : index === 4
       ? navigate('DHelpCenter')
-      : index === 6
+      : index === 5
       ? AsyncStorage.removeItem('@login')
           .then(res => {
             store.setToken({
@@ -92,15 +90,12 @@ function EDrawerContent (props) {
         icon='an' color={colors.black[0]} name="adduser" size={RFPercentage(3.5)} />
     ) : index === 4 ? (
         <JIcon
-        icon='an' color={colors.black[0]} name="adduser" size={RFPercentage(3.5)} />
-    ) : index === 5 ? (
-        <JIcon
         icon='fe'
         color={colors.black[0]}
         name="help-circle"
         size={RFPercentage(3.5)}
       />
-    ) : index === 6 ? (
+    ) : index === 5 ? (
         <JIcon
         icon='mi'
         color={colors.black[0]}

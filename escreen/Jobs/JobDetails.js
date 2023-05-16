@@ -10,7 +10,7 @@ import {
   ActivityIndicator,
   FlatList,
 } from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useEffect,useContext,useRef} from 'react';
 import JScreen from '../../customComponents/JScreen';
 import moment from 'moment';
 import JGradientHeader from '../../customComponents/JGradientHeader';
@@ -19,7 +19,6 @@ import colors from '../../config/colors';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import {StoreContext} from '../../mobx/store';
 import {heightPercentageToDP} from 'react-native-responsive-screen';
-import JIcon from '../../customComponents/JIcon';
 import JRow from '../../customComponents/JRow';
 import DEVOTEAM from '../../assets/svg/Icon/DEVOTEAM.svg';
 import Placeholder from '../../assets/svg/Icon/Placeholder.svg';
@@ -37,11 +36,8 @@ import {Pressable} from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
 import {useNavigation} from '@react-navigation/native';
 import PhoneInput from 'react-native-phone-number-input';
-import {useRef} from 'react';
 import JChevronIcon from '../../customComponents/JChevronIcon';
-import {useContext} from 'react';
 import {observer} from 'mobx-react';
-import {baseUrl} from '../../ApiUrls';
 import Toast from 'react-native-toast-message';
 import JErrorText from '../../customComponents/JErrorText';
 import url from '../../config/url';
@@ -50,6 +46,7 @@ const JobDetails = ({route}) => {
   const store = useContext(StoreContext);
   const phoneInput = useRef(null);
   const navigation = useNavigation();
+  
   const _selectOneFile = async setFieldValue => {
     //Opening Document Picker for selection of one file
     try {
@@ -85,10 +82,10 @@ const JobDetails = ({route}) => {
   // console.log(route.params.jid)
   const [modalVisible, setModalVisible] = useState(false);
   const [jobDetail, setJobDetail] = useState([]);
-  const [add, setAdd] = useState();
+  const [jobCount, setJobCount] = useState();
   const [error, setError] = useState(false);
   const [loader, setLoader] = useState(true);
-
+  console.log(jobDetail)
   const _addCandidate = (values) => {
 
     var myHeaders = new Headers();
@@ -138,7 +135,7 @@ console.log(formdata)
             type: 'success',
             text1: 'success',
           });
-
+navigation.goBack();
           //  console.log(values)
         } else {
           Toast.show({
@@ -160,7 +157,7 @@ console.log(formdata)
     var myHeaders = new Headers();
     myHeaders.append(
       'Authorization',
-      `Bearer ${store.token.token}`,
+      `Bearer ${store.token?.token}`,
     );
 
     fetch(
@@ -174,8 +171,9 @@ console.log(formdata)
     )
       .then(response => response.json())
       .then(result => {
-        // console.log(result.job);
+        // console.log(result.job[0]);
         setJobDetail(result.job[0]);
+        setJobCount(result);
       })
       .catch(error => {
         console.log('error', error);
@@ -206,11 +204,16 @@ console.log(formdata)
           : jobDetail.job_details?.career_level,
     },
     {
+      isScroll:true,
       heading: store.lang.job_tag,
       name:
-        jobDetail.job_details?.job_tag === null
+      
+        jobDetail.job_details?.job_tag == null
           ? 'N/A'
-          : jobDetail.job_details?.job_tag,
+          : 
+          jobDetail?.job_details?.job_tag.map(u => u.name).join(', ')
+           
+         
     },
 
     {
@@ -259,7 +262,7 @@ console.log(formdata)
             alignItems={store.lang.id == 0 ? 'flex-start' : 'flex-end'}
             paddingTop={RFPercentage(1)}
             left={JChevronIcon}
-            right={<Star />}
+           
             children={
               <View style={{marginTop: RFPercentage(2), width: '100%'}}>
                 <JRow style={{justifyContent: 'space-between'}}>
@@ -280,8 +283,8 @@ console.log(formdata)
                 <JRow>
                   <Placeholder />
                   <JText style={styles.txt}>
-                    {jobDetail.city_name},{jobDetail.state_name}{' '}
-                    {jobDetail.country_name}
+                    {jobDetail?.city_name},{jobDetail?.state_name}{' '}
+                    {jobDetail?.country_name}
                   </JText>
                 </JRow>
                 <JRow style={{justifyContent: 'space-between'}}>
@@ -290,12 +293,12 @@ console.log(formdata)
 
                     <JText style={styles.txt}>
                       {store.lang.expire_on}{' '}
-                      {moment(jobDetail.job_expiry_date, 'DD,MM,YYYY').format(
+                      {moment(jobDetail?.job_expiry_date, 'DD,MM,YYYY').format(
                         'DD MMM,YYYY',
                       )}
                     </JText>
                   </JRow>
-                  <JText style={styles.txt}>5 {store.lang.open_jobs}</JText>
+                  <JText style={styles.txt}>{jobCount?.jobCount}{' '}{store.lang.open_jobs}</JText>
                 </JRow>
               </View>
             }
@@ -312,30 +315,45 @@ console.log(formdata)
             </JText>
             <View style={{marginHorizontal: RFPercentage(1.3)}}>
               <JText style={styles.headertxt2}>{store.lang.job_skills}</JText>
-
-              <JText style={styles.txt1}>
-                {jobDetail?.job_requirement?.job_skills}
-              </JText>
+              
+              {jobDetail?.job_requirement?.job_skills.map((skill) => <JText style={styles.txt1}>{skill.name}</JText>)}
+             
+            
 
               <JText style={styles.headertxt2}>{store.lang.degree_level}</JText>
-
-              <JRow>
-                <JText style={styles.dg}>
-                  {jobDetail?.job_requirement?.degree_level}
-                </JText>
-              </JRow>
+              <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+              {jobDetail?.job_requirement?.degree_level.map((level) => 
+              <JRow style={{marginHorizontal: RFPercentage(1),}}>
+                  <JText style={styles.dg}>
+                    {level.name}
+                  </JText>
+                </JRow>)}
+                </ScrollView>
 
               <JText style={styles.headertxt2}>
                 {store.lang.assessment_Required}
               </JText>
-              <JText style={styles.txt1}>
-                {jobDetail?.job_requirement?.assessment_required}
-              </JText>
+              {jobDetail?.job_requirement?.assessment_required.map((item) => <JText style={styles.txt1}>{item.assessment_name}</JText>)}
+             
             </View>
             <JText style={styles.headertxt1}>{store.lang.job_Details}</JText>
             {/* <JText style={{textAlign:'center',fontSize:RFPercentage(2),marginTop: RFPercentage(-2),marginLeft: RFPercentage(-4),}}></JText> */}
 
             {data?.map((item, index) => (
+              item.isScroll?
+              <JRow>
+                <JText key={index} style={styles.headertxt3}>
+                  {item.heading}
+                </JText>
+                
+                <ScrollView horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              // contentContainerStyle={{backgroundColor:'red'}}
+              >
+              <JText style={styles.txt2}>{item.name}</JText>
+             </ScrollView>
+              </JRow>
+              :
               <JRow>
                 <JText key={index} style={styles.headertxt3}>
                   {item.heading}
@@ -345,7 +363,7 @@ console.log(formdata)
             ))}
 
             <JText style={styles.headertxt1}>{store.lang.description} </JText>
-            <JText style={styles.txt2}>
+            <JText style={[styles.txt2, {paddingBottom: RFPercentage(3)}]}>
               {jobDetail?.job_description?.description}
             </JText>
           </JScrollView>
@@ -375,6 +393,7 @@ console.log(formdata)
 
                 _addCandidate(values);
                 setModalVisible(!modalVisible);
+
               }}
               validationSchema={yup.object().shape({
                 resume: yup.object().shape({
@@ -389,11 +408,7 @@ console.log(formdata)
                   .email('Must be a valid email')
                   .required()
                   .label('Email'),
-                phone: yup
-                  .string()
-                  .max(14)
-                  .required()
-                  .label('Phone'),
+                phone: yup.string().max(14).required().label('Phone'),
               })}>
               {({
                 values,
@@ -422,7 +437,7 @@ console.log(formdata)
                         containerStyle={{marginTop: RFPercentage(1)}}
                         isRequired
                         heading={store.lang.first_name}
-                        value={values.firstName.name}
+                        value={values.firstName}
                         error={touched.firstName && errors.firstName && true}
                         onChangeText={handleChange('firstName')}
                         onBlur={() => setFieldTouched('firstName')}
@@ -610,7 +625,7 @@ const styles = StyleSheet.create({
   txt1: {
     fontSize: RFPercentage(1.9),
     fontWeight: '500',
-    marginVertical: RFPercentage(1),
+    marginVertical: RFPercentage(0.5),
   },
   txt2: {
     fontSize: RFPercentage(1.9),

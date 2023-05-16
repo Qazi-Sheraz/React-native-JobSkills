@@ -12,13 +12,14 @@ import {Formik} from 'formik';
 import Feather from 'react-native-vector-icons/Feather';
 import colors from '../../config/colors';
 import {RFPercentage} from 'react-native-responsive-fontsize';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import JChevronIcon from '../../customComponents/JChevronIcon';
 import {useEffect} from 'react';
-import { baseUrl } from '../../ApiUrls';
+import Toast from 'react-native-toast-message';
 import url from '../../config/url';
 import { useContext } from 'react';
 import { StoreContext } from '../../mobx/store';
+import JRow from '../../customComponents/JRow';
 
 const ECompanyInformation = () => {
   const [loader, setLoader] = useState(false);
@@ -26,25 +27,26 @@ const ECompanyInformation = () => {
   const navigation = useNavigation();
   const phoneInput = useRef(null);
   const store = useContext(StoreContext);
+  const {params}=useRoute();
 
   const _companyInfo = values => {
     var myHeaders = new Headers();
     myHeaders.append(
       'Authorization',
-      `Bearer ${store.token.token}`,
+      `Bearer ${store.token?.token}`,
     );
     // console.log(values.industries.id);
     var formdata = new FormData();
-    formdata.append('ceo', values.ceo_name);
-    formdata.append('industry_id', values.industries.id);
-    formdata.append('ownership_type_id', values.ownerShipTypes.id);
-    formdata.append('companyName', values.company_name);
-    formdata.append('company_size_id', values.companySize.id);
-    formdata.append('details', values.employeDetail);
-    formdata.append('no_of_offices',values.offices);
-    formdata.append('location', values.location);
-    formdata.append('website', values.website);
-    formdata.append('fax', values.fax);
+    formdata.append('ceo', values?.ceo_name);
+    formdata.append('industry_id', values?.industries.id);
+    formdata.append('ownership_type_id', values?.ownerShipTypes.id);
+    formdata.append('companyName', values?.company_name);
+    formdata.append('company_size_id', values?.companySize.id);
+    formdata.append('details', values?.employeDetail);
+    formdata.append('no_of_offices',values?.offices);
+    formdata.append('location', values?.location);
+    formdata.append('website', values?.website);
+    formdata.append('fax', values?.fax);
     // console.log(formdata);
     var requestOptions = {
       method: 'POST',
@@ -52,19 +54,28 @@ const ECompanyInformation = () => {
       body: formdata,
       redirect: 'follow',
     };
-    fetch(`${url.baseUrl}/companyUpdate/8`, requestOptions)
+    fetch(`${url.baseUrl}/companyUpdate/${store.token?.user?.owner_id}`, requestOptions)
       .then(response => response.json())
-      .then(result => 
-        console.log(result)
-        )
-      .catch(error => console.log('error', error));
+      .then(result => {
+        // console.log(result)
+        Toast.show({
+          type: 'success',
+          text1: 'Successfully update',
+        })
+        navigation.goBack()
+    })
+    .catch(error =>
+    Toast.show({
+      type: 'error',
+      text1: ('error===>'),
+    }))
   };
 
   const _getcompanyInfo = () => {
     var myHeaders = new Headers();
     myHeaders.append(
       'Authorization',
-      `Bearer ${store.token.token}`,
+      `Bearer ${store.token?.token}`,
     );
 
     var requestOptions = {
@@ -96,11 +107,11 @@ const ECompanyInformation = () => {
     <JScreen headerShown={false}>
       <Formik
         initialValues={{
-          ceo_name: '',
-          ownerShipTypes: '',
-          industries: '',
-          companySize: '',
-          location: '',
+          ceo_name: params?.ceo_name,
+          ownerShipTypes: params?.ownership,
+          industries: params?.industry,
+          companySize: params?.company_size,
+          location: params?.location,
           company_name: '',
           offices: '',
           website: '',
@@ -180,10 +191,9 @@ const ECompanyInformation = () => {
               {touched.ceo_name && errors.ceo_name && (
                 <JErrorText>{errors.ceo_name}</JErrorText>
               )}
-
               <JSelectInput
                 containerStyle={{marginTop: RFPercentage(2)}}
-                value={values.ownerShipTypes.name}
+                value={values.ownerShipTypes?.name}
                 data={info?.ownerShipTypes}
                 id={values.ownerShipTypes?.id}
                 header={'Owner Ship'}
@@ -200,15 +210,14 @@ const ECompanyInformation = () => {
                   />
                 }
               />
-
               {touched.ownerShipTypes && errors.ownerShipTypes && (
                 <JErrorText>{errors.ownerShipTypes}</JErrorText>
               )}
               <JSelectInput
                 containerStyle={{marginTop: RFPercentage(2)}}
-                value={values.industries.name}
+                value={values.industries?.name}
                 data={info?.industries}
-                // id={values.industries?.id}
+                id={values.industries?.id}
                 header={'Industry'}
                 heading={'Industry :'}
                 setValue={e => {

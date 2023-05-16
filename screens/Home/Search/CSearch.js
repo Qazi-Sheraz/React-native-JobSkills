@@ -40,7 +40,21 @@ const CSearch = ({navigation}) => {
   ];
   const store = useContext(StoreContext);
   const [search, setSearch] = useState('');
+  const getData = async () => {
+    try {
+        // await AsyncStorage.removeItem('@recent')
+      const jsonValue = await AsyncStorage.getItem('@recent')
+   
+     store.setRecentSearch(jsonValue != null ? JSON.parse(jsonValue) : [])
+    //  console.log("job===>>>",store.recentSearch)
+    } catch(e) {
+      // error reading value
+    }
+  }
 
+useEffect(() => {
+    getData();
+}, [])
   const _getFilterList = () => {
     var myHeaders = new Headers();
     myHeaders.append('Authorization', `Bearer ${store.token.token}`);
@@ -182,15 +196,18 @@ const CSearch = ({navigation}) => {
               fontSize={RFPercentage(3)}>
               Recent Searches
             </JText>
-            {data.map((item, index) => (
+            {store.recentSearch?.map((item, index) => (
+              
+                
               <JRecentJob
-                onPress={() => {
-                  setName(item.JobName);
-                  refRBSheet.current.open();
-                }}
-                JobName={item.JobName}
-              />
-            ))}
+              key={index}
+                  onPress={() => {
+                    _search(item,store,false);
+                    // refRBSheet.current.open();
+                  }}
+                  JobName={item}
+                />
+              ))}
           </>
         )}
       </JScrollView>

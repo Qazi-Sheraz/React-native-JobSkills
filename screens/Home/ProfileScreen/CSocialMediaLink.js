@@ -20,25 +20,29 @@ import {StoreContext} from '../../../mobx/store';
 import {_getProfile} from '../../../functions/Candidate/MyProfile';
 import {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
+import url from '../../../config/url';
+import Toast from 'react-native-toast-message';
 function CSocialMediaLink({refRBSheet, data, user}) {
   const store = useContext(StoreContext);
   const [loader, setLoader] = useState(false);
   const navigation = useNavigation();
+  // console.log(store.token?.user?.facebook_url,)
   return (
     <Formik
       initialValues={{
-        fb: user.facebook_url,
-        ln: user.linkedin_url,
-        tw: user.twitter_url,
+        facebook_url: store.token?.user?.facebook_url,
+        linkedin_url: store.token?.user?.linkedin_url,
+        twitter_url: store.token?.user?.twitter_url,
       }}
       onSubmit={values => {
-        console.log(values);
+        // console.log(values);
         var myHeaders = new Headers();
-        myHeaders.append('Authorization', `Bearer ${store.token.token}`);
+        myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
         var formdata = new FormData();
-        formdata.append('facebook_url', values.fb);
-        formdata.append('twitter_url', values.tw);
-        formdata.append('linkedin_url', values.ln);
+        formdata.append('facebook_url', values?.facebook_url);
+        formdata.append('twitter_url', values?.twitter_url);
+        formdata.append('linkedin_url', values?.linkedin_url);
+        console.log(formdata)
         var requestOptions = {
           method: 'POST',
           headers: myHeaders,
@@ -47,18 +51,24 @@ function CSocialMediaLink({refRBSheet, data, user}) {
         };
 
         setLoader(true);
-        fetch(
-          'https://dev.jobskills.digital/api/update-profile',
-          requestOptions,
-        )
+        fetch(`${url.baseUrl}/companyUpdate/${store.token?.user?.owner_id}`, requestOptions)
           .then(response => response.json())
           .then(result => {
             console.log(result);
             if (result.success === false) {
-              alert('Error while saving data');
+              Toast.show({
+                type: 'error',
+                text1: 'Error while saving data',
+              });
             } else {
-              _getProfile(store);
-              alert(result);
+              Toast.show({
+                type: 'success',
+                text1: 'Successfully update',
+              });
+              navigation.goBack()
+
+              // _getProfile(store);
+              // alert(result);
             }
             setLoader(false);
           })
@@ -121,38 +131,38 @@ function CSocialMediaLink({refRBSheet, data, user}) {
 
           <View style={{paddingHorizontal: RFPercentage(2)}}>
             <JInput
-              value={values.fb}
-              heading={'Facebook'}
-              error={touched.fb && errors.fb && true}
+              value={values.facebook_url}
+              heading={'Facebook URL :'}
+              error={touched.facebook_url && errors.facebook_url && true}
               containerStyle={styles.input}
-              placeholder="Facebook"
-              onChangeText={handleChange('fb')}
-              onBlur={() => setFieldTouched('fb')}
+              // placeholder="Facebook"
+              onChangeText={handleChange('facebook_url')}
+              onBlur={() => setFieldTouched('facebook_url')}
             />
-            {touched.fb && errors.fb && <JErrorText>{errors.fb}</JErrorText>}
+            {touched.facebook_url && errors.facebook_url && <JErrorText>{errors.facebook_url}</JErrorText>}
 
             <JInput
-              value={values.ln}
+              value={values.linkedin_url}
               containerStyle={styles.input}
-              heading={'LinkedIn'}
-              error={touched.ln && errors.ln && true}
+              heading={'LinkedIn URL :'}
+              error={touched.linkedin_url && errors.linkedin_url && true}
               //   autoFocus
-              placeholder="LinkedIn"
-              onChangeText={handleChange('ln')}
-              onBlur={() => setFieldTouched('ln')}
+              // placeholder={"LinkedIn"}
+              onChangeText={handleChange('linkedin_url')}
+              onBlur={() => setFieldTouched('linkedin_url')}
             />
-            {touched.ln && errors.ln && <JErrorText>{errors.ln}</JErrorText>}
+            {touched.linkedin_url && errors.linkedin_url && <JErrorText>{errors.linkedin_url}</JErrorText>}
 
             <JInput
-              value={values.tw}
-              heading={'Twitter'}
-              error={touched.tw && errors.tw && true}
+              value={values.twitter_url}
+              heading={'Twitter URL :'}
+              error={touched.twitter_url && errors.twitter_url && true}
               containerStyle={styles.input}
-              placeholder="Twitter"
-              onChangeText={handleChange('tw')}
-              onBlur={() => setFieldTouched('tw')}
+              // placeholder="Twitter"
+              onChangeText={handleChange('twitter_url')}
+              onBlur={() => setFieldTouched('twitter_url')}
             />
-            {touched.tw && errors.tw && <JErrorText>{errors.tw}</JErrorText>}
+            {touched.twitter_url && errors.twitter_url && <JErrorText>{errors.twitter_url}</JErrorText>}
           </View>
         </JScreen>
       )}

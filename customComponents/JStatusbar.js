@@ -1,13 +1,10 @@
-import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
-import React ,{useEffect}from 'react';
+import {ActivityIndicator, StyleSheet, View} from 'react-native';
+import React ,{useEffect,useContext,useState}from 'react';
 import JRow from './JRow';
 import JIcon from './JIcon';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import colors from '../config/colors';
 import JText from './JText';
-import {useState} from 'react';
-import { baseUrl } from '../ApiUrls';
-import { useContext } from 'react';
 import { StoreContext } from '../mobx/store';
 import { useRoute } from '@react-navigation/native';
 import url from '../config/url';

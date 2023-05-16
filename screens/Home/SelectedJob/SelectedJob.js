@@ -219,10 +219,10 @@ function SelectedJob({route, navigation}) {
               width: RFPercentage(2.3),
               marginRight: RFPercentage(1),
             }}
-            source={{uri: jobData.job.company.company_url}}
+            source={{uri: jobData?.job?.company?.company_url}}
           />
           <JText fontColor={colors.white[0]} fontSize={simpleText}>
-            {jobData.job.company.user.first_name}
+            {jobData?.job?.company?.user?.first_name}
           </JText>
         </View>
 
@@ -239,7 +239,7 @@ function SelectedJob({route, navigation}) {
             name="location"
           />
           <JText fontColor={colors.white[0]} fontSize={simpleText}>
-            {jobData.job.city_name}
+            {jobData?.job?.city_name}
           </JText>
         </View>
 
@@ -269,19 +269,19 @@ function SelectedJob({route, navigation}) {
               />
               <JText fontColor={colors.white[0]} fontSize={simpleText}>
                 Posted :
-                {moment(jobData.job.job_publish_date).format('DD MMM YYYY')}
+                {moment(jobData?.job?.job_publish_date).format('DD MMM YYYY')}
               </JText>
             </View>
           </View>
           <JText fontColor={colors.white[0]} fontSize={simpleText}>
-            Expiry :{moment(jobData.job.job_expiry_date).format('DD MMM YYYY')}
+            Expiry :{moment(jobData?.job?.job_expiry_date).format('DD MMM YYYY')}
           </JText>
         </View>
         <JText
           fontAlign="right"
           fontWeight={headingWeight.weight}
           fontColor={colors.white[0]}>
-          Open Jobs: {jobData.data.jobsCount}
+          Open Jobs: {jobData?.data?.jobsCount}
         </JText>
       </JGradientView>
       {status.success == false && status.message === '3' ? (
@@ -298,7 +298,7 @@ function SelectedJob({route, navigation}) {
           <JText
             onPress={() =>
               Linking.openURL(
-                `https://dev.jobskills.digital/job-details/${jobData.job.job_id}`,
+                `https://dev.jobskills.digital/job-details/${jobData?.job?.job_id}`,
               )
             }
             style={{marginLeft: RFPercentage(1)}}
@@ -350,8 +350,8 @@ function SelectedJob({route, navigation}) {
           fontSize={headingWeight.size}>
           About :
         </JText>
-        {jobData.job.description ? (
-          <JTagText fontSize={simpleText}>{jobData.job.description}</JTagText>
+        {jobData?.job?.description ? (
+          <JTagText fontSize={simpleText}>{jobData?.job?.description}</JTagText>
         ) : (
           <JText fontAlign="center" fontSize={simpleText}>
             N/A
@@ -367,7 +367,7 @@ function SelectedJob({route, navigation}) {
           Skill :
         </JText>
         <JText fontSize={simpleText}>
-          {jobData.job.jobs_skill.map((item, index) => item.name)}
+          {jobData?.job?.jobs_skill.map((item, index) => item.name)}
         </JText>
 
         <JText
@@ -377,8 +377,8 @@ function SelectedJob({route, navigation}) {
           Degree Level :
         </JText>
         <JText fontSize={simpleText}>
-          {jobData.job.degree_level
-            ? jobData.job.degree_level.map((item, index) => item.name)
+          {jobData?.job?.degree_level
+            ? jobData?.job?.degree_level.map((item, index) => item.name)
             : 'N/A'}
         </JText>
 
@@ -389,8 +389,8 @@ function SelectedJob({route, navigation}) {
           Assessment required :
         </JText>
         <JText fontSize={simpleText}>
-          {jobData.job.assessment
-            ? jobData.job.assessment.map((item, index) => item.assessment_name)
+          {jobData?.job?.assessment
+            ? jobData?.job?.assessment.map((item, index) => item.assessment_name)
             : 'N/A'}
         </JText>
 
@@ -402,15 +402,15 @@ function SelectedJob({route, navigation}) {
         <View style={styles.jobDetails}>
           <JText style={styles.jobDetails_heading}>Job Category</JText>
           <JText style={styles.jobDetails_text}>
-            {jobData.job.job_category.name}
+            {jobData?.job?.job_category.name}
           </JText>
         </View>
 
         <View style={styles.jobDetails}>
           <JText style={styles.jobDetails_heading}>Career Level</JText>
           <JText style={styles.jobDetails_text}>
-            {jobData.job.career_level
-              ? jobData.job.career_level.level_name
+            {jobData?.job.career_level
+              ? jobData?.job?.career_level?.level_name
               : 'NA'}
           </JText>
         </View>
@@ -420,8 +420,8 @@ function SelectedJob({route, navigation}) {
           <JText
             // onPress={() => console.log(jobData.job.jobs_tag)}
             style={styles.jobDetails_text}>
-            {jobData.job.jobs_tag.length > 0
-              ? jobData.job.jobs_tag.map((item, index) => item.name + ',')
+            {jobData?.job?.jobs_tag.length > 0
+              ? jobData?.job?.jobs_tag.map((item, index) => item.name + ',')
               : 'N/A'}
           </JText>
         </View>
@@ -429,22 +429,22 @@ function SelectedJob({route, navigation}) {
         <View style={styles.jobDetails}>
           <JText style={styles.jobDetails_heading}>Job Type</JText>
           <JText style={styles.jobDetails_text}>
-            {jobData.job.job_type ? jobData.job.job_type.name : 'N/A'}
+            {jobData?.job?.job_type ? jobData?.job?.job_type?.name : 'N/A'}
           </JText>
         </View>
 
         <View style={styles.jobDetails}>
           <JText style={styles.jobDetails_heading}>Job Shift</JText>
           <JText style={styles.jobDetails_text}>
-            {jobData.job.job_shift ? jobData.job.job_shift.shift : 'N/A'}
+            {jobData?.job.job_shift ? jobData?.job.job_shift.shift : 'N/A'}
           </JText>
         </View>
 
         <View style={styles.jobDetails}>
           <JText style={styles.jobDetails_heading}>Functional Area</JText>
           <JText style={styles.jobDetails_text}>
-            {jobData.job.functional_area
-              ? jobData.job.functional_area.name
+            {jobData?.job.functional_area
+              ? jobData?.job.functional_area.name
               : 'N/A'}
           </JText>
         </View>
@@ -452,22 +452,22 @@ function SelectedJob({route, navigation}) {
         <View style={styles.jobDetails}>
           <JText style={styles.jobDetails_heading}>Positions</JText>
           <JText style={styles.jobDetails_text}>
-            {jobData.job.position ? jobData.job.position : 'N/A'}
+            {jobData?.job?.position ? jobData?.job?.position : 'N/A'}
           </JText>
         </View>
 
         <View style={styles.jobDetails}>
           <JText style={styles.jobDetails_heading}>Job Experience</JText>
           <JText style={styles.jobDetails_text}>
-            {jobData.job.experience ? jobData.job.experience : 'N/A'}
+            {jobData?.job.experience ? jobData?.job.experience : 'N/A'}
           </JText>
         </View>
 
         <View style={styles.jobDetails}>
           <JText style={styles.jobDetails_heading}>Salary Period</JText>
           <JText style={styles.jobDetails_text}>
-            {jobData.job.salary_period
-              ? jobData.job.salary_period.period
+            {jobData?.job.salary_period
+              ? jobData?.job.salary_period.period
               : 'N/A'}
           </JText>
         </View>
@@ -475,7 +475,7 @@ function SelectedJob({route, navigation}) {
         <View style={styles.jobDetails}>
           <JText style={styles.jobDetails_heading}>Is Freelance</JText>
           <JText style={styles.jobDetails_text}>
-            {jobData.job.is_freelance ? 'Yes' : 'No'}
+            {jobData?.job.is_freelance ? 'Yes' : 'No'}
           </JText>
         </View>
         <JText
@@ -484,9 +484,9 @@ function SelectedJob({route, navigation}) {
           Description :
         </JText>
 
-        {jobData.job.company.details ? (
+        {jobData?.job.company.details ? (
           <JTagText fontSize={simpleText}>
-            {jobData.job.company.details}
+            {jobData?.job.company.details}
           </JTagText>
         ) : (
           <JText fontAlign="center" fontSize={simpleText}>
@@ -500,7 +500,7 @@ function SelectedJob({route, navigation}) {
         setStatus={setStatus}
         id={jobData.job.id}
         token={store.token.token}
-        jobId={jobData.job.job_id}
+        jobId={jobData?.job.job_id}
       />
 
       <RBSheet

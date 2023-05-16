@@ -1,5 +1,5 @@
 import {StyleSheet, Linking, View, ActivityIndicator} from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useEffect, useState} from 'react';
 import JScreen from '../../customComponents/JScreen';
 import JGradientHeader from '../../customComponents/JGradientHeader';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -12,7 +12,7 @@ import JScrollView from '../../customComponents/JScrollView';
 import {useCallback} from 'react';
 import JProfileSections from '../../customComponents/JProfileSections';
 import JProfileInfo from '../../customComponents/JProfileInfo';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation, useRoute,} from '@react-navigation/native';
 import JText from '../../customComponents/JText';
 import JRow from '../../customComponents/JRow';
 import FontAwesome5Brands from 'react-native-vector-icons/FontAwesome5';
@@ -21,6 +21,9 @@ import {observer} from 'mobx-react';
 import url from '../../config/url';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
+import JNotfoundData from '../../customComponents/JNotfoundData';
+import { values } from 'mobx';
+import { useContext } from 'react';
 // import token from '../../mobx/store';
 
 const Profile = () => {
@@ -29,7 +32,9 @@ const Profile = () => {
   const [profile, setProfile] = useState();
   const [error, setError] = useState(false);
   const [loader, setLoader] = useState(true);
-  // console.log('store====>>> ',store.token?.user?.owner_id);
+  const{params}=useRoute();
+  const isFoucs = useIsFocused();
+  console.log('store====>>>' , profile?.company[0]?.contact_information?.is_phone_verified);
 
   const onRefresh = useCallback(() => {
     _getProfile(store);
@@ -83,7 +88,7 @@ const Profile = () => {
     )
       .then(response => response.json())
       .then(result => {
-        // console.log(result);
+        console.log(result);
         setProfile(result);
       })
       .catch(error => console.log('error', error))
@@ -92,10 +97,28 @@ const Profile = () => {
         setLoader(false);
       });
   };
-
+  const _otp =()=>{
+    var myHeaders = new Headers();
+    myHeaders.append("Accept", "application/json");
+    var formdata = new FormData();
+    formdata.append("phone", profile?.company[0]?.contact_information?.phone_number);
+    // console.log(profile?.company[0]?.contact_information?.phone_number)
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: formdata,
+      redirect: 'follow'
+    };
+    fetch(`${url.baseUrl}/send-code`, requestOptions)
+      .then(response => response.json())
+      .then(result => console.log(result))
+      .catch(error => console.log('error', error));
+    };
   useEffect(() => {
+  
     _jobProfile();
-  }, [loader]);
+    
+  }, [loader,isFoucs]);
 
   return loader ? (
     <ActivityIndicator />
@@ -133,7 +156,10 @@ const Profile = () => {
           // loader={store.myProfileApiLoader}
 
           onIconPress={() => {
-            navigation.navigate('EContactInformation');
+            navigation.navigate('EContactInformation', {
+              user_name: profile?.company[0]?.name,
+              user_email: profile?.company[0]?.contact_information?.email,
+            });
           }}
           isEmpty={false}
           heading={store.lang.contact_info}
@@ -159,9 +185,19 @@ const Profile = () => {
                 }
               />
               <JText
-                onPress={() => navigation.navigate('VerifiedPhone')}
-                fontColor={colors.redish[0]}>
-                {store.lang.confirm_your_num}
+             
+            onPress={() =>
+             { profile?.company[0]?.contact_information?.is_phone_verified == 0 ?(
+              navigation.navigate('VerifiedPhone',{phone:profile?.company[0]?.contact_information?.phone_number}),
+                _otp()
+              ):( Toast.show({
+                type: 'success',
+                text1: 'Already confiremd',
+               
+              }))}}
+                
+                fontColor={profile?.company[0]?.contact_information?.is_phone_verified == 1 ?colors.shortlisted[0]: colors.redish[0]}>
+                {profile?.company[0]?.contact_information?.is_phone_verified == 1 ?store.lang.confirmed :store.lang.confirm_your_num }
               </JText>
             </BorderView>
             // )
@@ -170,10 +206,16 @@ const Profile = () => {
 
         <JProfileSections
           onIconPress={() => {
-            navigation.navigate('ECompanyInformation');
+            navigation.navigate('ECompanyInformation',{
+              ceo_name:profile?.company[0]?.company_information?.ceo,
+              ownership:profile?.company[0]?.company_information?.ownership_type,
+              industry:profile?.company[0]?.company_information?.industry,
+              company_size:profile?.company[0]?.company_information?.company_size,
+              location:profile?.company[0]?.company_information?.location, });
+            
           }}
           isEmpty={false}
-          icon="1"
+          // icon="1"
           heading={store.lang.company_info}
           emptyMsg={store.lang.company_info_not_available}
           children={
@@ -209,18 +251,17 @@ const Profile = () => {
         />
         <JProfileSections
           // loader={store.myProfileApiLoader}
+
           onIconPress={() => {
-            navigation.navigate('ESocialLink');
-
-            // refRBSheet.current.open();
+            navigation.navigate('CSocialMediaLink');
           }}
-          IconPress2={() => {
-            navigation.navigate('ESocialLink');
+          // IconPress2={() => {
+          //   navigation.navigate('ESocialLink');
 
-            // refRBSheet.current.open();
-          }}
+          //   // refRBSheet.current.open();
+          // }}
           isEmpty={false}
-          icon="1"
+          // icon="1"
           heading={store.lang.social_media_links}
           emptyMsg={store.lang.social_links_not_available}
           children={
@@ -229,63 +270,103 @@ const Profile = () => {
                 marginVertical: RFPercentage(2),
                 padding: RFPercentage(1),
               }}>
-              {/* // ['facebook_url', 'twitter_url', 'linkedin-in'] */}
+              {/* ['facebook_url', 'twitter_url', 'linkedin-in'] */}
+
               {profile?.company?.map((item, index) => (
-                <View style={{marginBottom: RFPercentage(2)}} key={index}>
-                  <JRow>
-                    <FontAwesome5Brands
-                      // onPress={() =>''
-                      //   // console.log(store.myProfile?.user[0].social_links)
-                      // }
-                      size={RFPercentage(3)}
-                      name={
-                        item.profile?.company[0]?.social_media_link
-                          ?.facebook_url == null
-                          ? 'facebook-f'
-                          : item.profile?.company?.social_media_link
-                              ?.twitter_url
-                          ? 'twitter'
-                          : 'linkedin-in'
-                      }
-                      color={colors.purple[0]}
-                      style={{marginRight: RFPercentage(2)}}
-                    />
-                    <JText fontWeight="600" fontSize={RFPercentage(2)}>
-                      {item.profile?.company[0]?.social_media_link
-                        ?.facebook_url == null
-                        ? 'N/A'
-                        : 'Facebook' &&
-                          item.profile?.company[0]?.social_media_link
-                            ?.twitter_url == null
-                        ? 'N/A'
-                        : 'Twitter' &&
-                          item.profile?.company[0]?.social_media_link
-                            ?.linkedin_url == null
-                        ? 'N/A'
-                        : 'LinkedIn'}
-                    </JText>
-                  </JRow>
-                  <JText
-                    // onPress={() =>
-                    //   Linking.openURL(
-                    //     // store.myProfile?.user[0].social_links[item],
-                    //   ).catch(err => {
-                    //     alert(err);
-                    //   })
-                    // }
-                    fontWeight="600"
-                    fontColor={'grey'}
-                    style={{textDecorationLine: 'underline'}}
-                    fontSize={RFPercentage(2)}>
-                    www.{' '}
-                    {item == 'facebook_url'
-                      ? 'Facebook'
-                      : item == 'twitter_url'
-                      ? 'Twitter'
-                      : 'LinkedIn'}{' '}
-                    .com
-                    {/* {store.myProfile?.user[0].social_links[item]} */}
-                  </JText>
+                <View key={index} >
+                  {item.social_media_link?.facebook_url && (
+                    <View style={{marginBottom: RFPercentage(2)}} >
+                      <JRow>
+                        <FontAwesome5Brands
+                          size={RFPercentage(3)}
+                          name="facebook-f"
+                          color={colors.purple[0]}
+                          style={{marginRight: RFPercentage(2)}}
+                        />
+                       
+                        <JText fontWeight="600" fontSize={RFPercentage(2)}>
+                          {'Facebook'}
+                        </JText>
+                        </JRow>
+                        <JText
+                          // onPress={() =>
+                          //   Linking.openURL(
+                          //     // store.myProfile?.user[0].social_links[item],
+                          //   ).catch(err => {
+                          //     alert(err);
+                          //   })
+                          // }
+                          fontWeight="600"
+                          fontColor={'grey'}
+                          style={{textDecorationLine: 'underline'}}
+                          fontSize={RFPercentage(2)}>
+                          {item.social_media_link.facebook_url}
+                        </JText>
+                      
+                    </View>
+                  )}
+
+                  {item.social_media_link?.twitter_url && (
+                    <View style={{marginBottom: RFPercentage(2)}}>
+                      <JRow>
+                        <FontAwesome5Brands
+                          size={RFPercentage(3)}
+                          name="twitter"
+                          color={colors.purple[0]}
+                          style={{marginRight: RFPercentage(2)}}
+                        />
+
+                        <JText fontWeight="600" fontSize={RFPercentage(2)}>
+                          {'Twitter'}
+                        </JText>
+                      </JRow>
+                      <JText
+                        // onPress={() =>
+                        //   Linking.openURL(
+                        //     // store.myProfile?.user[0].social_links[item],
+                        //   ).catch(err => {
+                        //     alert(err);
+                        //   })
+                        // }
+                        fontWeight="600"
+                        fontColor={'grey'}
+                        style={{textDecorationLine: 'underline'}}
+                        fontSize={RFPercentage(2)}>
+                        {item.social_media_link.twitter_url}
+                      </JText>
+                    </View>
+                  )}
+
+                  {item.social_media_link?.linkedin_url && (
+                    <View style={{marginBottom: RFPercentage(2)}} >
+                      <JRow>
+                        <FontAwesome5Brands
+                          size={RFPercentage(3)}
+                          name="linkedin-in"
+                          color={colors.purple[0]}
+                          style={{marginRight: RFPercentage(2)}}
+                        />
+
+                        <JText fontWeight="600" fontSize={RFPercentage(2)}>
+                          {'LinkedIn'}
+                        </JText>
+                      </JRow>
+                      <JText
+                        // onPress={() =>
+                        //   Linking.openURL(
+                        //     // store.myProfile?.user[0].social_links[item],
+                        //   ).catch(err => {
+                        //     alert(err);
+                        //   })
+                        // }
+                        fontWeight="600"
+                        fontColor={'grey'}
+                        style={{textDecorationLine: 'underline'}}
+                        fontSize={RFPercentage(2)}>
+                        {item.social_media_link.linkedin_url}
+                      </JText>
+                    </View>
+                  )}
                 </View>
               ))}
             </View>

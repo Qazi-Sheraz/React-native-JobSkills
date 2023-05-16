@@ -100,7 +100,7 @@ function AllJobs({navigation}) {
                 containerStyle={{marginBottom: RFPercentage(2)}}
                 img={item.company.company_url}
                 title={item.job_title}
-                location={item.city.name}
+                location={`${item.city_name}${item.location}`}
                 category={item.job_category.name}
               />
             )}

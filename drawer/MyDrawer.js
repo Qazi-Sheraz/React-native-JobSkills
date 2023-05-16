@@ -7,7 +7,6 @@ import EmployeStack from '../stacks/Employee/EmployeStack';
 import {StoreContext} from '../mobx/store';
 import {useContext} from 'react';
 import AuthStack from '../stacks/Auth/AuthStack';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Observer } from 'mobx-react';
 
 export default function MyDrawer() {
@@ -16,12 +15,11 @@ export default function MyDrawer() {
   const Drawer = createDrawerNavigator();
  
 
-
   return (
     <Observer>
     {() => (
 
-    !store.token ?
+    !store?.token ?
     
     <AuthStack/>
     :
@@ -37,7 +35,7 @@ export default function MyDrawer() {
       initialRouteName={'CHome'}
       drawerContent={props => (
          <CustomDrawerContent {...props} />
-        // <EDrawerContent {...props} />
+       
       )}>
       <Drawer.Screen name="CHomeStack" component={CHomeStack} />
      
@@ -50,10 +48,10 @@ export default function MyDrawer() {
     }}
     initialRouteName={'CHome'}
     drawerContent={props => (
-      //  <CustomDrawerContent {...props} />
+  
       <EDrawerContent {...props} />
     )}>
-    {/* <Drawer.Screen name="CHomeStack" component={CHomeStack} /> */}
+    
     <Drawer.Screen name="EHomeStack" component={EmployeStack} />
   </Drawer.Navigator>
     )}

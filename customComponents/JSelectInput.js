@@ -190,7 +190,7 @@ function JSelectInput({
       setArea(functionArea);
     }
 
-    if (header === 'Carrer Level') {
+    if (header == 'Carrer Level') {
       Object.keys(data).forEach(function (key, index) {
         level.push({
           id: key,
@@ -411,10 +411,10 @@ function JSelectInput({
           }
         }}
         style={[{flexDirection: 'column'}, containerStyle]}>
-        <View
+        <JRow
           style={{
-            flexDirection: 'row',
-            alignItems: 'center',
+            // flexDirection: 'row',
+            // alignItems: 'center',
             justifyContent: 'space-between',
           }}>
           {icon}
@@ -433,7 +433,7 @@ function JSelectInput({
             )}
           </JRow>
           {rightIcon}
-        </View>
+        </JRow>
         <JRow
           style={{
             marginTop:RFPercentage(1),
@@ -630,7 +630,7 @@ function JSelectInput({
               renderItem={({item, index}) => (
                 <TouchableOpacity
                   onPress={() => {
-                    if (isMultiple === true) {
+                    if (isMultiple == true) {
                       handleSelectItem(item);
                     } else {
                       setValue(item);
@@ -649,7 +649,7 @@ function JSelectInput({
                     <JText fontSize={RFPercentage(1.8)}>{item.name}</JText>
 
                     {isMultiple === true && selectedItems?.includes(item) && (
-                      <JIcon icon="fe" name="check" size={RFPercentage(2)} />
+                      <JIcon icon="fe" name="check" size={RFPercentage(2)} color={colors.black[0]}/>
                     )}
                   </JRow>
                 </TouchableOpacity>
