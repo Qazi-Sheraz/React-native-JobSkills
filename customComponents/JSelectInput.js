@@ -80,8 +80,8 @@ function JSelectInput({
   const [nationality, setNationality] = useState([]);
   const [ownership, setOwnership] = useState([]);
   const [companySize, setCompanySize] = useState([]);
-
   const [selectedItems, setSelectedItems] = useState(id);
+  
   const handleSelectItem = item => {
     if (selectedItems.includes(item)) {
       setSelectedItems(selectedItems.filter(i => i !== item));
@@ -131,7 +131,6 @@ function JSelectInput({
     let nationalityArr = [];
     let ownerArr = [];
     let sizeArr = [];
-
     if (header === 'Job Skill') {
       Object.keys(data).forEach(function (key, index) {
         skill.push({

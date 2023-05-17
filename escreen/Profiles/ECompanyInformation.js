@@ -20,6 +20,7 @@ import url from '../../config/url';
 import { useContext } from 'react';
 import { StoreContext } from '../../mobx/store';
 import JRow from '../../customComponents/JRow';
+import { keys } from 'mobx';
 
 const ECompanyInformation = () => {
   const [loader, setLoader] = useState(false);
@@ -28,7 +29,7 @@ const ECompanyInformation = () => {
   const phoneInput = useRef(null);
   const store = useContext(StoreContext);
   const {params}=useRoute();
-
+// console.log('paramsghdgf==>',params?.offices)
   const _companyInfo = values => {
     var myHeaders = new Headers();
     myHeaders.append(
@@ -43,11 +44,11 @@ const ECompanyInformation = () => {
     formdata.append('companyName', values?.company_name);
     formdata.append('company_size_id', values?.companySize.id);
     formdata.append('details', values?.employeDetail);
-    formdata.append('no_of_offices',values?.offices);
+    formdata.append('no_of_offices',values?.no_of_offices);
     formdata.append('location', values?.location);
     formdata.append('website', values?.website);
     formdata.append('fax', values?.fax);
-    // console.log(formdata);
+    console.log(formdata);
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
@@ -67,7 +68,7 @@ const ECompanyInformation = () => {
     .catch(error =>
     Toast.show({
       type: 'error',
-      text1: ('error===>'),
+      text1: 'Oops! Something went wrong',
     }))
   };
 
@@ -103,19 +104,36 @@ const ECompanyInformation = () => {
     _getcompanyInfo();
   }, [loader]);
 
+  // console.log(ownerShipTypes.id)
+  // const findValueByKey=(obj, key)=> {
+
+  //   return obj?.[key];
+  // }
+  // const value = findValueByKey(info?.ownerShipTypes, params?.ownership);
+  // console.log(value)
+
   return (
     <JScreen headerShown={false}>
       <Formik
         initialValues={{
-          ceo_name: params?.ceo_name,
-          ownerShipTypes: params?.ownership,
-          industries: params?.industry,
-          companySize: params?.company_size,
-          location: params?.location,
-          company_name: '',
-          offices: '',
-          website: '',
-          fax: '',
+          ceo_name: params?.ceo_name?params?.ceo_name:'',
+          ownerShipTypes:params?.ownership && params?.ownership_id?{
+            name:params?.ownership,
+            id:params?.ownership_id,
+          } : '',
+          industries:params?.industry && params?.industry_id? {
+            name:params?.industry,
+            id:params?.industry_id,
+          }:'',
+          companySize: params?.company_size && params?.company_size_id?{
+            name:params?.company_size,
+            id:params?.company_size_id,
+          }:'',
+          location: params?.location?params?.location:'',
+          company_name: params?.company_name ? params?.company_name:'',
+          no_of_offices: JSON.stringify(params?.offices),
+          website: params?.website?params?.website:'',
+          fax: params?.fax?params?.fax:'',
           employeDetail: '',
         }}
         onSubmit={values => {
@@ -182,7 +200,7 @@ const ECompanyInformation = () => {
               }}>
               <JInput
                 containerStyle={{marginTop: RFPercentage(2)}}
-                heading={'CEO Name:'}
+                heading={'CEO Name :'}
                 value={values.ceo_name}
                 error={touched.ceo_name && errors.ceo_name && true}
                 onChangeText={handleChange('ceo_name')}
@@ -191,9 +209,20 @@ const ECompanyInformation = () => {
               {touched.ceo_name && errors.ceo_name && (
                 <JErrorText>{errors.ceo_name}</JErrorText>
               )}
+                <JInput
+                containerStyle={{marginTop: RFPercentage(2)}}
+                heading={'Company Name:'}
+                value={values.company_name}
+                error={touched.company_name && errors.company_name && true}
+                onChangeText={handleChange('company_name')}
+                onBlur={() => setFieldTouched('company_name')}
+              />
+              {touched.company_name && errors.company_name && (
+                <JErrorText>{errors.company_name}</JErrorText>
+              )}
               <JSelectInput
                 containerStyle={{marginTop: RFPercentage(2)}}
-                value={values.ownerShipTypes?.name}
+                value={values?.ownerShipTypes?.name}
                 data={info?.ownerShipTypes}
                 id={values.ownerShipTypes?.id}
                 header={'Owner Ship'}
@@ -257,17 +286,7 @@ const ECompanyInformation = () => {
               {touched.companySize && errors.companySize && (
                 <JErrorText>{errors.companySize}</JErrorText>
               )}
-               <JInput
-                containerStyle={{marginTop: RFPercentage(2)}}
-                heading={'Company Name:'}
-                value={values.company_name}
-                error={touched.company_name && errors.company_name && true}
-                onChangeText={handleChange('company_name')}
-                onBlur={() => setFieldTouched('company_name')}
-              />
-              {touched.company_name && errors.company_name && (
-                <JErrorText>{errors.company_name}</JErrorText>
-              )}
+             
               <JInput
                 containerStyle={{marginTop: RFPercentage(2)}}
                 heading={'Location:'}
@@ -282,13 +301,13 @@ const ECompanyInformation = () => {
               <JInput
                 containerStyle={{marginTop: RFPercentage(2)}}
                 heading={'No of Offices:'}
-                value={values.offices}
-                error={touched.offices && errors.offices && true}
-                onChangeText={handleChange('offices')}
-                onBlur={() => setFieldTouched('offices')}
+                value={values.no_of_offices}
+                error={touched.no_of_offices && errors.no_of_offices && true}
+                onChangeText={handleChange('no_of_offices')}
+                onBlur={() => setFieldTouched('no_of_offices')}
               />
-              {touched.offices && errors.offices && (
-                <JErrorText>{errors.offices}</JErrorText>
+              {touched.no_of_offices && errors.no_of_offices && (
+                <JErrorText>{errors.no_of_offices}</JErrorText>
               )}
               <JInput
                 containerStyle={{marginTop: RFPercentage(2)}}

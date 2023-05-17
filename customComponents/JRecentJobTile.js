@@ -146,7 +146,7 @@ function JRecentJobTile({
               }}>
               <TouchableOpacity
                 onPress={() =>
-                  navigation.navigate('JobDetails', {id: item.job_id})
+                  navigation.navigate('JobDetails', {id: item.job_id,jid:item.id})
                 }
                 style={{
                   // height: RFPercentage(12),

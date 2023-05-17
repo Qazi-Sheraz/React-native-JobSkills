@@ -79,19 +79,19 @@ const JobDetails = ({route}) => {
       }
     }
   };
-  // console.log(route.params.jid)
+  console.log(route.params.jid)
   const [modalVisible, setModalVisible] = useState(false);
   const [jobDetail, setJobDetail] = useState([]);
   const [jobCount, setJobCount] = useState();
   const [error, setError] = useState(false);
   const [loader, setLoader] = useState(true);
-  console.log(jobDetail)
+
   const _addCandidate = (values) => {
 
     var myHeaders = new Headers();
     myHeaders.append(
       'Authorization',
-      `Bearer ${store.token.token}`,
+      `Bearer ${store.token?.token}`,
     );
   
     var formdata = new FormData();
@@ -135,7 +135,6 @@ console.log(formdata)
             type: 'success',
             text1: 'success',
           });
-navigation.goBack();
           //  console.log(values)
         } else {
           Toast.show({
@@ -404,7 +403,6 @@ navigation.goBack();
                 email: yup
                   .string()
                   .min(0, 'Email address cannot be empty')
-                  .max(25, 'Email address must be at most 25 characters long')
                   .email('Must be a valid email')
                   .required()
                   .label('Email'),
@@ -431,7 +429,7 @@ navigation.goBack();
                         </JText>
                       }
                     />
-
+                  {/* {console.log(route.params.jid)} */}
                     <View style={{padding: RFPercentage(2)}}>
                       <JInput
                         containerStyle={{marginTop: RFPercentage(1)}}

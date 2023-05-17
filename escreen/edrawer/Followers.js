@@ -18,6 +18,7 @@ import {Image} from 'react-native';
 import {baseUrl} from '../../ApiUrls';
 import { FlatList } from 'react-native';
 import url from '../../config/url';
+import JNotfoundData from '../../customComponents/JNotfoundData';
 
 const Followers = () => {
   const store = useContext(StoreContext);
@@ -85,9 +86,11 @@ const Followers = () => {
           left={JChevronIcon}
         />
       }>
+
       {loader === true ? (
         <ActivityIndicator />
-      ) : (
+      ) 
+      : (followerdata.length > 0 ? (
         <>
           <JSearchInput
             length={1}
@@ -152,7 +155,7 @@ const Followers = () => {
             />
           </View>
         </>
-      )}
+        ): <JNotfoundData/>)}
     </JScreen>
   );
 };

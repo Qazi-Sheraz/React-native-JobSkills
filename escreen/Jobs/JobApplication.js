@@ -32,6 +32,7 @@ import {useNavigation} from '@react-navigation/native';
 import JChevronIcon from '../../customComponents/JChevronIcon';
 import {observer} from 'mobx-react';
 import url from '../../config/url';
+import JNotfoundData from '../../customComponents/JNotfoundData';
 
 
 
@@ -165,8 +166,10 @@ const data = [
 
       {loader == true ? (
         <ActivityIndicator />
-      ) : (
+      ) :  
+        jApplication.length>0?(
         <>
+       
           <JRow
             style={{
               paddingHorizontal: RFPercentage(2),
@@ -216,6 +219,7 @@ const data = [
             </Menu>
           </JRow>
 
+
           <ScrollView style={{flex: 1, paddingHorizontal: RFPercentage(2)}}>
             {(searchQuery.length > 0 ? filteredData1 : jApplication).map(
               (item, index) => (
@@ -230,7 +234,8 @@ const data = [
             )}
           </ScrollView>
         </>
-      )}
+      ): <JNotfoundData/>
+    }
       <RBSheet
         ref={refRBSheet}
         // closeOnDragDown={false}

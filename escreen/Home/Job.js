@@ -78,9 +78,7 @@ const Job = () => {
 
 
   useEffect(() => {
-    if (isFoucs) {
       _getjobs();
-    }
   }, [loader, isFoucs]);
 
   return (

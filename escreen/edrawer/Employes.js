@@ -11,6 +11,7 @@ import JSearchInput from '../../customComponents/JSearchInput';
 import JEmployeUser from '../../customComponents/JEmployeUser';
 import { StoreContext } from '../../mobx/store';
 import url from '../../config/url';
+import JNotfoundData from '../../customComponents/JNotfoundData';
 
 const Employes = () => {
   const {navigate, goBack} = useNavigation();
@@ -34,7 +35,7 @@ const Employes = () => {
   const _getEmployeData = () => {
 
     var myHeaders = new Headers();
-    myHeaders.append('Authorization', `Bearer ${store.token.token}`,);
+    myHeaders.append('Authorization', `Bearer ${store.token?.token}`,);
 
     fetch(`${url.baseUrl}/company/employees` ,
     {
@@ -92,6 +93,7 @@ const Employes = () => {
       {loader ? (
         <ActivityIndicator />
       ) : (
+      employeeData.length > 0 ?(
         <>
           <JSearchInput
             length={1}
@@ -110,7 +112,7 @@ const Employes = () => {
             />
           </View>
         </>
-      )}
+      ):<JNotfoundData/>)}
     </JScreen>
   );
 };

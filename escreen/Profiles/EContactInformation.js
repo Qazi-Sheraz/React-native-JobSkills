@@ -37,7 +37,7 @@ function EContactInformation({refRBSheet, data, user}) {
     myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
     var formdata = new FormData();
     formdata.append('name', values?.name);
-    formdata.append('phone',  values?.phone);
+    formdata.append('phone',  values?.phone.slice(1));
     formdata.append("industry_id", "2");
     formdata.append('country_id',  values?.countries.id);
     formdata.append('state_id',  values?.state.id);

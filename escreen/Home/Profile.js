@@ -34,7 +34,7 @@ const Profile = () => {
   const [loader, setLoader] = useState(true);
   const{params}=useRoute();
   const isFoucs = useIsFocused();
-  console.log('store====>>>' , profile?.company[0]?.contact_information?.is_phone_verified);
+  // console.log('store====>>>' , profile?.company[0]?.contact_information?.is_phone_verified);
 
   const onRefresh = useCallback(() => {
     _getProfile(store);
@@ -111,8 +111,18 @@ const Profile = () => {
     };
     fetch(`${url.baseUrl}/send-code`, requestOptions)
       .then(response => response.json())
-      .then(result => console.log(result))
-      .catch(error => console.log('error', error));
+      .then(result => {console.log(result)
+        Toast.show({
+          type: 'success',
+          text1: 'OTP has been sent to your registered phone number',
+        });
+
+      })
+      .catch(error => {console.log('error', error)
+      Toast.show({
+        type: 'error',
+        text1: 'Oops! Something went wrong',
+      });});
     };
   useEffect(() => {
   
@@ -177,18 +187,18 @@ const Profile = () => {
               </JText>
               <JProfileInfo
                 title={store.lang.phone_number}
-                text={
-                  profile?.company[0]?.contact_information?.regional_code !==
+                text={profile?.company[0]?.contact_information?.phone_number?
+                (  profile?.company[0]?.contact_information?.regional_code !==
                   null
-                    ? `${profile?.company[0]?.contact_information?.regional_code}${profile?.company[0]?.contact_information?.phone_number}`
-                    : profile?.company[0]?.contact_information?.phone_number
+                    ? `${profile?.company[0]?.contact_information?.regional_code.replace(/\+/g, "")}${profile?.company[0]?.contact_information?.phone_number.replace(/\+/g, "")}`
+                    : profile?.company[0]?.contact_information?.phone_number.replace(/\+/g, "")):'N/A'
                 }
               />
               <JText
              
             onPress={() =>
              { profile?.company[0]?.contact_information?.is_phone_verified == 0 ?(
-              navigation.navigate('VerifiedPhone',{phone:profile?.company[0]?.contact_information?.phone_number}),
+              navigation.navigate('VerifiedPhone',{phone:profile?.company[0]?.contact_information?.phone_number.replace(/\+/g, "")}),
                 _otp()
               ):( Toast.show({
                 type: 'success',
@@ -207,11 +217,20 @@ const Profile = () => {
         <JProfileSections
           onIconPress={() => {
             navigation.navigate('ECompanyInformation',{
+
               ceo_name:profile?.company[0]?.company_information?.ceo,
+              company_name:profile?.company[0]?.company_information?.company_name,
+              ownership_id:profile?.company[0]?.company_information?.ownership_type_id,
               ownership:profile?.company[0]?.company_information?.ownership_type,
               industry:profile?.company[0]?.company_information?.industry,
+              industry_id:profile?.company[0]?.company_information?.industry_id,
               company_size:profile?.company[0]?.company_information?.company_size,
-              location:profile?.company[0]?.company_information?.location, });
+              company_size_id:profile?.company[0]?.company_information?.company_size_id,
+              location:profile?.company[0]?.company_information?.location,
+              offices:profile?.company[0]?.company_information?.no_of_offices,
+              website:profile?.company[0]?.company_information?.website,
+              fax:profile?.company[0]?.company_information?.fax,
+             });
             
           }}
           isEmpty={false}
@@ -223,6 +242,10 @@ const Profile = () => {
               <JProfileInfo
                 title={store.lang.CEO_name}
                 text={profile?.company[0]?.company_information?.ceo}
+              />
+              <JProfileInfo
+                title={store.lang.company_name}
+                text={profile?.company[0]?.company_information?.company_name}
               />
               <JProfileInfo
                 title={store.lang.ownership_type}
@@ -242,10 +265,18 @@ const Profile = () => {
                 title={store.lang.location}
                 text={profile?.company[0]?.company_information?.location}
               />
-              {/* <JProfileInfo
+              <JProfileInfo
                 title={store.lang.no_of_office}
-                text={profile?.company[0]?.company_information?.}
-              /> */}
+                text={profile?.company[0]?.company_information?.no_of_offices}
+              />
+              <JProfileInfo
+                title={store.lang.website}
+                text={profile?.company[0]?.company_information?.website}
+              />
+              <JProfileInfo
+                title={store.lang.fax}
+                text={profile?.company[0]?.company_information?.fax}
+              />
             </BorderView>
           }
         />

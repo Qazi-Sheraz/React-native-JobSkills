@@ -32,6 +32,7 @@ import JRow from '../../customComponents/JRow';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import url from '../../config/url';
 import JIcon from '../../customComponents/JIcon';
+import JNotfoundData from '../../customComponents/JNotfoundData';
 
 const Home = ({isempty = false,}) => {
   const navigation=useNavigation();
@@ -70,9 +71,7 @@ const Home = ({isempty = false,}) => {
   };
 
   useEffect(() => {
-    if (isFoucs) {
       _dashboard();
-    }
   }, [loader, isFoucs]);
 
   return (
@@ -300,21 +299,9 @@ const Home = ({isempty = false,}) => {
                 </JRow>
               </>
             ) : (
-              <View
-                style={{
-                  height: heightPercentageToDP(12),
-                  // backgroundColor: colors.tileColor[0],
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Image
-                  style={{width: RFPercentage(6), height: RFPercentage(6)}}
-                  source={require('../../assets/images/empty/empty.png')}
-                />
-                <JText style={{marginTop: RFPercentage(1)}}>
-                  {store.lang.not_found}
-                </JText>
-              </View>
+              
+              <JNotfoundData/>
+              
             )}
 
             <JText
@@ -329,21 +316,7 @@ const Home = ({isempty = false,}) => {
                 <JRecentJobTile star={false} item={item} key={index} />
               ))
             ) : (
-              <View
-                style={{
-                  height: heightPercentageToDP(22),
-                  // backgroundColor: colors.tileColor[0],
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Image
-                  style={{width: RFPercentage(6), height: RFPercentage(6)}}
-                  source={require('../../assets/images/empty/empty.png')}
-                />
-                <JText style={{marginTop: RFPercentage(1)}}>
-                  {store.lang.not_found}
-                </JText>
-              </View>
+              <JNotfoundData/>
             )}
           </JScrollView>
         </React.Fragment>
