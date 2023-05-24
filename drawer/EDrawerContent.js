@@ -87,7 +87,7 @@ function EDrawerContent (props) {
       />
     ) : index === 3 ? (
         <JIcon
-        icon='an' color={colors.black[0]} name="adduser" size={RFPercentage(3.5)} />
+        icon='ft' color={colors.black[0]} name="bar-chart" size={RFPercentage(2.4)} />
     ) : index === 4 ? (
         <JIcon
         icon='fe'
@@ -107,7 +107,7 @@ function EDrawerContent (props) {
         icon='fe'
         color={colors.black[0]}
         name="help-circle"
-        size={RFPercentage(3.5)}
+        size={RFPercentage(3)}
       />
     );
   return (

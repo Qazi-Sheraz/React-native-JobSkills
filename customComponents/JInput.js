@@ -6,10 +6,12 @@ import colors from '../config/colors';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useContext } from 'react';
 import { StoreContext } from '../mobx/store';
+import JRow from './JRow';
 export default function JInput({
   containerStyle,
   heading,
   icon,
+  Icon1,
   onChangeText,
   placeholder,
   placeHolderColor = colors.placeHolderColor[0],
@@ -25,6 +27,8 @@ export default function JInput({
   error,
   defaultValue,
   isRequired = false,
+  numberOfLines=1,
+  multiline=false,
 }) {
   const store = useContext(StoreContext);
   return (
@@ -44,17 +48,22 @@ export default function JInput({
           </JText>
         )}
       </View>
+      <JRow>
+    
       <View
         style={{
+          // width:Icon1?'80%':'100%',
           flexDirection: 'row',
           alignItems: 'center',
           marginTop: RFPercentage(0.3),
           marginBottom: RFPercentage(0.5),
           borderBottomWidth: RFPercentage(0.2),
-          
           borderBottomColor: error ? colors.danger[0] : colors.inputBorder[0],
         }}>
+           { Icon1 &&
+        <View >{Icon1}</View>}
         <TextInput
+
           autoFocus={autoFocus}
           onChangeText={onChangeText}
           defaultValue={defaultValue}
@@ -70,6 +79,8 @@ export default function JInput({
           autoCapitalize={autoCapitalize}
           onBlur={onBlur}
           onFocus={onFocus}
+          numberOfLines={numberOfLines}
+          multiline={multiline}
           secureTextEntry={eye ? true : false}
         />
         {forPassword && (
@@ -81,7 +92,7 @@ export default function JInput({
             color={colors.purple[0]}
           />
         )}
-      </View>
+      </View></JRow>
     </View>
   );
 }

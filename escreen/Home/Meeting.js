@@ -19,6 +19,7 @@ import {StoreContext} from '../../mobx/store';
 import {useContext} from 'react';
 import {useState} from 'react';
 import url from '../../config/url';
+import { useIsFocused } from '@react-navigation/native';
 
 const Meeting = ({isempty=false,}) => {
   const store = useContext(StoreContext);
@@ -26,12 +27,12 @@ const Meeting = ({isempty=false,}) => {
   const [data1, setData1] = useState({});
   const [loader, setLoader] = useState(true);
   const [error, setError] = useState(false);
-
+  const isFoucs = useIsFocused();
   const _getmeeting = () => {
     var myHeaders = new Headers();
     myHeaders.append(
       'Authorization',
-      `Bearer ${store.token.token}`,
+      `Bearer ${store.token?.token}`,
     );
 
     fetch(`${url.baseUrl}/meetings`, {
@@ -85,7 +86,7 @@ const Meeting = ({isempty=false,}) => {
   useEffect(() => {
     _getmeeting();
     
-  }, [loader]);
+  }, [loader,isFoucs]);
 
   const refRBSheet = useRef();
   return (
@@ -117,7 +118,7 @@ const Meeting = ({isempty=false,}) => {
               renderItem={({item, index}) => (
                 <JMeetingJob
                 key={index}
-                  onPress={() => _getmeetingInfo(item.id)}
+                  startonPress={() => _getmeetingInfo(item.id)}
                   item={item}
                   
                 />

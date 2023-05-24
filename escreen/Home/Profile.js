@@ -22,7 +22,7 @@ import url from '../../config/url';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
 import JNotfoundData from '../../customComponents/JNotfoundData';
-import { values } from 'mobx';
+
 import { useContext } from 'react';
 // import token from '../../mobx/store';
 
@@ -169,6 +169,12 @@ const Profile = () => {
             navigation.navigate('EContactInformation', {
               user_name: profile?.company[0]?.name,
               user_email: profile?.company[0]?.contact_information?.email,
+              country:profile?.company[0]?.contact_information?.country_name,
+              country_id:profile?.company[0]?.contact_information?.country_id,
+              state:profile?.company[0]?.contact_information?.state_name,
+              state_id:profile?.company[0]?.contact_information?.state_id,
+              city:profile?.company[0]?.contact_information?.city_name,
+              city_id:profile?.company[0]?.contact_information?.city_id,
             });
           }}
           isEmpty={false}

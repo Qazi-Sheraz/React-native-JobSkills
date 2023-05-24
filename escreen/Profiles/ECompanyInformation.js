@@ -19,8 +19,6 @@ import Toast from 'react-native-toast-message';
 import url from '../../config/url';
 import { useContext } from 'react';
 import { StoreContext } from '../../mobx/store';
-import JRow from '../../customComponents/JRow';
-import { keys } from 'mobx';
 
 const ECompanyInformation = () => {
   const [loader, setLoader] = useState(false);

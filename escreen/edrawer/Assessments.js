@@ -8,17 +8,18 @@ import colors from '../../config/colors';
 import { StoreContext } from '../../mobx/store';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import url from '../../config/url';
+import { useNavigation } from '@react-navigation/native';
 
 const Assessments = () => {
   const store = useContext(StoreContext);
   const [loader, setLoader] = useState(true);
   const [data, setData] = useState([]);
-  const [error,setError]=useState(false)
-
+  const [error,setError]=useState(false);
+const navigation= useNavigation();
   const _getAssesmentsData = () => {
 
     var myHeaders = new Headers();
-    myHeaders.append('Authorization',`Bearer ${store.token.token}`,);
+    myHeaders.append('Authorization',`Bearer ${store?.token?.token}`,);
 
     fetch(`${url.baseUrl}/employer/assessment-list` ,
     {
@@ -29,7 +30,7 @@ const Assessments = () => {
 
     .then(response => response.json())
       .then(result => {
-        console.log(result);
+        // console.log(result.assessment);
         setData(result.assessment);
       
       })
@@ -75,7 +76,8 @@ const Assessments = () => {
         data={data}
         renderItem={({item, index}) => (
           <>
-            <View
+            <Pressable
+            onPress={()=>navigation.navigate('AssessmentView',{id:item.id,name:item.assessment_name})}
               style={{
                 borderBottomColor: colors.border[0],
                 borderBottomWidth: RFPercentage(0.1),
@@ -87,7 +89,7 @@ const Assessments = () => {
               <JText style={{marginTop: RFPercentage(1)}}>
                Category: {item.job_category}
               </JText>
-            </View>
+            </Pressable>
           </>
         )}
         keyExtractor={(item, index) => index}

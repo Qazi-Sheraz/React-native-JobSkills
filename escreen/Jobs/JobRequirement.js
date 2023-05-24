@@ -9,7 +9,6 @@ import colors from '../../config/colors';
 import JIcon from '../../customComponents/JIcon';
 import {Formik} from 'formik';
 import * as yup from 'yup';
-import Feather from 'react-native-vector-icons/Feather';
 import JSelectInput from '../../customComponents/JSelectInput';
 import JErrorText from '../../customComponents/JErrorText';
 import JButton from '../../customComponents/JButton';
@@ -18,7 +17,7 @@ import JRow from '../../customComponents/JRow';
 import { baseUrl } from '../../ApiUrls';
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
 import {Calendar} from 'react-native-calendars';
-import { Toast } from 'react-native-toast-message/lib/src/Toast';
+import Toast from 'react-native-toast-message';
 import JNewJobIcon from '../../customComponents/JNewJobIcon';
 import url from '../../config/url';
 import { useContext } from 'react';
@@ -48,7 +47,7 @@ const JobRequirement = ({calendar='0',}) => {
 
 // const arry=params.assessment.map((item)=>item.id).map(Number)
 // // const arr1= arry.map(Number);
-console.log((params?.jobTag?.map((item)=>item.id).map(Number)))
+// console.log((params?.jobTag?.map((item)=>item.id).map(Number)))
 // params.assessment.map((item)=>console.log("id",item.id))
   
   const _handleSubmit = values => {
@@ -107,10 +106,9 @@ console.log((params?.jobTag?.map((item)=>item.id).map(Number)))
       }
       
       else{ 
-        console.log('error',message);
         Toast.show({
         type: 'error',
-        text1: 'message',
+        text1: result.message,
       });
     }
   }).catch(error => 

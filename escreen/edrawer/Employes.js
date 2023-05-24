@@ -1,12 +1,12 @@
-import {StyleSheet, FlatList, View, ActivityIndicator} from 'react-native';
-import React, { useContext,useEffect,useState } from 'react';
+import {StyleSheet, FlatList, View, RefreshControl,ActivityIndicator} from 'react-native';
+import React, { useCallback, useContext,useEffect,useState } from 'react';
 import JScreen from '../../customComponents/JScreen';
 import JGradientHeader from '../../customComponents/JGradientHeader';
 import JText from '../../customComponents/JText';
 import JIcon from '../../customComponents/JIcon';
 import colors from '../../config/colors';
 import {RFPercentage} from 'react-native-responsive-fontsize';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import JSearchInput from '../../customComponents/JSearchInput';
 import JEmployeUser from '../../customComponents/JEmployeUser';
 import { StoreContext } from '../../mobx/store';
@@ -21,7 +21,7 @@ const Employes = () => {
   const [error,setError]=useState(false)
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredData, setFilteredData] = useState(employeeData);
-
+  const isFoucs = useIsFocused()
   const handleSearch = (text) => {
     setSearchQuery(text);
     
@@ -62,7 +62,16 @@ const Employes = () => {
 
  useEffect(() => {
   _getEmployeData();
- }, [loader]);
+ }, [loader,isFoucs]);
+
+ const onRefresh = useCallback(() => {
+  store.setIsRefreshing(true);
+
+  setTimeout(() => {
+    _getEmployeData();
+    store.setIsRefreshing(false);
+  }, 2000);
+}, []);
 
   return (
     <JScreen
@@ -106,7 +115,12 @@ const Employes = () => {
           />
           <View>
             <FlatList
-
+  refreshControl={
+    <RefreshControl
+      refreshing={store.isRefreshing}
+      onRefresh={onRefresh}
+    />
+  }
              data={searchQuery.length > 0 ?filteredData :employeeData}
               renderItem={({item, index}) => <JEmployeUser item={item} />}
             />

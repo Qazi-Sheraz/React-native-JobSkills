@@ -38,7 +38,7 @@ const Job = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredData, setFilteredData] = useState(jobData);
 
-  const isFoucs = useIsFocused()
+  const isFoucs = useIsFocused();
 
   const handleSearch = (text) => {
     setSearchQuery(text);
@@ -53,7 +53,7 @@ const Job = () => {
     var myHeaders = new Headers();
     myHeaders.append(
       'Authorization',
-      `Bearer ${store.token.token}`,
+      `Bearer ${store.token?.token}`,
     );
     
     console.log(myHeaders)
@@ -64,7 +64,6 @@ const Job = () => {
     })
       .then(response => response.json())
       .then(result => {
-        // console.log(result.jobs);
         setJobData(result.jobs);
       })
       .catch(error => {

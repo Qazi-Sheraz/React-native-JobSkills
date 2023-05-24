@@ -33,7 +33,7 @@ import {
   MenuOption,
   MenuTrigger,
 } from 'react-native-popup-menu';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import JRow from './JRow';
 import JIcon from './JIcon';
 import JButton from './JButton';
@@ -62,13 +62,14 @@ function JRecentJobTile({
   const navigation = useNavigation();
   const [stat, setStat] = useState(item.status);
   const [modalVisible, setModalVisible] = useState(false);
-  const[status1,setStatus1] = useState()
+  const[status1,setStatus1] = useState();
+  const isFoucs = useIsFocused();
 
   const _getjobStatus = (id,status1) => {
     var myHeaders = new Headers();
     myHeaders.append(
       'Authorization',
-      `Bearer ${store.token.token}`,
+      `Bearer ${store.token?.token}`,
     );
     
 // console.log(`${baseUrl}/employer/job/${item.id}/status/${id}`,item)
@@ -79,18 +80,19 @@ function JRecentJobTile({
     })
       .then(response => response.json())
       .then(result => {
-        // console.log(result.jobs);
+        console.log(result.jobs);
 
         if (result.success === true) {
-      
            setStat(status1)
-           console.log(status1)
+           Toast.show({
+            type: 'success',
+            text1: result.message,});
         }
         else{
 
           Toast.show({
             type: 'error',
-            text1: message,
+            text1: result.message,
           });
         }
       })
@@ -104,7 +106,7 @@ function JRecentJobTile({
   };
   useEffect(() => {
     // _getjobStatus();
-  }, [loader]);
+  }, [loader,isFoucs]);
 
   return isempty === true ? (
     <View
@@ -420,8 +422,15 @@ function JRecentJobTile({
               //   </MenuOptions>
               // // </Menu>
               <JRow
+              onPress={()=>
+                Toast.show({
+                  type: 'success',
+                  text1: 'Icon pressd',
+                })}
+             disabled={false}
                 style={{
-                  width: RFPercentage(3),
+
+                  width: RFPercentage(5),
                   height: RFPercentage(4),
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -429,7 +438,8 @@ function JRecentJobTile({
                   right: store.lang.id == 0 ? 0 : null,
                   top: 2,
                 }}>
-                <JIcon icon="io" name={'share-social-outline'} size={25} color={colors.purple[0]} />
+                 
+                <JIcon   icon="io" name={'share-social-outline'} size={25} color={colors.purple[0]} />
               </JRow>
             )}
           </View>

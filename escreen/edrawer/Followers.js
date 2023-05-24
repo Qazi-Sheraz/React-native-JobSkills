@@ -1,5 +1,5 @@
-import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import {ActivityIndicator, StyleSheet, RefreshControl, View} from 'react-native';
+import React, { useCallback } from 'react';
 import JScreen from '../../customComponents/JScreen';
 import JGradientHeader from '../../customComponents/JGradientHeader';
 import JText from '../../customComponents/JText';
@@ -7,7 +7,7 @@ import JSearchInput from '../../customComponents/JSearchInput';
 import JIcon from '../../customComponents/JIcon';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import colors from '../../config/colors';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import JRow from '../../customComponents/JRow';
 import JChevronIcon from '../../customComponents/JChevronIcon';
 import {StoreContext} from '../../mobx/store';
@@ -28,7 +28,7 @@ const Followers = () => {
   const [loader, setLoader] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredData, setFilteredData] = useState(followerdata);
-
+  const isFoucs = useIsFocused();
   const handleSearch = (text) => {
     setSearchQuery(text);
     
@@ -66,8 +66,15 @@ const Followers = () => {
 
   useEffect(() => {
     _followers();
-  }, [loader]);
-
+  }, [isFoucs,loader]);
+  const onRefresh = useCallback(() => {
+    store.setIsRefreshing(true);
+  
+    setTimeout(() => {
+      _followers();
+      store.setIsRefreshing(false);
+    }, 2000);
+  }, []);
   return (
     <JScreen
       onTryAgainPress={() => _followers()}
@@ -103,6 +110,12 @@ const Followers = () => {
               marginVertical: RFPercentage(1),
             }}>
             <FlatList
+            refreshControl={
+              <RefreshControl
+                refreshing={store.isRefreshing}
+                onRefresh={onRefresh}
+              />
+            }
               data={searchQuery.length > 0 ? filteredData : followerdata}
               renderItem={({item, index}) => (
                 <JRow

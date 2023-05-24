@@ -79,7 +79,7 @@ const JobDetails = ({route}) => {
       }
     }
   };
-  console.log(route.params.jid)
+  // console.log(route.params.jid)
   const [modalVisible, setModalVisible] = useState(false);
   const [jobDetail, setJobDetail] = useState([]);
   const [jobCount, setJobCount] = useState();
@@ -246,7 +246,7 @@ console.log(formdata)
     },
     {
       heading: store.lang.Is_Freelance,
-      name: jobDetail?.job_details?.is_freelance === false ? 'false' : 'true',
+      name: jobDetail?.job_details?.is_freelance === false ? 'No' : 'Yes',
     },
   ];
   return (

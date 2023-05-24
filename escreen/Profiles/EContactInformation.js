@@ -31,7 +31,7 @@ function EContactInformation({refRBSheet, data, user}) {
   const store = useContext(StoreContext);
   const phoneInput = useRef(null);
   const {params}=useRoute();
-// console.log(store.token?.user?.first_name)
+
   const _contactInfo = values => {
     var myHeaders = new Headers();
     myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
@@ -99,16 +99,33 @@ function EContactInformation({refRBSheet, data, user}) {
   useEffect(() => {
     _getcountry();
   }, [loader]);
-
+// console.log(info?.state)
+//   const searchKey = params.country;
+//   const searchValue = info?.countries[searchKey];
+//   // const searchKey = params.state;
+//   // const searchValue = info?.countries[searchKey];
+//   // const searchKey = params.city;
+//   // const searchValue = info?.countries[searchKey];
+  
+//   // console.log('Found value:', searchValue);
   return (
     <JScreen headerShown={false}>
       <Formik
         initialValues={{
           name:store.token?.user?.first_name,
-          email: params?.user_email,
-          countries: '',
-          state: '',
-          city: '',
+          email: params?.user_email?params?.user_email:'',
+          countries: params?.country && params?.country_id?{
+            name:params?.country,
+            id:params?.country_id,
+          } : '',
+          state: params?.state && params?.state_id?{
+            name:params?.state,
+            id:params?.state_id,
+          } : '',
+          city:params?.city && params?.city_id?{
+            name:params?.city,
+            id:params?.city_id,
+          } : '',
           phone: '',
         }}
         onSubmit={values => {
@@ -219,7 +236,7 @@ function EContactInformation({refRBSheet, data, user}) {
                 containerStyle={{marginTop: RFPercentage(2)}}
                 value={values.countries?.name}
                 id={values.countries?.id}
-                data={info?.countries? info?.countries :'not fount'}
+                data={info?.countries}
                 setValue={e => setFieldValue('countries', e)}
                 header={'Country'}
                 heading={'Country :'}

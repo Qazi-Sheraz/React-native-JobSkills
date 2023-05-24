@@ -1,33 +1,28 @@
-import {FlatList, StyleSheet, Image, View, Pressable, ActivityIndicator} from 'react-native';
+import {FlatList, StyleSheet, Image, View, ActivityIndicator} from 'react-native';
 import React, {useRef, useState, useEffect} from 'react';
 import JScreen from '../../customComponents/JScreen';
 import JHeader from '../../customComponents/JHeader';
-import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import JLogoImage from '../../customComponents/JLogoImage';
 import {
   heightPercentageToDP,
   widthPercentageToDP,
 } from 'react-native-responsive-screen';
-import JShadowView from '../../customComponents/JShadowView';
-import translation from '../../config/translation';
 import {useContext} from 'react';
 import {StoreContext} from '../../mobx/store';
 import colors from '../../config/colors';
 import JText from '../../customComponents/JText';
 import JScrollView from '../../customComponents/JScrollView';
 import JGradientView from '../../customComponents/JGradientView';
-import JSideHeading from '../../customComponents/JSideHeading';
 import moment from 'moment';
 import JRecentJobTile from '../../customComponents/JRecentJobTile';
 import JFindTitle from '../../customComponents/JFindTitle';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import EDrawerContent from '../../drawer/EDrawerContent';
-import {Observer, observer, useObserver} from 'mobx-react';
+import {Observer, observer} from 'mobx-react';
 import JRow from '../../customComponents/JRow';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import url from '../../config/url';
@@ -208,12 +203,13 @@ const Home = ({isempty = false,}) => {
 
 
             {data?.meetings?.length > 0 ? (
-              <>
+              <FlatList
+               data={data?.meetings}
+               renderItem={({item,index})=>
                 <JRow
                   disabled={false}
-                  onPress={() => refRBSheet.current.open()}
                   style={{
-                    marginTop: RFPercentage(1),
+                    marginVertical: RFPercentage(1),
                     borderBottomWidth: RFPercentage(0.1),
                     borderBottomColor: colors.border[0],
                   }}>
@@ -241,19 +237,19 @@ const Home = ({isempty = false,}) => {
                       elevation: 4,
                     }}>
                     <JText style={{color: colors.white[0]}}>
-                      {moment().format('HH:MM A')}
+                      {moment(item.start_date_and_time).format('HH:MM')} {item.meridiem}
                     </JText>
                     <JText style={{color: colors.white[0]}}>
-                      {moment().format('ddd DD')}
+                      {moment(item.start_date_and_time).format('ddd DD')}
                     </JText>
                     <JText style={{color: colors.white[0]}}>
-                      {moment().format('MMM YYYY')}
+                      {moment(item.start_date_and_time).format('MMM YYYY')}
                     </JText>
                   </View>
                   <View
                     style={{paddingHorizontal: RFPercentage(2), width: '75%'}}>
                     <JText fontWeight="bold" fontSize={RFPercentage(2.2)}>
-                      {store.lang.project_Manager}
+                      {item.meeting_topic}
                     </JText>
                     <JRow
                       style={{
@@ -274,12 +270,13 @@ const Home = ({isempty = false,}) => {
                           marginHorizontal: RFPercentage(1),
                           fontSize: RFPercentage(1.9),
                         }}>
-                        Taqi Haider
+                        {item.employer_name}
                       </JText>
                     </JRow>
 
                     <JRow
                       disabled={false}
+                      onPress={() => refRBSheet.current.open()}
                       style={{
                         alignSelf:
                           store.lang.id == 0 ? 'flex-end' : 'flex-start',
@@ -297,7 +294,10 @@ const Home = ({isempty = false,}) => {
                     </JRow>
                   </View>
                 </JRow>
-              </>
+               }
+               />
+                
+              
             ) : (
               
               <JNotfoundData/>

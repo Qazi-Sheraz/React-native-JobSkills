@@ -10,7 +10,6 @@ import JReload from '../../customComponents/JReload';
 import Toast from 'react-native-toast-message';
 import url from '../../config/url';
 import { StoreContext } from '../../mobx/store';
-import { values } from 'mobx';
 import { useRoute } from '@react-navigation/native';
 
 export default function VerifiedPhone({ navigation}) {
@@ -22,8 +21,6 @@ export default function VerifiedPhone({ navigation}) {
     d3: '',
     d4: '',
   });
-
-
   const d1 = useRef();
   const d2 = useRef();
   const d3 = useRef();
@@ -47,8 +44,9 @@ var requestOptions = {
 
 fetch(`${url.baseUrl}/phone-code-verification`, requestOptions)
   .then(response => response.json())
-  .then(result =>{ console.log(result)
-  if(result.success===true){
+  .then(result =>{ 
+    console.log(result)
+  if(result.success===false){
     Toast.show({
       type: 'success',
       text1: result.message,
@@ -58,11 +56,14 @@ fetch(`${url.baseUrl}/phone-code-verification`, requestOptions)
   }
   else{Toast.show({
     type: 'error',
-    text1: result.message,
+    text1: 'Worng OTP !',
   });}
   }
   )
-  .catch(error => console.log('error', error));
+  .catch(error => Toast.show({
+    type: 'error',
+    text1: 'something went wrong',
+  }))
   }
   return (
     <JScreen>
@@ -86,7 +87,7 @@ fetch(`${url.baseUrl}/phone-code-verification`, requestOptions)
         <JText
           fontWeight={'500'}
           fontAlign="center"
-          children={'Enter 4 digit code that you received on this phone no +966*******777'}
+          children={`Enter 4 digit code that you received on this phone no ${params.phone}`}
           style={{marginTop: RFPercentage(0.5), width: '70%'}}
         />
       </View>
@@ -228,7 +229,7 @@ fetch(`${url.baseUrl}/phone-code-verification`, requestOptions)
               Toast.show({
                 type: 'success',
                 text1: 'Send Code Successfully',
-                text2: 'Check your Email',
+                text2: 'Check your Phone',
               });
             }}
           />

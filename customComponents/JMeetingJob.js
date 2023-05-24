@@ -51,7 +51,7 @@ const JMeetingJob = ({item,startonPress,onPress}) => {
         </JRow>
 
         </View>
-      <JRow onPress={startonPress} style={styles.startBtn}>
+      <JRow  disabled={false} onPress={startonPress} style={styles.startBtn}>
           <JText
             style={{
               marginHorizontal: RFPercentage(0.5),

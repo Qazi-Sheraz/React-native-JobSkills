@@ -50,6 +50,7 @@ import CSocialMediaLink from '../../screens/Home/ProfileScreen/CSocialMediaLink'
 import ViewResume from '../../escreen/Jobs/ViewResume';
 import LngTranslation from '../../screens/LngTranslation/LngTranslation';
 import ESearch from '../../escreen/Jobs/ESearch';
+import AssessmentView from '../../escreen/edrawer/AssessmentView';
 
 const Stack = createStackNavigator();
 
@@ -249,6 +250,7 @@ function EmployeStack({navigation}) {
         <Stack.Screen name="Employes" component={Employes} />
         <Stack.Screen name="ViewResume" component={ViewResume} />
         <Stack.Screen name="ESocialLink" component={ESocialLink} />
+        <Stack.Screen name="AssessmentView" component={AssessmentView} />
         <Stack.Screen
           name="CSocialMediaLink"
           component={CSocialMediaLink}

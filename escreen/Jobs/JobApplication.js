@@ -28,7 +28,7 @@ import {
 import {StoreContext} from '../../mobx/store';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {heightPercentageToDP} from 'react-native-responsive-screen';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import JChevronIcon from '../../customComponents/JChevronIcon';
 import {observer} from 'mobx-react';
 import url from '../../config/url';
@@ -104,7 +104,7 @@ const data = [
 
   const [error, setError] = useState(false);
   const [loader, setLoader] = useState(true);
-
+  const isFoucs = useIsFocused();
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredData1, setFilteredData1] = useState(jApplication);
 
@@ -140,7 +140,7 @@ const data = [
       })
       .catch(error => {
         console.log('error', error);
-        // setError(true);
+        setError(true);
       })
       .finally(() => {
         setLoader(false);
@@ -148,10 +148,10 @@ const data = [
   };
   useEffect(() => {
     _jobApplication();
-  }, [loader]);
+  }, [loader,isFoucs]);
 
   return (
-    <JScreen isError={error} onTryAgainPress={() => _jobApplication()}>
+    <JScreen isError={error} onTryAgainPress={() => {_jobApplication()}}>
       <JGradientHeader
         center={
           <JText
@@ -230,13 +230,14 @@ const data = [
                   item={item}
                   // date={moment(item.apply_date, 'DD-MM-YYYY').format('DD MMM,YYYY')}
                 />
+                
               ),
             )}
           </ScrollView>
         </>
       ): <JNotfoundData/>
     }
-      <RBSheet
+      {/* <RBSheet
         ref={refRBSheet}
         // closeOnDragDown={false}
         closeOnPressMask={true}
@@ -269,7 +270,7 @@ const data = [
             ))}
           </ScrollView>
         </View>
-      </RBSheet>
+      </RBSheet> */}
       <Modal animationType="fade" transparent={true} visible={modalVisible}>
         <Pressable
           onPress={() => setModalVisible(!modalVisible)}
@@ -286,6 +287,7 @@ const data = [
           </View>
         </Pressable>
       </Modal>
+      
     </JScreen>
   );
 };

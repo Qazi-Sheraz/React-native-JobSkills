@@ -31,7 +31,7 @@ export default function JText({
           color: fontColor,
           textDecorationLine: textDecorationLine,
           fontWeight: fontWeight,
-          textAlign:fontAlign ? fontAlign: store.lang.id== 0? 'left' :'right',
+          textAlign:fontAlign ? fontAlign: store.lang.id == 0? 'left' :'right',
         },
         style,
       ]}>
