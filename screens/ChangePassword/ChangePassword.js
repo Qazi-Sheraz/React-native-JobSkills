@@ -18,6 +18,9 @@ import JErrorText from '../../customComponents/JErrorText';
 import url from '../../config/url';
 import Toast from 'react-native-toast-message';
 import { StoreContext } from '../../mobx/store';
+import JChevronIcon from '../../customComponents/JChevronIcon';
+
+import { observer } from 'mobx-react';
 const ChangePassword = () => {
   const navigation = useNavigation();
   const [reset, setReset] = useState();
@@ -81,17 +84,11 @@ const ChangePassword = () => {
               fontColor={colors.white[0]}
               fontWeight="bold"
               fontSize={RFPercentage(2.5)}>
-              Change Password
+              {store.lang.change_password}
             </JText>
           }
           left={
-            <JIcon
-              icon="fe"
-              onPress={() => navigation.goBack()}
-              name="chevron-left"
-              size={RFPercentage(3.5)}
-              color={colors.white[0]}
-            />
+            <JChevronIcon/>
           }
         />
       }>
@@ -129,8 +126,8 @@ const ChangePassword = () => {
             <View style={{flex: 1, marginTop: RFPercentage(4)}}>
               <JInput
                 headingWeight="bold"
-                heading={'Current Password'}
-                icon={<CurrentP marginRight={RFPercentage(2)} />}
+                heading={store.lang.current_password}
+                icon={<CurrentP marginHorizontal={RFPercentage(2)} />}
                 value={values.password_current}
                 error={
                   touched.password_current && errors.password_current && true
@@ -143,8 +140,8 @@ const ChangePassword = () => {
               )}
               <JInput
                 headingWeight="bold"
-                heading={'New Password'}
-                icon={<Key marginRight={RFPercentage(2)} />}
+                heading={store.lang.new_password}
+                icon={<Key marginHorizontal={RFPercentage(2)} />}
                 value={values.password}
                 error={touched.password && errors.password && true}
                 onChangeText={handleChange('password')}
@@ -156,8 +153,8 @@ const ChangePassword = () => {
               )}
               <JInput
                 headingWeight="bold"
-                heading={'Confirm Password'}
-                icon={<Key marginRight={RFPercentage(2)} />}
+                heading={store.lang.confirm_password}
+                icon={<Key marginHorizontal={RFPercentage(2)} />}
                 value={values.password_confirmation}
                 error={
                   touched.password_confirmation &&
@@ -181,13 +178,13 @@ const ChangePassword = () => {
                 style={styles.btn}
                 backgroundColor={'#fff'}
                 borderColor={colors.black[0]}
-                children={'Cancel'}
+                children={store.lang.cancel}
               />
               <JButton
                 isValid={isValid}
                 onPress={() => handleSubmit()}
                 style={styles.btn}
-                children={loader ? 'Loading' : 'Update'}
+                children={loader ? 'Loading' : store.lang.update}
               />
             </JRow>
           </>
@@ -197,6 +194,6 @@ const ChangePassword = () => {
   );
 };
 
-export default ChangePassword;
+export default observer(ChangePassword);
 
-const styles = StyleSheet.create({btn: {width: '48%'}});
+const styles = StyleSheet.create({btn: {width: '48%',}});

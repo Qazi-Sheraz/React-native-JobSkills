@@ -12,6 +12,8 @@ import JEmployeUser from '../../customComponents/JEmployeUser';
 import { StoreContext } from '../../mobx/store';
 import url from '../../config/url';
 import JNotfoundData from '../../customComponents/JNotfoundData';
+import JChevronIcon from '../../customComponents/JChevronIcon';
+import { observer } from 'mobx-react';
 
 const Employes = () => {
   const {navigate, goBack} = useNavigation();
@@ -85,17 +87,11 @@ const Employes = () => {
               fontColor={colors.white[0]}
               fontWeight="bold"
               fontSize={RFPercentage(2.5)}>
-              Employe User
+              {store.lang.employe_user}
             </JText>
           }
           left={
-            <JIcon
-              icon="fe"
-              onPress={() => goBack()}
-              name="chevron-left"
-              size={RFPercentage(3.5)}
-              color={colors.white[0]}
-            />
+            <JChevronIcon/>
           }
         />
       }>
@@ -131,6 +127,6 @@ const Employes = () => {
   );
 };
 
-export default Employes;
+export default observer(Employes);
 
 const styles = StyleSheet.create({});

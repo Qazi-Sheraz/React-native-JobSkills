@@ -4,11 +4,12 @@ import { StoreContext } from "../mobx/store";
 export const getDrawerItem = () => {
   const store = useContext(StoreContext);
     return [
-      'Account Setting',
+      store.lang.account_settings,
       store.lang.followers,
-      'Employees',
+      store.lang.employees,
       store.lang.assessments,
-      'Help & Center',
-      'Logout',
+      store.lang.help_center,
+      store.lang.logout,
+      
     ];
   };

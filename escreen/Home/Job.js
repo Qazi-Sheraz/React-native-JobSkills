@@ -34,7 +34,7 @@ const Job = () => {
   const [jobData, setJobData] = useState([]);
   const [error, setError] = useState(false);
   const [loader, setLoader] = useState(true);
-
+  const [update, setUpdate] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredData, setFilteredData] = useState(jobData);
 
@@ -78,7 +78,7 @@ const Job = () => {
 
   useEffect(() => {
       _getjobs();
-  }, [loader, isFoucs]);
+  }, [loader, isFoucs,update]);
 
   return (
 
@@ -120,6 +120,8 @@ const Job = () => {
             <JRecentJobTile
             star={false}
             option={true}
+            update={update}
+            setUpdate={setUpdate}
               onSelect={() => setModalVisible(true)}
               onPress={() => navigation.navigate('JobDetails',{id:item.job_id,jid:item.id})}
               image={false}

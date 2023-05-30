@@ -40,6 +40,7 @@ import JButton from './JButton';
 import {useEffect} from 'react';
 import Toast from 'react-native-toast-message';
 import url from '../config/url';
+import { Share } from 'react-native';
 
 function JRecentJobTile({
   isempty = false,
@@ -50,7 +51,8 @@ function JRecentJobTile({
   type = 'job',
   onPress,
   containerStyle,
- 
+ update,
+ setUpdate,
   favouriteData = [],
   jobId,
   onSelect,
@@ -58,12 +60,29 @@ function JRecentJobTile({
 }) {
  
   const [loader, setLoader] = useState();
+  const [en, setEn] = useState({});
+  const [ar, setAr] = useState();
   const store = useContext(StoreContext);
   const navigation = useNavigation();
   const [stat, setStat] = useState(item.status);
   const [modalVisible, setModalVisible] = useState(false);
   const[status1,setStatus1] = useState();
   const isFoucs = useIsFocused();
+// console.log()
+
+
+
+  const shareItem = async () => {
+    try {
+      await Share.share({
+        message: item?.job_title, // The content you want to share
+        url: 'https://example.com/item', // Optional URL to share
+        title: item?.job_title,// Optional title for the message
+      });
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
 
   const _getjobStatus = (id,status1) => {
     var myHeaders = new Headers();
@@ -87,6 +106,7 @@ function JRecentJobTile({
            Toast.show({
             type: 'success',
             text1: result.message,});
+            setUpdate(!update)
         }
         else{
 
@@ -105,8 +125,17 @@ function JRecentJobTile({
       });
   };
   useEffect(() => {
-    // _getjobStatus();
-  }, [loader,isFoucs]);
+    // _allStatus();
+  }, [isFoucs,loader]);
+
+
+// console.log(en);
+
+
+
+ 
+
+
 
   return isempty === true ? (
     <View
@@ -422,11 +451,13 @@ function JRecentJobTile({
               //   </MenuOptions>
               // // </Menu>
               <JRow
-              onPress={()=>
+              onPress={()=>{
                 Toast.show({
                   type: 'success',
                   text1: 'Icon pressd',
-                })}
+                })
+                // shareItem()
+              }}
              disabled={false}
                 style={{
 
@@ -464,12 +495,12 @@ function JRecentJobTile({
                     onPress={() => {
                       {
                         status1 === store.lang.drafted
-                          ? _getjobStatus(0, 'Drafted')
+                          ? _getjobStatus(0, store.lang.drafted)
                           : status1 === store.lang.live
-                          ? _getjobStatus(1, 'Live')
+                          ? _getjobStatus(1, store.lang.live)
                           : status1 === store.lang.closed
-                          ? _getjobStatus(2, 'Closed')
-                          : _getjobStatus(3, 'Paused');
+                          ? _getjobStatus(2, store.lang.closed)
+                          : _getjobStatus(3, store.lang.paused);
                       }
 
                       setModalVisible(!modalVisible);
@@ -496,7 +527,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: RFPercentage(2),
     justifyContent: 'space-between',
-    shadowColor: '#000',
+    shadowColor: '#000',  
     shadowOffset: {
       width: 0,
       height: 2,

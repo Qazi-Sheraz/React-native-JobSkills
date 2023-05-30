@@ -22,9 +22,9 @@ const JEmployeUser = ({item}) => {
         borderBottomColor: colors.border[0],
         // marginBottom: RFPercentage(1),
       }}>
-
+<JRow>
         <JText style={styles.Hname}>{item.name}</JText>
-
+</JRow>
       <JRow
         style={{
           alignItems: 'flex-end',
@@ -63,14 +63,14 @@ const JEmployeUser = ({item}) => {
         </View>
         <JStatus status={item.status} />
       </JRow>
-      {/* </JRow> */}
     </Pressable>
   );
 };
 
 export default JEmployeUser;
 
-const styles = StyleSheet.create({ Hname: {
+const styles = StyleSheet.create({
+   Hname: {
     fontSize: RFPercentage(2.3),
     fontWeight: 'bold',
     width:'75%'

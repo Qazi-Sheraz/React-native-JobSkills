@@ -3,6 +3,7 @@ import React, { useContext } from 'react'
 import JText from '../../../customComponents/JText'
 import { RFPercentage } from 'react-native-responsive-fontsize'
 import { StoreContext } from '../../../mobx/store'
+import colors from '../../../config/colors'
 
 const CTermsConditions = () => {
   const store = useContext(StoreContext);
@@ -10,7 +11,7 @@ const CTermsConditions = () => {
     <ScrollView
             showsVerticalScrollIndicator={false}
             style={{margin: RFPercentage(2)}}>
-            <JText style={styles.headingText}>Terms and Conditions</JText>
+            <JText style={styles.header}>Terms and Conditions</JText>
             <JText style={styles.pgText}>Welcome to jobskills.digital!</JText>
             <JText style={styles.pgText}>
               These terms and conditions outline the rules and regulations for
@@ -262,6 +263,11 @@ const CTermsConditions = () => {
 export default CTermsConditions
 
 const styles = StyleSheet.create({  
+  header: {
+    fontSize: RFPercentage(2.5),
+    fontWeight: 'bold',
+    color: colors.primary[0],
+  },
   headingText: {
   fontWeight: 'bold',
   fontSize: RFPercentage(2),

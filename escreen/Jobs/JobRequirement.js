@@ -22,6 +22,7 @@ import JNewJobIcon from '../../customComponents/JNewJobIcon';
 import url from '../../config/url';
 import { useContext } from 'react';
 import { StoreContext } from '../../mobx/store';
+import { observer } from 'mobx-react';
 
 const JobRequirement = ({calendar='0',}) => {
 
@@ -98,7 +99,7 @@ const JobRequirement = ({calendar='0',}) => {
       if (result.success == true ){
              Toast.show({
                type: 'success',
-               text1: 'Successfully Job created',
+               text1: result.message,
              });
              
         
@@ -447,7 +448,7 @@ const JobRequirement = ({calendar='0',}) => {
   );
 };
 
-export default JobRequirement;
+export default observer(JobRequirement);
 
 const styles = StyleSheet.create({
   container: {marginTop: RFPercentage(2)},

@@ -23,6 +23,7 @@ import JIcon from '../../customComponents/JIcon';
 import {useNavigation} from '@react-navigation/native';
 import JNewJobIcon from '../../customComponents/JNewJobIcon';
 import url from '../../config/url';
+import { observer } from 'mobx-react';
 
 const AddNew_Job = () => {
   const {navigate, goBack} = useNavigation();
@@ -317,7 +318,7 @@ const AddNew_Job = () => {
   );
 };
 
-export default AddNew_Job;
+export default observer(AddNew_Job);
 
 const styles = StyleSheet.create({
   container: {marginTop: RFPercentage(2)},

@@ -27,7 +27,7 @@ const JStatusbar = ({item}) => {
 
       .then(response => response.json())
       .then(result => {
-        console.log(result.jobApplicationStatus)
+        // console.log(result.jobApplicationStatus)
         setIndex(result.jobApplicationStatus)})
       .catch(error => console.log('error', error))
       .finally(() => {

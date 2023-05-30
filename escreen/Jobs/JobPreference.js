@@ -16,6 +16,7 @@ import colors from '../../config/colors';
 import JNewJobIcon from '../../customComponents/JNewJobIcon';
 import url from '../../config/url';
 import { StoreContext } from '../../mobx/store';
+import { observer } from 'mobx-react';
 
 const JobPreference = () => {
   const {navigate, goBack} = useNavigation();
@@ -281,7 +282,7 @@ const JobPreference = () => {
   );
 };
 
-export default JobPreference;
+export default observer(JobPreference);
 
 const styles = StyleSheet.create({container: {marginTop: RFPercentage(2)},modal: {
   height:'100%',

@@ -7,13 +7,14 @@ import Toast from 'react-native-toast-message';
 import { useContext } from 'react';
 import { StoreContext } from '../../../mobx/store';
 import { observer } from 'mobx-react';
+import colors from '../../../config/colors';
 const CPrivacyPolicy = () => {
   const store = useContext(StoreContext);
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
       style={{margin: RFPercentage(2)}}>
-      <JText style={styles.headingText}>{store.lang.privacy_policy}</JText>
+      <JText style={styles.header}>{store.lang.privacy_policy}</JText>
       <JText style={styles.headingText1}>{store.lang.Last_updated}</JText>
       <JText style={styles.pgText}>{store.lang.ptext1}</JText>
       <JText style={styles.headingText}>{store.lang.interpretation}</JText>
@@ -361,6 +362,11 @@ const CPrivacyPolicy = () => {
 export default observer(CPrivacyPolicy);
 
 const styles = StyleSheet.create({
+  header: {
+    fontSize: RFPercentage(2.5),
+    fontWeight: 'bold',
+    color: colors.primary[0],
+  },
     headingText: {
         fontWeight: 'bold',
         fontSize: RFPercentage(2),

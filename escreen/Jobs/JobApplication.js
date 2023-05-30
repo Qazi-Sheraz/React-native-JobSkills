@@ -107,6 +107,7 @@ const data = [
   const isFoucs = useIsFocused();
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredData1, setFilteredData1] = useState(jApplication);
+  const [update,setUpdate]=useState(true)
 
   const handleSearch = (text) => {
     setSearchQuery(text);
@@ -135,7 +136,6 @@ const data = [
     )
       .then(response => response.json())
       .then(result => {
-        // console.log(result.job_application);
         setJApplication(result?.job_application);
       })
       .catch(error => {
@@ -148,10 +148,14 @@ const data = [
   };
   useEffect(() => {
     _jobApplication();
-  }, [loader,isFoucs]);
+  }, [isFoucs,loader,update]);
 
   return (
-    <JScreen isError={error} onTryAgainPress={() => {_jobApplication()}}>
+    <JScreen
+      isError={error}
+      onTryAgainPress={() => {
+        _jobApplication();
+      }}>
       <JGradientHeader
         center={
           <JText
@@ -166,10 +170,8 @@ const data = [
 
       {loader == true ? (
         <ActivityIndicator />
-      ) :  
-        jApplication.length>0?(
+      ) : jApplication.length > 0 ? (
         <>
-       
           <JRow
             style={{
               paddingHorizontal: RFPercentage(2),
@@ -219,24 +221,25 @@ const data = [
             </Menu>
           </JRow>
 
-
           <ScrollView style={{flex: 1, paddingHorizontal: RFPercentage(2)}}>
             {(searchQuery.length > 0 ? filteredData1 : jApplication).map(
               (item, index) => (
                 <JApplication
+                  update={update}
+                  setUpdate={setUpdate}
                   key={index}
                   onPress={() => setModalVisible(true)}
                   onSelect={handleSelect}
                   item={item}
                   // date={moment(item.apply_date, 'DD-MM-YYYY').format('DD MMM,YYYY')}
                 />
-                
               ),
             )}
           </ScrollView>
         </>
-      ): <JNotfoundData/>
-    }
+      ) : (
+        <JNotfoundData />
+      )}
       {/* <RBSheet
         ref={refRBSheet}
         // closeOnDragDown={false}
@@ -287,7 +290,6 @@ const data = [
           </View>
         </Pressable>
       </Modal>
-      
     </JScreen>
   );
 };

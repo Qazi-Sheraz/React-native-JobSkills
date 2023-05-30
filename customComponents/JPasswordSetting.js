@@ -10,12 +10,12 @@ const JPasswordSetting = ({Svg, Header, txt, onPress ,Sw='0'}) => {
     const [isEnabled, setIsEnabled] = useState(false);
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
   return (
-    <Pressable
+    <JRow
+    disabled={false}
       onPress={onPress}
       style={{
         width: '100%',
         height: RFPercentage(6),
-        flexDirection: 'row',
         alignItems: 'center',
         justifyContent:'space-between',
         marginTop: RFPercentage(3),
@@ -52,7 +52,7 @@ const JPasswordSetting = ({Svg, Header, txt, onPress ,Sw='0'}) => {
       onValueChange={toggleSwitch}
       value={isEnabled}
 />:null}
-    </Pressable>
+    </JRow>
   );
 };
 

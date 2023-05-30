@@ -247,41 +247,41 @@ const Profile = () => {
             <BorderView>
               <JProfileInfo
                 title={store.lang.CEO_name}
-                text={profile?.company[0]?.company_information?.ceo}
+                text={profile?.company[0]?.company_information?.ceo?profile?.company[0]?.company_information?.ceo:'N/A'}
               />
               <JProfileInfo
                 title={store.lang.company_name}
-                text={profile?.company[0]?.company_information?.company_name}
+                text={profile?.company[0]?.company_information?.company_name?profile?.company[0]?.company_information?.company_name:'N/A'}
               />
               <JProfileInfo
                 title={store.lang.ownership_type}
-                text={profile?.company[0]?.company_information?.ownership_type}
+                text={profile?.company[0]?.company_information?.ownership_type?profile?.company[0]?.company_information?.ownership_type:'N/A'}
               />
               <JProfileInfo
                 title={store.lang.Industry}
-                text={profile?.company[0]?.company_information?.industry}
+                text={profile?.company[0]?.company_information?.industry?profile?.company[0]?.company_information?.industry:'N/A'}
               />
 
               <JProfileInfo
                 title={store.lang.size}
-                text={profile?.company[0]?.company_information?.company_size}
+                text={profile?.company[0]?.company_information?.company_size?profile?.company[0]?.company_information?.company_size:'N/A'}
               />
 
               <JProfileInfo
                 title={store.lang.location}
-                text={profile?.company[0]?.company_information?.location}
+                text={profile?.company[0]?.company_information?.location?profile?.company[0]?.company_information?.location:'N/A'}
               />
               <JProfileInfo
                 title={store.lang.no_of_office}
-                text={profile?.company[0]?.company_information?.no_of_offices}
+                text={profile?.company[0]?.company_information?.no_of_offices?profile?.company[0]?.company_information?.no_of_offices:'N/A'}
               />
               <JProfileInfo
                 title={store.lang.website}
-                text={profile?.company[0]?.company_information?.website}
+                text={profile?.company[0]?.company_information?.website?profile?.company[0]?.company_information?.website:'N/A'}
               />
               <JProfileInfo
                 title={store.lang.fax}
-                text={profile?.company[0]?.company_information?.fax}
+                text={profile?.company[0]?.company_information?.fax?profile?.company[0]?.company_information?.fax:'N/A'}
               />
             </BorderView>
           }

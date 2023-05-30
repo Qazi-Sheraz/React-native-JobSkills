@@ -22,7 +22,7 @@ import JRecentJobTile from '../../customComponents/JRecentJobTile';
 import JFindTitle from '../../customComponents/JFindTitle';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import EDrawerContent from '../../drawer/EDrawerContent';
-import {Observer, observer} from 'mobx-react';
+import {observer} from 'mobx-react';
 import JRow from '../../customComponents/JRow';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import url from '../../config/url';
@@ -37,6 +37,7 @@ const Home = ({isempty = false,}) => {
   const [data, setData] = useState({});
   const [error, setError] = useState(false);
   const [loader, setLoader] = useState(true);
+  const [update, setUpdate] = useState(true);
 
   const _dashboard = () => {
     var myHeaders = new Headers();
@@ -67,7 +68,7 @@ const Home = ({isempty = false,}) => {
 
   useEffect(() => {
       _dashboard();
-  }, [loader, isFoucs]);
+  }, [loader,isFoucs,update]);
 
   return (
     <JScreen
@@ -79,7 +80,7 @@ const Home = ({isempty = false,}) => {
         <JHeader
           left={
             <JIcon
-            icon='fe'
+              icon="fe"
               onPress={() => navigation.openDrawer(EDrawerContent)}
               name="menu"
               size={RFPercentage(3.5)}
@@ -95,12 +96,8 @@ const Home = ({isempty = false,}) => {
           }
           right={
             <JIcon
-            icon={'ma'}
-              // onPress={() => navigation.navigate('CNotification')}
-              onPress={() => {
-                // console.log(store.lang);
-                store.lang.id == 0 ? store.setLang('ud') : store.setLang('en');
-              }}
+              icon={'ma'}
+              onPress={() => navigation.navigate('CNotification')}
               name="bell-badge-outline"
               size={RFPercentage(3.5)}
               color={'#000000'}
@@ -201,107 +198,114 @@ const Home = ({isempty = false,}) => {
               {store.lang.upcoming_Meetings}
             </JText>
 
-
             {data?.meetings?.length > 0 ? (
               <FlatList
-               data={data?.meetings}
-               renderItem={({item,index})=>
-                <JRow
-                  disabled={false}
-                  style={{
-                    marginVertical: RFPercentage(1),
-                    borderBottomWidth: RFPercentage(0.1),
-                    borderBottomColor: colors.border[0],
-                  }}>
-                  <View
+                data={data?.meetings}
+                renderItem={({item, index}) => (
+                  <JRow
+                    disabled={false}
                     style={{
-                      backgroundColor: colors.purple[0],
-                      width: '25%',
-                      alignItems: 'center',
-                      paddingVertical: RFPercentage(3),
-                      borderTopEndRadius:
-                        store.lang.id == 0 ? RFPercentage(2) : RFPercentage(0),
-                      borderBottomEndRadius:
-                        store.lang.id == 0 ? RFPercentage(2) : RFPercentage(0),
-                      borderTopStartRadius:
-                        store.lang.id == 0 ? RFPercentage(0) : RFPercentage(2),
-                      borderBottomStartRadius:
-                        store.lang.id == 0 ? RFPercentage(0) : RFPercentage(2),
-                      shadowColor: '#000000',
-                      shadowOpacity: 0.3,
-                      shadowRadius: 2,
-                      shadowOffset: {
-                        height: 1,
-                        width: 1,
-                      },
-                      elevation: 4,
+                      marginVertical: RFPercentage(1),
+                      borderBottomWidth: RFPercentage(0.1),
+                      borderBottomColor: colors.border[0],
                     }}>
-                    <JText style={{color: colors.white[0]}}>
-                      {moment(item.start_date_and_time).format('HH:MM')} {item.meridiem}
-                    </JText>
-                    <JText style={{color: colors.white[0]}}>
-                      {moment(item.start_date_and_time).format('ddd DD')}
-                    </JText>
-                    <JText style={{color: colors.white[0]}}>
-                      {moment(item.start_date_and_time).format('MMM YYYY')}
-                    </JText>
-                  </View>
-                  <View
-                    style={{paddingHorizontal: RFPercentage(2), width: '75%'}}>
-                    <JText fontWeight="bold" fontSize={RFPercentage(2.2)}>
-                      {item.meeting_topic}
-                    </JText>
-                    <JRow
+                    <View
                       style={{
-                        marginTop: RFPercentage(1),
+                        backgroundColor: colors.purple[0],
+                        width: '25%',
+                        alignItems: 'center',
+                        paddingVertical: RFPercentage(3),
+                        borderTopEndRadius:
+                          store.lang.id == 0
+                            ? RFPercentage(2)
+                            : RFPercentage(0),
+                        borderBottomEndRadius:
+                          store.lang.id == 0
+                            ? RFPercentage(2)
+                            : RFPercentage(0),
+                        borderTopStartRadius:
+                          store.lang.id == 0
+                            ? RFPercentage(0)
+                            : RFPercentage(2),
+                        borderBottomStartRadius:
+                          store.lang.id == 0
+                            ? RFPercentage(0)
+                            : RFPercentage(2),
+                        shadowColor: '#000000',
+                        shadowOpacity: 0.3,
+                        shadowRadius: 2,
+                        shadowOffset: {
+                          height: 1,
+                          width: 1,
+                        },
+                        elevation: 4,
                       }}>
-                      <Image
+                      <JText style={{color: colors.white[0]}}>
+                        {moment(item.start_date_and_time).format('HH:MM')}{' '}
+                        {item.meridiem}
+                      </JText>
+                      <JText style={{color: colors.white[0]}}>
+                        {moment(item.start_date_and_time).format('ddd DD')}
+                      </JText>
+                      <JText style={{color: colors.white[0]}}>
+                        {moment(item.start_date_and_time).format('MMM YYYY')}
+                      </JText>
+                    </View>
+                    <View
+                      style={{
+                        paddingHorizontal: RFPercentage(2),
+                        width: '75%',
+                      }}>
+                      <JText fontWeight="bold" fontSize={RFPercentage(2.2)}>
+                        {item.meeting_topic}
+                      </JText>
+                      <JRow
                         style={{
-                          width: RFPercentage(4),
-                          height: RFPercentage(4),
-                          borderRadius: RFPercentage(4),
-                        }}
-                        source={{
-                          uri: 'https://media.istockphoto.com/id/1358205700/photo/shot-of-a-young-man-using-his-smartphone-to-send-text-messages.jpg?s=1024x1024&w=is&k=20&c=KAY3jM0WHkdPdQEPwMl1B2gGKDb_hP_596yrU-5yuSs=',
-                        }}
-                      />
-                      <JText
-                        style={{
-                          marginHorizontal: RFPercentage(1),
-                          fontSize: RFPercentage(1.9),
+                          marginTop: RFPercentage(1),
                         }}>
-                        {item.employer_name}
-                      </JText>
-                    </JRow>
+                        <Image
+                          style={{
+                            width: RFPercentage(4),
+                            height: RFPercentage(4),
+                            borderRadius: RFPercentage(4),
+                          }}
+                          source={{
+                            uri: 'https://media.istockphoto.com/id/1358205700/photo/shot-of-a-young-man-using-his-smartphone-to-send-text-messages.jpg?s=1024x1024&w=is&k=20&c=KAY3jM0WHkdPdQEPwMl1B2gGKDb_hP_596yrU-5yuSs=',
+                          }}
+                        />
+                        <JText
+                          style={{
+                            marginHorizontal: RFPercentage(1),
+                            fontSize: RFPercentage(1.9),
+                          }}>
+                          {item.employer_name}
+                        </JText>
+                      </JRow>
 
-                    <JRow
-                      disabled={false}
-                      onPress={() => refRBSheet.current.open()}
-                      style={{
-                        alignSelf:
-                          store.lang.id == 0 ? 'flex-end' : 'flex-start',
-                        borderWidth: RFPercentage(0.2),
-                        borderColor: colors.purple[0],
-                        paddingVertical: RFPercentage(0.5),
-                        paddingHorizontal: RFPercentage(0.8),
-                      }}>
-                      <JText
-                        style={{marginRight: RFPercentage(0.5)}}
-                        fontWeight="bold">
-                        {store.lang.start}
-                      </JText>
-                      <Entypo name="controller-play" size={RFPercentage(2)} />
-                    </JRow>
-                  </View>
-                </JRow>
-               }
-               />
-                
-              
+                      <JRow
+                        disabled={false}
+                        onPress={() => refRBSheet.current.open()}
+                        style={{
+                          alignSelf:
+                            store.lang.id == 0 ? 'flex-end' : 'flex-start',
+                          borderWidth: RFPercentage(0.2),
+                          borderColor: colors.purple[0],
+                          paddingVertical: RFPercentage(0.5),
+                          paddingHorizontal: RFPercentage(0.8),
+                        }}>
+                        <JText
+                          style={{marginRight: RFPercentage(0.5)}}
+                          fontWeight="bold">
+                          {store.lang.start}
+                        </JText>
+                        <Entypo name="controller-play" size={RFPercentage(2)} />
+                      </JRow>
+                    </View>
+                  </JRow>
+                )}
+              />
             ) : (
-              
-              <JNotfoundData/>
-              
+              <JNotfoundData />
             )}
 
             <JText
@@ -313,10 +317,16 @@ const Home = ({isempty = false,}) => {
             </JText>
             {data?.recentJobs?.length > 0 ? (
               data?.recentJobs?.map((item, index) => (
-                <JRecentJobTile star={false} item={item} key={index} />
+                <JRecentJobTile
+                  update={update}
+                  setUpdate={setUpdate}
+                  star={false}
+                  item={item}
+                  key={index}
+                />
               ))
             ) : (
-              <JNotfoundData/>
+              <JNotfoundData />
             )}
           </JScrollView>
         </React.Fragment>

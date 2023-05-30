@@ -1,4 +1,4 @@
-import { ScrollView, Dimensions, ActivityIndicator, Button } from 'react-native'
+import { ScrollView, Dimensions, ActivityIndicator, Button,Linking } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import JScreen from '../../customComponents/JScreen'
 import JGradientHeader from '../../customComponents/JGradientHeader'
@@ -13,6 +13,7 @@ import JButton from '../../customComponents/JButton'
 import { View } from 'react-native-animatable'
 import { StoreContext } from '../../mobx/store'
 import url from '../../config/url'
+import { observer } from 'mobx-react'
 
 
 
@@ -98,7 +99,7 @@ const ViewResume = () => {
       ) : (
         <View style={{flex:1 }}>
         <ScrollView 
-        
+         
            showsVerticalScrollIndicator={false}>
           <Pdf
             trustAllCerts={false}
@@ -139,7 +140,7 @@ const ViewResume = () => {
         <JButton
             // isValid={isValid}
             onPress={() => {
-            //   handleSubmit();
+              Linking.openURL(resume?.data);
             }}
             style={{
             //   width: '46%',
@@ -154,4 +155,4 @@ const ViewResume = () => {
   );
 }
 
-export default ViewResume
+export default observer(ViewResume)

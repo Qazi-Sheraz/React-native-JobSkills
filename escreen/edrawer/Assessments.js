@@ -9,6 +9,7 @@ import { StoreContext } from '../../mobx/store';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import url from '../../config/url';
 import { useNavigation } from '@react-navigation/native';
+import { observer } from 'mobx-react';
 
 const Assessments = () => {
   const store = useContext(StoreContext);
@@ -101,6 +102,6 @@ const navigation= useNavigation();
   )
 }
 
-export default Assessments
+export default observer(Assessments)
 
 const styles = StyleSheet.create({})

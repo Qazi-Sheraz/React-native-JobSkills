@@ -26,38 +26,35 @@ const HelpCenter = ({navigation}) => {
               fontColor={colors.white[0]}
               fontWeight="bold"
               fontSize={RFPercentage(2.5)}>
-              {'Help Center'}
+              {store.lang.help_center}
             </JText>
           }
-          left={<JChevronIcon />}
+          left={<JChevronIcon/>}
         />
       }>
       <View
-        style={{
-          marginTop: RFPercentage(4),
-
-          flex: 1,
+        style={{ flex: 1,
         }}>
         <Pressable
           onPress={() => {
-            setModalVisible(true), setName('Terms & Condtions');
+            setModalVisible(true), setName(store.lang.terms_condtions);
           }}
           style={styles.view}>
-          <JText style={{fontSize: RFPercentage(2.5)}}>Terms & Condtions</JText>
+          <JText style={{fontSize: RFPercentage(2.5)}}>{store.lang.terms_condtions}</JText>
         </Pressable>
         <Pressable
           onPress={() => {
-            setModalVisible(true), setName('Privacy Policy');
+            setModalVisible(true), setName(store.lang.privacy_policy);
           }}
           style={styles.view}>
-          <JText style={{fontSize: RFPercentage(2.5)}}>Privacy Policy</JText>
+          <JText style={{fontSize: RFPercentage(2.5)}}>{store.lang.privacy_policy}</JText>
         </Pressable>
         <Pressable
           onPress={() => {
-            setModalVisible(true), setName('About us');
+            setModalVisible(true), setName(store.lang.about_us);
           }}
           style={styles.view}>
-          <JText style={{fontSize: RFPercentage(2.5)}}>About us</JText>
+          <JText style={{fontSize: RFPercentage(2.5)}}>{store.lang.about_us}</JText>
         </Pressable>
       </View>
       <Modal animationType="slide" visible={modalVisible}>
@@ -74,9 +71,9 @@ const HelpCenter = ({navigation}) => {
             left={<JChevronIcon onPress={() => setModalVisible(false)} />}
           />
           
-          {mname === 'Terms & Condtions' ? (
+          {mname === store.lang.terms_condtions ? (
             <CTermsConditions />
-          ) : mname === 'Privacy Policy' ? (
+          ) : mname === store.lang.privacy_policy ? (
             <CPrivacyPolicy />
           ) : (
             <CAboutUS />
@@ -93,7 +90,7 @@ const styles = StyleSheet.create({
   view: {
     // backgroundColor: colors.tileColor[0],
     marginVertical: RFPercentage(2),
-    paddingHorizontal: RFPercentage(4),
+    paddingHorizontal: RFPercentage(2),
     // paddingVertical: RFPercentage(0.5),
     shadowColor: '#000',
     shadowOffset: {

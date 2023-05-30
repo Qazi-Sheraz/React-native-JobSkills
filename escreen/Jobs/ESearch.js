@@ -25,6 +25,8 @@ import {
   import JGradientHeader from '../../customComponents/JGradientHeader';
 import JRecentJobTile from '../../customComponents/JRecentJobTile';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import JRow from '../../customComponents/JRow';
+import JChevronIcon from '../../customComponents/JChevronIcon';
   
   const ESearch = ({navigation}) => {
     const refRBSheet = useRef();
@@ -58,20 +60,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
         header={
           <JHeader
             left={
-              <Feather
-                onPress={() => {
-                  navigation.goBack();
-                  store.setFilterData([]);
-                }}
-                name="chevron-left"
-                size={RFPercentage(3.5)}
-                color={colors.black[0]}
-              />
+              <JChevronIcon onPress={() => {
+                navigation.goBack();
+                store.setFilterData([]);
+              }} color='#00000090'/>
             }
           
           />
         }>
-        <JText fontSize={RFPercentage(3)}>Find your Job</JText>
+        
+        <JText fontSize={RFPercentage(3)}>{store.lang.find_your_Job}</JText>
         <JShadowView
           shadowColor={colors.purple[0]}
           containerStyle={{
@@ -81,15 +79,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
             justifyContent: 'space-between',
             paddingLeft: RFPercentage(1),
             height: heightPercentageToDP(6),
-            flexDirection: 'row',
+            flexDirection: store.lang.id == 0 ? 'row' : 'row-reverse',
             alignItems: 'center',
           }}
           isPressable={false}>
           <TextInput
             // autoFocus
             style={{
+              textAlign:store.lang.id == 0 ? 'left':'right', 
               color: colors.black[0],
-              width: '100%',
+              width: '85%',
             }}
             onChangeText={e => {
               setSearch(e);
@@ -97,7 +96,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
                 store.setFilterData([]);
               }
             }}
-            placeholder="Search"
+            placeholder={store.lang.search}
             placeholderTextColor={colors.placeHolderColor[0]}
           />
           {store.filterDataApiLoader === true ? (
@@ -126,9 +125,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
               size={RFPercentage(3.5)}
               color={search.length > 0 ? colors.black[0] : '#00000040'}
               style={{
-                marginRight: RFPercentage(1),
-                position: 'absolute',
-                right: 0,
+                marginHorizontal: RFPercentage(1),
+                
               }}
             />
           )}
@@ -161,7 +159,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
               <JText
                 style={{marginBottom: RFPercentage(2)}}
                 fontSize={RFPercentage(3)}>
-                Recent Searches
+                {store.lang.Recent_search}
               </JText>
              
               {store.recentSearch?.map((item, index) => (

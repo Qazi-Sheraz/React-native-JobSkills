@@ -19,6 +19,7 @@ import {baseUrl} from '../../ApiUrls';
 import { FlatList } from 'react-native';
 import url from '../../config/url';
 import JNotfoundData from '../../customComponents/JNotfoundData';
+import { observer } from 'mobx-react';
 
 const Followers = () => {
   const store = useContext(StoreContext);
@@ -173,7 +174,7 @@ const Followers = () => {
   );
 };
 
-export default Followers;
+export default observer(Followers);
 
 const styles = StyleSheet.create({
   mainView: {marginHorizontal: RFPercentage(1), flex: 1},

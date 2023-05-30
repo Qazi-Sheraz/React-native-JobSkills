@@ -21,12 +21,14 @@ import Toast from 'react-native-toast-message';
 import {observer, Observer} from 'mobx-react';
 import { getDrawerItem } from '../data/edrawer';
 import JIcon from '../customComponents/JIcon';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import JRow from '../customComponents/JRow';
+import { useEffect } from 'react';
 
 function EDrawerContent (props) {
   
   const {navigate} = useNavigation();
+  const isFoucs = useIsFocused();
   const store = useContext(StoreContext);
   const user = store.token?.user;
   const _navigateToScreen = index => {
@@ -62,7 +64,9 @@ function EDrawerContent (props) {
           })
       : null;
   };
+useEffect(() => {
 
+}, [isFoucs])
   const _navigationIcons = index =>
     index === 0 ? (
       <JIcon

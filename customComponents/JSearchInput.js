@@ -33,13 +33,13 @@ import { Observer, observer } from 'mobx-react';
           backgroundColor: colors.white[0],
           borderWidth: RFPercentage(0.1),
           borderColor: `${colors.purple[0]}50`,
-          paddingHorizontal: RFPercentage(2),
+          paddingHorizontal: RFPercentage(1),
         },
         containerStyle,
       ]}>
       <JRow>
         <AntDesign
-          style={{marginRight: RFPercentage(1)}}
+          style={{marginHorizontal: RFPercentage(1)}}
           name="search1"
           color={colors.placeHolderColor[0]}
           size={RFPercentage(2.5)}
@@ -47,7 +47,7 @@ import { Observer, observer } from 'mobx-react';
 
         <TextInput
           autoFocus={autoFocus}
-          style={[{width: '100%'}, inputStyle]}
+          style={[{width: '90%',textAlign:store.lang.id===0?'left':'right'}, inputStyle]}
           placeholder={store.lang.search}
           placeholderTextColor={placeholderTextColor}
           onChangeText={onChangeText}

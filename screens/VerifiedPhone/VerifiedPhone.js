@@ -45,7 +45,7 @@ var requestOptions = {
 fetch(`${url.baseUrl}/phone-code-verification`, requestOptions)
   .then(response => response.json())
   .then(result =>{ 
-    console.log(result)
+    // console.log(result)
   if(result.success===false){
     Toast.show({
       type: 'success',

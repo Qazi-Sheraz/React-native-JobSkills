@@ -23,7 +23,6 @@ import JRow from '../../customComponents/JRow';
 import DEVOTEAM from '../../assets/svg/Icon/DEVOTEAM.svg';
 import Placeholder from '../../assets/svg/Icon/Placeholder.svg';
 import Calendar from '../../assets/svg/Icon/Calendar.svg';
-import Star from '../../assets/svg/Icon/Star.svg';
 import JScrollView from '../../customComponents/JScrollView';
 import Entypo from 'react-native-vector-icons/Entypo';
 import JButton from '../../customComponents/JButton';
@@ -46,12 +45,12 @@ const JobDetails = ({route}) => {
   const store = useContext(StoreContext);
   const phoneInput = useRef(null);
   const navigation = useNavigation();
-  
   const _selectOneFile = async setFieldValue => {
     //Opening Document Picker for selection of one file
     try {
       const res = await DocumentPicker.pick({
         type: [DocumentPicker.types.pdf],
+        
         //There can me more options as well
         // DocumentPicker.types.allFiles
         // DocumentPicker.types.images
@@ -59,8 +58,10 @@ const JobDetails = ({route}) => {
         // DocumentPicker.types.audio
         // DocumentPicker.types.pdf
       });
+   
+    
+      // console.log(size)
       //Printing the log realted to the file
-
       console.log('URI : ' + res[0].uri);
       console.log('Type : ' + res[0].type);
       console.log('File Name : ' + res[0].name);
@@ -78,6 +79,7 @@ const JobDetails = ({route}) => {
         throw err;
       }
     }
+    
   };
   // console.log(route.params.jid)
   const [modalVisible, setModalVisible] = useState(false);
@@ -133,13 +135,13 @@ console.log(formdata)
         if (result.success === true) {
           Toast.show({
             type: 'success',
-            text1: 'success',
+            text1: result.message,
           });
           //  console.log(values)
         } else {
           Toast.show({
             type: 'error',
-            text1:result.message
+            text1:result.message,
            
           });
         }
@@ -261,7 +263,6 @@ console.log(formdata)
             alignItems={store.lang.id == 0 ? 'flex-start' : 'flex-end'}
             paddingTop={RFPercentage(1)}
             left={JChevronIcon}
-           
             children={
               <View style={{marginTop: RFPercentage(2), width: '100%'}}>
                 <JRow style={{justifyContent: 'space-between'}}>
@@ -297,7 +298,9 @@ console.log(formdata)
                       )}
                     </JText>
                   </JRow>
-                  <JText style={styles.txt}>{jobCount?.jobCount}{' '}{store.lang.open_jobs}</JText>
+                  <JText style={styles.txt}>
+                    {jobCount?.jobCount} {store.lang.open_jobs}
+                  </JText>
                 </JRow>
               </View>
             }
@@ -314,52 +317,55 @@ console.log(formdata)
             </JText>
             <View style={{marginHorizontal: RFPercentage(1.3)}}>
               <JText style={styles.headertxt2}>{store.lang.job_skills}</JText>
-              
-              {jobDetail?.job_requirement?.job_skills.map((skill) => <JText style={styles.txt1}>{skill.name}</JText>)}
-             
-            
+
+              {jobDetail?.job_requirement?.job_skills.map(skill => (
+                <JText style={styles.txt1}>{skill.name}</JText>
+              ))}
 
               <JText style={styles.headertxt2}>{store.lang.degree_level}</JText>
-              <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-              {jobDetail?.job_requirement?.degree_level.map((level) => 
-              <JRow style={{marginHorizontal: RFPercentage(1),}}>
-                  <JText style={styles.dg}>
-                    {level.name}
-                  </JText>
-                </JRow>)}
-                </ScrollView>
+              <ScrollView
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}>
+                {jobDetail?.job_requirement?.degree_level.map(level => (
+                  <JRow style={{marginHorizontal: RFPercentage(1)}}>
+                    <JText style={styles.dg}>{level.name}</JText>
+                  </JRow>
+                ))}
+              </ScrollView>
 
               <JText style={styles.headertxt2}>
                 {store.lang.assessment_Required}
               </JText>
-              {jobDetail?.job_requirement?.assessment_required.map((item) => <JText style={styles.txt1}>{item.assessment_name}</JText>)}
-             
+              {jobDetail?.job_requirement?.assessment_required.map(item => (
+                <JText style={styles.txt1}>{item.assessment_name}</JText>
+              ))}
             </View>
             <JText style={styles.headertxt1}>{store.lang.job_Details}</JText>
             {/* <JText style={{textAlign:'center',fontSize:RFPercentage(2),marginTop: RFPercentage(-2),marginLeft: RFPercentage(-4),}}></JText> */}
 
-            {data?.map((item, index) => (
-              item.isScroll?
-              <JRow>
-                <JText key={index} style={styles.headertxt3}>
-                  {item.heading}
-                </JText>
-                
-                <ScrollView horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              // contentContainerStyle={{backgroundColor:'red'}}
-              >
-              <JText style={styles.txt2}>{item.name}</JText>
-             </ScrollView>
-              </JRow>
-              :
-              <JRow>
-                <JText key={index} style={styles.headertxt3}>
-                  {item.heading}
-                </JText>
-                <JText style={styles.txt2}>{item.name}</JText>
-              </JRow>
-            ))}
+            {data?.map((item, index) =>
+              item.isScroll ? (
+                <JRow>
+                  <JText key={index} style={styles.headertxt3}>
+                    {item.heading}
+                  </JText>
+                  <ScrollView
+                    horizontal={true}
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={{width:'100%',flexDirection:store.lang.id===0?'row':'row-reverse'}}
+                  >
+                    <JText style={[styles.txt2,{width:'60%'}]}>{item.name}</JText>
+                 </ScrollView>
+                 </JRow>
+              ) : (
+                <JRow>
+                  <JText key={index} style={styles.headertxt3}>
+                    {item.heading}
+                  </JText>
+                  <JText style={styles.txt2}>{item.name}</JText>
+                </JRow>
+              ),
+            )}
 
             <JText style={styles.headertxt1}>{store.lang.description} </JText>
             <JText style={[styles.txt2, {paddingBottom: RFPercentage(3)}]}>
@@ -392,7 +398,6 @@ console.log(formdata)
 
                 _addCandidate(values);
                 setModalVisible(!modalVisible);
-
               }}
               validationSchema={yup.object().shape({
                 resume: yup.object().shape({
@@ -429,7 +434,7 @@ console.log(formdata)
                         </JText>
                       }
                     />
-                  {/* {console.log(route.params.jid)} */}
+                    {/* {console.log(route.params.jid)} */}
                     <View style={{padding: RFPercentage(2)}}>
                       <JInput
                         containerStyle={{marginTop: RFPercentage(1)}}
@@ -509,43 +514,66 @@ console.log(formdata)
                         }}>
                         {store.lang.sure_updated_resume}
                       </JText>
-
                       {values.resume?.uri ? (
-                        <View style={{alignSelf: 'center'}}>
-                          <Pdf
-                            trustAllCerts={false}
-                            source={{uri: values.resume.uri}}
-                            onLoadComplete={(numberOfPages, filePath) => {
-                              console.log(`Number of pages: ${numberOfPages}`);
-                            }}
-                            onPageChanged={(page, numberOfPages) => {
-                              console.log(`Current page: ${page}`);
-                            }}
-                            onError={error => {
-                              console.log(error);
-                            }}
-                            onPressLink={uri => {
-                              console.log(`Link pressed: ${uri}`);
-                            }}
-                            style={{
-                              alignSelf: 'center',
-                              width: Dimensions.get('window').width / 3,
-                              height: Dimensions.get('window').height / 3,
-                            }}
-                          />
-                          <Entypo
-                            onPress={() => _selectOneFile(setFieldValue)}
-                            name="circle-with-cross"
-                            size={RFPercentage(3.5)}
-                            color={colors.danger[0]}
-                            style={{
-                              position: 'absolute',
-                              zIndex: 1,
-                              right: RFPercentage(-2),
-                              top: RFPercentage(-1),
-                            }}
-                          />
-                        </View>
+                        values.resume.size <= 2000000 ? (
+                          <View style={{alignSelf: 'center'}}>
+                            <Pdf
+                              trustAllCerts={false}
+                              source={{uri: values.resume.uri}}
+                              onLoadComplete={(numberOfPages, filePath) => {
+                                console.log(
+                                  `Number of pages: ${numberOfPages}`,
+                                );
+                              }}
+                              onPageChanged={(page, numberOfPages) => {
+                                console.log(`Current page: ${page}`);
+                              }}
+                              onError={error => {
+                                console.log(error);
+                              }}
+                              onPressLink={uri => {
+                                console.log(`Link pressed: ${uri}`);
+                              }}
+                              style={{
+                                alignSelf: 'center',
+                                width: Dimensions.get('window').width / 3,
+                                height: Dimensions.get('window').height / 3,
+                              }}
+                            />
+                            <Entypo
+                              onPress={() => _selectOneFile(setFieldValue)}
+                              name="circle-with-cross"
+                              size={RFPercentage(3.5)}
+                              color={colors.danger[0]}
+                              style={{
+                                position: 'absolute',
+                                zIndex: 1,
+                                right: RFPercentage(-2),
+                                top: RFPercentage(-1),
+                              }}
+                            />
+                          </View>
+                        ) : (
+                          <>
+                            <JText style={{marginVertical: RFPercentage(1),}}>File size exceeds 2 MB limit</JText>
+                            <JRow
+                              style={{
+                                justifyContent: 'center',
+                                marginHorizontal: RFPercentage(3),
+                                borderColor: colors.primary[1],
+                              }}>
+                              <JButton
+                                onPress={() => _selectOneFile(setFieldValue)}
+                                style={{
+                                  width: '46%',
+                                  backgroundColor: colors.white[0],
+                                  borderColor: colors.black[1],
+                                }}
+                                children={store.lang.upload_resume}
+                              />
+                            </JRow>
+                          </>
+                        )
                       ) : (
                         <JRow
                           style={{
@@ -574,7 +602,14 @@ console.log(formdata)
                         <JButton
                           // isValid={isValid}
                           onPress={() => {
-                            handleSubmit();
+                            if(values.resume.size <= 2000000)
+                                 {handleSubmit();}
+                                else{
+                                  Toast.show({
+                                    type: 'error',
+                                    text1: 'error',
+                                  });}
+                            
                           }}
                           style={{
                             width: '46%',
@@ -585,7 +620,7 @@ console.log(formdata)
                     </View>
                   </ScrollView>
                   <Pressable
-                    style={{height: '20%', width: '100%'}}
+                    style={{height: '15%', width: '100%'}}
                     onPress={() => setModalVisible(!modalVisible)}
                   />
                 </SafeAreaView>

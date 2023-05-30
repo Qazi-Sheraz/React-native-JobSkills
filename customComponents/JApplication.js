@@ -23,7 +23,7 @@ import * as yup from 'yup';
 import JInput from './JInput';
 import JButton from './JButton';
 import DatePicker from 'react-native-date-picker';
-import { useRoute,useNavigation } from '@react-navigation/native';
+import { useRoute,useNavigation, useIsFocused } from '@react-navigation/native';
 import { keys, values } from 'mobx';
 // import url from '../../config/url';
 export default function JApplication({
@@ -34,15 +34,16 @@ export default function JApplication({
   onPress,
   item,
   jobApplications,
+  update,
+  setUpdate,
 }) {
   const{params}=useRoute();
   const [error, setError] = useState(false);
   const [loader, setLoader] = useState(true);
   const [option, setOption] = useState(false);
-  
   const [meetings, setMeetings] = useState();
   const [menu, setMenu] = useState('');
-
+  const isFoucs = useIsFocused();
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
   const [date, setDate] = useState(new Date())
@@ -52,6 +53,7 @@ export default function JApplication({
 const [stat,setStat]=useState(item.status);
   const [selectedStatus, setSelectedStatus] = useState();
   const [modalVisible, setModalVisible] = useState(false);
+
   const handleStatusSelect = (status1) => {
     setSelectedStatus(status1);
     status1==store.lang.drafted
@@ -93,7 +95,7 @@ const [stat,setStat]=useState(item.status);
     formdata.append("zoom_link", values.zoom_link);
     formdata.append("candidateID", item.candidate_user_id);
     formdata.append("jobid",item.job_id);
-  //  console.log('formdata',formdata)
+   console.log('formdata',formdata)
 
 
     fetch(`${url.baseUrl}/meetings-submit`, {
@@ -108,9 +110,12 @@ const [stat,setStat]=useState(item.status);
       if (result.success === true ){
              Toast.show({
                type: 'success',
-               text1: 'Successfully Meeting created',
+               text1:result.message,
              });
-             
+             setStat('Invitation Sent')
+             setUpdate(!update)
+
+
         // console.log('success===','true')
         // navigate('Meeting',)   
       }
@@ -148,7 +153,7 @@ const [stat,setStat]=useState(item.status);
         console.log(result)
         if (result.success == true) {
           setStat(selectedStatus)
-        
+          setUpdate(!update)
        }
        else{
 
@@ -206,7 +211,12 @@ const [stat,setStat]=useState(item.status);
 //  }, [loader])
  useEffect(() => {
   _interviewScheduled()
- }, [loader])
+  
+ }, [loader,isFoucs])
+ useEffect(() => {
+  
+ }, [stat])
+
 
 
 // Replace the placeholders with the selected date and time
@@ -224,6 +234,7 @@ const updatedDescription =(description,value)=>description.replace(
         onPress={() =>
           navigation.navigate('ProfileApplication', {
             candidate_id: item.candidate_id,
+            candidate_user_id:item.candidate_user_id,
             job_id: item.job_id,
             id: item.id,
           })
@@ -238,6 +249,9 @@ const updatedDescription =(description,value)=>description.replace(
             justifyContent: 'space-between',
           }}>
           <JText style={styles.Hname}>{item.candidate_name}</JText>
+
+          {item.status==='Selected' || item.status==='Rejected' ? null 
+          :(
           <Menu>
             <MenuTrigger
               style={{
@@ -270,12 +284,12 @@ const updatedDescription =(description,value)=>description.replace(
                 onSelect={() => handleStatusSelect(store.lang.shortlisted)}>
                 <JText style={styles.menutxt}>{store.lang.shortlisted}</JText>
               </MenuOption>
-              <MenuOption
+              {/* <MenuOption
                 onSelect={() => handleStatusSelect(store.lang.invitation_Sent)}>
                 <JText style={styles.menutxt}>
                   {store.lang.invitation_Sent}
                 </JText>
-              </MenuOption>
+              </MenuOption> */}
               <MenuOption
                 onSelect={() => {
                   setModalVisible(true),
@@ -314,7 +328,7 @@ const updatedDescription =(description,value)=>description.replace(
                 </JText>
               </MenuOption>
             </MenuOptions>
-          </Menu>
+          </Menu>)}
         </JRow>
         <JRow
           style={{
@@ -362,248 +376,268 @@ const updatedDescription =(description,value)=>description.replace(
               </JText>
             }
           />
+          {item.status === 'Invitation Sent' ? (<SafeAreaView
+          style={{justifyContent:'space-between',height:'90%'}}>
+            <View style={{marginHorizontal: RFPercentage(2)}}>
+              <JText style={styles.headers}>Interview Date :</JText>
+              <JText style={styles.date}>
+                {moment(values.interview_date_and_time).format('YYYY/MM/DD')}
+              </JText>
 
-          <Formik
-            initialValues={{
-              interview_topic: meetings?.interview_topic
-                ? meetings?.interview_topic
-                : '',
-              interview_date_and_time: new Date(),
-              description: meetings?.description ? meetings.description : '',
-              interview_type: meetings?.meeting_type && meetings.meeting_type.length > 0 ? meetings.meeting_type[0] : '',
-              office_location: '',
-              zoom_link: '',
-            }}
-            onSubmit={values => {
-              // console.log(values.interview_type=== 'Office Base'? 0:'Zoom' && 1);
-
-              // const selectedMeetingTypeID = meetings?.meeting_type[0][values.interview_type];
-              // console.log('Selected Meeting Type ID:', selectedMeetingTypeID);
-              // setLoader(true);
-              _meetingSubmit(values);
-              setModalVisible(!modalVisible);
-            }}
-            // validationSchema={yup.object().shape({
-            //   interview_topic: yup
-            //     .string()
-            //     .required()
-            //     .label('interview_topic'),
-            //   interview_date_and_time: yup
-            //     .string()
-            //     .required()
-            //     .label('interview_date_and_time'),
-            //   description: yup.string().required().label('description'),
-            //   interview_type: yup
-            //     .string()
-            //     .required()
-            //     .label('interview_topic'),
-            // })}
+              <JText style={styles.headers}>Interview Time :</JText>
+              <JText style={styles.date}>
+                {moment(values.interview_date_and_time).format('HH:MM A')}
+              </JText>
             
-          >
-            {({
-              values,
-              handleChange,
-              errors,
-              setFieldTouched,
-              touched,
-              isValid,
-              handleSubmit,
-              setFieldValue,
-            }) => (
-              <ScrollView
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={{
-                  paddingVertical: RFPercentage(1),
-                  marginHorizontal: RFPercentage(2),
-                }}>
-                <JInput
-                  containerStyle={{marginTop: RFPercentage(1)}}
-                  isRequired
-                  heading={'Interview Topic: '}
-                  value={values.interview_topic}
-                  error={
-                    touched.interview_topic && errors.interview_topic && true
-                  }
-                  multiline={true}
-                  onChangeText={handleChange('interview_topic')}
-                  onBlur={() => setFieldTouched('interview_topic')}
-                />
-                <View
-                  style={{
-                    justifyContent: 'space-between',
-                    paddingTop: RFPercentage(1),
-                    marginBottom: RFPercentage(1),
-                  }}>
-                  <JText
-                    style={{fontSize: RFPercentage(2.5), fontWeight: '500'}}>
-                    Interview Date and Time :
-                  </JText>
-                  <Pressable
-                    onPress={() => setOpen(true)}
-                    style={{
-                      height: RFPercentage(6),
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      borderBottomWidth: RFPercentage(0.2),
-                      borderBottomColor: error
-                        ? colors.danger[0]
-                        : colors.inputBorder[0],
-                    }}>
-                    <JIcon
-                      icon={'ev'}
-                      name={'calendar'}
-                      color={'#000'}
-                      size={RFPercentage(4.5)}
-                    />
-                    <JText fontSize={RFPercentage(2)}>
-                      {moment(values.interview_date_and_time).format(
-                        'YYYY/MM/DD HH:MM',
-                      )}
-                    </JText>
-                  </Pressable>
-                </View>
-                <JInput
-                  containerStyle={{marginTop: RFPercentage(1)}}
-                  isRequired
-                  multiline={true}
-                  heading={'Description'}
-                  value={updatedDescription(
-                    values.description,
-                    moment(values.interview_date_and_time).format(
-                      'YYYY/MM/DD HH:MM',
-                    ),
-                  )}
-                  error={touched.description && errors.description && true}
-                  onChangeText={handleChange('description')}
-                  onBlur={() => setFieldTouched('description')}
-                />
+            </View>
+            <JButton onPress={()=> setModalVisible(false)}>{store.lang.close}
+            </JButton></SafeAreaView>
+          ) : (
+            <Formik
+              initialValues={{
+                interview_topic: meetings?.interview_topic
+                  ? meetings?.interview_topic
+                  : '',
+                interview_date_and_time: new Date(),
+                description: meetings?.description ? meetings.description : '',
+                interview_type:
+                  meetings?.meeting_type && meetings.meeting_type.length > 0
+                    ? meetings.meeting_type[0]
+                    : '',
+                office_location: '',
+                zoom_link: '',
+              }}
+              onSubmit={values => {
+                // console.log(values.interview_type=== 'Office Base'? 0:'Zoom' && 1);
 
-                <View
-                  style={{
-                    justifyContent: 'space-between',
-                    paddingTop: RFPercentage(1),
-                    marginBottom: RFPercentage(1),
+                // const selectedMeetingTypeID = meetings?.meeting_type[0][values.interview_type];
+                // console.log('Selected Meeting Type ID:', selectedMeetingTypeID);
+                // setLoader(true);
+                _meetingSubmit(values);
+                setModalVisible(!modalVisible);
+              }}
+              // validationSchema={yup.object().shape({
+              //   interview_topic: yup
+              //     .string()
+              //     .required()
+              //     .label('interview_topic'),
+              //   interview_date_and_time: yup
+              //     .string()
+              //     .required()
+              //     .label('interview_date_and_time'),
+              //   description: yup.string().required().label('description'),
+              //   interview_type: yup
+              //     .string()
+              //     .required()
+              //     .label('interview_topic'),
+              // })}
+            >
+              {({
+                values,
+                handleChange,
+                errors,
+                setFieldTouched,
+                touched,
+                isValid,
+                handleSubmit,
+                setFieldValue,
+              }) => (
+                <ScrollView
+                  showsVerticalScrollIndicator={false}
+                  contentContainerStyle={{
+                    paddingVertical: RFPercentage(1),
+                    marginHorizontal: RFPercentage(2),
                   }}>
-                  <JText
-                    style={{fontSize: RFPercentage(2.5), fontWeight: '500'}}>
-                    Interview Type
-                  </JText>
-                  <Pressable
-                    onPress={() => setOption(!option)}
-                    style={styles.menuV}>
-                    <JText
-                      fontSize={RFPercentage(2)}
-                      style={{paddingHorizontal: RFPercentage(1)}}>
-                      {/* {menu ? menu : meetings?.meeting_type[0]} */}
-                      {values.interview_type}
-                    </JText>
-                    <JIcon
-                      icon={'en'}
-                      name={
-                        option === true
-                          ? 'chevron-small-up'
-                          : 'chevron-small-down'
-                      }
-                      color={'#00000090'}
-                      size={RFPercentage(4)}
-                    />
-                  </Pressable>
-                  {option === true && (
-                    <View
-                      style={{
-                        borderWidth: RFPercentage(0.1),
-                        borderRadius: RFPercentage(1),
-                        paddingVertical: RFPercentage(1),
-                      }}>
-                      {(meetings?.meeting_type).map((item, index) => (
-                        <Pressable
-                          key={index}
-                          style={{
-                            padding: 10,
-                            justifyContent: 'space-between',
-                          }}
-                          onPress={() => {
-                           
-                            setFieldValue('interview_type',item);
-                            setOption(false);
-                          }}>
-                          <JText fontSize={RFPercentage(2)}>{item}</JText>
-                        </Pressable>
-                      ))}
-                    </View>
-                  )}
-                </View>
-                {values.interview_type === 'Office Base' ? (
                   <JInput
                     containerStyle={{marginTop: RFPercentage(1)}}
                     isRequired
-                    placeholder={'https//map.app.goo.gl/B31UbkjUXD5XrvkHA'}
-                    heading={'Office location'}
-                    value={values.office_location}
+                    heading={'Interview Topic: '}
+                    value={values.interview_topic}
                     error={
-                      touched.office_location && errors.office_location && true
+                      touched.interview_topic && errors.interview_topic && true
                     }
-                    onChangeText={handleChange('office_location')}
-                    onBlur={() => setFieldTouched('office_location')}
+                    multiline={true}
+                    onChangeText={handleChange('interview_topic')}
+                    onBlur={() => setFieldTouched('interview_topic')}
                   />
-                ) : (
-                  values.interview_type === 'Zoom' && (
-                    <JRow style={{marginVertical: RFPercentage(2)}}>
-                      <Switch
-                        trackColor={{
-                          false: '#767577',
-                          true: colors.purple[0],
-                        }}
-                        thumbColor="#f4f3f4"
-                        ios_backgroundColor="#3e3e3e"
-                        onValueChange={toggleSwitch}
-                        value={isEnabled}
-                      />
-                      <JText>Add Zoom Meeting Link Manually</JText>
-                    </JRow>
-                  )
-                )}
-                {isEnabled === true && values.interview_type === 'Zoom' && (
-                   <JInput
-                   containerStyle={{marginTop: RFPercentage(1)}}
-                   placeholder={'Zoom'}
-                  //  heading={'Zoom'}
-                   value={values.zoom_link}
-                   error={
-                     touched.zoom_link && errors.zoom_link && true
-                   }
-                   onChangeText={handleChange('zoom_link')}
-                   onBlur={() => setFieldTouched('zoom_link')}
-                 />
-                )}
-                <JRow
-                  style={{
-                    justifyContent: 'flex-end',
-                    margin: RFPercentage(2),
-                  }}>
-                  <JButton
-                    onPress={() => setModalVisible(false)}
+                  <View
                     style={{
-                      marginHorizontal: RFPercentage(2),
-                      backgroundColor: '#fff',
-                      borderColor: '#000040',
+                      justifyContent: 'space-between',
+                      paddingTop: RFPercentage(1),
+                      marginBottom: RFPercentage(1),
                     }}>
-                    Close
-                  </JButton>
-                  <JButton onPress={() => handleSubmit()}>Submit</JButton>
-                </JRow>
-                {open && (
-                  <DatePicker
-                    modal
-                    open={open}
-                    date={values.interview_date_and_time}
-                    onConfirm={e => setFieldValue('interview_date_and_time', e)}
-                    onCancel={() => setOpen(false)}
+                    <JText
+                      style={{fontSize: RFPercentage(2.5), fontWeight: '500'}}>
+                      Interview Date and Time :
+                    </JText>
+                    <Pressable
+                      onPress={() => setOpen(true)}
+                      style={{
+                        height: RFPercentage(6),
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        borderBottomWidth: RFPercentage(0.2),
+                        borderBottomColor: error
+                          ? colors.danger[0]
+                          : colors.inputBorder[0],
+                      }}>
+                      <JIcon
+                        icon={'ev'}
+                        name={'calendar'}
+                        color={'#000'}
+                        size={RFPercentage(4.5)}
+                      />
+                      <JText fontSize={RFPercentage(2)}>
+                        {moment(values.interview_date_and_time).format(
+                          'YYYY/MM/DD HH:MM',
+                        )}
+                      </JText>
+                    </Pressable>
+                  </View>
+                  <JInput
+                    containerStyle={{marginTop: RFPercentage(1)}}
+                    isRequired
+                    multiline={true}
+                    heading={'Description'}
+                    value={updatedDescription(
+                      values.description,
+                      moment(values.interview_date_and_time).format(
+                        'YYYY/MM/DD HH:MM',
+                      ),
+                    )}
+                    error={touched.description && errors.description && true}
+                    onChangeText={handleChange('description')}
+                    onBlur={() => setFieldTouched('description')}
                   />
-                )}
-              </ScrollView>
-            )}
-          </Formik>
+
+                  <View
+                    style={{
+                      justifyContent: 'space-between',
+                      paddingTop: RFPercentage(1),
+                      marginBottom: RFPercentage(1),
+                    }}>
+                    <JText
+                      style={{fontSize: RFPercentage(2.5), fontWeight: '500'}}>
+                      Interview Type
+                    </JText>
+                    <Pressable
+                      onPress={() => setOption(!option)}
+                      style={styles.menuV}>
+                      <JText
+                        fontSize={RFPercentage(2)}
+                        style={{paddingHorizontal: RFPercentage(1)}}>
+                        {/* {menu ? menu : meetings?.meeting_type[0]} */}
+                        {values.interview_type}
+                      </JText>
+                      <JIcon
+                        icon={'en'}
+                        name={
+                          option === true
+                            ? 'chevron-small-up'
+                            : 'chevron-small-down'
+                        }
+                        color={'#00000090'}
+                        size={RFPercentage(4)}
+                      />
+                    </Pressable>
+                    {option === true && (
+                      <View
+                        style={{
+                          borderWidth: RFPercentage(0.1),
+                          borderRadius: RFPercentage(1),
+                          paddingVertical: RFPercentage(1),
+                        }}>
+                        {(meetings?.meeting_type).map((item, index) => (
+                          <Pressable
+                            key={index}
+                            style={{
+                              padding: 10,
+                              justifyContent: 'space-between',
+                            }}
+                            onPress={() => {
+                              setFieldValue('interview_type', item);
+                              setOption(false);
+                            }}>
+                            <JText fontSize={RFPercentage(2)}>{item}</JText>
+                          </Pressable>
+                        ))}
+                      </View>
+                    )}
+                  </View>
+                  {values.interview_type === 'Office Base' ? (
+                    <JInput
+                      containerStyle={{marginTop: RFPercentage(1)}}
+                      isRequired
+                      placeholder={'https//map.app.goo.gl/B31UbkjUXD5XrvkHA'}
+                      heading={'Office location'}
+                      value={values.office_location}
+                      error={
+                        touched.office_location &&
+                        errors.office_location &&
+                        true
+                      }
+                      onChangeText={handleChange('office_location')}
+                      onBlur={() => setFieldTouched('office_location')}
+                    />
+                  ) : (
+                    values.interview_type === 'Zoom' && (
+                      <JRow style={{marginVertical: RFPercentage(2)}}>
+                        <Switch
+                          trackColor={{
+                            false: '#767577',
+                            true: colors.purple[0],
+                          }}
+                          thumbColor="#f4f3f4"
+                          ios_backgroundColor="#3e3e3e"
+                          onValueChange={toggleSwitch}
+                          value={isEnabled}
+                        />
+                        <JText>Add Zoom Meeting Link Manually</JText>
+                      </JRow>
+                    )
+                  )}
+                  {isEnabled === true && values.interview_type === 'Zoom' && (
+                    <JInput
+                      containerStyle={{marginTop: RFPercentage(1)}}
+                      placeholder={'Zoom'}
+                      //  heading={'Zoom'}
+                      value={values.zoom_link}
+                      error={touched.zoom_link && errors.zoom_link && true}
+                      onChangeText={handleChange('zoom_link')}
+                      onBlur={() => setFieldTouched('zoom_link')}
+                    />
+                  )}
+                  <JRow
+                    style={{
+                      justifyContent: 'flex-end',
+                      margin: RFPercentage(2),
+                    }}>
+                    <JButton
+                      onPress={() => setModalVisible(false)}
+                      style={{
+                        marginHorizontal: RFPercentage(2),
+                        backgroundColor: '#fff',
+                        borderColor: '#000040',
+                      }}>
+                      Close
+                    </JButton>
+                    <JButton onPress={() => handleSubmit()}>Submit</JButton>
+                  </JRow>
+                  {open && (
+                    <DatePicker
+                      modal
+                      open={open}
+                      date={values.interview_date_and_time}
+                      onConfirm={e =>
+                        setFieldValue('interview_date_and_time', e)
+                      }
+                      onCancel={() => setOpen(false)}
+                    />
+                  )}
+                </ScrollView>
+              )}
+            </Formik>
+          )}
         </SafeAreaView>
       </Modal>
       <View></View>
@@ -650,4 +684,6 @@ const styles = StyleSheet.create({
     
     elevation: 2,
   },
+  headers:{fontWeight:'bold',fontSize:RFPercentage(3),marginVertical: RFPercentage(2),},
+  date:{fontSize:RFPercentage(2.5),marginHorizontal: RFPercentage(2),},
 });

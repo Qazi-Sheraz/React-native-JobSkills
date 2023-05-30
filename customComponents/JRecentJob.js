@@ -4,13 +4,12 @@ import JText from './JText'
 import Feather from 'react-native-vector-icons/Feather';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import colors from '../config/colors';
+import JRow from './JRow';
 const JRecentJob = ({JobName,onPress}) => {
   return (
-    <Pressable
+    <JRow
               onPress={onPress}
               style={{
-                flexDirection: 'row',
-                alignItems: 'center',
                 paddingVertical: RFPercentage(2),
                 borderBottomWidth: RFPercentage(0.1),
               }}>
@@ -18,10 +17,10 @@ const JRecentJob = ({JobName,onPress}) => {
                 name="clock"
                 size={RFPercentage(3.5)}
                 color={colors.black[0]}
-                style={{marginRight: RFPercentage(1)}}
+                style={{marginHorizontal: RFPercentage(1)}}
               />
-              <JText fontSize={RFPercentage(2)}>{JobName}</JText>
-            </Pressable>
+              <JText fontSize={RFPercentage(2)} fontWeight='bold'>{JobName}</JText>
+            </JRow>
   )
 }
 

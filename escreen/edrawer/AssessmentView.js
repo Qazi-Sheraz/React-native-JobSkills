@@ -11,6 +11,7 @@ import { StoreContext } from '../../mobx/store'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import url from '../../config/url'
 import JIcon from '../../customComponents/JIcon'
+import { observer } from 'mobx-react'
 
 const AssessmentView = () => {
     const store = useContext(StoreContext);
@@ -19,7 +20,6 @@ const AssessmentView = () => {
     const [ans, setAns] = useState();
     const [error,setError]=useState(false);
   const {params}=useRoute();
-  console.log(params.name)
     const _getAssesmentQues = () => {
   
       var myHeaders = new Headers();
@@ -88,7 +88,7 @@ const AssessmentView = () => {
               }}>
               <JText
                 style={styles.header}>
-                Questions: {index + 1}
+                {store.lang.questions}{'\r'}{index + 1}
               </JText>
               <JText
                 style={styles.ques}>
@@ -103,7 +103,12 @@ const AssessmentView = () => {
               <JText
                 style={{ fontWeight: 'bold',
                 fontSize: RFPercentage(1.9)}}>
-                Questions Type : {item.question_type}
+                {store.lang.ques_type}{'\r'}
+              </JText>
+              <JText
+                style={{ fontWeight: 'bold',
+                fontSize: RFPercentage(1.9)}}>
+                {item.question_type}
               </JText>
             
             </JRow> 
@@ -124,7 +129,7 @@ const AssessmentView = () => {
               }}>
               <JText
                 style={styles.header}>
-                Answer:
+                {store.lang.answer}
               </JText>
               <JText style={styles.answer}>
                 {item.assessment_defined_answers[0]?.answer ?item.assessment_defined_answers[0]?.answer:'N/A' }
@@ -139,7 +144,7 @@ const AssessmentView = () => {
   );
 }
 
-export default AssessmentView
+export default observer(AssessmentView)
 
 const styles = StyleSheet.create({
   mainView: {

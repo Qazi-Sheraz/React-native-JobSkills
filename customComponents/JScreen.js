@@ -49,6 +49,7 @@ export default function JScreen({
         flex: 1,
         backgroundColor: '#ffffff',
       }}>
+        <StatusBar backgroundColor={colors.purple[0]}/>
       {headerShown && header}
 
       {internet === true && netInfo.isConnected === false ? (
