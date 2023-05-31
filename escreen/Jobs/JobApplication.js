@@ -155,6 +155,7 @@ const data = [
       isError={error}
       onTryAgainPress={() => {
         _jobApplication();
+        setError(false);
       }}>
       <JGradientHeader
         center={
@@ -162,7 +163,7 @@ const data = [
             fontColor={colors.white[0]}
             fontWeight="bold"
             fontSize={RFPercentage(2.5)}>
-            {'Job Applicantes'}
+            {store.lang.job_Applicantes}
           </JText>
         }
         left={JChevronIcon}

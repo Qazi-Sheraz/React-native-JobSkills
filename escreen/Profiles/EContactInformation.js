@@ -140,9 +140,9 @@ function EContactInformation({refRBSheet, data, user}) {
             .email('Must be a valid email')
             .required()
             .label('Company'),
-          // countries: yup.string().required().label('Country'),
-          // city: yup.string().required().label('City'),
-          // state: yup.string().required().label('State'),
+            countries: yup.string().required('Country is required').label('Country'),
+            city: yup.string().required('City is required').label('City'),
+            state: yup.string().required('State is required').label('State'),
           phone: yup.string().max(14).required().label('Phone'),
         })}>
         {({
@@ -189,6 +189,9 @@ function EContactInformation({refRBSheet, data, user}) {
                 marginHorizontal: RFPercentage(2),
               }}>
               <JInput
+              style={{
+                    textAlign: store.lang.id == 0 ? 'left' : 'right',
+                  }}
                 containerStyle={{marginTop: RFPercentage(2)}}
                 heading={'Name:'}
                 value={values.name}
@@ -200,6 +203,9 @@ function EContactInformation({refRBSheet, data, user}) {
                 <JErrorText>{errors.name}</JErrorText>
               )}
               <JInput
+              style={{
+                textAlign: store.lang.id == 0 ? 'left' : 'right',
+              }}
                 containerStyle={{marginTop: RFPercentage(2)}}
                 value={values.email}
                 heading={'Email:'}

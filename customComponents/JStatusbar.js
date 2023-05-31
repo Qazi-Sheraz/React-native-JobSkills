@@ -8,6 +8,7 @@ import JText from './JText';
 import { StoreContext } from '../mobx/store';
 import { useRoute } from '@react-navigation/native';
 import url from '../config/url';
+import { observer } from 'mobx-react';
 
 
 const JStatusbar = ({item}) => {
@@ -144,15 +145,15 @@ const JStatusbar = ({item}) => {
         />
       </JRow>
       <JRow style={{justifyContent:'space-evenly',width:'70%'}}>
-      <JText>Shortlisted</JText>
-      <JText>Interview{'\n'}Scheduled</JText>
-      <JText>Interview{'\n'}Completed</JText>
+      <JText>{store.lang.shortlisteds}</JText>
+      <JText>{store.lang.Interview}{'\n'}{store.lang.scheduled}</JText>
+      <JText>{store.lang.Interview}{'\n'}{store.lang.completed}</JText>
       </JRow>
     </>)
   );
 };
 
-export default JStatusbar;
+export default observer(JStatusbar);
 
 const styles = StyleSheet.create({
   line: {

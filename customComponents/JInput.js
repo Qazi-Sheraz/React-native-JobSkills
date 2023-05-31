@@ -25,6 +25,7 @@ export default function JInput({
   onPressEye,
   eye = false,
   error,
+  style,
   defaultValue,
   isRequired = false,
   numberOfLines=1,
@@ -67,12 +68,12 @@ export default function JInput({
           autoFocus={autoFocus}
           onChangeText={onChangeText}
           defaultValue={defaultValue}
-          style={{
+          style={[{
             paddingBottom: RFPercentage(0.5),
             fontSize: RFPercentage(2.3),
             width: forPassword ? '90%' : '100%',
             color: colors.black[0],
-          }}
+          },style]}
           placeholder={placeholder}
           placeholderTextColor={placeHolderColor}
           value={value}

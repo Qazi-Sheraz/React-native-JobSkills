@@ -23,6 +23,7 @@ import url from '../../config/url';
 import { useContext } from 'react';
 import { StoreContext } from '../../mobx/store';
 import { observer } from 'mobx-react';
+import JChevronIcon from '../../customComponents/JChevronIcon';
 
 const JobRequirement = ({calendar='0',}) => {
 
@@ -172,13 +173,7 @@ const JobRequirement = ({calendar='0',}) => {
             </JText>
           }
           left={
-            <JIcon
-              icon="fe"
-              onPress={() => goBack()}
-              name="chevron-left"
-              size={RFPercentage(3.5)}
-              color={colors.white[0]}
-            />
+            <JChevronIcon/>
           }
         />
       }>
@@ -192,13 +187,11 @@ const JobRequirement = ({calendar='0',}) => {
           experience: '',
           publishDate: new Date().toDateString(),
           expiry: new Date().toDateString(),
-         
         }}
         onSubmit={values => {
           console.log({...params, ...values});
           // console.log(values);
           _handleSubmit(values);
-          
         }}
         // validationSchema={yup.object().shape({
         //   career: yup.string().required().label('Career Level'),
@@ -222,7 +215,6 @@ const JobRequirement = ({calendar='0',}) => {
             <ScrollView
               contentContainerStyle={{paddingBottom: RFPercentage(8)}}>
               <JSelectInput
-             
                 containerStyle={styles.container}
                 value={values.careerLevels?.name}
                 data={requirements?.careerLevels}
@@ -231,65 +223,66 @@ const JobRequirement = ({calendar='0',}) => {
                 heading={'Career Level:'}
                 setValue={e => setFieldValue('careerLevels', e)}
                 error={touched.careerLevels && errors.careerLevels && true}
-                rightIcon={
-                  <JNewJobIcon/>
-                }
+                rightIcon={<JNewJobIcon />}
               />
               {touched.careerLevels && errors.careerLevels && (
                 <JErrorText>{errors.careerLevels}</JErrorText>
               )}
               <JSelectInput
-               isMultiple={true}
+                isMultiple={true}
                 containerStyle={styles.container}
-                value={values.requiredDegreeLevel?.map((item )=> item.name).join(', ')}
+                value={values.requiredDegreeLevel
+                  ?.map(item => item.name)
+                  .join(', ')}
                 data={requirements?.requiredDegreeLevel}
-                id={values.requiredDegreeLevel?.map((item )=> item.id).join(', ')}
+                id={values.requiredDegreeLevel?.map(item => item.id).join(', ')}
                 header={'Degree Level'}
                 heading={'Degree Level:'}
                 setValue={e => setFieldValue('requiredDegreeLevel', e)}
-                error={touched.requiredDegreeLevel && errors.requiredDegreeLevel && true}
-                rightIcon={
-                  <JNewJobIcon/>
+                error={
+                  touched.requiredDegreeLevel &&
+                  errors.requiredDegreeLevel &&
+                  true
                 }
+                rightIcon={<JNewJobIcon />}
               />
               {touched.requiredDegreeLevel && errors.requiredDegreeLevel && (
                 <JErrorText>{errors.requiredDegreeLevel}</JErrorText>
               )}
               <JSelectInput
-               isMultiple={true}
+                isMultiple={true}
                 containerStyle={styles.container}
-                value={values.jobNationality?.map((item )=> item.name).join(', ')}
+                value={values.jobNationality?.map(item => item.name).join(', ')}
                 data={requirements?.jobNationality}
-                id={values.jobNationality?.map((item )=> item.id).join(', ')}
+                id={values.jobNationality?.map(item => item.id).join(', ')}
                 header={'job Nationality'}
                 heading={'job Nationality:'}
                 setValue={e => setFieldValue('jobNationality', e)}
                 error={touched.jobNationality && errors.jobNationality && true}
-                rightIcon={
-                  <JNewJobIcon/>
-                }
+                rightIcon={<JNewJobIcon />}
               />
               {touched.jobNationality && errors.jobNationality && (
                 <JErrorText>{errors.jobNationality}</JErrorText>
               )}
               <JSelectInput
-               isMultiple={true}
+                isMultiple={true}
                 containerStyle={styles.container}
-                value={values.jobLanguage?.map((item )=> item.name).join(', ')}
+                value={values.jobLanguage?.map(item => item.name).join(', ')}
                 data={requirements?.jobLanguage}
-                id={values.jobLanguage?.map((item )=> item.id).join(', ')}
+                id={values.jobLanguage?.map(item => item.id).join(', ')}
                 header={'Language'}
                 heading={'Job Language:'}
                 setValue={e => setFieldValue('jobLanguage', e)}
                 error={touched.jobLanguage && errors.jobLanguage && true}
-                rightIcon={
-                  <JNewJobIcon/>
-                }
+                rightIcon={<JNewJobIcon />}
               />
               {touched.jobLanguage && errors.jobLanguage && (
                 <JErrorText>{errors.jobLanguage}</JErrorText>
               )}
               <JInput
+                style={{
+                  textAlign: store.lang.id == 0 ? 'left' : 'right',
+                }}
                 isRequired
                 containerStyle={styles.container}
                 heading={'Position:'}
@@ -302,6 +295,9 @@ const JobRequirement = ({calendar='0',}) => {
                 <JErrorText>{errors.position}</JErrorText>
               )}
               <JInput
+                style={{
+                  textAlign: store.lang.id == 0 ? 'left' : 'right',
+                }}
                 isRequired
                 containerStyle={styles.container}
                 heading={'Job Experience:'}
@@ -313,32 +309,31 @@ const JobRequirement = ({calendar='0',}) => {
               {touched.experience && errors.experience && (
                 <JErrorText>{errors.experience}</JErrorText>
               )}
-             <View
+              <View
+                style={{
+                  justifyContent: 'space-between',
+                  paddingTop: RFPercentage(2),
+                  marginBottom: RFPercentage(1),
+                }}>
+                <JText style={{fontSize: RFPercentage(2.5), fontWeight: '500'}}>
+                  Job Expiry Date:
+                </JText>
+                <Pressable
+                  onPress={() => setModalVisible1(true)}
                   style={{
-                    justifyContent: 'space-between',
-                    paddingTop: RFPercentage(2),
-                    marginBottom: RFPercentage(1),
+                    height: RFPercentage(6),
+                    flexDirection: store.lang.id === 0 ? 'row' : 'row-reverse',
+                    alignItems: 'center',
+                    borderBottomWidth: RFPercentage(0.2),
+                    // backgroundColor: 'red',
+                    borderBottomColor: error
+                      ? colors.danger[0]
+                      : colors.inputBorder[0],
                   }}>
-                  <JText
-                    style={{fontSize: RFPercentage(2.5), fontWeight: '500'}}>
-                    Job Expiry Date:`
-                  </JText>
-                  <Pressable
-                    onPress={() => setModalVisible1(true)}
-                    style={{
-                      height: RFPercentage(6),
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      borderBottomWidth: RFPercentage(0.2),
-                      // backgroundColor: 'red',
-                      borderBottomColor: error
-                        ? colors.danger[0]
-                        : colors.inputBorder[0],
-                    }}>
-                    <JText fontSize={RFPercentage(2)}>{values.expiry}</JText>
-                  </Pressable>
-                </View>
-                <View
+                  <JText fontSize={RFPercentage(2)}>{values.expiry}</JText>
+                </Pressable>
+              </View>
+              <View
                 style={{
                   justifyContent: 'space-between',
                   paddingTop: RFPercentage(1),
@@ -351,7 +346,7 @@ const JobRequirement = ({calendar='0',}) => {
                   onPress={() => setModalVisible(true)}
                   style={{
                     height: RFPercentage(6),
-                    flexDirection: 'row',
+                    flexDirection: store.lang.id === 0 ? 'row' : 'row-reverse',
                     alignItems: 'center',
                     borderBottomWidth: RFPercentage(0.2),
                     borderBottomColor: error
@@ -361,7 +356,7 @@ const JobRequirement = ({calendar='0',}) => {
                   <JText fontSize={RFPercentage(2)}>{values.publishDate}</JText>
                 </Pressable>
               </View>
-              <View style={{marginVertical: RFPercentage(2)}}>
+              <View style={{marginVertical: RFPercentage(2),alignItems:store.lang.id===0? 'flex-start':'flex-end', width: '100%'}}>
                 <JRow style={styles.switch}>
                   <JText style={styles.txtSwitch}>Hide Salary</JText>
                   <Switch
@@ -407,7 +402,7 @@ const JobRequirement = ({calendar='0',}) => {
                 <Calendar
                   style={styles.date}
                   onDayPress={day => {
-                    setFieldValue('publishDate', day.dateString)
+                    setFieldValue('publishDate', day.dateString);
                   }}
                   markedDates={{
                     [selected]: {
@@ -429,7 +424,7 @@ const JobRequirement = ({calendar='0',}) => {
                 <Calendar
                   style={styles.date}
                   onDayPress={day => {
-                    setFieldValue('expiry', day.dateString)
+                    setFieldValue('expiry', day.dateString);
                   }}
                   markedDates={{
                     [selected]: {

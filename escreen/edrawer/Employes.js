@@ -17,7 +17,7 @@ import { observer } from 'mobx-react';
 
 const Employes = () => {
   const {navigate, goBack} = useNavigation();
-  const store=useContext(StoreContext);
+  const store = useContext(StoreContext);
   const [loader, setLoader] = useState(true);
   const [employeeData, setEmployeeData] = useState([]);
   const [error,setError]=useState(false)
@@ -55,7 +55,7 @@ const Employes = () => {
 
       .catch(error => {
         // console.log('error', error);
-        alert('error',error)
+       setError(true)
    
       }).finally(()=>{
         setLoader(false);
@@ -73,12 +73,12 @@ const Employes = () => {
     _getEmployeData();
     store.setIsRefreshing(false);
   }, 2000);
-}, []);
+}, [loader,]);
 
   return (
     <JScreen
       isError={error}
-      onTryAgainPress={() => _getEmployeData()}
+      onTryAgainPress={() => {_getEmployeData(),setError(false)}}
       style={{paddingHorizontal: RFPercentage(2)}}
       header={
         <JGradientHeader
@@ -118,7 +118,8 @@ const Employes = () => {
     />
   }
              data={searchQuery.length > 0 ?filteredData :employeeData}
-              renderItem={({item, index}) => <JEmployeUser item={item} />}
+              renderItem={({item, index}) => <JEmployeUser 
+              item={item} />}
             />
           </View>
         </>

@@ -104,6 +104,9 @@ const ESocialLink = () => {
 
         <View style={{paddingHorizontal: RFPercentage(2)}}>
           <JInput
+          style={{
+            textAlign: store.lang.id == 0 ? 'left' : 'right',
+          }}
             value={values.fb}
             heading={'Facebook'}
             error={touched.fb && errors.fb && true}
@@ -115,6 +118,9 @@ const ESocialLink = () => {
           {touched.fb && errors.fb && <JErrorText>{errors.fb}</JErrorText>}
 
           <JInput
+          style={{
+            textAlign: store.lang.id == 0 ? 'left' : 'right',
+          }}
             value={values.ln}
             containerStyle={styles.input}
             heading={'LinkedIn'}
@@ -127,6 +133,9 @@ const ESocialLink = () => {
           {touched.ln && errors.ln && <JErrorText>{errors.ln}</JErrorText>}
 
           <JInput
+          style={{
+            textAlign: store.lang.id == 0 ? 'left' : 'right',
+          }}
             value={values.tw}
             heading={'Twitter'}
             error={touched.tw && errors.tw && true}

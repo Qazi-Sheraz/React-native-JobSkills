@@ -18,83 +18,24 @@ import { observer } from 'mobx-react'
 
 
 const ViewResume = () => {
-    const {params}= useRoute()
-    // console.log(params)
     const store = useContext(StoreContext);
     const [error, setError] = useState(false);
-    const [resume, setResume] = useState();
-    const [loader, setLoader] = useState(true);
-    const _viewResume = (id) => {
-        var myHeaders = new Headers();
-        myHeaders.append(
-          'Authorization',
-          `Bearer ${store.token.token}`,
-        );
-    
-        fetch(`${url.baseUrl}/employer/resume-view/${params.id}`, {
-          method: 'GET',
-          headers: myHeaders,
-          redirect: 'follow',
-        })
-        
-          .then(response => response.json())
-          .then(result => {
-            // console.log(result);
-           setResume(result)          })
-    
-          .catch(error => {
-             console.log('error', error);
-            alert('error', error);
-          })
-          .finally(() => {
-            setLoader(false);
-          });
-      };
-      useEffect(() => {
-        _viewResume();
-      }, [loader]);
-
-    //   const downloadPDF = () => {
-    //     const fileURL = 'https://www.example.com/sample.pdf'; // Replace with your PDF file URL
-    //     const filePath = RNFS.DocumentDirectoryPath + '/sample.pdf'; // Replace with the desired file name and path
-      
-    //     RNFetchBlob.config({
-    //       fileCache: true,
-    //       addAndroidDownloads: {
-    //         useDownloadManager: true,
-    //         notification: true,
-    //         title: 'Sample PDF',
-    //         path: filePath,
-    //         description: 'Downloading PDF...',
-    //         mime: 'application/pdf',
-    //         mediaScannable: true,
-    //         notificationOpenOnClick: true,
-    //       },
-    //     })
-    //       .fetch('GET', fileURL, {})
-    //       .then((res) => {
-    //         console.log('File downloaded to:', res.path());
-    //       })
-    //       .catch((error) => {
-    //         console.log(error);
-    //       });
-    //   };
-      
+   
   return (
-    <JScreen isError={error} onTryAgainPress={() => _viewResume()}>
+    <JScreen>
       <JGradientHeader
         center={
           <JText
             fontColor={colors.white[0]}
             fontWeight="bold"
             fontSize={RFPercentage(2.5)}>
-            {'Test CV'}
+            {store.lang.test_cV}
           </JText>
         }
         left={JChevronIcon}
       />
 
-      {loader == true ? (
+      {store.pdfApiLoader === true ? (
         <ActivityIndicator />
       ) : (
         <View style={{flex:1 }}>
@@ -103,7 +44,7 @@ const ViewResume = () => {
            showsVerticalScrollIndicator={false}>
           <Pdf
             trustAllCerts={false}
-            source={{uri: resume?.data}}
+            source={{uri: store.pdf}}
             onLoadComplete={(numberOfPages, filePath) => {
               console.log(`Number of pages: ${numberOfPages}`);
             }}
@@ -140,7 +81,7 @@ const ViewResume = () => {
         <JButton
             // isValid={isValid}
             onPress={() => {
-              Linking.openURL(resume?.data);
+              Linking.openURL(store.pdf);
             }}
             style={{
             //   width: '46%',
@@ -148,7 +89,7 @@ const ViewResume = () => {
               position:'absolute',
               bottom:20
             }}
-            children={'Download Resume'}
+            children={store.lang.downloadResume}
           /></View>
       )}
     </JScreen>

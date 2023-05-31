@@ -11,10 +11,13 @@ import {
 } from 'react-native-responsive-screen';
 import JText from '../../customComponents/JText';
 import colors from '../../config/colors';
+import { StatusBar } from 'react-native';
 
 export default function GetStart() {
   return (
+    
     <JGradientScreen>
+      <StatusBar backgroundColor={colors.purple[0]}/>
       <JSkip
         containerStyle={styles.skip}
         children="Skip"

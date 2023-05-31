@@ -116,6 +116,7 @@ const Profile = () => {
           type: 'success',
           text1: 'OTP has been sent to your registered phone number',
         });
+        
 
       })
       .catch(error => {console.log('error', error)

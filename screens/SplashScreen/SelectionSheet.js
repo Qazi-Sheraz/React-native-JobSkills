@@ -1,4 +1,4 @@
-import {StyleSheet, View} from 'react-native';
+import {StatusBar, StyleSheet, View} from 'react-native';
 import React from 'react';
 import {heightPercentageToDP} from 'react-native-responsive-screen';
 import colors from '../../config/colors';
@@ -9,6 +9,7 @@ import * as Animatable from 'react-native-animatable';
 export default function SelectionSheet({navigation}) {
   return (
     <Animatable.View style={styles.sheetContainer} animation="slideInUp">
+      <StatusBar backgroundColor={colors.purple[0]}/>
       <View style={styles.sheetItemContainer}>
         <JButton
           fontStyle={styles.buttonStyle}

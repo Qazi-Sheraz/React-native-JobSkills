@@ -57,24 +57,24 @@ const [stat,setStat]=useState(item.status);
   const handleStatusSelect = (status1) => {
     setSelectedStatus(status1);
     status1==store.lang.drafted
-    ?_applicantsStatus(0,'Drafted')
+    ?_applicantsStatus(0,store.lang.drafted)
     :  status1== store.lang.applied
-    ?_applicantsStatus(1,'Applied')
+    ?_applicantsStatus(1,store.lang.applied)
     :  status1==store.lang.rejected
-    ?_applicantsStatus(2,'Rejected')
+    ?_applicantsStatus(2,store.lang.rejected)
     :  status1==store.lang.selected
-    ?_applicantsStatus(3,'Selected')
+    ?_applicantsStatus(3,store.lang.selected)
     :  status1==store.lang.shortlisted
-    ?_applicantsStatus(4,'Shortlisted')
+    ?_applicantsStatus(4,store.lang.shortlisted)
     :  status1==store.lang.invitation_Sent
-    ?_applicantsStatus(5,'Invitation Sent')
+    ?_applicantsStatus(5,store.lang.invitation_Sent)
     :  status1==store.lang.interview_scheduled
-    ?_applicantsStatus(6,'Interview Scheduled')
+    ?_applicantsStatus(6,store.lang.interview_scheduled)
     :  status1==store.lang.interview_accepted
-    ?_applicantsStatus(7,'Interview Accepted')
+    ?_applicantsStatus(7,store.lang.interview_accepted)
     :  status1==store.lang.interview_rescheduled
-    ?_applicantsStatus(8,'Interview Rescheduled')
-    :  status1==store.lang.interview_completed && _applicantsStatus(9,'Interview Completed')
+    ?_applicantsStatus(8,store.lang.interview_rescheduled)
+    :  status1==store.lang.interview_completed && _applicantsStatus(9,store.lang.interview_completed)
     // console.log(status1)
   };
   const _meetingSubmit = values => {
@@ -112,7 +112,7 @@ const [stat,setStat]=useState(item.status);
                type: 'success',
                text1:result.message,
              });
-             setStat('Invitation Sent')
+             setStat(store.lang.invitation_Sent)
              setUpdate(!update)
 
 
@@ -250,7 +250,7 @@ const updatedDescription =(description,value)=>description.replace(
           }}>
           <JText style={styles.Hname}>{item.candidate_name}</JText>
 
-          {item.status==='Selected' || item.status==='Rejected' ? null 
+          {item.status===store.lang.selected || item.status===store.lang.rejected ? null 
           :(
           <Menu>
             <MenuTrigger
@@ -449,6 +449,9 @@ const updatedDescription =(description,value)=>description.replace(
                     marginHorizontal: RFPercentage(2),
                   }}>
                   <JInput
+                  style={{
+                    textAlign: store.lang.id == 0 ? 'left' : 'right',
+                  }}
                     containerStyle={{marginTop: RFPercentage(1)}}
                     isRequired
                     heading={'Interview Topic: '}
@@ -463,6 +466,7 @@ const updatedDescription =(description,value)=>description.replace(
                   <View
                     style={{
                       justifyContent: 'space-between',
+                      // flexDirection: store.lang.id===0?'row':'row-reverse',
                       paddingTop: RFPercentage(1),
                       marginBottom: RFPercentage(1),
                     }}>
@@ -474,7 +478,7 @@ const updatedDescription =(description,value)=>description.replace(
                       onPress={() => setOpen(true)}
                       style={{
                         height: RFPercentage(6),
-                        flexDirection: 'row',
+                        flexDirection: store.lang.id===0?'row':'row-reverse',
                         alignItems: 'center',
                         borderBottomWidth: RFPercentage(0.2),
                         borderBottomColor: error
@@ -495,6 +499,9 @@ const updatedDescription =(description,value)=>description.replace(
                     </Pressable>
                   </View>
                   <JInput
+                  style={{
+                    textAlign: store.lang.id == 0 ? 'left' : 'right',
+                  }}
                     containerStyle={{marginTop: RFPercentage(1)}}
                     isRequired
                     multiline={true}
@@ -515,6 +522,7 @@ const updatedDescription =(description,value)=>description.replace(
                       justifyContent: 'space-between',
                       paddingTop: RFPercentage(1),
                       marginBottom: RFPercentage(1),
+
                     }}>
                     <JText
                       style={{fontSize: RFPercentage(2.5), fontWeight: '500'}}>
@@ -522,7 +530,7 @@ const updatedDescription =(description,value)=>description.replace(
                     </JText>
                     <Pressable
                       onPress={() => setOption(!option)}
-                      style={styles.menuV}>
+                      style={[styles.menuV,{flexDirection: store.lang.id===0?'row':'row-reverse',}]}>
                       <JText
                         fontSize={RFPercentage(2)}
                         style={{paddingHorizontal: RFPercentage(1)}}>
@@ -553,6 +561,7 @@ const updatedDescription =(description,value)=>description.replace(
                             style={{
                               padding: 10,
                               justifyContent: 'space-between',
+                              flexDirection: store.lang.id===0?'row':'row-reverse',
                             }}
                             onPress={() => {
                               setFieldValue('interview_type', item);
@@ -566,6 +575,9 @@ const updatedDescription =(description,value)=>description.replace(
                   </View>
                   {values.interview_type === 'Office Base' ? (
                     <JInput
+                    style={{
+                      textAlign: store.lang.id == 0 ? 'left' : 'right',
+                    }}
                       containerStyle={{marginTop: RFPercentage(1)}}
                       isRequired
                       placeholder={'https//map.app.goo.gl/B31UbkjUXD5XrvkHA'}
@@ -598,6 +610,9 @@ const updatedDescription =(description,value)=>description.replace(
                   )}
                   {isEnabled === true && values.interview_type === 'Zoom' && (
                     <JInput
+                    style={{
+                      textAlign: store.lang.id == 0 ? 'left' : 'right',
+                    }}
                       containerStyle={{marginTop: RFPercentage(1)}}
                       placeholder={'Zoom'}
                       //  heading={'Zoom'}
@@ -619,9 +634,9 @@ const updatedDescription =(description,value)=>description.replace(
                         backgroundColor: '#fff',
                         borderColor: '#000040',
                       }}>
-                      Close
+                      {store.lang.close}
                     </JButton>
-                    <JButton onPress={() => handleSubmit()}>Submit</JButton>
+                    <JButton onPress={() => handleSubmit()}>{store.lang.submit}</JButton>
                   </JRow>
                   {open && (
                     <DatePicker

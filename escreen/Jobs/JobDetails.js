@@ -195,14 +195,14 @@ console.log(formdata)
       name:
         jobDetail?.job_details?.job_category === null
           ? 'N/A'
-          : jobDetail.job_details?.job_category,
+          : store.lang.id===0?jobDetail.job_details?.job_category:store.lang.id===1?jobDetail.job_details?.job_category_urdu:jobDetail.job_details?.job_category_arabic,
     },
     {
       heading: store.lang.career_level,
       name:
         jobDetail?.job_details?.career_level === null
           ? 'N/A'
-          : jobDetail.job_details?.career_level,
+          :store.lang.id===0?jobDetail.job_details?.career_level:store.lang.id===1?jobDetail.job_details?.career_level_urdu:jobDetail.job_details?.career_level_arabic,
     },
     {
       isScroll:true,
@@ -212,7 +212,7 @@ console.log(formdata)
         jobDetail.job_details?.job_tag == null
           ? 'N/A'
           : 
-          jobDetail?.job_details?.job_tag.map(u => u.name).join(', ')
+          jobDetail?.job_details?.job_tag.map(u => store.lang.id===0?u.name: store.lang.id===1?u.urdu_title:u.arabic_title).join(', ')
            
          
     },
@@ -222,7 +222,7 @@ console.log(formdata)
       name:
         jobDetail?.job_details?.job_shift === null
           ? 'N/A'
-          : jobDetail.job_details?.job_shift,
+          : store.lang.id===0?jobDetail.job_details?.job_shift:store.lang.id===1?jobDetail.job_details?.job_shift_urdu:jobDetail.job_details?.job_shift_arabic,
     },
 
     {
@@ -244,11 +244,11 @@ console.log(formdata)
       name:
         jobDetail?.job_details?.salary_period === null
           ? 'N/A'
-          : jobDetail?.job_details?.salary_period,
+          : store.lang.id===0?jobDetail.job_details?.salary_period:store.lang.id===1?jobDetail.job_details?.salary_period_urdu:jobDetail.job_details?.salary_period_arabic,
     },
     {
       heading: store.lang.Is_Freelance,
-      name: jobDetail?.job_details?.is_freelance === false ? 'No' : 'Yes',
+      name: jobDetail?.job_details?.is_freelance === false ? store.lang.no : store.lang.yes,
     },
   ];
   return (
@@ -266,7 +266,7 @@ console.log(formdata)
             children={
               <View style={{marginTop: RFPercentage(2), width: '100%'}}>
                 <JRow style={{justifyContent: 'space-between'}}>
-                  <JText style={styles.headertxt}>{jobDetail.job_title}</JText>
+                  <JText style={styles.headertxt}>{jobDetail?.job_title}</JText>
 
                   <JText style={{fontSize: RFPercentage(1.8), color: '#ffff'}}>
                     {'\r'}
@@ -283,8 +283,22 @@ console.log(formdata)
                 <JRow>
                   <Placeholder />
                   <JText style={styles.txt}>
-                    {jobDetail?.city_name},{jobDetail?.state_name}{' '}
-                    {jobDetail?.country_name}
+                    {store.lang.id === 0
+                      ? jobDetail?.city_name
+                      : store.lang.id === 1
+                      ? jobDetail?.city_name_urdu
+                      : jobDetail?.city_name_arabic}
+                    ,
+                    {store.lang.id === 0
+                      ? jobDetail?.state_name
+                      : store.lang.id === 1
+                      ? jobDetail?.state_name_urdu
+                      : jobDetail?.state_name_arabic}
+                    {store.lang.id === 0
+                      ? jobDetail?.country_name
+                      : store.lang.id === 1
+                      ? jobDetail?.country_name_urdu
+                      : jobDetail?.country_name_arabic}
                   </JText>
                 </JRow>
                 <JRow style={{justifyContent: 'space-between'}}>
@@ -319,16 +333,16 @@ console.log(formdata)
               <JText style={styles.headertxt2}>{store.lang.job_skills}</JText>
 
               {jobDetail?.job_requirement?.job_skills.map(skill => (
-                <JText style={styles.txt1}>{skill.name}</JText>
+                <JText style={styles.txt1}>{store.lang.id===0?skill.name:store.lang.id===1?skill.urdu_title:skill.arabic_title}</JText>
               ))}
 
               <JText style={styles.headertxt2}>{store.lang.degree_level}</JText>
               <ScrollView
-                horizontal={true}
+                horizontal
                 showsHorizontalScrollIndicator={false}>
                 {jobDetail?.job_requirement?.degree_level.map(level => (
                   <JRow style={{marginHorizontal: RFPercentage(1)}}>
-                    <JText style={styles.dg}>{level.name}</JText>
+                    <JText style={styles.dg}>{store.lang.id===0?level.name:store.lang.id===1?level.urdu_title:level.arabic_title}</JText>
                   </JRow>
                 ))}
               </ScrollView>
@@ -352,11 +366,16 @@ console.log(formdata)
                   <ScrollView
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={{width:'100%',flexDirection:store.lang.id===0?'row':'row-reverse'}}
-                  >
-                    <JText style={[styles.txt2,{width:'60%'}]}>{item.name}</JText>
-                 </ScrollView>
-                 </JRow>
+                    contentContainerStyle={{
+                      width: '100%',
+                      flexDirection:
+                        store.lang.id === 0 ? 'row' : 'row-reverse',
+                    }}>
+                    <JText style={[styles.txt2, {width: '60%'}]}>
+                      {item.name}
+                    </JText>
+                  </ScrollView>
+                </JRow>
               ) : (
                 <JRow>
                   <JText key={index} style={styles.headertxt3}>
@@ -437,6 +456,9 @@ console.log(formdata)
                     {/* {console.log(route.params.jid)} */}
                     <View style={{padding: RFPercentage(2)}}>
                       <JInput
+                      style={{
+                        textAlign: store.lang.id == 0 ? 'left' : 'right',
+                      }}
                         containerStyle={{marginTop: RFPercentage(1)}}
                         isRequired
                         heading={store.lang.first_name}
@@ -446,6 +468,9 @@ console.log(formdata)
                         onBlur={() => setFieldTouched('firstName')}
                       />
                       <JInput
+                      style={{
+                        textAlign: store.lang.id == 0 ? 'left' : 'right',
+                      }}
                         containerStyle={{marginTop: RFPercentage(1)}}
                         isRequired
                         heading={store.lang.last_name}
@@ -455,6 +480,9 @@ console.log(formdata)
                         onBlur={() => setFieldTouched('lastName')}
                       />
                       <JInput
+                      style={{
+                        textAlign: store.lang.id == 0 ? 'left' : 'right',
+                      }}
                         containerStyle={{marginTop: RFPercentage(1)}}
                         isRequired
                         heading={store.lang.email}
@@ -555,7 +583,9 @@ console.log(formdata)
                           </View>
                         ) : (
                           <>
-                            <JText style={{marginVertical: RFPercentage(1),}}>File size exceeds 2 MB limit</JText>
+                            <JText style={{marginVertical: RFPercentage(1)}}>
+                              File size exceeds 2 MB limit
+                            </JText>
                             <JRow
                               style={{
                                 justifyContent: 'center',
@@ -602,14 +632,14 @@ console.log(formdata)
                         <JButton
                           // isValid={isValid}
                           onPress={() => {
-                            if(values.resume.size <= 2000000)
-                                 {handleSubmit();}
-                                else{
-                                  Toast.show({
-                                    type: 'error',
-                                    text1: 'error',
-                                  });}
-                            
+                            if (values.resume.size <= 2000000) {
+                              handleSubmit();
+                            } else {
+                              Toast.show({
+                                type: 'error',
+                                text1: 'error',
+                              });
+                            }
                           }}
                           style={{
                             width: '46%',

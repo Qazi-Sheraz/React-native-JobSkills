@@ -22,6 +22,7 @@ import {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import url from '../../../config/url';
 import Toast from 'react-native-toast-message';
+import JChevronIcon from '../../../customComponents/JChevronIcon';
 function CSocialMediaLink({refRBSheet, data, user}) {
   const store = useContext(StoreContext);
   const [loader, setLoader] = useState(false);
@@ -120,17 +121,15 @@ function CSocialMediaLink({refRBSheet, data, user}) {
               )
             }
             left={
-              <Feather
-                onPress={() => navigation.goBack()}
-                name="chevron-left"
-                size={RFPercentage(3.5)}
-                color={colors.white[0]}
-              />
+              <JChevronIcon/>
             }
           />
 
           <View style={{paddingHorizontal: RFPercentage(2)}}>
             <JInput
+            style={{
+              textAlign: store.lang.id == 0 ? 'left' : 'right',
+            }}
               value={values.facebook_url}
               heading={'Facebook URL :'}
               error={touched.facebook_url && errors.facebook_url && true}
@@ -142,6 +141,9 @@ function CSocialMediaLink({refRBSheet, data, user}) {
             {touched.facebook_url && errors.facebook_url && <JErrorText>{errors.facebook_url}</JErrorText>}
 
             <JInput
+            style={{
+              textAlign: store.lang.id == 0 ? 'left' : 'right',
+            }}
               value={values.linkedin_url}
               containerStyle={styles.input}
               heading={'LinkedIn URL :'}
@@ -154,6 +156,9 @@ function CSocialMediaLink({refRBSheet, data, user}) {
             {touched.linkedin_url && errors.linkedin_url && <JErrorText>{errors.linkedin_url}</JErrorText>}
 
             <JInput
+            style={{
+              textAlign: store.lang.id == 0 ? 'left' : 'right',
+            }}
               value={values.twitter_url}
               heading={'Twitter URL :'}
               error={touched.twitter_url && errors.twitter_url && true}

@@ -24,6 +24,7 @@ import {useNavigation} from '@react-navigation/native';
 import JNewJobIcon from '../../customComponents/JNewJobIcon';
 import url from '../../config/url';
 import { observer } from 'mobx-react';
+import JChevronIcon from '../../customComponents/JChevronIcon';
 
 const AddNew_Job = () => {
   const {navigate, goBack} = useNavigation();
@@ -77,17 +78,11 @@ const AddNew_Job = () => {
               fontColor={colors.white[0]}
               fontWeight="bold"
               fontSize={RFPercentage(2.5)}>
-              {'Job Detail'}
+              {store.lang.job_Details}
             </JText>
           }
           left={
-            <JIcon
-              icon="fe"
-              onPress={() => goBack()}
-              name="chevron-left"
-              size={RFPercentage(3.5)}
-              color={colors.white[0]}
-            />
+            <JChevronIcon />
           }
         />
       }>
@@ -150,6 +145,9 @@ const AddNew_Job = () => {
                   <JErrorText>{errors.jobCategory}</JErrorText>
                 )}
                 <JInput
+                style={{
+                    textAlign: store.lang.id == 0 ? 'left' : 'right',
+                  }}
                   isRequired
                   containerStyle={styles.container}
                   heading={'Job Title:'}
@@ -283,6 +281,9 @@ const AddNew_Job = () => {
                 )}
 
                 <JInput
+                style={{
+                  textAlign: store.lang.id == 0 ? 'left' : 'right',
+                }}
                   isRequired
                   containerStyle={styles.container}
                   heading={'Description:'}

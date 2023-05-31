@@ -3,7 +3,10 @@ import React from 'react';
 import JText from './JText';
 import colors from '../config/colors';
 import {RFPercentage} from 'react-native-responsive-fontsize';
+import { StoreContext } from '../mobx/store';
+import { useContext } from 'react';
 export default function JStatusChecker({status,onPress}) {
+  const store = useContext(StoreContext); 
   return (
     <JText
    
@@ -11,17 +14,25 @@ export default function JStatusChecker({status,onPress}) {
         paddingHorizontal: RFPercentage(1.5),
         paddingVertical: RFPercentage(1),
         backgroundColor:
-          status === 'Drafted'
-            ? colors.drafted[0]
-            : status === 'Applied'
-            ? colors.applied[0]
-            : status === 'Rejected'
-            ? colors.rejected[0]
-            : status === 'Selected'
-            ? colors.selected[0]
-            : status === 'Shortlisted'
-            ? colors.shortlisted[0]
-            : colors.interview_scheduled[0],
+          status === store.lang.drafted
+            ? colors.secondary[0]
+            : status === store.lang.applied
+            ? colors.primary[0]
+            : status === store.lang.rejected
+            ? colors.danger[0]
+            : status === store.lang.selected
+            ? colors.info[0]
+            : status === store.lang.shortlisted
+            ? colors.success[0]
+            : status === store.lang.invitation_Sent
+            ?colors.warning[0]
+            : status === store.lang.interview_scheduled
+            ?colors.success[0]
+            : status === store.lang.interview_accepted
+            ?colors.info[0]
+            : status === store.lang.interview_rescheduled
+            ?colors.primary[0]
+            :colors.success[0],
             
         color: colors.white[0],
         textAlign: 'center',

@@ -166,7 +166,7 @@ const ECompanyInformation = () => {
                   fontColor={colors.white[0]}
                   fontWeight="bold"
                   fontSize={RFPercentage(2.5)}>
-                  Employer
+                  {store.lang.employer}
                 </JText>
               }
               right={
@@ -197,6 +197,9 @@ const ECompanyInformation = () => {
                 marginHorizontal: RFPercentage(2),
               }}>
               <JInput
+              style={{
+                textAlign: store.lang.id == 0 ? 'left' : 'right',
+              }}
                 containerStyle={{marginTop: RFPercentage(2)}}
                 heading={'CEO Name :'}
                 value={values.ceo_name}
@@ -208,6 +211,9 @@ const ECompanyInformation = () => {
                 <JErrorText>{errors.ceo_name}</JErrorText>
               )}
                 <JInput
+                style={{
+                  textAlign: store.lang.id == 0 ? 'left' : 'right',
+                }}
                 containerStyle={{marginTop: RFPercentage(2)}}
                 heading={'Company Name:'}
                 value={values.company_name}
@@ -219,6 +225,9 @@ const ECompanyInformation = () => {
                 <JErrorText>{errors.company_name}</JErrorText>
               )}
               <JSelectInput
+              style={{
+                textAlign: store.lang.id == 0 ? 'left' : 'right',
+              }}
                 containerStyle={{marginTop: RFPercentage(2)}}
                 value={values?.ownerShipTypes?.name}
                 data={info?.ownerShipTypes}
@@ -241,6 +250,7 @@ const ECompanyInformation = () => {
                 <JErrorText>{errors.ownerShipTypes}</JErrorText>
               )}
               <JSelectInput
+              
                 containerStyle={{marginTop: RFPercentage(2)}}
                 value={values.industries?.name}
                 data={info?.industries}
@@ -286,6 +296,9 @@ const ECompanyInformation = () => {
               )}
              
               <JInput
+              style={{
+                textAlign: store.lang.id == 0 ? 'left' : 'right',
+              }}
                 containerStyle={{marginTop: RFPercentage(2)}}
                 heading={'Location:'}
                 value={values.location}
@@ -297,6 +310,9 @@ const ECompanyInformation = () => {
                 <JErrorText>{errors.location}</JErrorText>
               )}
               <JInput
+              style={{
+                textAlign: store.lang.id == 0 ? 'left' : 'right',
+              }}
                 containerStyle={{marginTop: RFPercentage(2)}}
                 heading={'No of Offices:'}
                 value={values.no_of_offices}
@@ -308,6 +324,9 @@ const ECompanyInformation = () => {
                 <JErrorText>{errors.no_of_offices}</JErrorText>
               )}
               <JInput
+              style={{
+                textAlign: store.lang.id == 0 ? 'left' : 'right',
+              }}
                 containerStyle={{marginTop: RFPercentage(2)}}
                 heading={'Website:'}
                 value={values.website}
@@ -319,6 +338,9 @@ const ECompanyInformation = () => {
                 <JErrorText>{errors.website}</JErrorText>
               )}
               <JInput
+              style={{
+                textAlign: store.lang.id == 0 ? 'left' : 'right',
+              }}
                 containerStyle={{marginTop: RFPercentage(2)}}
                 heading={'Fax:'}
                 value={values.fax}
@@ -330,6 +352,9 @@ const ECompanyInformation = () => {
                 <JErrorText>{errors.fax}</JErrorText>
               )}
               <JInput
+              style={{
+                textAlign: store.lang.id == 0 ? 'left' : 'right',
+              }}
                 containerStyle={{marginTop: RFPercentage(2)}}
                 heading={'Employe Detail:'}
                 value={values.employeDetail}

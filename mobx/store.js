@@ -161,17 +161,25 @@ export const StoreProvider = props => {
     setFeatureApiError: action(e => (store.featureCompanyApiError = e)),
     allFeatureCompanyInput: '',
     setAllFeatureCompanyInput: action(e => (store.allFeatureCompanyInput = e)),
+    //All Languages
+    lang: en,
+    setLang: action(
+      e => (store.lang = e == 'en' ? en : e == 'ur' ? ud : e == 'ar' && ar),
+    ),
+    // Search Find Job
+    recentSearch: [],
+    setRecentSearch: action(e => (store.recentSearch = e)),
+    pushSearch: action(e => (store.recentSearch = [...store.recentSearch, e])),
+ //PDF Url
+     pdf: '',
+    setPdf: action(e=> (store.pdf = e)),
+    pdfApiLoader: true,
+    setPdfApiLoader: action(e => (store.pdfApiLoader = e)),
+ 
 
-    lang:en,
-    setLang: action(e => (store.lang = e == 'en' ? en : e == 'ur' ? ud :e == 'ar' && ar)),
-
-    recentSearch:[],
-    setRecentSearch: action(e => (store.recentSearch =e )),
-    pushSearch:action(e => (store.recentSearch = [...store.recentSearch,e] )),
-    
-   
-    
-
+// Update State
+update:true,
+setUpdate: action(e=> (store.update = e)),
   }));
   return (
     <StoreContext.Provider value={store}>

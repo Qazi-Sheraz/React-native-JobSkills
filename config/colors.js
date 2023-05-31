@@ -8,7 +8,7 @@ export default {
   purple: ['#4F1D75'],
   placeHolderColor: ['#828282'],
   dividerText: ['#6F6F6F'],
-  danger: ['red'],
+  danger: ['#FC544B'],
   isValid: ['#D6D5D5'],
   inputBorder: ['#828282'],
   footer: ['#D6D5D5'],
@@ -28,4 +28,13 @@ export default {
   green: ['#3BB557'],
   redish: ['#F84A4A'],
   about: ['#daa520'],
+  secondary :['#CDD3D8'],
+  info : ['#3ABAF4'],
+  success : ['#47C363'],
+  warning : ['#FFA426'],
+
+
+
+
+
 };

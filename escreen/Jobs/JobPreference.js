@@ -17,6 +17,7 @@ import JNewJobIcon from '../../customComponents/JNewJobIcon';
 import url from '../../config/url';
 import { StoreContext } from '../../mobx/store';
 import { observer } from 'mobx-react';
+import JChevronIcon from '../../customComponents/JChevronIcon';
 
 const JobPreference = () => {
   const {navigate, goBack} = useNavigation();
@@ -82,13 +83,7 @@ const JobPreference = () => {
             </JText>
           }
           left={
-            <JIcon
-              icon="fe"
-              onPress={() => goBack()}
-              name="chevron-left"
-              size={RFPercentage(3.5)}
-              color={colors.white[0]}
-            />
+            <JChevronIcon/>
           }
         />
       }>
@@ -156,6 +151,9 @@ const JobPreference = () => {
                 
 
                 <JInput
+                style={{
+                  textAlign: store.lang.id == 0 ? 'left' : 'right',
+                }}
                   isRequired
                   containerStyle={styles.container}
                   heading={'Salary From:'}
@@ -169,6 +167,9 @@ const JobPreference = () => {
                 )}
 
                 <JInput
+                style={{
+                  textAlign: store.lang.id == 0 ? 'left' : 'right',
+                }}
                   isRequired
                   containerStyle={styles.container}
                   heading={'Salary To:'}

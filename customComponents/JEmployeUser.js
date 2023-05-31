@@ -10,8 +10,12 @@ import JIcon from './JIcon';
 import Edit from '../assets/svg/Icon/Edit.svg';
 import Delete from '../assets/svg/Icon/Delete.svg';
 import JStatus from './JStatus';
+import { StoreContext } from '../mobx/store';
+import { useContext } from 'react';
+import { observer } from 'mobx-react';
 
-const JEmployeUser = ({item}) => {
+const JEmployeUser = ({item,update}) => {
+  const store=useContext(StoreContext);
   const {navigate} = useNavigation();
   return (
     <Pressable
@@ -61,13 +65,27 @@ const JEmployeUser = ({item}) => {
           <JText style={styles.txt}>{item.email}</JText>
           <JText style={styles.txt}>{item.role}</JText>
         </View>
-        <JStatus status={item.status} />
+        <JText
+   style={{
+     paddingHorizontal: RFPercentage(1.5),
+     paddingVertical: RFPercentage(1),
+     backgroundColor:
+       (item.status==='Active' && item.status_arabic==='نشيط')
+         ? colors.success[0]
+         :(item.status==='Pending' && item.status_arabic==='قيد الانتظار')
+         && colors.primary[0],
+     color: colors.white[0],
+     textAlign: 'center',
+   }}>
+  {store.lang.id===0?item.status:store.lang.id===1?item.status:item.status_arabic}
+ </JText>
+        {/* <JStatus status={store.lang.id===0?item.status:item.status_arabic} /> */}
       </JRow>
     </Pressable>
   );
 };
 
-export default JEmployeUser;
+export default observer(JEmployeUser);
 
 const styles = StyleSheet.create({
    Hname: {

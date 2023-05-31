@@ -46,7 +46,7 @@ fetch(`${url.baseUrl}/phone-code-verification`, requestOptions)
   .then(response => response.json())
   .then(result =>{ 
     // console.log(result)
-  if(result.success===false){
+  if(result.success===true){
     Toast.show({
       type: 'success',
       text1: result.message,
@@ -56,7 +56,7 @@ fetch(`${url.baseUrl}/phone-code-verification`, requestOptions)
   }
   else{Toast.show({
     type: 'error',
-    text1: 'Worng OTP !',
+    text1: result.message,
   });}
   }
   )
@@ -65,6 +65,36 @@ fetch(`${url.baseUrl}/phone-code-verification`, requestOptions)
     text1: 'something went wrong',
   }))
   }
+  const _otp =()=>{
+    var myHeaders = new Headers();
+    myHeaders.append("Accept", "application/json");
+    var formdata = new FormData();
+    formdata.append("phone", params.phone);
+    // console.log(profile?.company[0]?.contact_information?.phone_number)
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: formdata,
+      redirect: 'follow'
+    };
+    fetch(`${url.baseUrl}/send-code`, requestOptions)
+      .then(response => response.json())
+      .then(result => {console.log(result)
+        Toast.show({
+          type: 'success',
+          text1: 'Send Code Successfully',
+          text2: 'Check your Phone',
+        });
+        
+        
+
+      })
+      .catch(error => {console.log('error', error)
+      Toast.show({
+        type: 'error',
+        text1: 'Oops! Something went wrong',
+      });});
+    };
   return (
     <JScreen>
       <View style={{flex: 0.5, justifyContent: 'center', alignItems: 'center'}}>
@@ -81,13 +111,13 @@ fetch(`${url.baseUrl}/phone-code-verification`, requestOptions)
         <JText
           fontSize={RFPercentage(2.8)}
           fontWeight={'bold'}
-          children="Confirmed Your Number"
+          children={store.lang.confirmed_number}
           style={{marginTop: RFPercentage(2)}}
         />
         <JText
           fontWeight={'500'}
           fontAlign="center"
-          children={`Enter 4 digit code that you received on this phone no ${params.phone}`}
+          children={`${store.lang.enter_number} ${params.phone}`}
           style={{marginTop: RFPercentage(0.5), width: '70%'}}
         />
       </View>
@@ -215,7 +245,7 @@ fetch(`${url.baseUrl}/phone-code-verification`, requestOptions)
           //   });
           //   // setValue({...value, d1: '', d2: '', d3: '', d4: ''});
           // }}
-          children={'Continue'}
+          children={store.lang.continue}
         />
         <View
           style={{
@@ -223,14 +253,11 @@ fetch(`${url.baseUrl}/phone-code-verification`, requestOptions)
             flexDirection: 'row',
             alignItems: 'center',
           }}>
-          <JText style={{marginRight: RFPercentage(0.8)}}>Resend Code</JText>
+          <JText style={{marginRight: RFPercentage(0.8)}}>{store.lang.resend_Code}</JText>
           <JReload
             onPress={() => {
-              Toast.show({
-                type: 'success',
-                text1: 'Send Code Successfully',
-                text2: 'Check your Phone',
-              });
+              _otp()
+            
             }}
           />
         </View>
