@@ -138,11 +138,10 @@ function EContactInformation({refRBSheet, data, user}) {
             .string()
             .min(0, 'Email address cannot be empty')
             .email('Must be a valid email')
-            .required()
-            .label('Company'),
-            countries: yup.string().required('Country is required').label('Country'),
-            city: yup.string().required('City is required').label('City'),
-            state: yup.string().required('State is required').label('State'),
+            .required(),
+            // countries: yup.string().required().label('Country'),
+            // city: yup.string().min(3,'minimum 3 leter').required().label('City'),
+            // state: yup.string().required().label('State'),
           phone: yup.string().max(14).required().label('Phone'),
         })}>
         {({
@@ -176,7 +175,8 @@ function EContactInformation({refRBSheet, data, user}) {
                     onPress={() => handleSubmit()}
                     fontColor={
                       isValid ? colors.white[0] : `${colors.white[0]}70`
-                    }>
+                    }
+                    >
                     Save
                   </JText>
                 )

@@ -63,7 +63,7 @@ function AllJobs({navigation}) {
       ) : (
         <React.Fragment>
           <JSearchInput
-            length={store.jobData.jobs.length}
+            length={store.jobData?.jobs.length}
             onChangeText={e => {
               store.setAllJobInput(e);
             }}
@@ -78,8 +78,8 @@ function AllJobs({navigation}) {
             }
             data={
               store.allJobInput.length === 0
-                ? store.jobData.jobs
-                : store.jobData.jobs.filter(e =>
+                ? store.jobData?.jobs
+                : store.jobData?.jobs.filter(e =>
                     e.job_title
                       .toLowerCase()
                       .includes(store.allJobInput.toLowerCase()),

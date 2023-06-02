@@ -57,7 +57,7 @@ function AppliedJobs({navigation}) {
                 <MenuTrigger>
                   <Entypo
                     name="dots-three-vertical"
-                    size={RFPercentage(3.5)}
+                    size={RFPercentage(2.8)}
                     color={colors.white[0]}
                   />
                 </MenuTrigger>

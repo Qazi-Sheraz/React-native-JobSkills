@@ -63,7 +63,7 @@ function EmployeStack({navigation}) {
       .then(res => {
         console.log(res);
         store.setToken(JSON.parse(res));
-        store.setUserInfo(store.token.user);
+        store.setUserInfo(store.token?.user);
 
         setTimeout(() => {
           setLoader(false);
@@ -228,7 +228,7 @@ function EmployeStack({navigation}) {
         initialRouteName={store?.token?.token ? 'CHome' : 'SelectionScreen'}>
           
         <Stack.Screen name="CHome" component={EBottomTab} />
-        <Stack.Screen name="LngTranslation" component={LngTranslation} />
+       
         <Stack.Screen name="Assessments" component={Assessments} />
         <Stack.Screen name="CAllJobs" component={AllJobs} />
         <Stack.Screen name="CFeatureCompany" component={FeatureCompany} />

@@ -1,37 +1,45 @@
 import {StatusBar, StyleSheet, View} from 'react-native';
-import React from 'react';
+import React, { useContext } from 'react';
 import {heightPercentageToDP} from 'react-native-responsive-screen';
 import colors from '../../config/colors';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import JButton from '../../customComponents/JButton';
 import JDivider from '../../customComponents/JDivider';
 import * as Animatable from 'react-native-animatable';
-export default function SelectionSheet({navigation}) {
+import { StoreContext } from '../../mobx/store';
+import { observer } from 'mobx-react';
+
+const SelectionSheet = ({navigation}) => {
+
+  const store = useContext(StoreContext);
   return (
     <Animatable.View style={styles.sheetContainer} animation="slideInUp">
       <StatusBar backgroundColor={colors.purple[0]}/>
       <View style={styles.sheetItemContainer}>
+
         <JButton
           fontStyle={styles.buttonStyle}
-          onPress={() => navigation.navigate('CLogin', {type: 2})}>
-          Employer
+          onPress={() => store.setLang('ar')}
+          // onPress={() => navigation.navigate('CLogin', {type: 2})}
+          >
+          {store.lang.employer}
         </JButton>
         <JDivider
           containerStyle={{marginVertical: RFPercentage(2)}}
-          children="OR"
+          children={store.lang.or}
         />
         <JButton
           fontStyle={styles.buttonStyle}
           onPress={() => navigation.navigate('CLogin', {type: 1})}
           borderColor={colors.black[0]}
           backgroundColor={colors.white[0]}>
-          Candidate
+          {store.lang.candidate}
         </JButton>
       </View>
     </Animatable.View>
   );
 }
-
+export default observer(SelectionSheet)
 const styles = StyleSheet.create({
   buttonStyle: {
     fontWeight: '500',
@@ -54,3 +62,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: RFPercentage(2),
   },
 });
+// import { StyleSheet, Text, View } from 'react-native'
+// import React from 'react'
+// import { observer } from 'mobx-react';
+
+// const SelectionSheet = () => {
+//   return (
+//     <View>
+//       <Text>SelectionSheet</Text>
+//     </View>
+//   )
+// }
+
+// export default SelectionSheet
+
+// const styles = StyleSheet.create({})

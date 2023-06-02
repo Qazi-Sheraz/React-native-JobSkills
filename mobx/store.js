@@ -164,8 +164,10 @@ export const StoreProvider = props => {
     //All Languages
     lang: en,
     setLang: action(
-      e => (store.lang = e == 'en' ? en : e == 'ur' ? ud : e == 'ar' && ar),
+      e => (store.lang = e == 'en' ? en : e == 'ur' ? ud : e == 'ar' && ar), 
     ),
+    langType:false,
+      setLangType:action(e=> store.langType=e ),
     // Search Find Job
     recentSearch: [],
     setRecentSearch: action(e => (store.recentSearch = e)),

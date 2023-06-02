@@ -32,6 +32,9 @@ import Assessment from '../../screens/Home/ProfileScreen/Assessment';
 import Profile from '../../screens/Home/Profile';
 import EditProfile from '../../screens/Home/ProfileScreen/EditProfile';
 import Notification from '../../screens/Notification/Notification';
+import EAccountSetting from '../../escreen/edrawer/EAccountSetting';
+import ChangePassword from '../../screens/ChangePassword/ChangePassword';
+import ChangeLanguage from '../../screens/ChangeLanguage/ChangeLanguage';
 
 const Stack = createStackNavigator();
 
@@ -228,6 +231,9 @@ function CHomeStack({navigation}) {
             component={CareerInformation}
           />
           <Stack.Screen name="Assessment" component={Assessment} />
+          <Stack.Screen name="EAccountSetting" component={EAccountSetting} />
+          <Stack.Screen name="ChangePassword" component={ChangePassword} />
+        <Stack.Screen name="ChangeLanguage" component={ChangeLanguage} />
           {/* AUTHENTICATION */}
           <Stack.Screen name="CNotification" component={Notification} />
           <Stack.Screen name="VerifiedEmail" component={VerifiedEmail} />

@@ -7,7 +7,6 @@ import {RFPercentage} from 'react-native-responsive-fontsize';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import JDivider from '../../customComponents/JDivider';
-
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -21,9 +20,11 @@ import url from '../../config/url';
 import Toast from 'react-native-toast-message';
 import {StoreContext} from '../../mobx/store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import JRow from '../../customComponents/JRow';
+import { observer } from 'mobx-react';
 
 
-export default function Login({navigation, route}) {
+const Login = ({navigation, route}) => {
   const store = useContext(StoreContext);
   const [loader, setLoader] = useState(false);
   console.log(route?.params?.type);
@@ -151,7 +152,7 @@ console.log(formdata)
         <JText
           fontSize={RFPercentage(2.8)}
           fontWeight={'bold'}
-          children="Welcome"
+          children={store.lang.welcome}
           style={{marginTop: RFPercentage(2)}}
         />
       </View>
@@ -169,7 +170,7 @@ console.log(formdata)
           email: yup
             .string()
             .min(0, 'Email address cannot be empty')
-         
+
             // .email('Must be a valid email')
             .required('Email is a required field'),
           password: yup
@@ -195,21 +196,24 @@ console.log(formdata)
               justifyContent: 'center',
             }}>
             <JInput
+              style={{textAlign: store.lang.id === 0 ? 'left' : 'right'}}
               value={values.email}
-              heading={'Email'}
+              heading={store.lang.email}
               error={touched.email && errors.email && true}
               icon={
                 <Feather
                   name="mail"
                   style={{
-                    marginRight:store.lang.id == 0 ? RFPercentage(1.6): RFPercentage(0),
-                    marginLeft:store.lang.id == 0 ? RFPercentage(0): RFPercentage(1.6),
+                    marginRight:
+                      store.lang.id == 0 ? RFPercentage(1.6) : RFPercentage(0),
+                    marginLeft:
+                      store.lang.id == 0 ? RFPercentage(0) : RFPercentage(1.6),
                   }}
                   size={RFPercentage(2.8)}
                   color={colors.purple[0]}
                 />
               }
-              placeholder="Email"
+              placeholder={store.lang.email}
               onChangeText={handleChange('email')}
               onBlur={() => setFieldTouched('email')}
             />
@@ -217,25 +221,28 @@ console.log(formdata)
               <JErrorText>{errors.email}</JErrorText>
             )}
             <JInput
+              style={{textAlign: store.lang.id === 0 ? 'left' : 'right'}}
               forPassword={true}
               eye={values.hide}
               error={touched.password && errors.password && true}
               onPressEye={() => setFieldValue('hide', !values.hide)}
               value={values.password}
-              heading={'Password'}
+              heading={store.lang.password}
               icon={
                 <MaterialCommunityIcons
                   name="shield-key-outline"
                   shield-key-outline
                   style={{
-                    marginRight:store.lang.id == 0 ? RFPercentage(1.5):RFPercentage(0),
-                    marginLeft:store.lang.id == 0 ? RFPercentage(0):RFPercentage(1.5),
+                    marginRight:
+                      store.lang.id == 0 ? RFPercentage(1.5) : RFPercentage(0),
+                    marginLeft:
+                      store.lang.id == 0 ? RFPercentage(0) : RFPercentage(1.5),
                   }}
                   size={RFPercentage(3)}
                   color={colors.purple[0]}
                 />
               }
-              placeholder="Password"
+              placeholder={store.lang.password}
               onChangeText={handleChange('password')}
               containerStyle={{marginTop: RFPercentage(3)}}
               onBlur={() => setFieldTouched('password')}
@@ -244,14 +251,12 @@ console.log(formdata)
               <JErrorText>{errors.password}</JErrorText>
             )}
 
-            <View
+            <JRow
               style={{
-                flexDirection: 'row',
                 justifyContent: 'space-between',
-                alignItems: 'center',
                 marginTop: RFPercentage(2),
               }}>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <JRow>
                 <CheckBox
                   tintColors={{true: colors.purple[0], false: 'black'}}
                   boxType="square"
@@ -259,10 +264,14 @@ console.log(formdata)
                   onValueChange={value => setFieldValue('remember', value)}
                 />
 
-                <JText style={{marginLeft: RFPercentage(1)}}>Remember</JText>
-              </View>
-              <JText onPress={() => alert('Forgot')}>Forgot Password?</JText>
-            </View>
+                <JText style={{marginLeft: RFPercentage(1)}}>
+                  {store.lang.remember}
+                </JText>
+              </JRow>
+                <JText onPress={() => alert('Forgot')}>
+                  {store.lang.forgot_password}
+                </JText>
+            </JRow>
 
             <JButton
               isValid={isValid}
@@ -272,15 +281,15 @@ console.log(formdata)
                 loader
                   ? 'Loading...'
                   : type === 1
-                  ? 'Login as Candidate'
-                  : 'Login as Employee'
+                  ? store.lang.login_as_candidate
+                  : store.lang.login_as_employee
               }
             />
           </View>
         )}
       </Formik>
       <View style={{flex: 0.15, alignItems: 'center'}}>
-        <JDivider children={'or login with'} />
+        <JDivider children={store.lang.login_with} />
         <View
           style={{
             flexDirection: 'row',
@@ -302,10 +311,12 @@ console.log(formdata)
 
       <JFooter
         onPress={() => navigation.navigate('CRegister', {type: type})}
-        children={' Don’t have an account? Register'}
+        children={store.lang.register_Btn}
       />
     </JScreen>
   );
 }
-
+export default observer(Login)
 const styles = StyleSheet.create({});
+
+

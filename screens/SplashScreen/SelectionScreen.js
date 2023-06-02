@@ -12,21 +12,21 @@ import { StatusBar } from 'react-native';
 // import JSkip from '../../customComponents/JSkip';
 
 export default function SelectionScreen({navigation}) {
-  useEffect(() => {
-    const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackButton);
+  // useEffect(() => {
+  //   const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackButton);
 
-    return () => {
-      backHandler.remove();
-    };
-  }, []);
+  //   return () => {
+  //     backHandler.remove();
+  //   };
+  // }, []);
 
-  const handleBackButton = () => {
-    // Add your custom logic here to handle the back button press
-    // For example, you can show a confirmation dialog or prevent the navigation entirely
+  // const handleBackButton = () => {
+  //   // Add your custom logic here to handle the back button press
+  //   // For example, you can show a confirmation dialog or prevent the navigation entirely
 
-    // To prevent the default behavior and disable back navigation:
-    return true;
-  };
+  //   // To prevent the default behavior and disable back navigation:
+  //   return true;
+  // };
   return (
     <JGradientScreen>
       <StatusBar backgroundColor={colors.purple[0]}/>

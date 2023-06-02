@@ -59,7 +59,7 @@ function SelectedJob({route, navigation}) {
 
   const _getDetail = () => {
     var myHeaders = new Headers();
-    myHeaders.append('Authorization', `Bearer ${store.token.token}`);
+    myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
 
     var requestOptions = {
       method: 'GET',
@@ -67,7 +67,7 @@ function SelectedJob({route, navigation}) {
       redirect: 'follow',
     };
 
-    fetch(`${url.baseUrl}/job-details/${route.params.id}`, requestOptions)
+    fetch(`${url.baseUrl}/job-details/${route.params?.id}`, requestOptions)
       .then(response => response.json())
       .then(function (response) {
         console.log('Get Selected Job Data', response.data);
@@ -90,7 +90,7 @@ function SelectedJob({route, navigation}) {
     _getDetail();
 
     return () => {};
-  }, [route.params.id]);
+  }, [route.params?.id]);
 
   return loader ? (
     <CLSelectedJob />
@@ -129,10 +129,10 @@ function SelectedJob({route, navigation}) {
               <FontAwesome
                 style={{marginRight: RFPercentage(2)}}
                 onPress={() =>
-                  _saveToFavoriteList(store, setStarLoader, jobData.job.id)
+                  _saveToFavoriteList(store, setStarLoader, jobData?.job.id)
                 }
                 name={
-                  store.favouriteList.some(e => e.job_id === jobData.job.id)
+                  store.favouriteList.some(e => e.job_id === jobData?.job.id)
                     ? 'star'
                     : 'star-o'
                 }
@@ -145,7 +145,7 @@ function SelectedJob({route, navigation}) {
               <MenuTrigger>
                 <Entypo
                   name="dots-three-vertical"
-                  size={RFPercentage(3.5)}
+                  size={RFPercentage(3)}
                   color={colors.white[0]}
                 />
               </MenuTrigger>
@@ -204,7 +204,7 @@ function SelectedJob({route, navigation}) {
           fontWeight={headingWeight.weight}
           fontSize={headingWeight.size}
           fontColor={colors.white[0]}>
-          {jobData.job.job_title}
+          {jobData?.job?.job_title}
         </JText>
 
         <View
@@ -367,7 +367,7 @@ function SelectedJob({route, navigation}) {
           Skill :
         </JText>
         <JText fontSize={simpleText}>
-          {jobData?.job?.jobs_skill.map((item, index) => item.name)}
+          {jobData?.job?.jobs_skill ? jobData?.job?.jobs_skill.map((item, index) => item.name):'N/A'}
         </JText>
 
         <JText
@@ -402,7 +402,7 @@ function SelectedJob({route, navigation}) {
         <View style={styles.jobDetails}>
           <JText style={styles.jobDetails_heading}>Job Category</JText>
           <JText style={styles.jobDetails_text}>
-            {jobData?.job?.job_category.name}
+            {jobData?.job?.job_category?.name ? jobData?.job?.job_category?.name: 'N/A'}
           </JText>
         </View>
 
@@ -420,7 +420,7 @@ function SelectedJob({route, navigation}) {
           <JText
             // onPress={() => console.log(jobData.job.jobs_tag)}
             style={styles.jobDetails_text}>
-            {jobData?.job?.jobs_tag.length > 0
+            {jobData?.job?.jobs_tag?.length > 0
               ? jobData?.job?.jobs_tag.map((item, index) => item.name + ',')
               : 'N/A'}
           </JText>
@@ -436,15 +436,15 @@ function SelectedJob({route, navigation}) {
         <View style={styles.jobDetails}>
           <JText style={styles.jobDetails_heading}>Job Shift</JText>
           <JText style={styles.jobDetails_text}>
-            {jobData?.job.job_shift ? jobData?.job.job_shift.shift : 'N/A'}
+            {jobData?.job?.job_shift ? jobData?.job?.job_shift.shift : 'N/A'}
           </JText>
         </View>
 
         <View style={styles.jobDetails}>
           <JText style={styles.jobDetails_heading}>Functional Area</JText>
           <JText style={styles.jobDetails_text}>
-            {jobData?.job.functional_area
-              ? jobData?.job.functional_area.name
+            {jobData?.job?.functional_area
+              ? jobData?.job?.functional_area.name
               : 'N/A'}
           </JText>
         </View>
@@ -459,15 +459,15 @@ function SelectedJob({route, navigation}) {
         <View style={styles.jobDetails}>
           <JText style={styles.jobDetails_heading}>Job Experience</JText>
           <JText style={styles.jobDetails_text}>
-            {jobData?.job.experience ? jobData?.job.experience : 'N/A'}
+            {jobData?.job?.experience ? jobData?.job?.experience : 'N/A'}
           </JText>
         </View>
 
         <View style={styles.jobDetails}>
           <JText style={styles.jobDetails_heading}>Salary Period</JText>
           <JText style={styles.jobDetails_text}>
-            {jobData?.job.salary_period
-              ? jobData?.job.salary_period.period
+            {jobData?.job?.salary_period
+              ? jobData?.job?.salary_period.period
               : 'N/A'}
           </JText>
         </View>
@@ -484,9 +484,9 @@ function SelectedJob({route, navigation}) {
           Description :
         </JText>
 
-        {jobData?.job.company.details ? (
+        {jobData?.job?.company?.details ? (
           <JTagText fontSize={simpleText}>
-            {jobData?.job.company.details}
+            {jobData?.job?.company?.details}
           </JTagText>
         ) : (
           <JText fontAlign="center" fontSize={simpleText}>
@@ -498,9 +498,9 @@ function SelectedJob({route, navigation}) {
       <JApplyJob
         status={status}
         setStatus={setStatus}
-        id={jobData.job.id}
-        token={store.token.token}
-        jobId={jobData?.job.job_id}
+        id={jobData?.job?.id}
+        token={store.token?.token}
+        jobId={jobData?.job?.job_id}
       />
 
       <RBSheet

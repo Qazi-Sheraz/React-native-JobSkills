@@ -51,11 +51,11 @@ export default function JInput({
       </View>
       <JRow>
     
-      <View
+      <JRow
         style={{
           // width:Icon1?'80%':'100%',
-          flexDirection: 'row',
-          alignItems: 'center',
+          // flexDirection: 'row',
+          // alignItems: 'center',
           marginTop: RFPercentage(0.3),
           marginBottom: RFPercentage(0.5),
           borderBottomWidth: RFPercentage(0.2),
@@ -93,7 +93,7 @@ export default function JInput({
             color={colors.purple[0]}
           />
         )}
-      </View></JRow>
+      </JRow></JRow>
     </View>
   );
 }

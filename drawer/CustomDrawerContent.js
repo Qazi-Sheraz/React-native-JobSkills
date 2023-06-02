@@ -30,7 +30,7 @@ function CustomDrawerContent(props) {
   const _navigateToScreen = index => {
     props.navigation.closeDrawer();
     index === 0
-      ? props.navigation.navigate('Profile')
+      ? props.navigation.navigate('EAccountSetting')
       : index === 1
       ? props.navigation.navigate('CAllJobs')
       : index === 2
