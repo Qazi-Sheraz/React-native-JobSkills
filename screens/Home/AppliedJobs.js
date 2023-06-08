@@ -33,7 +33,7 @@ function AppliedJobs({navigation}) {
     }, 2000);
   }, []);
 
-  console.log(store.appliedJobList.appliedJob);
+  // console.log(store.appliedJobList.appliedJob);
 
   return (
     <JScreen
@@ -90,7 +90,7 @@ function AppliedJobs({navigation}) {
       ) : (
         <React.Fragment>
           <JSearchInput
-            length={store.appliedJobList.appliedJob.length}
+            length={store.appliedJobList?.appliedJob?.length}
             onChangeText={e => {
               store.setAppliedJobInput(e);
             }}
@@ -105,20 +105,20 @@ function AppliedJobs({navigation}) {
               />
             }
             data={
-              store.appliedJobInput.length > 0
-                ? store.appliedJobList.appliedJob.filter(e =>
+              store.appliedJobInput?.length > 0
+                ? store.appliedJobList?.appliedJob?.filter(e =>
                     e.job_title
                       .toLowerCase()
                       .includes(store.appliedJobInput.toLowerCase()),
                   )
-                : store.appliedJobSelect.length > 0 &&
+                : store.appliedJobSelect?.length > 0 &&
                   store.appliedJobSelect !== 'All'
-                ? store.appliedJobList.appliedJob.filter(
+                ? store.appliedJobList?.appliedJob?.filter(
                     e =>
                       e.application_status.toLowerCase() ===
                       store.appliedJobSelect.toLowerCase(),
                   )
-                : store.appliedJobList.appliedJob
+                : store.appliedJobList?.appliedJob
             }
             ListEmptyComponent={() => <JEmpty />}
             showsVerticalScrollIndicator={false}

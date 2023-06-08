@@ -62,7 +62,7 @@ function Followings({navigation}) {
       ) : (
         <React.Fragment>
           <JSearchInput
-            length={store.followingList.length}
+            length={store.followingList?.length}
             onChangeText={e => {
               store.setFollowingInput(e);
             }}
@@ -76,7 +76,7 @@ function Followings({navigation}) {
               />
             }
             data={
-              store.followingInput.length === 0
+              store.followingInput?.length === 0
                 ? store.followingList
                 : store.followingList.filter(e =>
                     e.company.user.first_name

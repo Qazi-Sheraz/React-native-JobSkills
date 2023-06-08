@@ -36,7 +36,7 @@ import JNotfoundData from '../../customComponents/JNotfoundData';
 const ProfileJobApplication = ({route}) => {
   const store = useContext(StoreContext);
   const {params}= useRoute();
-  // console.log(params.id);
+  // console.log(store.token?.token);
   
   const [details, setDetails] = useState();
   const [resume, setResume] = useState();
@@ -60,7 +60,7 @@ const ProfileJobApplication = ({route}) => {
       `Bearer ${store.token?.token}`,
     );
 
-    fetch(`${url.baseUrl}/candidate-details/${params.candidate_id}`, {
+    fetch(`${url.baseUrl}/candidate-details/${params?.candidate_id}`, {
       method: 'GET',
       headers: myHeaders,
       redirect: 'follow',
@@ -72,7 +72,7 @@ const ProfileJobApplication = ({route}) => {
       })
 
       .catch(error => {
-         console.log('error', error);
+        //  console.log('error', error);
         setError(true);
       })
       .finally(() => {
@@ -81,7 +81,7 @@ const ProfileJobApplication = ({route}) => {
   };
   useEffect(() => {
     _candidateDetails();
-  }, [loader]);
+  }, []);
 // console.log('pdf======',store.pdf)
   const _reportSubmit = values => {
     var myHeaders = new Headers();
@@ -92,7 +92,7 @@ const ProfileJobApplication = ({route}) => {
     formdata.append("userId", store.token?.user?.id);
     formdata.append("candidateId", params?.candidate_user_id);
     formdata.append("note",values.note);
-   console.log('formdata',formdata)
+  //  console.log('formdata',formdata)
 
 
     fetch(`${url.baseUrl}/employer/report-to-candidate`, {
@@ -111,7 +111,6 @@ const ProfileJobApplication = ({route}) => {
              }); 
              setLoader(false);
              setModalVisible(!modalVisible); 
-
       }
       
       else{ 
@@ -121,26 +120,29 @@ const ProfileJobApplication = ({route}) => {
         text1: result.message,
       });
     }
-  }).catch(error => 
-      console.log('error', error));
+  }).catch(error => {}
+      // console.log('error', error)
+      );
    
   };
   const _viewResum = () => {
     var myHeaders = new Headers();
-    myHeaders.append(
-      'Authorization',
-      `Bearer ${store.token?.token}`,
-    );
+    // myHeaders.append('Authorization', `Bearer ${store.token?.token}`, {
+    //   // 'Accept': 'application/json',
+    //   // 'Content-Type': 'application/json',
+    // });
 
     fetch(`${url.baseUrl}/employer/resume-view/${params?.id}`, {
       method: 'GET',
-      headers: myHeaders,
+      headers: {'Authorization': `Bearer ${store.token?.token}`,
+      'Accept': 'application/json',
+     },
       redirect: 'follow',
     })
     
       .then(response => response.json())
       .then(result => {
-        // console.log(result);
+        console.log('result===>', result?.data);
         store.setPdf(result?.data) ;        
        })
 
@@ -153,20 +155,10 @@ const ProfileJobApplication = ({route}) => {
   };
   useEffect(() => {
     _viewResum();
-  }, [store.pdfApiLoader]);
+  }, []);
 // console.log(resume?.data)
-  return loader ? (
-    <ActivityIndicator />
-  ) : (
+  return (
     <>
-      {error === true ? (
-        <JApiError
-          onTryAgainPress={() => {
-            _candidateDetails();
-            setError(false);
-          }}
-        />
-      ) : (
         <View style={styles.maincontainer}>
           <JHeader
             left={<JChevronIcon color={'Black'} />}
@@ -223,7 +215,14 @@ const ProfileJobApplication = ({route}) => {
               )
             }
           />
-
+{loader ? (
+    <ActivityIndicator />
+  ) : error == true ? 
+        <JApiError
+        onTryAgainPress={() => {
+          _candidateDetails(),
+        setError(false)}}
+        />:(
           <View style={styles.main}>
             <Image
               style={styles.img}
@@ -279,7 +278,7 @@ const ProfileJobApplication = ({route}) => {
                 <JText style={styles.results}>
                   {store.lang.assessment_result}
                 </JText>
-                {details?.candidateAssessment[0]?.assessment_name.length > 0 ? (
+                {details?.candidateAssessment[0]?.assessment_name?.length > 0 ? (
                   <>
                     <FlatList
                       data={details?.candidateAssessment?.slice(0, 4)}
@@ -306,7 +305,7 @@ const ProfileJobApplication = ({route}) => {
 
               <View style={styles.experience}>
                 <JText style={styles.title}>{store.lang.experience}</JText>
-                {details?.candidateExperiences[0]?.experience_title.length >
+                {details?.candidateExperiences[0]?.experience_title?.length >
                 0 ? (
                   <JSkills
                     JobTitle={
@@ -330,7 +329,7 @@ const ProfileJobApplication = ({route}) => {
 
               <View style={styles.experience}>
                 <JText style={styles.title}>{store.lang.education}</JText>
-                {details?.candidateExperiences[0]?.degree_title.length > 0 ? (
+                {details?.candidateExperiences[0]?.degree_title?.length > 0 ? (
                   <FlatList
                     data={details?.candidateEducation}
                     renderItem={({item, index}) => (
@@ -350,7 +349,7 @@ const ProfileJobApplication = ({route}) => {
 
               <View style={styles.rView}>
                 <JText style={styles.results}>{store.lang.skills}</JText>
-                {details?.candidateSkill[0]?.skill_name.length > 0 ? (
+                {details?.candidateSkill[0]?.skill_name?.length > 0 ? (
                   <>
                     <FlatList
                       data={details?.candidateSkill?.slice(0, 4)}
@@ -430,9 +429,9 @@ const ProfileJobApplication = ({route}) => {
                 )}
               </RBSheet>
             </ScrollView>
-          </View>
+          </View>)}
         </View>
-      )}
+       
       <Modal animationType="slide" transparent={true} visible={modalVisible}>
         <SafeAreaView style={styles.centeredView}>
           <JGradientHeader

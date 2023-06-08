@@ -25,6 +25,8 @@ import {useIsFocused, useNavigation} from '@react-navigation/native';
 import JButton from '../../customComponents/JButton';
 import {observer} from 'mobx-react';
 import url from '../../config/url';
+import JNotfoundData from '../../customComponents/JNotfoundData';
+import JApiError from '../../customComponents/JApiError';
 
 const Job = () => {
 
@@ -39,9 +41,9 @@ const Job = () => {
   const [filteredData, setFilteredData] = useState(jobData);
 
   const isFoucs = useIsFocused();
-
   const handleSearch = (text) => {
     setSearchQuery(text);
+
     
     const filtered = jobData.filter((item) => {
       return item?.job_title.toLowerCase().includes(text.toLowerCase());
@@ -53,10 +55,20 @@ const Job = () => {
     var myHeaders = new Headers();
     myHeaders.append(
       'Authorization',
+      // `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNzQwYTNkNmY1NWEzZDYzYjM0ODI5ODdmNWZlMzM1N2Y0MTBhZjYxZmJiMTUyNjgxYjhjMjY0OWJmYzMyZTZmMjRhNjBlZTNjMDFkOWM3NGMiLCJpYXQiOjE2ODYwMzcxMDQuMTE5MzA5LCJuYmYiOjE2ODYwMzcxMDQuMTE5MzEzLCJleHAiOjE3MTc2NTk1MDQuMTEyNzcsInN1YiI6Ijg0Iiwic2NvcGVzIjpbXX0.WqyC9fdDZEEUNwcXjEvm_uCgILD2bDOlYKt2SrdUnTN2KGJitVg3bGvpUnKN7Iaa8C6fAo3qUOoDp_2oAeIJLbpvkAMAbB9oV3r5bMXpgABt3p_1ckkekQFkHjbqwL1qNk6YeAtuw8pQKEZwo8hKRr1zh8Nw1CR8NwsKxmmPNB-Uy1FG3gVzZeahmQzB4COicMQlKpXBK4Fx_fMoKZ1FqtVPASck9ZsBie4ETGk9EnBqEou7wpym6X9t0ckQARvIUU5EF8XPd_Z-ZCtvPwoQQCRjbVc1ALCrYPJfRnIS7ysEn9G_wrwpY5Q3_O1tyZ7HEl3zhL2sChHyKokNAhXES3Nhwrka85P08y_ETLcbiLxUBb7A7GY5YPopbtK21QZ9Ay39hgpr8G2RFVr91mEy1dq2DjtAigQNvP2DRDoQpVWm2fod797mu6za85GX5OgFh6QXiQ6Rlp13BFLNBCVVM62U67N6zWs5a5YGFtZIMrE63HXdvFgaYv8pfcAu5Yr5u0jzo_Cz1LKAGUC2iaw1yDfnsIO-xYCzYD27o1GsSHAdcdMd0DiMmy0C23gxjhNwl9u9ZO0P4-59svkV1gMp9JlNW03u3MNfKeQTTE0MdQdupczgUYi2mplRIgTFzasir7_YtKf_N7pT-EKwCklQsY9X7GSz_eLXOCKaytoD7uo`,
       `Bearer ${store.token?.token}`,
+      {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+
+      }
     );
     
-    console.log(myHeaders)
+    // console.log(fetch(`${url.baseUrl}/employer/jobs`, {
+    //   method: 'GET',
+    //   headers: myHeaders,
+    //   redirect: 'follow',
+    // }))
     fetch(`${url.baseUrl}/employer/jobs`, {
       method: 'GET',
       headers: myHeaders,
@@ -64,10 +76,11 @@ const Job = () => {
     })
       .then(response => response.json())
       .then(result => {
-        setJobData(result.jobs);
+        // console.log(result)
+        store.setJobEmployerData(result.jobs);
       })
       .catch(error => {
-        console.log('error', error);
+        // console.log('job===error', error);
         setError(true);
       })
       .finally(() => {
@@ -77,19 +90,17 @@ const Job = () => {
 
 
   useEffect(() => {
-      _getjobs();
-  }, [loader, isFoucs,update]);
+    
+     _getjobs();
+    
+  }, [isFoucs]);
 
   return (
 
     <JScreen
-    isError={error}
-    onTryAgainPress={()=> _getjobs()}
-
       style={{paddingHorizontal: RFPercentage(2)}}
      
       header={
-        
         <JGradientHeader
           center={
             <JText
@@ -106,8 +117,14 @@ const Job = () => {
  {loader ? (
         <ActivityIndicator />
       ) : (
+        error == true ? 
+          <JApiError
+          onTryAgainPress={() => {
+            _getjobs(),
+          setError(false)}}
+          />:
         <>
-        {jobData.length>0 ? 
+        {store?.jobEmployerData?.length>0 ? 
       (<><JSearchInput
         length={1}
         onChangeText={handleSearch}
@@ -115,7 +132,7 @@ const Job = () => {
         onPressIcon={() => alert('Icon Pressed')}
       />
       <JScrollView>
-        {(searchQuery.length > 0 ?filteredData :jobData).map((item, index) => (
+        {(searchQuery?.length > 0 ?filteredData :store?.jobEmployerData).map((item, index) => (
           <>
             <JRecentJobTile
             star={false}
@@ -123,28 +140,17 @@ const Job = () => {
             update={update}
             setUpdate={setUpdate}
               onSelect={() => setModalVisible(true)}
-              onPress={() => navigation.navigate('JobDetails',{id:item.job_id,jid:item.id})}
+              onPress={() => {
+                navigation.navigate('JobDetails',{id:item.job_id,jid:item.id}) 
+              console.log(item)}}
               image={false}
               item={item}
               key={index}
             />
           </>
         ))}
-      </JScrollView></>):(  <View
-      style={{
-        flex:1,
-        // height: heightPercentageToDP(12),
-        // backgroundColor: colors.tileColor[0],
-        justifyContent: 'center',
-        alignItems: 'center',
-       
-      }}>
-      <Image
-        style={{width: RFPercentage(6), height: RFPercentage(6)}}
-        source={require('../../assets/images/empty/empty.png')}
-      />
-      <JText style={{marginTop: RFPercentage(1)}}>{store.lang.not_found}</JText>
-    </View>)}
+      </JScrollView></>):  
+     <JNotfoundData/>}
       <View
         style={{
           height: heightPercentageToDP(6),

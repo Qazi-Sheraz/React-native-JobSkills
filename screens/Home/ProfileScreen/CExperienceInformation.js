@@ -50,7 +50,7 @@ function CExperienceInformation({refRBSheet, data}) {
           currency: profile.salary_currency,
         }}
         onSubmit={values => {
-          console.log(values);
+          // console.log(values);
 
           var myHeaders = new Headers();
           myHeaders.append('Authorization', `Bearer ${store.token.token}`);
@@ -76,7 +76,7 @@ function CExperienceInformation({refRBSheet, data}) {
           )
             .then(response => response.json())
             .then(result => {
-              console.log(result);
+              // console.log(result);
               if (result.success === false) {
                 alert('Error while saving data');
               } else {
@@ -86,7 +86,7 @@ function CExperienceInformation({refRBSheet, data}) {
               setLoader(false);
             })
             .catch(error => {
-              console.log('error', error);
+              // console.log('error', error);
               setLoader(false);
             });
 

@@ -57,7 +57,7 @@ const Followers = () => {
         setFollowersData(result.followers);
       })
       .catch(error => {
-        console.log('error', error);
+        // console.log('error', error);
         setError(true);
       })
       .finally(() => {
@@ -98,7 +98,7 @@ const Followers = () => {
       {loader === true ? (
         <ActivityIndicator />
       ) 
-      : (followerdata.length > 0 ? (
+      : (followerdata?.length > 0 ? (
         <>
           <JSearchInput
             length={1}
@@ -117,7 +117,7 @@ const Followers = () => {
                 onRefresh={onRefresh}
               />
             }
-              data={searchQuery.length > 0 ? filteredData : followerdata}
+              data={searchQuery?.length > 0 ? filteredData : followerdata}
               renderItem={({item, index}) => (
                 <JRow
                   key={index}

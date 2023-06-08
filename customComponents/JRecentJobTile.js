@@ -41,6 +41,7 @@ import {useEffect} from 'react';
 import Toast from 'react-native-toast-message';
 import url from '../config/url';
 import { Share } from 'react-native';
+import JNotfoundData from './JNotfoundData';
 
 function JRecentJobTile({
   isempty = false,
@@ -61,10 +62,10 @@ function JRecentJobTile({
  
   const [loader, setLoader] = useState();
   const [en, setEn] = useState({});
-  const [ar, setAr] = useState();
+  const [error, setError] = useState();
   const store = useContext(StoreContext);
   const navigation = useNavigation();
-  const [stat, setStat] = useState(item.status);
+  const [stat, setStat] = useState(item?.status_id);
   const [modalVisible, setModalVisible] = useState(false);
   const[status1,setStatus1] = useState();
   const isFoucs = useIsFocused();
@@ -89,6 +90,11 @@ function JRecentJobTile({
     myHeaders.append(
       'Authorization',
       `Bearer ${store.token?.token}`,
+      {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+
+      }
     );
     
 // console.log(`${baseUrl}/employer/job/${item.id}/status/${id}`,item)
@@ -99,7 +105,7 @@ function JRecentJobTile({
     })
       .then(response => response.json())
       .then(result => {
-        console.log(result.jobs);
+        // console.log(result.jobs);
 
         if (result.success === true) {
            setStat(status1)
@@ -117,8 +123,8 @@ function JRecentJobTile({
         }
       })
       .catch(error => {
-        console.log('error', error);
-       alert('Error')
+        // console.log('error', error);
+       setError(true)
       })
       .finally(() => {
         setLoader(false);
@@ -126,31 +132,11 @@ function JRecentJobTile({
   };
   useEffect(() => {
     // _allStatus();
-  }, [isFoucs,loader]);
+  }, []);
 
 
-// console.log(en);
-
-
-
- 
-
-
-
-  return isempty === true ? (
-    <View
-      style={{
-        height: heightPercentageToDP(12),
-        // backgroundColor: colors.tileColor[0],
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}>
-      <Image
-        style={{width: RFPercentage(6), height: RFPercentage(6)}}
-        source={require('../assets/images/empty/empty.png')}
-      />
-      <JText style={{marginTop: RFPercentage(1)}}>{store.lang.not_found}</JText>
-    </View>
+  return isempty == true ? (
+   <JNotfoundData/>
   ) : (
     <Observer>
       {() => (
@@ -177,7 +163,7 @@ function JRecentJobTile({
               }}>
               <TouchableOpacity
                 onPress={() =>
-                  navigation.navigate('JobDetails', {id: item.job_id,jid:item.id})
+                  navigation.navigate('JobDetails', {id: item?.job_id,jid:item?.id})
                 }
                 style={{
                   // height: RFPercentage(12),
@@ -193,7 +179,7 @@ function JRecentJobTile({
                     width: RFPercentage(10),
                   }}
                   resizeMode="contain"
-                  source={{uri: item.company_url}}
+                  source={{uri: item?.company_url}}
                 />
               </TouchableOpacity>
             </View>
@@ -207,7 +193,7 @@ function JRecentJobTile({
             }}>
               <JRow>
             <JText style={{width: '80%'}} fontWeight="bold">
-              {item?.job_title}
+              {item.job_title}
             </JText>
             </JRow>
             <JRow
@@ -217,7 +203,7 @@ function JRecentJobTile({
               <JText fontColor={colors.danger[0]}>{store.lang.expire_on}</JText>
               <JText>
                 {/* 12 MAR 2023 */}
-                {moment(item.expire_on, 'DD-MM-YYYY').format('DD MMM,YYYY')}
+                {moment(item?.job_expiry_date, 'DD-MM-YYYY').format('DD MMM,YYYY')}
               </JText>
             </JRow>
             <JRow
@@ -228,15 +214,15 @@ function JRecentJobTile({
               <JRow
                 disabled={false}
                 onPress={() =>
-                  navigation.navigate('JobApplication', {id: item.id})
+                  navigation.navigate('JobApplication', {id: item?.id})
                 }>
                 <EvilIcons name="user" size={RFPercentage(3)} />
                 <JText>
-                  {item ? item.applicant : 2} {store.lang.applicant}
+                  {item ? item?.applicant : 2} {store.lang.applicant}
                 </JText>
               </JRow>
               {/* {respponce.condition === close ? ( */}
-              {stat === store.lang.closed ? (
+              {stat === 2 ? (
                 <JRow
                   style={{
                     backgroundColor: colors.danger[0],
@@ -252,7 +238,7 @@ function JRecentJobTile({
                     {store.lang.closed}
                   </JText>
                 </JRow>
-              ) : stat === store.lang.live ? (
+              ) : stat === 1 ? (
                 <Menu>
                   <MenuTrigger>
                     <JRow
@@ -309,7 +295,7 @@ function JRecentJobTile({
                     )}
                   </MenuOptions>
                 </Menu>
-              ) : stat === store.lang.paused ? (
+              ) : stat === 3 ? (
                 <Menu>
                   <MenuTrigger>
                     <JRow
@@ -358,7 +344,7 @@ function JRecentJobTile({
                             <JText
                               style={{marginLeft: RFPercentage(2)}}
                               fontSize={RFPercentage(2)}>
-                              {item.name}
+                              {item?.name}
                             </JText>
                           </JRow>
                         </MenuOption>
@@ -410,7 +396,7 @@ function JRecentJobTile({
                   marginHorizontal: option === true ? RFPercentage(3) : null,
                 }}
                 name={
-                  favouriteData.some(item => item.job_id === jobId)
+                  favouriteData.some(item => item?.job_id === jobId)
                     ? 'star'
                     : 'star-outline'
                 }
@@ -418,7 +404,7 @@ function JRecentJobTile({
                 color={colors.purple[0]}
               />:null
             )}
-            {option === true && (
+            {option == true && (
               // <Menu
               //   style={{
               //     position: 'absolute',

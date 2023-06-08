@@ -64,7 +64,7 @@ const Employes = () => {
 
  useEffect(() => {
   _getEmployeData();
- }, [loader,isFoucs]);
+ }, []);
 
  const onRefresh = useCallback(() => {
   store.setIsRefreshing(true);
@@ -98,7 +98,7 @@ const Employes = () => {
       {loader ? (
         <ActivityIndicator />
       ) : (
-      employeeData.length > 0 ?(
+      employeeData?.length > 0 ?(
         <>
           <JSearchInput
             length={1}
@@ -117,7 +117,7 @@ const Employes = () => {
       onRefresh={onRefresh}
     />
   }
-             data={searchQuery.length > 0 ?filteredData :employeeData}
+             data={searchQuery?.length > 0 ?filteredData :employeeData}
               renderItem={({item, index}) => <JEmployeUser 
               item={item} />}
             />

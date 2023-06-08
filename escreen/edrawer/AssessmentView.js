@@ -41,7 +41,7 @@ const AssessmentView = () => {
         })
   
         .catch(error => {
-          console.log('error', error);
+          // console.log('error', error);
           
      
         }).finally(()=>{
@@ -51,7 +51,7 @@ const AssessmentView = () => {
   
    useEffect(() => {
     _getAssesmentQues();
-   }, [loader]);
+   }, []);
 //   console.log(data?.assessment_question?.assessment_defined_answers?.answer)
   
    

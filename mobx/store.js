@@ -164,24 +164,45 @@ export const StoreProvider = props => {
     //All Languages
     lang: en,
     setLang: action(
-      e => (store.lang = e == 'en' ? en : e == 'ur' ? ud : e == 'ar' && ar), 
+      e => (store.lang = e == 'en' ? en : e == 'ur' ? ud : e == 'ar' && ar),
     ),
-    langType:false,
-      setLangType:action(e=> store.langType=e ),
+    langType: false,
+    setLangType: action(e => (store.langType = e)),
     // Search Find Job
     recentSearch: [],
     setRecentSearch: action(e => (store.recentSearch = e)),
     pushSearch: action(e => (store.recentSearch = [...store.recentSearch, e])),
- //PDF Url
-     pdf: '',
-    setPdf: action(e=> (store.pdf = e)),
+    //PDF Url
+    pdf: '',
+    setPdf: action(e => (store.pdf = e)),
     pdfApiLoader: true,
     setPdfApiLoader: action(e => (store.pdfApiLoader = e)),
+
+    // Update State
+    update: true,
+    setUpdate: action(e => (store.update = e)),
+
+    // Get Employe Job
+    jobEmployerData: [],
+    setJobEmployerData: action(e => (store.jobEmployerData = e)),
+    AddJobEmployerData: action(e => (store.jobEmployerData = [e,...store.jobEmployerData])),
+
+    // Get Employe Job Details
+    jobDetail: [],
+    setJobDetail: action(e => (store.jobDetail = e)),
  
 
-// Update State
-update:true,
-setUpdate: action(e=> (store.update = e)),
+    employeHome: {},
+    setEmployeHome: action(e => (store.employeHome = e)),
+    AddRecentJobs: action(e => {store.employeHome.recentJobs[0] = [e,...store.employeHome.recentJobs[0]]}),
+
+    //Job Store
+    jobCreate: {},
+    setJobCreate: action(e => (store.jobCreate = e)),
+    createApiLoader:true,
+    setCreateApiLoader: action(e => (store.jobCreate = e)),
+    createApiError:true,
+    setCreateApiError: action(e => (store.jobCreate = e)),
   }));
   return (
     <StoreContext.Provider value={store}>

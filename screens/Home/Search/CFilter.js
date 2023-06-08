@@ -45,7 +45,7 @@ const CFilter = ({navigation}) => {
               area: '',
             }}
             onSubmit={values => {
-              console.log(values);
+              // console.log(values);
               _searchFilter(values, store, navigation);
             }}>
             {({

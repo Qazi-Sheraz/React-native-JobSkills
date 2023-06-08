@@ -21,22 +21,23 @@ import RNRestart from 'react-native-restart';
 
 const ChangeLanguage = () => {
   const navigation=useNavigation();
+  const [selectedLanguage, setSelectedLanguage] = useState('');
   const store = useContext(StoreContext);
   const isFoucs = useIsFocused();
   const [data, setData] = useState([
-    {id: 0, name: 'English (United Kingdom)', selected: false},
-    {id: 1, name: 'اردو', selected: false},
-    {id: 2, name:  'العربية', selected: false},
+    {id: 0, name: 'English (United Kingdom)', selected: false,short:"en"},
+    {id: 1, name: 'اردو', selected: false,short:"ur"},
+    {id: 2, name:  'العربية', selected: false,short:"ar"},
   ]);
-  // console.log(selected)
+  // console.log(data.short)
 
-  const _changeLanguage =  (lang) => {
+  const _changeLanguage =  (selectedLanguage) => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization",`Bearer ${store.token?.token}`);
-
+// console.log(selectedLanguage)
     var formdata = new FormData();
-    formdata.append("languageName",lang ==='English (United Kingdom)'?'en':lang ==='اردو'?'ur':lang ==='العربية'&&'ar');
-    console.log(formdata);
+    formdata.append("languageName",selectedLanguage);
+    // console.log(formdata);
     fetch(`${url.baseUrl}/change-language`, {
       method: 'POST',
       headers: myHeaders,
@@ -51,7 +52,6 @@ const ChangeLanguage = () => {
             text1: result.message,
           });
             RNRestart.restart()
-          // navigation.navigate('EAccountSetting',{name: lang}); // Store the selected language
         }
         else{
           Toast.show({
@@ -62,48 +62,59 @@ const ChangeLanguage = () => {
       })
       .catch(error => console.log('error', error));
   };
+  // const handleSave = async () => {
+  //   const selectedLanguage = data.find(item => item.selected);
+  //   if (selectedLanguage) {
+  //     const lang = selectedLanguage.name;
+  //     if (lang === 'English (United Kingdom)') {
+  //       store.setLang('en'); // Switch to 'en' language
+  //     } else if (lang === 'اردو') {
+  //       store.setLang('ur'); // Switch to 'ur' language
+  //     } else if (lang === 'العربية') {
+  //       store.setLang('ar'); // Switch to 'ar' language
+  //     }
+  //     console.log(selectedLanguage)
+  //     try {
+  //       await AsyncStorage.setItem('selectedLanguage', lang);
+  //       _changeLanguage(lang);
+  //       console.log(lang)
+       
+  //     } catch (error) {
+  //       console.log('Error storing language:', error);
+  //     }
+  //   }
+   
+  // };
+
   const handleSave = async () => {
     const selectedLanguage = data.find(item => item.selected);
     if (selectedLanguage) {
-      const lang = selectedLanguage.name;
-      if (lang === 'English (United Kingdom)') {
-        store.setLang('en'); // Switch to 'en' language
-      } else if (lang === 'اردو') {
-        store.setLang('ur'); // Switch to 'ur' language
-      } else if (lang === 'العربية') {
-        store.setLang('ar'); // Switch to 'ar' language
-      }
-      
+      const lang = selectedLanguage.short;
+      // console.log(selectedLanguage);
       try {
-        await AsyncStorage.setItem('selectedLanguage', lang);
-        _changeLanguage(lang);
-       
+        await AsyncStorage.setItem('selectedLanguage', selectedLanguage.short);
+        store.setLang(selectedLanguage.short)
+
+        _changeLanguage(selectedLanguage.short);
       } catch (error) {
-        console.log('Error storing language:', error);
+        // console.log('Error storing language:', error);
       }
     }
-   
   };
-  const _getSelectedLanguage = async () => {
+  const getStoredLanguage = async () => {
     try {
-      const selectedLanguage = await AsyncStorage.getItem('selectedLanguage');
-      if (selectedLanguage) {
-        // Update the selected language in the data state
-        setData((prevData) =>
-          prevData.map((item) =>
-            item.name === selectedLanguage
-              ? { ...item, selected: true }
-              : { ...item, selected: false }
-          )
-        );
+      const storedLanguage = await AsyncStorage.getItem('selectedLanguage');
+      if (storedLanguage) {
+        // Language was found in AsyncStorage, set it as the selected language
+        setSelectedLanguage(storedLanguage);
       }
     } catch (error) {
-      console.log('Error retrieving language:', error);
+      // console.log('Error retrieving stored language:', error);
     }
   };
   useEffect(() => {
-    _getSelectedLanguage();
-  }, [isFoucs])
+    getStoredLanguage();
+  }, [])
   // console.log(fetchSelectedLanguage())
 
   return (
@@ -128,7 +139,7 @@ const ChangeLanguage = () => {
           <JCircleCheck
             key={index}
             language={item.name}
-            isSelected={item.selected}
+            isSelected={item.selected }
             onPress={() => {
               setData(
                 data.map(obj =>

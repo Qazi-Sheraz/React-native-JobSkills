@@ -69,11 +69,11 @@ const CareerInformation = ({navigation}) => {
       body: formdata,
       redirect: 'follow',
     };
-    console.log(requestOptions);
+    // console.log(requestOptions);
     fetch('https://dev.jobskills.digital/api/experience-create', requestOptions)
       .then(response => response.json())
       .then(result => {
-        console.log(result);
+        // console.log(result);
 
         _addExp(result.candidateExperience);
         alert(result.message);
@@ -82,7 +82,7 @@ const CareerInformation = ({navigation}) => {
         refRBSheet.current.close();
       })
       .catch(error => {
-        console.log('error', error);
+        // console.log('error', error);
         setLoader(false);
       });
   };
@@ -101,7 +101,7 @@ const CareerInformation = ({navigation}) => {
     formdata.append('result', values.result);
     formdata.append('year', `${values.year.name}`);
 
-    console.log(formdata);
+    // console.log(formdata);
     setLoader(true);
     var requestOptions = {
       method: 'POST',
@@ -115,7 +115,7 @@ const CareerInformation = ({navigation}) => {
     )
       .then(response => response.json())
       .then(result => {
-        console.log(result.data);
+        // console.log(result.data);
         _addEdu(result.data);
         alert(result.message);
 
@@ -123,7 +123,7 @@ const CareerInformation = ({navigation}) => {
         refRBSheet.current.close();
       })
       .catch(error => {
-        console.log('error', error);
+        // console.log('error', error);
         setLoader(false);
       });
   };
@@ -143,13 +143,13 @@ const CareerInformation = ({navigation}) => {
     )
       .then(response => response.json())
       .then(result => {
-        console.log(result);
+        // console.log(result);
         setEducation(result.canidateEducation);
         setExpereince(result.canidateExperience);
         setApiLoader(false);
       })
       .catch(error => {
-        console.log('error', error);
+        // console.log('error', error);
         setApiLoader(false);
       });
   };
@@ -173,17 +173,17 @@ const CareerInformation = ({navigation}) => {
         headers: myHeaders,
         redirect: 'follow',
       };
-      console.log(requestOptions);
+      // console.log(requestOptions);
       fetch(
         `https://dev.jobskills.digital/api/candidate-experience-delete/${id}`,
         requestOptions,
       )
         .then(response => response.json())
         .then(result => {
-          console.log(result);
+          // console.log(result);
           setExpereince(experience.filter(e => e.id !== id));
         })
-        .catch(error => console.log('error', error));
+        // .catch(error => console.log('error', error));
     };
   };
 
@@ -198,7 +198,7 @@ const CareerInformation = ({navigation}) => {
     ]);
 
     const _delete = () => {
-      console.log(id);
+      // console.log(id);
       var myHeaders = new Headers();
       myHeaders.append('Authorization', `Bearer ${store.token.token}`);
 
@@ -212,10 +212,10 @@ const CareerInformation = ({navigation}) => {
       )
         .then(response => response.json())
         .then(result => {
-          console.log(result);
+          // console.log(result);
           setEducation(education.filter(e => e.id !== id));
         })
-        .catch(error => console.log('error', error));
+        // .catch(error => console.log('error', error));
     };
   };
 
@@ -333,7 +333,7 @@ const CareerInformation = ({navigation}) => {
               description: '',
             }}
             onSubmit={values => {
-              console.log(values);
+              // console.log(values);
               _addExperince(values);
             }}
             // validationSchema={yup.object().shape({
@@ -549,7 +549,7 @@ const CareerInformation = ({navigation}) => {
               year: '',
             }}
             onSubmit={values => {
-              console.log(values);
+              // console.log(values);
               _addEducation(values);
             }}
             // validationSchema={yup.object().shape({

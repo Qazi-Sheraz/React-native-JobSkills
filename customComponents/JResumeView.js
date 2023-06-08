@@ -56,16 +56,16 @@ export default function JResumeView({item, setModalVisible, _deleteCV}) {
         trustAllCerts={false}
         source={{uri: item?.original_url}}
         onLoadComplete={(numberOfPages, filePath) => {
-          console.log(`Number of pages: ${numberOfPages}`);
+          // console.log(`Number of pages: ${numberOfPages}`);
         }}
         onPageChanged={(page, numberOfPages) => {
-          console.log(`Current page: ${page}`);
+          // console.log(`Current page: ${page}`);
         }}
         onError={error => {
-          console.log(error);
+          // console.log(error);
         }}
         onPressLink={uri => {
-          console.log(`Link pressed: ${uri}`);
+          // console.log(`Link pressed: ${uri}`);
         }}
         style={{
           alignSelf: 'center',

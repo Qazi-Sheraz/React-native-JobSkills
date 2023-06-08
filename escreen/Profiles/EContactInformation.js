@@ -26,6 +26,7 @@ function EContactInformation({refRBSheet, data, user}) {
   const [loader, setLoader] = useState(false);
   const [info, setInfo] = useState();
   const [update, setUpdate] = useState();
+  const [error, setError] = useState(false);
   const navigation = useNavigation();
 
   const store = useContext(StoreContext);
@@ -44,7 +45,7 @@ function EContactInformation({refRBSheet, data, user}) {
     formdata.append('city_id',  values?.city.id);
     formdata.append('email',  values?.email);
 
-    console.log(formdata);
+    // console.log(formdata);
 
     var requestOptions = {
       method: 'POST',
@@ -70,7 +71,7 @@ function EContactInformation({refRBSheet, data, user}) {
       .catch(error =>
       Toast.show({
         type: 'error',
-        text1: ('error===>'),
+        text1: ('Something went wrong'),
       }))
   };
 
@@ -90,7 +91,7 @@ function EContactInformation({refRBSheet, data, user}) {
       .then(result => {
         setInfo(result);
       })
-      .catch(error => console.log('error', error))
+      .catch(error => {console.log('error', error),setError(true)})
       .finally(() => {
         setLoader(false);
       });
@@ -98,7 +99,7 @@ function EContactInformation({refRBSheet, data, user}) {
 
   useEffect(() => {
     _getcountry();
-  }, [loader]);
+  }, []);
 // console.log(info?.state)
 //   const searchKey = params.country;
 //   const searchValue = info?.countries[searchKey];
@@ -109,23 +110,37 @@ function EContactInformation({refRBSheet, data, user}) {
   
 //   // console.log('Found value:', searchValue);
   return (
-    <JScreen headerShown={false}>
+    <JScreen
+      headerShown={false}
+      isError={error}
+      onTryAgainPress={() => {
+        _getcountry(), setError(false);
+      }}>
       <Formik
         initialValues={{
-          name:store.token?.user?.first_name,
-          email: params?.user_email?params?.user_email:'',
-          countries: params?.country && params?.country_id?{
-            name:params?.country,
-            id:params?.country_id,
-          } : '',
-          state: params?.state && params?.state_id?{
-            name:params?.state,
-            id:params?.state_id,
-          } : '',
-          city:params?.city && params?.city_id?{
-            name:params?.city,
-            id:params?.city_id,
-          } : '',
+          name: store.token?.user?.first_name,
+          email: params?.user_email ? params?.user_email : '',
+          countries:
+            params?.country && params?.country_id
+              ? {
+                  name: params?.country,
+                  id: params?.country_id,
+                }
+              : '',
+          state:
+            params?.state && params?.state_id
+              ? {
+                  name: params?.state,
+                  id: params?.state_id,
+                }
+              : '',
+          city:
+            params?.city && params?.city_id
+              ? {
+                  name: params?.city,
+                  id: params?.city_id,
+                }
+              : '',
           phone: '',
         }}
         onSubmit={values => {
@@ -139,9 +154,9 @@ function EContactInformation({refRBSheet, data, user}) {
             .min(0, 'Email address cannot be empty')
             .email('Must be a valid email')
             .required(),
-            // countries: yup.string().required().label('Country'),
-            // city: yup.string().min(3,'minimum 3 leter').required().label('City'),
-            // state: yup.string().required().label('State'),
+          // countries: yup.string().required().label('Country'),
+          // city: yup.string().min(3,'minimum 3 leter').required().label('City'),
+          // state: yup.string().required().label('State'),
           phone: yup.string().max(14).required().label('Phone'),
         })}>
         {({
@@ -161,7 +176,7 @@ function EContactInformation({refRBSheet, data, user}) {
                   fontColor={colors.white[0]}
                   fontWeight="bold"
                   fontSize={RFPercentage(2.5)}>
-                  Contact
+                  {store.lang.contact}
                 </JText>
               }
               right={
@@ -175,9 +190,8 @@ function EContactInformation({refRBSheet, data, user}) {
                     onPress={() => handleSubmit()}
                     fontColor={
                       isValid ? colors.white[0] : `${colors.white[0]}70`
-                    }
-                    >
-                    Save
+                    }>
+                    {store.lang.save}
                   </JText>
                 )
               }
@@ -189,11 +203,11 @@ function EContactInformation({refRBSheet, data, user}) {
                 marginHorizontal: RFPercentage(2),
               }}>
               <JInput
-              style={{
-                    textAlign: store.lang.id == 0 ? 'left' : 'right',
-                  }}
+                style={{
+                  textAlign: store.lang.id == 0 ? 'left' : 'right',
+                }}
                 containerStyle={{marginTop: RFPercentage(2)}}
-                heading={'Name:'}
+                heading={`${store.lang.name}:`}
                 value={values.name}
                 error={touched.name && errors.name && true}
                 onChangeText={handleChange('name')}
@@ -203,12 +217,12 @@ function EContactInformation({refRBSheet, data, user}) {
                 <JErrorText>{errors.name}</JErrorText>
               )}
               <JInput
-              style={{
-                textAlign: store.lang.id == 0 ? 'left' : 'right',
-              }}
+                style={{
+                  textAlign: store.lang.id == 0 ? 'left' : 'right',
+                }}
                 containerStyle={{marginTop: RFPercentage(2)}}
                 value={values.email}
-                heading={'Email:'}
+                heading={`${store.lang.email}:`}
                 error={touched.email && errors.email && true}
                 onChangeText={handleChange('email')}
                 onBlur={() => setFieldTouched('email')}
@@ -221,6 +235,7 @@ function EContactInformation({refRBSheet, data, user}) {
                 ref={phoneInput}
                 defaultValue={values.phone}
                 defaultCode="SA"
+                placeholder={store.lang.phone_number}
                 containerStyle={{
                   width: '100%',
                   borderBottomWidth: RFPercentage(0.1),
@@ -242,10 +257,10 @@ function EContactInformation({refRBSheet, data, user}) {
                 containerStyle={{marginTop: RFPercentage(2)}}
                 value={values.countries?.name}
                 id={values.countries?.id}
-                data={info?.countries}
+                data={store.lang.id==0?store.jobCreate?.english_data?.countries:store.jobCreate?.arabic_data?.countries}
                 setValue={e => setFieldValue('countries', e)}
-                header={'Country'}
-                heading={'Country :'}
+                header={store.lang.country}
+                heading={`${store.lang.country}:`}
                 error={touched.countries && errors.countries && true}
                 rightIcon={<JNewJobIcon />}
               />
@@ -255,11 +270,11 @@ function EContactInformation({refRBSheet, data, user}) {
 
               <JSelectInput
                 containerStyle={{marginTop: RFPercentage(2)}}
-                value={values.state?.name}
+                value={store.lang.id==0?values.state?.name:values.state?.arabic_title}
                 id={values.countries?.id}
                 setValue={e => setFieldValue('state', e)}
-                header={'State'}
-                heading={'State :'}
+                header={store.lang.state}
+                heading={`${store.lang.state}:`}
                 error={touched.state && errors.state && true}
                 rightIcon={<JNewJobIcon />}
               />
@@ -269,10 +284,10 @@ function EContactInformation({refRBSheet, data, user}) {
 
               <JSelectInput
                 containerStyle={{marginTop: RFPercentage(2)}}
-                value={values.city?.name}
+                value={store.lang.id==0?values.city?.name:values.city?.arabic_title}
                 setValue={e => setFieldValue('city', e)}
-                header={'City'}
-                heading={'City :'}
+                header={store.lang.city}
+                heading={`${store.lang.city}:`}
                 id={values.state?.id}
                 error={touched.city && errors.city && true}
                 rightIcon={<JNewJobIcon />}

@@ -82,7 +82,9 @@ export default function Experience({
                 <JRow style={{justifyContent: 'space-between'}}>
                   <JText>{item.experience_title}</JText>
                   <TouchableOpacity
-                    onPress={() => console.log(item)}
+                    onPress={() => {
+                      // console.log(item)
+                    }}
                     style={{
                       justifyContent: 'center',
                       alignItems: 'center',

@@ -14,7 +14,6 @@ import JErrorText from '../../customComponents/JErrorText';
 import JButton from '../../customComponents/JButton';
 import JInput from '../../customComponents/JInput';
 import JRow from '../../customComponents/JRow';
-import { baseUrl } from '../../ApiUrls';
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
 import {Calendar} from 'react-native-calendars';
 import Toast from 'react-native-toast-message';
@@ -25,7 +24,7 @@ import { StoreContext } from '../../mobx/store';
 import { observer } from 'mobx-react';
 import JChevronIcon from '../../customComponents/JChevronIcon';
 
-const JobRequirement = ({calendar='0',}) => {
+const JobRequirement = () => {
 
   const {params,values}=useRoute()
   // console.log(
@@ -64,7 +63,6 @@ const JobRequirement = ({calendar='0',}) => {
     formdata.append('job_shift_id', params?.jobShift?.id);
     formdata.append('jobsSkill', JSON.stringify(params?.jobSkill?.map((item)=>item.id).map(Number)));
     formdata.append('jobTag', JSON.stringify(params?.jobTag?.map((item)=>item.id).map(Number)));
-    
     formdata.append('description', params?.jobDescription);
     formdata.append('no_preference',params?.preference?.id);
     formdata.append('salary_from', params?.salaryFrom);
@@ -74,7 +72,7 @@ const JobRequirement = ({calendar='0',}) => {
     formdata.append('country_id',params?.countries.id);
     formdata.append('state_id', `${params?.state.id}`);
     formdata.append('city_id',`${params?.city.id}`);
-    formdata.append('career_level_id',values?.careerLevels.id);
+    formdata.append('career_level_id',values?.careerLevel.id);
     formdata.append('degree_level_id', JSON.stringify(values?.requiredDegreeLevel.map((item)=>item.id).map(Number)));
     formdata.append('jobsNationality', JSON.stringify(values?.jobNationality?.map((item)=>item.id).map(Number)));
     formdata.append('jobsLanguage', JSON.stringify(values?.jobLanguage?.map((item)=>item.id).map(Number)));
@@ -84,7 +82,7 @@ const JobRequirement = ({calendar='0',}) => {
     formdata.append('job_expiry_date', values?.expiry);
     formdata.append('hide_salary',isEnabled);
     formdata.append('is_freelance',isEnabled1);
-   console.log('formdata',formdata)
+  //  console.log('formdata',formdata)
 
 
     fetch(`${url.baseUrl}/employer/jobs/store`, {
@@ -102,9 +100,9 @@ const JobRequirement = ({calendar='0',}) => {
                type: 'success',
                text1: result.message,
              });
-             
-        
-        navigate('Job', {...params, ...values})   
+            //  console.log('new jobsssssss',result.data),
+             store.AddJobEmployerData(result.data),
+            navigate('Job')   
       }
       
       else{ 
@@ -113,73 +111,71 @@ const JobRequirement = ({calendar='0',}) => {
         text1: result.message,
       });
     }
-  }).catch(error => 
-      console.log('error', error));
+  }).catch(error => {
+      console.log('error', error)
+    });
    
   };
   
 
-  const _addRequirement= () => {
-    var myHeaders = new Headers();
-    myHeaders.append(
-      'Authorization',
-      `Bearer ${store.token?.token}`,
-    );
-    fetch(
-      `${url.baseUrl}/employer/jobs/create`,
+  // const _addRequirement= () => {
+  //   var myHeaders = new Headers();
+  //   myHeaders.append(
+  //     'Authorization',
+  //     `Bearer ${store.token?.token}`,
+  //   );
+  //   fetch(
+  //     `${url.baseUrl}/employer/jobs/create`,
 
-      {
-        method: 'GET',
-        headers: myHeaders,
-        redirect: 'follow',
-      },
-    )
-      .then(response => response.json())
-      .then(result => {
-        setRequirements(result.data);
+  //     {
+  //       method: 'GET',
+  //       headers: myHeaders,
+  //       redirect: 'follow',
+  //     },
+  //   )
+  //     .then(response => response.json())
+  //     .then(results => {
+  //       // console.log(results)
+  //       setRequirements(results);
+  //     })
+  //     .catch(error => {
+  //       console.log('requirements error', error);
+  //       setError(true);
 
-      })
-      .catch(error => {
-        console.log('error', error);
-        setError(true);
-
-      })
-      .finally(() => {
-        setLoader(false);
+  //     })
+  //     .finally(() => {
+  //       setLoader(false);
         
-      });
-  };
-  useEffect(() => {
-    _addRequirement();
-  }, [loader]);
+  //     });
+  // };
+  // useEffect(() => {
+  //   _addRequirement();
+  // }, [loader]);
   return (
     <JScreen
-      isError={error}
-      onTryAgainPress={() => _addRequirement()}
+     
       style={{paddingHorizontal: RFPercentage(2)}}
       header={
         <JGradientHeader
-          right={
-            <JText fontColor={colors.white[0]} fontSize={RFPercentage(2)}>
-              Previous
-            </JText>
-          }
+          // right={
+          //   <JText fontColor={colors.white[0]} fontSize={RFPercentage(2)}>
+          //     {store.lang.previous}
+          //   </JText>
+          // }
           center={
             <JText
               fontColor={colors.white[0]}
               fontWeight="bold"
               fontSize={RFPercentage(2.5)}>
-              {'Job Requirement'}
+              {store.lang.job_requirement}
             </JText>
           }
-          left={
-            <JChevronIcon/>
-          }
+          left={<JChevronIcon />}
         />
       }>
       <Formik
         initialValues={{
-          careerLevels: '',
+          careerLevel: '',
           requiredDegreeLevel: [],
           jobNationality: [],
           jobLanguage: [],
@@ -189,7 +185,7 @@ const JobRequirement = ({calendar='0',}) => {
           expiry: new Date().toDateString(),
         }}
         onSubmit={values => {
-          console.log({...params, ...values});
+          // console.log({...params, ...values});
           // console.log(values);
           _handleSubmit(values);
         }}
@@ -213,31 +209,39 @@ const JobRequirement = ({calendar='0',}) => {
         }) => (
           <>
             <ScrollView
+              showsVerticalScrollIndicator={false}
               contentContainerStyle={{paddingBottom: RFPercentage(8)}}>
               <JSelectInput
                 containerStyle={styles.container}
-                value={values.careerLevels?.name}
-                data={requirements?.careerLevels}
-                id={values.careerLevels?.id}
-                header={'Carrer Level'}
-                heading={'Career Level:'}
-                setValue={e => setFieldValue('careerLevels', e)}
-                error={touched.careerLevels && errors.careerLevels && true}
+                value={values.careerLevel?.name}
+                data={
+                  store.lang.id === 0
+                    ? store.jobCreate?.english_data?.careerLevels
+                    : store.jobCreate?.arabic_data?.careerLevels
+                }
+                id={values.careerLevel?.id}
+                header={store.lang.career_level}
+                heading={`${store.lang.career_level}:`}
+                setValue={e => setFieldValue('careerLevel', e)}
+                error={touched.careerLevel && errors.careerLevel && true}
                 rightIcon={<JNewJobIcon />}
               />
-              {touched.careerLevels && errors.careerLevels && (
-                <JErrorText>{errors.careerLevels}</JErrorText>
+              {touched.careerLevel && errors.careerLevel && (
+                <JErrorText>{errors.careerLevel}</JErrorText>
               )}
+
               <JSelectInput
                 isMultiple={true}
                 containerStyle={styles.container}
-                value={values.requiredDegreeLevel
-                  ?.map(item => item.name)
-                  .join(', ')}
-                data={requirements?.requiredDegreeLevel}
+                value={values.requiredDegreeLevel?.map(item => item.name).join(', ')}
+                data={
+                  store.lang.id === 0
+                    ? store.jobCreate?.english_data?.requiredDegreeLevel
+                    : store.jobCreate?.arabic_data?.requiredDegreeLevel
+                }
                 id={values.requiredDegreeLevel?.map(item => item.id).join(', ')}
-                header={'Degree Level'}
-                heading={'Degree Level:'}
+                header={store.lang.degree_level}
+                heading={`${store.lang.degree_level}:`}
                 setValue={e => setFieldValue('requiredDegreeLevel', e)}
                 error={
                   touched.requiredDegreeLevel &&
@@ -252,11 +256,15 @@ const JobRequirement = ({calendar='0',}) => {
               <JSelectInput
                 isMultiple={true}
                 containerStyle={styles.container}
-                value={values.jobNationality?.map(item => item.name).join(', ')}
-                data={requirements?.jobNationality}
+                value={values.jobNationality?.map(item => item?.name).join(', ')}
+                data={
+                  store.lang.id == 0
+                    ? store.jobCreate?.english_data?.jobNationality
+                    : store.jobCreate?.arabic_data?.jobNationality
+                }
                 id={values.jobNationality?.map(item => item.id).join(', ')}
-                header={'job Nationality'}
-                heading={'job Nationality:'}
+                header={store.lang.job_nationality}
+                heading={`${store.lang.job_nationality}:`}
                 setValue={e => setFieldValue('jobNationality', e)}
                 error={touched.jobNationality && errors.jobNationality && true}
                 rightIcon={<JNewJobIcon />}
@@ -267,11 +275,15 @@ const JobRequirement = ({calendar='0',}) => {
               <JSelectInput
                 isMultiple={true}
                 containerStyle={styles.container}
-                value={values.jobLanguage?.map(item => item.name).join(', ')}
-                data={requirements?.jobLanguage}
+                value={values.jobLanguage?.map(item => item?.name).join(', ')}
+                data={
+                  store.lang.id === 0
+                    ? store.jobCreate?.english_data?.jobLanguage
+                    : store.jobCreate?.arabic_data?.jobLanguage
+                }
                 id={values.jobLanguage?.map(item => item.id).join(', ')}
-                header={'Language'}
-                heading={'Job Language:'}
+                header={store.lang.language}
+                heading={`${store.lang.language}:`}
                 setValue={e => setFieldValue('jobLanguage', e)}
                 error={touched.jobLanguage && errors.jobLanguage && true}
                 rightIcon={<JNewJobIcon />}
@@ -285,11 +297,12 @@ const JobRequirement = ({calendar='0',}) => {
                 }}
                 isRequired
                 containerStyle={styles.container}
-                heading={'Position:'}
+                heading={`${store.lang.position}:`}
                 value={values.position}
                 error={touched.position && errors.position && true}
                 onChangeText={handleChange('position')}
                 onBlur={() => setFieldTouched('position')}
+                keyboardType="numeric"
               />
               {touched.position && errors.position && (
                 <JErrorText>{errors.position}</JErrorText>
@@ -300,11 +313,12 @@ const JobRequirement = ({calendar='0',}) => {
                 }}
                 isRequired
                 containerStyle={styles.container}
-                heading={'Job Experience:'}
+                heading={`${store.lang.job_Experience}:`}
                 value={values.experience}
                 error={touched.experience && errors.experience && true}
                 onChangeText={handleChange('experience')}
                 onBlur={() => setFieldTouched('experience')}
+                keyboardType="numeric"
               />
               {touched.experience && errors.experience && (
                 <JErrorText>{errors.experience}</JErrorText>
@@ -316,7 +330,7 @@ const JobRequirement = ({calendar='0',}) => {
                   marginBottom: RFPercentage(1),
                 }}>
                 <JText style={{fontSize: RFPercentage(2.5), fontWeight: '500'}}>
-                  Job Expiry Date:
+                  {store.lang.expiry_date}:
                 </JText>
                 <Pressable
                   onPress={() => setModalVisible1(true)}
@@ -340,7 +354,7 @@ const JobRequirement = ({calendar='0',}) => {
                   marginBottom: RFPercentage(1),
                 }}>
                 <JText style={{fontSize: RFPercentage(2.5), fontWeight: '500'}}>
-                  Publish Date:
+                  {store.lang.publish_date}:
                 </JText>
                 <Pressable
                   onPress={() => setModalVisible(true)}
@@ -356,9 +370,16 @@ const JobRequirement = ({calendar='0',}) => {
                   <JText fontSize={RFPercentage(2)}>{values.publishDate}</JText>
                 </Pressable>
               </View>
-              <View style={{marginVertical: RFPercentage(2),alignItems:store.lang.id===0? 'flex-start':'flex-end', width: '100%'}}>
+              <View
+                style={{
+                  marginVertical: RFPercentage(2),
+                  alignItems: store.lang.id === 0 ? 'flex-start' : 'flex-end',
+                  width: '100%',
+                }}>
                 <JRow style={styles.switch}>
-                  <JText style={styles.txtSwitch}>Hide Salary</JText>
+                  <JText style={styles.txtSwitch}>
+                    {store.lang.hide_salary}
+                  </JText>
                   <Switch
                     trackColor={{false: '#767577', true: colors.purple[0]}}
                     thumbColor="#f4f3f4"
@@ -368,7 +389,9 @@ const JobRequirement = ({calendar='0',}) => {
                   />
                 </JRow>
                 <JRow style={styles.switch}>
-                  <JText style={styles.txtSwitch}>Is Freelance</JText>
+                  <JText style={styles.txtSwitch}>
+                    {store.lang.Is_Freelance}
+                  </JText>
                   <Switch
                     trackColor={{false: '#767577', true: colors.purple[0]}}
                     thumbColor="#f4f3f4"
@@ -390,7 +413,7 @@ const JobRequirement = ({calendar='0',}) => {
                 bottom: RFPercentage(3),
                 width: RFPercentage(20),
               }}>
-              {'Post Job'}
+              {store.lang.post_job}
             </JButton>
             <Modal
               animationType="fade"

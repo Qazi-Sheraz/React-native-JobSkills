@@ -19,8 +19,8 @@ const SelectionSheet = ({navigation}) => {
 
         <JButton
           fontStyle={styles.buttonStyle}
-          onPress={() => store.setLang('ar')}
-          // onPress={() => navigation.navigate('CLogin', {type: 2})}
+          // onPress={() => store.setLang('ar')}
+          onPress={() => navigation.navigate('CLogin', {type: 2})}
           >
           {store.lang.employer}
         </JButton>

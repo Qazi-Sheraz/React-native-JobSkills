@@ -52,12 +52,12 @@ function CGeneralInformation({refRBSheet, data, user}) {
       body: formdata,
       redirect: 'follow',
     };
-    console.log(formdata);
+    // console.log(formdata);
     setLoader(true);
     fetch('https://dev.jobskills.digital/api/update-profile', requestOptions)
       .then(response => response.json())
       .then(result => {
-        console.log(result);
+        // console.log(result);
         if (result.success === false) {
           alert('Error while saving data');
         } else {
@@ -67,7 +67,7 @@ function CGeneralInformation({refRBSheet, data, user}) {
         setLoader(false);
       })
       .catch(error => {
-        console.log('error', error);
+        // console.log('error', error);
         setLoader(false);
       });
   };
@@ -91,7 +91,7 @@ function CGeneralInformation({refRBSheet, data, user}) {
           availability: profile.immediate_available ? true : false,
         }}
         onSubmit={values => {
-          console.log(values);
+          // console.log(values);
           _postData(values);
         }}
         // validationSchema={yup.object().shape({

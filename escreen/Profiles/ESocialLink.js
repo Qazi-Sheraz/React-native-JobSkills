@@ -28,7 +28,7 @@ const ESocialLink = () => {
       formdata.append('facebook_url', values.fb);
       formdata.append('twitter_url', values.tw);
       formdata.append('linkedin_url', values.ln);
-      console.log(formdata)
+      // console.log(formdata)
       var requestOptions = {
         method: 'POST',
         headers: myHeaders,
@@ -43,7 +43,7 @@ const ESocialLink = () => {
       )
         .then(response => response.json())
         .then(result => {
-          console.log(result);
+          // console.log(result);
           if (result.success === false) {
             alert('Error while saving data');
           } else {
@@ -53,7 +53,7 @@ const ESocialLink = () => {
           setLoader(false);
         })
         .catch(error => {
-          console.log('error', error);
+          // console.log('error', error);
           setLoader(false);
         });
     }}

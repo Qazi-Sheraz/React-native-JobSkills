@@ -42,16 +42,16 @@ function AuthStack({navigation}) {
   const _getoken = token => {
     AsyncStorage.getItem(token)
       .then(res => {
-        console.log(res);
+        // console.log("resssssssss",res);
         store.setToken(JSON.parse(res));
-        store.setUserInfo(store.token.user);
+        store.setUserInfo(store.token?.user);
 
         setTimeout(() => {
           setLoader(false);
         }, 2000);
       })
       .catch(error => {
-        console.log('Error in CHomeStack', error);
+        // console.log('Error in CHomeStack', error);
 
         setLoader(false);
       });

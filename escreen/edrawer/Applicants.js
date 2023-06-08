@@ -41,10 +41,10 @@ const Applicants = () => {
       });
       //Printing the log realted to the file
 
-      console.log('URI : ' + res[0].uri);
-      console.log('Type : ' + res[0].type);
-      console.log('File Name : ' + res[0].name);
-      console.log('File Size : ' + res[0].size);
+      // console.log('URI : ' + res[0].uri);
+      // console.log('Type : ' + res[0].type);
+      // console.log('File Name : ' + res[0].name);
+      // console.log('File Size : ' + res[0].size);
       //Setting the state to show single file attributes
       setFieldValue('resume', res[0]);
     } catch (err) {
@@ -86,7 +86,7 @@ const Applicants = () => {
     formdata.append('title', values.resume?.name);
     formdata.append('type', '1');
 
-console.log(formdata)
+// console.log(formdata)
     fetch(
       `${url.baseUrl}/employer/add-candidate`,
 
@@ -99,7 +99,7 @@ console.log(formdata)
     )
       .then(response => response.json())
       .then(result => {
-        console.log(result)
+        // console.log(result)
        
         if (result.success === true) {
           Toast.show({
@@ -117,7 +117,7 @@ console.log(formdata)
         }
       })
       .catch(error => {
-        console.log('error===>>>>>', error);
+        // console.log('error===>>>>>', error);
       })
       .finally(() => {
         setLoader(false);
@@ -157,7 +157,7 @@ console.log(formdata)
           is_default: false,
         }}
         onSubmit={values => {
-          console.log(values);
+          // console.log(values);
           // setLoader(true);
           _addApplicants(values);
 
@@ -279,16 +279,16 @@ console.log(formdata)
                   trustAllCerts={false}
                   source={{uri: values.resume.uri}}
                   onLoadComplete={(numberOfPages, filePath) => {
-                    console.log(`Number of pages: ${numberOfPages}`);
+                    // console.log(`Number of pages: ${numberOfPages}`);
                   }}
                   onPageChanged={(page, numberOfPages) => {
-                    console.log(`Current page: ${page}`);
+                    // console.log(`Current page: ${page}`);
                   }}
                   onError={error => {
-                    console.log(error);
+                    // console.log(error);
                   }}
                   onPressLink={uri => {
-                    console.log(`Link pressed: ${uri}`);
+                    // console.log(`Link pressed: ${uri}`);
                   }}
                   style={{
                     alignSelf: 'center',

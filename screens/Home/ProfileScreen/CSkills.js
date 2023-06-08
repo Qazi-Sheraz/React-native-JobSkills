@@ -25,7 +25,7 @@ function CSkills({data}) {
         skill: '',
       }}
       onSubmit={values => {
-        console.log(values.skill);
+        // console.log(values.skill);
       }}
       // validationSchema={yup.object().shape({
 

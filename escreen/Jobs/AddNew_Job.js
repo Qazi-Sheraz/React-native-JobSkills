@@ -36,7 +36,7 @@ const AddNew_Job = () => {
     var myHeaders = new Headers();
     myHeaders.append(
       'Authorization',
-      `Bearer ${store.token.token}`,
+      `Bearer ${store.token?.token}`,
     );
     fetch(
       `${url.baseUrl}/employer/jobs/create`,
@@ -49,27 +49,28 @@ const AddNew_Job = () => {
     )
       .then(response => response.json())
       .then(result => {
-        setAddJob(result.data);
+        store.setJobCreate(result);
+        // console.log(result.arabic_data)
 
       })
       .catch(error => {
-        console.log('error', error);
-        setError(true);
+        // console.log('error', error);
+        store.setCreateApiError(true);
 
       })
       .finally(() => {
-        setLoader(false);
+        store.setCreateApiLoader(false);
         
       });
   };
   useEffect(() => {
     _addnewJob();
-  }, [loader]);
+  }, []);
 
   return (
     <JScreen
-      isError={error}
-      onTryAgainPress={() => _addnewJob()}
+      isError={store.createApiError}
+      onTryAgainPress={() => {_addnewJob(),store.setCreateApiError(false)}}
       style={{paddingHorizontal: RFPercentage(2)}}
       header={
         <JGradientHeader
@@ -86,7 +87,7 @@ const AddNew_Job = () => {
           }
         />
       }>
-      {loader ? (
+      {store.CreateApiLoader ? (
         <ActivityIndicator />
       ) : (
         <Formik
@@ -102,7 +103,7 @@ const AddNew_Job = () => {
             jobDescription: '',
           }}
           onSubmit={values => {
-            console.log(values);
+            // console.log(values);
             navigate('JobPreference', {...values});
           }}
           validationSchema={yup.object().shape({
@@ -133,10 +134,10 @@ const AddNew_Job = () => {
                 <JSelectInput
                   containerStyle={styles.container}
                   value={values.jobCategory?.name}
-                  data={addJob?.jobCategory}
+                  data={store.lang.id==0?store.jobCreate?.english_data?.jobCategory:store.jobCreate?.arabic_data?.jobCategory}
                   setValue={e => setFieldValue('jobCategory', e)}
-                  header={'Job Category'}
-                  heading={'Job Category:'}
+                  header={store.lang.job_category}
+                  heading={`${store.lang.job_category}:`}
                   id={values.jobCategory.id}
                   error={touched.jobCategory && errors.jobCategory && true}
                   rightIcon={<JNewJobIcon />}
@@ -150,8 +151,8 @@ const AddNew_Job = () => {
                   }}
                   isRequired
                   containerStyle={styles.container}
-                  heading={'Job Title:'}
-                  data={addJob?.jobTilte}
+                  heading={`${store.lang.job_title}:`}
+                  
                   value={values.jobTilte}
                   error={touched.jobTilte && errors.jobTilte && true}
                   onChangeText={handleChange('jobTilte')}
@@ -223,10 +224,10 @@ const AddNew_Job = () => {
                 <JSelectInput
                   isMultiple={true}
                   containerStyle={styles.container}
-                  header={'Required Assessment'}
-                  heading={'Required Assessment:'}
+                  header={store.lang.required_assessment}
+                  heading={`${store.lang.required_assessment}:`}
                   id={values.assessment?.map(item => item.id).join(', ')}
-                  data={addJob?.assessment}
+                  data={store.lang.id==0?store.jobCreate?.english_data?.assessment:store.jobCreate?.arabic_data?.assessment}
                   value={values.assessment?.map(item => item.name).join(', ')}
                   setValue={e => setFieldValue('assessment', e)}
                   error={touched.assessment && errors.assessment && true}
@@ -238,10 +239,10 @@ const AddNew_Job = () => {
                 <JSelectInput
                   containerStyle={styles.container}
                   value={values.jobShift.name}
-                  data={addJob?.jobShift}
+                  data={store.lang.id==0?store.jobCreate?.english_data?.jobShift:store.jobCreate?.arabic_data?.jobShift}
                   setValue={e => setFieldValue('jobShift', e)}
-                  header={'Job Shift'}
-                  heading={'Job Shift:'}
+                  header={store.lang.job_Shift}
+                  heading={`${store.lang.job_Shift}:`}
                   id={values.jobShift.id}
                   error={touched.jobShift && errors.jobShift && true}
                   rightIcon={<JNewJobIcon />}
@@ -253,10 +254,10 @@ const AddNew_Job = () => {
                   isMultiple={true}
                   containerStyle={styles.container}
                   value={values.jobSkill?.map(item => item.name).join(', ')}
-                  data={addJob?.jobSkill}
+                  data={store.lang.id==0?store.jobCreate?.english_data?.jobSkill:store.jobCreate?.arabic_data?.jobSkill}
                   setValue={e => setFieldValue('jobSkill', e)}
-                  header={'Job Skill'}
-                  heading={'Job Skill:'}
+                  header={store.lang.job_skills}
+                  heading={`${store.lang.job_skills}:`}
                   id={values.jobSkill?.map(item => item.id).join(', ')}
                   error={touched.jobSkill && errors.jobSkill && true}
                   rightIcon={<JNewJobIcon />}
@@ -268,10 +269,10 @@ const AddNew_Job = () => {
                   isMultiple={true}
                   containerStyle={styles.container}
                   value={values.jobTag?.map(item => item.name).join(', ')}
-                  data={addJob?.jobTag}
+                  data={store.lang.id==0?store.jobCreate?.english_data?.jobTag:store.jobCreate?.arabic_data?.jobTag}
                   setValue={e => setFieldValue('jobTag', e)}
-                  header={'Job Tag'}
-                  heading={'Job Tag:'}
+                  header={store.lang.job_tag}
+                  heading={`${store.lang.job_tag}:`}
                   id={values.jobTag?.map(item => item.id).join(', ')}
                   error={touched.jobTag && errors.jobTag && true}
                   rightIcon={<JNewJobIcon />}
@@ -286,8 +287,8 @@ const AddNew_Job = () => {
                 }}
                   isRequired
                   containerStyle={styles.container}
-                  heading={'Description:'}
-                  data={addJob?.jobDescription}
+                  heading={`${store.lang.description}:`}
+                  
                   value={values.jobDescription.id}
                   // id={values.jobDescription.id}
 
@@ -309,7 +310,7 @@ const AddNew_Job = () => {
                   bottom: RFPercentage(3),
                   width: RFPercentage(20),
                 }}>
-                {loader ? 'Loading' : 'Next'}
+                {loader ? store.lang.loading : store.lang.next}
               </JButton>
             </>
           )}

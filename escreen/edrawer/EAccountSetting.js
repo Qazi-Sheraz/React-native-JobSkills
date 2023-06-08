@@ -24,7 +24,7 @@ const EAccountSetting = () => {
 
   useEffect(() => {
   
-  }, [isFoucs])
+  }, [])
   return (
     <JScreen
     style={{paddingHorizontal: RFPercentage(2)}}

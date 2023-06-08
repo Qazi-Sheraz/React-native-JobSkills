@@ -27,40 +27,40 @@ const JobPreference = () => {
   const [loader, setLoader] = useState(true);
   const [preferences, setPreferences] = useState();
 
-  const _addJobPreference = () => {
-    var myHeaders = new Headers();
-    myHeaders.append(
-      'Authorization',
-      `Bearer ${store.token.token}`,
-    );
-    fetch(
-      `${url.baseUrl}/employer/jobs/create`,
+  // const _addJobPreference = () => {
+  //   var myHeaders = new Headers();
+  //   myHeaders.append(
+  //     'Authorization',
+  //     `Bearer ${store.token?.token}`,
+  //   );
+  //   fetch(
+  //     `${url.baseUrl}/employer/jobs/create`,
 
-      {
-        method: 'GET',
-        headers: myHeaders,
-        redirect: 'follow',
-      },
-    )
-      .then(response => response.json())
-      .then(result => {
-        setPreferences(result.data);
-
-      })
-      .catch(error => {
-        console.log('error', error);
-        setError(true);
-
-      })
-      .finally(() => {
-        setLoader(false);
+  //     {
+  //       method: 'GET',
+  //       headers: myHeaders,
+  //       redirect: 'follow',
+  //     },
+  //   )
+  //     .then(response => response.json())
+  //     .then(result => {
+  //       setPreferences(result);
         
-      });
-  };
+  //     })
+  //     .catch(error => {
+  //       // console.log('error', error);
+  //       setError(true);
 
-  useEffect(() => {
-    _addJobPreference();
-  }, [loader]);
+  //     })
+  //     .finally(() => {
+  //       setLoader(false);
+        
+  //     });
+  // };
+
+  // useEffect(() => {
+  //   _addJobPreference();
+  // }, []);
 
   return (
     <JScreen
@@ -69,17 +69,17 @@ const JobPreference = () => {
       style={{paddingHorizontal: RFPercentage(2)}}
       header={
         <JGradientHeader
-          right={
-            <JText fontColor={colors.white[0]} fontSize={RFPercentage(2)}>
-              Previous
-            </JText>
-          }
+          // right={
+          //   <JText fontColor={colors.white[0]} fontSize={RFPercentage(2)}>
+          //     {store.lang.previous}
+          //   </JText>
+          // }
           center={
             <JText
               fontColor={colors.white[0]}
               fontWeight="bold"
               fontSize={RFPercentage(2.5)}>
-              {'Job Preference'}
+              {store.lang.job_preference}
             </JText>
           }
           left={
@@ -87,9 +87,9 @@ const JobPreference = () => {
           }
         />
       }>
-      {loader ? (
+      {/* {loader ? (
         <ActivityIndicator />
-      ) : (
+      ) : ( */}
         <Formik
           initialValues={{
             preference: '',
@@ -135,9 +135,9 @@ const JobPreference = () => {
                   containerStyle={styles.container}
                   value={values.preference.name}
                   id={values.preference?.id}
-                  data={preferences?.preference}
-                  header={'Gender Preference'}
-                  heading={'Gender Preference:'}
+                  data={store.lang.id==0?store.jobCreate?.english_data?.preference:store.jobCreate?.arabic_data?.preference}
+                  header={store.lang.gender_preference}
+                  heading={`${store.lang.gender_preference}:`}
                   setValue={e => setFieldValue('preference', e)}
                   error={touched.preference && errors.preference && true}
                   rightIcon={
@@ -156,11 +156,12 @@ const JobPreference = () => {
                 }}
                   isRequired
                   containerStyle={styles.container}
-                  heading={'Salary From:'}
+                  heading={`${store.lang.salary_from}:`}
                   value={values.salaryFrom}
                   error={touched.salaryFrom && errors.salaryFrom && true}
                   onChangeText={handleChange('salaryFrom')}
                   onBlur={() => setFieldTouched('salaryFrom')}
+                  keyboardType="numeric"
                 />
                 {touched.salaryFrom && errors.salaryFrom && (
                   <JErrorText>{errors.salaryFrom}</JErrorText>
@@ -172,11 +173,12 @@ const JobPreference = () => {
                 }}
                   isRequired
                   containerStyle={styles.container}
-                  heading={'Salary To:'}
+                  heading={`${store.lang.salary_to}:`}
                   value={values.salaryTo}
                   error={touched.salaryTo && errors.salaryTo && true}
                   onChangeText={handleChange('salaryTo')}
                   onBlur={() => setFieldTouched('salaryTo')}
+                  keyboardType="numeric"
                 />
                 {touched.salaryTo && errors.salaryTo && (
                   <JErrorText>{errors.salaryTo}</JErrorText>
@@ -186,10 +188,10 @@ const JobPreference = () => {
                   containerStyle={styles.container}
                   value={values.currencies.name}
                   id={values.currencies.id}
-                  data={preferences?.currencies}
+                  data={store.lang.id==0?store.jobCreate?.english_data?.currencies:store.jobCreate?.arabic_data?.currencies}
                   setValue={e => setFieldValue('currencies', e)}
-                  header={'Salary Currency'}
-                  heading={'Currency:'}
+                  header={store.lang.salary_currency}
+                  heading={`${store.lang.salary_currency}:`}
                   error={touched.currencies && errors.currencies && true}
                   rightIcon={
                     <JNewJobIcon/>
@@ -203,10 +205,10 @@ const JobPreference = () => {
                   containerStyle={styles.container}
                   value={values.salaryPeriods.name}
                   id={values.salaryPeriods.id}
-                  data={preferences?.salaryPeriods}
+                  data={store.lang.id==0?store.jobCreate?.english_data?.salaryPeriods:store.jobCreate?.arabic_data?.salaryPeriods}
                   setValue={e => setFieldValue('salaryPeriods', e)}
-                  header={'Salary Period'}
-                  heading={'Salary Period:'}
+                  header={store.lang.Salary_Period}
+                  heading={`${store.lang.Salary_Period}:`}
                   error={touched.salaryPeriods && errors.salaryPeriods && true}
                   rightIcon={
                     <JNewJobIcon/>
@@ -218,10 +220,10 @@ const JobPreference = () => {
                 <JSelectInput
                   containerStyle={styles.container}
                   value={values.countries.name}
-                  data={preferences?.countries}
+                  data={store.lang.id==0?store.jobCreate?.english_data?.countries:store.jobCreate?.arabic_data?.countries}
                   setValue={e => setFieldValue('countries', e)}
-                  header={'Country'}
-                  heading={'Country:'}
+                  header={store.lang.country}
+                  heading={`${store.lang.country}:`}
                   id={values.countries.id}
                   error={touched.countries && errors.countries && true}
                   rightIcon={
@@ -233,11 +235,11 @@ const JobPreference = () => {
                 )}
                 <JSelectInput
                   containerStyle={styles.container}
-                  value={values.state.name}
+                  value={store.lang.id==0?values.state?.name:values.state?.arabic_title}
                   id={values.countries?.id}
                   setValue={e => setFieldValue('state', e)}
-                  header={'State'}
-                  heading={'State:'}
+                  header={store.lang.state}
+                  heading={`${store.lang.state}:`}
                   error={touched.state && errors.state && true}
                   rightIcon={
                     <JNewJobIcon/>
@@ -248,10 +250,10 @@ const JobPreference = () => {
                 )}
                 <JSelectInput
                   containerStyle={styles.container}
-                  value={values.city.name}
+                  value={store.lang.id==0?values.city?.name:values.city?.arabic_title}
                   setValue={e => setFieldValue('city', e)}
-                  header={'City'}
-                  heading={'City:'}
+                  header={store.lang.city}
+                  heading={`${store.lang.city}:`}
                   id={values.state?.id}
                   error={touched.city && errors.city && true}
                   rightIcon={
@@ -270,13 +272,13 @@ const JobPreference = () => {
                   bottom: RFPercentage(3),
                   width: RFPercentage(20),
                 }}>
-                {loader ? 'Loading' : 'Next'}
+                {loader ? store.lang.loading : store.lang.next}
               </JButton>
               
             </>
           )}
         </Formik>
-      )}
+      {/* )} */}
 
 
     </JScreen>

@@ -43,7 +43,7 @@ function CSocialMediaLink({refRBSheet, data, user}) {
         formdata.append('facebook_url', values?.facebook_url);
         formdata.append('twitter_url', values?.twitter_url);
         formdata.append('linkedin_url', values?.linkedin_url);
-        console.log(formdata)
+        // console.log(formdata)
         var requestOptions = {
           method: 'POST',
           headers: myHeaders,
@@ -55,7 +55,7 @@ function CSocialMediaLink({refRBSheet, data, user}) {
         fetch(`${url.baseUrl}/companyUpdate/${store.token?.user?.owner_id}`, requestOptions)
           .then(response => response.json())
           .then(result => {
-            console.log(result);
+            // console.log(result);
             if (result.success === false) {
               Toast.show({
                 type: 'error',
@@ -74,7 +74,7 @@ function CSocialMediaLink({refRBSheet, data, user}) {
             setLoader(false);
           })
           .catch(error => {
-            console.log('error', error);
+            // console.log('error', error);
             setLoader(false);
           });
       }}

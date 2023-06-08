@@ -28,8 +28,8 @@ export const _search = (e, store,isSearch) => {
   fetch('https://dev.jobskills.digital/api/search-jobs', requestOptions)
     .then(response => response.json())
     .then(result => {
-      console.log(result.data);
-      if (result.data.length < 1) {
+      // console.log(result.data);
+      if (result.data?.length < 1) {
         JToast({
           type: 'error',
           text1: 'No Result Found !',
@@ -45,7 +45,7 @@ export const _search = (e, store,isSearch) => {
       }
     })
     .catch(error => {
-      console.log('error', error);
+      // console.log('error', error);
       store.setFilterDataApiLoader(false);
     });
 };
@@ -78,14 +78,14 @@ export const _searchFilter = (values, store, navigation) => {
     redirect: 'follow',
   };
 
-  console.log(requestOptions);
+  // console.log(requestOptions);
   store.setFilterDataApiLoader(true);
   fetch('https://dev.jobskills.digital/api/search-jobs', requestOptions)
     .then(response => response.json())
     .then(result => {
-      console.log(result.data);
+      // console.log(result.data);
 
-      if (result.data.length < 1) {
+      if (result.data?.length < 1) {
         JToast({
           type: 'error',
           text1: 'No Result Found !',
@@ -95,7 +95,7 @@ export const _searchFilter = (values, store, navigation) => {
       }
     })
     .catch(error => {
-      console.log('error', error);
+      // console.log('error', error);
     })
     .finally(() => {
       navigation.navigate('CSearch');

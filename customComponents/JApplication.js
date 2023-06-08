@@ -37,66 +37,67 @@ export default function JApplication({
   update,
   setUpdate,
 }) {
-  const{params}=useRoute();
+  const {params} = useRoute();
   const [error, setError] = useState(false);
   const [loader, setLoader] = useState(true);
   const [option, setOption] = useState(false);
   const [meetings, setMeetings] = useState();
-  const [menu, setMenu] = useState('');
   const isFoucs = useIsFocused();
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
-  const [date, setDate] = useState(new Date())
-  const [open, setOpen] = useState(false)
+
+  const [open, setOpen] = useState(false);
   const store = useContext(StoreContext);
-  const navigation=useNavigation();
-const [stat,setStat]=useState(item.status);
+  const navigation = useNavigation();
+  const [stat, setStat] = useState(item.status);
   const [selectedStatus, setSelectedStatus] = useState();
   const [modalVisible, setModalVisible] = useState(false);
-
-  const handleStatusSelect = (status1) => {
+// console.log(item.status)
+  const handleStatusSelect = status1 => {
     setSelectedStatus(status1);
-    status1==store.lang.drafted
-    ?_applicantsStatus(0,store.lang.drafted)
-    :  status1== store.lang.applied
-    ?_applicantsStatus(1,store.lang.applied)
-    :  status1==store.lang.rejected
-    ?_applicantsStatus(2,store.lang.rejected)
-    :  status1==store.lang.selected
-    ?_applicantsStatus(3,store.lang.selected)
-    :  status1==store.lang.shortlisted
-    ?_applicantsStatus(4,store.lang.shortlisted)
-    :  status1==store.lang.invitation_Sent
-    ?_applicantsStatus(5,store.lang.invitation_Sent)
-    :  status1==store.lang.interview_scheduled
-    ?_applicantsStatus(6,store.lang.interview_scheduled)
-    :  status1==store.lang.interview_accepted
-    ?_applicantsStatus(7,store.lang.interview_accepted)
-    :  status1==store.lang.interview_rescheduled
-    ?_applicantsStatus(8,store.lang.interview_rescheduled)
-    :  status1==store.lang.interview_completed && _applicantsStatus(9,store.lang.interview_completed)
+    status1 == store.lang.drafted
+      ? _applicantsStatus(0, store.lang.drafted)
+      : status1 == store.lang.applied
+      ? _applicantsStatus(1, store.lang.applied)
+      : status1 == store.lang.rejected
+      ? _applicantsStatus(2, store.lang.rejected)
+      : status1 == store.lang.selected
+      ? _applicantsStatus(3, store.lang.selected)
+      : status1 == store.lang.shortlisted
+      ? _applicantsStatus(4, store.lang.shortlisted)
+      : status1 == store.lang.invitation_Sent
+      ? _applicantsStatus(5, store.lang.invitation_Sent)
+      : status1 == store.lang.interview_scheduled
+      ? _applicantsStatus(6, store.lang.interview_scheduled)
+      : status1 == store.lang.interview_accepted
+      ? _applicantsStatus(7, store.lang.interview_accepted)
+      : status1 == store.lang.interview_rescheduled
+      ? _applicantsStatus(8, store.lang.interview_rescheduled)
+      : status1 == store.lang.interview_completed &&
+        _applicantsStatus(9, store.lang.interview_completed);
     // console.log(status1)
   };
   const _meetingSubmit = values => {
     var myHeaders = new Headers();
-    myHeaders.append("Authorization",`Bearer ${store.token?.token}`);
+    myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
 
     var formdata = new FormData();
-    
-    formdata.append("topic", values.interview_topic);
+
+    formdata.append('topic', values.interview_topic);
     formdata.append(
       'start_time',
-      moment(values.interview_date_and_time).format(
-        'YYYY/MM/DD HH:MM',
-      ));
-    formdata.append("agenda", values.description);
-    formdata.append("interviewType", values.interview_type === 'Office Base'? 0:'Zoom'? 1:2);
-    formdata.append("office_location", values.office_location);
-    formdata.append("zoom_link", values.zoom_link);
-    formdata.append("candidateID", item.candidate_user_id);
-    formdata.append("jobid",item.job_id);
-   console.log('formdata',formdata)
-
+      moment(values.interview_date_and_time).format('YYYY/MM/DD HH:MM'),
+    );
+    formdata.append('agenda', values.description);
+    formdata.append(
+      'interviewType',
+      values.interview_type === 'Office Base' ? 0 : 'Zoom' ? 1 : 2,
+    );
+    formdata.append('office_location', values.office_location);
+    formdata.append('zoom_link', values.zoom_link);
+    formdata.append('candidateID', item.candidate_user_id);
+    formdata.append('jobid', item.job_id);
+    // console.log('formdata', formdata);
 
     fetch(`${url.baseUrl}/meetings-submit`, {
       method: 'POST',
@@ -105,68 +106,54 @@ const [stat,setStat]=useState(item.status);
       redirect: 'follow',
     })
       .then(response => response.json())
-      .then(result => { 
-        
-      if (result.success === true ){
-             Toast.show({
-               type: 'success',
-               text1:result.message,
-             });
-             setStat(store.lang.invitation_Sent)
-             setUpdate(!update)
+      .then(result => {
+        if (result.success === true) {
+          Toast.show({
+            type: 'success',
+            text1: result.message,
+          });
+          setStat(store.lang.invitation_Sent);
+          setUpdate(!update);
 
-
-        // console.log('success===','true')
-        // navigate('Meeting',)   
-      }
-      
-      else{ 
-        // console.log('error',message);
-        Toast.show({
-        type: 'error',
-        // text1: result.message,
-      });
-    }
-  }).catch(error => 
-      console.log('error', error));
-   
+          // console.log('success===','true')
+          // navigate('Meeting',)
+        } else {
+          // console.log('error',message);
+          Toast.show({
+            type: 'error',
+            // text1: result.message,
+          });
+        }
+      })
+      // .catch(error => console.log('error', error));
   };
-  
 
-  const _applicantsStatus = (id,selectedStatus) => {
+  const _applicantsStatus = (id, selectedStatus) => {
     var myHeaders = new Headers();
-    myHeaders.append(
-      'Authorization',
-      `Bearer ${store.token?.token}`,
-    );
+    myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
 
-
-    fetch(`${url.baseUrl}/employer/job-applications/${item.id}/status/${id}`,{
+    fetch(`${url.baseUrl}/employer/job-applications/${item.id}/status/${id}`, {
       method: 'GET',
       headers: myHeaders,
       redirect: 'follow',
-    }
-    )  
+    })
       .then(response => response.json())
       .then(result => {
         // console.log(`${url.baseUrl}/employer/job-applications/${item.id}/status/${id}`)
-        console.log(result)
+        // console.log(result);
         if (result.success == true) {
-          setStat(selectedStatus)
-          setUpdate(!update)
-       }
-       else{
-
-         Toast.show({
-           type: 'error',
-           text1: message,
-         });
-       }
-
+          setStat(selectedStatus);
+          setUpdate(!update);
+        } else {
+          Toast.show({
+            type: 'error',
+            text1: message,
+          });
+        }
       })
       .catch(error => {
-        console.log('error', error);
-        // setError(true);
+        // console.log('error', error);
+        setError(true);
       })
       .finally(() => {
         setLoader(false);
@@ -174,67 +161,56 @@ const [stat,setStat]=useState(item.status);
   };
   const _interviewScheduled = () => {
     var myHeaders = new Headers();
-    myHeaders.append(
-      'Authorization',
-      `Bearer ${store.token?.token}`,
-    );
+    myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
 
-
-    fetch(`${url.baseUrl}/employer/ScheduleDetail/${item.candidate_user_id}/${item.job_id}`,{
-      method: 'GET',
-      headers: myHeaders,
-      redirect: 'follow',
-    }
-    )  
-
+    fetch(
+      `${url.baseUrl}/employer/ScheduleDetail/${item.candidate_user_id}/${item.job_id}`,
+      {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow',
+      },
+    )
       .then(response => response.json())
       .then(result => {
         // console.log(result)
-          setMeetings(result)})
-       
+        setMeetings(result);
+      })
+
       .catch(error => {
-        console.log('error', error);
-        // setError(true);
+        // console.log('error', error);
+        setError(true);
       })
       .finally(() => {
         setLoader(false);
       });
   };
 
-            // console.log(item.candidate_user_id);
+  // console.log(item.candidate_user_id);
   // const handleDateChange = (selectedDate) => {
   //   setDate(selectedDate);
   //   setOpen(false);
   // };
-//  useEffect(() => {
-//  _applicantsStatus()
-//  }, [loader])
- useEffect(() => {
-  _interviewScheduled()
-  
- }, [loader,isFoucs])
- useEffect(() => {
-  
- }, [stat])
+  //  useEffect(() => {
+  //  _applicantsStatus()
+  //  }, [loader])
+  useEffect(() => {
+    _interviewScheduled();
+  }, []);
+  useEffect(() => {}, [stat]);
 
-
-
-// Replace the placeholders with the selected date and time
-const updatedDescription =(description,value)=>description.replace(
-  /--Select Time--/i,
-  moment(value).format('HH:MM'),
-).replace(/--Select Date--/i, moment(value).format('YYYY/MM/DD'))
-;
-
-
-
+  // Replace the placeholders with the selected date and time
+  const updatedDescription = (description, value) =>
+    description
+      .replace(/--Select Time--/i, moment(value).format('HH:MM'))
+      .replace(/--Select Date--/i, moment(value).format('YYYY/MM/DD'));
   return (
     <>
       <Pressable
         onPress={() =>
           navigation.navigate('ProfileApplication', {
             candidate_id: item.candidate_id,
-            candidate_user_id:item.candidate_user_id,
+            candidate_user_id: item.candidate_user_id,
             job_id: item.job_id,
             id: item.id,
           })
@@ -250,85 +226,86 @@ const updatedDescription =(description,value)=>description.replace(
           }}>
           <JText style={styles.Hname}>{item.candidate_name}</JText>
 
-          {item.status===store.lang.selected || item.status===store.lang.rejected ? null 
-          :(
-          <Menu>
-            <MenuTrigger
-              style={{
-                width: RFPercentage(3),
-                height: RFPercentage(4),
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              <JIcon icon={'sm'} name={'options-vertical'} size={20} />
-            </MenuTrigger>
+          {item.status === store.lang.selected ||
+          item.status === store.lang.rejected ? null : (
+            <Menu>
+              <MenuTrigger
+                style={{
+                  width: RFPercentage(3),
+                  height: RFPercentage(4),
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <JIcon icon={'sm'} name={'options-vertical'} size={20} />
+              </MenuTrigger>
 
-            <MenuOptions>
-              <MenuOption
-                onSelect={() => handleStatusSelect(store.lang.drafted)}>
-                <JText style={styles.menutxt}>{store.lang.drafted}</JText>
-              </MenuOption>
-              <MenuOption
-                onSelect={() => handleStatusSelect(store.lang.applied)}>
-                <JText style={styles.menutxt}>{store.lang.applied}</JText>
-              </MenuOption>
-              <MenuOption
-                onSelect={() => handleStatusSelect(store.lang.rejected)}>
-                <JText style={styles.menutxt}>{store.lang.rejected}</JText>
-              </MenuOption>
-              <MenuOption
-                onSelect={() => handleStatusSelect(store.lang.selected)}>
-                <JText style={styles.menutxt}>{store.lang.selected}</JText>
-              </MenuOption>
-              <MenuOption
-                onSelect={() => handleStatusSelect(store.lang.shortlisted)}>
-                <JText style={styles.menutxt}>{store.lang.shortlisted}</JText>
-              </MenuOption>
-              {/* <MenuOption
+              <MenuOptions>
+                <MenuOption
+                  onSelect={() => handleStatusSelect(store.lang.drafted)}>
+                  <JText style={styles.menutxt}>{store.lang.drafted}</JText>
+                </MenuOption>
+                <MenuOption
+                  onSelect={() => handleStatusSelect(store.lang.applied)}>
+                  <JText style={styles.menutxt}>{store.lang.applied}</JText>
+                </MenuOption>
+                <MenuOption
+                  onSelect={() => handleStatusSelect(store.lang.rejected)}>
+                  <JText style={styles.menutxt}>{store.lang.rejected}</JText>
+                </MenuOption>
+                <MenuOption
+                  onSelect={() => handleStatusSelect(store.lang.selected)}>
+                  <JText style={styles.menutxt}>{store.lang.selected}</JText>
+                </MenuOption>
+                <MenuOption
+                  onSelect={() => handleStatusSelect(store.lang.shortlisted)}>
+                  <JText style={styles.menutxt}>{store.lang.shortlisted}</JText>
+                </MenuOption>
+                {/* <MenuOption
                 onSelect={() => handleStatusSelect(store.lang.invitation_Sent)}>
                 <JText style={styles.menutxt}>
                   {store.lang.invitation_Sent}
                 </JText>
               </MenuOption> */}
-              <MenuOption
-                onSelect={() => {
-                  setModalVisible(true),
-                    {
-                      candidate_user_id: item.candidate_user_id,
-                      job_id: item.job_id,
-                      id: item.id,
-                    };
-                }}>
-                <JText style={styles.menutxt}>
-                  {store.lang.interview_scheduled}
-                </JText>
-              </MenuOption>
-              <MenuOption
-                onSelect={() =>
-                  handleStatusSelect(store.lang.interview_accepted)
-                }>
-                <JText style={styles.menutxt}>
-                  {store.lang.interview_accepted}
-                </JText>
-              </MenuOption>
-              <MenuOption
-                onSelect={() =>
-                  handleStatusSelect(store.lang.interview_rescheduled)
-                }>
-                <JText style={styles.menutxt}>
-                  {store.lang.interview_rescheduled}
-                </JText>
-              </MenuOption>
-              <MenuOption
-                onSelect={() =>
-                  handleStatusSelect(store.lang.interview_completed)
-                }>
-                <JText style={styles.menutxt}>
-                  {store.lang.interview_completed}
-                </JText>
-              </MenuOption>
-            </MenuOptions>
-          </Menu>)}
+                <MenuOption
+                  onSelect={() => {
+                    setModalVisible(true),
+                      {
+                        candidate_user_id: item.candidate_user_id,
+                        job_id: item.job_id,
+                        id: item.id,
+                      };
+                  }}>
+                  <JText style={styles.menutxt}>
+                    {store.lang.interview_scheduled}
+                  </JText>
+                </MenuOption>
+                <MenuOption
+                  onSelect={() =>
+                    handleStatusSelect(store.lang.interview_accepted)
+                  }>
+                  <JText style={styles.menutxt}>
+                    {store.lang.interview_accepted}
+                  </JText>
+                </MenuOption>
+                <MenuOption
+                  onSelect={() =>
+                    handleStatusSelect(store.lang.interview_rescheduled)
+                  }>
+                  <JText style={styles.menutxt}>
+                    {store.lang.interview_rescheduled}
+                  </JText>
+                </MenuOption>
+                <MenuOption
+                  onSelect={() =>
+                    handleStatusSelect(store.lang.interview_completed)
+                  }>
+                  <JText style={styles.menutxt}>
+                    {store.lang.interview_completed}
+                  </JText>
+                </MenuOption>
+              </MenuOptions>
+            </Menu>
+          )}
         </JRow>
         <JRow
           style={{
@@ -372,26 +349,28 @@ const updatedDescription =(description,value)=>description.replace(
                 fontColor={colors.white[0]}
                 fontWeight="bold"
                 fontSize={RFPercentage(2.5)}>
-                {'Interview Scheduled'}
+                {store.lang.interview_scheduled}
               </JText>
             }
           />
-          {item.status === 'Invitation Sent' ? (<SafeAreaView
-          style={{justifyContent:'space-between',height:'90%'}}>
-            <View style={{marginHorizontal: RFPercentage(2)}}>
-              <JText style={styles.headers}>Interview Date :</JText>
-              <JText style={styles.date}>
-                {moment(values.interview_date_and_time).format('YYYY/MM/DD')}
-              </JText>
+          {item.status === store.lang.invitation_Sent ? (
+            <SafeAreaView
+              style={{justifyContent: 'space-between', height: '90%'}}>
+              <View style={{marginHorizontal: RFPercentage(2)}}>
+                <JText style={styles.headers}>Interview Date :</JText>
+                <JText style={styles.date}>
+                  {moment(values.interview_date_and_time).format('YYYY/MM/DD')}
+                </JText>
 
-              <JText style={styles.headers}>Interview Time :</JText>
-              <JText style={styles.date}>
-                {moment(values.interview_date_and_time).format('HH:MM A')}
-              </JText>
-            
-            </View>
-            <JButton onPress={()=> setModalVisible(false)}>{store.lang.close}
-            </JButton></SafeAreaView>
+                <JText style={styles.headers}>Interview Time :</JText>
+                <JText style={styles.date}>
+                  {moment(values.interview_date_and_time).format('HH:MM A')}
+                </JText>
+              </View>
+              <JButton onPress={() => setModalVisible(false)}>
+                {store.lang.close}
+              </JButton>
+            </SafeAreaView>
           ) : (
             <Formik
               initialValues={{
@@ -401,7 +380,7 @@ const updatedDescription =(description,value)=>description.replace(
                 interview_date_and_time: new Date(),
                 description: meetings?.description ? meetings.description : '',
                 interview_type:
-                  meetings?.meeting_type && meetings.meeting_type.length > 0
+                  meetings?.meeting_type && meetings.meeting_type?.length > 0
                     ? meetings.meeting_type[0]
                     : '',
                 office_location: '',
@@ -449,12 +428,12 @@ const updatedDescription =(description,value)=>description.replace(
                     marginHorizontal: RFPercentage(2),
                   }}>
                   <JInput
-                  style={{
-                    textAlign: store.lang.id == 0 ? 'left' : 'right',
-                  }}
+                    style={{
+                      textAlign: store.lang.id == 0 ? 'left' : 'right',
+                    }}
                     containerStyle={{marginTop: RFPercentage(1)}}
                     isRequired
-                    heading={'Interview Topic: '}
+                    heading={`${store.lang.interview_topic}:`}
                     value={values.interview_topic}
                     error={
                       touched.interview_topic && errors.interview_topic && true
@@ -478,7 +457,8 @@ const updatedDescription =(description,value)=>description.replace(
                       onPress={() => setOpen(true)}
                       style={{
                         height: RFPercentage(6),
-                        flexDirection: store.lang.id===0?'row':'row-reverse',
+                        flexDirection:
+                          store.lang.id === 0 ? 'row' : 'row-reverse',
                         alignItems: 'center',
                         borderBottomWidth: RFPercentage(0.2),
                         borderBottomColor: error
@@ -499,9 +479,9 @@ const updatedDescription =(description,value)=>description.replace(
                     </Pressable>
                   </View>
                   <JInput
-                  style={{
-                    textAlign: store.lang.id == 0 ? 'left' : 'right',
-                  }}
+                    style={{
+                      textAlign: store.lang.id == 0 ? 'left' : 'right',
+                    }}
                     containerStyle={{marginTop: RFPercentage(1)}}
                     isRequired
                     multiline={true}
@@ -522,7 +502,6 @@ const updatedDescription =(description,value)=>description.replace(
                       justifyContent: 'space-between',
                       paddingTop: RFPercentage(1),
                       marginBottom: RFPercentage(1),
-
                     }}>
                     <JText
                       style={{fontSize: RFPercentage(2.5), fontWeight: '500'}}>
@@ -530,7 +509,13 @@ const updatedDescription =(description,value)=>description.replace(
                     </JText>
                     <Pressable
                       onPress={() => setOption(!option)}
-                      style={[styles.menuV,{flexDirection: store.lang.id===0?'row':'row-reverse',}]}>
+                      style={[
+                        styles.menuV,
+                        {
+                          flexDirection:
+                            store.lang.id === 0 ? 'row' : 'row-reverse',
+                        },
+                      ]}>
                       <JText
                         fontSize={RFPercentage(2)}
                         style={{paddingHorizontal: RFPercentage(1)}}>
@@ -561,7 +546,8 @@ const updatedDescription =(description,value)=>description.replace(
                             style={{
                               padding: 10,
                               justifyContent: 'space-between',
-                              flexDirection: store.lang.id===0?'row':'row-reverse',
+                              flexDirection:
+                                store.lang.id === 0 ? 'row' : 'row-reverse',
                             }}
                             onPress={() => {
                               setFieldValue('interview_type', item);
@@ -575,9 +561,9 @@ const updatedDescription =(description,value)=>description.replace(
                   </View>
                   {values.interview_type === 'Office Base' ? (
                     <JInput
-                    style={{
-                      textAlign: store.lang.id == 0 ? 'left' : 'right',
-                    }}
+                      style={{
+                        textAlign: store.lang.id == 0 ? 'left' : 'right',
+                      }}
                       containerStyle={{marginTop: RFPercentage(1)}}
                       isRequired
                       placeholder={'https//map.app.goo.gl/B31UbkjUXD5XrvkHA'}
@@ -610,9 +596,9 @@ const updatedDescription =(description,value)=>description.replace(
                   )}
                   {isEnabled === true && values.interview_type === 'Zoom' && (
                     <JInput
-                    style={{
-                      textAlign: store.lang.id == 0 ? 'left' : 'right',
-                    }}
+                      style={{
+                        textAlign: store.lang.id == 0 ? 'left' : 'right',
+                      }}
                       containerStyle={{marginTop: RFPercentage(1)}}
                       placeholder={'Zoom'}
                       //  heading={'Zoom'}
@@ -636,7 +622,9 @@ const updatedDescription =(description,value)=>description.replace(
                       }}>
                       {store.lang.close}
                     </JButton>
-                    <JButton onPress={() => handleSubmit()}>{store.lang.submit}</JButton>
+                    <JButton onPress={() => handleSubmit()}>
+                      {store.lang.submit}
+                    </JButton>
                   </JRow>
                   {open && (
                     <DatePicker

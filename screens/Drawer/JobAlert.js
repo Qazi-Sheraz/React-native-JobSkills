@@ -33,7 +33,7 @@ const JobAlert = ({navigation}) => {
       bool: e,
     };
     items[index] = item;
-    console.log(items);
+    // console.log(items);
 
     setData([...items]);
   };
@@ -51,7 +51,7 @@ const JobAlert = ({navigation}) => {
     fetch('https://dev.jobskills.digital/api/job-alert', requestOptions)
       .then(response => response.json())
       .then(result => {
-        console.log(result[0]);
+        // console.log(result[0]);
         let arr = [
           {
             name: 'Notify Me',
@@ -73,13 +73,13 @@ const JobAlert = ({navigation}) => {
             });
           }
         });
-        console.log('>>', arr);
+        // console.log('>>', arr);
 
         setData(arr);
         setLoader(false);
       })
       .catch(error => {
-        console.log('error', error);
+        // console.log('error', error);
 
         setLoader(false);
       });
@@ -108,12 +108,12 @@ const JobAlert = ({navigation}) => {
       body: formdata,
       redirect: 'follow',
     };
-    console.log(requestOptions);
+    // console.log(requestOptions);
     setApiLoader(true);
     fetch('https://dev.jobskills.digital/api/job-alert-update', requestOptions)
       .then(response => response.json())
       .then(result => {
-        console.log(result);
+        // console.log(result);
 
         JToast({
           type: 'success',
@@ -121,7 +121,7 @@ const JobAlert = ({navigation}) => {
         });
       })
       .catch(error => {
-        console.log('error', error);
+        // console.log('error', error);
         JToast({
           type: 'error',
           text1: 'Error while Updating',

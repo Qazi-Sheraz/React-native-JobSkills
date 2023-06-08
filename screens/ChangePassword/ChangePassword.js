@@ -31,7 +31,7 @@ const ChangePassword = () => {
     formdata.append('password_current', values.password_current);
     formdata.append('password', values.password);
     formdata.append('password_confirmation', values.password_confirmation);
-    console.log(formdata);
+    // console.log(formdata);
 
     var myHeaders = new Headers();
 
@@ -45,7 +45,7 @@ const ChangePassword = () => {
     })
       .then(response => response.json())
       .then(result => {
-        console.log(result);
+        // console.log(result);
         if (result?.success == true) {
           setReset(result);
           Toast.show({
@@ -62,7 +62,7 @@ const ChangePassword = () => {
       })
 
       .catch(error => {
-        console.log('error', error);
+        // console.log('error', error);
         Toast.show({
           type: 'error',
           text1: error,
@@ -99,7 +99,7 @@ const ChangePassword = () => {
           password_confirmation: '',
         }}
         onSubmit={values => {
-          console.log(values);
+          // console.log(values);
           _resetPassword(values);
         }}
         validationSchema={yup.object().shape({

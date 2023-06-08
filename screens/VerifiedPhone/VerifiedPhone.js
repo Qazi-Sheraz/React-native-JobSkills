@@ -33,7 +33,7 @@ var formdata = new FormData();
 formdata.append("phone", params?.phone);
 formdata.append("code",`${value.d1}${value.d2}${value.d3}${value.d4}`
  );
- console.log(formdata)
+//  console.log(formdata)
 
 var requestOptions = {
   method: 'POST',
@@ -79,7 +79,7 @@ fetch(`${url.baseUrl}/phone-code-verification`, requestOptions)
     };
     fetch(`${url.baseUrl}/send-code`, requestOptions)
       .then(response => response.json())
-      .then(result => {console.log(result)
+      .then(result => {
         Toast.show({
           type: 'success',
           text1: 'Send Code Successfully',
@@ -89,7 +89,8 @@ fetch(`${url.baseUrl}/phone-code-verification`, requestOptions)
         
 
       })
-      .catch(error => {console.log('error', error)
+      .catch(error => {
+        // console.log('error', error)
       Toast.show({
         type: 'error',
         text1: 'Oops! Something went wrong',

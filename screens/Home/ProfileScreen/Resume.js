@@ -57,10 +57,10 @@ const Resume = ({navigation}) => {
       });
       //Printing the log realted to the file
 
-      console.log('URI : ' + res[0].uri);
-      console.log('Type : ' + res[0].type);
-      console.log('File Name : ' + res[0].name);
-      console.log('File Size : ' + res[0].size);
+      // console.log('URI : ' + res[0].uri);
+      // console.log('Type : ' + res[0].type);
+      // console.log('File Name : ' + res[0].name);
+      // console.log('File Size : ' + res[0].size);
       //Setting the state to show single file attributes
       setFieldValue('resume', res[0]);
     } catch (err) {
@@ -98,10 +98,10 @@ const Resume = ({navigation}) => {
       fetch(`${url.baseUrl}/delete-resumes/${id}`, requestOptions)
         .then(response => response.json())
         .then(result => {
-          console.log(result);
+          // console.log(result);
           setResumes(resumes.filter(e => e.id !== id));
         })
-        .catch(error => console.log('error', error));
+        // .catch(error => console.log('error', error));
     };
   };
   const _getResume = () => {
@@ -117,12 +117,12 @@ const Resume = ({navigation}) => {
     fetch(`${url.baseUrl}/resumes`, requestOptions)
       .then(response => response.json())
       .then(result => {
-        console.log('Resumes', result);
+        // console.log('Resumes', result);
         setResumes(result.data);
         setLoader(false);
       })
       .catch(error => {
-        console.log('error', error);
+        // console.log('error', error);
         setLoader(false);
       });
   };
@@ -223,7 +223,7 @@ const Resume = ({navigation}) => {
             is_default: false,
           }}
           onSubmit={values => {
-            console.log(values);
+            // console.log(values);
 
             var myHeaders = new Headers();
             myHeaders.append('Authorization', `Bearer ${store.token.token}`);
@@ -240,7 +240,7 @@ const Resume = ({navigation}) => {
               'is_default',
               values.is_default == true ? '1' : '0',
             );
-            console.log(formdata);
+            // console.log(formdata);
             var requestOptions = {
               method: 'POST',
               headers: myHeaders,
@@ -254,14 +254,14 @@ const Resume = ({navigation}) => {
             )
               .then(response => response.json())
               .then(result => {
-                console.log(result);
+                // console.log(result);
                 alert(result.message);
                 _getResume();
                 setApiLoader(false);
                 setModalVisible(false);
               })
               .catch(error => {
-                console.log('error', error);
+                // console.log('error', error);
                 alert('Error while uploading CV');
                 setApiLoader(false);
                 // setModalVisible(false);
@@ -334,16 +334,16 @@ const Resume = ({navigation}) => {
                         trustAllCerts={false}
                         source={{uri: values.resume.uri}}
                         onLoadComplete={(numberOfPages, filePath) => {
-                          console.log(`Number of pages: ${numberOfPages}`);
+                          // console.log(`Number of pages: ${numberOfPages}`);
                         }}
                         onPageChanged={(page, numberOfPages) => {
-                          console.log(`Current page: ${page}`);
+                          // console.log(`Current page: ${page}`);
                         }}
                         onError={error => {
-                          console.log(error);
+                          // console.log(error);
                         }}
                         onPressLink={uri => {
-                          console.log(`Link pressed: ${uri}`);
+                          // console.log(`Link pressed: ${uri}`);
                         }}
                         style={{
                           alignSelf: 'center',

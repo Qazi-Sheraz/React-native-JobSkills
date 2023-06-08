@@ -61,7 +61,7 @@ function EmployeStack({navigation}) {
   const _getoken = token => {
     AsyncStorage.getItem(token)
       .then(res => {
-        console.log(res);
+        // console.log(res);
         store.setToken(JSON.parse(res));
         store.setUserInfo(store.token?.user);
 
@@ -92,7 +92,7 @@ function EmployeStack({navigation}) {
      * received or sent
      */
     const authStatus = await messaging().requestPermission();
-    console.log('Authorization status(authStatus):', authStatus);
+    // console.log('Authorization status(authStatus):', authStatus);
     return (
       authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
       authStatus === messaging.AuthorizationStatus.PROVISIONAL
@@ -107,9 +107,10 @@ function EmployeStack({navigation}) {
       messaging()
         .getToken()
         .then(fcmToken => {
-          console.log('FCM Token -> ', fcmToken);
+          // console.log('FCM Token -> ', fcmToken);
         });
-    } else console.log('Not Authorization status:', authStatus);
+    } else 
+    // console.log('Not Authorization status:', authStatus);
 
     /**
      * When a notification from FCM has triggered the application
@@ -122,10 +123,10 @@ function EmployeStack({navigation}) {
       .getInitialNotification()
       .then(async remoteMessage => {
         if (remoteMessage) {
-          console.log(
-            'getInitialNotification:' +
-              'Notification caused app to open from quit state',
-          );
+          // console.log(
+          //   'getInitialNotification:' +
+          //     'Notification caused app to open from quit state',
+          // );
           if (remoteMessage) {
             onMessageReceived(remoteMessage);
           }
@@ -200,7 +201,7 @@ function EmployeStack({navigation}) {
         [
           {
             text: 'Cancel',
-            onPress: () => console.log('Cancel Pressed'),
+            // onPress: () => console.log('Cancel Pressed'),
             style: 'cancel',
           },
           {

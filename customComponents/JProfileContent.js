@@ -45,14 +45,12 @@ export default function JProfileContent({src, name, email, jd}) {
     )
       .then(response => response.json())
       .then(result => {
-        console.log(result);
         setSingleFile(res[0]);
         _getProfile(store);
         alert(result.message);
         setLoader(false);
       })
       .catch(error => {
-        console.log('error', error);
         setLoader(false);
       });
   };
@@ -70,10 +68,10 @@ export default function JProfileContent({src, name, email, jd}) {
       });
       //Printing the log realted to the file
 
-      console.log('URI : ' + res[0].uri);
-      console.log('Type : ' + res[0].type);
-      console.log('File Name : ' + res[0].name);
-      console.log('File Size : ' + res[0].size);
+      // console.log('URI : ' + res[0].uri);
+      // console.log('Type : ' + res[0].type);
+      // console.log('File Name : ' + res[0].name);
+      // console.log('File Size : ' + res[0].size);
       //Setting the state to show single file attributes
 
       _uploadImage(res);

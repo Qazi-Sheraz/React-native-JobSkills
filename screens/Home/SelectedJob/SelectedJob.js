@@ -70,12 +70,12 @@ function SelectedJob({route, navigation}) {
     fetch(`${url.baseUrl}/job-details/${route.params?.id}`, requestOptions)
       .then(response => response.json())
       .then(function (response) {
-        console.log('Get Selected Job Data', response.data);
+        // console.log('Get Selected Job Data', response.data);
         setJobData(response);
         setLoader(false);
       })
       .catch(function (error) {
-        console.log(error);
+        // console.log(error);
         setError(true);
 
         Toast.show({

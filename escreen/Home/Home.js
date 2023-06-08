@@ -40,10 +40,16 @@ const Home = ({isempty = false,}) => {
   const [update, setUpdate] = useState(true);
 
   const _dashboard = () => {
+    console.log(store.token?.token)
     var myHeaders = new Headers();
     myHeaders.append(
+
       'Authorization',
-      `Bearer ${store.token.token}`,
+      `Bearer ${store.token?.token}`,{
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+
+      }
     );
     
     fetch(`${url.baseUrl}/dashboardEmployer`, {
@@ -55,10 +61,11 @@ const Home = ({isempty = false,}) => {
       .then(result => {
      
         // console.log(result);
-        setData(result);
+        // console.log(result)
+        store.setEmployeHome(result);
       })
       .catch(error => {
-        console.log('error', error);
+        console.log('home==error', error);
         setError(true);
       })
       .finally(() => {
@@ -67,13 +74,11 @@ const Home = ({isempty = false,}) => {
   };
 
   useEffect(() => {
-      _dashboard();
-  }, [loader,isFoucs,update]);
+        _dashboard()
+  }, [isFoucs]);
 
   return (
     <JScreen
-      isError={error}
-      onTryAgainPress={() => _dashboard()}
       style={{paddingHorizontal: RFPercentage(2)}}
       internet={true}
       header={
@@ -107,7 +112,15 @@ const Home = ({isempty = false,}) => {
       }>
       {loader ? (
         <ActivityIndicator />
-      ) : (
+      ) :
+      error ==true ? 
+      <JApiError
+      onTryAgainPress={() => {
+        _dashboard(),
+      setError(false)}}
+      />
+      :
+      (
         // <JText>Loading</JText>
         <React.Fragment>
           <JFindTitle JobTitle={store.lang.job_title} />
@@ -119,20 +132,20 @@ const Home = ({isempty = false,}) => {
               data={[
                 {
                   name: store.lang.total,
-                  count: data?.counts?.totalJobs,
+                  count: store.employeHome?.counts?.totalJobs,
                 },
                 {
                   name: store.lang.open,
-                  count: data?.counts?.jobCount,
+                  count: store.employeHome?.counts?.jobCount,
                 },
                 {
                   name: store.lang.paused,
-                  count: data?.counts?.pausedJobCount,
+                  count: store.employeHome?.counts?.pausedJobCount,
                 },
 
                 {
                   name: store.lang.close,
-                  count: data?.counts?.closedJobCount,
+                  count: store.employeHome?.counts?.closedJobCount,
                 },
               ]}
               showsHorizontalScrollIndicator={false}
@@ -198,9 +211,9 @@ const Home = ({isempty = false,}) => {
               {store.lang.upcoming_Meetings}
             </JText>
 
-            {data?.meetings?.length > 0 ? (
+            {store.employeHome?.meetings?.length > 0 ? (
               <FlatList
-                data={data?.meetings}
+                data={store.employeHome?.meetings}
                 renderItem={({item, index}) => (
                   <JRow
                     disabled={false}
@@ -315,8 +328,8 @@ const Home = ({isempty = false,}) => {
               fontColor={colors.black[0]}>
               {store.lang.Recent_Jobs}
             </JText>
-            {data?.recentJobs?.length > 0 ? (
-              data?.recentJobs?.map((item, index) => (
+            {store.employeHome?.recentJobs?.length > 0 ? (
+              store.employeHome?.recentJobs?.map((item, index) => (
                 <JRecentJobTile
                   update={update}
                   setUpdate={setUpdate}

@@ -62,10 +62,10 @@ const JobDetails = ({route}) => {
     
       // console.log(size)
       //Printing the log realted to the file
-      console.log('URI : ' + res[0].uri);
-      console.log('Type : ' + res[0].type);
-      console.log('File Name : ' + res[0].name);
-      console.log('File Size : ' + res[0].size);
+      // console.log('URI : ' + res[0].uri);
+      // console.log('Type : ' + res[0].type);
+      // console.log('File Name : ' + res[0].name);
+      // console.log('File Size : ' + res[0].size);
       //Setting the state to show single file attributes
       setFieldValue('resume', res[0]);
     } catch (err) {
@@ -83,7 +83,7 @@ const JobDetails = ({route}) => {
   };
   // console.log(route.params.jid)
   const [modalVisible, setModalVisible] = useState(false);
-  const [jobDetail, setJobDetail] = useState([]);
+  // const [jobDetail, setJobDetail] = useState([]);
   const [jobCount, setJobCount] = useState();
   const [error, setError] = useState(false);
   const [loader, setLoader] = useState(true);
@@ -103,10 +103,10 @@ const JobDetails = ({route}) => {
     formdata.append('phone',values?.phone);
     formdata.append('file',
       {
-        uri: values.resume.uri,
-        name: values.resume.name,
-        filename: values.resume.name,
-        type: values.resume.type,
+        uri: values.resume?.uri,
+        name: values.resume?.name,
+        filename: values.resume?.name,
+        type: values.resume?.type,
       },
       // values?.resume?.uri,
     );
@@ -117,7 +117,7 @@ const JobDetails = ({route}) => {
     formdata.append('type', '1');
 
 
-console.log(formdata)
+// console.log(formdata)
     fetch(
       `${url.baseUrl}/employer/add-candidate`,
 
@@ -130,7 +130,7 @@ console.log(formdata)
     )
       .then(response => response.json())
       .then(result => {
-        console.log(result)
+        // console.log(result)
        
         if (result.success === true) {
           Toast.show({
@@ -147,7 +147,7 @@ console.log(formdata)
         }
       })
       .catch(error => {
-        console.log('error===>>>>>', error);
+        // console.log('error===>>>>>', error);
       })
       .finally(() => {
         setLoader(false);
@@ -173,11 +173,11 @@ console.log(formdata)
       .then(response => response.json())
       .then(result => {
         // console.log(result.job[0]);
-        setJobDetail(result.job[0]);
+        store.setJobDetail(result.job[0]);
         setJobCount(result);
       })
       .catch(error => {
-        console.log('error', error);
+        // console.log('error', error);
         setError(true);
       })
       .finally(() => {
@@ -187,32 +187,32 @@ console.log(formdata)
 
   useEffect(() => {
     _getjobDetail();
-  }, [loader]);
+  }, []);
 
   const data = [
     {
       heading: store.lang.job_category,
       name:
-        jobDetail?.job_details?.job_category === null
+      store.jobDetail?.job_details?.job_category === null
           ? 'N/A'
-          : store.lang.id===0?jobDetail.job_details?.job_category:store.lang.id===1?jobDetail.job_details?.job_category_urdu:jobDetail.job_details?.job_category_arabic,
+          : store.lang.id===0?store.jobDetail.job_details?.job_category:store.lang.id===1?store.jobDetail.job_details?.job_category_urdu:store.jobDetail.job_details?.job_category_arabic,
     },
     {
       heading: store.lang.career_level,
       name:
-        jobDetail?.job_details?.career_level === null
+      store.jobDetail?.job_details?.career_level === null
           ? 'N/A'
-          :store.lang.id===0?jobDetail.job_details?.career_level:store.lang.id===1?jobDetail.job_details?.career_level_urdu:jobDetail.job_details?.career_level_arabic,
+          :store.lang.id===0?store.jobDetail.job_details?.career_level:store.lang.id===1?store.jobDetail.job_details?.career_level_urdu:store.jobDetail.job_details?.career_level_arabic,
     },
     {
       isScroll:true,
       heading: store.lang.job_tag,
       name:
       
-        jobDetail.job_details?.job_tag == null
+      store.jobDetail.job_details?.job_tag == null
           ? 'N/A'
           : 
-          jobDetail?.job_details?.job_tag.map(u => store.lang.id===0?u.name: store.lang.id===1?u.urdu_title:u.arabic_title).join(', ')
+          store.jobDetail?.job_details?.job_tag.map(u => store.lang.id===0?u.name: store.lang.id===1?u.urdu_title:u.arabic_title).join(', ')
            
          
     },
@@ -220,35 +220,35 @@ console.log(formdata)
     {
       heading: store.lang.job_Shift,
       name:
-        jobDetail?.job_details?.job_shift === null
+      store.jobDetail?.job_details?.job_shift === null
           ? 'N/A'
-          : store.lang.id===0?jobDetail.job_details?.job_shift:store.lang.id===1?jobDetail.job_details?.job_shift_urdu:jobDetail.job_details?.job_shift_arabic,
+          : store.lang.id===0?store.jobDetail.job_details?.job_shift:store.lang.id===1?store.jobDetail.job_details?.job_shift_urdu:store.jobDetail.job_details?.job_shift_arabic,
     },
 
     {
       heading: store.lang.position,
       name:
-        jobDetail?.job_details?.postion === null
+      store.jobDetail?.job_details?.postion === null
           ? 'N/A'
-          : jobDetail.job_details?.postion,
+          : store.jobDetail.job_details?.postion,
     },
     {
       heading: store.lang.job_Experience,
       name:
-        jobDetail?.job_details?.job_experience === null
+      store.jobDetail?.job_details?.job_experience === null
           ? 'N/A'
-          : jobDetail?.job_details?.job_experience,
+          : store.jobDetail?.job_details?.job_experience,
     },
     {
       heading: store.lang.Salary_Period,
       name:
-        jobDetail?.job_details?.salary_period === null
+      store.jobDetail?.job_details?.salary_period === null
           ? 'N/A'
-          : store.lang.id===0?jobDetail.job_details?.salary_period:store.lang.id===1?jobDetail.job_details?.salary_period_urdu:jobDetail.job_details?.salary_period_arabic,
+          : store.lang.id===0?store.jobDetail.job_details?.salary_period:store.lang.id===1?store.jobDetail.job_details?.salary_period_urdu:store.jobDetail.job_details?.salary_period_arabic,
     },
     {
       heading: store.lang.Is_Freelance,
-      name: jobDetail?.job_details?.is_freelance === false ? store.lang.no : store.lang.yes,
+      name: store.jobDetail?.job_details?.is_freelance === false ? store.lang.no : store.lang.yes,
     },
   ];
   return (
@@ -266,39 +266,39 @@ console.log(formdata)
             children={
               <View style={{marginTop: RFPercentage(2), width: '100%'}}>
                 <JRow style={{justifyContent: 'space-between'}}>
-                  <JText style={styles.headertxt}>{jobDetail?.job_title}</JText>
+                  <JText style={styles.headertxt}>{store.jobDetail?.job_title}</JText>
 
                   <JText style={{fontSize: RFPercentage(1.8), color: '#ffff'}}>
                     {'\r'}
                     {store.lang.date_posted}
-                    {moment(jobDetail.job_publish_date, 'DD,MM,YYYY').format(
+                    {moment(store.jobDetail.job_publish_date, 'DD,MM,YYYY').format(
                       'DD MMM,YYYY',
                     )}
                   </JText>
                 </JRow>
                 <JRow>
                   <DEVOTEAM />
-                  <JText style={styles.txt}>{jobDetail.company_name}</JText>
+                  <JText style={styles.txt}>{store.jobDetail.company_name}</JText>
                 </JRow>
                 <JRow>
                   <Placeholder />
                   <JText style={styles.txt}>
                     {store.lang.id === 0
-                      ? jobDetail?.city_name
+                      ? store.jobDetail?.city_name
                       : store.lang.id === 1
-                      ? jobDetail?.city_name_urdu
-                      : jobDetail?.city_name_arabic}
+                      ? store.jobDetail?.city_name_urdu
+                      : store.jobDetail?.city_name_arabic}
                     ,
                     {store.lang.id === 0
-                      ? jobDetail?.state_name
+                      ? store.jobDetail?.state_name
                       : store.lang.id === 1
-                      ? jobDetail?.state_name_urdu
-                      : jobDetail?.state_name_arabic}
+                      ? store.jobDetail?.state_name_urdu
+                      : store.jobDetail?.state_name_arabic}
                     {store.lang.id === 0
-                      ? jobDetail?.country_name
+                      ? store.jobDetail?.country_name
                       : store.lang.id === 1
-                      ? jobDetail?.country_name_urdu
-                      : jobDetail?.country_name_arabic}
+                      ? store.jobDetail?.country_name_urdu
+                      : store.jobDetail?.country_name_arabic}
                   </JText>
                 </JRow>
                 <JRow style={{justifyContent: 'space-between'}}>
@@ -307,7 +307,7 @@ console.log(formdata)
 
                     <JText style={styles.txt}>
                       {store.lang.expire_on}{' '}
-                      {moment(jobDetail?.job_expiry_date, 'DD,MM,YYYY').format(
+                      {moment(store.jobDetail?.job_expiry_date, 'DD,MM,YYYY').format(
                         'DD MMM,YYYY',
                       )}
                     </JText>
@@ -332,7 +332,7 @@ console.log(formdata)
             <View style={{marginHorizontal: RFPercentage(1.3)}}>
               <JText style={styles.headertxt2}>{store.lang.job_skills}</JText>
 
-              {jobDetail?.job_requirement?.job_skills.map(skill => (
+              {store.jobDetail?.job_requirement?.job_skills.map(skill => (
                 <JText style={styles.txt1}>{store.lang.id===0?skill.name:store.lang.id===1?skill.urdu_title:skill.arabic_title}</JText>
               ))}
 
@@ -340,7 +340,7 @@ console.log(formdata)
               <ScrollView
                 horizontal
                 showsHorizontalScrollIndicator={false}>
-                {jobDetail?.job_requirement?.degree_level.map(level => (
+                {store.jobDetail?.job_requirement?.degree_level.map(level => (
                   <JRow style={{marginHorizontal: RFPercentage(1)}}>
                     <JText style={styles.dg}>{store.lang.id===0?level.name:store.lang.id===1?level.urdu_title:level.arabic_title}</JText>
                   </JRow>
@@ -350,7 +350,7 @@ console.log(formdata)
               <JText style={styles.headertxt2}>
                 {store.lang.assessment_Required}
               </JText>
-              {jobDetail?.job_requirement?.assessment_required.map(item => (
+              {store.jobDetail?.job_requirement?.assessment_required.map(item => (
                 <JText style={styles.txt1}>{item.assessment_name}</JText>
               ))}
             </View>
@@ -388,7 +388,7 @@ console.log(formdata)
 
             <JText style={styles.headertxt1}>{store.lang.description} </JText>
             <JText style={[styles.txt2, {paddingBottom: RFPercentage(3)}]}>
-              {jobDetail?.job_description?.description}
+              {store.jobDetail?.job_description?.description}
             </JText>
           </JScrollView>
           <View style={styles.bottomV}>
@@ -504,7 +504,8 @@ console.log(formdata)
                         <PhoneInput
                           ref={phoneInput}
                           defaultValue={values.phone}
-                          defaultCode="PK"
+                          defaultCode="SA"
+                          placeholder={store.lang.phone_number}
                           containerStyle={{
                             width: '100%',
                             borderBottomWidth: RFPercentage(0.1),
@@ -543,24 +544,24 @@ console.log(formdata)
                         {store.lang.sure_updated_resume}
                       </JText>
                       {values.resume?.uri ? (
-                        values.resume.size <= 2000000 ? (
+                        values.resume?.size <= 2000000 ? (
                           <View style={{alignSelf: 'center'}}>
                             <Pdf
                               trustAllCerts={false}
-                              source={{uri: values.resume.uri}}
+                              source={{uri: values.resume?.uri}}
                               onLoadComplete={(numberOfPages, filePath) => {
-                                console.log(
-                                  `Number of pages: ${numberOfPages}`,
-                                );
+                                // console.log(
+                                //   `Number of pages: ${numberOfPages}`,
+                                // );
                               }}
                               onPageChanged={(page, numberOfPages) => {
-                                console.log(`Current page: ${page}`);
+                                // console.log(`Current page: ${page}`);
                               }}
                               onError={error => {
-                                console.log(error);
+                                // console.log(error);
                               }}
                               onPressLink={uri => {
-                                console.log(`Link pressed: ${uri}`);
+                                // console.log(`Link pressed: ${uri}`);
                               }}
                               style={{
                                 alignSelf: 'center',
@@ -632,7 +633,7 @@ console.log(formdata)
                         <JButton
                           // isValid={isValid}
                           onPress={() => {
-                            if (values.resume.size <= 2000000) {
+                            if (values.resume?.size <= 2000000) {
                               handleSubmit();
                             } else {
                               Toast.show({

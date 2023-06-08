@@ -37,7 +37,7 @@ const navigation= useNavigation();
       })
 
       .catch(error => {
-        console.log('error', error);
+        // console.log('error', error);
         setError(true)
    
       }).finally(()=>{
@@ -47,7 +47,7 @@ const navigation= useNavigation();
 
  useEffect(() => {
  _getAssesmentsData();
- }, [loader]);
+ }, []);
 
 
   return (

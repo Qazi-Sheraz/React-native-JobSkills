@@ -37,7 +37,7 @@ export default function ResetPassword() {
           email: '',
         }}
         onSubmit={values => {
-          console.log(values);
+          // console.log(values);
         }}
         validationSchema={yup.object().shape({
           email: yup

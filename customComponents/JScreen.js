@@ -94,48 +94,50 @@ export default function JScreen({
             />
           </View>
         </View>
-      ) : isError === true ? (
-        <View style={[{flex: 9}, style]}>
-          <View
-            style={{
-              height: '70%',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Image
-              style={{
-                height: RFPercentage(30),
-                width: RFPercentage(30),
-              }}
-              source={require('../assets/images/errors/error.png')}
-            />
-            <JText
-              fontSize={RFPercentage(4)}
-              style={{marginTop: RFPercentage(5)}}>
-              Error
-            </JText>
-            <JText
-              fontAlign="center"
-              fontSize={RFPercentage(2)}
-              style={{marginTop: RFPercentage(1), width: '70%'}}>
-              we are sorry, we weren’t able to complete your request.
-            </JText>
-          </View>
-          <View
-            style={{
-              height: '30%',
-              justifyContent: 'flex-end',
-              alignItems: 'center',
-              paddingBottom: RFPercentage(3),
-            }}>
-            <JButton
-              children={'Try Again'}
-              onPress={onTryAgainPress}
-              style={{height: RFPercentage(5), width: RFPercentage(40)}}
-            />
-          </View>
-        </View>
-      ) : (
+      )
+      // ) : isError === true ? (
+      //   <View style={[{flex: 9}, style]}>
+      //     <View
+      //       style={{
+      //         height: '70%',
+      //         justifyContent: 'center',
+      //         alignItems: 'center',
+      //       }}>
+      //       <Image
+      //         style={{
+      //           height: RFPercentage(30),
+      //           width: RFPercentage(30),
+      //         }}
+      //         source={require('../assets/images/errors/error.png')}
+      //       />
+      //       <JText
+      //         fontSize={RFPercentage(4)}
+      //         style={{marginTop: RFPercentage(5)}}>
+      //         Error
+      //       </JText>
+      //       <JText
+      //         fontAlign="center"
+      //         fontSize={RFPercentage(2)}
+      //         style={{marginTop: RFPercentage(1), width: '70%'}}>
+      //         we are sorry, we weren’t able to complete your request.
+      //       </JText>
+      //     </View>
+      //     <View
+      //       style={{
+      //         height: '30%',
+      //         justifyContent: 'flex-end',
+      //         alignItems: 'center',
+      //         paddingBottom: RFPercentage(3),
+      //       }}>
+      //       <JButton
+      //         children={'Try Again'}
+      //         onPress={onTryAgainPress}
+      //         style={{height: RFPercentage(5), width: RFPercentage(40)}}
+      //       />
+      //     </View>
+      //   </View>
+      // ) 
+      : (
         <View style={[styles.container, style]}>{children}</View>
       )}
 

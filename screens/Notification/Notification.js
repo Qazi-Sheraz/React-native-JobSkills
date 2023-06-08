@@ -46,7 +46,7 @@ function Notification ({navigation, route}) {
       })
 
       .catch(error => {
-         console.log('error', error);
+        //  console.log('error', error);
       })
       .finally(() => {
         setLoader(false);

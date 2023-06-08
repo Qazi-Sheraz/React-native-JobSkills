@@ -43,12 +43,12 @@ const Assessment = ({navigation}) => {
     fetch('https://dev.jobskills.digital/api/assessment-list', requestOptions)
       .then(response => response.json())
       .then(result => {
-        console.log(result);
+        // console.log(result);
         setData(result.data);
         setLoader(false);
       })
       .catch(error => {
-        console.log('error', error);
+        // console.log('error', error);
         setLoader(false);
       });
   };
@@ -61,10 +61,10 @@ const Assessment = ({navigation}) => {
       headers: myHeaders,
       redirect: 'follow',
     };
-    console.log(
-      `https://dev.jobskills.digital/api/assessment-view/${id}/${userId}`,
-      requestOptions,
-    );
+    // console.log(
+    //   `https://dev.jobskills.digital/api/assessment-view/${id}/${userId}`,
+    //   requestOptions,
+    // );
 
     fetch(
       `https://dev.jobskills.digital/api/assessment-view/${id}/${userId}`,
@@ -72,12 +72,12 @@ const Assessment = ({navigation}) => {
     )
       .then(response => response.json())
       .then(result => {
-        console.log(result);
+        // console.log(result);
         setSelected(result.data);
         setLoader1(false);
       })
       .catch(error => {
-        console.log('error', error);
+        // console.log('error', error);
         setLoader1(false);
       });
   };

@@ -14,14 +14,14 @@ export const _getFollowingCompanyData = store => {
   fetch(`${url.baseUrl}/favourite-companies`, requestOptions)
     .then(response => response.json())
     .then(res => {
-      console.log('Following Company', res.data);
+      // console.log('Following Company', res.data);
       store.setFollowingApiLoader(true);
       store.setFollowingInput('');
       store.setFollowingList(res.data);
       store.setFollowingApiLoader(false);
     })
     .catch(error => {
-      console.log('Error while getting Favourite Company', error);
+      // console.log('Error while getting Favourite Company', error);
       JToast({
         type: 'error',
         text1: 'Error',
@@ -68,7 +68,7 @@ export const _saveToFollowing = (store, setLoader, id) => {
       }
     })
     .catch(error => {
-      console.log(error);
+      // console.log(error);
       JToast({
         type: 'error',
         text1: 'Error',

@@ -9,6 +9,7 @@ import {useContext} from 'react';
 import AuthStack from '../stacks/Auth/AuthStack';
 import { Observer } from 'mobx-react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import LangStack from '../stacks/Language/LangStack';
 
 export default function MyDrawer() {
 
@@ -16,70 +17,60 @@ export default function MyDrawer() {
   const Drawer = createDrawerNavigator();
   const[loader,setLoader]=useState(true);
 
+
     const _getLang = async () => {
       try {
-        const storedLanguage = await AsyncStorage.getItem('selectedLanguage');
-        if (storedLanguage) {
-          // Set the stored language in the store or wherever you need to use it
-          if (storedLanguage === 'English (United Kingdom)') {
-            store.setLang('en');
-          } else if (storedLanguage === 'اردو') {
-            store.setLang('ur');
-          } else if (storedLanguage === 'العربية') {
-            store.setLang('ar');
-          }
-        }
+
+        const _store=await AsyncStorage.multiGet(['selectedLanguage','splash'])
+        // console.log(_store[0][1])
+        // console.log(_store[1][1])
+        _store[0][1] != null ? store?.setLang(_store[0][1]) :store?.setLang('en')
+        _store[1][1] != null ? store?.setLangType(_store[1][1]) :store?.setLangType('false')
+    
       } catch (error) {
-        console.log('Error retrieving stored language:', error);
+        // console.log('Error retrieving stored language:', error);
       } finally {
         setLoader(false);
-  };};
+      }
+    };
   useEffect(() => {
-    _getLang('@lang');
+    _getLang('selectedLanguage');
     return () => {};
   }, []);
- 
-
+  
+  
+   
   return (
     <Observer>
-    {() => (
+      {() =>
+        store.langType == 'false' && !store?.token ? (
+          <LangStack />
 
-    !store?.token ?
-    
-    <AuthStack/>
-    :
-
-    
-    store.token?.user?.owner_type.includes('Candidate') ?
-
-    <Drawer.Navigator
-      screenOptions={{
-        headerShown: false,
-        drawerPosition: store.lang.id == 0 ? 'left' : 'right',
-      }}
-      initialRouteName={'CHome'}
-      drawerContent={props => (
-         <CustomDrawerContent {...props} />
-       
-      )}>
-      <Drawer.Screen name="CHomeStack" component={CHomeStack} />
-     
-    </Drawer.Navigator>
-    :
-    <Drawer.Navigator
-    screenOptions={{
-      headerShown: false,
-      drawerPosition: store.lang.id == 0 ? 'left' : 'right',
-    }}
-    initialRouteName={'CHome'}
-    drawerContent={props => (
-  
-      <EDrawerContent {...props} />
-    )}>
-    
-    <Drawer.Screen name="EHomeStack" component={EmployeStack} />
-  </Drawer.Navigator>
-    )}
-  </Observer>
+        ) : store.langType == 'true' && !store?.token ? (
+          <AuthStack />
+        ) 
+        : store.token?.user?.owner_type.includes('Candidate') ? (
+          <Drawer.Navigator
+            screenOptions={{
+              headerShown: false,
+              // drawerPosition: store.lang.id == 0 ? 'left' : 'right',
+            }}
+            initialRouteName={'CHome'}
+            drawerContent={props => <CustomDrawerContent {...props} />}>
+            <Drawer.Screen name="CHomeStack" component={CHomeStack} />
+          </Drawer.Navigator>
+        ) : (
+          <Drawer.Navigator
+            screenOptions={{
+              headerShown: false,
+              // drawerPosition: store.lang.id == 0 ? 'left' : 'right',
+            }}
+            initialRouteName={'CHome'}
+            drawerContent={props => <EDrawerContent {...props} />}>
+            <Drawer.Screen name="EHomeStack" component={EmployeStack} />
+          </Drawer.Navigator>
+        )
+      }
+    </Observer>
   );
 }

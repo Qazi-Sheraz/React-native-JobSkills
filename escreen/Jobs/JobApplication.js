@@ -33,6 +33,7 @@ import JChevronIcon from '../../customComponents/JChevronIcon';
 import {observer} from 'mobx-react';
 import url from '../../config/url';
 import JNotfoundData from '../../customComponents/JNotfoundData';
+import JApiError from '../../customComponents/JApiError';
 
 
 
@@ -122,9 +123,19 @@ const data = [
     var myHeaders = new Headers();
     myHeaders.append(
       'Authorization',
+      // `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNzQwYTNkNmY1NWEzZDYzYjM0ODI5ODdmNWZlMzM1N2Y0MTBhZjYxZmJiMTUyNjgxYjhjMjY0OWJmYzMyZTZmMjRhNjBlZTNjMDFkOWM3NGMiLCJpYXQiOjE2ODYwMzcxMDQuMTE5MzA5LCJuYmYiOjE2ODYwMzcxMDQuMTE5MzEzLCJleHAiOjE3MTc2NTk1MDQuMTEyNzcsInN1YiI6Ijg0Iiwic2NvcGVzIjpbXX0.WqyC9fdDZEEUNwcXjEvm_uCgILD2bDOlYKt2SrdUnTN2KGJitVg3bGvpUnKN7Iaa8C6fAo3qUOoDp_2oAeIJLbpvkAMAbB9oV3r5bMXpgABt3p_1ckkekQFkHjbqwL1qNk6YeAtuw8pQKEZwo8hKRr1zh8Nw1CR8NwsKxmmPNB-Uy1FG3gVzZeahmQzB4COicMQlKpXBK4Fx_fMoKZ1FqtVPASck9ZsBie4ETGk9EnBqEou7wpym6X9t0ckQARvIUU5EF8XPd_Z-ZCtvPwoQQCRjbVc1ALCrYPJfRnIS7ysEn9G_wrwpY5Q3_O1tyZ7HEl3zhL2sChHyKokNAhXES3Nhwrka85P08y_ETLcbiLxUBb7A7GY5YPopbtK21QZ9Ay39hgpr8G2RFVr91mEy1dq2DjtAigQNvP2DRDoQpVWm2fod797mu6za85GX5OgFh6QXiQ6Rlp13BFLNBCVVM62U67N6zWs5a5YGFtZIMrE63HXdvFgaYv8pfcAu5Yr5u0jzo_Cz1LKAGUC2iaw1yDfnsIO-xYCzYD27o1GsSHAdcdMd0DiMmy0C23gxjhNwl9u9ZO0P4-59svkV1gMp9JlNW03u3MNfKeQTTE0MdQdupczgUYi2mplRIgTFzasir7_YtKf_N7pT-EKwCklQsY9X7GSz_eLXOCKaytoD7uo`,
       `Bearer ${store.token?.token}`,
     );
     //  console.log(route.params.id)
+    // console.log(
+    //   `${url.baseUrl}/employer/jobs/${route?.params?.id}/applications`,
+    
+    //   {
+    //     method: 'GET',
+    //     headers: myHeaders,
+    //     redirect: 'follow',
+    //   },
+    // )
     fetch(
       `${url.baseUrl}/employer/jobs/${route?.params?.id}/applications`,
 
@@ -139,7 +150,7 @@ const data = [
         setJApplication(result?.job_application);
       })
       .catch(error => {
-        console.log('error', error);
+        console.log('application===error', error);
         setError(true);
       })
       .finally(() => {
@@ -148,15 +159,10 @@ const data = [
   };
   useEffect(() => {
     _jobApplication();
-  }, [isFoucs,loader,update]);
+  }, []);
 
   return (
-    <JScreen
-      isError={error}
-      onTryAgainPress={() => {
-        _jobApplication();
-        setError(false);
-      }}>
+    <JScreen>
       <JGradientHeader
         center={
           <JText
@@ -169,9 +175,16 @@ const data = [
         left={JChevronIcon}
       />
 
-      {loader == true ? (
+      {loader ? (
         <ActivityIndicator />
-      ) : jApplication.length > 0 ? (
+      ) : 
+      error == true ? 
+        <JApiError
+        onTryAgainPress={() => {
+          _jobApplication(),
+        setError(false)}}
+        />:
+      jApplication?.length > 0 ? (
         <>
           <JRow
             style={{
@@ -223,7 +236,7 @@ const data = [
           </JRow>
 
           <ScrollView style={{flex: 1, paddingHorizontal: RFPercentage(2)}}>
-            {(searchQuery.length > 0 ? filteredData1 : jApplication).map(
+            {(searchQuery?.length > 0 ? filteredData1 : jApplication).map(
               (item, index) => (
                 <JApplication
                   update={update}

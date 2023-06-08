@@ -30,7 +30,7 @@ import {_getProfile} from '../../functions/Candidate/MyProfile';
 function Profile({navigation}) {
 
   const store = useContext(StoreContext);
-  console.log(store.myProfile?.user[0]);
+  // console.log(store.myProfile?.user[0]);
   const [update, setUpdate] = useState(false);
 
   const BorderView = ({children}) => {
@@ -362,8 +362,8 @@ function Profile({navigation}) {
                       <View style={{marginBottom: RFPercentage(2)}} key={index}>
                         <JRow>
                           <FontAwesome5Brands
-                            onPress={() =>
-                              console.log(store.myProfile?.user[0].social_links)
+                            onPress={() =>{''}
+                              // console.log(store.myProfile?.user[0].social_links)
                             }
                             size={RFPercentage(3)}
                             name={

@@ -20,6 +20,8 @@ import {useContext} from 'react';
 import {useState} from 'react';
 import url from '../../config/url';
 import { useIsFocused } from '@react-navigation/native';
+import JNotfoundData from '../../customComponents/JNotfoundData';
+import JApiError from '../../customComponents/JApiError';
 
 const Meeting = ({isempty=false,}) => {
   const store = useContext(StoreContext);
@@ -47,7 +49,7 @@ const Meeting = ({isempty=false,}) => {
       })
 
       .catch(error => {
-        console.log('error', error);
+        // console.log('error', error);
         setError(true);
       })
 
@@ -59,7 +61,11 @@ const Meeting = ({isempty=false,}) => {
     var myHeaders = new Headers();
     myHeaders.append(
       'Authorization',
-      `Bearer ${store.token.token}`,
+      `Bearer ${store.token?.token}`,{
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+
+      }
     );
 
     fetch(`${url.baseUrl}/employer/meetingInfo/${id}`, {
@@ -75,8 +81,8 @@ const Meeting = ({isempty=false,}) => {
       })
 
       .catch(error => {
-        console.log('error', error);
-        setError(true);
+        console.log('error===meeting', error);
+   
       })
 
       .finally(() => {
@@ -86,13 +92,11 @@ const Meeting = ({isempty=false,}) => {
   useEffect(() => {
     _getmeeting();
     
-  }, [loader,isFoucs]);
+  }, []);
 
   const refRBSheet = useRef();
   return (
     <JScreen
-      isError={error}
-      onTryAgainPress={() => {_getmeeting()}}
       style={{marginHorizontal: RFPercentage(2),}}
       header={
         <JGradientHeader
@@ -106,11 +110,16 @@ const Meeting = ({isempty=false,}) => {
           }
         />
       }> 
-      {data.length>0?(
+      {data?.length>0?(
       loader ? (
         <ActivityIndicator />
       ) :
-      (
+      error == true ? (
+        <JApiError
+        onTryAgainPress={() => {
+          _getmeeting(),
+        setError(false)}}
+        />):
         <>
             <FlatList
               data={data}
@@ -163,20 +172,8 @@ const Meeting = ({isempty=false,}) => {
               <JText style={styles.rbtxt2}>{ data1 && data1.pasword ? data1.pasword:'No pasword available'}</JText>
             </View>
           </RBSheet>
-        </>)
-      ):(  <View
-        style={{
-          flex:1,
-          justifyContent: 'center',
-          alignItems: 'center',
-         
-        }}>
-        <Image
-          style={{width: RFPercentage(6), height: RFPercentage(6)}}
-          source={require('../../assets/images/empty/empty.png')}
-        />
-        <JText style={{marginTop: RFPercentage(1)}}>{store.lang.not_found}</JText>
-      </View>)}
+        </>
+      ): <JNotfoundData/>}
     </JScreen>
   );
 };

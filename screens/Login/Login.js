@@ -27,7 +27,7 @@ import { observer } from 'mobx-react';
 const Login = ({navigation, route}) => {
   const store = useContext(StoreContext);
   const [loader, setLoader] = useState(false);
-  console.log(route?.params?.type);
+  // console.log(route?.params?.type);
   const type = route?.params?.type;
 
 
@@ -57,7 +57,7 @@ const Login = ({navigation, route}) => {
     var formdata = new FormData();
     formdata.append('email', values.email);
     formdata.append('password', values.password);
-console.log(formdata)
+// console.log(formdata)
     var requestOptions = {
       method: 'POST',
       body: formdata,
@@ -69,7 +69,7 @@ console.log(formdata)
     fetch(type == 1 ? 'https://dev.jobskills.digital/api/users/login':'https://dev.jobskills.digital/api/employer/login', requestOptions)
       .then(response => response.json())
       .then(result => {
-        console.log('Result===>',result);
+        // console.log('Result===>',result);
 
         if (result.token) {
           _storeToken(result, values.remember);
@@ -121,7 +121,7 @@ console.log(formdata)
     fetch(`${url.baseUrl}/users/verifyEmail`, requestOptions)
       .then(response => response.json())
       .then(result => {
-        console.log(result);
+        // console.log(result);
         if (result === 'No Email Found') {
           Toast.show({
             type: 'error',
@@ -264,7 +264,7 @@ console.log(formdata)
                   onValueChange={value => setFieldValue('remember', value)}
                 />
 
-                <JText style={{marginLeft: RFPercentage(1)}}>
+                <JText style={{marginHorizontal: RFPercentage(1)}}>
                   {store.lang.remember}
                 </JText>
               </JRow>
@@ -279,7 +279,7 @@ console.log(formdata)
               onPress={() => handleSubmit()}
               children={
                 loader
-                  ? 'Loading...'
+                  ? store.lang.loading
                   : type === 1
                   ? store.lang.login_as_candidate
                   : store.lang.login_as_employee

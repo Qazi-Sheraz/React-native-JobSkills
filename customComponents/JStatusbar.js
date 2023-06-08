@@ -18,19 +18,26 @@ const JStatusbar = ({item}) => {
   const store = useContext(StoreContext);
   const _getStatusbar=()=> {
     var myHeaders = new Headers();
-    myHeaders.append("Authorization", `Bearer ${store.token.token}`);
+    myHeaders.append("Authorization", `Bearer ${store.token?.token}`,{
+      // 'Accept': 'application/json',
+      // 'Content-Type': 'application/json'
+
+    });
     var requestOptions = {
       method: 'GET',
       headers: myHeaders,
       redirect: 'follow'
     };
-    fetch(`${url.baseUrl}/candidate/job-application/${params?.job_id}/status/${params.candidate_id}`, requestOptions)
-
+    fetch(
+      `${url.baseUrl}/candidate/job-application/${params?.job_id}/status/${params.candidate_id}`,
+      requestOptions,
+    )
       .then(response => response.json())
       .then(result => {
         // console.log(result.jobApplicationStatus)
-        setIndex(result.jobApplicationStatus)})
-      .catch(error => console.log('error', error))
+        setIndex(result.jobApplicationStatus);
+      })
+      .catch(error => {})
       .finally(() => {
         setLoader(false);
       });

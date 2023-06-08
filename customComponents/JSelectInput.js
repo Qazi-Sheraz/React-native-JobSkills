@@ -50,6 +50,7 @@ function JSelectInput({
   mode = 'date',
   data,
 }) {
+  const store = useContext(StoreContext);
   const refRBSheet = useRef();
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState(new Date());
@@ -92,7 +93,7 @@ function JSelectInput({
   const handleSetSelectedItems = () => {
     // do something with the selected items, such as sending them to a server
     setValue(selectedItems);
-    console.log(selectedItems);
+    // console.log(selectedItems);
   };
 
   const _years = startYear => {
@@ -115,7 +116,7 @@ function JSelectInput({
     let martialArr = [];
     let functionArea = [];
     let industry = [];
-    let level = [];
+    let careerlevel = [];
     let currency = [];
     let expericeYear = [];
     let jobType = [];
@@ -131,7 +132,7 @@ function JSelectInput({
     let nationalityArr = [];
     let ownerArr = [];
     let sizeArr = [];
-    if (header === 'Job Skill') {
+    if (header === store.lang.job_skills) {
       Object.keys(data).forEach(function (key, index) {
         skill.push({
           id: key,
@@ -141,7 +142,7 @@ function JSelectInput({
       setSkills(skill);
     }
 
-    if (header === 'Job Category') {
+    if (header === store.lang.job_category) {
       Object.keys(data).forEach(function (key, index) {
         categories.push({
           id: key,
@@ -189,17 +190,17 @@ function JSelectInput({
       setArea(functionArea);
     }
 
-    if (header == 'Carrer Level') {
-      Object.keys(data).forEach(function (key, index) {
-        level.push({
+    if (header == store.lang.career_level) {
+      Object?.keys(data)?.forEach(function (key, index) {
+        careerlevel?.push({
           id: key,
           name: data[key],
         });
       });
-      setCareerLevel(level);
+      setCareerLevel(careerlevel);
     }
 
-    if (header === 'Industry') {
+    if (header === store.lang.Industry) {
       Object.keys(data).forEach(function (key, index) {
         industry.push({
           id: key,
@@ -209,7 +210,7 @@ function JSelectInput({
       setIndustry(industry);
     }
 
-    if (header === 'Salary Currency') {
+    if (header === store.lang.salary_currency) {
       Object.keys(data).forEach(function (key, index) {
         currency.push({
           id: key,
@@ -219,8 +220,8 @@ function JSelectInput({
       setCurrencies(currency);
     }
 
-    if (header === 'Language') {
-      Object.keys(data).forEach(function (key, index) {
+    if (header === store.lang.language) {
+      Object?.keys(data)?.forEach(function (key, index) {
         langArr.push({
           id: key,
           name: data[key],
@@ -247,7 +248,7 @@ function JSelectInput({
       });
       setTitle(titleArr);
     }
-    if (header === 'Job Shift') {
+    if (header === store.lang.job_Shift) {
       Object.keys(data).forEach(function (key, index) {
         shiftArr.push({
           id: key,
@@ -256,7 +257,7 @@ function JSelectInput({
       });
       setShift(shiftArr);
     }
-    if (header === 'Job Tag') {
+    if (header === store.lang.job_tag) {
       Object.keys(data).forEach(function (key, index) {
         tag.push({
           id: key,
@@ -265,7 +266,7 @@ function JSelectInput({
       });
       setTags(tag);
     }
-    if (header === 'Required Assessment') {
+    if (header === store.lang.required_assessment) {
       Object.keys(data).forEach(function (key, index) {
         assessment.push({
           id: key,
@@ -274,7 +275,7 @@ function JSelectInput({
       });
       setAssessments(assessment);
     }
-    if (header === 'Salary Period') {
+    if (header === store.lang.Salary_Period) {
       Object.keys(data).forEach(function (key, index) {
         period.push({
           id: key,
@@ -283,7 +284,7 @@ function JSelectInput({
       });
       setPeriods(period);
     }
-    if (header === 'Gender Preference') {
+    if (header === store.lang.gender_preference) {
       Object.keys(data).forEach(function (key, index) {
         preferenceArr.push({
           id: key,
@@ -292,8 +293,8 @@ function JSelectInput({
       });
       setPreference(preferenceArr);
     }
-    if (header === 'Degree Level') {
-      Object.keys(data).forEach(function (key, index) {
+    if (header === store.lang.degree_level) {
+      Object?.keys(data)?.forEach(function (key, index) {
         degree.push({
           id: key,
           name: data[key],
@@ -301,7 +302,7 @@ function JSelectInput({
       });
       setDegreeLevel(degree);
     }
-    if (header === 'Owner Ship') {
+    if (header === store.lang.ownership_type) {
       Object.keys(data).forEach(function (key, index) {
         ownerArr.push({
           id: key,
@@ -310,7 +311,7 @@ function JSelectInput({
       });
       setOwnership(ownerArr);
     }
-    if (header === 'Size') {
+    if (header === store.lang.size) {
       Object.keys(data).forEach(function (key, index) {
         sizeArr.push({
           id: key,
@@ -319,8 +320,8 @@ function JSelectInput({
       });
       setCompanySize(sizeArr);
     }
-    if (header === 'job Nationality') {
-      Object.keys(data).forEach(function (key, index) {
+    if (header === store.lang.job_nationality) {
+      Object?.keys(data)?.forEach(function (key, index) {
         nationalityArr.push({
           id: key,
           name: data[key],
@@ -365,7 +366,7 @@ function JSelectInput({
         setLoader(false);
       })
       .catch(error => {
-        console.log('error', error);
+        // console.log('error', error);
         setLoader(false);
       });
   };
@@ -379,13 +380,13 @@ function JSelectInput({
     fetch(`https://dev.jobskills.digital/api/state-list/${id}`, requestOptions)
       .then(response => response.json())
       .then(result => {
-        var myObject = result.state;
-
+        var myObject = result.state
+// console.log(result.state[0]?.arabic_title)
         setState(myObject);
         setLoader(false);
       })
       .catch(error => {
-        console.log('error', error);
+        // console.log('error', error);
         setLoader(false);
       });
   };
@@ -396,13 +397,13 @@ function JSelectInput({
         onPress={() => {
           if (isDate === false) {
             refRBSheet.current.open();
-            header === 'Country'
+            header === store.lang.country
               ? _getCountryList()
-              : header === 'City'
+              : header === store.lang.city
               ? _getCityList()
               : header === 'Year'
               ? _years(2019 - 20)
-              : header === 'State'
+              : header === store.lang.state
               ? _getStateList()
               : _getProfile();
           } else {
@@ -494,7 +495,7 @@ function JSelectInput({
                   }}
                   fontColor="#ffff"
                   fontSize={RFPercentage(2)}>
-                  Done
+                  {store.lang?.done}
                 </JText>
               )
             }
@@ -504,11 +505,11 @@ function JSelectInput({
           ) : (
             <FlatList
               data={
-                header === 'Country'
+                header === store.lang.country
                   ? county.filter(e =>
                       e.name.toLowerCase().includes(query.toLowerCase()),
                     )
-                  : header === 'City'
+                  : header === store.lang.city
                   ? city.filter(e =>
                       e.name.toLowerCase().includes(query.toLowerCase()),
                     )
@@ -518,8 +519,8 @@ function JSelectInput({
                   ? genders.filter(e =>
                       e.name.toLowerCase().includes(query.toLowerCase()),
                     )
-                  : header === 'Language'
-                  ? languages.filter(e =>
+                  : header === store.lang.language
+                  ? languages?.filter(e =>
                       e.name.toLowerCase().includes(query.toLowerCase()),
                     )
                   : header === 'Martial Status'
@@ -530,15 +531,15 @@ function JSelectInput({
                   ? area.filter(e =>
                       e.name.toLowerCase().includes(query.toLowerCase()),
                     )
-                  : header === 'Industry'
+                  : header === store.lang.Industry
                   ? industry.filter(e =>
                       e.name.toLowerCase().includes(query.toLowerCase()),
                     )
-                  : header === 'Carrer Level'
-                  ? careerLevel.filter(e =>
+                  : header === store.lang.career_level
+                  ? careerLevel?.filter(e =>
                       e.name.toLowerCase().includes(query.toLowerCase()),
                     )
-                  : header === 'Salary Currency'
+                  : header === store.lang.salary_currency
                   ? currencies.filter(e =>
                       e.name.toLowerCase().includes(query.toLowerCase()),
                     )
@@ -546,11 +547,11 @@ function JSelectInput({
                   ? jobType.filter(e =>
                       e.name.toLowerCase().includes(query.toLowerCase()),
                     )
-                  : header === 'Job Category'
+                  : header === store.lang.job_category
                   ? categories.filter(e =>
                       e.name.toLowerCase().includes(query.toLowerCase()),
                     )
-                  : header === 'Job Skill'
+                  : header === store.lang.job_skills
                   ? skills.filter(e =>
                       e.name.toLowerCase().includes(query.toLowerCase()),
                     )
@@ -558,47 +559,48 @@ function JSelectInput({
                   ? title.filter(e =>
                       e.name.toLowerCase().includes(query.toLowerCase()),
                     )
-                  : header === 'Job Shift'
+                  : header === store.lang.job_Shift
                   ? shift.filter(e =>
                       e.name.toLowerCase().includes(query.toLowerCase()),
                     )
-                  : header === 'Job Tag'
+                  : header === store.lang.job_tag
                   ? tags.filter(e =>
                       e.name.toLowerCase().includes(query.toLowerCase()),
                     )
-                  : header === 'Required Assessment'
+                  : header === store.lang.required_assessment
                   ? Assessments.filter(e =>
                       e.name.toLowerCase().includes(query.toLowerCase()),
                     )
-                  : header === 'Salary Period'
+                  : header === store.lang.Salary_Period
                   ? periods.filter(e =>
                       e.name.toLowerCase().includes(query.toLowerCase()),
                     )
-                  : header === 'Gender Preference'
+                  : header === store.lang.gender_preference
                   ? preference.filter(e =>
                       e.name.toLowerCase().includes(query.toLowerCase()),
                     )
-                  : header === 'Degree Level'
-                  ? degreeLevel.filter(e =>
+                  : header === store.lang.degree_level
+                  ? degreeLevel?.filter(e =>
                       e.name.toLowerCase().includes(query.toLowerCase()),
                     )
-                  : header === 'job Nationality'
-                  ? nationality.filter(e =>
+                  : header === store.lang.job_nationality
+                  ? nationality?.filter(e =>
                       e.name.toLowerCase().includes(query.toLowerCase()),
                     )
-                  : header === 'Owner Ship'
+                  : header === store.lang.ownership_type
                   ? ownership.filter(e =>
                       e.name.toLowerCase().includes(query.toLowerCase()),
                     )
-                  : header === 'Size'
+                  : header === store.lang.size
                   ? companySize.filter(e =>
                       e.name.toLowerCase().includes(query.toLowerCase()),
                     )
                   : header === 'Experience'
                   ? experience
-                  : state.filter(e =>
-                      e.name.toLowerCase().includes(query.toLowerCase()),
-                    )
+                  : header === store.lang.state
+                  && state.filter(e =>
+                    e.name.toLowerCase().includes(query.toLowerCase()),)
+                   
               }
               ListHeaderComponent={
                 header !== 'Experience' && (
@@ -611,7 +613,7 @@ function JSelectInput({
                       justifyContent: 'space-between',
                       paddingLeft: RFPercentage(1),
                       height: heightPercentageToDP(6),
-                      flexDirection: 'row',
+                      flexDirection: store.lang.id===0?'row':'row-reverse',
                       alignItems: 'center',
                       marginHorizontal: RFPercentage(2),
                     }}
@@ -619,8 +621,8 @@ function JSelectInput({
                     <TextInput
                       onChangeText={e => setQuery(e)}
                       placeholderTextColor={colors.placeHolderColor[0]}
-                      placeholder="Search"
-                      style={{color: colors.black[0]}}
+                      placeholder={store.lang.search}
+                      style={{color: colors.black[0],textAlign:store.lang.id===0?'left':'right'}}
                     />
                   </JShadowView>
                 )
@@ -635,7 +637,7 @@ function JSelectInput({
                       setValue(item);
                       refRBSheet.current.close();
                     }
-                    console.log(item);
+                    // console.log(item);
                   }}
                   style={{
                     paddingVertical: RFPercentage(2),
@@ -645,7 +647,9 @@ function JSelectInput({
                     borderBottomWidth: RFPercentage(0.1),
                   }}>
                   <JRow>
-                    <JText fontSize={RFPercentage(1.8)}>{item.name}</JText>
+                    {header ===store.lang.state || header === store.lang.city
+                    ?<JText fontSize={RFPercentage(1.8)}>{store.lang.id==0 ?item?.name:item?.arabic_title}</JText>
+                   :<JText fontSize={RFPercentage(1.8)}>{item?.name}</JText>}
 
                     {isMultiple === true && selectedItems?.includes(item) && (
                       <JIcon icon="fe" name="check" size={RFPercentage(2)} color={colors.black[0]}/>
@@ -665,7 +669,7 @@ function JSelectInput({
         date={date}
         onConfirm={date => {
           setOpen(false);
-          console.log(date);
+          // console.log(date);
           setValue(date);
         }}
         onCancel={() => {

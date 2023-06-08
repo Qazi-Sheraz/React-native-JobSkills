@@ -30,6 +30,7 @@ export default function JInput({
   isRequired = false,
   numberOfLines=1,
   multiline=false,
+  keyboardType,
 }) {
   const store = useContext(StoreContext);
   return (
@@ -82,6 +83,7 @@ export default function JInput({
           onFocus={onFocus}
           numberOfLines={numberOfLines}
           multiline={multiline}
+          keyboardType={keyboardType}
           secureTextEntry={eye ? true : false}
         />
         {forPassword && (

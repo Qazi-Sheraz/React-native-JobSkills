@@ -3,7 +3,7 @@ import {JToast} from '../Toast';
 
 export const _getHomeData = store => {
   var myHeaders = new Headers();
-  myHeaders.append('Authorization', `Bearer ${store.token.token}`);
+  myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
 
   var requestOptions = {
     method: 'GET',
@@ -19,7 +19,7 @@ export const _getHomeData = store => {
       store.setHomeApiLoader(false);
     })
     .catch(error => {
-      console.log(error);
+      // console.log(error);
       JToast({
         type: 'error',
         text1: 'Error',
@@ -32,7 +32,7 @@ export const _getHomeData = store => {
 
 export const _getFavouriteJobData = store => {
   var myHeaders = new Headers();
-  myHeaders.append('Authorization', `Bearer ${store.token.token}`);
+  myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
 
   var requestOptions = {
     method: 'GET',
@@ -46,12 +46,12 @@ export const _getFavouriteJobData = store => {
   fetch(`${url.baseUrl}/favourite-jobs`, requestOptions)
     .then(response => response.json())
     .then(res => {
-      console.log('Favourite Jobs', res.data);
+      // console.log('Favourite Jobs', res.data);
       store.setFavouriteList(res.data);
       store.setFavouriteApiLoader(false);
     })
     .catch(error => {
-      console.log(error);
+      // console.log(error);
       JToast({
         type: 'error',
         text1: 'Error',
@@ -64,7 +64,7 @@ export const _getFavouriteJobData = store => {
 
 export const _saveToFavoriteList = (store, setLoader, id) => {
   var myHeaders = new Headers();
-  myHeaders.append('Authorization', `Bearer ${store.token.token}`);
+  myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
 
   setLoader(true);
   var formdata = new FormData();
@@ -80,7 +80,7 @@ export const _saveToFavoriteList = (store, setLoader, id) => {
   fetch(`${url.baseUrl}/save-favourite-job`, requestOptions)
     .then(response => response.json())
     .then(result => {
-      console.log(result);
+      // console.log(result);
       if (result.data) {
         JToast({
           type: 'success',
@@ -99,7 +99,7 @@ export const _saveToFavoriteList = (store, setLoader, id) => {
       setLoader(false);
     })
     .catch(error => {
-      console.log(error);
+      // console.log(error);
       JToast({
         type: 'error',
         text1: 'Error',
@@ -111,7 +111,7 @@ export const _saveToFavoriteList = (store, setLoader, id) => {
 
 export const _getAppliedJobData = store => {
   var myHeaders = new Headers();
-  myHeaders.append('Authorization', `Bearer ${store.token.token}`);
+  myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
 
   var requestOptions = {
     method: 'GET',
@@ -125,12 +125,12 @@ export const _getAppliedJobData = store => {
   fetch(`${url.baseUrl}/applied-jobs`, requestOptions)
     .then(response => response.json())
     .then(res => {
-      console.log(res);
+      // console.log(res);
       store.setAppliedJobList(res);
       store.setAppliedJobApiLoader(false);
     })
     .catch(error => {
-      console.log('Applied Job Error',error)
+      // console.log('Applied Job Error',error)
       JToast.show({
         type: 'error',
         text1: 'Error',
@@ -143,7 +143,7 @@ export const _getAppliedJobData = store => {
 
 export const _getAllJobData = store => {
   var myHeaders = new Headers();
-  myHeaders.append('Authorization', `Bearer ${store.token.token}`);
+  myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
 
   var requestOptions = {
     method: 'GET',
@@ -161,7 +161,7 @@ export const _getAllJobData = store => {
       store.setJobApiLoader(false);
     })
     .catch(error => {
-      console.log(error);
+      // console.log(error);
       JToast({
         type: 'error',
         text1: 'Error',
@@ -174,7 +174,7 @@ export const _getAllJobData = store => {
 
 export const _getAllFeatureJobData = store => {
   var myHeaders = new Headers();
-  myHeaders.append('Authorization', `Bearer ${store.token.token}`);
+  myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
 
   var requestOptions = {
     method: 'GET',
@@ -192,7 +192,7 @@ export const _getAllFeatureJobData = store => {
       store.setFeatureJobApiLoader(false);
     })
     .catch(error => {
-      console.log(error);
+      // console.log(error);
       JToast({
         type: 'error',
         text1: 'Error',
@@ -223,7 +223,7 @@ export const _getAllFeatureCompanyData = store => {
       store.setFeatureCompanyApiLoader(false);
     })
     .catch(error => {
-      console.log(error);
+      // console.log(error);
       JToast({
         type: 'error',
         text1: 'Error',

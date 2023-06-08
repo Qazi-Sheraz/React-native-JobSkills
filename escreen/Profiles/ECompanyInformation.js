@@ -6,7 +6,7 @@ import JText from '../../customComponents/JText';
 import {ActivityIndicator} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import JInput from '../../customComponents/JInput';
-import PhoneInput from 'react-native-phone-number-input';
+import * as yup from 'yup';
 import JSelectInput from '../../customComponents/JSelectInput';
 import {Formik} from 'formik';
 import Feather from 'react-native-vector-icons/Feather';
@@ -23,6 +23,7 @@ import { StoreContext } from '../../mobx/store';
 const ECompanyInformation = () => {
   const [loader, setLoader] = useState(false);
   const [info, setInfo] = useState();
+  const [error, setError] = useState(false);
   const navigation = useNavigation();
   const phoneInput = useRef(null);
   const store = useContext(StoreContext);
@@ -46,7 +47,7 @@ const ECompanyInformation = () => {
     formdata.append('location', values?.location);
     formdata.append('website', values?.website);
     formdata.append('fax', values?.fax);
-    console.log(formdata);
+    // console.log(formdata);
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
@@ -57,17 +58,19 @@ const ECompanyInformation = () => {
       .then(response => response.json())
       .then(result => {
         // console.log(result)
+        
         Toast.show({
           type: 'success',
           text1: 'Successfully update',
         })
         navigation.goBack()
     })
-    .catch(error =>
+    .catch(error =>{
+      console.log('error====',error)
     Toast.show({
       type: 'error',
       text1: 'Oops! Something went wrong',
-    }))
+    })})
   };
 
   const _getcompanyInfo = () => {
@@ -92,7 +95,7 @@ const ECompanyInformation = () => {
         // console.log(result);
         setInfo(result);
       })
-      .catch(error => console.log('error', error))
+      .catch(error =>  {console.log('error', error),setError(true)})
       .finally(() => {
         setLoader(false);
       });
@@ -100,7 +103,7 @@ const ECompanyInformation = () => {
 
   useEffect(() => {
     _getcompanyInfo();
-  }, [loader]);
+  }, []);
 
   // console.log(ownerShipTypes.id)
   // const findValueByKey=(obj, key)=> {
@@ -111,27 +114,41 @@ const ECompanyInformation = () => {
   // console.log(value)
 
   return (
-    <JScreen headerShown={false}>
+    <JScreen
+      headerShown={false}
+      isError={error}
+      onTryAgainPress={() => {
+        _getcompanyInfo(), setError(false);
+      }}>
       <Formik
         initialValues={{
-          ceo_name: params?.ceo_name?params?.ceo_name:'',
-          ownerShipTypes:params?.ownership && params?.ownership_id?{
-            name:params?.ownership,
-            id:params?.ownership_id,
-          } : '',
-          industries:params?.industry && params?.industry_id? {
-            name:params?.industry,
-            id:params?.industry_id,
-          }:'',
-          companySize: params?.company_size && params?.company_size_id?{
-            name:params?.company_size,
-            id:params?.company_size_id,
-          }:'',
-          location: params?.location?params?.location:'',
-          company_name: params?.company_name ? params?.company_name:'',
+          ceo_name: params?.ceo_name ? params?.ceo_name : '',
+          ownerShipTypes:
+            params?.ownership && params?.ownership_id
+              ? {
+                  name: params?.ownership,
+                  id: params?.ownership_id,
+                }
+              : '',
+          industries:
+            params?.industry && params?.industry_id
+              ? {
+                  name: params?.industry,
+                  id: params?.industry_id,
+                }
+              : '',
+          companySize:
+            params?.company_size && params?.company_size_id
+              ? {
+                  name: params?.company_size,
+                  id: params?.company_size_id,
+                }
+              : '',
+          location: params?.location ? params?.location : '',
+          company_name: params?.company_name ? params?.company_name : '',
           no_of_offices: JSON.stringify(params?.offices),
-          website: params?.website?params?.website:'',
-          fax: params?.fax?params?.fax:'',
+          website: params?.website ? params?.website : '',
+          fax: params?.fax ? params?.fax : '',
           employeDetail: '',
         }}
         onSubmit={values => {
@@ -178,30 +195,29 @@ const ECompanyInformation = () => {
                 ) : (
                   <JText
                     onPress={() => {
-                      isValid && handleSubmit()}
-                    
-                    }
+                      isValid && handleSubmit();
+                    }}
                     fontColor={
                       !isValid ? `${colors.white[0]}70` : colors.white[0]
                     }>
-                    Save
+                    {store.lang.save}
                   </JText>
                 )
               }
               left={JChevronIcon}
             />
             <ScrollView
-            showsVerticalScrollIndicator={false}
+              showsVerticalScrollIndicator={false}
               contentContainerStyle={{paddingBottom: RFPercentage(8)}}
               style={{
                 marginHorizontal: RFPercentage(2),
               }}>
               <JInput
-              style={{
-                textAlign: store.lang.id == 0 ? 'left' : 'right',
-              }}
+                style={{
+                  textAlign: store.lang.id == 0 ? 'left' : 'right',
+                }}
                 containerStyle={{marginTop: RFPercentage(2)}}
-                heading={'CEO Name :'}
+                heading={`${store.lang.CEO_name}:`}
                 value={values.ceo_name}
                 error={touched.ceo_name && errors.ceo_name && true}
                 onChangeText={handleChange('ceo_name')}
@@ -210,12 +226,12 @@ const ECompanyInformation = () => {
               {touched.ceo_name && errors.ceo_name && (
                 <JErrorText>{errors.ceo_name}</JErrorText>
               )}
-                <JInput
+              <JInput
                 style={{
                   textAlign: store.lang.id == 0 ? 'left' : 'right',
                 }}
                 containerStyle={{marginTop: RFPercentage(2)}}
-                heading={'Company Name:'}
+                heading={`${store.lang.company_name}:`}
                 value={values.company_name}
                 error={touched.company_name && errors.company_name && true}
                 onChangeText={handleChange('company_name')}
@@ -225,15 +241,15 @@ const ECompanyInformation = () => {
                 <JErrorText>{errors.company_name}</JErrorText>
               )}
               <JSelectInput
-              style={{
-                textAlign: store.lang.id == 0 ? 'left' : 'right',
-              }}
+                style={{
+                  textAlign: store.lang.id == 0 ? 'left' : 'right',
+                }}
                 containerStyle={{marginTop: RFPercentage(2)}}
                 value={values?.ownerShipTypes?.name}
                 data={info?.ownerShipTypes}
                 id={values.ownerShipTypes?.id}
-                header={'Owner Ship'}
-                heading={'Owner Ship :'}
+                header={store.lang.ownership_type}
+                heading={`${store.lang.ownership_type}:`}
                 setValue={e => {
                   setFieldValue('ownerShipTypes', e);
                 }}
@@ -250,13 +266,12 @@ const ECompanyInformation = () => {
                 <JErrorText>{errors.ownerShipTypes}</JErrorText>
               )}
               <JSelectInput
-              
                 containerStyle={{marginTop: RFPercentage(2)}}
                 value={values.industries?.name}
                 data={info?.industries}
                 id={values.industries?.id}
-                header={'Industry'}
-                heading={'Industry :'}
+                header={store.lang.Industry}
+                heading={`${store.lang.Industry}:`}
                 setValue={e => {
                   setFieldValue('industries', e);
                 }}
@@ -277,8 +292,8 @@ const ECompanyInformation = () => {
                 value={values.companySize.name}
                 data={info?.companySize}
                 id={values.companySize?.id}
-                header={'Size'}
-                heading={'Size :'}
+                header={store.lang.size}
+                heading={`${store.lang.size}:`}
                 setValue={e => {
                   setFieldValue('companySize', e);
                 }}
@@ -294,13 +309,13 @@ const ECompanyInformation = () => {
               {touched.companySize && errors.companySize && (
                 <JErrorText>{errors.companySize}</JErrorText>
               )}
-             
+
               <JInput
-              style={{
-                textAlign: store.lang.id == 0 ? 'left' : 'right',
-              }}
+                style={{
+                  textAlign: store.lang.id == 0 ? 'left' : 'right',
+                }}
                 containerStyle={{marginTop: RFPercentage(2)}}
-                heading={'Location:'}
+                heading={`${store.lang.location}:`}
                 value={values.location}
                 error={touched.location && errors.location && true}
                 onChangeText={handleChange('location')}
@@ -310,11 +325,11 @@ const ECompanyInformation = () => {
                 <JErrorText>{errors.location}</JErrorText>
               )}
               <JInput
-              style={{
-                textAlign: store.lang.id == 0 ? 'left' : 'right',
-              }}
+                style={{
+                  textAlign: store.lang.id == 0 ? 'left' : 'right',
+                }}
                 containerStyle={{marginTop: RFPercentage(2)}}
-                heading={'No of Offices:'}
+                heading={`${store.lang.no_of_office}:`}
                 value={values.no_of_offices}
                 error={touched.no_of_offices && errors.no_of_offices && true}
                 onChangeText={handleChange('no_of_offices')}
@@ -324,11 +339,11 @@ const ECompanyInformation = () => {
                 <JErrorText>{errors.no_of_offices}</JErrorText>
               )}
               <JInput
-              style={{
-                textAlign: store.lang.id == 0 ? 'left' : 'right',
-              }}
+                style={{
+                  textAlign: store.lang.id == 0 ? 'left' : 'right',
+                }}
                 containerStyle={{marginTop: RFPercentage(2)}}
-                heading={'Website:'}
+                heading={`${store.lang.website}:`}
                 value={values.website}
                 error={touched.website && errors.website && true}
                 onChangeText={handleChange('website')}
@@ -338,11 +353,11 @@ const ECompanyInformation = () => {
                 <JErrorText>{errors.website}</JErrorText>
               )}
               <JInput
-              style={{
-                textAlign: store.lang.id == 0 ? 'left' : 'right',
-              }}
+                style={{
+                  textAlign: store.lang.id == 0 ? 'left' : 'right',
+                }}
                 containerStyle={{marginTop: RFPercentage(2)}}
-                heading={'Fax:'}
+                heading={`${store.lang.fax}:`}
                 value={values.fax}
                 error={touched.fax && errors.fax && true}
                 onChangeText={handleChange('fax')}
@@ -352,11 +367,11 @@ const ECompanyInformation = () => {
                 <JErrorText>{errors.fax}</JErrorText>
               )}
               <JInput
-              style={{
-                textAlign: store.lang.id == 0 ? 'left' : 'right',
-              }}
+                style={{
+                  textAlign: store.lang.id == 0 ? 'left' : 'right',
+                }}
                 containerStyle={{marginTop: RFPercentage(2)}}
-                heading={'Employe Detail:'}
+                heading={`${store.lang.employe_detail}:`}
                 value={values.employeDetail}
                 error={touched.employeDetail && errors.employeDetail && true}
                 onChangeText={handleChange('employeDetail')}

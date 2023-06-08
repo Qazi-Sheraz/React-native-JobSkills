@@ -69,10 +69,10 @@ useEffect(() => {
     )
       .then(response => response.json())
       .then(result => {
-        console.log(result.data);
+        // console.log(result.data);
         store.setFilterList(result.data);
       })
-      .catch(error => console.log('error', error));
+      // .catch(error => console.log('error', error));
   };
 
   useEffect(() => {

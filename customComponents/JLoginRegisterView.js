@@ -34,7 +34,6 @@ export default function JLoginRegisterView() {
           password: '',
         }}
         onSubmit={values => {
-          console.log(values);
         }}
         validationSchema={yup.object().shape({
           email: yup

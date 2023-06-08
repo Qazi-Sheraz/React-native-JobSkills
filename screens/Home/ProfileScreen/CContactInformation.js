@@ -21,7 +21,7 @@ import {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 
 function CContactInformation({refRBSheet, user}) {
-  console.log(user);
+  // console.log(user);
   const phoneInput = useRef(null);
   const store = useContext(StoreContext);
   const navigation = useNavigation();
@@ -42,7 +42,7 @@ function CContactInformation({refRBSheet, user}) {
     fetch('https://dev.jobskills.digital/api/update-profile', requestOptions)
       .then(response => response.json())
       .then(result => {
-        console.log(result);
+        // console.log(result);
         if (result.success === false) {
           alert('Error while saving data');
         } else {
@@ -52,7 +52,7 @@ function CContactInformation({refRBSheet, user}) {
         setLoader(false);
       })
       .catch(error => {
-        console.log('error', error);
+        // console.log('error', error);
         setLoader(false);
       });
   };
@@ -63,7 +63,7 @@ function CContactInformation({refRBSheet, user}) {
         phone: user.mobile_number,
       }}
       onSubmit={values => {
-        console.log(values);
+        // console.log(values);
         _postData(values);
       }}
       validationSchema={yup.object().shape({

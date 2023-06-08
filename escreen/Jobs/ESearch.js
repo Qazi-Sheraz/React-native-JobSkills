@@ -92,7 +92,7 @@ import JChevronIcon from '../../customComponents/JChevronIcon';
             }}
             onChangeText={e => {
               setSearch(e);
-              if (e.length < 1) {
+              if (e?.length < 1) {
                 store.setFilterData([]);
               }
             }}
@@ -112,7 +112,7 @@ import JChevronIcon from '../../customComponents/JChevronIcon';
           ) : (
             <Feather
               onPress={() => {
-                if (search.length > 0) {
+                if (search?.length > 0) {
                   _search(search, store,true);
                 } else {
                   JToast({
@@ -123,7 +123,7 @@ import JChevronIcon from '../../customComponents/JChevronIcon';
               }}
               name="search"
               size={RFPercentage(3.5)}
-              color={search.length > 0 ? colors.black[0] : '#00000040'}
+              color={search?.length > 0 ? colors.black[0] : '#00000040'}
               style={{
                 marginHorizontal: RFPercentage(1),
                 
