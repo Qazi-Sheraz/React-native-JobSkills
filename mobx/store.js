@@ -200,9 +200,9 @@ export const StoreProvider = props => {
     jobCreate: {},
     setJobCreate: action(e => (store.jobCreate = e)),
     createApiLoader:true,
-    setCreateApiLoader: action(e => (store.jobCreate = e)),
+    setCreateApiLoader: action(e => (store.createApiLoader = e)),
     createApiError:true,
-    setCreateApiError: action(e => (store.jobCreate = e)),
+    setCreateApiError: action(e => (store.createApiError = e)),
   }));
   return (
     <StoreContext.Provider value={store}>

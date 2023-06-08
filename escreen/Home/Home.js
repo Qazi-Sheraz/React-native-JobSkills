@@ -40,7 +40,7 @@ const Home = ({isempty = false,}) => {
   const [update, setUpdate] = useState(true);
 
   const _dashboard = () => {
-    console.log(store.token?.token)
+    // console.log(store.token?.token)
     var myHeaders = new Headers();
     myHeaders.append(
 

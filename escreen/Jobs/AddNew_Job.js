@@ -28,10 +28,11 @@ import JChevronIcon from '../../customComponents/JChevronIcon';
 
 const AddNew_Job = () => {
   const {navigate, goBack} = useNavigation();
-  const [error, setError] = useState(false);
-  const [loader, setLoader] = useState(true);
-  const [addJob, setAddJob] = useState();
+  // const [error, setError] = useState(false);
+  // const [addJob, setAddJob] = useState();
   const store = useContext(StoreContext);
+console.log(store.createApiLoader)
+
   const _addnewJob = () => {
     var myHeaders = new Headers();
     myHeaders.append(
@@ -50,8 +51,8 @@ const AddNew_Job = () => {
       .then(response => response.json())
       .then(result => {
         store.setJobCreate(result);
-        // console.log(result.arabic_data)
-
+        console.log(result.arabic_data)
+        // store.setCreateApiLoader(false);
       })
       .catch(error => {
         // console.log('error', error);
@@ -65,7 +66,7 @@ const AddNew_Job = () => {
   };
   useEffect(() => {
     _addnewJob();
-  }, []);
+  }, [store.createApiLoader]);
 
   return (
     <JScreen
@@ -87,7 +88,7 @@ const AddNew_Job = () => {
           }
         />
       }>
-      {store.CreateApiLoader ? (
+      {store?.createApiLoader  ? (
         <ActivityIndicator />
       ) : (
         <Formik
@@ -310,7 +311,7 @@ const AddNew_Job = () => {
                   bottom: RFPercentage(3),
                   width: RFPercentage(20),
                 }}>
-                {loader ? store.lang.loading : store.lang.next}
+                {store.createApiLoader ? store.lang.loading : store.lang.next}
               </JButton>
             </>
           )}
