@@ -1,10 +1,6 @@
 import {
   ActivityIndicator,
-  Modal,
-  SafeAreaView,
   StyleSheet,
-  Image,
-  TextInput,
   View,
 } from 'react-native';
 import React, { useEffect } from 'react';
@@ -13,7 +9,6 @@ import JGradientHeader from '../../customComponents/JGradientHeader';
 import JScreen from '../../customComponents/JScreen';
 import colors from '../../config/colors';
 import {RFPercentage} from 'react-native-responsive-fontsize';
-import JShadowView from '../../customComponents/JShadowView';
 import {heightPercentageToDP} from 'react-native-responsive-screen';
 import {useContext} from 'react';
 import {StoreContext} from '../../mobx/store';
@@ -21,31 +16,31 @@ import {useState} from 'react';
 import JSearchInput from '../../customComponents/JSearchInput';
 import JRecentJobTile from '../../customComponents/JRecentJobTile';
 import JScrollView from '../../customComponents/JScrollView';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation, useRoute} from '@react-navigation/native';
 import JButton from '../../customComponents/JButton';
 import {observer} from 'mobx-react';
 import url from '../../config/url';
 import JNotfoundData from '../../customComponents/JNotfoundData';
 import JApiError from '../../customComponents/JApiError';
+import { useCallback } from 'react';
 
 const Job = () => {
 
   const navigation = useNavigation();
   const store = useContext(StoreContext);
-  // const [modalVisible, setModalVisible] = useState(false);
   const [jobData, setJobData] = useState([]);
   const [error, setError] = useState(false);
   const [loader, setLoader] = useState(true);
   const [update, setUpdate] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredData, setFilteredData] = useState(jobData);
-
+const{params}=useRoute()
+console.log(params)
   const isFoucs = useIsFocused();
   const handleSearch = (text) => {
     setSearchQuery(text);
 
-    
-    const filtered = jobData.filter((item) => {
+    const filtered = store.jobEmployerData.filter((item) => {
       return item?.job_title.toLowerCase().includes(text.toLowerCase());
     });
     setFilteredData(filtered);
@@ -61,14 +56,7 @@ const Job = () => {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
 
-      }
-    );
-    
-    // console.log(fetch(`${url.baseUrl}/employer/jobs`, {
-    //   method: 'GET',
-    //   headers: myHeaders,
-    //   redirect: 'follow',
-    // }))
+      }); 
     fetch(`${url.baseUrl}/employer/jobs`, {
       method: 'GET',
       headers: myHeaders,
@@ -87,7 +75,14 @@ const Job = () => {
         setLoader(false);
       });
   };
+  const onRefresh = useCallback(() => {
+    setLoader(true);
 
+    setTimeout(() => {
+      _getjobs();
+      setLoader(false);
+    }, 2000);
+  }, []);
 
   useEffect(() => {
     
@@ -131,7 +126,9 @@ const Job = () => {
         value={searchQuery}
         onPressIcon={() => alert('Icon Pressed')}
       />
-      <JScrollView>
+      <JScrollView
+      refreshing={loader}
+      onRefresh={onRefresh}>
         {(searchQuery?.length > 0 ?filteredData :store?.jobEmployerData).map((item, index) => (
           <>
             <JRecentJobTile
@@ -142,7 +139,8 @@ const Job = () => {
               onSelect={() => setModalVisible(true)}
               onPress={() => {
                 navigation.navigate('JobDetails',{id:item.job_id,jid:item.id}) 
-              console.log(item)}}
+              // console.log(item)
+            }}
               image={false}
               item={item}
               key={index}

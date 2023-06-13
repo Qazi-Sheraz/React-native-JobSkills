@@ -10,15 +10,19 @@ import Job from './Job';
 import Profile from './Profile';
 import CustomEmployeeBottomTab from '../../bottomTab/CustomEmployeeBottomTab';
 import { observer } from 'mobx-react';
+import url from '../../config/url';
+import { _addnewJob, _dashboard, _viewResum } from '../../functions/Candidate/BottomTab';
 
  function EBottomTab() {
   const Tab = createBottomTabNavigator();
   const store = useContext(StoreContext);
 
   useEffect(() => {
+    _dashboard(store);
+    _addnewJob(store);
+    // _viewResum(store);
     return () => {
-      // getFavouriteJobList();
-      // _getData();
+   
     };
   }, []);
 

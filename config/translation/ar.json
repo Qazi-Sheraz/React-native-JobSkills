@@ -65,6 +65,7 @@
     "hide_salary":"إخفاء الراتب",
     "post_job":"وظيفة بعد",
     "description":"المسمى الوظيفي",
+    "descriptions":"وصف",
     "add_candidate":"أضف المرشح",
     "candidate":"مُرَشَّح",
     "first_name":"الاسم الأول:",
@@ -229,7 +230,21 @@
     "job_requirement": "متطلبات العمل",
     "name": "اسم",
     "contact": "اتصال",
-    "privacy_policy": "Privacy",
-    "privacy_policy": "Privacy"
+    "zoom": "تكبير",
+    "manual_link": "رابط يدوي",
+    "interview_Date_and_Time": "تاريخ ووقت المقابلة",
+    "interview_time": "وقت المقابلة",
+    "interview_date": "موعد المقابلة",
+    "interview_type": "نوع المقابلة",
+    "add_zoom_manually": "إضافة تكبير ارتباط الاجتماع يدويًا",
+    "office_location": "موقع المكتب",
+    "office_base": "قاعدة المكتب",
+    "twitter": "تويتر",
+    "linkedIn": "لينكدإن",
+    "facebook": "فيسبوك",
+    "facebook_url": "رابط فيسبوك",
+    "linkedIn_url": "رابط لينكدإن",
+    "twitter_url": "رابط تويتر"
+
 
     }

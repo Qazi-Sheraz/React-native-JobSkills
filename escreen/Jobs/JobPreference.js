@@ -18,6 +18,7 @@ import url from '../../config/url';
 import { StoreContext } from '../../mobx/store';
 import { observer } from 'mobx-react';
 import JChevronIcon from '../../customComponents/JChevronIcon';
+import { _addnewJob } from '../../functions/Candidate/BottomTab';
 
 const JobPreference = () => {
   const {navigate, goBack} = useNavigation();
@@ -27,45 +28,10 @@ const JobPreference = () => {
   const [loader, setLoader] = useState(true);
   const [preferences, setPreferences] = useState();
 
-  // const _addJobPreference = () => {
-  //   var myHeaders = new Headers();
-  //   myHeaders.append(
-  //     'Authorization',
-  //     `Bearer ${store.token?.token}`,
-  //   );
-  //   fetch(
-  //     `${url.baseUrl}/employer/jobs/create`,
-
-  //     {
-  //       method: 'GET',
-  //       headers: myHeaders,
-  //       redirect: 'follow',
-  //     },
-  //   )
-  //     .then(response => response.json())
-  //     .then(result => {
-  //       setPreferences(result);
-        
-  //     })
-  //     .catch(error => {
-  //       // console.log('error', error);
-  //       setError(true);
-
-  //     })
-  //     .finally(() => {
-  //       setLoader(false);
-        
-  //     });
-  // };
-
-  // useEffect(() => {
-  //   _addJobPreference();
-  // }, []);
-
   return (
     <JScreen
-      isError={error}
-      onTryAgainPress={() => _addJobPreference()}
+      isError={store.createApiError}
+      onTryAgainPress={() => {_addnewJob(store)}}
       style={{paddingHorizontal: RFPercentage(2)}}
       header={
         <JGradientHeader
@@ -87,9 +53,9 @@ const JobPreference = () => {
           }
         />
       }>
-      {/* {loader ? (
+    {store?.createApiLoader ? (
         <ActivityIndicator />
-      ) : ( */}
+      ) : (
         <Formik
           initialValues={{
             preference: '',
@@ -106,16 +72,43 @@ const JobPreference = () => {
             navigate('JobRequirement',{...params,...values});
             
           }}
-          // validationSchema={yup.object().shape({
-          //   preference: yup.string().required().label('Gender'),
-          //   curcityrency: yup.string().required().label('Currency'),
-          //   SalaryPeriod: yup.string().required().label('Job Shift'),
-          //   country: yup.string().required().label('Country'),
-          //   state: yup.string().required().label('State'),
-          //   city: yup.string().required().label('City'),
-          //   expiry: yup.string().required().label('Expiry Date'),
-
-          // })}
+          validationSchema={yup.object().shape({
+            salaryFrom: yup
+              .string()
+              .max(8, 'Maximum 8 digits allowed')
+              .required('salaryFrom is required'),
+              salaryTo: yup
+              .string()
+              .max(10, 'Maximum 10 digits allowed')
+              .required('salaryTo is required'),
+            preference: yup
+            .object()
+            .required('Gender is required'),
+            
+            currencies: yup
+              .object()
+              .shape()
+              .required('Salary Currency is required'),
+              salaryPeriods: yup
+              .object()
+              .shape()
+              .required('Salary Period is required'),
+              countries: yup
+              .object()
+              .shape()
+              .required('Country is required'),
+              city: yup
+              .object()
+              .shape()
+              .required('City is required'),
+              state: yup
+              .object()
+              .shape()
+              .required('State is required'),
+             
+             
+            // jobDescription: yup.string().required('Description is required').label('Description'),
+          })}
         >
           {({
             values,
@@ -272,13 +265,13 @@ const JobPreference = () => {
                   bottom: RFPercentage(3),
                   width: RFPercentage(20),
                 }}>
-                {loader ? store.lang.loading : store.lang.next}
+                {store.lang.next}
               </JButton>
               
             </>
           )}
         </Formik>
-      {/* )} */}
+      )}
 
 
     </JScreen>

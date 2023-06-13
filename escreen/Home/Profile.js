@@ -1,4 +1,4 @@
-import {StyleSheet, Linking, View, ActivityIndicator} from 'react-native';
+import {StyleSheet, Linking, View, ActivityIndicator, Pressable} from 'react-native';
 import React, { useEffect, useState} from 'react';
 import JScreen from '../../customComponents/JScreen';
 import JGradientHeader from '../../customComponents/JGradientHeader';
@@ -25,6 +25,7 @@ import JNotfoundData from '../../customComponents/JNotfoundData';
 
 import { useContext } from 'react';
 import JApiError from '../../customComponents/JApiError';
+import { JToast } from '../../functions/Toast';
 // import token from '../../mobx/store';
 
 const Profile = () => {
@@ -37,9 +38,7 @@ const Profile = () => {
   const isFoucs = useIsFocused();
   // console.log('store====>>>' , profile?.company[0]?.contact_information?.is_phone_verified);
 
-  const onRefresh = useCallback(() => {
-    _getProfile(store);
-  }, []);
+
   const _removeToken = () => {
     AsyncStorage.removeItem('@login')
       .then(res => {
@@ -89,7 +88,7 @@ const Profile = () => {
     )
       .then(response => response.json())
       .then(result => {
-        // console.log(result);
+        // console.log(result.contact_information);
         setProfile(result);
       })
       .catch(error => {
@@ -101,6 +100,7 @@ const Profile = () => {
         setLoader(false);
       });
   };
+  const maxLength = 20;
   const _otp =()=>{
     var myHeaders = new Headers();
     myHeaders.append("Accept", "application/json");
@@ -131,6 +131,17 @@ const Profile = () => {
         text1: 'Oops! Something went wrong',
       });});
     };
+
+    
+    const onRefresh = useCallback(() => {
+      setLoader(true);
+  
+      setTimeout(() => {
+        _jobProfile();
+        setLoader(false);
+      }, 2000);
+    }, []);
+
   useEffect(() => {
   
     _jobProfile();
@@ -173,7 +184,7 @@ const Profile = () => {
             email={profile?.company[0]?.contact_information?.email}
           />
           <JScrollView
-            // refreshing={store.myProfileApiLoader}
+            refreshing={loader}
             onRefresh={onRefresh}
             style={{
               paddingHorizontal: RFPercentage(2),
@@ -187,13 +198,21 @@ const Profile = () => {
                   user_name: profile?.company[0]?.name,
                   user_email: profile?.company[0]?.contact_information?.email,
                   country:
-                    profile?.company[0]?.contact_information?.country_name,
+                    store.lang.id == 0
+                      ? profile?.company[0]?.contact_information?.english?.country_name
+                      : profile?.company[0]?.contact_information?.arabic?.country_name,
                   country_id:
                     profile?.company[0]?.contact_information?.country_id,
-                  state: profile?.company[0]?.contact_information?.state_name,
+                  state: store.lang.id == 0
+                  ? profile?.company[0]?.contact_information?.english?.state_name
+                  : profile?.company[0]?.contact_information?.arabic?.state_name,
                   state_id: profile?.company[0]?.contact_information?.state_id,
-                  city: profile?.company[0]?.contact_information?.city_name,
+                  city: store.lang.id == 0
+                  ? profile?.company[0]?.contact_information?.english?.city_name
+                  : profile?.company[0]?.contact_information?.arabic?.city_name,
                   city_id: profile?.company[0]?.contact_information?.city_id,
+                  phone:
+                    profile?.company[0]?.contact_information?.phone_number?.replace(/\+/g,'',),
                 });
               }}
               isEmpty={false}
@@ -216,14 +235,14 @@ const Profile = () => {
                       profile?.company[0]?.contact_information?.phone_number
                         ? profile?.company[0]?.contact_information
                             ?.regional_code !== null
-                          ? `${profile?.company[0]?.contact_information?.regional_code.replace(
+                          ? `${profile?.company[0]?.contact_information?.regional_code?.replace(
                               /\+/g,
                               '',
-                            )}${profile?.company[0]?.contact_information?.phone_number.replace(
+                            )}${profile?.company[0]?.contact_information?.phone_number?.replace(
                               /\+/g,
                               '',
                             )}`
-                          : profile?.company[0]?.contact_information?.phone_number.replace(
+                          : profile?.company[0]?.contact_information?.phone_number?.replace(
                               /\+/g,
                               '',
                             )
@@ -236,7 +255,7 @@ const Profile = () => {
                         ?.is_phone_verified == 0
                         ? (navigation.navigate('VerifiedPhone', {
                             phone:
-                              profile?.company[0]?.contact_information?.phone_number.replace(
+                              profile?.company[0]?.contact_information?.phone_number?.replace(
                                 /\+/g,
                                 '',
                               ),
@@ -271,9 +290,12 @@ const Profile = () => {
                     profile?.company[0]?.company_information?.company_name,
                   ownership_id:
                     profile?.company[0]?.company_information?.ownership_type_id,
-                  ownership:
-                    profile?.company[0]?.company_information?.ownership_type,
-                  industry: profile?.company[0]?.company_information?.industry,
+                  ownership:store.lang.id==0?
+                    profile?.company[0]?.company_information?.english?.ownership_type
+                    :profile?.company[0]?.company_information?.arabic?.ownership_type,
+                  industry: store.lang.id==0?
+                  profile?.company[0]?.company_information?.english?.industry
+                  :profile?.company[0]?.company_information?.arabic?.industry,
                   industry_id:
                     profile?.company[0]?.company_information?.industry_id,
                   company_size:
@@ -284,7 +306,8 @@ const Profile = () => {
                   offices:
                     profile?.company[0]?.company_information?.no_of_offices,
                   website: profile?.company[0]?.company_information?.website,
-                  fax: profile?.company[0]?.company_information?.fax,
+                  details: profile?.company[0]?.company_information?.employer_details,
+                  // fax: profile?.company[0]?.company_information?.fax,
                 });
               }}
               isEmpty={false}
@@ -312,17 +335,20 @@ const Profile = () => {
                   <JProfileInfo
                     title={`${store.lang.ownership_type}:`}
                     text={
-                      profile?.company[0]?.company_information?.ownership_type
-                        ? profile?.company[0]?.company_information
-                            ?.ownership_type
+                      profile?.company[0]?.company_information?.ownership_type_id
+                        ? store.lang.id==0?
+                        profile?.company[0]?.company_information?.english?.ownership_type
+                        :profile?.company[0]?.company_information?.arabic?.ownership_type
                         : 'N/A'
                     }
                   />
                   <JProfileInfo
                     title={`${store.lang.Industry}:`}
                     text={
-                      profile?.company[0]?.company_information?.industry
-                        ? profile?.company[0]?.company_information?.industry
+                      profile?.company[0]?.company_information?.industry_id
+                        ? store.lang.id==0?
+                        profile?.company[0]?.company_information?.english?.industry
+                        :profile?.company[0]?.company_information?.arabic?.industry
                         : 'N/A'
                     }
                   />
@@ -354,21 +380,22 @@ const Profile = () => {
                     }
                   />
                   <JProfileInfo
+                 
                     title={`${store.lang.website}:`}
                     text={
                       profile?.company[0]?.company_information?.website
-                        ? profile?.company[0]?.company_information?.website
+                        ?( profile?.company[0]?.company_information?.website.length>maxLength? profile?.company[0]?.company_information?.website.substring(0, 25) + '....':profile?.company[0]?.company_information?.website)
                         : 'N/A'
                     }
                   />
-                  <JProfileInfo
+                  {/* <JProfileInfo
                     title={`${store.lang.fax}:`}
                     text={
                       profile?.company[0]?.company_information?.fax
                         ? profile?.company[0]?.company_information?.fax
                         : 'N/A'
                     }
-                  />
+                  /> */}
                 </BorderView>
               }
             />
@@ -376,7 +403,12 @@ const Profile = () => {
               // loader={store.myProfileApiLoader}
 
               onIconPress={() => {
-                navigation.navigate('CSocialMediaLink');
+                // console.log(profile?.company[0]?.social_media_link?.facebook_url)
+                navigation.navigate('CSocialMediaLink', {
+                  fb: profile?.company[0]?.social_media_link?.facebook_url,
+                  ln: profile?.company[0]?.social_media_link?.linkedin_url,
+                  tw: profile?.company[0]?.social_media_link?.twitter_url,
+                });
               }}
               // IconPress2={() => {
               //   navigation.navigate('ESocialLink');
@@ -397,97 +429,87 @@ const Profile = () => {
 
                   {profile?.company?.map((item, index) => (
                     <View key={index}>
-                      {item.social_media_link?.facebook_url && (
-                        <View style={{marginBottom: RFPercentage(2)}}>
+                      {item.social_media_link?.facebook_url&& (
+                        <Pressable onPress={()=>{
+                          Linking.openURL(item.social_media_link?.facebook_url)
+                            .catch((error) => console.error('Error opening URL:', error));
+                        }} style={{marginBottom: RFPercentage(2)}}>
                           <JRow>
                             <FontAwesome5Brands
                               size={RFPercentage(3)}
                               name="facebook-f"
                               color={colors.purple[0]}
-                              style={{marginRight: RFPercentage(2)}}
+                              style={{marginHorizontal: RFPercentage(1)}}
                             />
 
                             <JText fontWeight="600" fontSize={RFPercentage(2)}>
-                              {'Facebook'}
+                              {store.lang.facebook}
                             </JText>
                           </JRow>
                           <JText
-                            // onPress={() =>
-                            //   Linking.openURL(
-                            //     // store.myProfile?.user[0].social_links[item],
-                            //   ).catch(err => {
-                            //     alert(err);
-                            //   })
-                            // }
+                          
                             fontWeight="600"
                             fontColor={'grey'}
                             style={{textDecorationLine: 'underline'}}
                             fontSize={RFPercentage(2)}>
-                            {item.social_media_link.facebook_url}
+                            {item.social_media_link?.facebook_url==='null'|| item.social_media_link?.facebook_url==='undefined'?'N/A':item.social_media_link?.facebook_url}
                           </JText>
-                        </View>
+                        </Pressable>
                       )}
 
                       {item.social_media_link?.twitter_url && (
-                        <View style={{marginBottom: RFPercentage(2)}}>
+                        <Pressable onPress={()=>{
+                          Linking.openURL(item.social_media_link?.twitter_url)
+                            .catch((error) => console.error('Error opening URL:', error));
+                        }} style={{marginBottom: RFPercentage(2)}}>
                           <JRow>
                             <FontAwesome5Brands
                               size={RFPercentage(3)}
                               name="twitter"
                               color={colors.purple[0]}
-                              style={{marginRight: RFPercentage(2)}}
+                              style={{marginHorizontal: RFPercentage(1)}}
                             />
 
-                            <JText fontWeight="600" fontSize={RFPercentage(2)}>
-                              {'Twitter'}
+                            <JText fontWeight="600" fontSize={RFPercentage(2)}>{store.lang.twitter}
                             </JText>
                           </JRow>
                           <JText
-                            // onPress={() =>
-                            //   Linking.openURL(
-                            //     // store.myProfile?.user[0].social_links[item],
-                            //   ).catch(err => {
-                            //     alert(err);
-                            //   })
-                            // }
+                          
                             fontWeight="600"
                             fontColor={'grey'}
                             style={{textDecorationLine: 'underline'}}
                             fontSize={RFPercentage(2)}>
-                            {item.social_media_link.twitter_url}
+                            {item.social_media_link.twitter_url==='null'||item.social_media_link?.twitter_url==='undefined'?'N/A':item.social_media_link.twitter_url}
                           </JText>
-                        </View>
+                        </Pressable>
                       )}
 
                       {item.social_media_link?.linkedin_url && (
-                        <View style={{marginBottom: RFPercentage(2)}}>
+                        <Pressable onPress={()=>{
+                          Linking.openURL(item.social_media_link?.linkedin_url)
+                            .catch((error) => console.error('Error opening URL:', error));
+                        }} style={{marginBottom: RFPercentage(2)}}>
                           <JRow>
                             <FontAwesome5Brands
                               size={RFPercentage(3)}
                               name="linkedin-in"
                               color={colors.purple[0]}
-                              style={{marginRight: RFPercentage(2)}}
+                              style={{marginHorizontal: RFPercentage(1)}}
                             />
 
                             <JText fontWeight="600" fontSize={RFPercentage(2)}>
-                              {'LinkedIn'}
+                              {store.lang.linkedIn}
                             </JText>
                           </JRow>
                           <JText
-                            // onPress={() =>
-                            //   Linking.openURL(
-                            //     // store.myProfile?.user[0].social_links[item],
-                            //   ).catch(err => {
-                            //     alert(err);
-                            //   })
-                            // }
+                            
                             fontWeight="600"
                             fontColor={'grey'}
                             style={{textDecorationLine: 'underline'}}
                             fontSize={RFPercentage(2)}>
-                            {item.social_media_link.linkedin_url}
+                            {item.social_media_link?.linkedin_url==='null'||item.social_media_link?.linkedin_url==='undefined'?'N/A':item.social_media_link?.linkedin_url}
                           </JText>
-                        </View>
+                        </Pressable>
                       )}
                     </View>
                   ))}

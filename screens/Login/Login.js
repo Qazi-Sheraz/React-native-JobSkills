@@ -170,13 +170,12 @@ const Login = ({navigation, route}) => {
           email: yup
             .string()
             .min(0, 'Email address cannot be empty')
-
-            // .email('Must be a valid email')
+            .max(255, 'Email address must be at most 255 characters long')
             .required('Email is a required field'),
           password: yup
             .string()
             .min(6, 'Password Must be at least 6 characters')
-            .max(15, 'Password must be at most 15 characters')
+            .max(16, 'Password must be at most 15 characters')
             .required('Password is a required field'),
         })}>
         {({

@@ -44,7 +44,7 @@ const ViewResume = () => {
            showsVerticalScrollIndicator={false}>
           <Pdf
             trustAllCerts={false}
-            source={{uri: store.pdf}}
+            source={{uri: store.pdf&&store.pdf}}
             onLoadComplete={(numberOfPages, filePath) => {
               // console.log(`Number of pages: ${numberOfPages}`);
             }}
@@ -81,7 +81,7 @@ const ViewResume = () => {
         <JButton
             // isValid={isValid}
             onPress={() => {
-              Linking.openURL(store.pdf);
+              Linking.openURL(store.pdf&&store.pdf);
             }}
             style={{
             //   width: '46%',

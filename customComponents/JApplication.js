@@ -25,8 +25,9 @@ import JButton from './JButton';
 import DatePicker from 'react-native-date-picker';
 import { useRoute,useNavigation, useIsFocused } from '@react-navigation/native';
 import { keys, values } from 'mobx';
+import { observer } from 'mobx-react';
 // import url from '../../config/url';
-export default function JApplication({
+const JApplication = ({
   Hname,
   status,
   ApplyDate,
@@ -36,7 +37,7 @@ export default function JApplication({
   jobApplications,
   update,
   setUpdate,
-}) {
+}) => {
   const {params} = useRoute();
   const [error, setError] = useState(false);
   const [loader, setLoader] = useState(true);
@@ -52,7 +53,7 @@ export default function JApplication({
   const [stat, setStat] = useState(item.status);
   const [selectedStatus, setSelectedStatus] = useState();
   const [modalVisible, setModalVisible] = useState(false);
-// console.log(item.status)
+// console.log(stat)
   const handleStatusSelect = status1 => {
     setSelectedStatus(status1);
     status1 == store.lang.drafted
@@ -139,8 +140,6 @@ export default function JApplication({
     })
       .then(response => response.json())
       .then(result => {
-        // console.log(`${url.baseUrl}/employer/job-applications/${item.id}/status/${id}`)
-        // console.log(result);
         if (result.success == true) {
           setStat(selectedStatus);
           setUpdate(!update);
@@ -185,19 +184,39 @@ export default function JApplication({
         setLoader(false);
       });
   };
-
-  // console.log(item.candidate_user_id);
-  // const handleDateChange = (selectedDate) => {
-  //   setDate(selectedDate);
-  //   setOpen(false);
-  // };
-  //  useEffect(() => {
-  //  _applicantsStatus()
-  //  }, [loader])
+  const _viewResum = () => {
+    var myHeaders = new Headers();
+    // myHeaders.append('Authorization', `Bearer ${store.token?.token}`, {
+    //   // 'Accept': 'application/json',
+    //   // 'Content-Type': 'application/json',
+    // });
+  
+    fetch(`${url.baseUrl}/employer/resume-view/${item.id}`, {
+      method: 'GET',
+      headers: {'Authorization': `Bearer ${store.token?.token}`,
+      'Accept': 'application/json',
+     },
+      redirect: 'follow',
+    })
+    
+      .then(response => response.json())
+      .then(result => {
+        console.log('result===>', result?.data);
+        store.setPdf(result?.data) ;        
+       })
+  
+      .catch(error => {
+        console.log('error===>', error);
+        store.setPdfApiError(true);
+      })
+      .finally(() => {
+        store.setPdfApiLoader(false);
+      });
+  };
+ 
   useEffect(() => {
     _interviewScheduled();
-  }, []);
-  useEffect(() => {}, [stat]);
+  }, [stat]);
 
   // Replace the placeholders with the selected date and time
   const updatedDescription = (description, value) =>
@@ -207,14 +226,15 @@ export default function JApplication({
   return (
     <>
       <Pressable
-        onPress={() =>
+        onPress={() =>{
+          _viewResum();
           navigation.navigate('ProfileApplication', {
             candidate_id: item.candidate_id,
             candidate_user_id: item.candidate_user_id,
             job_id: item.job_id,
             id: item.id,
           })
-        }
+        }}
         style={{
           marginVertical: RFPercentage(0.8),
           borderBottomWidth: RFPercentage(0.1),
@@ -240,10 +260,10 @@ export default function JApplication({
               </MenuTrigger>
 
               <MenuOptions>
-                <MenuOption
+                {/* <MenuOption
                   onSelect={() => handleStatusSelect(store.lang.drafted)}>
                   <JText style={styles.menutxt}>{store.lang.drafted}</JText>
-                </MenuOption>
+                </MenuOption> */}
                 <MenuOption
                   onSelect={() => handleStatusSelect(store.lang.applied)}>
                   <JText style={styles.menutxt}>{store.lang.applied}</JText>
@@ -269,6 +289,7 @@ export default function JApplication({
                 <MenuOption
                   onSelect={() => {
                     setModalVisible(true),
+                    
                       {
                         candidate_user_id: item.candidate_user_id,
                         job_id: item.job_id,
@@ -357,12 +378,12 @@ export default function JApplication({
             <SafeAreaView
               style={{justifyContent: 'space-between', height: '90%'}}>
               <View style={{marginHorizontal: RFPercentage(2)}}>
-                <JText style={styles.headers}>Interview Date :</JText>
+                <JText style={styles.headers}>{store.lang.interview_date} :</JText>
                 <JText style={styles.date}>
                   {moment(values.interview_date_and_time).format('YYYY/MM/DD')}
                 </JText>
 
-                <JText style={styles.headers}>Interview Time :</JText>
+                <JText style={styles.headers}>{store.lang.interview_time} :</JText>
                 <JText style={styles.date}>
                   {moment(values.interview_date_and_time).format('HH:MM A')}
                 </JText>
@@ -387,12 +408,9 @@ export default function JApplication({
                 zoom_link: '',
               }}
               onSubmit={values => {
-                // console.log(values.interview_type=== 'Office Base'? 0:'Zoom' && 1);
-
-                // const selectedMeetingTypeID = meetings?.meeting_type[0][values.interview_type];
-                // console.log('Selected Meeting Type ID:', selectedMeetingTypeID);
-                // setLoader(true);
+              
                 _meetingSubmit(values);
+                
                 setModalVisible(!modalVisible);
               }}
               // validationSchema={yup.object().shape({
@@ -451,7 +469,7 @@ export default function JApplication({
                     }}>
                     <JText
                       style={{fontSize: RFPercentage(2.5), fontWeight: '500'}}>
-                      Interview Date and Time :
+                      {store.lang.interview_Date_and_Time} :
                     </JText>
                     <Pressable
                       onPress={() => setOpen(true)}
@@ -485,7 +503,7 @@ export default function JApplication({
                     containerStyle={{marginTop: RFPercentage(1)}}
                     isRequired
                     multiline={true}
-                    heading={'Description'}
+                    heading={store.lang.descriptions}
                     value={updatedDescription(
                       values.description,
                       moment(values.interview_date_and_time).format(
@@ -505,7 +523,7 @@ export default function JApplication({
                     }}>
                     <JText
                       style={{fontSize: RFPercentage(2.5), fontWeight: '500'}}>
-                      Interview Type
+                      {store.lang.interview_type}
                     </JText>
                     <Pressable
                       onPress={() => setOption(!option)}
@@ -520,7 +538,7 @@ export default function JApplication({
                         fontSize={RFPercentage(2)}
                         style={{paddingHorizontal: RFPercentage(1)}}>
                         {/* {menu ? menu : meetings?.meeting_type[0]} */}
-                        {values.interview_type}
+                        {values.interview_type==='Office Base'?store.lang.office_base:store.lang.manual_link}
                       </JText>
                       <JIcon
                         icon={'en'}
@@ -553,7 +571,7 @@ export default function JApplication({
                               setFieldValue('interview_type', item);
                               setOption(false);
                             }}>
-                            <JText fontSize={RFPercentage(2)}>{item}</JText>
+                            <JText fontSize={RFPercentage(2)}>{item==='Office Base'?store.lang.office_base:store.lang.manual_link}</JText>
                           </Pressable>
                         ))}
                       </View>
@@ -567,7 +585,7 @@ export default function JApplication({
                       containerStyle={{marginTop: RFPercentage(1)}}
                       isRequired
                       placeholder={'https//map.app.goo.gl/B31UbkjUXD5XrvkHA'}
-                      heading={'Office location'}
+                      heading={store.lang.office_location}
                       value={values.office_location}
                       error={
                         touched.office_location &&
@@ -577,37 +595,23 @@ export default function JApplication({
                       onChangeText={handleChange('office_location')}
                       onBlur={() => setFieldTouched('office_location')}
                     />
-                  ) : (
-                    values.interview_type === 'Zoom' && (
-                      <JRow style={{marginVertical: RFPercentage(2)}}>
-                        <Switch
-                          trackColor={{
-                            false: '#767577',
-                            true: colors.purple[0],
-                          }}
-                          thumbColor="#f4f3f4"
-                          ios_backgroundColor="#3e3e3e"
-                          onValueChange={toggleSwitch}
-                          value={isEnabled}
-                        />
-                        <JText>Add Zoom Meeting Link Manually</JText>
-                      </JRow>
-                    )
-                  )}
-                  {isEnabled === true && values.interview_type === 'Zoom' && (
+                  ) :
+                  values.interview_type === 'Manual Link' && (
                     <JInput
                       style={{
                         textAlign: store.lang.id == 0 ? 'left' : 'right',
                       }}
                       containerStyle={{marginTop: RFPercentage(1)}}
-                      placeholder={'Zoom'}
+                      placeholder={store.lang.manual_link}
                       //  heading={'Zoom'}
                       value={values.zoom_link}
                       error={touched.zoom_link && errors.zoom_link && true}
                       onChangeText={handleChange('zoom_link')}
                       onBlur={() => setFieldTouched('zoom_link')}
                     />
-                  )}
+                  )
+                  }
+                  
                   <JRow
                     style={{
                       justifyContent: 'flex-end',
@@ -647,7 +651,7 @@ export default function JApplication({
     </>
   );
 }
-
+export default observer(JApplication)
 const styles = StyleSheet.create({
   Hname: {
     fontSize: RFPercentage(2.5),

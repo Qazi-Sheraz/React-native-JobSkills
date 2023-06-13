@@ -65,6 +65,7 @@
     "hide_salary":"تنخواہ چھپائیں",
     "post_job":"نوکری پوسٹ کریں",
     "description":"کام کی تفصیل",
+    "descriptions":"تفصیل",
     "add_candidate":"امیدوار شامل کریں",
     "candidate":"امیدوار",
     "first_name":"پہلا نام:",
@@ -228,7 +229,20 @@
     "job_requirement": "ملازمت کی ضرورت",
     "name": "نام",
     "contact": "رابطہ کریں",
-    "privacy_policy": "Privacy",
-    "privacy_policy": "Privacy"
+    "zoom": "زوم",
+    "manual_link": "دستی لنک",
+    "interview_Date_and_Time": "انٹرویو کی تاریخ اور وقت",
+    "interview_time": "انٹرویو کا وقت",
+    "interview_date": "انٹرویو کی تاریخ",
+    "interview_type": "انٹرویو کی قسم",
+    "add_zoom_manually": "زوم میٹنگ لنک کو دستی طور پر شامل کریں",
+    "office_location": "دفتر کا مقام",
+    "office_base": "آفس بیس",
+    "twitter":"ٹویٹر",
+    "linkedIn": "لنکڈ ان",
+    "facebook": "فیس بک",
+    "facebook_url": "فیس بک یو آر ایل",
+    "linkedIn_url": "لنکڈ ان یو آر ایل",
+    "twitter_url": "ٹویٹر یو آر ایل"
 
     }

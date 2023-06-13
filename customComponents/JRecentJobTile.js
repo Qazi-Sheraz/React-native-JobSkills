@@ -52,8 +52,8 @@ function JRecentJobTile({
   type = 'job',
   onPress,
   containerStyle,
- update,
- setUpdate,
+  update,
+  setUpdate,
   favouriteData = [],
   jobId,
   onSelect,
@@ -108,7 +108,7 @@ function JRecentJobTile({
         // console.log(result.jobs);
 
         if (result.success === true) {
-           setStat(status1)
+           setStat(id),
            Toast.show({
             type: 'success',
             text1: result.message,});
@@ -123,17 +123,15 @@ function JRecentJobTile({
         }
       })
       .catch(error => {
-        // console.log('error', error);
-       setError(true)
+        console.log('error', error);
+       
       })
       .finally(() => {
         setLoader(false);
       });
   };
-  useEffect(() => {
-    // _allStatus();
-  }, []);
 
+// console.log(stat)
 
   return isempty == true ? (
    <JNotfoundData/>
@@ -272,7 +270,7 @@ function JRecentJobTile({
                   </MenuTrigger>
 
                   <MenuOptions style={{paddingVertical: RFPercentage(0.5)}}>
-                    {[{name: store.lang.paused}, {name: store.lang.closed}].map(
+                    {[{name: store.lang.paused,id:3}, {name: store.lang.closed,id:2}].map(
                       (item, index) => (
                         <MenuOption
                           style={{
@@ -280,7 +278,7 @@ function JRecentJobTile({
                           }}
                           key={index}
                           onSelect={() => {
-                            setStatus1(item.name);
+                            setStatus1(item.id);
                             setModalVisible(true);
                           }}>
                           <JRow>
@@ -329,7 +327,7 @@ function JRecentJobTile({
                   </MenuTrigger>
 
                   <MenuOptions style={{paddingVertical: RFPercentage(0.5)}}>
-                    {[{name: store.lang.live}, {name: store.lang.closed}].map(
+                    {[{name: store.lang.live,id:1}, {name: store.lang.closed,id:2}].map(
                       (item, index) => (
                         <MenuOption
                           style={{
@@ -337,7 +335,7 @@ function JRecentJobTile({
                           }}
                           key={index}
                           onSelect={() => {
-                            setStatus1(item.name);
+                            setStatus1(item.id);
                             setModalVisible(true);
                           }}>
                           <JRow>
@@ -480,11 +478,11 @@ function JRecentJobTile({
                   <JButton
                     onPress={() => {
                       {
-                        status1 === store.lang.drafted
+                        status1 === 0
                           ? _getjobStatus(0, store.lang.drafted)
-                          : status1 === store.lang.live
+                          : status1 === 1
                           ? _getjobStatus(1, store.lang.live)
-                          : status1 === store.lang.closed
+                          : status1 === 2
                           ? _getjobStatus(2, store.lang.closed)
                           : _getjobStatus(3, store.lang.paused);
                       }

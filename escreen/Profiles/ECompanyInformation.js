@@ -19,6 +19,7 @@ import Toast from 'react-native-toast-message';
 import url from '../../config/url';
 import { useContext } from 'react';
 import { StoreContext } from '../../mobx/store';
+import JErrorText from '../../customComponents/JErrorText';
 
 const ECompanyInformation = () => {
   const [loader, setLoader] = useState(false);
@@ -28,7 +29,7 @@ const ECompanyInformation = () => {
   const phoneInput = useRef(null);
   const store = useContext(StoreContext);
   const {params}=useRoute();
-// console.log('paramsghdgf==>',params?.offices)
+  // console.log(params?.details)
   const _companyInfo = values => {
     var myHeaders = new Headers();
     myHeaders.append(
@@ -46,7 +47,7 @@ const ECompanyInformation = () => {
     formdata.append('no_of_offices',values?.no_of_offices);
     formdata.append('location', values?.location);
     formdata.append('website', values?.website);
-    formdata.append('fax', values?.fax);
+    // formdata.append('fax', values?.fax);
     // console.log(formdata);
     var requestOptions = {
       method: 'POST',
@@ -105,13 +106,6 @@ const ECompanyInformation = () => {
     _getcompanyInfo();
   }, []);
 
-  // console.log(ownerShipTypes.id)
-  // const findValueByKey=(obj, key)=> {
-
-  //   return obj?.[key];
-  // }
-  // const value = findValueByKey(info?.ownerShipTypes, params?.ownership);
-  // console.log(value)
 
   return (
     <JScreen
@@ -120,6 +114,7 @@ const ECompanyInformation = () => {
       onTryAgainPress={() => {
         _getcompanyInfo(), setError(false);
       }}>
+        {loader?(<ActivityIndicator/>):(
       <Formik
         initialValues={{
           ceo_name: params?.ceo_name ? params?.ceo_name : '',
@@ -146,25 +141,35 @@ const ECompanyInformation = () => {
               : '',
           location: params?.location ? params?.location : '',
           company_name: params?.company_name ? params?.company_name : '',
-          no_of_offices: JSON.stringify(params?.offices),
+          no_of_offices: params?.offices==null ?'':JSON.stringify(params?.offices),
           website: params?.website ? params?.website : '',
-          fax: params?.fax ? params?.fax : '',
-          employeDetail: '',
+          // fax: params?.fax ? params?.fax : '',
+          employeDetail: params?.details==null?'':params?.details,
         }}
         onSubmit={values => {
           // console.log(values);
           _companyInfo(values);
         }}
-        // validationSchema={yup.object().shape({
-        //   title: yup.string().required().label('Title'),
-        //   company: yup.string().required().label('Company'),
-        //   county: yup.string().required().label('Country'),
-        //   city: yup.string().required().label('City'),
-        //   state: yup.string().required().label('State'),
-        //   start: yup.string().required().label('Start'),
-        //   end: yup.string().required().label('End'),
-        //   description: yup.string().required().label('Description'),
-        // })}
+        validationSchema={yup.object().shape({
+            
+          ownerShipTypes: yup
+          .object()
+          .shape()
+          .required('OwnerShipTypes is required'),
+          industries: yup
+          .object()
+          .shape()
+          .required('Industries is required'),
+          companySize: yup
+          .object()
+          .shape()
+          .required('CompanySize is required'),
+          company_name: yup.string().required(),
+          location: yup.string().max(288).required('Location is required'),
+          ceo_name: yup.string().required(),
+          website: yup.string().required('Website is required'),
+          // fax: yup.string().max(14).required(),
+        })}
       >
         {({
           values,
@@ -231,7 +236,7 @@ const ECompanyInformation = () => {
                   textAlign: store.lang.id == 0 ? 'left' : 'right',
                 }}
                 containerStyle={{marginTop: RFPercentage(2)}}
-                heading={`${store.lang.company_name}:`}
+                heading={`${store.lang.company_name}`}
                 value={values.company_name}
                 error={touched.company_name && errors.company_name && true}
                 onChangeText={handleChange('company_name')}
@@ -246,7 +251,7 @@ const ECompanyInformation = () => {
                 }}
                 containerStyle={{marginTop: RFPercentage(2)}}
                 value={values?.ownerShipTypes?.name}
-                data={info?.ownerShipTypes}
+                data={store.lang.id==0?info?.english?.ownerShipTypes:info?.arabic?.ownerShipTypes }
                 id={values.ownerShipTypes?.id}
                 header={store.lang.ownership_type}
                 heading={`${store.lang.ownership_type}:`}
@@ -268,7 +273,7 @@ const ECompanyInformation = () => {
               <JSelectInput
                 containerStyle={{marginTop: RFPercentage(2)}}
                 value={values.industries?.name}
-                data={info?.industries}
+                data={store.lang.id==0?info?.english?.industries:info?.arabic?.industries }
                 id={values.industries?.id}
                 header={store.lang.Industry}
                 heading={`${store.lang.Industry}:`}
@@ -290,7 +295,7 @@ const ECompanyInformation = () => {
               <JSelectInput
                 containerStyle={{marginTop: RFPercentage(2)}}
                 value={values.companySize.name}
-                data={info?.companySize}
+                data={store.lang.id==0?info?.english?.companySize:info?.arabic?.companySize }
                 id={values.companySize?.id}
                 header={store.lang.size}
                 heading={`${store.lang.size}:`}
@@ -333,6 +338,7 @@ const ECompanyInformation = () => {
                 value={values.no_of_offices}
                 error={touched.no_of_offices && errors.no_of_offices && true}
                 onChangeText={handleChange('no_of_offices')}
+                keyboardType="numeric"
                 onBlur={() => setFieldTouched('no_of_offices')}
               />
               {touched.no_of_offices && errors.no_of_offices && (
@@ -352,7 +358,7 @@ const ECompanyInformation = () => {
               {touched.website && errors.website && (
                 <JErrorText>{errors.website}</JErrorText>
               )}
-              <JInput
+              {/* <JInput
                 style={{
                   textAlign: store.lang.id == 0 ? 'left' : 'right',
                 }}
@@ -365,7 +371,7 @@ const ECompanyInformation = () => {
               />
               {touched.fax && errors.fax && (
                 <JErrorText>{errors.fax}</JErrorText>
-              )}
+              )} */}
               <JInput
                 style={{
                   textAlign: store.lang.id == 0 ? 'left' : 'right',
@@ -383,7 +389,7 @@ const ECompanyInformation = () => {
             </ScrollView>
           </>
         )}
-      </Formik>
+      </Formik>)}
     </JScreen>
   );
 };

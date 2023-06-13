@@ -233,3 +233,72 @@ export const _getAllFeatureCompanyData = store => {
       store.setFeatureCompanyApiLoader(false);
     });
 };
+
+
+export const _dashboard = (store) => {
+  var myHeaders = new Headers();
+  myHeaders.append(
+
+    'Authorization',
+    `Bearer ${store.token?.token}`,{
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+
+    }
+  );
+  
+  fetch(`${url.baseUrl}/dashboardEmployer`, {
+    method: 'GET',
+    headers: myHeaders,
+    redirect: 'follow',
+  })
+    .then(response => response.json())
+    .then(result => {
+      store.setEHomeApiError(false)
+      store.setEmployeHome(result);
+    })
+    .catch(error => {
+      console.log('home==error', error);
+      store.setEHomeApiError(true);
+    })
+    .finally(() => {
+      store.setEHomeApiLoader(false);
+    });
+};
+
+export const _addnewJob = (store) => {
+  var myHeaders = new Headers();
+  myHeaders.append(
+    'Authorization',
+    `Bearer ${store.token?.token}`,
+  );
+  fetch(
+    `${url.baseUrl}/employer/jobs/create`,
+
+    {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow',
+    },
+  )
+    .then(response => response.json())
+    .then(result => {
+      store.setCreateApiError(false);
+      store.setJobCreate(result);
+      
+      // console.log(result.arabic_data)
+      // store.setCreateApiLoader(false);
+    })
+    .catch(error => {
+      // console.log('error', error);
+      store.setCreateApiError(true);
+
+    })
+    .finally(() => {
+      store.setCreateApiLoader(false);
+      
+    });
+};
+
+
+  

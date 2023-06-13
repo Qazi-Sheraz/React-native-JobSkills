@@ -34,13 +34,14 @@ import {observer} from 'mobx-react';
 import url from '../../config/url';
 import JNotfoundData from '../../customComponents/JNotfoundData';
 import JApiError from '../../customComponents/JApiError';
+import { _jobApplication } from '../../functions/Candidate/BottomTab';
 
 
 
 const JobApplication = ({route}) => {
   const {navigate, goBack} = useNavigation();
   const [selectedItem, setSelectedItem] = useState();
-  const [jApplication, setJApplication] = useState();
+  // const [jApplication, setJApplication] = useState();
   const store = useContext(StoreContext);
   const handleSelect = status => {
     setSelectedItem(status);
@@ -63,62 +64,56 @@ const data = [
   {id:8,status: store.lang.interview_rescheduled},
   {id:9,status: store.lang.interview_completed},
 ];
+
   const filterData = status => {
    
-      setJApplication(jApplication.filter(e => e.status == status));
+    store.setJApplication(store.jApplication.filter(e => e.status == status));
 
         refRBSheet.current.close();
   };
 
   const sortByNameAscending = () => {
-    setJApplication(
-      [...jApplication].sort((a, b) =>
+    store.setJApplication(
+      [...store.jApplication].sort((a, b) =>
         a.candidate_name.localeCompare(b.candidate_name),
       ),
     );
   };
 
   const sortByNameDescending = () => {
-    setJApplication(
-      [...jApplication].sort((a, b) =>
+    store.setJApplication(
+      [...store.jApplication].sort((a, b) =>
         b.candidate_name.localeCompare(a.candidate_name),
       ),
     );
   };
 
   const sortByRecentApplyDateDescending = () => {
-    setJApplication(
-      [...jApplication].sort(
+    store.setJApplication(
+      [...store.jApplication].sort(
         (a, b) => new Date(b.apply_date) - new Date(a.apply_date),
       ),
     );
   };
-  // const sortedData = [...jApplication].sort((a, b) => new Date(b?.apply_date) - new Date(a?.apply_date));
-
-  // const latestDate = sortedData[0].date;
-
-  // // Format the latest date to your desired output
-  // const formattedDate = new Date(latestDate).toLocaleDateString();
-
-  // console.log("formattedDate",formattedDate);
+  
 
 
   const [error, setError] = useState(false);
   const [loader, setLoader] = useState(true);
   const isFoucs = useIsFocused();
   const [searchQuery, setSearchQuery] = useState('');
-  const [filteredData1, setFilteredData1] = useState(jApplication);
-  const [update,setUpdate]=useState(true)
-
+  const [filteredData1, setFilteredData1] = useState(store.jApplication);
+  const [update,setUpdate]=useState(true);
+  // console.log(update)
   const handleSearch = (text) => {
     setSearchQuery(text);
     
-    const filtered = jApplication.filter((item) => {
+    const filtered = store.jApplication.filter((item) => {
       return item.candidate_name.toLowerCase().includes(text.toLowerCase());
     });
     setFilteredData1(filtered);
   };
-
+  console.log(store.jApplication);
   const _jobApplication = () => {
     var myHeaders = new Headers();
     myHeaders.append(
@@ -126,16 +121,6 @@ const data = [
       // `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNzQwYTNkNmY1NWEzZDYzYjM0ODI5ODdmNWZlMzM1N2Y0MTBhZjYxZmJiMTUyNjgxYjhjMjY0OWJmYzMyZTZmMjRhNjBlZTNjMDFkOWM3NGMiLCJpYXQiOjE2ODYwMzcxMDQuMTE5MzA5LCJuYmYiOjE2ODYwMzcxMDQuMTE5MzEzLCJleHAiOjE3MTc2NTk1MDQuMTEyNzcsInN1YiI6Ijg0Iiwic2NvcGVzIjpbXX0.WqyC9fdDZEEUNwcXjEvm_uCgILD2bDOlYKt2SrdUnTN2KGJitVg3bGvpUnKN7Iaa8C6fAo3qUOoDp_2oAeIJLbpvkAMAbB9oV3r5bMXpgABt3p_1ckkekQFkHjbqwL1qNk6YeAtuw8pQKEZwo8hKRr1zh8Nw1CR8NwsKxmmPNB-Uy1FG3gVzZeahmQzB4COicMQlKpXBK4Fx_fMoKZ1FqtVPASck9ZsBie4ETGk9EnBqEou7wpym6X9t0ckQARvIUU5EF8XPd_Z-ZCtvPwoQQCRjbVc1ALCrYPJfRnIS7ysEn9G_wrwpY5Q3_O1tyZ7HEl3zhL2sChHyKokNAhXES3Nhwrka85P08y_ETLcbiLxUBb7A7GY5YPopbtK21QZ9Ay39hgpr8G2RFVr91mEy1dq2DjtAigQNvP2DRDoQpVWm2fod797mu6za85GX5OgFh6QXiQ6Rlp13BFLNBCVVM62U67N6zWs5a5YGFtZIMrE63HXdvFgaYv8pfcAu5Yr5u0jzo_Cz1LKAGUC2iaw1yDfnsIO-xYCzYD27o1GsSHAdcdMd0DiMmy0C23gxjhNwl9u9ZO0P4-59svkV1gMp9JlNW03u3MNfKeQTTE0MdQdupczgUYi2mplRIgTFzasir7_YtKf_N7pT-EKwCklQsY9X7GSz_eLXOCKaytoD7uo`,
       `Bearer ${store.token?.token}`,
     );
-    //  console.log(route.params.id)
-    // console.log(
-    //   `${url.baseUrl}/employer/jobs/${route?.params?.id}/applications`,
-    
-    //   {
-    //     method: 'GET',
-    //     headers: myHeaders,
-    //     redirect: 'follow',
-    //   },
-    // )
     fetch(
       `${url.baseUrl}/employer/jobs/${route?.params?.id}/applications`,
 
@@ -147,19 +132,22 @@ const data = [
     )
       .then(response => response.json())
       .then(result => {
-        setJApplication(result?.job_application);
+        
+        store.setJApplication(result?.job_application);
       })
       .catch(error => {
         console.log('application===error', error);
-        setError(true);
+        store.setJAppError(true);
       })
       .finally(() => {
-        setLoader(false);
+        store.setJAppLoader(false);
       });
   };
+ 
   useEffect(() => {
     _jobApplication();
-  }, []);
+    
+  }, [update]);
 
   return (
     <JScreen>
@@ -175,16 +163,16 @@ const data = [
         left={JChevronIcon}
       />
 
-      {loader ? (
+      {store.jAppLoader ? (
         <ActivityIndicator />
       ) : 
       error == true ? 
         <JApiError
         onTryAgainPress={() => {
-          _jobApplication(),
-        setError(false)}}
+          _jobApplication();
+        store.setJAppError(false)}}
         />:
-      jApplication?.length > 0 ? (
+        store.jApplication?.length > 0 ? (
         <>
           <JRow
             style={{
@@ -236,13 +224,13 @@ const data = [
           </JRow>
 
           <ScrollView style={{flex: 1, paddingHorizontal: RFPercentage(2)}}>
-            {(searchQuery?.length > 0 ? filteredData1 : jApplication).map(
+            {(searchQuery?.length > 0 ? filteredData1 : store.jApplication).map(
               (item, index) => (
                 <JApplication
                   update={update}
                   setUpdate={setUpdate}
                   key={index}
-                  onPress={() => setModalVisible(true)}
+                  onPress={() => {setModalVisible(true)}}
                   onSelect={handleSelect}
                   item={item}
                   // date={moment(item.apply_date, 'DD-MM-YYYY').format('DD MMM,YYYY')}
@@ -292,16 +280,13 @@ const data = [
         <Pressable
           onPress={() => setModalVisible(!modalVisible)}
           style={styles.centeredView}>
+            {store.setJAppLoader?<ActivityIndicator/>:
           <View style={styles.modalView}>
-            <JText fontColor={colors.white[0]} fontSize={RFPercentage(1.8)}>
-              Candidate Fit Score calculates how a participant{'\n'}scores in
-              relation to the “ideal profile” for a given{'\n'}role. The Fit
-              Score is categorised to help with ease{'\n'}of interpretation and
-              use during the hiring process.{'\n'}Typically, 76-100 indicates a
-              good fit to the role,{'\n'}25-75 indicates a possible fit, and
-              1-24 indicates a{'\n'}low fit.
-            </JText>
-          </View>
+            <JText fontColor={colors.white[0]} fontSize={RFPercentage(1.8)}style={{paddingHorizontal:store.jApplication[0]?.fit_score_information == null?RFPercentage(10):RFPercentage(0)}}>
+              {store.jApplication[0]?.fit_score_information === null?'N/A' :store.jApplication[0]?.fit_score_information}
+            
+               </JText>
+          </View>}
         </Pressable>
       </Modal>
     </JScreen>

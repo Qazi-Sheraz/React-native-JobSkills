@@ -133,13 +133,13 @@ const Registration = ({navigation, route}) => {
           email: yup
             .string()
             .min(0, 'Email address cannot be empty')
-
+            .max(255, 'Email address must be at most 255 characters long')
             .email('Must be a valid email')
             .required('Email is a required field'),
           password: yup
             .string()
             .min(8, 'Password Must be at least 8 characters')
-
+            .max(16, 'Password must be at most 15 characters')
             .required('Password is a required field'),
           confirmPassword: yup
             .string()

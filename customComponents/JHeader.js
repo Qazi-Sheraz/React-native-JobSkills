@@ -17,8 +17,6 @@ export default function JHeader({
       style={[
         {
           flex: 1,
-
-       
           justifyContent: 'space-between',
           paddingHorizontal: widthPercentageToDP(5),
         },

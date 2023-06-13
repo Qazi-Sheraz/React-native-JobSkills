@@ -25,53 +25,21 @@ import JNewJobIcon from '../../customComponents/JNewJobIcon';
 import url from '../../config/url';
 import { observer } from 'mobx-react';
 import JChevronIcon from '../../customComponents/JChevronIcon';
+import { _addnewJob } from '../../functions/Candidate/BottomTab';
 
 const AddNew_Job = () => {
   const {navigate, goBack} = useNavigation();
   // const [error, setError] = useState(false);
   // const [addJob, setAddJob] = useState();
   const store = useContext(StoreContext);
-console.log(store.createApiLoader)
-
-  const _addnewJob = () => {
-    var myHeaders = new Headers();
-    myHeaders.append(
-      'Authorization',
-      `Bearer ${store.token?.token}`,
-    );
-    fetch(
-      `${url.baseUrl}/employer/jobs/create`,
-
-      {
-        method: 'GET',
-        headers: myHeaders,
-        redirect: 'follow',
-      },
-    )
-      .then(response => response.json())
-      .then(result => {
-        store.setJobCreate(result);
-        console.log(result.arabic_data)
-        // store.setCreateApiLoader(false);
-      })
-      .catch(error => {
-        // console.log('error', error);
-        store.setCreateApiError(true);
-
-      })
-      .finally(() => {
-        store.setCreateApiLoader(false);
-        
-      });
-  };
-  useEffect(() => {
-    _addnewJob();
-  }, [store.createApiLoader]);
+// console.log(store.createApiLoader)
 
   return (
     <JScreen
       isError={store.createApiError}
-      onTryAgainPress={() => {_addnewJob(),store.setCreateApiError(false)}}
+      onTryAgainPress={() => {
+        _addnewJob(store), store.setCreateApiError(false);
+      }}
       style={{paddingHorizontal: RFPercentage(2)}}
       header={
         <JGradientHeader
@@ -83,18 +51,15 @@ console.log(store.createApiLoader)
               {store.lang.job_Details}
             </JText>
           }
-          left={
-            <JChevronIcon />
-          }
+          left={<JChevronIcon />}
         />
       }>
-      {store?.createApiLoader  ? (
+      {store?.createApiLoader ? (
         <ActivityIndicator />
       ) : (
         <Formik
           initialValues={{
             jobTilte: '',
-            // jobType: [],
             jobCategory: [],
             // functionalArea: '',
             assessment: [],
@@ -108,17 +73,56 @@ console.log(store.createApiLoader)
             navigate('JobPreference', {...values});
           }}
           validationSchema={yup.object().shape({
-            jobTilte: yup.string().max(25,'Title must be at most 25 characters long').required().label('Job Title'),
-          //   type: yup.string().required().label('Job Type'),
-          //   category: yup.string().required().label('Job Category'),
-          //   city: yup.string().required().label('Functional Area'),
-          //   required: yup.string().required().label('Assessment'),
-          //   shift: yup.string().required().label('Job Shift'),
-          //   skill: yup.string().required().label('Job Skills'),
-          //   tag: yup.string().required().label('Job Tag'),
-          //   description: yup.string().required().label('Description'),
+            jobTilte: yup
+              .string()
+              .max(25, 'Title must be at most 25 characters long')
+              .required('Job Title is required')
+              .label('Job Title'),
+            jobCategory: yup
+              .object()
+              .shape()
+              .nullable()
+              .required('Job Category is required'),
+            assessment: yup
+              .array()
+              .nullable()
+              .of(
+                yup.object().shape({
+                  id: yup.string().required('Assessment ID is required'),
+                  name: yup.string().required('Assessment name is required'),
+                }),
+              )
+              .required('Required Assessment is required')
+              .min(1, 'At least one Assessment is required'),
+            jobShift: yup
+              .object()
+              .shape()
+              .nullable()
+              .required('Job Shift is required'),
+            jobSkill: yup
+              .array()
+              .nullable()
+              .of(
+                yup.object().shape({
+                  id: yup.string().required('Skill ID is required'),
+                  name: yup.string().required('Skill name is required'),
+                }),
+              )
+              .required('Job Skills are required')
+              .min(1, 'At least one Skill is required'),
+            jobTag: yup
+              .array()
+              .nullable()
+              .of(
+                yup.object().shape({
+                  id: yup.string().required('Tag ID is required'),
+                  name: yup.string().required('Tag name is required'),
+                }),
+              )
+              .required('Job Tags are required')
+              .min(1, 'At least one Tag is required'),
+            jobDescription: yup.string().required('Job Description is required').label('Description'),
           })}>
-          
           {({
             values,
             handleChange,
@@ -131,11 +135,16 @@ console.log(store.createApiLoader)
           }) => (
             <>
               <ScrollView
+                showsVerticalScrollIndicator={false}
                 contentContainerStyle={{paddingBottom: RFPercentage(8)}}>
                 <JSelectInput
                   containerStyle={styles.container}
                   value={values.jobCategory?.name}
-                  data={store.lang.id==0?store.jobCreate?.english_data?.jobCategory:store.jobCreate?.arabic_data?.jobCategory}
+                  data={
+                    store.lang.id == 0
+                      ? store.jobCreate?.english_data?.jobCategory
+                      : store.jobCreate?.arabic_data?.jobCategory
+                  }
                   setValue={e => setFieldValue('jobCategory', e)}
                   header={store.lang.job_category}
                   heading={`${store.lang.job_category}:`}
@@ -147,13 +156,12 @@ console.log(store.createApiLoader)
                   <JErrorText>{errors.jobCategory}</JErrorText>
                 )}
                 <JInput
-                style={{
+                  style={{
                     textAlign: store.lang.id == 0 ? 'left' : 'right',
                   }}
                   isRequired
                   containerStyle={styles.container}
                   heading={`${store.lang.job_title}:`}
-                  
                   value={values.jobTilte}
                   error={touched.jobTilte && errors.jobTilte && true}
                   onChangeText={handleChange('jobTilte')}
@@ -162,65 +170,6 @@ console.log(store.createApiLoader)
                 {touched.jobTilte && errors.jobTilte && (
                   <JErrorText>{errors.jobTilte}</JErrorText>
                 )}
-                {/* <JSelectInput
-                  containerStyle={styles.container}
-                  header={'Job Title'}
-                  heading={'Job Title:'}
-                  value={values.jobTilte.name}
-                  data={addJob?.jobTilte}
-                  id={values.jobTilte.id}
-                  setValue={e => setFieldValue('jobTilte', e)}
-                  error={touched.jobTilte && errors.jobTilte && true}
-                  rightIcon={
-                    <JNewJobIcon/>
-                  }
-                />
-                {touched.jobTilte && errors.jobTilte && (
-                  <JErrorText>{errors.jobTilte}</JErrorText>
-                )} */}
-
-                {/* <JSelectInput
-                  containerStyle={styles.container}
-                  header={'Job Type'}
-                  heading={'Job Type:'}
-                  value={values.jobType.toString()}
-                  id={values.jobType.id}
-                  data={addJob?.jobType}
-                  setValue={e => setFieldValue('jobType', e)}
-                  error={touched.jobType && errors.jobType && true}
-                  rightIcon={
-                    <Feather
-                      name="chevron-right"
-                      size={RFPercentage(2.5)}
-                      color={colors.black[0]}
-                    />
-                  }
-                />
-                {console.log(values.jobType)}
-                {touched.jobType && errors.jobType && (
-                  <JErrorText>{errors.jobType}</JErrorText>
-                )} */}
-
-                {/* <JSelectInput
-                  containerStyle={styles.container}
-                  value={values.functionalArea.name}
-                  data={addJob?.functionalArea}
-                  setValue={e => setFieldValue('functionalArea', e)}
-                  header={'Functional Area'}
-                  heading={'Functional Area:'}
-                  id={values.functionalArea.id}
-                  error={touched.functionalArea && errors.functionalArea && true}
-                  rightIcon={
-                    <Feather
-                      name="chevron-right"
-                      size={RFPercentage(2.5)}
-                      color={colors.black[0]}
-                    />
-                  }
-                />
-                {touched.functionalArea && errors.functionalArea && (
-                  <JErrorText>{errors.functionalArea}</JErrorText>
-                )} */}
 
                 <JSelectInput
                   isMultiple={true}
@@ -228,7 +177,11 @@ console.log(store.createApiLoader)
                   header={store.lang.required_assessment}
                   heading={`${store.lang.required_assessment}:`}
                   id={values.assessment?.map(item => item.id).join(', ')}
-                  data={store.lang.id==0?store.jobCreate?.english_data?.assessment:store.jobCreate?.arabic_data?.assessment}
+                  data={
+                    store.lang.id == 0
+                      ? store.jobCreate?.english_data?.assessment
+                      : store.jobCreate?.arabic_data?.assessment
+                  }
                   value={values.assessment?.map(item => item.name).join(', ')}
                   setValue={e => setFieldValue('assessment', e)}
                   error={touched.assessment && errors.assessment && true}
@@ -240,7 +193,11 @@ console.log(store.createApiLoader)
                 <JSelectInput
                   containerStyle={styles.container}
                   value={values.jobShift.name}
-                  data={store.lang.id==0?store.jobCreate?.english_data?.jobShift:store.jobCreate?.arabic_data?.jobShift}
+                  data={
+                    store.lang.id == 0
+                      ? store.jobCreate?.english_data?.jobShift
+                      : store.jobCreate?.arabic_data?.jobShift
+                  }
                   setValue={e => setFieldValue('jobShift', e)}
                   header={store.lang.job_Shift}
                   heading={`${store.lang.job_Shift}:`}
@@ -255,7 +212,11 @@ console.log(store.createApiLoader)
                   isMultiple={true}
                   containerStyle={styles.container}
                   value={values.jobSkill?.map(item => item.name).join(', ')}
-                  data={store.lang.id==0?store.jobCreate?.english_data?.jobSkill:store.jobCreate?.arabic_data?.jobSkill}
+                  data={
+                    store.lang.id == 0
+                      ? store.jobCreate?.english_data?.jobSkill
+                      : store.jobCreate?.arabic_data?.jobSkill
+                  }
                   setValue={e => setFieldValue('jobSkill', e)}
                   header={store.lang.job_skills}
                   heading={`${store.lang.job_skills}:`}
@@ -270,7 +231,11 @@ console.log(store.createApiLoader)
                   isMultiple={true}
                   containerStyle={styles.container}
                   value={values.jobTag?.map(item => item.name).join(', ')}
-                  data={store.lang.id==0?store.jobCreate?.english_data?.jobTag:store.jobCreate?.arabic_data?.jobTag}
+                  data={
+                    store.lang.id == 0
+                      ? store.jobCreate?.english_data?.jobTag
+                      : store.jobCreate?.arabic_data?.jobTag
+                  }
                   setValue={e => setFieldValue('jobTag', e)}
                   header={store.lang.job_tag}
                   heading={`${store.lang.job_tag}:`}
@@ -283,13 +248,12 @@ console.log(store.createApiLoader)
                 )}
 
                 <JInput
-                style={{
-                  textAlign: store.lang.id == 0 ? 'left' : 'right',
-                }}
+                  style={{
+                    textAlign: store.lang.id == 0 ? 'left' : 'right',
+                  }}
                   isRequired
                   containerStyle={styles.container}
                   heading={`${store.lang.description}:`}
-                  
                   value={values.jobDescription.id}
                   // id={values.jobDescription.id}
 
@@ -311,7 +275,7 @@ console.log(store.createApiLoader)
                   bottom: RFPercentage(3),
                   width: RFPercentage(20),
                 }}>
-                {store.createApiLoader ? store.lang.loading : store.lang.next}
+                {store.lang.next}
               </JButton>
             </>
           )}

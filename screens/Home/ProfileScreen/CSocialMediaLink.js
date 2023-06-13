@@ -19,21 +19,23 @@ import {useContext} from 'react';
 import {StoreContext} from '../../../mobx/store';
 import {_getProfile} from '../../../functions/Candidate/MyProfile';
 import {useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import url from '../../../config/url';
 import Toast from 'react-native-toast-message';
 import JChevronIcon from '../../../customComponents/JChevronIcon';
+
 function CSocialMediaLink({refRBSheet, data, user}) {
   const store = useContext(StoreContext);
   const [loader, setLoader] = useState(false);
   const navigation = useNavigation();
-  // console.log(store.token?.user?.facebook_url,)
+  const {params}=useRoute()
+console.log(params.fb)
   return (
     <Formik
       initialValues={{
-        facebook_url: store.token?.user?.facebook_url,
-        linkedin_url: store.token?.user?.linkedin_url,
-        twitter_url: store.token?.user?.twitter_url,
+        facebook_url: params?.fb,
+        linkedin_url: params?.ln,
+        twitter_url: params?.tw,
       }}
       onSubmit={values => {
         // console.log(values);
@@ -79,9 +81,9 @@ function CSocialMediaLink({refRBSheet, data, user}) {
           });
       }}
       // validationSchema={yup.object().shape({
-      //   fb: yup.string().required().label('Facebook'),
-      //   ln: yup.string().required().label('LinkedIn'),
-      //   tw: yup.string().required().label('Twitter'),
+      //   fb: yup.string().url().required().label('Facebook'),
+      //   ln: yup.string().url().required().label('LinkedIn'),
+      //   tw: yup.string().url().required().label('Twitter'),
       // })}
     >
       {({
@@ -101,7 +103,7 @@ function CSocialMediaLink({refRBSheet, data, user}) {
                 fontColor={colors.white[0]}
                 fontWeight="bold"
                 fontSize={RFPercentage(2.5)}>
-                Social Media Links
+                {store.lang.social_media_links}
               </JText>
             }
             right={
@@ -116,7 +118,7 @@ function CSocialMediaLink({refRBSheet, data, user}) {
                   fontColor={
                     !isValid ? `${colors.white[0]}70` : colors.white[0]
                   }>
-                  Save
+                  {store.lang.save}
                 </JText>
               )
             }
@@ -131,10 +133,10 @@ function CSocialMediaLink({refRBSheet, data, user}) {
               textAlign: store.lang.id == 0 ? 'left' : 'right',
             }}
               value={values.facebook_url}
-              heading={'Facebook URL :'}
+              heading={`${store.lang.facebook_url}:`}
               error={touched.facebook_url && errors.facebook_url && true}
               containerStyle={styles.input}
-              // placeholder="Facebook"
+              placeholder="https://www.facebook.com"
               onChangeText={handleChange('facebook_url')}
               onBlur={() => setFieldTouched('facebook_url')}
             />
@@ -146,10 +148,10 @@ function CSocialMediaLink({refRBSheet, data, user}) {
             }}
               value={values.linkedin_url}
               containerStyle={styles.input}
-              heading={'LinkedIn URL :'}
+              heading={`${store.lang.linkedIn_url}:`}
               error={touched.linkedin_url && errors.linkedin_url && true}
               //   autoFocus
-              // placeholder={"LinkedIn"}
+              placeholder={"https://www.linkdin.com"}
               onChangeText={handleChange('linkedin_url')}
               onBlur={() => setFieldTouched('linkedin_url')}
             />
@@ -160,10 +162,10 @@ function CSocialMediaLink({refRBSheet, data, user}) {
               textAlign: store.lang.id == 0 ? 'left' : 'right',
             }}
               value={values.twitter_url}
-              heading={'Twitter URL :'}
+              heading={`${store.lang.twitter_url}:`}
               error={touched.twitter_url && errors.twitter_url && true}
               containerStyle={styles.input}
-              // placeholder="Twitter"
+              placeholder="https://www.twitter.com"
               onChangeText={handleChange('twitter_url')}
               onBlur={() => setFieldTouched('twitter_url')}
             />

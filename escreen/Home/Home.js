@@ -28,55 +28,33 @@ import { useIsFocused, useNavigation } from '@react-navigation/native';
 import url from '../../config/url';
 import JIcon from '../../customComponents/JIcon';
 import JNotfoundData from '../../customComponents/JNotfoundData';
+import JApiError from '../../customComponents/JApiError';
+import { _dashboard } from '../../functions/Candidate/BottomTab';
+import { refresh } from '@react-native-community/netinfo';
+import { RefreshControl } from 'react-native';
+import { useCallback } from 'react';
 
-const Home = ({isempty = false,}) => {
+const Home = () => {
   const navigation=useNavigation();
   const refRBSheet = useRef();
   const isFoucs = useIsFocused();
   const store = useContext(StoreContext);
-  const [data, setData] = useState({});
-  const [error, setError] = useState(false);
-  const [loader, setLoader] = useState(true);
   const [update, setUpdate] = useState(true);
+ 
+  
+  const onRefresh = useCallback(() => {
+    store.setEHomeApiLoader(true);
 
-  const _dashboard = () => {
-    // console.log(store.token?.token)
-    var myHeaders = new Headers();
-    myHeaders.append(
+    setTimeout(() => {
+      _dashboard(store);
+      store.setEHomeApiLoader(false);
+    }, 1000);
+  }, [store]);
 
-      'Authorization',
-      `Bearer ${store.token?.token}`,{
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-
-      }
-    );
-    
-    fetch(`${url.baseUrl}/dashboardEmployer`, {
-      method: 'GET',
-      headers: myHeaders,
-      redirect: 'follow',
-    })
-      .then(response => response.json())
-      .then(result => {
-     
-        // console.log(result);
-        // console.log(result)
-        store.setEmployeHome(result);
-      })
-      .catch(error => {
-        console.log('home==error', error);
-        setError(true);
-      })
-      .finally(() => {
-        setLoader(false);
-      });
-  };
-
-  useEffect(() => {
-        _dashboard()
-  }, [isFoucs]);
-
+useEffect(() => {
+  _dashboard(store);
+  
+}, [isFoucs])
   return (
     <JScreen
       style={{paddingHorizontal: RFPercentage(2)}}
@@ -110,14 +88,13 @@ const Home = ({isempty = false,}) => {
           }
         />
       }>
-      {loader ? (
+      {store.eHomeApiLoader ? (
         <ActivityIndicator />
       ) :
-      error ==true ? 
+      store.eHomeApiError ==true ? 
       <JApiError
       onTryAgainPress={() => {
-        _dashboard(),
-      setError(false)}}
+        _dashboard(store)}}
       />
       :
       (
@@ -125,8 +102,14 @@ const Home = ({isempty = false,}) => {
         <React.Fragment>
           <JFindTitle JobTitle={store.lang.job_title} />
 
-          <JScrollView>
+          <JScrollView
+          refreshing={store.eHomeApiLoader}
+          onRefresh={onRefresh}
+          
+          
+          >
             <FlatList
+            
               style={{alignSelf: 'center', marginVertical: RFPercentage(2)}}
               horizontal
               data={[
@@ -283,7 +266,7 @@ const Home = ({isempty = false,}) => {
                             borderRadius: RFPercentage(4),
                           }}
                           source={{
-                            uri: 'https://media.istockphoto.com/id/1358205700/photo/shot-of-a-young-man-using-his-smartphone-to-send-text-messages.jpg?s=1024x1024&w=is&k=20&c=KAY3jM0WHkdPdQEPwMl1B2gGKDb_hP_596yrU-5yuSs=',
+                            uri: item.employer_images!=null ? require('./../../assets/images/person.png') : item.employer_image,
                           }}
                         />
                         <JText
@@ -305,6 +288,7 @@ const Home = ({isempty = false,}) => {
                           borderColor: colors.purple[0],
                           paddingVertical: RFPercentage(0.5),
                           paddingHorizontal: RFPercentage(0.8),
+                          marginVertical: RFPercentage(0.5),
                         }}>
                         <JText
                           style={{marginRight: RFPercentage(0.5)}}
@@ -329,15 +313,21 @@ const Home = ({isempty = false,}) => {
               {store.lang.Recent_Jobs}
             </JText>
             {store.employeHome?.recentJobs?.length > 0 ? (
-              store.employeHome?.recentJobs?.map((item, index) => (
+              // store.employeHome?.recentJobs?.map((item, index) => (
+                
+                <FlatList
+                
+                data={store.employeHome?.recentJobs}
+                renderItem={({item,index})=>(
                 <JRecentJobTile
                   update={update}
                   setUpdate={setUpdate}
                   star={false}
                   item={item}
-                  key={index}
+                
+                />)}
                 />
-              ))
+              // ))
             ) : (
               <JNotfoundData />
             )}
@@ -362,6 +352,7 @@ const Home = ({isempty = false,}) => {
             display: 'none',
           },
         }}>
+          {store.eHomeApiLoader?<ActivityIndicator/>:
         <View
           style={{
             paddingHorizontal: RFPercentage(3),
@@ -376,10 +367,10 @@ const Home = ({isempty = false,}) => {
             {store.lang.meeting_Info}
           </JText>
           <JText style={styles.rbtxt}>{store.lang.meeting_ID}</JText>
-          <JText style={styles.rbtxt2}>3457654</JText>
+          <JText style={styles.rbtxt2}>{store?.employeHome?.meetings[0]?.meeting_id ==null ?'N/A':store?.employeHome?.meetings[0]?.meeting_id}</JText>
           <JText style={styles.rbtxt}>{store.lang.password}</JText>
-          <JText style={styles.rbtxt2}>34fgg654</JText>
-        </View>
+          <JText style={styles.rbtxt2}>{store?.employeHome?.meetings[0]?.meeting_password== null ?'N/A':store?.employeHome?.meetings[0]?.meeting_password}</JText>
+        </View>}
       </RBSheet>
     </JScreen>
   );

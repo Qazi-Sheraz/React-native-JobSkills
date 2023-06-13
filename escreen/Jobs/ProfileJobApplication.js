@@ -16,6 +16,7 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import Download from '../../assets/svg/Icon/Download.svg';
 import Eyes from '../../assets/svg/Icon/Eyes.svg';
 import Flag from '../../assets/svg/Icon/Flag.svg';
+import * as yup from 'yup';
 import {
   Menu,
   MenuOption,
@@ -36,7 +37,7 @@ import JNotfoundData from '../../customComponents/JNotfoundData';
 const ProfileJobApplication = ({route}) => {
   const store = useContext(StoreContext);
   const {params}= useRoute();
-  // console.log(store.token?.token);
+  // console.log(store.pdf);
   
   const [details, setDetails] = useState();
   const [resume, setResume] = useState();
@@ -72,16 +73,14 @@ const ProfileJobApplication = ({route}) => {
       })
 
       .catch(error => {
-        //  console.log('error', error);
+         console.log('error', error);
         setError(true);
       })
       .finally(() => {
         setLoader(false);
       });
   };
-  useEffect(() => {
-    _candidateDetails();
-  }, []);
+ 
 // console.log('pdf======',store.pdf)
   const _reportSubmit = values => {
     var myHeaders = new Headers();
@@ -125,45 +124,55 @@ const ProfileJobApplication = ({route}) => {
       );
    
   };
-  const _viewResum = () => {
-    var myHeaders = new Headers();
-    // myHeaders.append('Authorization', `Bearer ${store.token?.token}`, {
-    //   // 'Accept': 'application/json',
-    //   // 'Content-Type': 'application/json',
-    // });
+  // const _viewResum = () => {
+  //   var myHeaders = new Headers();
+  //   // myHeaders.append('Authorization', `Bearer ${store.token?.token}`, {
+  //   //   // 'Accept': 'application/json',
+  //   //   // 'Content-Type': 'application/json',
+  //   // });
 
-    fetch(`${url.baseUrl}/employer/resume-view/${params?.id}`, {
-      method: 'GET',
-      headers: {'Authorization': `Bearer ${store.token?.token}`,
-      'Accept': 'application/json',
-     },
-      redirect: 'follow',
-    })
+  //   fetch(`${url.baseUrl}/employer/resume-view/${params?.id}`, {
+  //     method: 'GET',
+  //     headers: {'Authorization': `Bearer ${store.token?.token}`,
+  //     'Accept': 'application/json',
+  //    },
+  //     redirect: 'follow',
+  //   })
     
-      .then(response => response.json())
-      .then(result => {
-        console.log('result===>', result?.data);
-        store.setPdf(result?.data) ;        
-       })
+  //     .then(response => response.json())
+  //     .then(result => {
+  //       console.log('result===>', result?.data);
+  //       store.setPdf(result?.data) ;        
+  //      })
 
-      .catch(error => {
-         setError(true);
-      })
-      .finally(() => {
-        store.setPdfApiLoader(false);
-      });
-  };
+  //     .catch(error => {
+  //       console.log('error===>', error);
+  //        setError(true);
+  //     })
+  //     .finally(() => {
+  //       store.setPdfApiLoader(false);
+  //     });
+  // };
   useEffect(() => {
-    _viewResum();
+    _candidateDetails()
   }, []);
 // console.log(resume?.data)
   return (
     <>
+    {loader ? (
+    <ActivityIndicator />
+  ) : error == true ? 
+        <JApiError
+        onTryAgainPress={() => {
+          _candidateDetails(),
+        setError(false)}}
+        />:(
         <View style={styles.maincontainer}>
           <JHeader
+         
             left={<JChevronIcon color={'Black'} />}
             right={
-              store.pdfApiLoader === true ? (
+              store.pdfApiLoader? (
                 <ActivityIndicator />
               ) : (
                 <Menu>
@@ -190,7 +199,7 @@ const ProfileJobApplication = ({route}) => {
                     </MenuOption>
                     <MenuOption
                       onSelect={() => {
-                        Linking.openURL(store.pdf);
+                        Linking.openURL(store.pdf&&store.pdf);
                       }}>
                       <JRow>
                         <Download />
@@ -215,14 +224,7 @@ const ProfileJobApplication = ({route}) => {
               )
             }
           />
-{loader ? (
-    <ActivityIndicator />
-  ) : error == true ? 
-        <JApiError
-        onTryAgainPress={() => {
-          _candidateDetails(),
-        setError(false)}}
-        />:(
+
           <View style={styles.main}>
             <Image
               style={styles.img}
@@ -373,7 +375,11 @@ const ProfileJobApplication = ({route}) => {
                   <JNotfoundData />
                 )}
               </View>
-              <RBSheet
+             
+            </ScrollView>
+          </View>
+        </View>)}
+        <RBSheet
                 ref={bottomSheetRef}
                 // closeOnDragDown={false}
                 closeOnPressMask={true}
@@ -427,11 +433,7 @@ const ProfileJobApplication = ({route}) => {
                     />
                   </View>
                 )}
-              </RBSheet>
-            </ScrollView>
-          </View>)}
-        </View>
-       
+        </RBSheet>
       <Modal animationType="slide" transparent={true} visible={modalVisible}>
         <SafeAreaView style={styles.centeredView}>
           <JGradientHeader
@@ -452,7 +454,9 @@ const ProfileJobApplication = ({route}) => {
               // console.log(values.interview_type=== 'Office Base'? 0:'Zoom' && 1);
               setLoader(true);
               _reportSubmit(values);
-            }}>
+            }}
+            validationSchema={yup.object().shape({
+              note: yup.string().required('Note is required').label('Note'),})}>
             {({
               values,
               handleChange,
@@ -493,8 +497,10 @@ const ProfileJobApplication = ({route}) => {
                     }}>
                     {store.lang.close}
                   </JButton>
-                  <JButton onPress={() => handleSubmit()}>
-                    {loader ? 'Loading...' : store.lang.submit}
+                  <JButton
+                  isValid={isValid}
+                   onPress={() => handleSubmit()}>
+                    {loader ? store.lang.loading : store.lang.submit}
                   </JButton>
                 </JRow>
               </ScrollView>

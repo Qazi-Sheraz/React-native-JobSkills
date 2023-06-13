@@ -11,7 +11,7 @@ const JProfileInfo = ({title, text, style, titleStyle, textStyle}) => {
         {justifyContent: 'space-between', marginVertical: RFPercentage(0.5)},
         style,
       ]}>
-      <JText fontWeight="bold" fontSize={RFPercentage(1.7)} style={titleStyle}>
+      <JText fontWeight="bold" fontSize={RFPercentage(1.7)} style={{titleStyle}}>
         {title}
       </JText>
       <JText fontSize={RFPercentage(1.7)} style={textStyle}>

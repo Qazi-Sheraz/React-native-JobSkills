@@ -63,6 +63,7 @@
     "hide_salary":"Hide Salary",
     "post_job":"Post Job",
     "description":"Job Description",
+    "descriptions":"Description",
     "add_candidate":"Add Candidate",
     "candidate":"Candidate",
     "first_name":"First Name:",
@@ -235,7 +236,21 @@
     "job_requirement": "Job Requirement",
     "name": "Name",
     "contact": "Contact",
-    "privacy_policy": "اسم"
+    "zoom": "Zoom",
+    "manual_link": "Manual Link",
+    "interview_Date_and_Time": "Interview Date and Time",
+    "interview_time": "Interview Time",
+    "interview_date": "Interview Date",
+    "add_zoom_manually": "Add Zoom Meeting Link Manually",
+    "office_location": "Office location",
+    "office_base": "Office Base",
+    "twitter": "Twitter",
+    "linkedIn": "LinkedIn",
+    "facebook": "Facebook",
+    "facebook_url": "Facebook URL",
+    "linkedIn_url": "LinkedIn URL",
+    "twitter_url": "Twitter URL"
+   
 
 
     

@@ -19,7 +19,7 @@ export default function  JButton({
   isValid,
   ref,
 }) {
-  return isValid !== undefined && isValid === false ? (
+  return isValid !== undefined && isValid === false? (
     <View
       ref={ref}
       style={[
@@ -29,7 +29,8 @@ export default function  JButton({
           alignSelf: 'center',
           backgroundColor: colors.border[0],
           height: heightPercentageToDP(5),
-          width: '100%',
+          // width: '100%',
+          paddingHorizontal:RFPercentage(2),
           borderWidth: borderWidth ? borderWidth : RFPercentage(0.1),
           borderColor: borderColor ? borderColor : colors.border[0],
         },
