@@ -51,6 +51,7 @@ import ViewResume from '../../escreen/Jobs/ViewResume';
 import LngTranslation from '../../screens/LngTranslation/LngTranslation';
 import ESearch from '../../escreen/Jobs/ESearch';
 import AssessmentView from '../../escreen/edrawer/AssessmentView';
+import AuthStack from '../Auth/AuthStack';
 
 const Stack = createStackNavigator();
 
@@ -221,65 +222,64 @@ function EmployeStack({navigation}) {
     <LogoScreen />
   ) : (
     <React.Fragment>
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false,
-          // gestureEnabled: false,
-        }}
-        initialRouteName={store?.token?.token ? 'CHome' : 'SelectionScreen'}>
-          
-        <Stack.Screen name="CHome" component={EBottomTab} />
-       
-        <Stack.Screen name="Assessments" component={Assessments} />
-        <Stack.Screen name="CAllJobs" component={AllJobs} />
-        <Stack.Screen name="CFeatureCompany" component={FeatureCompany} />
-        <Stack.Screen name="CFeatureJob" component={FeatureJob} />
-        <Stack.Screen name="CSelectedJob" component={SelectedJob} />
-        <Stack.Screen name="CSelectedCompany" component={SelectedCompany} />
-        <Stack.Screen name="ESearch" component={ESearch} />
-        <Stack.Screen name="CFilter" component={CFilter} />
-        <Stack.Screen name="JobDetails" component={JobDetails} />
-        <Stack.Screen name="AddNew_Job" component={AddNew_Job} />
-        <Stack.Screen name="JobPreference" component={JobPreference} />
-        <Stack.Screen name="JobRequirement" component={JobRequirement} />
-        <Stack.Screen name="JobApplication" component={JobApplication} />
-        <Stack.Screen name="ProfileApplication" component={ProfileJobApplication} />
-        <Stack.Screen name="CEditProfile" component={EditProfile} />
-        <Stack.Screen name="Followers" component={Followers} />
-        <Stack.Screen name="Applicants" component={Applicants} />
-        <Stack.Screen name="Transaction" component={Transaction} />
-        <Stack.Screen name="Employes" component={Employes} />
-        <Stack.Screen name="ViewResume" component={ViewResume} />
-        <Stack.Screen name="ESocialLink" component={ESocialLink} />
-        <Stack.Screen name="AssessmentView" component={AssessmentView} />
-        <Stack.Screen
-          name="CSocialMediaLink"
-          component={CSocialMediaLink}
-        />
-        <Stack.Screen
-          name="EContactInformation"
-          component={EContactInformation}
-        />
-        <Stack.Screen
-          name="ECompanyInformation"
-          component={ECompanyInformation}
-        />
-       
+      {store.token.token?
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: false,
+            // gestureEnabled: false,
+          }}
+          initialRouteName={'CHome'}>
+          <Stack.Screen name="CHome" component={EBottomTab} />
 
-        {/* AUTHENTICATION */}
-        <Stack.Screen name="CNotification" component={Notification} />
-        <Stack.Screen name="SelectionScreen" component={SelectionScreen} />
-        <Stack.Screen name="CVerifiedEmail" component={VerifiedEmail} />
-        <Stack.Screen name="CLogin" component={Login} />
-        <Stack.Screen name="CRegister" component={Registration} />
-        <Stack.Screen name="EAccountSetting" component={EAccountSetting} />
-        <Stack.Screen name="DFollowings" component={Followings} />
-        <Stack.Screen name="DJobAlert" component={JobAlert} />
-        <Stack.Screen name="DHelpCenter" component={HelpCenter} />
-        <Stack.Screen name="ChangePassword" component={ChangePassword} />
-        <Stack.Screen name="ChangeLanguage" component={ChangeLanguage} />
-        <Stack.Screen name="VerifiedPhone" component={VerifiedPhone} />
-      </Stack.Navigator>
+          <Stack.Screen name="Assessments" component={Assessments} />
+          <Stack.Screen name="CAllJobs" component={AllJobs} />
+          <Stack.Screen name="CFeatureCompany" component={FeatureCompany} />
+          <Stack.Screen name="CFeatureJob" component={FeatureJob} />
+          <Stack.Screen name="CSelectedJob" component={SelectedJob} />
+          <Stack.Screen name="CSelectedCompany" component={SelectedCompany} />
+          <Stack.Screen name="ESearch" component={ESearch} />
+          <Stack.Screen name="CFilter" component={CFilter} />
+          <Stack.Screen name="JobDetails" component={JobDetails} />
+          <Stack.Screen name="AddNew_Job" component={AddNew_Job} />
+          <Stack.Screen name="JobPreference" component={JobPreference} />
+          <Stack.Screen name="JobRequirement" component={JobRequirement} />
+          <Stack.Screen name="JobApplication" component={JobApplication} />
+          <Stack.Screen
+            name="ProfileApplication"
+            component={ProfileJobApplication}
+          />
+          <Stack.Screen name="CEditProfile" component={EditProfile} />
+          <Stack.Screen name="Followers" component={Followers} />
+          <Stack.Screen name="Applicants" component={Applicants} />
+          <Stack.Screen name="Transaction" component={Transaction} />
+          <Stack.Screen name="Employes" component={Employes} />
+          <Stack.Screen name="ViewResume" component={ViewResume} />
+          <Stack.Screen name="ESocialLink" component={ESocialLink} />
+          <Stack.Screen name="AssessmentView" component={AssessmentView} />
+          <Stack.Screen name="CSocialMediaLink" component={CSocialMediaLink} />
+          <Stack.Screen
+            name="EContactInformation"
+            component={EContactInformation}
+          />
+          <Stack.Screen
+            name="ECompanyInformation"
+            component={ECompanyInformation}
+          />
+
+          {/* AUTHENTICATION */}
+          <Stack.Screen name="CNotification" component={Notification} />
+          <Stack.Screen name="SelectionScreen" component={SelectionScreen} />
+          <Stack.Screen name="CVerifiedEmail" component={VerifiedEmail} />
+          <Stack.Screen name="EAccountSetting" component={EAccountSetting} />
+          <Stack.Screen name="DFollowings" component={Followings} />
+          <Stack.Screen name="DJobAlert" component={JobAlert} />
+          <Stack.Screen name="DHelpCenter" component={HelpCenter} />
+          <Stack.Screen name="ChangePassword" component={ChangePassword} />
+          <Stack.Screen name="ChangeLanguage" component={ChangeLanguage} />
+          <Stack.Screen name="VerifiedPhone" component={VerifiedPhone} />
+        </Stack.Navigator>
+        :<AuthStack/>}
+  
     </React.Fragment>
   );
 }

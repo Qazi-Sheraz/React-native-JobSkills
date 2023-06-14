@@ -244,7 +244,11 @@
     "facebook": "فيسبوك",
     "facebook_url": "رابط فيسبوك",
     "linkedIn_url": "رابط لينكدإن",
-    "twitter_url": "رابط تويتر"
+    "twitter_url": "رابط تويتر",
+    "areYouSure": "هل أنت متأكد أنك تريد تغيير الحالة؟",
+    "attention": "تنبيه!",
+    "logout_successfully": "تم تسجيل الخروج بنجاح",
+    "login_successfully": "تتم تسجيل الدخول بنجاح"
 
 
     }

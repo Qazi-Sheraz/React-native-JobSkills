@@ -204,7 +204,7 @@ export const StoreProvider = props => {
 // Get Employe Home
     employeHome: {},
     setEmployeHome: action(e => (store.employeHome = e)),
-    AddRecentJobs: action(e => {store.employeHome.recentJobs[0] = [e,...store.employeHome.recentJobs[0]]}),
+    AddRecentJobs: action(e => {store.employeHome.recentJobs[0] = [e,store.employeHome.recentJobs[0]]}),
     eHomeApiLoader:true,
     setEHomeApiLoader: action(e => (store.eHomeApiLoader = e)),
     eHomeApiError:true,
@@ -217,6 +217,7 @@ export const StoreProvider = props => {
     setCreateApiLoader: action(e => (store.createApiLoader = e)),
     createApiError:true,
     setCreateApiError: action(e => (store.createApiError = e)),
+
   }));
   return (
     <StoreContext.Provider value={store}>

@@ -38,8 +38,8 @@ const Login = ({navigation, route}) => {
       AsyncStorage.setItem('@login', JSON.stringify(token))
         .then(res => {
           store.setToken(token);
-          // console.log('res', token);
-          navigation.navigate('CHome');
+          console.log('res', token);
+          // navigation.navigate('CHome');
         })
         .catch(error => {
           Toast.show({
@@ -66,7 +66,7 @@ const Login = ({navigation, route}) => {
 
     setLoader(true);
 
-    fetch(type == 1 ? 'https://dev.jobskills.digital/api/users/login':'https://dev.jobskills.digital/api/employer/login', requestOptions)
+    fetch(type == 1 ?`${url.baseUrl}/users/login`:`${url.baseUrl}/employer/login`, requestOptions)
       .then(response => response.json())
       .then(result => {
         // console.log('Result===>',result);
@@ -76,8 +76,8 @@ const Login = ({navigation, route}) => {
           
           Toast.show({
             type: 'success',
-            text1: 'Login Successfully',
-            text2: 'Welcome',
+            text1: store.lang.login_successfully,
+            text2: store.lang.welcome,
           });
         } else {
           if (result == "Error Incorrect Password!" || result== "Incorrect Password!") {

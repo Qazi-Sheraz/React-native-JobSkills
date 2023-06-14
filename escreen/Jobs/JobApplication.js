@@ -113,7 +113,7 @@ const data = [
     });
     setFilteredData1(filtered);
   };
-  console.log(store.jApplication);
+  // console.log(store.jApplication);
   const _jobApplication = () => {
     var myHeaders = new Headers();
     myHeaders.append(

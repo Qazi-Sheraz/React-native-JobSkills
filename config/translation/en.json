@@ -249,7 +249,11 @@
     "facebook": "Facebook",
     "facebook_url": "Facebook URL",
     "linkedIn_url": "LinkedIn URL",
-    "twitter_url": "Twitter URL"
+    "twitter_url": "Twitter URL",
+    "areYouSure": "Are you sure want to change the status?",
+    "attention": "Attention!",
+    "logout_successfully": "Logout Successfully",
+    "login_successfully": "Login Successfully"
    
 
 

@@ -97,9 +97,9 @@ const JobRequirement = () => {
       .then(result => { 
         
       if (result.success === true ){
-        console.log('new jobsssssss',result.data),
-             store.AddJobEmployerData(result.data),
-            //  store.AddRecentJobs(result.data),
+        console.log('new jobsssssss',result.data)
+             store.AddJobEmployerData(result.data)
+             store.AddRecentJobs(result.data)
               Toast.show({
                type: 'success',
                text1: result.message,
@@ -258,9 +258,7 @@ const JobRequirement = () => {
                       ? store.jobCreate?.english_data?.requiredDegreeLevel
                       : store.jobCreate?.arabic_data?.requiredDegreeLevel
                   }
-                  id={values.requiredDegreeLevel
-                    ?.map(item => item.id)
-                    .join(', ')}
+                  id={values.requiredDegreeLevel}
                   header={store.lang.degree_level}
                   heading={`${store.lang.degree_level}:`}
                   setValue={e => setFieldValue('requiredDegreeLevel', e)}
@@ -285,7 +283,7 @@ const JobRequirement = () => {
                       ? store.jobCreate?.english_data?.jobNationality
                       : store.jobCreate?.arabic_data?.jobNationality
                   }
-                  id={values.jobNationality?.map(item => item.id).join(', ')}
+                  id={values.jobNationality}
                   header={store.lang.job_nationality}
                   heading={`${store.lang.job_nationality}:`}
                   setValue={e => setFieldValue('jobNationality', e)}
@@ -306,7 +304,7 @@ const JobRequirement = () => {
                       ? store.jobCreate?.english_data?.jobLanguage
                       : store.jobCreate?.arabic_data?.jobLanguage
                   }
-                  id={values.jobLanguage?.map(item => item.id).join(', ')}
+                  id={values.jobLanguage}
                   header={store.lang.language}
                   heading={`${store.lang.language}:`}
                   setValue={e => setFieldValue('jobLanguage', e)}

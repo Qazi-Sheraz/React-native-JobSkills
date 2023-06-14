@@ -82,10 +82,10 @@ function JSelectInput({
   const [ownership, setOwnership] = useState([]);
   const [companySize, setCompanySize] = useState([]);
   const [selectedItems, setSelectedItems] = useState(id);
-  
+  // console.log('>>',selectedItems)
   const handleSelectItem = item => {
-    if (selectedItems.includes(item)) {
-      setSelectedItems(selectedItems.filter(i => i !== item));
+    if (selectedItems.find((e)=>e.id === item.id)) {
+      setSelectedItems(selectedItems.filter(i => i.id !== item.id));
     } else {
       setSelectedItems([...selectedItems, item]);
     }
@@ -651,7 +651,7 @@ function JSelectInput({
                     ?<JText fontSize={RFPercentage(1.8)}>{store.lang.id==0 ?item?.name:item?.arabic_title}</JText>
                    :<JText fontSize={RFPercentage(1.8)}>{item?.name}</JText>}
 
-                    {isMultiple === true && selectedItems?.includes(item) && (
+                    {isMultiple === true && selectedItems.find((e)=>e.id == item.id) && (
                       <JIcon icon="fe" name="check" size={RFPercentage(2)} color={colors.black[0]}/>
                     )}
                   </JRow>

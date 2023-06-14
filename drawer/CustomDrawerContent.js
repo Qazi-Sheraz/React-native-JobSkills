@@ -41,13 +41,11 @@ function CustomDrawerContent(props) {
       ? props.navigation.navigate('DHelpCenter')
       : AsyncStorage.removeItem('@login')
           .then(res => {
-            store.setToken({
-              token: null,
-            });
+            store.setToken({});
 
             Toast.show({
               type: 'success',
-              text1: 'Logout Successfully',
+              text1: store.lang.logout_successfully,
             });
           })
           .catch(error => {

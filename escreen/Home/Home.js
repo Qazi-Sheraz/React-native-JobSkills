@@ -319,7 +319,7 @@ useEffect(() => {
                 
                 data={store.employeHome?.recentJobs}
                 renderItem={({item,index})=>(
-                <JRecentJobTile
+                <JRecentJobTile 
                   update={update}
                   setUpdate={setUpdate}
                   star={false}

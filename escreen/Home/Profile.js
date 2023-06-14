@@ -44,11 +44,10 @@ const Profile = () => {
       .then(res => {
         store.setToken({
           token: null,
-        });
-        navigation.replace('SelectionScreen');
+        })
         Toast.show({
           type: 'success',
-          text1: 'Logout Successfully',
+          text1: store.lang.logout_successfully,
         });
       })
       .catch(error => {

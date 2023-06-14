@@ -35,7 +35,7 @@ const Job = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredData, setFilteredData] = useState(jobData);
 const{params}=useRoute()
-console.log(params)
+// console.log(params)
   const isFoucs = useIsFocused();
   const handleSearch = (text) => {
     setSearchQuery(text);

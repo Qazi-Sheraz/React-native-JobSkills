@@ -243,6 +243,10 @@
     "facebook": "فیس بک",
     "facebook_url": "فیس بک یو آر ایل",
     "linkedIn_url": "لنکڈ ان یو آر ایل",
-    "twitter_url": "ٹویٹر یو آر ایل"
+    "twitter_url": "ٹویٹر یو آر ایل",
+    "areYouSure": "کیا آپ واقعی حالت تبدیل کرنا چاہتے ہیں؟",
+    "attention": "توجہ!",
+    "logout_successfully": "لاگ آؤٹ کامیابی سے",
+    "login_successfully": "کامیابی سے لاگ ان کریں"
 
     }

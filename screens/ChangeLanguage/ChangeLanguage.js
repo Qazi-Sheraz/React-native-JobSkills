@@ -21,12 +21,12 @@ import RNRestart from 'react-native-restart';
 
 const ChangeLanguage = () => {
   const navigation=useNavigation();
-  const [selectedLanguage, setSelectedLanguage] = useState('');
+  const [selectedLanguage, setSelectedLanguage] = useState(null);
   const store = useContext(StoreContext);
   const isFoucs = useIsFocused();
   const [data, setData] = useState([
     {id: 0, name: 'English (United Kingdom)', selected: false,short:"en"},
-    {id: 1, name: 'اردو', selected: false,short:"ur"},
+    // {id: 1, name: 'اردو', selected: false,short:"ur"},
     {id: 2, name:  'العربية', selected: false,short:"ar"},
   ]);
   // console.log(data.short)
@@ -62,42 +62,32 @@ const ChangeLanguage = () => {
       })
       .catch(error => console.log('error', error));
   };
+
+
   // const handleSave = async () => {
   //   const selectedLanguage = data.find(item => item.selected);
   //   if (selectedLanguage) {
-  //     const lang = selectedLanguage.name;
-  //     if (lang === 'English (United Kingdom)') {
-  //       store.setLang('en'); // Switch to 'en' language
-  //     } else if (lang === 'اردو') {
-  //       store.setLang('ur'); // Switch to 'ur' language
-  //     } else if (lang === 'العربية') {
-  //       store.setLang('ar'); // Switch to 'ar' language
-  //     }
-  //     console.log(selectedLanguage)
+  //     const lang = selectedLanguage.short;
+  //     // console.log(selectedLanguage);
   //     try {
-  //       await AsyncStorage.setItem('selectedLanguage', lang);
-  //       _changeLanguage(lang);
-  //       console.log(lang)
-       
+  //       await AsyncStorage.setItem('selectedLanguage', selectedLanguage.short);
+  //       store.setLang(selectedLanguage.short)
+
+  //       _changeLanguage(selectedLanguage.short);
   //     } catch (error) {
-  //       console.log('Error storing language:', error);
+  //       // console.log('Error storing language:', error);
   //     }
   //   }
-   
   // };
-
   const handleSave = async () => {
-    const selectedLanguage = data.find(item => item.selected);
     if (selectedLanguage) {
-      const lang = selectedLanguage.short;
-      // console.log(selectedLanguage);
+      const lang = selectedLanguage;
       try {
-        await AsyncStorage.setItem('selectedLanguage', selectedLanguage.short);
-        store.setLang(selectedLanguage.short)
-
-        _changeLanguage(selectedLanguage.short);
+        await AsyncStorage.setItem('selectedLanguage', selectedLanguage);
+        store.setLang(selectedLanguage);
+        _changeLanguage(selectedLanguage);
       } catch (error) {
-        // console.log('Error storing language:', error);
+        console.log('Error storing language:', error);
       }
     }
   };
@@ -107,9 +97,12 @@ const ChangeLanguage = () => {
       if (storedLanguage) {
         // Language was found in AsyncStorage, set it as the selected language
         setSelectedLanguage(storedLanguage);
+      } else {
+        // Set the default language as the selected language
+        setSelectedLanguage(data.find(item => item.selected).short);
       }
     } catch (error) {
-      // console.log('Error retrieving stored language:', error);
+      console.log('Error retrieving stored language:', error);
     }
   };
   useEffect(() => {
@@ -139,15 +132,20 @@ const ChangeLanguage = () => {
           <JCircleCheck
             key={index}
             language={item.name}
-            isSelected={item.selected }
+            // isSelected={item.selected }
+            // onPress={() => {
+
+            //   setData(
+            //     data.map(obj =>
+            //       obj.id === item.id
+            //         ? {...obj, selected: true}
+            //         : {...obj, selected: false},
+            //     ),
+            //   );
+            // }}
+            isSelected={selectedLanguage === item.short}
             onPress={() => {
-              setData(
-                data.map(obj =>
-                  obj.id === item.id
-                    ? {...obj, selected: true}
-                    : {...obj, selected: false},
-                ),
-              );
+              setSelectedLanguage(item.short);
             }}
           />
         ))}
@@ -156,7 +154,6 @@ const ChangeLanguage = () => {
       <JButton
         onPress={() => {
           handleSave();
-          
         }}
         style={{
           marginBottom: RFPercentage(5),

@@ -28,31 +28,27 @@ import { useEffect } from 'react';
 function EDrawerContent (props) {
   
   const {navigate} = useNavigation();
-  const isFoucs = useIsFocused();
   const store = useContext(StoreContext);
   const user = store.token?.user;
   const _navigateToScreen = index => {
     props.navigation.closeDrawer();
     index === 0
-      ? navigate('EAccountSetting')
+      ? props.navigation.navigate('EAccountSetting')
       : index === 1
-      ? navigate('Followers')
+      ? props.navigation.navigate('Followers')
       : index === 2
-      ? navigate('Employes')
+      ? props.navigation.navigate('Employes')
       : index === 3
-      ? navigate('Assessments')
+      ? props.navigation.navigate('Assessments')
       : index === 4
-      ? navigate('DHelpCenter')
+      ? props.navigation.navigate('DHelpCenter')
       : index === 5
       ? AsyncStorage.removeItem('@login')
           .then(res => {
-            store.setToken({
-              token: null,
-            });
-            navigate('SelectionScreen');
+            store.setToken({})
             Toast.show({
               type: 'success',
-              text1: 'Logout Successfully',
+              text1: store.lang.logout_successfully,
             });
           })
           .catch(error => {
@@ -64,9 +60,7 @@ function EDrawerContent (props) {
           })
       : null;
   };
-useEffect(() => {
 
-}, [isFoucs])
   const _navigationIcons = index =>
     index === 0 ? (
       <JIcon
@@ -115,7 +109,9 @@ useEffect(() => {
       />
     );
   return (
-    <DrawerContentScrollView {...props}>
+    <DrawerContentScrollView {...props}
+    showsVerticalScrollIndicator={false}>
+
       {/* <DrawerItemList {...props} /> */}
       {/* <DrawerItem label="Help" onPress={() => alert('Link to help')} /> */}
       <View style={{height: heightPercentageToDP(100)}}>

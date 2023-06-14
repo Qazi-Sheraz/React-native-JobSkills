@@ -173,10 +173,11 @@ const AddNew_Job = () => {
 
                 <JSelectInput
                   isMultiple={true}
+                  
                   containerStyle={styles.container}
                   header={store.lang.required_assessment}
                   heading={`${store.lang.required_assessment}:`}
-                  id={values.assessment?.map(item => item.id).join(', ')}
+                  id={values.assessment}
                   data={
                     store.lang.id == 0
                       ? store.jobCreate?.english_data?.assessment
@@ -220,7 +221,7 @@ const AddNew_Job = () => {
                   setValue={e => setFieldValue('jobSkill', e)}
                   header={store.lang.job_skills}
                   heading={`${store.lang.job_skills}:`}
-                  id={values.jobSkill?.map(item => item.id).join(', ')}
+                  id={values.jobSkill}
                   error={touched.jobSkill && errors.jobSkill && true}
                   rightIcon={<JNewJobIcon />}
                 />
@@ -239,7 +240,7 @@ const AddNew_Job = () => {
                   setValue={e => setFieldValue('jobTag', e)}
                   header={store.lang.job_tag}
                   heading={`${store.lang.job_tag}:`}
-                  id={values.jobTag?.map(item => item.id).join(', ')}
+                  id={values.jobTag}
                   error={touched.jobTag && errors.jobTag && true}
                   rightIcon={<JNewJobIcon />}
                 />

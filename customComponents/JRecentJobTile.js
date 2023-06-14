@@ -65,7 +65,7 @@ function JRecentJobTile({
   const [error, setError] = useState();
   const store = useContext(StoreContext);
   const navigation = useNavigation();
-  const [stat, setStat] = useState(item?.status_id);
+  const [stat, setStat] = useState(parseInt(item.status_id));
   const [modalVisible, setModalVisible] = useState(false);
   const[status1,setStatus1] = useState();
   const isFoucs = useIsFocused();
@@ -130,7 +130,9 @@ function JRecentJobTile({
         setLoader(false);
       });
   };
-
+  useEffect(() => {
+    setStat(parseInt(item.status_id));
+  }, [item.status_id]);
 // console.log(stat)
 
   return isempty == true ? (
@@ -216,11 +218,12 @@ function JRecentJobTile({
                 }>
                 <EvilIcons name="user" size={RFPercentage(3)} />
                 <JText>
-                  {item ? item?.applicant : 2} {store.lang.applicant}
+                  {item?.applicant?item?.applicant:'0'} {store.lang.applicant}
                 </JText>
+               
               </JRow>
               {/* {respponce.condition === close ? ( */}
-              {stat === 2 ? (
+              {stat == 2 ? (
                 <JRow
                   style={{
                     backgroundColor: colors.danger[0],
@@ -236,7 +239,7 @@ function JRecentJobTile({
                     {store.lang.closed}
                   </JText>
                 </JRow>
-              ) : stat === 1 ? (
+              ) : stat == 1 ? (
                 <Menu>
                   <MenuTrigger>
                     <JRow
@@ -293,7 +296,7 @@ function JRecentJobTile({
                     )}
                   </MenuOptions>
                 </Menu>
-              ) : stat === 3 ? (
+              ) : stat == 3 ? (
                 <Menu>
                   <MenuTrigger>
                     <JRow
@@ -461,9 +464,9 @@ function JRecentJobTile({
           <Modal animationType="fade" transparent={true} visible={modalVisible}>
             <SafeAreaView style={styles.container}>
               <View style={styles.modal}>
-                <JText style={styles.header}>Attention!</JText>
+                <JText style={styles.header}>{store.lang.attention}</JText>
                 <JText style={styles.msg}>
-                  Are you sure want to change the status?
+                  {store.lang.areYouSure}
                 </JText>
                 <JRow style={{justifyContent: 'space-between'}}>
                   <JButton
@@ -473,7 +476,7 @@ function JRecentJobTile({
                       width: '50%',
                       borderWidth: RFPercentage(0),
                     }}
-                    children={'No'}
+                    children={store.lang.no}
                   />
                   <JButton
                     onPress={() => {
@@ -490,7 +493,7 @@ function JRecentJobTile({
                       setModalVisible(!modalVisible);
                     }}
                     style={{width: '50%'}}
-                    children={'Yes'}
+                    children={store.lang.yes}
                   />
                 </JRow>
               </View>
