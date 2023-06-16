@@ -216,7 +216,7 @@ function JRecentJobTile({
                 onPress={() =>
                   navigation.navigate('JobApplication', {id: item?.id})
                 }>
-                <EvilIcons name="user" size={RFPercentage(3)} />
+                <JIcon icon={'ev'} name="user" size={RFPercentage(3)} />
                 <JText>
                   {item?.applicant?item?.applicant:'0'} {store.lang.applicant}
                 </JText>

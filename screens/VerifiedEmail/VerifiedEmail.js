@@ -9,14 +9,25 @@ import JButton from '../../customComponents/JButton';
 
 import JReload from '../../customComponents/JReload';
 import Toast from 'react-native-toast-message';
-export default function VerifiedEmail({route, navigation}) {
+import { observer } from 'mobx-react';
+import { useContext } from 'react';
+import { StoreContext } from '../../mobx/store';
+import { useRoute } from '@react-navigation/native';
+import url from '../../config/url';
+
+
+
+const VerifiedEmail = ({route, navigation}) => {
+  const store =useContext(StoreContext);
+  const [loader, setLoader] = useState();
   const [value, setValue] = useState({
     d1: '',
     d2: '',
     d3: '',
     d4: '',
   });
-
+  const {params}=useRoute();
+  const type = params?.type;
   let _hideEmail = function (email) {
     return email.replace(/(.{2})(.*)(?=@)/, function (gp1, gp2, gp3) {
       for (let i = 0; i < gp3.length; i++) {
@@ -30,6 +41,91 @@ export default function VerifiedEmail({route, navigation}) {
   const d3 = useRef();
   const d4 = useRef();
 
+
+  const _varifyEmail = values => {
+    var formdata = new FormData();
+    formdata.append('email', params?.email);
+    formdata.append("code", `${value.d1}${value.d2}${value.d3}${value.d4}`);
+    console.log(formdata);
+    var requestOptions = {
+      method: 'POST',
+      body: formdata,
+      redirect: 'follow',
+    };
+
+    setLoader(true);
+
+    fetch(`${url.baseUrl}/forget-password-verification`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        console.log('Result===>', result);
+
+        if (result.success == true) {
+         Toast.show({
+           type: 'success',
+           text1: result.message,
+         });
+         navigation.navigate('LoginPassword',{email: params?.email ,type: type})
+        } else {
+         Toast.show({
+           type: 'error',
+           text1: result.message,
+         });
+          
+        }
+      })
+      .catch(error => {
+       Toast.show({
+         type: 'error',
+         text1: error.message,
+       });
+        
+      })
+      .finally(() => {
+        setLoader(false);
+      });
+  };
+  const _forgetPassword = values => {
+    var formdata = new FormData();
+    formdata.append('email', params?.email);
+    console.log(formdata);
+    var requestOptions = {
+      method: 'POST',
+      body: formdata,
+      redirect: 'follow',
+    };
+
+    setLoader(true);
+
+    fetch(`${url.baseUrl}/forget-password`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        console.log('Result===>', result);
+
+        if (result.success == true) {
+         Toast.show({
+           type: 'success',
+           text1: result.message,
+         });
+        } else {
+         Toast.show({
+           type: 'error',
+           text1: result.message,
+         });
+          
+        }
+      })
+      .catch(error => {
+       Toast.show({
+         type: 'error',
+         text1: error.message,
+       });
+        
+      })
+      .finally(() => {
+        setLoader(false);
+      });
+  };
   return (
     <JScreen>
       <View style={{flex: 0.5, justifyContent: 'center', alignItems: 'center'}}>
@@ -46,16 +142,14 @@ export default function VerifiedEmail({route, navigation}) {
         <JText
           fontSize={RFPercentage(2.8)}
           fontWeight={'bold'}
-          children="Verify your Email"
+          children={store.lang.verify_your_email}
           style={{marginTop: RFPercentage(2)}}
         />
         <JText
           fontWeight={'500'}
           fontAlign="center"
-          children={`Enter 4 digit code that you received on this email 
-          ${_hideEmail(route.params.email,)}
-          
-          ` }
+          children={`${store.lang.enter_4_digit_code}
+          ${_hideEmail(route.params.email)}`}
           style={{marginTop: RFPercentage(0.5), width: '70%'}}
         />
       </View>
@@ -165,23 +259,24 @@ export default function VerifiedEmail({route, navigation}) {
             paddingHorizontal: RFPercentage(8),
           }}
           onPress={() => {
-            Toast.show({
-              type: 'success',
-              text1: 'Verified Successfully',
-              text2: `${value.d1
-                .concat(value.d2)
-                .concat(value.d3)
-                .concat(value.d4)}`,
-            });
-
-            navigation.navigate('CLogin', {
-              email: route.params.email,
-              password: route.params.password,
-              type: route.params.type,
-            });
+            _varifyEmail(value);
+            // Toast.show({
+            //   type: 'success',
+            //   text1: 'Verified Successfully',
+            //   text2: `${value.d1
+            //     .concat(value.d2)
+            //     .concat(value.d3)
+            //     .concat(value.d4)}`,
+            // });
+            // navigation.navigate('LoginPassword',{type: type})
+            // navigation.navigate('CLogin', {
+            //   email: route.params.email,
+            //   password: route.params.password,
+            //   type: route.params.type,
+            // });
             // setValue({...value, d1: '', d2: '', d3: '', d4: ''});
           }}
-          children={'Continue'}
+          children={loader?store.lang.loading:store.lang.continue}
         />
         <View
           style={{
@@ -189,21 +284,22 @@ export default function VerifiedEmail({route, navigation}) {
             flexDirection: 'row',
             alignItems: 'center',
           }}>
-          <JText style={{marginRight: RFPercentage(0.8)}}>Resend Code</JText>
+          <JText style={{marginRight: RFPercentage(0.8)}}>{store.lang.resend_Code}</JText>
           <JReload
             onPress={() => {
-              Toast.show({
-                type: 'success',
-                text1: 'Send Code Successfully',
-                text2: 'Check your Email',
-              });
+              _forgetPassword();
             }}
           />
         </View>
       </View>
     </JScreen>
   );
-}
+};
+
+
+
+
+export default observer(VerifiedEmail)
 
 const styles = StyleSheet.create({
   inputContainer: {

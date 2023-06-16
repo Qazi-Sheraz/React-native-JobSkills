@@ -19,40 +19,11 @@ import * as Animatable from 'react-native-animatable';
 const LngTranslation = () => {
   const store = useContext(StoreContext);
   const navigation = useNavigation();
+const[btn,setBtn]=useState(false);
+const[btn2,setBtn2]=useState(false);
 
-
-  // const _changeLanguage =  (lang) => {
-  //   var myHeaders = new Headers();
-  //   myHeaders.append("Authorization",`Bearer ${store.token?.token}`);
-
-  //   var formdata = new FormData();
-  //   formdata.append("languageName",lang);
-  //   console.log(formdata);
-  //   fetch(`${url.baseUrl}/change-language`, {
-  //     method: 'POST',
-  //     headers: myHeaders,
-  //     body: formdata,
-  //     redirect: 'follow'
-  //   })
-  //     .then(response => response.json())
-  //     .then(result => {
-  //       if(result.success== true){
-  //         Toast.show({
-  //           type: 'success',
-  //           text1: result.message,
-  //         });
-  //           // RNRestart.restart()
-  //         // navigation.navigate('EAccountSetting',{name: lang}); // Store the selected language
-  //       }
-  //       else{
-  //         Toast.show({
-  //           type: 'error',
-  //           text1: result.message,
-  //         });
-  //       }
-  //     })
-  //     .catch(error => console.log('error', error));
-  // };
+ 
+ 
 
   const handleSave = async lang => {
  // Switch to the selected language
@@ -110,10 +81,21 @@ useEffect(() => {
             {store.lang.langButtons}
           </JText>
         </View>
-        <JRow >
-          <JButton onPress={()=>{handleSave('en')}} style={{paddingHorizontal:RFPercentage(4),backgroundColor:store.lang === 'en'?'#fff':colors.primary[0]}} >English</JButton>
-          <JButton onPress={()=>{handleSave('ur')}} style={{paddingHorizontal:RFPercentage(4),backgroundColor:store.lang === 'ur'?'#fff':colors.primary[0]}}>اردو</JButton>
-          <JButton onPress={()=>{handleSave('ar')}} style={{paddingHorizontal:RFPercentage(4),backgroundColor:store.lang === 'ar'?'#fff':colors.primary[0]}}>العربية</JButton>
+        <JRow  style={{borderWidth:RFPercentage(0.1)}}>
+          <JButton onPress={()=>{
+            setBtn(true)
+            setBtn2(false)
+            setTimeout(() => {
+              handleSave('en');
+            }, 1000);
+           }} style={{paddingHorizontal:RFPercentage(6),backgroundColor:btn === true?colors.primary[0]:'#fff',borderColor:btn === true?colors.primary[0]:colors.border[0]}} >English</JButton>
+          {/* <JButton onPress={()=>{handleSave('ur')}} style={{paddingHorizontal:RFPercentage(4),backgroundColor:store.lang === 'ur'?'#fff':colors.primary[0]}}>اردو</JButton> */}
+          <JButton onPress={()=>{
+            setBtn2(true)
+            setBtn(false)
+            setTimeout(() => {
+            handleSave('ar');
+          }, 1000); }} style={{paddingHorizontal:RFPercentage(6),backgroundColor:btn2=== true?colors.primary[0]:'#fff',borderColor:btn === true?colors.primary[0]:colors.border[0]}}>العربية</JButton>
         </JRow>
       </View>
       </Animatable.View>

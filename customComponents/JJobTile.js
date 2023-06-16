@@ -21,6 +21,8 @@ import {StoreContext} from '../mobx/store';
 import {_saveToFavoriteList} from '../functions/Candidate/BottomTab.js';
 import {observer} from 'mobx-react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import JNotfoundData from './JNotfoundData';
+import JRow from './JRow';
 function JJobTile({
   isempty = false,
   img,
@@ -40,34 +42,21 @@ function JJobTile({
   const store = useContext(StoreContext);
 
   return isempty === true ? (
-    <View
-      style={{
-        height: heightPercentageToDP(14),
-        backgroundColor: colors.tileColor[0],
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}>
-      <Image
-        style={{width: RFPercentage(6), height: RFPercentage(6)}}
-        source={require('../assets/images/empty/empty.png')}
-      />
-      <JText style={{marginTop: RFPercentage(1)}}>Not Found !</JText>
-    </View>
+    <JNotfoundData/>
   ) : (
-    <View
+    <JRow
       style={[
         {
           height: heightPercentageToDP(14),
           backgroundColor: colors.tileColor[0],
-          flexDirection: 'row',
         },
         containerStyle,
       ]}>
       <View
         style={{
-          width: '28%',
+          // width: '28%',
           justifyContent: 'center',
-          paddingHorizontal: RFPercentage(1),
+          // paddingHorizontal: RFPercentage(1),
         }}>
         <TouchableOpacity
           onPress={onPress}
@@ -90,11 +79,12 @@ function JJobTile({
         </TouchableOpacity>
       </View>
       {type === 'job' ? (
-        <View
+        <JRow
           style={{
-            width: '72%',
+            width: '70%',
             justifyContent: 'center',
-            flexDirection: 'row',
+            marginHorizontal: RFPercentage(1),
+            
           }}>
           <View
             style={{
@@ -143,17 +133,16 @@ function JJobTile({
               color={colors.purple[0]}
             />
           )}
-        </View>
+        </JRow>
       ) : type === 'company' ? (
         <View
           style={{
-            width: '72%',
+            width: '70%',
             justifyContent: 'center',
-            paddingLeft: RFPercentage(1),
+            marginHorizontal: RFPercentage(1),
           }}>
-          <View
+          <JRow
             style={{
-              flexDirection: 'row',
               justifyContent: 'space-between',
             }}>
             <JText>{title}</JText>
@@ -169,7 +158,7 @@ function JJobTile({
               size={RFPercentage(3)}
               color={colors.purple[0]}
             />
-          </View>
+          </JRow>
           <JText style={{marginVertical: RFPercentage(0.5)}}>{location}</JText>
 
           <JText
@@ -188,23 +177,20 @@ function JJobTile({
       ) : (
         <View
           style={{
-            width: '72%',
+            width: '70%',
             justifyContent: 'center',
-            paddingLeft: RFPercentage(1),
+            marginHorizontal: RFPercentage(1),
           }}>
-          <View
+          <JRow
             style={{
-              flexDirection: 'row',
               justifyContent: 'space-between',
             }}>
             <JText>{title}</JText>
-          </View>
+          </JRow>
           <JText style={{marginVertical: RFPercentage(0.5)}}>{location}</JText>
-          <View
+          <JRow
             style={{
-              flexDirection: 'row',
               justifyContent: 'space-between',
-              alignItems: 'center',
               paddingRight: RFPercentage(1),
             }}>
             <JText
@@ -214,10 +200,10 @@ function JJobTile({
               {category}
             </JText>
             <JStatusChecker status={status} />
-          </View>
+          </JRow>
         </View>
       )}
-    </View>
+    </JRow>
   );
 }
 export default memo(observer(JJobTile));

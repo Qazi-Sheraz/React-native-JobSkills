@@ -21,6 +21,7 @@ import {_saveToFavoriteList} from '../functions/Candidate/BottomTab.js';
 import {observer} from 'mobx-react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {_saveToFollowing} from '../functions/Candidate/DFollowing';
+import JRow from './JRow';
 function JCompanyTile({
   isempty = false,
   img,
@@ -49,12 +50,11 @@ function JCompanyTile({
       <JText style={{marginTop: RFPercentage(1)}}>Not Found !</JText>
     </View>
   ) : (
-    <View
+    <JRow
       style={[
         {
           height: heightPercentageToDP(14),
           backgroundColor: colors.tileColor[0],
-          flexDirection: 'row',
         },
         containerStyle,
       ]}>
@@ -142,7 +142,7 @@ function JCompanyTile({
           Open Job
         </JText>
       </View>
-    </View>
+    </JRow>
   );
 }
 export default observer(JCompanyTile);

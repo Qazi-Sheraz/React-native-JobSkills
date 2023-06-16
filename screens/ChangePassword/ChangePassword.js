@@ -125,6 +125,7 @@ const ChangePassword = () => {
           <>
             <View style={{flex: 1, marginTop: RFPercentage(4)}}>
               <JInput
+              style={{textAlign: store.lang.id === 0 ? 'left' : 'right'}}
                 headingWeight="bold"
                 heading={store.lang.current_password}
                 icon={<CurrentP marginHorizontal={RFPercentage(2)} />}
@@ -139,6 +140,7 @@ const ChangePassword = () => {
                 <JErrorText>{errors.password_current}</JErrorText>
               )}
               <JInput
+              style={{textAlign: store.lang.id === 0 ? 'left' : 'right'}}
                 headingWeight="bold"
                 heading={store.lang.new_password}
                 icon={<Key marginHorizontal={RFPercentage(2)} />}
@@ -152,6 +154,7 @@ const ChangePassword = () => {
                 <JErrorText>{errors.password}</JErrorText>
               )}
               <JInput
+              style={{textAlign: store.lang.id === 0 ? 'left' : 'right'}}
                 headingWeight="bold"
                 heading={store.lang.confirm_password}
                 icon={<Key marginHorizontal={RFPercentage(2)} />}

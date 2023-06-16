@@ -228,24 +228,7 @@ fetch(`${url.baseUrl}/phone-code-verification`, requestOptions)
             height: RFPercentage(6),
             paddingHorizontal: RFPercentage(8),
           }}
-          // onPress={() => {
-          //   Toast.show({
-          //     type: 'success',
-          //     text1: 'Verified Successfully',
-          //     text2: `${value.d1
-          //       .concat(value.d2)
-          //       .concat(value.d3)
-          //       .concat(value.d4)}`,
-          //   });
-
-          //   navigation.navigate('CLogin', {
-          //     phone:route.params.phone,
-          //     email: route.params.email,
-          //     password: route.params.password,
-          //     type: route.params.type,
-          //   });
-          //   // setValue({...value, d1: '', d2: '', d3: '', d4: ''});
-          // }}
+         
           children={store.lang.continue}
         />
         <View

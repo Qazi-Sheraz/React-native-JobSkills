@@ -38,7 +38,7 @@ const Login = ({navigation, route}) => {
       AsyncStorage.setItem('@login', JSON.stringify(token))
         .then(res => {
           store.setToken(token);
-          console.log('res', token);
+          // console.log('res', token);
           // navigation.navigate('CHome');
         })
         .catch(error => {
@@ -267,7 +267,7 @@ const Login = ({navigation, route}) => {
                   {store.lang.remember}
                 </JText>
               </JRow>
-                <JText onPress={() => alert('Forgot')}>
+                <JText onPress={() => navigation.navigate('ForgetPassword',{type: type, email: values.email })}>
                   {store.lang.forgot_password}
                 </JText>
             </JRow>

@@ -33,6 +33,7 @@ import { _dashboard } from '../../functions/Candidate/BottomTab';
 import { refresh } from '@react-native-community/netinfo';
 import { RefreshControl } from 'react-native';
 import { useCallback } from 'react';
+import { Linking } from 'react-native';
 
 const Home = () => {
   const navigation=useNavigation();
@@ -40,7 +41,7 @@ const Home = () => {
   const isFoucs = useIsFocused();
   const store = useContext(StoreContext);
   const [update, setUpdate] = useState(true);
- 
+  const [data1, setData1] = useState();
   
   const onRefresh = useCallback(() => {
     store.setEHomeApiLoader(true);
@@ -61,13 +62,15 @@ useEffect(() => {
       internet={true}
       header={
         <JHeader
+          containerStyle={{
+            flexDirection: 'row',
+          }}
           left={
             <JIcon
               icon="fe"
               onPress={() => navigation.openDrawer(EDrawerContent)}
               name="menu"
               size={RFPercentage(3.5)}
-              color={'#000000'}
             />
           }
           center={
@@ -83,33 +86,28 @@ useEffect(() => {
               onPress={() => navigation.navigate('CNotification')}
               name="bell-badge-outline"
               size={RFPercentage(3.5)}
-              color={'#000000'}
             />
           }
         />
       }>
       {store.eHomeApiLoader ? (
         <ActivityIndicator />
-      ) :
-      store.eHomeApiError ==true ? 
-      <JApiError
-      onTryAgainPress={() => {
-        _dashboard(store)}}
-      />
-      :
-      (
+      ) : store.eHomeApiError == true ? (
+        <JApiError
+          onTryAgainPress={() => {
+            _dashboard(store);
+          }}
+        />
+      ) : (
         // <JText>Loading</JText>
         <React.Fragment>
-          <JFindTitle JobTitle={store.lang.job_title} />
+          <JFindTitle
+            JobTitle={store.lang.job_title}
+            onPress={() => navigation.navigate('ESearch')}
+          />
 
-          <JScrollView
-          refreshing={store.eHomeApiLoader}
-          onRefresh={onRefresh}
-          
-          
-          >
+          <JScrollView refreshing={store.eHomeApiLoader} onRefresh={onRefresh}>
             <FlatList
-            
               style={{alignSelf: 'center', marginVertical: RFPercentage(2)}}
               horizontal
               data={[
@@ -266,7 +264,10 @@ useEffect(() => {
                             borderRadius: RFPercentage(4),
                           }}
                           source={{
-                            uri: item.employer_images!=null ? require('./../../assets/images/person.png') : item.employer_image,
+                            uri:
+                              item.employer_images != null
+                                ? require('./../../assets/images/person.png')
+                                : item.employer_image,
                           }}
                         />
                         <JText
@@ -280,7 +281,9 @@ useEffect(() => {
 
                       <JRow
                         disabled={false}
-                        onPress={() => refRBSheet.current.open()}
+                        onPress={() => {
+                          refRBSheet.current.open(), setData1(item);
+                        }}
                         style={{
                           alignSelf:
                             store.lang.id == 0 ? 'flex-end' : 'flex-start',
@@ -295,7 +298,11 @@ useEffect(() => {
                           fontWeight="bold">
                           {store.lang.start}
                         </JText>
-                        <Entypo name="controller-play" size={RFPercentage(2)} />
+                        <JIcon
+                          icon={'en'}
+                          name="controller-play"
+                          size={RFPercentage(2)}
+                        />
                       </JRow>
                     </View>
                   </JRow>
@@ -314,21 +321,20 @@ useEffect(() => {
             </JText>
             {store.employeHome?.recentJobs?.length > 0 ? (
               // store.employeHome?.recentJobs?.map((item, index) => (
-                
-                <FlatList
-                
+
+              <FlatList
                 data={store.employeHome?.recentJobs}
-                renderItem={({item,index})=>(
-                <JRecentJobTile 
-                  update={update}
-                  setUpdate={setUpdate}
-                  star={false}
-                  item={item}
-                
-                />)}
-                />
-              // ))
+                renderItem={({item, index}) => (
+                  <JRecentJobTile
+                    update={update}
+                    setUpdate={setUpdate}
+                    star={false}
+                    item={item}
+                  />
+                )}
+              />
             ) : (
+              // ))
               <JNotfoundData />
             )}
           </JScrollView>
@@ -352,7 +358,6 @@ useEffect(() => {
             display: 'none',
           },
         }}>
-          {store.eHomeApiLoader?<ActivityIndicator/>:
         <View
           style={{
             paddingHorizontal: RFPercentage(3),
@@ -360,17 +365,40 @@ useEffect(() => {
           }}>
           <JText
             style={{
-              marginVertical: RFPercentage(1),
+              marginVertical: RFPercentage(3),
               fontSize: RFPercentage(2.5),
               fontWeight: 'bold',
             }}>
             {store.lang.meeting_Info}
           </JText>
-          <JText style={styles.rbtxt}>{store.lang.meeting_ID}</JText>
-          <JText style={styles.rbtxt2}>{store?.employeHome?.meetings[0]?.meeting_id ==null ?'N/A':store?.employeHome?.meetings[0]?.meeting_id}</JText>
-          <JText style={styles.rbtxt}>{store.lang.password}</JText>
-          <JText style={styles.rbtxt2}>{store?.employeHome?.meetings[0]?.meeting_password== null ?'N/A':store?.employeHome?.meetings[0]?.meeting_password}</JText>
-        </View>}
+          {data1?.office_location !== null ? (
+            <>
+              <JText style={styles.rbtxt}>{store.lang.office_base}</JText>
+              <JText
+                style={styles.rbtxt2}
+                onPress={() => {
+                  Linking.openURL(data1?.office_location);
+                }}>
+                {data1?.office_location == null
+                  ? 'N/A'
+                  : data1?.office_location}
+              </JText>
+            </>
+          ) : data1?.join_url !== null ? (
+            <>
+              <JText style={styles.rbtxt}>{store.lang.meeting_link}</JText>
+              <JText
+                style={styles.rbtxt2}
+                onPress={() => {
+                  Linking.openURL(data1?.join_url);
+                }}>
+                {data1?.join_url == null ? 'N/A' : data1?.join_url}
+              </JText>
+            </>
+          ) : (
+            <JNotfoundData />
+          )}
+        </View>
       </RBSheet>
     </JScreen>
   );
@@ -387,5 +415,6 @@ const styles = StyleSheet.create({
   rbtxt2: {
     marginVertical: RFPercentage(0.5),
     fontSize: RFPercentage(2),
+    color:'#008AD8',
   },
 });

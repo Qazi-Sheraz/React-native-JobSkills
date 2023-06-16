@@ -225,6 +225,7 @@ const JobRequirement = () => {
             setFieldValue,
           }) => (
             <>
+            <View style={{height:'90%'}}>
               <ScrollView
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{paddingBottom: RFPercentage(8)}}>
@@ -431,6 +432,7 @@ const JobRequirement = () => {
                   </JRow>
                 </View>
               </ScrollView>
+              </View>
               <JButton
                 isValid={isValid}
                 onPress={() => {

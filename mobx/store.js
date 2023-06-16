@@ -177,7 +177,7 @@ export const StoreProvider = props => {
     setPdf: action(e => (store.pdf = e)),
     pdfApiLoader: true,
     setPdfApiLoader: action(e => (store.pdfApiLoader = e)),
-    pdfApiError: true,
+    pdfApiError: false,
     setPdfApiError: action(e => (store.pdfApiError = e)),
 
     // Update State
@@ -196,9 +196,9 @@ export const StoreProvider = props => {
     // Get Job Application
     jApplication: [],
     setJApplication: action(e => (store.jApplication = e)),
-    jAppLoader: [],
+    jAppLoader: true,
     setJAppLoader: action(e => (store.jAppLoader = e)),
-    jAppError: [],
+    jAppError: false,
     setJAppError: action(e => (store.jAppError = e)),
  
 // Get Employe Home
@@ -207,7 +207,7 @@ export const StoreProvider = props => {
     AddRecentJobs: action(e => {store.employeHome.recentJobs[0] = [e,store.employeHome.recentJobs[0]]}),
     eHomeApiLoader:true,
     setEHomeApiLoader: action(e => (store.eHomeApiLoader = e)),
-    eHomeApiError:true,
+    eHomeApiError:false,
     setEHomeApiError: action(e => (store.eHomeApiError = e)),
     
     //Job Store
@@ -215,7 +215,7 @@ export const StoreProvider = props => {
     setJobCreate: action(e => (store.jobCreate = e)),
     createApiLoader:true,
     setCreateApiLoader: action(e => (store.createApiLoader = e)),
-    createApiError:true,
+    createApiError:false,
     setCreateApiError: action(e => (store.createApiError = e)),
 
   }));

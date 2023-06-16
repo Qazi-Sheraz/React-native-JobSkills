@@ -503,6 +503,7 @@ function JSelectInput({
           {loader ? (
             <ActivityIndicator />
           ) : (
+            <View style={{paddingBottom:RFPercentage(-10)}}>
             <FlatList
               data={
                 header === store.lang.country
@@ -629,6 +630,7 @@ function JSelectInput({
               }
               initialNumToRender={16}
               renderItem={({item, index}) => (
+                
                 <TouchableOpacity
                   onPress={() => {
                     if (isMultiple == true) {
@@ -658,7 +660,7 @@ function JSelectInput({
                 </TouchableOpacity>
               )}
               keyExtractor={(item, index) => index}
-            />
+            /></View>
           )}
         </SafeAreaView>
       </RBSheet>

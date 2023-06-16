@@ -47,7 +47,7 @@ function AppliedJobs({navigation}) {
               fontColor={colors.white[0]}
               fontWeight="bold"
               fontSize={RFPercentage(2.5)}>
-              {'Applied Job'}
+              {store.lang.applied_job}
             </JText>
           }
           right={

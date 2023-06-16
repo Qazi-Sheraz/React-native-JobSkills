@@ -25,6 +25,7 @@ import {_getHomeData} from '../../functions/Candidate/BottomTab';
 import translation from '../../config/translation';
 import JCompanyTile from '../../customComponents/JCompanyTile';
 import {_searchFilter} from '../../functions/CFilter';
+import JFindTitle from '../../customComponents/JFindTitle';
 
 function Home({navigation}) {
   const store = useContext(StoreContext);
@@ -48,6 +49,9 @@ function Home({navigation}) {
       internet={true}
       header={
         <JHeader
+        containerStyle={{
+          flexDirection: 'row',
+        }}
           left={
             <Feather
               color={colors.black[0]}
@@ -77,6 +81,9 @@ function Home({navigation}) {
         <CLHome />
       ) : (
         <React.Fragment>
+
+          <JFindTitle JobTitle={store.lang.jobTitle_Skills_Company}  onPress={() => navigation.navigate('CSearch')}/>
+{/* 
           <JShadowView
             onPress={() => navigation.navigate('CSearch')}
             shadowColor={colors.purple[0]}
@@ -104,13 +111,13 @@ function Home({navigation}) {
             <JText
               fontColor={colors.placeHolderColor[0]}
               fontSize={RFPercentage(2)}>
-              Job Tilte,Skill or Company
+              {store.lang.jobTitle_Skills_Company}
             </JText>
-          </JShadowView>
+          </JShadowView> */}
 
           <JScrollView refreshing={store.isRefreshing} onRefresh={onRefresh}>
             <JSideHeading
-              leftHeading={'Popular Categories'}
+              leftHeading={store.lang.popular_categories}
               rightHeading={
                 store.filterDataApiLoader && (
                   <ActivityIndicator
@@ -145,7 +152,7 @@ function Home({navigation}) {
                     justifyContent: 'center',
                     alignItems: 'center',
                   }}>
-                  <JText fontColor={colors.white[0]}>{item.name}</JText>
+                  <JText fontColor={colors.white[0]}style={{textAlign:'center'}}>{item.name}</JText>
                   <JText fontColor={colors.white[0]}>({item.jobs_count})</JText>
                 </JGradientView>
               )}
@@ -153,8 +160,8 @@ function Home({navigation}) {
             />
 
             <JSideHeading
-              leftHeading={'Featured Company'}
-              rightHeading={'See All'}
+              leftHeading={store.lang.featured_company}
+              rightHeading={store.lang.see_all}
               onRightHeadingPress={() => navigation.navigate('CFeatureCompany')}
             />
             {data.featuredCompanies?.length > 0 ? (
@@ -176,8 +183,8 @@ function Home({navigation}) {
             )}
 
             <JSideHeading
-              leftHeading={'Featured Job'}
-              rightHeading={'See All'}
+              leftHeading={store.lang.featured_job}
+              rightHeading={store.lang.see_all}
               onRightHeadingPress={() => navigation.navigate('CFeatureJob')}
             />
             {data.featuredJobs?.length > 0 ? (
@@ -201,8 +208,8 @@ function Home({navigation}) {
             )}
 
             <JSideHeading
-              leftHeading={'Latest Jobs'}
-              rightHeading={'See All'}
+              leftHeading={store.lang.latest_jobs}
+              rightHeading={store.lang.see_all}
               onRightHeadingPress={() => navigation.navigate('CAllJobs')}
             />
 

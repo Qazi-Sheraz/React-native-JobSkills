@@ -16,6 +16,7 @@ import JGradientHeader from '../../customComponents/JGradientHeader';
 import JCompanyTile from '../../customComponents/JCompanyTile';
 import Feather from 'react-native-vector-icons/Feather';
 import {_getFollowingCompanyData} from '../../functions/Candidate/DFollowing';
+import JChevronIcon from '../../customComponents/JChevronIcon';
 
 function Followings({navigation}) {
   const store = useContext(StoreContext);
@@ -43,16 +44,11 @@ function Followings({navigation}) {
               fontColor={colors.white[0]}
               fontWeight="bold"
               fontSize={RFPercentage(2.5)}>
-              {'Following Company'}
+              {store.lang.following_company}
             </JText>
           }
           left={
-            <Feather
-              onPress={() => navigation.goBack()}
-              name="chevron-left"
-              size={RFPercentage(3.5)}
-              color={colors.white[0]}
-            />
+        <JChevronIcon/>
           }
         />
       }

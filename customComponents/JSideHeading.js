@@ -2,6 +2,7 @@ import {StyleSheet, View} from 'react-native';
 import React from 'react';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import JText from './JText';
+import JRow from './JRow';
 export default function JSideHeading({
   leftHeading,
   onLeftHeadingPress,
@@ -11,11 +12,11 @@ export default function JSideHeading({
   rightHeadingStyle,
 }) {
   return (
-    <View
+    <JRow
       style={{
-        flexDirection: 'row',
+        // flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center',
+        // alignItems: 'center',
         marginVertical: RFPercentage(2),
       }}>
       <JText
@@ -31,7 +32,7 @@ export default function JSideHeading({
         ]}>
         {rightHeading}
       </JText>
-    </View>
+    </JRow>
   );
 }
 

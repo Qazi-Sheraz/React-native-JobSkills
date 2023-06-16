@@ -24,6 +24,7 @@ import {StoreContext} from '../mobx/store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
 import {observer, Observer} from 'mobx-react';
+import JRow from '../customComponents/JRow';
 function CustomDrawerContent(props) {
   const store = useContext(StoreContext);
   const user = store.token?.user;
@@ -138,11 +139,10 @@ function CustomDrawerContent(props) {
             marginTop: RFPercentage(3),
           }}>
           {getDrawerItems().map((item, index) => (
-            <TouchableOpacity
+            <JRow
+            disabled={false}
               onPress={() => _navigateToScreen(index)}
               style={{
-                flexDirection: 'row',
-                alignItems: 'center',
                 marginVertical: RFPercentage(1.7),
               }}
               key={index}>
@@ -150,10 +150,10 @@ function CustomDrawerContent(props) {
               <JText
                 fontWeight="bold"
                 fontSize={RFPercentage(2)}
-                style={{marginLeft: RFPercentage(2)}}>
+                style={{marginHorizontal: RFPercentage(1)}}>
                 {item}
               </JText>
-            </TouchableOpacity>
+            </JRow>
           ))}
         </View>
         <JText

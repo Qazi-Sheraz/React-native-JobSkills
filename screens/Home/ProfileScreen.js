@@ -121,7 +121,7 @@ const ProfileScreen = ({navigation}) => {
                 paddingHorizontal: RFPercentage(1),
               }}>
               {item.icon}
-              <JText fontSize={RFPercentage(2)}>{item.name}</JText>
+              <JText fontSize={RFPercentage(2) }style={{marginHorizontal: RFPercentage(1),}}>{item.name}</JText>
             </JRow>
           </Pressable>
         )}

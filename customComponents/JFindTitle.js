@@ -6,12 +6,15 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import colors from './../config/colors';
 import { useNavigation,} from '@react-navigation/native';
 import JRow from './JRow';
-const JFindTitle = ({JobTitle}) => {
+
+
+const JFindTitle = ({JobTitle,onPress}) => {
+
   const navigation = useNavigation();
   return (
     <JRow
     disabled={false}
-          onPress={() => navigation.navigate('ESearch')}
+          onPress={onPress}
           style={{
            paddingVertical:RFPercentage
            (1.2),
@@ -21,13 +24,13 @@ const JFindTitle = ({JobTitle}) => {
             paddingHorizontal: RFPercentage(1),
 
           }}>
-          <JText fontColor={colors.searchIcon[0]} fontSize={RFPercentage(2)}>
+          <JText fontColor={colors.placeHolderColor[0]} fontSize={RFPercentage(2)}>
             {JobTitle}
           </JText>
           <AntDesign
             name="search1"
             color={colors.searchIcon[0]}
-            size={RFPercentage(2.5)}
+            size={RFPercentage(2.8)}
           />
         </JRow>
   )

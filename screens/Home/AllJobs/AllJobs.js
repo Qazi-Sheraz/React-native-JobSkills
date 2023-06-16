@@ -19,6 +19,7 @@ import JGradientHeader from '../../../customComponents/JGradientHeader';
 import colors from '../../../config/colors';
 import JSearchInput from '../../../customComponents/JSearchInput';
 import Feather from 'react-native-vector-icons/Feather';
+import JChevronIcon from '../../../customComponents/JChevronIcon';
 function AllJobs({navigation}) {
   const store = useContext(StoreContext);
   useEffect(() => {
@@ -44,16 +45,11 @@ function AllJobs({navigation}) {
               fontColor={colors.white[0]}
               fontWeight="bold"
               fontSize={RFPercentage(2.5)}>
-              {'Job'}
+              {store.lang.job}
             </JText>
           }
           left={
-            <Feather
-              onPress={() => navigation.goBack()}
-              name="chevron-left"
-              size={RFPercentage(3.5)}
-              color={colors.white[0]}
-            />
+           <JChevronIcon/>
           }
         />
       }

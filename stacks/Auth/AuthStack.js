@@ -7,6 +7,10 @@ import {StoreContext} from '../../mobx/store';
 import {observer} from 'mobx-react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LogoScreen from '../../screens/SplashScreen/LogoScreen';
+import ForgetPassword from '../../screens/forgetPassword/ForgetPassword';
+import VerifiedEmail from '../../screens/VerifiedEmail/VerifiedEmail';
+import ResetPassword from '../../screens/ResetPassword/ResetPassword';
+import ResetLoginPassword from '../../screens/forgetPassword/ResetLoginPassword';
 
 
 const Stack = createStackNavigator();
@@ -51,6 +55,9 @@ function AuthStack({navigation}) {
         <Stack.Screen name="SelectionScreen" component={SelectionScreen} />
         <Stack.Screen name="CLogin" component={Login} />
         <Stack.Screen name="CRegister" component={Registration} />
+        <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
+        <Stack.Screen name="CVerifiedEmail" component={VerifiedEmail} />
+        <Stack.Screen name="LoginPassword" component={ResetLoginPassword} />
       </Stack.Navigator>
     </React.Fragment>
   );

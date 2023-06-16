@@ -16,13 +16,14 @@ import Octicons from 'react-native-vector-icons/Octicons'
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons'
 import Zocial from 'react-native-vector-icons/Zocial'
 import { RFPercentage } from 'react-native-responsive-fontsize'
+import colors from '../config/colors'
 
 export default function JIcon(
     {
       onPress,
         icon,
         name,
-        color,
+        color=colors.drafted[0],
         size=RFPercentage(2.5),
         style
     }

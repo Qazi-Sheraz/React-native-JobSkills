@@ -133,7 +133,8 @@ const data = [
       .then(response => response.json())
       .then(result => {
         
-        store.setJApplication(result?.job_application);
+        store.setJApplication(result?.job_application)
+        
       })
       .catch(error => {
         console.log('application===error', error);
@@ -145,8 +146,8 @@ const data = [
   };
  
   useEffect(() => {
-    _jobApplication();
-    
+    store.setJAppLoader(true)
+    _jobApplication()
   }, [update]);
 
   return (
@@ -280,7 +281,7 @@ const data = [
         <Pressable
           onPress={() => setModalVisible(!modalVisible)}
           style={styles.centeredView}>
-            {store.setJAppLoader?<ActivityIndicator/>:
+            {store.jAppLoader?<ActivityIndicator/>:
           <View style={styles.modalView}>
             <JText fontColor={colors.white[0]} fontSize={RFPercentage(1.8)}style={{paddingHorizontal:store.jApplication[0]?.fit_score_information == null?RFPercentage(10):RFPercentage(0)}}>
               {store.jApplication[0]?.fit_score_information === null?'N/A' :store.jApplication[0]?.fit_score_information}

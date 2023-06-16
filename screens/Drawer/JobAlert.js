@@ -20,6 +20,7 @@ import {useEffect} from 'react';
 import {useContext} from 'react';
 import {StoreContext} from '../../mobx/store';
 import {JToast} from '../../functions/Toast';
+import JChevronIcon from '../../customComponents/JChevronIcon';
 const JobAlert = ({navigation}) => {
   const [loader, setLoader] = useState([]);
   const store = useContext(StoreContext);
@@ -144,16 +145,11 @@ const JobAlert = ({navigation}) => {
               fontColor={colors.white[0]}
               fontWeight="bold"
               fontSize={RFPercentage(2.5)}>
-              {'Job Alerts'}
+              {store.lang.job_alert}
             </JText>
           }
           left={
-            <Feather
-              onPress={() => navigation.goBack()}
-              name="chevron-left"
-              size={RFPercentage(3.5)}
-              color={colors.white[0]}
-            />
+           <JChevronIcon/>
           }
           right={loader && <ActivityIndicator />}
         />
@@ -195,7 +191,7 @@ const JobAlert = ({navigation}) => {
           bottom: RFPercentage(2),
           width: RFPercentage(20),
         }}>
-        Save
+        {store.lang.save}
       </JButton>
     </JScreen>
   );
