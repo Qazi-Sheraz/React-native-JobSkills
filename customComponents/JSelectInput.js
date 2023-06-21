@@ -152,7 +152,7 @@ function JSelectInput({
       setCategories(categories);
     }
 
-    if (header === 'Job Type') {
+    if (header === store.lang.job_type) {
       Object.keys(data).forEach(function (key, index) {
         jobType.push({
           id: key,
@@ -171,7 +171,7 @@ function JSelectInput({
       setExperience(expericeYear);
     }
 
-    if (header === 'Gender') {
+    if (header === store.lang.gender) {
       data.forEach(item => {
         genderArr.push({
           name: item,
@@ -180,7 +180,7 @@ function JSelectInput({
       setGenders(genderArr);
     }
 
-    if (header === 'Functional Area') {
+    if (header === store.lang.functional_Area) {
       Object.keys(data).forEach(function (key, index) {
         functionArea.push({
           id: key,
@@ -516,7 +516,7 @@ function JSelectInput({
                     )
                   : header === 'Year'
                   ? years
-                  : header === 'Gender'
+                  : header === store.lang.gender
                   ? genders.filter(e =>
                       e.name.toLowerCase().includes(query.toLowerCase()),
                     )
@@ -528,7 +528,7 @@ function JSelectInput({
                   ? martial.filter(e =>
                       e.name.toLowerCase().includes(query.toLowerCase()),
                     )
-                  : header === 'Functional Area'
+                  : header === store.lang.functional_Area
                   ? area.filter(e =>
                       e.name.toLowerCase().includes(query.toLowerCase()),
                     )
@@ -544,7 +544,7 @@ function JSelectInput({
                   ? currencies.filter(e =>
                       e.name.toLowerCase().includes(query.toLowerCase()),
                     )
-                  : header === 'Job Type'
+                  : header === store.lang.job_type
                   ? jobType.filter(e =>
                       e.name.toLowerCase().includes(query.toLowerCase()),
                     )

@@ -22,6 +22,7 @@ import {observer} from 'mobx-react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {_saveToFollowing} from '../functions/Candidate/DFollowing';
 import JRow from './JRow';
+import JChevronIcon from './JChevronIcon';
 function JCompanyTile({
   isempty = false,
   img,
@@ -36,19 +37,7 @@ function JCompanyTile({
   const store = useContext(StoreContext);
 
   return isempty === true ? (
-    <View
-      style={{
-        height: heightPercentageToDP(14),
-        backgroundColor: colors.tileColor[0],
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}>
-      <Image
-        style={{width: RFPercentage(6), height: RFPercentage(6)}}
-        source={require('../assets/images/empty/empty.png')}
-      />
-      <JText style={{marginTop: RFPercentage(1)}}>Not Found !</JText>
-    </View>
+  <JChevronIcon/>
   ) : (
     <JRow
       style={[
@@ -60,9 +49,9 @@ function JCompanyTile({
       ]}>
       <View
         style={{
-          width: '28%',
+          // width: '26%',
           justifyContent: 'center',
-          paddingHorizontal: RFPercentage(1),
+          // paddingHorizontal: RFPercentage(1),
         }}>
         <TouchableOpacity
           onPress={onPress}
@@ -89,12 +78,12 @@ function JCompanyTile({
         style={{
           width: '72%',
           justifyContent: 'center',
-          paddingLeft: RFPercentage(1),
+          // paddingHorizontal: RFPercentage(1),
         }}>
-        <View
+        <JRow
           style={{
-            flexDirection: 'row',
             justifyContent: 'space-between',
+            paddingHorizontal: RFPercentage(1),
           }}>
           <JText>{title}</JText>
 
@@ -126,12 +115,12 @@ function JCompanyTile({
               color={colors.purple[0]}
             />
           )}
-        </View>
-        <JText style={{marginVertical: RFPercentage(0.5)}}>{location}</JText>
+        </JRow>
+        <JText style={{marginVertical: RFPercentage(0.5),paddingHorizontal: RFPercentage(1)}}>{location}</JText>
 
         <JText
           style={{
-            alignSelf: 'flex-end',
+            alignSelf: store.lang.id==0?'flex-end':'flex-start',
             marginVertical: RFPercentage(0),
             marginRight: RFPercentage(1),
             padding: RFPercentage(0.5),

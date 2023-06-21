@@ -63,11 +63,11 @@ function AppliedJobs({navigation}) {
                 </MenuTrigger>
 
                 <MenuOptions>
-                  {['All', ...store.appliedJobList.statusArray].map(
+                  {[store.lang.all, ...store.appliedJobList?.statusArray].map(
                     (item, index) => (
                       <MenuOption
                         style={{
-                          marginLeft: RFPercentage(1),
+                          marginHorizontal: RFPercentage(1),
                           paddingVertical: RFPercentage(1.5),
                         }}
                         key={index}
@@ -112,7 +112,7 @@ function AppliedJobs({navigation}) {
                       .includes(store.appliedJobInput.toLowerCase()),
                   )
                 : store.appliedJobSelect?.length > 0 &&
-                  store.appliedJobSelect !== 'All'
+                  store.appliedJobSelect !== store.lang.all
                 ? store.appliedJobList?.appliedJob?.filter(
                     e =>
                       e.application_status.toLowerCase() ===
@@ -125,7 +125,7 @@ function AppliedJobs({navigation}) {
             renderItem={({item}) => (
               <JJobTile
                 onPress={() =>
-                  navigation.navigate('CSelectedJob', {
+                  navigation.navigate('CJobDetails', {
                     id: item.job_unique_id,
                   })
                 }

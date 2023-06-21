@@ -35,6 +35,7 @@ import JButton from '../../../customComponents/JButton';
 import JInput from '../../../customComponents/JInput';
 import JResumeView from '../../../customComponents/JResumeView';
 import url from '../../../config/url';
+import JChevronIcon from '../../../customComponents/JChevronIcon';
 
 const Resume = ({navigation}) => {
   const store = useContext(StoreContext);
@@ -132,6 +133,7 @@ const Resume = ({navigation}) => {
   }, []);
   return (
     <JScreen
+    // style={{marginHorizontal: RFPercentage(2),}}
       headerShown={true}
       header={
         <JGradientHeader
@@ -140,18 +142,11 @@ const Resume = ({navigation}) => {
               fontColor={colors.white[0]}
               fontWeight="bold"
               fontSize={RFPercentage(2.5)}>
-              {'Resume'}
+              {store.lang.resume}
             </JText>
           }
           left={
-            <Feather
-              onPress={() => {
-                navigation.goBack();
-              }}
-              name="chevron-left"
-              size={RFPercentage(3.5)}
-              color={colors.white[0]}
-            />
+            <JChevronIcon/>
           }
           right={
             loader ? (
@@ -293,7 +288,7 @@ const Resume = ({navigation}) => {
                       fontColor={colors.white[0]}
                       fontWeight="bold"
                       fontSize={RFPercentage(2.5)}>
-                      {'Full Detail'}
+                      {store.lang.full_detail}
                     </JText>
                   }
                   right={
@@ -310,7 +305,7 @@ const Resume = ({navigation}) => {
                 />
                 <ScrollView style={{padding: RFPercentage(2)}}>
                   <JRow>
-                    <JText fontSize={RFPercentage(2.5)}>Resume</JText>
+                    <JText fontSize={RFPercentage(2.5)}>{store.lang.resume}</JText>
                     <JText
                       fontColor={colors.danger[0]}
                       fontSize={RFPercentage(2.5)}>
@@ -325,7 +320,7 @@ const Resume = ({navigation}) => {
                       marginBottom: RFPercentage(2),
                       marginTop: RFPercentage(1),
                     }}>
-                    Be sure to include an updated resume
+                    {store.lang.sure_updated_resume}
                   </JText>
 
                   {values.resume?.uri ? (
@@ -378,7 +373,7 @@ const Resume = ({navigation}) => {
                           backgroundColor: colors.white[0],
                           borderColor: colors.black[1],
                         }}
-                        children={'Upload Resume'}
+                        children={store.lang.upload_resume}
                       />
                     </JRow>
                   )}
@@ -386,7 +381,7 @@ const Resume = ({navigation}) => {
                   <JInput
                     containerStyle={{marginTop: RFPercentage(1)}}
                     isRequired
-                    heading={'Name'}
+                    heading={store.lang.name}
                     value={values.name}
                     error={touched.name && errors.name && true}
                     onChangeText={handleChange('name')}
@@ -398,7 +393,7 @@ const Resume = ({navigation}) => {
                       marginVertical: RFPercentage(2),
                     }}>
                     <JText fontWeight={'500'} fontSize={RFPercentage(2.5)}>
-                      Is Default
+                      {store.lang.is_default }
                     </JText>
 
                     <Switch
@@ -424,7 +419,7 @@ const Resume = ({navigation}) => {
                       style={{
                         width: '46%',
                       }}
-                      children={apiLoader ? 'Loading...' : 'Upload'}
+                      children={apiLoader ? store.lang.loading : store.lang.upload}
                     />
                   </JRow>
                 </ScrollView>

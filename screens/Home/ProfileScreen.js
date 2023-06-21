@@ -38,7 +38,7 @@ const ProfileScreen = ({navigation}) => {
               fontColor={colors.white[0]}
               fontWeight="bold"
               fontSize={RFPercentage(2.5)}>
-              {'My Profile'}
+              {store.lang.my_profile}
             </JText>
           }
           right={
@@ -61,7 +61,7 @@ const ProfileScreen = ({navigation}) => {
             ? []
             : [
                 {
-                  name: 'About Me',
+                  name: store.lang.about_me,
                   route: 'Aboutme',
                   icon: (
                     <AntDesign
@@ -73,7 +73,7 @@ const ProfileScreen = ({navigation}) => {
                   ),
                 },
                 {
-                  name: 'Resume',
+                  name: store.lang.resume,
                   route: 'Resume',
                   icon: (
                     <Entypo
@@ -86,7 +86,7 @@ const ProfileScreen = ({navigation}) => {
                 },
 
                 {
-                  name: 'Career Information',
+                  name: store.lang.career_information,
                   route: 'CareerInformation',
                   icon: (
                     <AntDesign
@@ -98,7 +98,7 @@ const ProfileScreen = ({navigation}) => {
                   ),
                 },
                 {
-                  name: 'Assessment',
+                  name: store.lang.assessments,
                   route: 'Assessment',
                   icon: (
                     <MaterialCommunityIcons

@@ -31,7 +31,7 @@ export default function JTagText({
         },
         style,
       ]}>
-      {children.toString().replace(/<(?:.|\n)*?>/gm, '')}
+      {children?.toString().replace(/<(?:.|\n)*?>/gm, '')}
     </Text>
   );
 }

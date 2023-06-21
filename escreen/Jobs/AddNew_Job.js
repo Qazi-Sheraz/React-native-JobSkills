@@ -29,10 +29,7 @@ import { _addnewJob } from '../../functions/Candidate/BottomTab';
 
 const AddNew_Job = () => {
   const {navigate, goBack} = useNavigation();
-  // const [error, setError] = useState(false);
-  // const [addJob, setAddJob] = useState();
   const store = useContext(StoreContext);
-// console.log(store.createApiLoader)
 
   return (
     <JScreen

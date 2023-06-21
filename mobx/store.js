@@ -60,6 +60,7 @@ export const StoreProvider = props => {
     filterFavouriteList: action(e =>
       store.favouriteList.filter(item => item.job_id !== e),
     ),
+
     favouriteApiLoader: true,
     setFavouriteApiLoader: action(e => (store.favouriteApiLoader = e)),
     favouriteApiError: false,
@@ -187,7 +188,9 @@ export const StoreProvider = props => {
     // Get Employe Job
     jobEmployerData: [],
     setJobEmployerData: action(e => (store.jobEmployerData = e)),
-    AddJobEmployerData: action(e => (store.jobEmployerData = [e,...store.jobEmployerData])),
+    AddJobEmployerData: action(
+      e => (store.jobEmployerData = [e, ...store.jobEmployerData]),
+    ),
 
     // Get Employe Job Details
     jobDetail: [],
@@ -200,24 +203,25 @@ export const StoreProvider = props => {
     setJAppLoader: action(e => (store.jAppLoader = e)),
     jAppError: false,
     setJAppError: action(e => (store.jAppError = e)),
- 
-// Get Employe Home
+
+    // Get Employe Home
     employeHome: {},
     setEmployeHome: action(e => (store.employeHome = e)),
-    AddRecentJobs: action(e => {store.employeHome.recentJobs[0] = [e,store.employeHome.recentJobs[0]]}),
-    eHomeApiLoader:true,
+    AddRecentJobs: action(e => {
+      store.employeHome.recentJobs[0] = [e, store.employeHome.recentJobs[0]];
+    }),
+    eHomeApiLoader: true,
     setEHomeApiLoader: action(e => (store.eHomeApiLoader = e)),
-    eHomeApiError:false,
+    eHomeApiError: false,
     setEHomeApiError: action(e => (store.eHomeApiError = e)),
-    
+
     //Job Store
     jobCreate: {},
     setJobCreate: action(e => (store.jobCreate = e)),
-    createApiLoader:true,
+    createApiLoader: true,
     setCreateApiLoader: action(e => (store.createApiLoader = e)),
-    createApiError:false,
+    createApiError: false,
     setCreateApiError: action(e => (store.createApiError = e)),
-
   }));
   return (
     <StoreContext.Provider value={store}>

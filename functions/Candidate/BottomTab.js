@@ -14,8 +14,9 @@ export const _getHomeData = store => {
   fetch(`${url.baseUrl}/home`, requestOptions)
     .then(res => res.json())
     .then(res => {
+
       store.setHomeApiLoader(true);
-      store.setHomeData(res.data);
+      store.setHomeData(res);
       store.setHomeApiLoader(false);
     })
     .catch(error => {
@@ -233,7 +234,6 @@ export const _getAllFeatureCompanyData = store => {
       store.setFeatureCompanyApiLoader(false);
     });
 };
-
 
 export const _dashboard = (store) => {
   var myHeaders = new Headers();

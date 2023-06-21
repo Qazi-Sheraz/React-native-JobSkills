@@ -39,6 +39,8 @@ import JApplyJob from '../../../customComponents/JApplyJob';
 import JRow from '../../../customComponents/JRow';
 import {_saveToFavoriteList} from '../../../functions/Candidate/BottomTab';
 import {observer, useObserver} from 'mobx-react';
+import JChevronIcon from '../../../customComponents/JChevronIcon';
+import { ScrollView } from 'react-native-gesture-handler';
 
 
  
@@ -49,12 +51,11 @@ function SelectedJob({route, navigation}) {
   const [status, setStatus] = useState({});
   const [error, setError] = useState();
   const refRBSheet = useRef();
-  const simpleText = RFPercentage(2);
+  const simpleText = RFPercentage(1.9);
   const store = useContext(StoreContext);
-
   const headingWeight = {
     weight: 'bold',
-    size: RFPercentage(3),
+    size: RFPercentage(2.5),
   };
 
   const _getDetail = () => {
@@ -70,7 +71,7 @@ function SelectedJob({route, navigation}) {
     fetch(`${url.baseUrl}/job-details/${route.params?.id}`, requestOptions)
       .then(response => response.json())
       .then(function (response) {
-        // console.log('Get Selected Job Data', response.data);
+        // console.log('Get Selected Job Data', response);
         setJobData(response);
         setLoader(false);
       })
@@ -85,13 +86,12 @@ function SelectedJob({route, navigation}) {
         setLoader(false);
       });
   };
-
   useEffect(() => {
     _getDetail();
 
     return () => {};
   }, [route.params?.id]);
-
+// console.log(jobData?.job[0]?.job_requirement?.job_skills)
   return loader ? (
     <CLSelectedJob />
   ) : (
@@ -101,33 +101,22 @@ function SelectedJob({route, navigation}) {
           height: heightPercentageToDP(25),
           paddingHorizontal: RFPercentage(2),
         }}>
-        <View
+        <JRow
           style={{
-            flexDirection: 'row',
-            alignItems: 'center',
             justifyContent: 'space-between',
             paddingVertical: RFPercentage(1.5),
           }}>
-          <Feather
-            onPress={() => navigation.goBack()}
-            name="chevron-left"
-            size={RFPercentage(3.5)}
-            color={colors.white[0]}
-          />
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
+          <JChevronIcon />
+          <JRow>
             {starLoader ? (
               <ActivityIndicator
-                size={RFPercentage(3.5)}
+                size={RFPercentage(3)}
                 style={{marginRight: RFPercentage(2)}}
                 color={colors.white[0]}
               />
             ) : (
               <FontAwesome
-                style={{marginRight: RFPercentage(2)}}
+                style={{marginHorizontal: RFPercentage(2)}}
                 onPress={() =>
                   _saveToFavoriteList(store, setStarLoader, jobData?.job.id)
                 }
@@ -145,143 +134,133 @@ function SelectedJob({route, navigation}) {
               <MenuTrigger>
                 <Entypo
                   name="dots-three-vertical"
-                  size={RFPercentage(3)}
+                  size={RFPercentage(2.6)}
                   color={colors.white[0]}
                 />
               </MenuTrigger>
 
               <MenuOptions>
-                {['Share Job', 'Email To Friend', 'Report Abuse'].map(
-                  (item, index) => (
-                    <MenuOption
-                      style={{
-                        marginLeft: RFPercentage(1),
-                        paddingVertical: RFPercentage(1.5),
-                      }}
-                      key={index}
-                      onSelect={() => {
-                        refRBSheet.current.open();
-                      }}>
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                        }}>
-                        {index === 0 ? (
-                          <AntDesign
-                            size={RFPercentage(3)}
-                            color={colors.black[0]}
-                            name="sharealt"
-                          />
-                        ) : index === 1 ? (
-                          <AntDesign
-                            size={RFPercentage(3)}
-                            color={colors.black[0]}
-                            name="mail"
-                          />
-                        ) : (
-                          <Feather
-                            size={RFPercentage(3)}
-                            color={colors.black[0]}
-                            name="flag"
-                          />
-                        )}
-                        <JText
-                          style={{marginLeft: RFPercentage(2)}}
-                          fontSize={RFPercentage(2)}>
-                          {item}
-                        </JText>
-                      </View>
-                    </MenuOption>
-                  ),
-                )}
+                {[
+                  store.lang.share_job,
+                  store.lang.email_to_friend,
+                  store.lang.report_abuse,
+                ].map((item, index) => (
+                  <MenuOption
+                    style={{
+                      marginHorizontal: RFPercentage(1),
+                      paddingVertical: RFPercentage(1.3),
+                    }}
+                    key={index}
+                    onSelect={() => {
+                      refRBSheet.current.open();
+                    }}>
+                    <JRow>
+                      {index === 0 ? (
+                        <AntDesign
+                          size={RFPercentage(3)}
+                          color={colors.black[0]}
+                          name="sharealt"
+                        />
+                      ) : index === 1 ? (
+                        <AntDesign
+                          size={RFPercentage(3)}
+                          color={colors.black[0]}
+                          name="mail"
+                        />
+                      ) : (
+                        <Feather
+                          size={RFPercentage(3)}
+                          color={colors.black[0]}
+                          name="flag"
+                        />
+                      )}
+                      <JText
+                        style={{marginHorizontal: RFPercentage(1)}}
+                        fontSize={RFPercentage(2)}>
+                        {item}
+                      </JText>
+                    </JRow>
+                  </MenuOption>
+                ))}
               </MenuOptions>
             </Menu>
-          </View>
-        </View>
+          </JRow>
+        </JRow>
 
         <JText
           fontWeight={headingWeight.weight}
           fontSize={headingWeight.size}
           fontColor={colors.white[0]}>
-          {jobData?.job?.job_title}
+          {jobData?.job[0]?.job_title}
         </JText>
 
-        <View
-          style={{
-            flexDirection: 'row',
-
-            alignItems: 'center',
-          }}>
+        <JRow>
           <Image
             style={{
-              height: RFPercentage(2.3),
+              height: RFPercentage(2.5),
               width: RFPercentage(2.3),
-              marginRight: RFPercentage(1),
+              marginHorizontal: RFPercentage(1),
             }}
-            source={{uri: jobData?.job?.company?.company_url}}
+            source={{uri: jobData?.job[0]?.company?.company_url}}
           />
           <JText fontColor={colors.white[0]} fontSize={simpleText}>
-            {jobData?.job?.company?.user?.first_name}
+            {jobData?.job[0]?.company_name !== null &&
+              jobData?.job[0]?.company_names}
           </JText>
-        </View>
+        </JRow>
 
-        <View
+        <JRow
           style={{
-            flexDirection: 'row',
-
-            alignItems: 'center',
             marginTop: RFPercentage(1),
           }}>
           <EvilIcons
-            size={RFPercentage(3.5)}
+            size={RFPercentage(2.8)}
             color={colors.white[0]}
             name="location"
           />
           <JText fontColor={colors.white[0]} fontSize={simpleText}>
-            {jobData?.job?.city_name}
+            {store.lang.id == 0
+              ? jobData?.job[0]?.city_name
+              : jobData?.job[0]?.city_name_arabic}
+            {'\r'}
+            {store.lang.id == 0
+              ? jobData?.job[0]?.state_name
+              : jobData?.job[0]?.state_name_arabic}
+            {'\r'}
+            {store.lang.id == 0
+              ? jobData?.job[0]?.country_name
+              : jobData?.job[0]?.country_name_arabic}
           </JText>
-        </View>
+        </JRow>
 
-        <View
+        <JRow
           style={{
-            flexDirection: 'row',
             justifyContent: 'space-between',
-            alignItems: 'center',
             marginVertical: RFPercentage(1),
           }}>
-          <View
-            style={{
-              flexDirection: 'row',
-
-              alignItems: 'center',
-            }}>
-            <View
-              style={{
-                flexDirection: 'row',
-
-                alignItems: 'center',
-              }}>
+          <JRow>
+            <JRow>
               <EvilIcons
-                size={RFPercentage(3.5)}
+                size={RFPercentage(2.8)}
                 color={colors.white[0]}
                 name="calendar"
               />
               <JText fontColor={colors.white[0]} fontSize={simpleText}>
-                Posted :
-                {moment(jobData?.job?.job_publish_date).format('DD MMM YYYY')}
+                {store.lang.date_posted}
+                {moment(jobData?.job?.job_publish_date).format('DD/MM/YYYY')}
               </JText>
-            </View>
-          </View>
+            </JRow>
+          </JRow>
           <JText fontColor={colors.white[0]} fontSize={simpleText}>
-            Expiry :{moment(jobData?.job?.job_expiry_date).format('DD MMM YYYY')}
+            {store.lang.expiry}
+            {moment(jobData?.job?.job_expiry_date).format('DD/MM/YYYY')}
           </JText>
-        </View>
+        </JRow>
         <JText
           fontAlign="right"
           fontWeight={headingWeight.weight}
           fontColor={colors.white[0]}>
-          Open Jobs: {jobData?.data?.jobsCount}
+          {jobData?.jobCount} {store.lang.open_jobs}
         </JText>
       </JGradientView>
       {status.success == false && status.message === '3' ? (
@@ -293,7 +272,7 @@ function SelectedJob({route, navigation}) {
             justifyContent: 'center',
           }}>
           <JText fontColor={colors.white[0]} fontWeight="bold">
-            Assessment Required
+            {store.lang.assessment_Required}
           </JText>
           <JText
             onPress={() =>
@@ -304,7 +283,7 @@ function SelectedJob({route, navigation}) {
             style={{marginLeft: RFPercentage(1)}}
             fontColor={colors.primary[0]}
             fontWeight="bold">
-            {'Click Here'}
+            {store.lang.click_here}
           </JText>
         </JRow>
       ) : status.success == false && status.message === '2' ? (
@@ -316,14 +295,14 @@ function SelectedJob({route, navigation}) {
             justifyContent: 'center',
           }}>
           <JText fontColor={colors.white[0]} fontWeight="bold">
-            Upload Your CV
+            {store.lang.upload_your_CV}
           </JText>
           <JText
             onPress={() => navigation.navigate('Resume')}
             style={{marginLeft: RFPercentage(1)}}
             fontColor={colors.primary[0]}
             fontWeight="bold">
-            {'Click Here'}
+            {store.lang.click_here}
           </JText>
         </JRow>
       ) : status.success == false && status.message === '1' ? (
@@ -335,7 +314,7 @@ function SelectedJob({route, navigation}) {
             justifyContent: 'center',
           }}>
           <JText fontColor={colors.white[0]} fontWeight="bold">
-            Already Applied
+            {store.lang.already_applied}
           </JText>
         </JRow>
       ) : null}
@@ -348,75 +327,89 @@ function SelectedJob({route, navigation}) {
         <JText
           style={{marginTop: RFPercentage(1.5)}}
           fontSize={headingWeight.size}>
-          About :
+          {store.lang.about} :
         </JText>
-        {jobData?.job?.description ? (
-          <JTagText fontSize={simpleText}>{jobData?.job?.description}</JTagText>
-        ) : (
-          <JText fontAlign="center" fontSize={simpleText}>
-            N/A
-          </JText>
-        )}
-
+        <JTagText
+          fontAlign={store.lang.id == 0 ? 'left' : 'right'}
+          fontSize={simpleText}>
+          {jobData?.job[0]?.description !== null
+            ? jobData?.job[0]?.description
+            : 'N/A'}
+        </JTagText>
         <JText
           style={{marginVertical: RFPercentage(1.5)}}
           fontSize={headingWeight.size}>
-          Job Requirements :
+          {store.lang.job_Requirement}
         </JText>
+        <View style={{marginHorizontal: RFPercentage(1.3)}}>
         <JText fontWeight="bold" fontSize={simpleText}>
-          Skill :
+          {store.lang.job_skills} :
         </JText>
-        <JText fontSize={simpleText}>
-          {jobData?.job?.jobs_skill ? jobData?.job?.jobs_skill.map((item, index) => item.name):'N/A'}
+        {jobData?.job[0]?.job_requirement?.job_skills.map(skill => (
+                <JText style={styles.txt1}>{store.lang.id===0?skill.name:store.lang.id===1?skill.urdu_title:skill.arabic_title}</JText>
+              ))}
+        <JText
+          style={{marginTop: RFPercentage(1)}}
+          fontWeight="bold"
+          fontSize={simpleText}>
+          {store.lang.degree_level} :
         </JText>
+        <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}>
+                {jobData?.job[0]?.job_requirement?.degree_level.map(level => (
+                  <JRow style={{marginHorizontal: RFPercentage(1)}}>
+                    <JText style={styles.dg}>{store.lang.id===0?level.name:store.lang.id===1?level.urdu_title:level.arabic_title}</JText>
+                  </JRow>
+                ))}
+              </ScrollView>
 
         <JText
           style={{marginTop: RFPercentage(1)}}
           fontWeight="bold"
           fontSize={simpleText}>
-          Degree Level :
+          {store.lang.assessment_Required} :
         </JText>
         <JText fontSize={simpleText}>
-          {jobData?.job?.degree_level
-            ? jobData?.job?.degree_level.map((item, index) => item.name)
+          {jobData?.job[0]?.job_requirement?.assessment_required
+            ? jobData?.job[0]?.job_requirement?.assessment_required.map(
+                (item, index) => item.assessment_name,
+              )
             : 'N/A'}
         </JText>
-
-        <JText
-          style={{marginTop: RFPercentage(1)}}
-          fontWeight="bold"
-          fontSize={simpleText}>
-          Assessment required :
-        </JText>
-        <JText fontSize={simpleText}>
-          {jobData?.job?.assessment
-            ? jobData?.job?.assessment.map((item, index) => item.assessment_name)
-            : 'N/A'}
-        </JText>
-
+</View>
         <JText
           style={{marginVertical: RFPercentage(1)}}
           fontSize={headingWeight.size}>
-          Job Details
+          {store.lang.job_Details}
         </JText>
-        <View style={styles.jobDetails}>
-          <JText style={styles.jobDetails_heading}>Job Category</JText>
-          <JText style={styles.jobDetails_text}>
-            {jobData?.job?.job_category?.name ? jobData?.job?.job_category?.name: 'N/A'}
+      
+        <JRow style={styles.jobDetails}>
+          <JText style={styles.jobDetails_heading}>
+            {store.lang.job_category} :
           </JText>
-        </View>
+          <JText style={styles.jobDetails_text}>
+            {jobData?.job?.job_category?.name
+              ? jobData?.job?.job_category?.name
+              : 'N/A'}
+          </JText>
+        </JRow>
 
-        <View style={styles.jobDetails}>
-          <JText style={styles.jobDetails_heading}>Career Level</JText>
+        <JRow style={styles.jobDetails}>
+          <JText style={styles.jobDetails_heading}>
+            {store.lang.career_level} :
+          </JText>
           <JText style={styles.jobDetails_text}>
             {jobData?.job.career_level
               ? jobData?.job?.career_level?.level_name
               : 'NA'}
           </JText>
-        </View>
+        </JRow>
 
-        <View style={styles.jobDetails}>
-          <JText style={styles.jobDetails_heading}>Job Tag</JText>
+        <JRow style={styles.jobDetails}>
+          <JText style={styles.jobDetails_heading}>
+            {store.lang.job_tag} :
+          </JText>
           <JText
             // onPress={() => console.log(jobData.job.jobs_tag)}
             style={styles.jobDetails_text}>
@@ -424,64 +417,78 @@ function SelectedJob({route, navigation}) {
               ? jobData?.job?.jobs_tag.map((item, index) => item.name + ',')
               : 'N/A'}
           </JText>
-        </View>
+        </JRow>
 
-        <View style={styles.jobDetails}>
-          <JText style={styles.jobDetails_heading}>Job Type</JText>
+        <JRow style={styles.jobDetails}>
+          <JText style={styles.jobDetails_heading}>
+            {store.lang.job_type} :
+          </JText>
           <JText style={styles.jobDetails_text}>
             {jobData?.job?.job_type ? jobData?.job?.job_type?.name : 'N/A'}
           </JText>
-        </View>
+        </JRow>
 
-        <View style={styles.jobDetails}>
-          <JText style={styles.jobDetails_heading}>Job Shift</JText>
+        <JRow style={styles.jobDetails}>
+          <JText style={styles.jobDetails_heading}>
+            {store.lang.job_Shift} :
+          </JText>
           <JText style={styles.jobDetails_text}>
             {jobData?.job?.job_shift ? jobData?.job?.job_shift.shift : 'N/A'}
           </JText>
-        </View>
+        </JRow>
 
-        <View style={styles.jobDetails}>
-          <JText style={styles.jobDetails_heading}>Functional Area</JText>
+        <JRow style={styles.jobDetails}>
+          <JText style={styles.jobDetails_heading}>
+            {store.lang.functional_Area} :
+          </JText>
           <JText style={styles.jobDetails_text}>
             {jobData?.job?.functional_area
               ? jobData?.job?.functional_area.name
               : 'N/A'}
           </JText>
-        </View>
+        </JRow>
 
-        <View style={styles.jobDetails}>
-          <JText style={styles.jobDetails_heading}>Positions</JText>
+        <JRow style={styles.jobDetails}>
+          <JText style={styles.jobDetails_heading}>
+            {store.lang.position} :
+          </JText>
           <JText style={styles.jobDetails_text}>
             {jobData?.job?.position ? jobData?.job?.position : 'N/A'}
           </JText>
-        </View>
+        </JRow>
 
-        <View style={styles.jobDetails}>
-          <JText style={styles.jobDetails_heading}>Job Experience</JText>
+        <JRow style={styles.jobDetails}>
+          <JText style={styles.jobDetails_heading}>
+            {store.lang.job_Experience} :
+          </JText>
           <JText style={styles.jobDetails_text}>
             {jobData?.job?.experience ? jobData?.job?.experience : 'N/A'}
           </JText>
-        </View>
+        </JRow>
 
-        <View style={styles.jobDetails}>
-          <JText style={styles.jobDetails_heading}>Salary Period</JText>
+        <JRow style={styles.jobDetails}>
+          <JText style={styles.jobDetails_heading}>
+            {store.lang.Salary_Period} :
+          </JText>
           <JText style={styles.jobDetails_text}>
             {jobData?.job?.salary_period
               ? jobData?.job?.salary_period.period
               : 'N/A'}
           </JText>
-        </View>
+        </JRow>
 
-        <View style={styles.jobDetails}>
-          <JText style={styles.jobDetails_heading}>Is Freelance</JText>
-          <JText style={styles.jobDetails_text}>
-            {jobData?.job.is_freelance ? 'Yes' : 'No'}
+        <JRow style={styles.jobDetails}>
+          <JText style={styles.jobDetails_heading}>
+            {store.lang.Is_Freelance} :
           </JText>
-        </View>
+          <JText style={styles.jobDetails_text}>
+            {jobData?.job[0]?.is_freelance ? 'Yes' : 'No'}
+          </JText>
+        </JRow>
         <JText
           style={{marginTop: RFPercentage(1.5)}}
           fontSize={headingWeight.size}>
-          Description :
+          {store.lang.description}
         </JText>
 
         {jobData?.job?.company?.details ? (
@@ -552,10 +559,54 @@ function SelectedJob({route, navigation}) {
 export default observer(SelectedJob);
 const styles = StyleSheet.create({
   jobDetails: {
-    flexDirection: 'row',
-    alignItems: 'center',
     marginBottom: RFPercentage(0.7),
   },
+  dg: {
+    marginVertical: RFPercentage(2),
+    padding: RFPercentage(1),
+    fontSize: RFPercentage(1.8),
+    backgroundColor: '#F8FAFC',
+    textAlign: 'center',
+    shadowColor: '#000',
+
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+
+    elevation: 2,
+  },
+  headertxt: {fontSize: RFPercentage(1.9), fontWeight: 'bold', color: '#ffff'},
+  headertxt1: {
+    fontSize: RFPercentage(3),
+    fontWeight: 'bold',
+    marginVertical: RFPercentage(1),
+  },
+
+  headertxt2: {
+    fontSize: RFPercentage(2),
+    fontWeight: '700',
+    marginVertical: RFPercentage(1),
+  },
+  headertxt3: {
+    fontSize: RFPercentage(2),
+    width: '40%',
+    fontWeight: '800',
+    marginVertical: RFPercentage(1),
+  },
+  txt: {fontSize: RFPercentage(1.8), color: '#ffff', margin: RFPercentage(1)},
+  txt1: {
+    fontSize: RFPercentage(1.9),
+    fontWeight: '500',
+    marginVertical: RFPercentage(0.5),
+  },
+  txt2: {
+    fontSize: RFPercentage(1.9),
+    fontWeight: '500',
+  },
+
   jobDetails_heading: {
     width: '50%',
     fontWeight: 'bold',

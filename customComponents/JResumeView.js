@@ -74,7 +74,7 @@ export default function JResumeView({item, setModalVisible, _deleteCV}) {
         }}
       />
 
-      <JRow
+      <View
         style={{
           justifyContent: 'space-between',
           width: '80%',
@@ -89,7 +89,7 @@ export default function JResumeView({item, setModalVisible, _deleteCV}) {
         <JText fontSize={RFPercentage(2)} fontColor={'#848484'}>
           {moment(item.created_at).fromNow()}
         </JText>
-      </JRow>
+      </View>
       <JRow style={{marginTop: RFPercentage(0.5)}}>
         <TouchableOpacity
           onPress={() => {
@@ -102,7 +102,7 @@ export default function JResumeView({item, setModalVisible, _deleteCV}) {
             width: RFPercentage(4),
 
             backgroundColor: '#6777EF',
-            marginRight: RFPercentage(1),
+            marginHorizontal: RFPercentage(0.5),
           }}>
           <FontAwesome
             color={colors.white[0]}
@@ -111,8 +111,10 @@ export default function JResumeView({item, setModalVisible, _deleteCV}) {
           />
         </TouchableOpacity>
         <TouchableOpacity
+        
           onPress={() => _deleteCV(item.id)}
           style={{
+            marginHorizontal: RFPercentage(0.5),
             justifyContent: 'center',
             alignItems: 'center',
             height: RFPercentage(4),

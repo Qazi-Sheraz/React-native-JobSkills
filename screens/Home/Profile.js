@@ -26,11 +26,12 @@ import JRow from '../../customComponents/JRow';
 import moment from 'moment';
 import FontAwesome5Brands from 'react-native-vector-icons/FontAwesome5';
 import {_getProfile} from '../../functions/Candidate/MyProfile';
+import JChevronIcon from '../../customComponents/JChevronIcon';
 
 function Profile({navigation}) {
 
   const store = useContext(StoreContext);
-  // console.log(store.myProfile?.user[0]);
+  console.log(store.myProfile?.user[0]);
   const [update, setUpdate] = useState(false);
 
   const BorderView = ({children}) => {
@@ -82,14 +83,7 @@ function Profile({navigation}) {
           height={heightPercentageToDP(22)}
           alignItems={'flex-start'}
           paddingTop={RFPercentage(3)}
-          left={
-            <Feather
-              onPress={() => navigation.goBack()}
-              name="chevron-left"
-              size={RFPercentage(3.5)}
-              color={colors.white[0]}
-            />
-          }
+          left={<JChevronIcon />}
           right={
             <AntDesign
               name="poweroff"
@@ -105,7 +99,10 @@ function Profile({navigation}) {
           store.myProfileApiLoader === false &&
           store.myProfile?.user[0].general_information?.first_name +
             ' ' +
-            store.myProfile?.user[0].general_information?.last_name
+            (store.myProfile?.user[0].general_information?.last_name !==
+            null
+            ? store.myProfile?.user[0].general_information?.last_name
+            : '')
         }
         // email={store.token.user.email}
         src={
@@ -128,9 +125,9 @@ function Profile({navigation}) {
             navigation.navigate('CEditProfile', {selected: 0});
           }}
           isEmpty={false}
-          heading={'Contact Information'}
+          heading={store.lang.contact_info}
           icon="pencil"
-          emptyMsg={'Contact Information Not Available'}
+          emptyMsg={store.lang.contact_Info_not_available}
           children={
             store.myProfileApiLoader === false && (
               <BorderView>
@@ -152,13 +149,13 @@ function Profile({navigation}) {
         />
         <JProfileSections
           loader={store.myProfileApiLoader}
-          heading={'General Information'}
+          heading={store.lang.general_info}
           onIconPress={() => {
             navigation.navigate('CEditProfile', {selected: 1});
           }}
           icon="pencil"
           isEmpty={false}
-          emptyMsg={'General Information Not Available'}
+          emptyMsg={store.lang.general_Info_not_available}
           children={
             store.myProfileApiLoader === false && (
               <BorderView>
@@ -287,9 +284,9 @@ function Profile({navigation}) {
               </BorderView>
             )
           }
-          heading={'Experience Information'}
+          heading={store.lang.experience_information}
           icon="add"
-          emptyMsg={'Experience Information Not Available'}
+          emptyMsg={store.lang.experience_information_not_available}
         />
 
         <JProfileSections
@@ -313,7 +310,6 @@ function Profile({navigation}) {
                     (item, index) => (
                       <JRow
                         key={index}
-                        
                         style={{
                           borderBottomColor: colors.border[0],
                           borderBottomWidth: RFPercentage(0.1),
@@ -346,9 +342,9 @@ function Profile({navigation}) {
             // refRBSheet.current.open();
           }}
           isEmpty={false}
-          heading={'Social Media Liks'}
+          heading={store.lang.social_media_links}
           icon="add"
-          emptyMsg={'Social Media Liks Not Available'}
+          emptyMsg={store.lang.social_links_not_available}
           children={
             store.myProfileApiLoader === false && (
               <View
@@ -362,7 +358,10 @@ function Profile({navigation}) {
                       <View style={{marginBottom: RFPercentage(2)}} key={index}>
                         <JRow>
                           <FontAwesome5Brands
-                            onPress={() =>{''}
+                            onPress={
+                              () => {
+                                '';
+                              }
                               // console.log(store.myProfile?.user[0].social_links)
                             }
                             size={RFPercentage(3)}

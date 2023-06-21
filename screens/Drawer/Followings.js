@@ -25,7 +25,7 @@ function Followings({navigation}) {
     store.setIsRefreshing(true);
 
     setTimeout(() => {
-      _getHomeData(store);
+      _getFollowingCompanyData(store);
 
       store.setIsRefreshing(false);
     }, 2000);
@@ -48,12 +48,12 @@ function Followings({navigation}) {
             </JText>
           }
           left={
-        <JChevronIcon/>
+        <JChevronIcon onPress={()=>{ store.setFollowingInput(''),navigation.goBack()}} />
           }
         />
       }
       style={{marginHorizontal: RFPercentage(2)}}>
-      {store.followingApiLoader === true ? (
+      {store.followingApiLoader == true ? (
         <CLFavouriteJob />
       ) : (
         <React.Fragment>
@@ -74,10 +74,9 @@ function Followings({navigation}) {
             data={
               store.followingInput?.length === 0
                 ? store.followingList
-                : store.followingList.filter(e =>
-                    e.company.user.first_name
-                      .toLowerCase()
-                      .includes(store.followingInput.toLowerCase()),
+                : store.followingList?.filter(e =>
+                  e.company_name?.toLowerCase().includes(store.followingInput.toLowerCase()) ||
+                  e.employer_name?.toLowerCase().includes(store.followingInput.toLowerCase())
                   )
             }
             ListEmptyComponent={() => <JEmpty />}
@@ -92,9 +91,9 @@ function Followings({navigation}) {
                 containerStyle={{marginTop: RFPercentage(1)}}
                 followingList={store.followingList}
                 companyId={item.company_id}
-                location={`${item.city_name},${item.country_name}`}
+                location={`${item?.city_name!==null?item?.city_name:''} ${item?.state_name!==null?item?.state_name:''} ${item?.country_name!==null?item?.country_name:'N/A'}`}
                 img={item.company_url}
-                title={item.employer_name}
+                title={item.company_name?item.company_name:item.employer_name}
               />
             )}
             keyExtractor={data => data.id}

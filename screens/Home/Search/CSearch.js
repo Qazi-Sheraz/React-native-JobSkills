@@ -29,17 +29,13 @@ import {useRef} from 'react';
 import JGradientHeader from '../../../customComponents/JGradientHeader';
 import JRecentJobTile from '../../../customComponents/JRecentJobTile';
 import JChevronIcon from '../../../customComponents/JChevronIcon';
+import url from '../../../config/url';
 
 const CSearch = ({navigation}) => {
   
   const refRBSheet = useRef();
   const [name, setName] = useState('');
-  const data = [
-    {id: 0, JobName: 'UI/UX Designer'},
-    {id: 1, JobName: 'Motion Graphic Designer'},
-    {id: 2, JobName: 'Laraval Developer'},
-    {id: 3, JobName: 'Interior Designer'},
-  ];
+  
   const store = useContext(StoreContext);
   const [search, setSearch] = useState('');
   const getData = async () => {
@@ -57,36 +53,15 @@ const CSearch = ({navigation}) => {
 useEffect(() => {
     getData();
 }, [])
-  const _getFilterList = () => {
-    var myHeaders = new Headers();
-    myHeaders.append('Authorization', `Bearer ${store.token.token}`);
-    var requestOptions = {
-      method: 'GET',
-      headers: myHeaders,
-      redirect: 'follow',
-    };
-    fetch(
-      'https://dev.jobskills.digital/api/search-jobs-filters',
-      requestOptions,
-    )
-      .then(response => response.json())
-      .then(result => {
-        // console.log(result.data);
-        store.setFilterList(result.data);
-      })
-      // .catch(error => console.log('error', error));
-  };
+ 
 
-  useEffect(() => {
-    _getFilterList();
-  }, []);
   return (
     <JScreen
       style={{paddingHorizontal: RFPercentage(2)}}
       header={
         <JHeader
           left={
-            <JChevronIcon color={colors.black[0]}/>
+            <JChevronIcon color={colors.black[0]} onPress={()=> {store.setFilterData('') ,navigation.goBack()}}/>
           }
           right={
             <Feather
@@ -113,9 +88,11 @@ useEffect(() => {
         }}
         isPressable={false}>
         <TextInput
+        
           // autoFocus
           style={{
             color: colors.black[0],
+            textAlign: store.lang.id == 0 ? 'left' : 'right',
             width: '85%',
           }}
           onChangeText={e => {
@@ -169,7 +146,7 @@ useEffect(() => {
                 favouriteData={store.favouriteList}
                 jobId={item.id}
                 onPress={() =>
-                  navigation.navigate('CSelectedJob', {
+                  navigation.navigate('CJobDetails', {
                     id: item.job_id,
                   })
                 }
@@ -188,7 +165,7 @@ useEffect(() => {
             <JText
               style={{marginBottom: RFPercentage(2)}}
               fontSize={RFPercentage(3)}>
-              Recent Searches
+              {store.lang.Recent_search}
             </JText>
             {store.recentSearch?.map((item, index) => (
               

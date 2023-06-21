@@ -40,7 +40,7 @@ function Favourite({navigation}) {
               fontColor={colors.white[0]}
               fontWeight="bold"
               fontSize={RFPercentage(2.5)}>
-              {'Favourite Job'}
+              {store.lang.favourite_job}
             </JText>
           }
         />
@@ -80,7 +80,7 @@ function Favourite({navigation}) {
                 favouriteData={store.favouriteList}
                 jobId={item.job_id}
                 onPress={() =>
-                  navigation.navigate('CSelectedJob', {
+                  navigation.navigate('CJobDetails', {
                     id: item.job_unique_id,
                   })
                 }

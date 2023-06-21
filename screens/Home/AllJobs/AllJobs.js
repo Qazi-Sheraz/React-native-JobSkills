@@ -21,6 +21,7 @@ import JSearchInput from '../../../customComponents/JSearchInput';
 import Feather from 'react-native-vector-icons/Feather';
 import JChevronIcon from '../../../customComponents/JChevronIcon';
 function AllJobs({navigation}) {
+
   const store = useContext(StoreContext);
   useEffect(() => {
     _getAllJobData(store);
@@ -45,11 +46,11 @@ function AllJobs({navigation}) {
               fontColor={colors.white[0]}
               fontWeight="bold"
               fontSize={RFPercentage(2.5)}>
-              {store.lang.job}
+              {store.lang.jobs}
             </JText>
           }
           left={
-           <JChevronIcon/>
+           <JChevronIcon onPress={()=>{ store.setAllJobInput(''),navigation.goBack()}}/>
           }
         />
       }
@@ -59,7 +60,7 @@ function AllJobs({navigation}) {
       ) : (
         <React.Fragment>
           <JSearchInput
-            length={store.jobData?.jobs.length}
+            length={store.jobData?.jobs?.length}
             onChangeText={e => {
               store.setAllJobInput(e);
             }}
@@ -73,7 +74,7 @@ function AllJobs({navigation}) {
               />
             }
             data={
-              store.allJobInput.length === 0
+              store.allJobInput?.length === 0
                 ? store.jobData?.jobs
                 : store.jobData?.jobs.filter(e =>
                     e.job_title
@@ -88,16 +89,16 @@ function AllJobs({navigation}) {
                 favouriteData={store.favouriteList}
                 jobId={item.id}
                 onPress={() =>
-                  navigation.navigate('CSelectedJob', {
+                  navigation.navigate('CJobDetails', {
                     id: item.job_id,
                   })
                 }
                 type="job"
                 containerStyle={{marginBottom: RFPercentage(2)}}
-                img={item.company.company_url}
+                img={item.company_image}
                 title={item.job_title}
-                location={`${item.city_name}${item.location}`}
-                category={item.job_category.name}
+                location={item.full_location?item.full_location:'N/A'}
+                category={store.lang.id==0?item.job_category_english:item.job_category_arabic}
               />
             )}
             keyExtractor={data => data.id}

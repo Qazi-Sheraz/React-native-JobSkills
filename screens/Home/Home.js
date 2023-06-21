@@ -30,7 +30,6 @@ import JFindTitle from '../../customComponents/JFindTitle';
 function Home({navigation}) {
   const store = useContext(StoreContext);
   const data = store.homeData;
-
   
   const onRefresh = useCallback(() => {
     store.setIsRefreshing(true);
@@ -132,7 +131,7 @@ function Home({navigation}) {
 
             <FlatList
               horizontal
-              data={data.categories}
+              data={data?.popularCategories}
               showsHorizontalScrollIndicator={false}
               renderItem={({item}) => (
                 <JGradientView
@@ -153,89 +152,88 @@ function Home({navigation}) {
                     alignItems: 'center',
                   }}>
                   <JText fontColor={colors.white[0]}style={{textAlign:'center'}}>{item.name}</JText>
-                  <JText fontColor={colors.white[0]}>({item.jobs_count})</JText>
+                  <JText fontColor={colors.white[0]}>({item.job_count})</JText>
                 </JGradientView>
               )}
               keyExtractor={data => data.name}
             />
-
-            <JSideHeading
-              leftHeading={store.lang.featured_company}
-              rightHeading={store.lang.see_all}
-              onRightHeadingPress={() => navigation.navigate('CFeatureCompany')}
-            />
-            {data.featuredCompanies?.length > 0 ? (
-              <JCompanyTile
-                followingList={store.followingList}
-                companyId={data.featuredCompanies[0].id}
-                onPress={() =>
-                  navigation.navigate('CSelectedCompany', {
-                    id: data.featuredCompanies[0].unique_id,
-                  })
-                }
-                onIconPress={() => alert('Icon Press')}
-                location={data.featuredCompanies[0].location}
-                img={data.featuredCompanies[0].company_url}
-                title={data.featuredCompanies[0].user.first_name}
-              />
-            ) : (
-              <JJobTile isempty={true} />
-            )}
-
-            <JSideHeading
+              <JSideHeading
               leftHeading={store.lang.featured_job}
               rightHeading={store.lang.see_all}
               onRightHeadingPress={() => navigation.navigate('CFeatureJob')}
             />
-            {data.featuredJobs?.length > 0 ? (
+            {data?.featuredJobs?.length > 0 ? (
               <JJobTile
                 favouriteData={store.favouriteList}
-                jobId={data.featuredJobs[0].id}
+                jobId={data?.featuredJobs[0]?.id}
                 onPress={() =>
-                  navigation.navigate('CSelectedJob', {
-                    id: data.featuredJobs[0].job_id,
+                  navigation.navigate('CJobDetails', {
+                    id: data?.featuredJobs[0]?.job_id,
                   })
                 }
                 onIconPress={() => alert('Icon Press')}
                 type="job"
-                location={data.featuredJobs[0].city_name}
-                category={data.featuredJobs[0].job_category.name}
-                img={data.featuredJobs[0].company.company_url}
-                title={data.featuredJobs[0].job_title}
+                location={`${data?.featuredJobs[0]?.city_name!==null?data?.featuredJobs[0]?.city_name:''} ${data?.featuredJobs[0]?.state_name!==null?data?.featuredJobs[0]?.state_name:''} ${data?.featuredJobs[0]?.country_name!==null?data?.featuredJobs[0]?.country_name:'N/A'}`}
+                category={`${store.lang.id==0?data?.featuredJobs[0]?.job_category_english:data?.featuredJobs[0]?.job_category_arabic}`}
+                img={data?.featuredJobs[0]?.image}
+                title={data?.featuredJobs[0]?.job_title}
               />
             ) : (
               <JJobTile type="job" isempty={true} />
             )}
 
             <JSideHeading
+              leftHeading={store.lang.featured_company}
+              rightHeading={store.lang.see_all}
+              onRightHeadingPress={() => navigation.navigate('CFeatureCompany')}
+            />
+            {data?.featuredCompanies?.length > 0 ? (
+              <JCompanyTile
+              type={'company'}
+                followingList={store.followingList}
+                companyId={data?.featuredCompanies[0]?.id}
+                onPress={() =>
+                  navigation.navigate('CSelectedCompany', {
+                    id: data?.featuredCompanies[0]?.unique_id,
+                  })
+                }
+                onIconPress={() => alert('Icon Press')}
+                location={`${data?.featuredCompanies[0]?.city_name!==null?data?.featuredCompanies[0]?.city_name:''} ${data?.featuredCompanies[0]?.state_name!==null?data?.featuredCompanies[0]?.state_name:''} ${data?.featuredCompanies[0]?.country_name!==null?data?.featuredCompanies[0]?.country_name:'N/A'}`}
+                img={data?.featuredCompanies[0]?.company_url}
+                title={data?.featuredCompanies[0]?.company_name}
+              />
+            ) : (
+              <JJobTile isempty={true} />
+            )}
+            <JSideHeading
               leftHeading={store.lang.latest_jobs}
               rightHeading={store.lang.see_all}
               onRightHeadingPress={() => navigation.navigate('CAllJobs')}
             />
 
-            {data.latestJobs?.length > 0 ? (
-              data.latestJobs.map((item, index) => (
+            {data?.latestJobs?.length > 0 ? (
+              data?.latestJobs.map((item, index) => (
                 <React.Fragment key={index}>
                   <JJobTile
                     favouriteData={store.favouriteList}
                     jobId={item.id}
                     onPress={() =>
-                      navigation.navigate('CSelectedJob', {
+                      navigation.navigate('CJobDetails', {
                         id: item.job_id,
                       })
                     }
                     onIconPress={() => alert('Icon Press')}
                     type="job"
-                    title={item.job_title}
-                    location={item.city_name}
-                    category={item.job_category.name}
-                    img={item.company.company_url}
+                    title={item?.job_title}
+                    location={item?.full_location}
+                    category={`${store.lang.id==0 ? item?.job_category_english:item?.job_category_arabic}`}
+                    img={item?.company_image}
                     containerStyle={{marginVertical: RFPercentage(1)}}
                   />
                 </React.Fragment>
               ))
             ) : (
-              <JEmpty />
+              <JJobTile type="job" isempty={true} />
             )}
           </JScrollView>
         </React.Fragment>

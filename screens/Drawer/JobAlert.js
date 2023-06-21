@@ -55,20 +55,20 @@ const JobAlert = ({navigation}) => {
         // console.log(result[0]);
         let arr = [
           {
-            name: 'Notify Me',
+            name: store.lang.notify_me,
             bool: result[0].candidate.job_alert == 1 ? true : false,
           },
         ];
         result[0].jobTypes.forEach(item => {
           if (result[0].jobAlerts.includes(item.id)) {
             arr.push({
-              name: item.name,
+              name: store.lang.id==0?item.name:item.arabic_title,
               bool: true,
               id: item.id,
             });
           } else {
             arr.push({
-              name: item.name,
+              name: store.lang.id==0?item.name:item.arabic_title,
               bool: false,
               id: item.id,
             });

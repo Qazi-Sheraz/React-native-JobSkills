@@ -65,7 +65,7 @@ const navigation= useNavigation();
             {store.lang.assessments}
           </JText>
         }
-        left={JChevronIcon}
+        left={<JChevronIcon/>}
       />
     }>
 

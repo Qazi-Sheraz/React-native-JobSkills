@@ -35,6 +35,8 @@ import Notification from '../../screens/Notification/Notification';
 import EAccountSetting from '../../escreen/edrawer/EAccountSetting';
 import ChangePassword from '../../screens/ChangePassword/ChangePassword';
 import ChangeLanguage from '../../screens/ChangeLanguage/ChangeLanguage';
+import JChevronIcon from '../../customComponents/JChevronIcon';
+import JobDetails from '../../escreen/Jobs/JobDetails';
 
 const Stack = createStackNavigator();
 
@@ -213,6 +215,7 @@ function CHomeStack({navigation}) {
           <Stack.Screen name="CFeatureCompany" component={FeatureCompany} />
           <Stack.Screen name="CFeatureJob" component={FeatureJob} />
           <Stack.Screen name="CSelectedJob" component={SelectedJob} />
+          <Stack.Screen name="CJobDetails" component={JobDetails} />
           <Stack.Screen name="CSelectedCompany" component={SelectedCompany} />
           <Stack.Screen name="CSearch" component={CSearch} />
           <Stack.Screen name="CFilter" component={CFilter} />

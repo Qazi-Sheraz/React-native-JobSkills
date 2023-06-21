@@ -12,6 +12,7 @@ import {StoreContext} from '../../mobx/store';
 import {
   _getAppliedJobData,
   _getFavouriteJobData,
+  _getFilterList,
   _getHomeData,
 } from '../../functions/Candidate/BottomTab';
 
@@ -46,10 +47,10 @@ export default function CBottomTab() {
           navigation={navigation}
         />
       )}>
-      <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Favourite" component={Favourite} />
-      <Tab.Screen name="Applied Jobs" component={AppliedJobs} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen options={{tabBarLabel:store.lang.home}} name="Home" component={Home} />
+      <Tab.Screen options={{tabBarLabel:store.lang.favourite}} name="Favourite" component={Favourite} />
+      <Tab.Screen options={{tabBarLabel:store.lang.applied_job}} name="Applied Jobs" component={AppliedJobs} />
+      <Tab.Screen options={{tabBarLabel:store.lang.profile}} name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   );
 }

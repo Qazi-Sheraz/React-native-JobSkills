@@ -39,6 +39,8 @@ import JEmpty from '../../../customComponents/JEmpty';
 import {StoreContext} from '../../../mobx/store';
 import {observer} from 'mobx-react';
 import {_saveToFollowing} from '../../../functions/Candidate/DFollowing';
+import JRow from '../../../customComponents/JRow';
+import JChevronIcon from '../../../customComponents/JChevronIcon';
 
 function SelectedJob({route, navigation}) {
   const [companyData, setCompanyData] = useState({});
@@ -97,106 +99,71 @@ function SelectedJob({route, navigation}) {
           height: heightPercentageToDP(25),
           paddingHorizontal: RFPercentage(2),
         }}>
-        <View
+        <JRow
           style={{
-            flexDirection: 'row',
-            alignItems: 'center',
             justifyContent: 'space-between',
             paddingVertical: RFPercentage(1.5),
           }}>
-          <Feather
-            onPress={() => navigation.goBack()}
-            name="chevron-left"
-            size={RFPercentage(3.5)}
-            color={colors.white[0]}
-          />
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-            {/* <FontAwesome
-              style={{marginRight: RFPercentage(2)}}
-              onPress={() => alert('Star')}
-              name="star-o"
-              size={RFPercentage(3.5)}
-              color={colors.white[0]}
-            /> */}
-
+          <JChevronIcon />
+          <JRow>
             <Menu>
               <MenuTrigger>
                 <Entypo
                   name="dots-three-vertical"
-                  size={RFPercentage(3.5)}
+                  size={RFPercentage(2.8)}
                   color={colors.white[0]}
                 />
               </MenuTrigger>
 
               <MenuOptions>
-                {['Share Job', 'Email To Friend', 'Report Abuse'].map(
+                {[store.lang.share_company, store.lang.report_to_company].map(
                   (item, index) => (
                     <MenuOption
                       style={{
-                        marginLeft: RFPercentage(1),
-                        paddingVertical: RFPercentage(1.5),
+                        marginHorizontal: RFPercentage(1),
+                        paddingVertical: RFPercentage(1.3),
                       }}
                       key={index}
                       onSelect={() => {
                         refRBSheet.current.open();
                       }}>
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                        }}>
+                      <JRow>
                         {index === 0 ? (
                           <AntDesign
-                            size={RFPercentage(3)}
+                            size={RFPercentage(2.8)}
                             color={colors.black[0]}
                             name="sharealt"
                           />
-                        ) : index === 1 ? (
-                          <AntDesign
-                            size={RFPercentage(3)}
-                            color={colors.black[0]}
-                            name="mail"
-                          />
                         ) : (
                           <Feather
-                            size={RFPercentage(3)}
+                            size={RFPercentage(2.8)}
                             color={colors.black[0]}
                             name="flag"
                           />
                         )}
-                        <JText fontSize={RFPercentage(2)}>
-                          {'   '}
+                        <JText
+                          fontSize={RFPercentage(2)}
+                          style={{marginHorizontal: RFPercentage(1)}}>
                           {item}
                         </JText>
-                      </View>
+                      </JRow>
                     </MenuOption>
                   ),
                 )}
               </MenuOptions>
             </Menu>
-          </View>
-        </View>
-        <View
+          </JRow>
+        </JRow>
+        <JRow
           style={{
-            flexDirection: 'row',
             justifyContent: 'space-between',
-            alignItems: 'center',
           }}>
-          <View
-            style={{
-              flexDirection: 'row',
-
-              alignItems: 'center',
-            }}>
+          <JRow>
             <Image
               style={{
                 height: RFPercentage(4),
                 width: RFPercentage(4),
-                marginRight: RFPercentage(1),
+                marginHorizontal: RFPercentage(1),
               }}
               source={{uri: companyData.company.company_url}}
             />
@@ -204,9 +171,9 @@ function SelectedJob({route, navigation}) {
               fontWeight={headingWeight.weight}
               fontSize={headingWeight.size}
               fontColor={colors.white[0]}>
-              {companyData.company.ceo}
+              {companyData.company?.company_name}
             </JText>
-          </View>
+          </JRow>
           {apiLoader ? (
             <View
               style={{
@@ -217,7 +184,7 @@ function SelectedJob({route, navigation}) {
                 backgroundColor: 'rgba(149, 145, 145, 0.35)',
               }}>
               <JText fontColor={colors.white[0]} fontSize={simpleText}>
-                Loading...
+                {store.lang.loading}
               </JText>
             </View>
           ) : (
@@ -236,40 +203,34 @@ function SelectedJob({route, navigation}) {
                 {store.followingList.some(
                   item => item.company_id === companyData.company.id,
                 )
-                  ? 'Followed'
-                  : 'Follow'}
+                  ? store.lang.followed
+                  : store.lang.follow}
               </JText>
             </TouchableOpacity>
           )}
-        </View>
-        <View
+        </JRow>
+        <JRow
           style={{
-            flexDirection: 'row',
-
-            alignItems: 'center',
             marginTop: RFPercentage(1),
           }}>
           <AntDesign
-            style={{marginRight: RFPercentage(0.5)}}
-            size={RFPercentage(3)}
+            style={{marginHorizontal: RFPercentage(0.5)}}
+            size={RFPercentage(2.8)}
             color={colors.white[0]}
             name="mail"
           />
           <JText fontColor={colors.white[0]} fontSize={simpleText}>
             {companyData.company.user.email}
           </JText>
-        </View>
+        </JRow>
 
-        <View
+        <JRow
           style={{
-            flexDirection: 'row',
-
-            alignItems: 'center',
             marginTop: RFPercentage(1),
           }}>
           <Ionicons
-            style={{marginRight: RFPercentage(0.5)}}
-            size={RFPercentage(3)}
+            style={{marginHorizontal: RFPercentage(0.5)}}
+            size={RFPercentage(2.8)}
             color={colors.white[0]}
             name="location-outline"
           />
@@ -279,30 +240,18 @@ function SelectedJob({route, navigation}) {
             fontSize={simpleText}>
             {companyData.company.location}
           </JText>
-        </View>
+        </JRow>
 
-        <View
+        <JRow
           style={{
-            flexDirection: 'row',
             justifyContent: 'space-between',
-            alignItems: 'center',
             marginVertical: RFPercentage(1),
           }}>
-          <View
-            style={{
-              flexDirection: 'row',
-
-              alignItems: 'center',
-            }}>
-            <View
-              style={{
-                flexDirection: 'row',
-
-                alignItems: 'center',
-              }}>
+          <JRow>
+            <JRow>
               <AntDesign
-                style={{marginRight: RFPercentage(0.5)}}
-                size={RFPercentage(3)}
+                style={{marginHorizontal: RFPercentage(0.5)}}
+                size={RFPercentage(2.8)}
                 color={colors.white[0]}
                 name="phone"
               />
@@ -311,40 +260,33 @@ function SelectedJob({route, navigation}) {
                   ? companyData.company.user.phone
                   : 'N/A'}
               </JText>
-            </View>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-
-              alignItems: 'center',
-            }}>
+            </JRow>
+          </JRow>
+          <JRow>
             <FontAwesome
-              style={{marginRight: RFPercentage(0.5)}}
-              size={RFPercentage(3)}
+              style={{marginHorizontal: RFPercentage(0.5)}}
+              size={RFPercentage(2.8)}
               color={colors.white[0]}
               name="globe"
             />
             <JText
-              //   onPress={() =>
-              //     Linking.openURL(companyData.company.website)
-              //   }
+              onPress={() => Linking.openURL(companyData?.company?.website)}
               fontColor={colors.white[0]}
               fontSize={simpleText}>
-              {companyData.company.website}
+              {companyData?.company?.website}
             </JText>
-          </View>
-        </View>
+          </JRow>
+        </JRow>
       </JGradientView>
       <JScrollView style={{paddingHorizontal: RFPercentage(3)}} enable={false}>
         <JText
           style={{marginTop: RFPercentage(1.5)}}
           fontSize={headingWeight.size}>
-          About :
+          {store.lang.about} :
         </JText>
-        {companyData.company.details ? (
+        {companyData?.company?.details ? (
           <JTagText fontSize={simpleText}>
-            {companyData.company.details}
+            {companyData?.company?.details}
           </JTagText>
         ) : (
           <JText fontAlign="center" fontSize={simpleText}>
@@ -355,26 +297,48 @@ function SelectedJob({route, navigation}) {
         <JText
           style={{marginTop: RFPercentage(1.5)}}
           fontSize={headingWeight.size}>
-          Recent Job Openings :
+          {store.lang.recent_job_openings} :
         </JText>
-        {companyData.data.jobDetails.length > 0 ? (
-          companyData.data.jobDetails.map((item, index) => (
+        {companyData?.data?.jobDetails?.length > 0 ? (
+          companyData?.data?.jobDetails.map((item, index) => (
             <React.Fragment key={index}>
               <JJobTile
                 favouriteData={store.favouriteList}
                 jobId={item.id}
                 onPress={() =>
-                  navigation.navigate('CSelectedJob', {
+                  navigation.navigate('CJobDetails', {
                     id: item.job_id,
                   })
                 }
                 onIconPress={() => alert('Icon Press')}
                 type="job"
                 title={item.job_title}
-                location={item.city_name}
-                category={item.job_category.name}
-                img={item.company.company_url}
-                containerStyle={{marginVertical: RFPercentage(1)}}
+                location={`${
+                  store.lang.id == 0
+                    ? item.city?.name !== null && item.city?.name
+                    : item.city?.arabic_title !== null &&
+                      item.city?.arabic_title
+                } ${
+                  store.lang.id == 0
+                  ? item.state?.name !== null && item.state?.name
+                    : item.state?.arabic_title !== null &&
+                      item.state?.arabic_title
+                } ${
+                  store.lang.id == 0
+                  ? item.country?.name !== null && item.country?.name
+                    : (item.country?.arabic_title !== null ?
+                      item.country?.arabic_title:'N/A')
+                }`}
+                category={
+                  store.lang.id == 0
+                    ? item.job_category?.name
+                    : item.job_category?.arabic_title
+                }
+                img={item.company?.company_url}
+                containerStyle={{
+                  marginVertical: RFPercentage(1),
+                  marginHorizontal: RFPercentage(0),
+                }}
               />
             </React.Fragment>
           ))
@@ -390,7 +354,7 @@ function SelectedJob({route, navigation}) {
           height: heightPercentageToDP(5),
           marginBottom: RFPercentage(2),
         }}
-        children={'Visit'}
+        children={store.lang.visit}
       />
 
       <RBSheet
@@ -406,13 +370,10 @@ function SelectedJob({route, navigation}) {
             backgroundColor: colors.black[0],
           },
         }}>
-        <View
+        <JRow
           style={{
             flex: 1,
-            flexDirection: 'row',
-
             justifyContent: 'space-evenly',
-            alignItems: 'center',
           }}>
           {['pinterest', 'google', 'facebook', 'linkedin', 'twitter'].map(
             (item, index) => (
@@ -434,7 +395,7 @@ function SelectedJob({route, navigation}) {
               </View>
             ),
           )}
-        </View>
+        </JRow>
       </RBSheet>
     </JScreen>
   );

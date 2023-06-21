@@ -46,7 +46,7 @@ export default function Education({
               },
               elevation: 4,
             }}>
-            <JText fontSize={RFPercentage(2)}>Education</JText>
+            <JText fontSize={RFPercentage(2)}>{store.lang.education}</JText>
             <AntDesign
               onPress={() => {
                 setSelected(1);
@@ -135,7 +135,7 @@ export default function Education({
                 justifyContent: 'center',
                 alignItems: 'center',
               }}>
-              <JText fontSize={RFPercentage(2)}>Education Not Available</JText>
+              <JText fontSize={RFPercentage(2)}>{store.lang.education_not_available}</JText>
             </View>
           )}
         </>

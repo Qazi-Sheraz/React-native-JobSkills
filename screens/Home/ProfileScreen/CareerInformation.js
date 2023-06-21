@@ -34,6 +34,7 @@ import {StoreContext} from '../../../mobx/store';
 import Experience from './SubHeagings/Experience';
 import Education from './SubHeagings/Education';
 import {useEffect} from 'react';
+import JChevronIcon from '../../../customComponents/JChevronIcon';
 const CareerInformation = ({navigation}) => {
   const refRBSheet = useRef();
   const [selected, setSelected] = useState(0);
@@ -246,16 +247,11 @@ const CareerInformation = ({navigation}) => {
               fontColor={colors.white[0]}
               fontWeight="bold"
               fontSize={RFPercentage(2.5)}>
-              {'Career Information'}
+              {store.lang.career_information}
             </JText>
           }
           left={
-            <Feather
-              onPress={() => navigation.goBack()}
-              name="chevron-left"
-              size={RFPercentage(3.5)}
-              color={colors.white[0]}
-            />
+            <JChevronIcon/>
           }
         />
       }>

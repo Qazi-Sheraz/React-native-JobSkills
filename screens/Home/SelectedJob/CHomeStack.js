@@ -180,7 +180,7 @@ function CHomeStack({navigation}) {
           {
             text: 'Visit',
             onPress: () => {
-              navigation.navigate('CSelectedJob', {
+              navigation.navigate('CJobDetails', {
                 id: remoteMessage.data && remoteMessage.data.id,
               });
             },

@@ -47,7 +47,7 @@ import { Observer, observer } from 'mobx-react';
 
         <TextInput
           autoFocus={autoFocus}
-          style={[{width: '90%',textAlign:store.lang.id===0?'left':'right'}, inputStyle]}
+          style={[{color: colors.black[0],width: '90%',textAlign:store.lang.id===0?'left':'right'}, inputStyle]}
           placeholder={store.lang.search}
           placeholderTextColor={placeholderTextColor}
           onChangeText={onChangeText}

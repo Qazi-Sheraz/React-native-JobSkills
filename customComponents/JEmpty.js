@@ -1,5 +1,5 @@
 import {StyleSheet, Image, View} from 'react-native';
-import React from 'react';
+import React, { useContext } from 'react';
 import colors from '../config/colors';
 import {
   heightPercentageToDP,
@@ -7,6 +7,7 @@ import {
 } from 'react-native-responsive-screen';
 import JText from './JText';
 import {RFPercentage} from 'react-native-responsive-fontsize';
+import { StoreContext } from '../mobx/store';
 export default function JEmpty({
   imageStyle,
   imgHeight = RFPercentage(56 / 2),
@@ -14,8 +15,9 @@ export default function JEmpty({
   tintColor,
   resizeMode = 'contain',
   height = heightPercentageToDP(80),
-  msg = 'No Data Available !',
+  msg,
 }) {
+  const store=useContext(StoreContext);
   return (
     <View
       style={{
@@ -41,7 +43,7 @@ export default function JEmpty({
         fontWeight="bold"
         fontAlign="center"
         fontSize={RFPercentage(2.5)}>
-        {msg}
+        {msg?msg:store.lang.no_data_available}
       </JText>
     </View>
   );

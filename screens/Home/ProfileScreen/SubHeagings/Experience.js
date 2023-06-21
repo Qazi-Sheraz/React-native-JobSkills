@@ -20,12 +20,14 @@ import {useContext} from 'react';
 import {StoreContext} from '../../../../mobx/store';
 import {useEffect} from 'react';
 export default function Experience({
+
   setSelected,
   refRBSheet,
   experience,
   loader,
   _deleteExperience,
 }) {
+  const store =useContext(StoreContext);
   return (
     <Observer>
       {() => (
@@ -45,7 +47,7 @@ export default function Experience({
               },
               elevation: 4,
             }}>
-            <JText fontSize={RFPercentage(2)}>Experience</JText>
+            <JText fontSize={RFPercentage(2)}>{store.lang.experience}</JText>
             <AntDesign
               onPress={() => {
                 setSelected(0);
@@ -137,7 +139,7 @@ export default function Experience({
                 justifyContent: 'center',
                 alignItems: 'center',
               }}>
-              <JText fontSize={RFPercentage(2)}>Experience Not Available</JText>
+              <JText fontSize={RFPercentage(2)}>{store.lang.experience_not_available}</JText>
             </View>
           )}
         </>

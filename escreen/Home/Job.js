@@ -120,7 +120,8 @@ const{params}=useRoute()
           />:
         <>
         {store?.jobEmployerData?.length>0 ? 
-      (<><JSearchInput
+      (<>
+      <JSearchInput
         length={1}
         onChangeText={handleSearch}
         value={searchQuery}
