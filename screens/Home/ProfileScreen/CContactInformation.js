@@ -18,10 +18,14 @@ import {useContext} from 'react';
 import {StoreContext} from '../../../mobx/store';
 import {_getProfile} from '../../../functions/Candidate/MyProfile';
 import {useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import JChevronIcon from '../../../customComponents/JChevronIcon';
+import JRow from '../../../customComponents/JRow';
+import { JToast } from '../../../functions/Toast';
 
 function CContactInformation({refRBSheet, user}) {
-  // console.log(user);
+  
+  const {params}=useRoute();
   const phoneInput = useRef(null);
   const store = useContext(StoreContext);
   const navigation = useNavigation();
@@ -47,7 +51,12 @@ function CContactInformation({refRBSheet, user}) {
           alert('Error while saving data');
         } else {
           _getProfile(store);
-          alert(result);
+          JToast({
+            type: 'success',
+            text1: result,
+          });
+          // alert(result);
+          navigation.navigate('Aboutme')
         }
         setLoader(false);
       })
@@ -59,8 +68,8 @@ function CContactInformation({refRBSheet, user}) {
   return (
     <Formik
       initialValues={{
-        email: user.email_address,
-        phone: user.mobile_number,
+        email: store.myProfile.user[0].contact_information?.email_address,
+        phone: params.phone?params.phone?.slice(3):'',
       }}
       onSubmit={values => {
         // console.log(values);
@@ -90,7 +99,7 @@ function CContactInformation({refRBSheet, user}) {
                 fontColor={colors.white[0]}
                 fontWeight="bold"
                 fontSize={RFPercentage(2.5)}>
-                Contact
+                {store.lang.contact}
               </JText>
             }
             right={
@@ -105,17 +114,12 @@ function CContactInformation({refRBSheet, user}) {
                   fontColor={
                     !isValid ? `${colors.white[0]}70` : colors.white[0]
                   }>
-                  Save
+                  {store.lang.save}
                 </JText>
               )
             }
             left={
-              <Feather
-                onPress={() => navigation.goBack()}
-                name="chevron-left"
-                size={RFPercentage(3.5)}
-                color={colors.white[0]}
-              />
+             <JChevronIcon/>
             }
           />
 
@@ -124,48 +128,48 @@ function CContactInformation({refRBSheet, user}) {
               marginTop: RFPercentage(3),
               paddingHorizontal: RFPercentage(2),
             }}>
-            {/* <JInput
+            <JInput
               value={values.email}
-              heading={'Email'}
+              heading={`${store.lang.email}:`}
               error={touched.email && errors.email && true}
-              placeholder="Email"
+              placeholder={store.lang.email}
               onChangeText={handleChange('email')}
               onBlur={() => setFieldTouched('email')}
             />
             {touched.email && errors.email && (
               <JErrorText>{errors.email}</JErrorText>
-            )} */}
+            )}
             <View>
-              <View
+              <JRow
                 style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
                   marginTop: RFPercentage(3),
                 }}>
                 <JText fontWeight="500" fontSize={RFPercentage(2.5)}>
-                  Phone
+                  {store.lang.phone_number}
                 </JText>
-              </View>
+              </JRow>
               <PhoneInput
-                ref={phoneInput}
-                defaultValue={values.phone}
-                defaultCode="PK"
-                containerStyle={{
-                  width: '100%',
-                  borderBottomWidth: RFPercentage(0.1),
-                  paddingVertical: 0,
-                }}
-                textContainerStyle={{
-                  paddingVertical: 0,
-                  backgroundColor: 'transparent',
-                }}
-                onChangeFormattedText={text => {
-                  setFieldValue('phone', text);
-                }}
-              />
-              {touched.phone && errors.phone && (
-                <JErrorText>{errors.phone}</JErrorText>
-              )}
+                  ref={phoneInput}
+                  defaultValue={values.phone}
+                  defaultCode="SA"
+                  placeholder={store.lang.phone_number}
+                  containerStyle={{
+                    width: '100%',
+                    borderBottomWidth: RFPercentage(0.1),
+                    paddingTop: 15,
+                    marginBottom: RFPercentage(2),
+                  }}
+                  textContainerStyle={{
+                    paddingVertical: 5,
+                    backgroundColor: 'transparent',
+                  }}
+                  onChangeFormattedText={text => {
+                    setFieldValue('phone', text);
+                  }}
+                />
+                {touched.phone && errors.phone && (
+                  <JErrorText>{errors.phone}</JErrorText>
+                )}
             </View>
           </View>
         </JScreen>

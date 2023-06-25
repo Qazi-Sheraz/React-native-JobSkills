@@ -17,6 +17,7 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import {Observer} from 'mobx-react';
 import {useContext} from 'react';
 import {StoreContext} from '../../../../mobx/store';
+import RBSheet from 'react-native-raw-bottom-sheet';
 
 export default function Education({
   education,
@@ -26,6 +27,7 @@ export default function Education({
   _deleteEducation,
 }) {
   const store = useContext(StoreContext);
+
 
   return (
     <Observer>
@@ -50,7 +52,7 @@ export default function Education({
             <AntDesign
               onPress={() => {
                 setSelected(1);
-                refRBSheet.current.open();
+                refRBSheet?.current?.open();
               }}
               color={colors.black[0]}
               name="pluscircleo"
@@ -82,7 +84,7 @@ export default function Education({
                   padding: RFPercentage(2),
                 }}>
                 <JRow style={{justifyContent: 'space-between'}}>
-                  <JText>{item.degree_title}</JText>
+                  <JText fontWeight='bold'>{item.degree_title}</JText>
                   <TouchableOpacity
                     style={{
                       justifyContent: 'center',
@@ -103,10 +105,10 @@ export default function Education({
                 </JText>
                 <JText style={{marginTop: RFPercentage(0.5)}}>
                   {item.year} |{' '}
-                  {store.myProfile.data.countries[item.country_id]}
+                  {store?.myProfile?.data?.countries[item.country_id]}
                 </JText>
-                <JRow style={{justifyContent: 'space-between'}}>
-                  <JText fontColor={colors.black[0]}>{item.institute}</JText>
+                {/* <JRow style={{justifyContent: 'space-between'}}>
+                  <JText fontColor={colors.black[0]}>{item.institute}</JText> */}
                   <TouchableOpacity
                     onPress={() => _deleteEducation(item.id)}
                     style={{
@@ -122,7 +124,7 @@ export default function Education({
                       size={RFPercentage(2.5)}
                     />
                   </TouchableOpacity>
-                </JRow>
+                {/* </JRow> */}
               </View>
             ))
           ) : (

@@ -15,7 +15,7 @@ import JSelectInput from '../../../customComponents/JSelectInput';
 import Feather from 'react-native-vector-icons/Feather';
 import colors from '../../../config/colors';
 import JRow from '../../../customComponents/JRow';
-
+import * as yup from 'yup';
 import moment from 'moment';
 import JGradientHeader from '../../../customComponents/JGradientHeader';
 import {StoreContext} from '../../../mobx/store';
@@ -24,6 +24,7 @@ import {_getProfile} from '../../../functions/Candidate/MyProfile';
 import {JToast} from '../../../functions/Toast';
 import {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
+import JChevronIcon from '../../../customComponents/JChevronIcon';
 
 function CGeneralInformation({refRBSheet, data, user}) {
   const store = useContext(StoreContext);
@@ -62,7 +63,11 @@ function CGeneralInformation({refRBSheet, data, user}) {
           alert('Error while saving data');
         } else {
           _getProfile(store);
-          alert(result);
+          JToast({
+            type: 'success',
+            text1: result,
+          });
+          navigation.navigate('Aboutme')
         }
         setLoader(false);
       })
@@ -95,14 +100,34 @@ function CGeneralInformation({refRBSheet, data, user}) {
           _postData(values);
         }}
         // validationSchema={yup.object().shape({
-        //   title: yup.string().required().label('Title'),
-        //   company: yup.string().required().label('Company'),
-        //   county: yup.string().required().label('Country'),
-        //   city: yup.string().required().label('City'),
-        //   state: yup.string().required().label('State'),
-        //   start: yup.string().required().label('Start'),
-        //   end: yup.string().required().label('End'),
-        //   description: yup.string().required().label('Description'),
+        //   first_name: yup.string().required().label('First Name'),
+        //   last_name: yup.string().required().label('Last Name'),
+        //   father: yup.string().required().label('Father'),
+        //   // dob: yup.string().required().label('dob'),
+        //   gender: yup
+        //   .object()
+        //   .shape()
+        //   .required('Gender is required'),
+        //   county: yup
+        //       .object()
+        //       .shape()
+        //       .required('Country is required'),
+        //       city: yup
+        //       .object()
+        //       .shape()
+        //       .required('City is required'),
+        //       state: yup
+        //       .object()
+        //       .shape()
+        //       .required('State is required'),
+        //       status: yup
+        //       .object()
+        //       .shape()
+        //       .required('Marital Status is required'),
+        //       // language: yup
+        //       // .object()
+        //       // .shape()
+        //       // .required('language Status is required'),
         // })}
       >
         {({
@@ -122,7 +147,7 @@ function CGeneralInformation({refRBSheet, data, user}) {
                   fontColor={colors.white[0]}
                   fontWeight="bold"
                   fontSize={RFPercentage(2.5)}>
-                  General
+                  {store.lang.general}
                 </JText>
               }
               right={
@@ -137,18 +162,11 @@ function CGeneralInformation({refRBSheet, data, user}) {
                     fontColor={
                       !isValid ? `${colors.white[0]}70` : colors.white[0]
                     }>
-                    Save
+                    {store.lang.save}
                   </JText>
                 )
               }
-              left={
-                <Feather
-                  onPress={() => navigation.goBack()}
-                  name="chevron-left"
-                  size={RFPercentage(3.5)}
-                  color={colors.white[0]}
-                />
-              }
+              left={<JChevronIcon />}
             />
             <ScrollView
               contentContainerStyle={{paddingBottom: RFPercentage(8)}}
@@ -156,8 +174,11 @@ function CGeneralInformation({refRBSheet, data, user}) {
                 marginHorizontal: RFPercentage(2),
               }}>
               <JInput
+                style={{
+                  textAlign: store.lang.id == 0 ? 'left' : 'right',
+                }}
                 containerStyle={{marginTop: RFPercentage(2)}}
-                heading={'First Name:'}
+                heading={store.lang.first_name}
                 value={values.first_name}
                 error={touched.first_name && errors.first_name && true}
                 onChangeText={handleChange('first_name')}
@@ -167,9 +188,12 @@ function CGeneralInformation({refRBSheet, data, user}) {
                 <JErrorText>{errors.first_name}</JErrorText>
               )}
               <JInput
+                style={{
+                  textAlign: store.lang.id == 0 ? 'left' : 'right',
+                }}
                 containerStyle={{marginTop: RFPercentage(2)}}
                 value={values.last_name}
-                heading={'Last Name :'}
+                heading={store.lang.last_name}
                 error={touched.last_name && errors.last_name && true}
                 onChangeText={handleChange('last_name')}
                 onBlur={() => setFieldTouched('last_name')}
@@ -179,9 +203,12 @@ function CGeneralInformation({refRBSheet, data, user}) {
               )}
 
               <JInput
+                style={{
+                  textAlign: store.lang.id == 0 ? 'left' : 'right',
+                }}
                 containerStyle={{marginTop: RFPercentage(2)}}
                 value={values.father}
-                heading={'Father Name :'}
+                heading={`${store.lang.father_name}`}
                 error={touched.father && errors.father && true}
                 onChangeText={handleChange('father')}
                 onBlur={() => setFieldTouched('father')}
@@ -194,7 +221,7 @@ function CGeneralInformation({refRBSheet, data, user}) {
                 containerStyle={{marginTop: RFPercentage(2)}}
                 value={values.dob && moment(values.dob).format('DD MM YYYY')}
                 isDate
-                heading={'Date of Birth :'}
+                heading={`${store.lang.date_of_birth} :`}
                 setValue={e => setFieldValue('dob', e)}
                 error={touched.dob && errors.dob && true}
                 rightIcon={
@@ -212,9 +239,9 @@ function CGeneralInformation({refRBSheet, data, user}) {
               <JSelectInput
                 containerStyle={{marginTop: RFPercentage(2)}}
                 value={values.gender?.name}
-                data={data.Gender}
-                header={'Gender'}
-                heading={'Gender :'}
+                data={data?.Gender}
+                header={store.lang.gender}
+                heading={`${store.lang.gender} :`}
                 setValue={e => setFieldValue('gender', e)}
                 error={touched.gender && errors.gender && true}
                 rightIcon={
@@ -232,9 +259,9 @@ function CGeneralInformation({refRBSheet, data, user}) {
               <JSelectInput
                 containerStyle={{marginTop: RFPercentage(2)}}
                 value={values.country?.name}
-                data={data.countries}
-                header={'Country'}
-                heading={'Country :'}
+                data={data?.countries}
+                header={store.lang.country}
+                heading={`${store.lang.country}:`}
                 setValue={e => {
                   setFieldValue('country', e);
                   setFieldValue('state', null);
@@ -258,8 +285,8 @@ function CGeneralInformation({refRBSheet, data, user}) {
                 value={values.state?.name}
                 id={values.country?.id}
                 setValue={e => setFieldValue('state', e)}
-                header={'State'}
-                heading={'State :'}
+                header={store.lang.state}
+                heading={`${store.lang.state}:`}
                 error={touched.state && errors.state && true}
                 rightIcon={
                   <Feather
@@ -277,8 +304,8 @@ function CGeneralInformation({refRBSheet, data, user}) {
                 containerStyle={{marginTop: RFPercentage(2)}}
                 value={values.city?.name}
                 setValue={e => setFieldValue('city', e)}
-                header={'City'}
-                heading={'City :'}
+                header={store.lang.city}
+                heading={`${store.lang.city}:`}
                 id={values.state?.id}
                 error={touched.city && errors.city && true}
                 rightIcon={
@@ -297,9 +324,9 @@ function CGeneralInformation({refRBSheet, data, user}) {
                 containerStyle={{marginTop: RFPercentage(2)}}
                 value={values.language?.name}
                 setValue={e => setFieldValue('language', e)}
-                data={data.language}
-                header={'Language'}
-                heading={'Language:'}
+                data={store.lang.id==0?store.myProfile.dataEnglish.language:store.myProfile.dataArabic.language}
+                header={store.lang.language}
+                heading={`${store.lang.language}:`}
                 error={touched.language && errors.language && true}
                 rightIcon={
                   <Feather
@@ -317,9 +344,10 @@ function CGeneralInformation({refRBSheet, data, user}) {
                 containerStyle={{marginTop: RFPercentage(2)}}
                 value={values.status?.name}
                 setValue={e => setFieldValue('status', e)}
-                header={'Martial Status'}
-                data={data.maritalStatus}
-                heading={'Martial Status:'}
+                header={store.lang.marital_status}
+                    heading={`${store.lang.marital_status}:`}
+                data={store.lang.id==0?store.myProfile.dataEnglish.maritalStatus:store.myProfile.dataArabic.maritalStatus}
+                
                 error={touched.status && errors.status && true}
                 rightIcon={
                   <Feather
@@ -339,7 +367,7 @@ function CGeneralInformation({refRBSheet, data, user}) {
                   marginVertical: RFPercentage(2),
                 }}>
                 <JText fontWeight={'500'} fontSize={RFPercentage(2.5)}>
-                  Immediate Available
+                  {store.lang.immediate_available}
                 </JText>
 
                 <Switch

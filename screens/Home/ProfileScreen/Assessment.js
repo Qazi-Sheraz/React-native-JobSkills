@@ -47,7 +47,7 @@ const Assessment = ({navigation}) => {
     fetch('https://dev.jobskills.digital/api/assessment-list', requestOptions)
       .then(response => response.json())
       .then(result => {
-        console.log(result.data);
+        // console.log(result.data);
         setData(result.data);
         setLoader(false);
       })
@@ -76,7 +76,7 @@ const Assessment = ({navigation}) => {
     )
       .then(response => response.json())
       .then(result => {
-        console.log(result.data);
+        // console.log(result.data);
         setSelected(result.data);
         setLoader1(false);
       })
@@ -104,7 +104,7 @@ const Assessment = ({navigation}) => {
           left={<JChevronIcon />}
         />
       }>
-      {loader === true ? (
+      {loader ? (
         <ActivityIndicator />
       ) : (
         <FlatList
@@ -114,8 +114,11 @@ const Assessment = ({navigation}) => {
             <>
               <Pressable
                 onPress={() => {
+                  setLoader1(true)
                   _getSpecificAssessment(item.id, item.user_id);
+                  setName(item?.assessment_name);
                   refRBSheet.current.open();
+
                 }}
                 style={{
                   borderBottomColor: colors.border[0],
@@ -155,21 +158,22 @@ const Assessment = ({navigation}) => {
               display: 'none',
             },
           }}>
-          {loader1 ? (
-            <ActivityIndicator />
-          ) : (
-            <>
+         
               <JGradientHeader
                 center={
                   <JText
                     fontColor={colors.white[0]}
                     fontWeight="bold"
                     fontSize={RFPercentage(2.5)}>
-                    {selected?.assessment_name[0]?.assessment_name}
+                    {name}
                   </JText>
                 }
-                left={<JChevronIcon />}
+                left={<JChevronIcon onPress={()=> {refRBSheet.current.close()}}/>}
               />
+               {loader1 ? (
+            <ActivityIndicator />
+          ) : (
+            <>
               <FlatList
                 ListEmptyComponent={<JEmpty />}
                 data={selected?.particular_assessments}
@@ -191,7 +195,7 @@ const Assessment = ({navigation}) => {
                         {item.assessment_question?.assessment_question}
                       </JText>
                     </JRow>
-                    <JRow
+                    {/* <JRow
                       style={{
                         paddingVertical: RFPercentage(1),
                         alignItems: 'flex-start',
@@ -211,7 +215,7 @@ const Assessment = ({navigation}) => {
                         }}>
                         {item.assessment_question?.question_type}
                       </JText>
-                    </JRow>
+                    </JRow> */}
 
                     {item.assessment_question?.question_type === 'dropDown' ||
                     item.assessment_question?.question_type === 'mcqs' ? (
@@ -317,7 +321,7 @@ export default Assessment;
 const styles = StyleSheet.create({
   mainView: {
     marginVertical: RFPercentage(1),
-    paddingHorizontal:RFPercentage(1),
+    paddingHorizontal:RFPercentage(2),
     backgroundColor: '#ffffff90',
     shadowColor: '#000',
     shadowOffset: {

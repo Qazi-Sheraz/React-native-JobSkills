@@ -230,7 +230,7 @@ function JSelectInput({
       setLanguages(langArr);
     }
 
-    if (header === 'Martial Status') {
+    if (header === store.lang.marital_status) {
       Object.keys(data).forEach(function (key, index) {
         martialArr.push({
           id: key,
@@ -401,7 +401,7 @@ function JSelectInput({
               ? _getCountryList()
               : header === store.lang.city
               ? _getCityList()
-              : header === 'Year'
+              : header === store.lang.year
               ? _years(2019 - 20)
               : header === store.lang.state
               ? _getStateList()
@@ -514,7 +514,7 @@ function JSelectInput({
                   ? city.filter(e =>
                       e.name.toLowerCase().includes(query.toLowerCase()),
                     )
-                  : header === 'Year'
+                  : header === store.lang.year
                   ? years
                   : header === store.lang.gender
                   ? genders.filter(e =>
@@ -524,7 +524,7 @@ function JSelectInput({
                   ? languages?.filter(e =>
                       e.name.toLowerCase().includes(query.toLowerCase()),
                     )
-                  : header === 'Martial Status'
+                  : header === store.lang.marital_status
                   ? martial.filter(e =>
                       e.name.toLowerCase().includes(query.toLowerCase()),
                     )

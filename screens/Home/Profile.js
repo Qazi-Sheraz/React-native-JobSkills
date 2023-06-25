@@ -27,11 +27,12 @@ import moment from 'moment';
 import FontAwesome5Brands from 'react-native-vector-icons/FontAwesome5';
 import {_getProfile} from '../../functions/Candidate/MyProfile';
 import JChevronIcon from '../../customComponents/JChevronIcon';
+import { ActivityIndicator } from 'react-native';
 
 function Profile({navigation}) {
 
   const store = useContext(StoreContext);
-  console.log(store.myProfile?.user[0]);
+  // console.log(store.myProfile?.user[0]);
   const [update, setUpdate] = useState(false);
 
   const BorderView = ({children}) => {
@@ -41,7 +42,7 @@ function Profile({navigation}) {
           borderColor: colors.border[0],
           borderWidth: RFPercentage(0.2),
           padding: RFPercentage(1),
-          marginVertical: RFPercentage(2),
+          marginVertical: RFPercentage(1),
         }}>
         {children}
       </View>
@@ -73,6 +74,7 @@ function Profile({navigation}) {
     return () => {};
   }, [store.myProfileApiLoader]);
 
+
   const onRefresh = useCallback(() => {
     _getProfile(store);
   }, []);
@@ -80,34 +82,37 @@ function Profile({navigation}) {
     <JScreen
       header={
         <JGradientHeader
+        justifyContent='flex-start'
           height={heightPercentageToDP(22)}
           alignItems={'flex-start'}
-          paddingTop={RFPercentage(3)}
+          paddingTop={RFPercentage(2)}
           left={<JChevronIcon />}
-          right={
-            <AntDesign
-              name="poweroff"
-              onPress={() => _removeToken()}
-              color={colors.white[0]}
-              size={RFPercentage(3)}
-            />
-          }
+          // right={
+          //   <AntDesign
+          //     name="poweroff"
+          //     onPress={() => _removeToken()}
+          //     color={colors.white[0]}
+          //     size={RFPercentage(3)}
+          //   />
+          // }
         />
       }>
+        {store.myProfileApiLoader?<ActivityIndicator/>
+        :(<>
       <JProfileContent
         name={
           store.myProfileApiLoader === false &&
           store.myProfile?.user[0].general_information?.first_name +
             ' ' +
-            (store.myProfile?.user[0].general_information?.last_name !==
+            (store.myProfile?.user[0]?.general_information?.last_name !==
             null
-            ? store.myProfile?.user[0].general_information?.last_name
+            ? store.myProfile?.user[0]?.general_information?.last_name
             : '')
         }
         // email={store.token.user.email}
         src={
           store.myProfile?.user[0]
-            ? store.myProfile?.user[0].profile_picture.avatar
+            ? store.myProfile?.user[0]?.profile_picture.avatar
             : store.token.user.avatar
         }
       />
@@ -122,7 +127,8 @@ function Profile({navigation}) {
         <JProfileSections
           loader={store.myProfileApiLoader}
           onIconPress={() => {
-            navigation.navigate('CEditProfile', {selected: 0});
+            navigation.navigate('CEditProfile', {selected: 0,
+              phone: store.myProfile?.user[0]?.contact_information?.mobile_number?.replace(/\+/g,'',),});
           }}
           isEmpty={false}
           heading={store.lang.contact_info}
@@ -132,17 +138,31 @@ function Profile({navigation}) {
             store.myProfileApiLoader === false && (
               <BorderView>
                 <JProfileInfo
-                  title="Email Address"
+                  title={store.lang.email_address}
                   text={
-                    store.myProfile?.user[0].contact_information?.email_address
+                    store.myProfile?.user[0]?.contact_information?.email_address==null?'':store.myProfile?.user[0]?.contact_information?.email_address
                   }
                 />
                 <JProfileInfo
-                  title="Phone Number"
-                  text={
-                    store.myProfile?.user[0].contact_information?.mobile_number
-                  }
-                />
+                    title={store.lang.phone_number}
+                    text={
+                      store.myProfile?.user[0]?.contact_information?.mobile_number
+                        ? store.myProfile?.user[0]?.contact_information?.regional_code !== null && undefined
+                          ? `${store.myProfile?.user[0]?.contact_information?.regional_code?.replace(
+                              /\+/g,
+                              '',
+                            )}${store.myProfile?.user[0]?.contact_information?.mobile_number?.replace(
+                              /\+/g,
+                              '',
+                            )}`
+                          : store.myProfile?.user[0]?.contact_information?.mobile_number?.replace(
+                              /\+/g,
+                              '',
+                            )
+                        : 'N/A'
+                    }
+                  />
+              
               </BorderView>
             )
           }
@@ -160,63 +180,58 @@ function Profile({navigation}) {
             store.myProfileApiLoader === false && (
               <BorderView>
                 <JProfileInfo
-                  title="Father Name"
+                  title={store.lang.father_name}
                   text={
-                    store.myProfile?.user[0].general_information?.father_name
+                    store.myProfile?.user[0]?.general_information?.father_name
                   }
                 />
                 <JProfileInfo
-                  title="Date of Birth"
+                  title={store.lang.date_of_birth}
                   text={
                     store.myProfileApiLoader === false &&
                     moment(
-                      store.myProfile?.user[0].general_information
-                        ?.date_of_birth,
+                      store.myProfile?.user[0]?.general_information?.date_of_birth,
                     ).format('MMM,DD YYYY')
                   }
                 />
                 <JProfileInfo
-                  title="Gender"
+                  title={store.lang.gender}
                   text={
-                    store.myProfile?.user[0].general_information?.gender == '1'
-                      ? 'Female'
-                      : 'Male'
+                    store.myProfile?.user[0]?.general_information?.gender == '1'
+                      ? store.lang.female
+                      : store.lang.male
                   }
                 />
 
                 <JProfileInfo
-                  title="Martial Status"
-                  text={
-                    store.myProfile?.user[0].general_information?.marital_status
-                      .name
-                  }
+                  title={store.lang.marital_status}
+                 
+                  text={store.lang.id==0?store.myProfile?.dataEnglish?.maritalStatus[store.myProfile?.user[0]?.general_information?.marital_status.id]:store.myProfile?.dataArabic?.maritalStatus[store.myProfile?.user[0]?.general_information?.marital_status.id] }
                 />
 
                 <JProfileInfo
-                  title="Location"
+                  title={store.lang.location}
                   text={
-                    store.myProfile?.user[0].general_information?.city_name &&
-                    store.myProfile?.user[0].general_information?.country_name
-                      ? `${store.myProfile?.user[0].general_information?.city_name.name} | ${store.myProfile?.user[0].general_information?.country_name.name}`
+                    store.myProfile?.user[0]?.general_information?.city_name &&
+                    store.myProfile?.user[0]?.general_information?.country_name
+                      ? `${store.myProfile?.user[0]?.general_information?.city_name?.name} | ${store.myProfile?.user[0]?.general_information?.state_name?.name} | ${store.lang.id==0?store.myProfile?.dataEnglish?.countries[store.myProfile?.user[0]?.general_information?.country_name.id]:store.myProfile?.dataArabic?.countries[store.myProfile?.user[0]?.general_information?.country_name.id]}`
                       : 'N/A'
                   }
                 />
 
                 <JProfileInfo
-                  title="Language"
+                  title={store.lang.language}
                   text={
-                    store.myProfile?.user[0].general_information?.language[0]
-                      ?.language
+                    store.myProfile?.user[0]?.general_information?.language.map((l,index)=>(store.lang.id==0?store.myProfile?.dataEnglish?.language[l.id]:store.myProfile?.dataArabic?.language[l.id])).join(', ')
                   }
                 />
 
                 <JProfileInfo
-                  title="Immediate Available"
+                  title={store.lang.immediate_available}
                   text={
-                    store.myProfile?.user[0].general_information
-                      ?.immediate_available
-                      ? 'Yes'
-                      : 'No'
+                    store.myProfile?.user[0]?.general_information?.immediate_available
+                      ?store.lang.yes
+                      :store.lang.no
                   }
                 />
               </BorderView>
@@ -233,53 +248,49 @@ function Profile({navigation}) {
             store.myProfileApiLoader === false && (
               <BorderView>
                 <JProfileInfo
-                  title="Experience"
+                  title={store.lang.experience}
                   text={
-                    store.myProfile?.user[0].experience_information
-                      ?.experience + ' Years'
+                    store.myProfile?.user[0]?.experience_information?.experience + store.lang.year
                   }
                 />
 
                 <JProfileInfo
-                  title="Career Level"
+                  title={store.lang.career_level}
+                  text={store.lang.id==0?store.myProfile?.dataEnglish?.careerLevel[store.myProfile?.user[0]?.experience_information?.career_level.id]:store.myProfile?.dataArabic?.careerLevel[store.myProfile?.user[0]?.experience_information?.career_level.id]}
+                />
+
+                <JProfileInfo
+                  title={store.lang.Industry}
+                
                   text={
-                    store.myProfile?.user[0].experience_information
-                      ?.career_level.name
+                    store.lang.id==0?store.myProfile?.dataEnglish?.industry[store.myProfile?.user[0]?.experience_information?.industry?.id]:store.myProfile?.dataArabic?.industry[store.myProfile?.user[0]?.experience_information?.industry?.id]
                   }
                 />
 
                 <JProfileInfo
-                  title="Industry"
+                  title={store.lang.functional_Area}
+                  
                   text={
-                    store.myProfile?.user[0].experience_information?.industry
-                      .name
+                    store.lang.id==0?store.myProfile?.dataEnglish?.functionalArea[store.myProfile?.user[0]?.experience_information?.functional_area.id]:store.myProfile?.dataArabic?.functionalArea[store.myProfile?.user[0]?.experience_information?.functional_area.id]
                   }
                 />
 
                 <JProfileInfo
-                  title="Functional Area"
+                  title={store.lang.current_salary}
+                 
                   text={
-                    store.myProfile?.user[0].experience_information
-                      ?.functional_area.name
+                    store.lang.id==0?store.myProfile?.dataEnglish?.currency[store.myProfile?.user[0]?.experience_information?.salary_currency.id]:store.myProfile?.dataArabic?.currency[store.myProfile?.user[0]?.experience_information?.salary_currency.id] +
+                    store.myProfile?.user[0]?.experience_information?.current_salary
                   }
                 />
 
                 <JProfileInfo
-                  title="Current Salary"
+                  title={store.lang.expected_salary}
                   text={
-                    'SAR ' +
-                    store.myProfile?.user[0].experience_information
-                      ?.current_salary
+                    store.lang.id==0?store.myProfile?.dataEnglish?.currency[store.myProfile?.user[0]?.experience_information?.salary_currency.id]:store.myProfile?.dataArabic?.currency[store.myProfile?.user[0]?.experience_information?.salary_currency.id] +
+                    store.myProfile?.user[0]?.experience_information?.expected_salary
                   }
-                />
-
-                <JProfileInfo
-                  title="Expected Salary"
-                  text={
-                    'SAR ' +
-                    store.myProfile?.user[0].experience_information
-                      ?.expected_salary
-                  }
+                
                 />
               </BorderView>
             )
@@ -291,10 +302,10 @@ function Profile({navigation}) {
 
         <JProfileSections
           loader={store.myProfileApiLoader}
-          onIconPress={() => {
-            navigation.navigate('CEditProfile', {selected: 3});
-          }}
-          heading={'Skills'}
+          // onIconPress={() => {
+          //   navigation.navigate('CEditProfile', {selected: 3});
+          // }}
+          heading={store.lang.skills}
           icon="add"
           emptyMsg={'Skills Not Available'}
           isEmpty={false}
@@ -322,10 +333,10 @@ function Profile({navigation}) {
                             width: RFPercentage(2),
                             borderRadius: RFPercentage(2),
                             backgroundColor: colors.purple[0],
-                            marginRight: RFPercentage(1),
+                            marginHorizontal: RFPercentage(1),
                           }}
                         />
-                        <JText fontSize={RFPercentage(1.8)}>{item.name}</JText>
+                        <JText fontSize={RFPercentage(1.8)}>{store.lang.id==0?item?.name:item?.arabic_title}</JText>
                       </JRow>
                     ),
                   )}
@@ -336,11 +347,11 @@ function Profile({navigation}) {
 
         <JProfileSections
           loader={store.myProfileApiLoader}
-          onIconPress={() => {
-            navigation.navigate('CEditProfile', {selected: 4});
+          // onIconPress={() => {
+          //   navigation.navigate('CEditProfile', {selected: 4});
 
-            // refRBSheet.current.open();
-          }}
+          //   // refRBSheet.current.open();
+          // }}
           isEmpty={false}
           heading={store.lang.social_media_links}
           icon="add"
@@ -373,7 +384,7 @@ function Profile({navigation}) {
                                 : 'linkedin-in'
                             }
                             color={colors.purple[0]}
-                            style={{marginRight: RFPercentage(2)}}
+                            style={{marginHorizontal: RFPercentage(1)}}
                           />
                           <JText fontWeight="600" fontSize={RFPercentage(2)}>
                             {item == 'facebook_url'
@@ -405,6 +416,7 @@ function Profile({navigation}) {
           }
         />
       </JScrollView>
+      </>)}
     </JScreen>
   );
 }

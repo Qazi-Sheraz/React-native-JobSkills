@@ -51,7 +51,7 @@ export default function Experience({
             <AntDesign
               onPress={() => {
                 setSelected(0);
-                refRBSheet.current.open();
+                refRBSheet?.current?.open();
               }}
               color={colors.black[0]}
               name="pluscircleo"
@@ -82,7 +82,7 @@ export default function Experience({
                   padding: RFPercentage(2),
                 }}>
                 <JRow style={{justifyContent: 'space-between'}}>
-                  <JText>{item.experience_title}</JText>
+                  <JText fontWeight='bold'>{item.experience_title}</JText>
                   <TouchableOpacity
                     onPress={() => {
                       // console.log(item)
@@ -100,17 +100,21 @@ export default function Experience({
                     />
                   </TouchableOpacity>
                 </JRow>
-                <JText style={{marginTop: RFPercentage(0.5)}}>
-                  {item.description}
-                </JText>
-                <JText style={{marginTop: RFPercentage(0.5)}}>
+                <JText style={{marginTop: RFPercentage(0.5),color:colors.searchPlaceholder[0],fontWeight:'bold'}}>
+                  {item.company}
+                </JText> 
+                <JText style={{marginTop: RFPercentage(0.5),color:colors.searchPlaceholder[0]}}>
                   {moment(item.start_date).format('DD')}th{' '}
                   {moment(item.start_date).format('MMM, YYYY')} -{' '}
                   {moment(item.end_date).format('DD')}th{' '}
-                  {moment(item.end_date).format('MMM, YYYY')} | Pakistan
+                  {moment(item.end_date).format('MMM, YYYY')} | {store.lang.pakistan}
                 </JText>
+                <JText style={{marginTop: RFPercentage(0.5)}}>
+                  {item.description}
+                </JText>
+               
                 <JRow style={{justifyContent: 'space-between'}}>
-                  <JText fontColor={colors.placeHolderColor[0]}>Complete</JText>
+                  <JText fontColor={colors.placeHolderColor[0]}>{store.lang.complete}</JText>
                   <TouchableOpacity
                     onPress={() => _deleteExperience(item.id)}
                     style={{
@@ -118,6 +122,7 @@ export default function Experience({
                       alignItems: 'center',
                       height: RFPercentage(4),
                       width: RFPercentage(4),
+                      marginTop: RFPercentage(2),
                       backgroundColor: '#FB3449',
                     }}>
                     <FontAwesome

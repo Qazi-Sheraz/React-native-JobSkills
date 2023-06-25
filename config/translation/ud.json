@@ -51,6 +51,7 @@
     "job_Requirement":"ملازمت کی ضرورت",
     "job_skills":"ملازمت کی مہارت",
     "degree_level":"ڈگری کی سطح",
+    "degree_title":"ڈگری کا عنوان",
     "assessment_Required":"تشخیص کی ضرورت ہے",
     "personal_Assessment":"ذاتی تشخیص |",
     "job_Details":"ملازمت کی تفصیلات",
@@ -317,7 +318,26 @@
     "upload_your_CV": "اپنا سی وی اپ لوڈ کریں",
     "already_applied": "پہلے سے لاگو",
     "filter": "فلٹر",
-    "score": "سکور"
+    "female": "عورت",
+    "male": "مرد",
+    "father_name": "والد کا نام",
+    "date_of_birth": "پیدائش کی تاریخ",
+    "marital_status": "ازدواجی حیثیت",
+    "immediate_available": "فوری طور پر دستیاب ہے",
+    "score": "سکور",
+    "year": "سال",
+    "complete": "مکمل",
+    "pakistan": "پاکستان",
+    "expected_salary": "متوقع تنخواہ",
+    "current_salary": "موجودہ تنخواہ",
+    "experience_title": "تجربہ کا عنوان",
+    "company": "کمپنی",
+    "start_date": "شروع کرنے کی تاریخ",
+    "end_date": "آخری تاریخ",
+    "currently_working": "فی الحال کام کر رہے ہیں",
+    "institute": "انسٹی ٹیوٹ",
+    "result": "نتیجہ",
+    "general": "جنرل"
 
 
 

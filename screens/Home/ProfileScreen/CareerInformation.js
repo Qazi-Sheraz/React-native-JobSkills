@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Alert,
   ScrollView,
   StyleSheet,
@@ -35,13 +36,19 @@ import Experience from './SubHeagings/Experience';
 import Education from './SubHeagings/Education';
 import {useEffect} from 'react';
 import JChevronIcon from '../../../customComponents/JChevronIcon';
+import JScrollView from '../../../customComponents/JScrollView';
+import { observer } from 'mobx-react';
+import url from '../../../config/url';
+import { JToast } from '../../../functions/Toast';
 const CareerInformation = ({navigation}) => {
   const refRBSheet = useRef();
   const [selected, setSelected] = useState(0);
   const [loader, setLoader] = useState();
   const [apiLoader, setApiLoader] = useState(true);
   const [education, setEducation] = useState([]);
+  const [edu, setEdu] = useState([]);
   const [experience, setExpereince] = useState([]);
+
 
   const store = useContext(StoreContext);
 
@@ -77,7 +84,11 @@ const CareerInformation = ({navigation}) => {
         // console.log(result);
 
         _addExp(result.candidateExperience);
-        alert(result.message);
+
+        JToast({
+          type: 'success',
+          text1: result.message,
+        });
 
         setLoader(false);
         refRBSheet.current.close();
@@ -118,8 +129,10 @@ const CareerInformation = ({navigation}) => {
       .then(result => {
         // console.log(result.data);
         _addEdu(result.data);
-        alert(result.message);
-
+        JToast({
+          type: 'success',
+          text1: result.message,
+        });
         setLoader(false);
         refRBSheet.current.close();
       })
@@ -131,7 +144,7 @@ const CareerInformation = ({navigation}) => {
 
   const _getExperience = () => {
     var myHeaders = new Headers();
-    myHeaders.append('Authorization', `Bearer ${store.token.token}`);
+    myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
     var requestOptions = {
       method: 'GET',
       headers: myHeaders,
@@ -144,9 +157,33 @@ const CareerInformation = ({navigation}) => {
     )
       .then(response => response.json())
       .then(result => {
-        // console.log(result);
+        // console.log(result.canidateEducation);
         setEducation(result.canidateEducation);
         setExpereince(result.canidateExperience);
+        setApiLoader(false);
+      })
+      .catch(error => {
+        // console.log('error', error);
+        setApiLoader(false);
+      });
+  };
+  const _getEdu = () => {
+    var myHeaders = new Headers();
+    myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
+    var requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow',
+    };
+    setApiLoader(true);
+    fetch(
+      `${url.baseUrl}/edit-education/45`,
+      requestOptions,
+    )
+      .then(response => response.json())
+      .then(result => {
+        console.log(result);
+        setEdu(result);
         setApiLoader(false);
       })
       .catch(error => {
@@ -255,6 +292,7 @@ const CareerInformation = ({navigation}) => {
           }
         />
       }>
+        {apiLoader?<ActivityIndicator/>:
       <ScrollView
         style={{
           paddingHorizontal: RFPercentage(2),
@@ -280,7 +318,7 @@ const CareerInformation = ({navigation}) => {
           refRBSheet={refRBSheet}
           _deleteEducation={_deleteEducation}
         />
-      </ScrollView>
+      </ScrollView>}
 
       <RBSheet
         ref={refRBSheet}
@@ -297,25 +335,24 @@ const CareerInformation = ({navigation}) => {
           },
         }}>
         <JGradientHeader
+        
           center={
             <JText
               fontColor={colors.white[0]}
               fontWeight="bold"
               fontSize={RFPercentage(2.5)}>
-              {selected === 0 ? 'Experience' : 'Education'}
+
+                
+              {selected == 0 ? store.lang.experience : store.lang.education}
             </JText>
           }
           left={
-            <Feather
-              onPress={() => refRBSheet.current.close()}
-              name="chevron-left"
-              size={RFPercentage(3.5)}
-              color={colors.white[0]}
-            />
+            <JChevronIcon onPress={() => refRBSheet?.current.close()}/>
           }
         />
-
+       
         {selected === 0 ? (
+
           <Formik
             initialValues={{
               title: '',
@@ -332,16 +369,26 @@ const CareerInformation = ({navigation}) => {
               // console.log(values);
               _addExperince(values);
             }}
-            // validationSchema={yup.object().shape({
-            //   title: yup.string().required().label('Title'),
-            //   company: yup.string().required().label('Company'),
-            //   county: yup.string().required().label('Country'),
-            //   city: yup.string().required().label('City'),
-            //   state: yup.string().required().label('State'),
-            //   start: yup.string().required().label('Start'),
-            //   end: yup.string().required().label('End'),
-            //   description: yup.string().required().label('Description'),
-            // })}
+            validationSchema={yup.object().shape({
+              title: yup.string().required().label('Title'),
+              company: yup.string().required().label('Company'),
+              
+              county: yup
+              .object()
+              .shape()
+              .required('Country is required'),
+              city: yup
+              .object()
+              .shape()
+              .required('City is required'),
+              state: yup
+              .object()
+              .shape()
+              .required('State is required'),
+              start: yup.string().required().label('Start'),
+              end: yup.string().required().label('End'),
+              description: yup.string().required().label('Description'),
+            })}
           >
             {({
               values,
@@ -354,14 +401,18 @@ const CareerInformation = ({navigation}) => {
               setFieldValue,
             }) => (
               <>
-                <ScrollView
-                  contentContainerStyle={{paddingBottom: RFPercentage(8)}}
+                <JScrollView
+                  // contentContainerStyle={{paddingBottom: RFPercentage(8),}}
                   style={{
                     marginHorizontal: RFPercentage(2),
                   }}>
                   <JInput
+                  style={{
+                    textAlign: store.lang.id == 0 ? 'left' : 'right',
+                  }}
                     isRequired={true}
-                    heading={'Experience Title :'}
+                    containerStyle={{marginTop: RFPercentage(2)}}
+                    heading={`${store.lang.experience_title}:`}
                     value={values.title}
                     error={touched.title && errors.title && true}
                     onChangeText={handleChange('title')}
@@ -371,10 +422,13 @@ const CareerInformation = ({navigation}) => {
                     <JErrorText>{errors.title}</JErrorText>
                   )}
                   <JInput
+                  style={{
+                    textAlign: store.lang.id == 0 ? 'left' : 'right',
+                  }}
                     isRequired={true}
                     containerStyle={{marginTop: RFPercentage(2)}}
                     value={values.company}
-                    heading={'Company :'}
+                    heading={`${store.lang.company}:`}
                     error={touched.company && errors.company && true}
                     onChangeText={handleChange('company')}
                     onBlur={() => setFieldTouched('company')}
@@ -382,13 +436,13 @@ const CareerInformation = ({navigation}) => {
                   {touched.company && errors.company && (
                     <JErrorText>{errors.company}</JErrorText>
                   )}
-
+{/* {console.log(store.myProfile)} */}
                   <JSelectInput
                     containerStyle={{marginTop: RFPercentage(2)}}
-                    data={store.myProfile.data.countries}
+                    data={store.lang.id==0?store.myProfile.dataEnglish.countries:store.myProfile.dataArabic.countries}
                     value={values.county.name}
-                    header={'Country'}
-                    heading={'Country :'}
+                    header={store.lang.country}
+                    heading={`${store.lang.country}:`}
                     setValue={e => setFieldValue('county', e)}
                     error={touched.county && errors.county && true}
                     rightIcon={
@@ -405,11 +459,13 @@ const CareerInformation = ({navigation}) => {
 
                   <JSelectInput
                     containerStyle={{marginTop: RFPercentage(2)}}
-                    value={values.state.name}
+                    value={store.lang.id == 0
+                      ? values.state?.name
+                      : values.state?.arabic_title}
                     id={values.county.id}
                     setValue={e => setFieldValue('state', e)}
-                    header={'State'}
-                    heading={'State :'}
+                    header={store.lang.state}
+                    heading={`${store.lang.state}:`}
                     error={touched.state && errors.state && true}
                     rightIcon={
                       <Feather
@@ -425,10 +481,12 @@ const CareerInformation = ({navigation}) => {
 
                   <JSelectInput
                     containerStyle={{marginTop: RFPercentage(2)}}
-                    value={values.city.name}
+                    value={ store.lang.id == 0
+                      ? values.city?.name
+                      : values.city?.arabic_title}
                     setValue={e => setFieldValue('city', e)}
-                    header={'City'}
-                    heading={'City :'}
+                    header={store.lang.city}
+                    heading={`${store.lang.city}:`}
                     id={values.state.id}
                     error={touched.city && errors.city && true}
                     rightIcon={
@@ -450,8 +508,8 @@ const CareerInformation = ({navigation}) => {
                       values.start && moment(values.start).format('DD MMM YYYY')
                     }
                     setValue={e => setFieldValue('start', e)}
-                    header={'Start Date'}
-                    heading={'Start Date:'}
+                    header={store.lang.start_date}
+                    heading={`${store.lang.start_date}:`}
                     error={touched.start && errors.start && true}
                     rightIcon={
                       <Feather
@@ -474,8 +532,8 @@ const CareerInformation = ({navigation}) => {
                           values.end && moment(values.end).format('DD MMM YYYY')
                         }
                         setValue={e => setFieldValue('end', e)}
-                        header={'End Date'}
-                        heading={'End Date :'}
+                        header={store.lang.end_date}
+                    heading={`${store.lang.end_date}:`}
                         error={touched.end && errors.end && true}
                         rightIcon={
                           <Feather
@@ -496,7 +554,7 @@ const CareerInformation = ({navigation}) => {
                       marginVertical: RFPercentage(2),
                     }}>
                     <JText fontWeight={'500'} fontSize={RFPercentage(2.5)}>
-                      Currently Working
+                      {store.lang.currently_working}
                     </JText>
 
                     <Switch
@@ -509,7 +567,10 @@ const CareerInformation = ({navigation}) => {
                   </JRow>
 
                   <JInput
-                    heading={'Description :'}
+                  style={{
+                    textAlign: store.lang.id == 0 ? 'left' : 'right',
+                  }}
+                    heading={`${store.lang.description}:`}
                     value={values.description}
                     error={touched.description && errors.description && true}
                     onChangeText={handleChange('description')}
@@ -518,7 +579,7 @@ const CareerInformation = ({navigation}) => {
                   {touched.title && errors.description && (
                     <JErrorText>{errors.description}</JErrorText>
                   )}
-                </ScrollView>
+                </JScrollView>
                 <JButton
                   isValid={isValid}
                   onPress={() => handleSubmit()}
@@ -527,7 +588,7 @@ const CareerInformation = ({navigation}) => {
                     bottom: RFPercentage(1),
                     width: RFPercentage(20),
                   }}>
-                  {loader ? 'Loading' : 'Save'}
+                  {loader ? store.lang.loading : store.lang.save}
                 </JButton>
               </>
             )}
@@ -548,16 +609,28 @@ const CareerInformation = ({navigation}) => {
               // console.log(values);
               _addEducation(values);
             }}
-            // validationSchema={yup.object().shape({
-            //   title: yup.string().required().label('Title'),
-            //   company: yup.string().required().label('Company'),
-            //   county: yup.string().required().label('Country'),
-            //   city: yup.string().required().label('City'),
-            //   state: yup.string().required().label('State'),
-            //   start: yup.string().required().label('Start'),
-            //   end: yup.string().required().label('End'),
-            //   description: yup.string().required().label('Description'),
-            // })}
+            validationSchema={yup.object().shape({
+              title: yup.string().required().label('Title'),
+              level: yup.string().required().label('Level'),
+              county: yup
+              .object()
+              .shape()
+              .required('Country is required'),
+              city: yup
+              .object()
+              .shape()
+              .required('City is required'),
+              state: yup
+              .object()
+              .shape()
+              .required('State is required'),
+              institude: yup.string().required().label('Institude'),
+              result: yup.string().required().label('Eesult'),
+              year: yup
+              .object()
+              .shape()
+              .required('Year is required'),
+            })}
           >
             {({
               values,
@@ -576,9 +649,13 @@ const CareerInformation = ({navigation}) => {
                     marginHorizontal: RFPercentage(2),
                   }}>
                   <JInput
+                  style={{
+                    textAlign: store.lang.id == 0 ? 'left' : 'right',
+                  }}
+                  keyboardType={'numeric'}
                     isRequired={true}
                     containerStyle={styles.container}
-                    heading={'Degree Level :'}
+                    heading={`${store.lang.degree_level}:`}
                     value={values.level}
                     error={touched.level && errors.level && true}
                     onChangeText={handleChange('level')}
@@ -588,10 +665,13 @@ const CareerInformation = ({navigation}) => {
                     <JErrorText>{errors.level}</JErrorText>
                   )}
                   <JInput
+                  style={{
+                    textAlign: store.lang.id == 0 ? 'left' : 'right',
+                  }}
                     isRequired={true}
                     containerStyle={styles.container}
                     value={values.title}
-                    heading={'Degree  Title :'}
+                    heading={`${store.lang.degree_title}:`}
                     error={touched.title && errors.title && true}
                     onChangeText={handleChange('title')}
                     onBlur={() => setFieldTouched('title')}
@@ -603,9 +683,9 @@ const CareerInformation = ({navigation}) => {
                   <JSelectInput
                     containerStyle={styles.container}
                     value={values.county.name}
-                    data={store.myProfile.data.countries}
-                    header={'Country'}
-                    heading={'Country :'}
+                    data={store.lang.id==0?store.myProfile.dataEnglish.countries:store.myProfile.dataArabic.countries}
+                    header={store.lang.country}
+                    heading={`${store.lang.country}:`}
                     setValue={e => setFieldValue('county', e)}
                     error={touched.county && errors.county && true}
                     rightIcon={
@@ -622,11 +702,13 @@ const CareerInformation = ({navigation}) => {
 
                   <JSelectInput
                     containerStyle={styles.container}
-                    value={values.state.name}
+                    value={store.lang.id == 0
+                      ? values.state?.name
+                      : values.state?.arabic_title}
                     id={values.county.id}
                     setValue={e => setFieldValue('state', e)}
-                    header={'State'}
-                    heading={'State :'}
+                    header={store.lang.state}
+                    heading={`${store.lang.state}:`}
                     error={touched.state && errors.state && true}
                     rightIcon={
                       <Feather
@@ -642,10 +724,12 @@ const CareerInformation = ({navigation}) => {
 
                   <JSelectInput
                     containerStyle={styles.container}
-                    value={values.city.name}
+                    value={store.lang.id == 0
+                      ? values.city?.name
+                      : values.city?.arabic_title}
                     setValue={e => setFieldValue('city', e)}
-                    header={'City'}
-                    heading={'City :'}
+                    header={store.lang.city}
+                    heading={`${store.lang.city}:`}
                     id={values.state.id}
                     error={touched.city && errors.city && true}
                     rightIcon={
@@ -661,9 +745,12 @@ const CareerInformation = ({navigation}) => {
                   )}
 
                   <JInput
+                  style={{
+                    textAlign: store.lang.id == 0 ? 'left' : 'right',
+                  }}
                     isRequired={true}
                     containerStyle={styles.container}
-                    heading={'Institute:'}
+                    heading={`${store.lang.institute}:`}
                     value={values.institude}
                     error={touched.institude && errors.institude && true}
                     onChangeText={handleChange('institude')}
@@ -674,9 +761,12 @@ const CareerInformation = ({navigation}) => {
                   )}
 
                   <JInput
+                  style={{
+                    textAlign: store.lang.id == 0 ? 'left' : 'right',
+                  }}
                     isRequired
                     containerStyle={styles.container}
-                    heading={'Result :'}
+                    heading={`${store.lang.result}:`}
                     value={values.result}
                     error={touched.result && errors.result && true}
                     onChangeText={handleChange('result')}
@@ -691,8 +781,8 @@ const CareerInformation = ({navigation}) => {
                     containerStyle={styles.container}
                     value={values.year.name}
                     setValue={e => setFieldValue('year', e)}
-                    header={'Year'}
-                    heading={'Year :'}
+                    header={store.lang.year}
+                    heading={`${store.lang.year}:`}
                     error={touched.year && errors.year && true}
                     rightIcon={
                       <Feather
@@ -714,7 +804,7 @@ const CareerInformation = ({navigation}) => {
                     bottom: RFPercentage(1),
                     width: RFPercentage(20),
                   }}>
-                  {loader ? 'Loading' : 'Save'}
+                  {loader ? store.lang.loading : store.lang.save}
                 </JButton>
               </>
             )}
@@ -725,7 +815,7 @@ const CareerInformation = ({navigation}) => {
   );
 };
 
-export default CareerInformation;
+export default observer(CareerInformation);
 
 const styles = StyleSheet.create({
   container: {marginTop: RFPercentage(2)},

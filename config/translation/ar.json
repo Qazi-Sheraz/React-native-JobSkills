@@ -51,6 +51,7 @@
     "job_Requirement":"متطلبات الوظائف",
     "job_skills":"مهارات العمل",
     "degree_level":"مستوى الدرجة",
+    "degree_title":"عنوان الدرجة",
     "assessment_Required":"التقييم المطلوب",
     "personal_Assessment":"التقييم الشخصي |",
     "job_Details":"تفاصيل الوظيفة",
@@ -318,7 +319,26 @@
     "upload_your_CV": "حمل سيرتك الذاتية",
     "already_applied": "تطبق بالفعل",
     "filter": "منقي",
-    "score": "نتيجة"
+    "female": "أنثى",
+    "male": "ذكر",
+    "father_name": "اسم الأب",
+    "date_of_birth": "تاريخ الميلاد",
+    "marital_status": "الحالة الاجتماعية",
+    "immediate_available": "متاح على الفور",
+    "score": "نتيجة",
+    "year": "سنة",
+    "complete": "مكتمل",
+    "pakistan": "باكستان",
+    "expected_salary": "الراتب المتوقع",
+    "current_salary": "الراتب الحالي",
+    "experience_title": "عنوان الخبرة",
+    "company": "شركة",
+    "start_date": "تاريخ البدء",
+    "end_date": "تاريخ الانتهاء",
+    "currently_working": "تعمل حاليا",
+    "institute": "معهد",
+    "result": "نتيجة",
+    "general": "عام"
 
 
 
