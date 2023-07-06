@@ -9,17 +9,21 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import colors from '../config/colors';
 import JText from '../customComponents/JText';
+import JRow from '../customComponents/JRow';
+import { StoreContext } from '../mobx/store';
+import { useContext } from 'react';
 
 export default function CustomCandidateBottomTab({
   state,
   descriptors,
   navigation,
+  fontSize,
 }) {
+  const store =useContext(StoreContext)
   return (
-    <View
+    <JRow
       style={{
-        flexDirection: 'row',
-        height: heightPercentageToDP(8),
+        height:heightPercentageToDP(store.lang.id==0? 8:8.7),
         backgroundColor: colors.white[0],
         shadowColor: 'black',
         shadowOpacity: 0.26,
@@ -73,6 +77,8 @@ export default function CustomCandidateBottomTab({
               flex: 1,
               justifyContent: 'center',
               alignItems: 'center',
+
+              // marginBottom:store.lang.id==0? RFPercentage(0):RFPercentage(0.5)
             }}>
             {index === 0 ? (
               <Ionicons
@@ -90,7 +96,7 @@ export default function CustomCandidateBottomTab({
               <Ionicons
                 color={isFocused ? colors.purple[0] : colors.inputBorder[0]}
                 name={isFocused ? 'briefcase' : 'ios-briefcase-outline'}
-                size={RFPercentage(3.5)}
+                size={RFPercentage(3.3)}
               />
             ) : (
               <FontAwesome
@@ -100,6 +106,7 @@ export default function CustomCandidateBottomTab({
               />
             )}
             <JText
+            fontSize={fontSize}
               fontColor={isFocused ? colors.purple[0] : colors.inputBorder[0]}
               fontWeight={isFocused ? 'bold' : 'normal'}>
               {label}
@@ -107,7 +114,7 @@ export default function CustomCandidateBottomTab({
           </TouchableOpacity>
         );
       })}
-    </View>
+    </JRow>
   );
 }
 

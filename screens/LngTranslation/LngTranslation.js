@@ -85,17 +85,14 @@ useEffect(() => {
           <JButton onPress={()=>{
             setBtn(true)
             setBtn2(false)
-            setTimeout(() => {
               handleSave('en');
-            }, 1000);
-           }} style={{paddingHorizontal:RFPercentage(6),backgroundColor:btn === true?colors.primary[0]:'#fff',borderColor:btn === true?colors.primary[0]:colors.border[0]}} >English</JButton>
+           }}
+            style={{paddingHorizontal:RFPercentage(6),backgroundColor:btn === false?colors.primary[0]:'#fff',borderColor:btn === false?colors.primary[0]:colors.border[0]}} >English</JButton>
           {/* <JButton onPress={()=>{handleSave('ur')}} style={{paddingHorizontal:RFPercentage(4),backgroundColor:store.lang === 'ur'?'#fff':colors.primary[0]}}>اردو</JButton> */}
           <JButton onPress={()=>{
             setBtn2(true)
             setBtn(false)
-            setTimeout(() => {
-            handleSave('ar');
-          }, 1000); }} style={{paddingHorizontal:RFPercentage(6),backgroundColor:btn2=== true?colors.primary[0]:'#fff',borderColor:btn === true?colors.primary[0]:colors.border[0]}}>العربية</JButton>
+            handleSave('ar');}} style={{paddingHorizontal:RFPercentage(6),backgroundColor:btn2=== true?colors.primary[0]:'#fff',borderColor:btn === true?colors.primary[0]:colors.border[0]}}>العربية</JButton>
         </JRow>
       </View>
       </Animatable.View>

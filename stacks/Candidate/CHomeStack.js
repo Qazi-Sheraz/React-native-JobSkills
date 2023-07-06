@@ -37,6 +37,7 @@ import ChangePassword from '../../screens/ChangePassword/ChangePassword';
 import ChangeLanguage from '../../screens/ChangeLanguage/ChangeLanguage';
 import JChevronIcon from '../../customComponents/JChevronIcon';
 import JobDetails from '../../escreen/Jobs/JobDetails';
+import CSocialMediaLink from '../../screens/Home/ProfileScreen/CSocialMediaLink';
 
 const Stack = createStackNavigator();
 
@@ -220,6 +221,7 @@ function CHomeStack({navigation}) {
           <Stack.Screen name="CSearch" component={CSearch} />
           <Stack.Screen name="CFilter" component={CFilter} />
           <Stack.Screen name="CEditProfile" component={EditProfile} />
+          <Stack.Screen name="CSocialMediaLink" component={CSocialMediaLink} />
           <Stack.Screen
             name="CContacttInformation"
             component={CContactInformation}

@@ -32,13 +32,11 @@ function JSelectInput({
   containerStyle,
   heading,
   icon,
-
+  maximumDate,
+  minimumDate,
   headingWeight = '500',
-
   value,
-
   forPassword = false,
-
   error,
   isMultiple=false,
   isRequired = false,
@@ -49,11 +47,13 @@ function JSelectInput({
   id,
   mode = 'date',
   data,
+  date1,
+  disabled=false,
 }) {
   const store = useContext(StoreContext);
   const refRBSheet = useRef();
   const [open, setOpen] = useState(false);
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(date1?date1:new Date());
   const [county, setCountry] = useState({});
   const [city, setCity] = useState([]);
   const [state, setState] = useState([]);
@@ -84,7 +84,7 @@ function JSelectInput({
   const [selectedItems, setSelectedItems] = useState(id);
   // console.log('>>',selectedItems)
   const handleSelectItem = item => {
-    if (selectedItems.find((e)=>e.id === item.id)) {
+    if (selectedItems?.find((e)=>e.id === item.id)) {
       setSelectedItems(selectedItems.filter(i => i.id !== item.id));
     } else {
       setSelectedItems([...selectedItems, item]);
@@ -121,7 +121,7 @@ function JSelectInput({
     let expericeYear = [];
     let jobType = [];
     let categories = [];
-    let skill = [];
+    let skillArr = [];
     let titleArr = [];
     let shiftArr = [];
     let tag = [];
@@ -134,12 +134,12 @@ function JSelectInput({
     let sizeArr = [];
     if (header === store.lang.job_skills) {
       Object.keys(data).forEach(function (key, index) {
-        skill.push({
+        skillArr.push({
           id: key,
           name: data[key],
         });
       });
-      setSkills(skill);
+      setSkills(skillArr);
     }
 
     if (header === store.lang.job_category) {
@@ -161,7 +161,7 @@ function JSelectInput({
       });
       setJobType(jobType);
     }
-    if (header === 'Experience') {
+    if (header === store.lang.experience) {
       for (var i = 1; i <= 50; i++) {
         expericeYear.push({
           name: i,
@@ -394,6 +394,7 @@ function JSelectInput({
   return (
     <>
       <Pressable
+      disabled={disabled}
         onPress={() => {
           if (isDate === false) {
             refRBSheet.current.open();
@@ -419,7 +420,7 @@ function JSelectInput({
           }}>
           {icon}
           <JRow>
-            <JText fontWeight={headingWeight} fontSize={RFPercentage(2.5)}>
+            <JText fontWeight={headingWeight} fontSize={RFPercentage(2.5)} fontColor={disabled==true?colors.inputBorder[0]:colors.black[0]}>
               {heading}
             </JText>
             {isRequired && (
@@ -541,9 +542,9 @@ function JSelectInput({
                       e.name.toLowerCase().includes(query.toLowerCase()),
                     )
                   : header === store.lang.salary_currency
-                  ? currencies.filter(e =>
+                  ? currencies.filter(e =>!e.name?'N/A':
                       e.name.toLowerCase().includes(query.toLowerCase()),
-                    )
+                  )
                   : header === store.lang.job_type
                   ? jobType.filter(e =>
                       e.name.toLowerCase().includes(query.toLowerCase()),
@@ -553,7 +554,7 @@ function JSelectInput({
                       e.name.toLowerCase().includes(query.toLowerCase()),
                     )
                   : header === store.lang.job_skills
-                  ? skills.filter(e =>
+                  ? skills.filter(e =>!e.name?'N/A':
                       e.name.toLowerCase().includes(query.toLowerCase()),
                     )
                   : header === 'Job Title'
@@ -596,7 +597,7 @@ function JSelectInput({
                   ? companySize.filter(e =>
                       e.name.toLowerCase().includes(query.toLowerCase()),
                     )
-                  : header === 'Experience'
+                  : header === store.lang.experience
                   ? experience
                   : header === store.lang.state
                   && state.filter(e =>
@@ -620,6 +621,7 @@ function JSelectInput({
                     }}
                     isPressable={false}>
                     <TextInput
+                    
                       onChangeText={e => setQuery(e)}
                       placeholderTextColor={colors.placeHolderColor[0]}
                       placeholder={store.lang.search}
@@ -632,6 +634,7 @@ function JSelectInput({
               renderItem={({item, index}) => (
                 
                 <TouchableOpacity
+                
                   onPress={() => {
                     if (isMultiple == true) {
                       handleSelectItem(item);
@@ -641,6 +644,7 @@ function JSelectInput({
                     }
                     // console.log(item);
                   }}
+                 
                   style={{
                     paddingVertical: RFPercentage(2),
                     marginHorizontal: RFPercentage(2),
@@ -648,12 +652,12 @@ function JSelectInput({
                     borderBottomColor: colors.border[0],
                     borderBottomWidth: RFPercentage(0.1),
                   }}>
-                  <JRow>
+                  <JRow >
                     {header ===store.lang.state || header === store.lang.city
                     ?<JText fontSize={RFPercentage(1.8)}>{store.lang.id==0 ?item?.name:item?.arabic_title}</JText>
                    :<JText fontSize={RFPercentage(1.8)}>{item?.name}</JText>}
 
-                    {isMultiple === true && selectedItems.find((e)=>e.id == item.id) && (
+                    {isMultiple === true && selectedItems?.find((e)=>e.id == item.id) && (
                       <JIcon icon="fe" name="check" size={RFPercentage(2)} color={colors.black[0]}/>
                     )}
                   </JRow>
@@ -666,9 +670,13 @@ function JSelectInput({
       </RBSheet>
       <DatePicker
         modal
+        
+  minimumDate={minimumDate}
+  maximumDate={maximumDate}
         mode={mode}
         open={open}
         date={date}
+        
         onConfirm={date => {
           setOpen(false);
           // console.log(date);

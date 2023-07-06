@@ -29,7 +29,7 @@ function CSocialMediaLink({refRBSheet, data, user}) {
   const [loader, setLoader] = useState(false);
   const navigation = useNavigation();
   const {params}=useRoute()
-console.log(params.fb)
+// console.log(params.fb)
   return (
     <Formik
       initialValues={{
@@ -45,7 +45,7 @@ console.log(params.fb)
         formdata.append('facebook_url', values?.facebook_url);
         formdata.append('twitter_url', values?.twitter_url);
         formdata.append('linkedin_url', values?.linkedin_url);
-        // console.log(formdata)
+        console.log(formdata)
         var requestOptions = {
           method: 'POST',
           headers: myHeaders,
@@ -54,7 +54,7 @@ console.log(params.fb)
         };
 
         setLoader(true);
-        fetch(`${url.baseUrl}/companyUpdate/${store.token?.user?.owner_id}`, requestOptions)
+        fetch(store.token?.user?.owner_type.includes('Candidate') == false?`${url.baseUrl}/companyUpdate/${store.token?.user?.owner_id}`:`${url.baseUrl}/update-profile`, requestOptions)
           .then(response => response.json())
           .then(result => {
             // console.log(result);
@@ -68,6 +68,7 @@ console.log(params.fb)
                 type: 'success',
                 text1: 'Successfully update',
               });
+              store.token?.user?.owner_type.includes('Candidate') == true&& _getProfile(store)
               navigation.goBack()
 
               // _getProfile(store);

@@ -281,7 +281,9 @@ useEffect(() => {
                       ? store.jobCreate?.english_data?.countries
                       : store.jobCreate?.arabic_data?.countries
                   }
-                  setValue={e => setFieldValue('countries', e)}
+                  setValue={e => {setFieldValue('countries', e)
+                  setFieldValue('state', '');
+                  setFieldValue('city', '');}}
                   header={store.lang.country}
                   heading={`${store.lang.country}:`}
                   error={touched.countries && errors.countries && true}

@@ -44,7 +44,7 @@ const JobRequirement = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisible1, setModalVisible1] = useState(false);
   const [error, setError] = useState(false);
-  const [loader, setLoader] = useState(true);
+  const [loader, setLoader] = useState(false);
   const [requirements, setRequirements] = useState();
 
 // const arry=params.assessment.map((item)=>item.id).map(Number)
@@ -95,15 +95,15 @@ const JobRequirement = () => {
     })
       .then(response => response.json())
       .then(result => { 
-        
       if (result.success === true ){
-        console.log('new jobsssssss',result.data)
+        // console.log('new jobsssssss',result.data)
              store.AddJobEmployerData(result.data)
              store.AddRecentJobs(result.data)
               Toast.show({
                type: 'success',
                text1: result.message,
              });
+             setLoader(false)
              navigate('Job',{...params,...values})
             
       }
@@ -436,7 +436,7 @@ const JobRequirement = () => {
               <JButton
                 isValid={isValid}
                 onPress={() => {
-                  // alert('Alert');
+                  setLoader(true)
                   handleSubmit();
                 }}
                 style={{
@@ -444,7 +444,7 @@ const JobRequirement = () => {
                   bottom: RFPercentage(3),
                   width: RFPercentage(20),
                 }}>
-                {store.lang.post_job}
+                {loader?store.lang.loading:store.lang.post_job}
               </JButton>
               <Modal
                 animationType="fade"

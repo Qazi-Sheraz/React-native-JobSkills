@@ -18,7 +18,7 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import {Observer} from 'mobx-react';
 import {useContext} from 'react';
 import {StoreContext} from '../../../../mobx/store';
-import {useEffect} from 'react';
+
 export default function Experience({
 
   setSelected,
@@ -82,7 +82,7 @@ export default function Experience({
                   padding: RFPercentage(2),
                 }}>
                 <JRow style={{justifyContent: 'space-between'}}>
-                  <JText fontWeight='bold'>{item.experience_title}</JText>
+                  <JText fontWeight='bold'>{item?.experience_title}</JText>
                   <TouchableOpacity
                     onPress={() => {
                       // console.log(item)
@@ -101,22 +101,22 @@ export default function Experience({
                   </TouchableOpacity>
                 </JRow>
                 <JText style={{marginTop: RFPercentage(0.5),color:colors.searchPlaceholder[0],fontWeight:'bold'}}>
-                  {item.company}
+                  {item?.company}
                 </JText> 
                 <JText style={{marginTop: RFPercentage(0.5),color:colors.searchPlaceholder[0]}}>
-                  {moment(item.start_date).format('DD')}th{' '}
-                  {moment(item.start_date).format('MMM, YYYY')} -{' '}
-                  {moment(item.end_date).format('DD')}th{' '}
-                  {moment(item.end_date).format('MMM, YYYY')} | {store.lang.pakistan}
+                  {moment(item?.start_date).format('DD')}th{' '}
+                  {moment(item?.start_date).format('MMM, YYYY')} -{' '}
+                  {moment(item?.end_date).format('DD')}th{' '}
+                  {moment(item?.end_date).format('MMM, YYYY')} | {store.lang.pakistan}
                 </JText>
                 <JText style={{marginTop: RFPercentage(0.5)}}>
-                  {item.description}
+                  {item?.description}
                 </JText>
                
                 <JRow style={{justifyContent: 'space-between'}}>
                   <JText fontColor={colors.placeHolderColor[0]}>{store.lang.complete}</JText>
                   <TouchableOpacity
-                    onPress={() => _deleteExperience(item.id)}
+                    onPress={() => _deleteExperience(item?.id)}
                     style={{
                       justifyContent: 'center',
                       alignItems: 'center',

@@ -82,8 +82,10 @@ export default function Education({
 
                   marginVertical: RFPercentage(1),
                   padding: RFPercentage(2),
-                }}>
+                }}>{item.degree_level&&
+                  <JText fontWeight='bold'>{store.lang.id==0?item.degree_level?.name:item.degree_level?.arabic_title}</JText>}
                 <JRow style={{justifyContent: 'space-between'}}>
+                  
                   <JText fontWeight='bold'>{item.degree_title}</JText>
                   <TouchableOpacity
                     style={{

@@ -22,6 +22,7 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 import JChevronIcon from '../../../customComponents/JChevronIcon';
 import JRow from '../../../customComponents/JRow';
 import { JToast } from '../../../functions/Toast';
+import url from '../../../config/url';
 
 function CContactInformation({refRBSheet, user}) {
   
@@ -30,12 +31,87 @@ function CContactInformation({refRBSheet, user}) {
   const store = useContext(StoreContext);
   const navigation = useNavigation();
   const [loader, setLoader] = useState(false);
+  const [phone, setPhone] = useState(params.phone);
+  const [code, setCode] = useState();
+
+  const regionalCodeMappings = {
+    "93": "AF", // Afghanistan
+    "355": "AL", // Albania
+    "213": "DZ", // Algeria
+    "376": "AD", // Andorra
+    "244": "AO", // Angola
+    "1-268": "AG", // Antigua and Barbuda
+    "54": "AR", // Argentina
+    "374": "AM", // Armenia
+    "61": "AU", // Australia
+    "43": "AT", // Austria
+    "994": "AZ", // Azerbaijan
+    "1-242": "BS", // Bahamas
+    "973": "BH", // Bahrain
+    "880": "BD", // Bangladesh
+    "1-246": "BB", // Barbados
+    "375": "BY", // Belarus
+    "32": "BE", // Belgium
+    "501": "BZ", // Belize
+    "229": "BJ", // Benin
+    "975": "BT", // Bhutan
+    "591": "BO", // Bolivia
+    "387": "BA", // Bosnia and Herzegovina
+    "267": "BW", // Botswana
+    "55": "BR", // Brazil
+    "673": "BN", // Brunei
+    "359": "BG", // Bulgaria
+    "226": "BF", // Burkina Faso
+    "257": "BI", // Burundi
+    "238": "CV", // Cabo Verde
+    "855": "KH", // Cambodia
+    "237": "CM", // Cameroon
+    "1": "CA", // Canada
+    "236": "CF", // Central African Republic
+    "235": "TD", // Chad
+    "56": "CL", // Chile
+    "86": "CN", // China
+    "57": "CO", // Colombia
+    "269": "KM", // Comoros
+    "243": "CD", // Congo, Democratic Republic of the
+    "242": "CG", // Congo, Republic of the
+    "506": "CR", // Costa Rica
+    "225": "CI", // Cote d'Ivoire (Ivory Coast)
+    "385": "HR", // Croatia
+    "53": "CU", // Cuba
+    "357": "CY", // Cyprus
+    "420": "CZ", // Czech Republic
+    "45": "DK", // Denmark
+    "253": "DJ", // Djibouti
+    "1-767": "DM", // Dominica
+    "1-809": "DO", // Dominican Republic
+    "1-829": "DO", // Dominican Republic
+    "1-849": "DO", // Dominican Republic
+    "670": "TL", // East Timor (Timor-Leste)
+    "593": "EC", // Ecuador
+    "20": "EG", // Egypt
+    "503": "SV", // El Salvador
+    "240": "GQ", // Equatorial Guinea
+    "291": "ER", // Eritrea
+    "372": "EE", // Estonia
+    "268": "SZ", // Eswatini (f.k.a. Swaziland)
+    "251": "ET", // Ethiopia
+    "679": "FJ", // Fiji
+    "358": "FI", // Finland
+    "33": "FR", // France
+  }
+  
+  
+  
+  
   const _postData = values => {
     var myHeaders = new Headers();
-    myHeaders.append('Authorization', `Bearer ${store.token.token}`);
+    myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
     var formdata = new FormData();
 
-    formdata.append('phone', values.phone);
+    formdata.append('phone', phone);
+    formdata.append('region_code', (code?.callingCode[0]));
+    console.log(formdata)
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
@@ -43,7 +119,7 @@ function CContactInformation({refRBSheet, user}) {
       redirect: 'follow',
     };
     setLoader(true);
-    fetch('https://dev.jobskills.digital/api/update-profile', requestOptions)
+    fetch(`${url.baseUrl}/update-profile`, requestOptions)
       .then(response => response.json())
       .then(result => {
         // console.log(result);
@@ -65,14 +141,17 @@ function CContactInformation({refRBSheet, user}) {
         setLoader(false);
       });
   };
+  // console.log(params.regional_code)
   return (
     <Formik
       initialValues={{
         email: store.myProfile.user[0].contact_information?.email_address,
-        phone: params.phone?params.phone?.slice(3):'',
+        // phone: params.phone?params.phone?.slice(3):'',
+        phone: params.phone!==undefined?params?.phone:'',
+        regional_code: params.region_code?regionalCodeMappings[params.region_code]:'',
       }}
       onSubmit={values => {
-        // console.log(values);
+        // console.log('regional;;;;;;;',values.regional_code);
         _postData(values);
       }}
       validationSchema={yup.object().shape({
@@ -151,7 +230,8 @@ function CContactInformation({refRBSheet, user}) {
               <PhoneInput
                   ref={phoneInput}
                   defaultValue={values.phone}
-                  defaultCode="SA"
+                  // defaultCode={code?.cca2?code?.cca2:"SA"}
+                  defaultCode={values.regional_code?values.regional_code  :"SA"}
                   placeholder={store.lang.phone_number}
                   containerStyle={{
                     width: '100%',
@@ -163,8 +243,17 @@ function CContactInformation({refRBSheet, user}) {
                     paddingVertical: 5,
                     backgroundColor: 'transparent',
                   }}
-                  onChangeFormattedText={text => {
+                  onChangeFormattedText={(text,c) => {
                     setFieldValue('phone', text);
+                    setFieldValue('regional_code', c);
+                  }}
+                  onChangeCountry={(e)=>{
+                    setCode(e)
+                    setFieldValue(e);
+                  }}
+                  onChangeText={(e)=>{
+                    setFieldValue(e);
+                    setPhone(e)
                   }}
                 />
                 {touched.phone && errors.phone && (

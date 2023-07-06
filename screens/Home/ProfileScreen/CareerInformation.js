@@ -1,6 +1,7 @@
 import {
   ActivityIndicator,
   Alert,
+  KeyboardAvoidingView,
   ScrollView,
   StyleSheet,
   Switch,
@@ -82,19 +83,28 @@ const CareerInformation = ({navigation}) => {
       .then(response => response.json())
       .then(result => {
         // console.log(result);
-
+        if(moment(values.start).format('DD MMM YYYY')===moment(values.end).format('DD MMM YYYY'))
+           {
+              JToast({
+              type: 'error',
+              text1: result.end_date[0],
+              visibilityTime : 1500
+            });
+           
+            setLoader(false);
+            }
+       else {
         _addExp(result.candidateExperience);
-
-        JToast({
+         JToast({
           type: 'success',
           text1: result.message,
         });
 
         setLoader(false);
-        refRBSheet.current.close();
+        refRBSheet.current.close();}
       })
       .catch(error => {
-        // console.log('error', error);
+        console.log('error', error);
         setLoader(false);
       });
   };
@@ -104,7 +114,7 @@ const CareerInformation = ({navigation}) => {
     myHeaders.append('Authorization', `Bearer ${store.token.token}`);
 
     var formdata = new FormData();
-    formdata.append('degree_level_id', values.level);
+    formdata.append('degree_level_id', values.level.id);
     formdata.append('degree_title', values.title);
     formdata.append('country_id', values.county.id);
     formdata.append('state_id', `${values.state.id}`);
@@ -113,7 +123,7 @@ const CareerInformation = ({navigation}) => {
     formdata.append('result', values.result);
     formdata.append('year', `${values.year.name}`);
 
-    // console.log(formdata);
+    console.log(formdata);
     setLoader(true);
     var requestOptions = {
       method: 'POST',
@@ -137,7 +147,7 @@ const CareerInformation = ({navigation}) => {
         refRBSheet.current.close();
       })
       .catch(error => {
-        // console.log('error', error);
+        console.log('error', error);
         setLoader(false);
       });
   };
@@ -177,7 +187,7 @@ const CareerInformation = ({navigation}) => {
     };
     setApiLoader(true);
     fetch(
-      `${url.baseUrl}/edit-education/45`,
+      `${url.baseUrl}/edit-general-profile`,
       requestOptions,
     )
       .then(response => response.json())
@@ -272,6 +282,7 @@ const CareerInformation = ({navigation}) => {
   };
   useEffect(() => {
     _getExperience();
+    _getEdu();
   }, []);
   return (
     <JScreen
@@ -321,13 +332,16 @@ const CareerInformation = ({navigation}) => {
       </ScrollView>}
 
       <RBSheet
+      
         ref={refRBSheet}
         closeOnDragDown={false}
         closeOnPressMask={false}
         height={heightPercentageToDP(97)}
+
         customStyles={{
           wrapper: {
             backgroundColor: '#00000080',
+            
           },
           draggableIcon: {
             backgroundColor: colors.black[0],
@@ -350,7 +364,7 @@ const CareerInformation = ({navigation}) => {
             <JChevronIcon onPress={() => refRBSheet?.current.close()}/>
           }
         />
-       
+       <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
         {selected === 0 ? (
 
           <Formik
@@ -367,6 +381,12 @@ const CareerInformation = ({navigation}) => {
             }}
             onSubmit={values => {
               // console.log(values);
+              // moment(values.start).format('DD MM YYYY')===moment(values.end).format('DD MM YYYY') ? 
+              // JToast({
+              //   type: 'error',
+              //   text1: result.end_date[0],
+              // })
+              // :
               _addExperince(values);
             }}
             validationSchema={yup.object().shape({
@@ -385,8 +405,7 @@ const CareerInformation = ({navigation}) => {
               .object()
               .shape()
               .required('State is required'),
-              start: yup.string().required().label('Start'),
-              end: yup.string().required().label('End'),
+             
               description: yup.string().required().label('Description'),
             })}
           >
@@ -401,6 +420,7 @@ const CareerInformation = ({navigation}) => {
               setFieldValue,
             }) => (
               <>
+              
                 <JScrollView
                   // contentContainerStyle={{paddingBottom: RFPercentage(8),}}
                   style={{
@@ -525,7 +545,11 @@ const CareerInformation = ({navigation}) => {
 
                   {values.working == false && (
                     <>
+
                       <JSelectInput
+                      disabled={values.start!==''?false:true}
+                      date1={moment().add(1, 'day').toDate()}
+                     minimumDate={moment().add(1, 'day')}
                         containerStyle={{marginTop: RFPercentage(2)}}
                         isDate={true}
                         value={
@@ -539,14 +563,29 @@ const CareerInformation = ({navigation}) => {
                           <Feather
                             name="chevron-down"
                             size={RFPercentage(2.5)}
-                            color={colors.black[0]}
+                            color={values.start==''?colors.inputBorder[0]:colors.black[0]}
                           />
                         }
+                        // disabled={!values.start}
                       />
                       {touched.end && errors.end && (
                         <JErrorText>{errors.end}</JErrorText>
                       )}
                     </>
+                  )} 
+                  <JInput
+                  style={{
+                    textAlign: store.lang.id == 0 ? 'left' : 'right',
+                  }}
+                  containerStyle={{marginTop: RFPercentage(2)}}
+                    heading={`${store.lang.description}:`}
+                    value={values.description}
+                    error={touched.description && errors.description && true}
+                    onChangeText={handleChange('description')}
+                    onBlur={() => setFieldTouched('description')}
+                  />
+                  {touched.title && errors.description && (
+                    <JErrorText>{errors.description}</JErrorText>
                   )}
                   <JRow
                     style={{
@@ -566,30 +605,21 @@ const CareerInformation = ({navigation}) => {
                     />
                   </JRow>
 
-                  <JInput
-                  style={{
-                    textAlign: store.lang.id == 0 ? 'left' : 'right',
-                  }}
-                    heading={`${store.lang.description}:`}
-                    value={values.description}
-                    error={touched.description && errors.description && true}
-                    onChangeText={handleChange('description')}
-                    onBlur={() => setFieldTouched('description')}
-                  />
-                  {touched.title && errors.description && (
-                    <JErrorText>{errors.description}</JErrorText>
-                  )}
+                 
                 </JScrollView>
+                <View style={styles.bottomV}>
                 <JButton
                   isValid={isValid}
                   onPress={() => handleSubmit()}
                   style={{
+                    
                     position: 'absolute',
                     bottom: RFPercentage(1),
                     width: RFPercentage(20),
                   }}>
                   {loader ? store.lang.loading : store.lang.save}
                 </JButton>
+                </View>
               </>
             )}
           </Formik>
@@ -611,7 +641,10 @@ const CareerInformation = ({navigation}) => {
             }}
             validationSchema={yup.object().shape({
               title: yup.string().required().label('Title'),
-              level: yup.string().required().label('Level'),
+              level: yup
+              .object()
+              .shape()
+              .required('Level is required'),
               county: yup
               .object()
               .shape()
@@ -648,7 +681,27 @@ const CareerInformation = ({navigation}) => {
                   style={{
                     marginHorizontal: RFPercentage(2),
                   }}>
-                  <JInput
+                    <JSelectInput
+                    containerStyle={styles.container}
+                    value={values.level.name}
+                    id={values.level.id}
+                    data={store.lang.id==0?edu?.dataEnglish?.degreeLevels:edu?.dataArabic?.degreeLevels}
+                    header={store.lang.degree_level}
+                    heading={`${store.lang.degree_level}:`}
+                    setValue={e => setFieldValue('level', e)}
+                    error={touched.level && errors.level && true}
+                    rightIcon={
+                      <Feather
+                        name="chevron-down"
+                        size={RFPercentage(2.5)}
+                        color={colors.black[0]}
+                      />
+                    }
+                  />
+                  {touched.level && errors.level && (
+                    <JErrorText>{errors.level}</JErrorText>
+                  )}
+                  {/* <JInput
                   style={{
                     textAlign: store.lang.id == 0 ? 'left' : 'right',
                   }}
@@ -663,7 +716,7 @@ const CareerInformation = ({navigation}) => {
                   />
                   {touched.level && errors.level && (
                     <JErrorText>{errors.level}</JErrorText>
-                  )}
+                  )} */}
                   <JInput
                   style={{
                     textAlign: store.lang.id == 0 ? 'left' : 'right',
@@ -765,6 +818,7 @@ const CareerInformation = ({navigation}) => {
                     textAlign: store.lang.id == 0 ? 'left' : 'right',
                   }}
                     isRequired
+                     keyboardType={'numeric'}
                     containerStyle={styles.container}
                     heading={`${store.lang.result}:`}
                     value={values.result}
@@ -796,6 +850,7 @@ const CareerInformation = ({navigation}) => {
                     <JErrorText>{errors.year}</JErrorText>
                   )}
                 </ScrollView>
+                <View style={styles.bottomV}>
                 <JButton
                   isValid={isValid}
                   onPress={() => handleSubmit()}
@@ -806,11 +861,14 @@ const CareerInformation = ({navigation}) => {
                   }}>
                   {loader ? store.lang.loading : store.lang.save}
                 </JButton>
+                </View>
               </>
             )}
           </Formik>
         )}
+        </KeyboardAvoidingView>
       </RBSheet>
+      
     </JScreen>
   );
 };
@@ -819,4 +877,13 @@ export default observer(CareerInformation);
 
 const styles = StyleSheet.create({
   container: {marginTop: RFPercentage(2)},
+  bottomV: {height: RFPercentage(9), width: '100%', padding: RFPercentage(1),shadowColor: "#000",
+  shadowOffset: {
+    width: 0,
+    height: 2,
+  },
+  shadowOpacity: 0.25,
+  shadowRadius: 3.84,
+  
+  elevation: 5},
 });

@@ -18,6 +18,7 @@ import {
 
 import ProfileScreen from './ProfileScreen';
 import {_getFollowingCompanyData} from '../../functions/Candidate/DFollowing';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 export default function CBottomTab() {
   const Tab = createBottomTabNavigator();
   const store = useContext(StoreContext);
@@ -46,7 +47,9 @@ export default function CBottomTab() {
           descriptors={descriptors}
           navigation={navigation}
         />
+
       )}>
+        
       <Tab.Screen options={{tabBarLabel:store.lang.home}} name="Home" component={Home} />
       <Tab.Screen options={{tabBarLabel:store.lang.favourite}} name="Favourite" component={Favourite} />
       <Tab.Screen options={{tabBarLabel:store.lang.applied_job}} name="Applied Jobs" component={AppliedJobs} />

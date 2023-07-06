@@ -23,14 +23,14 @@ import {useContext} from 'react';
 import {_getProfile} from '../../../functions/Candidate/MyProfile';
 import {JToast} from '../../../functions/Toast';
 import {useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import JChevronIcon from '../../../customComponents/JChevronIcon';
 
 function CGeneralInformation({refRBSheet, data, user}) {
   const store = useContext(StoreContext);
   const [loader, setLoader] = useState(false);
   const navigation = useNavigation();
-
+const{params}=useRoute();
   const _postData = values => {
     var myHeaders = new Headers();
     myHeaders.append('Authorization', `Bearer ${store.token.token}`);
@@ -39,14 +39,14 @@ function CGeneralInformation({refRBSheet, data, user}) {
     formdata.append('last_name', values.last_name);
     formdata.append('father_name', values.father);
     formdata.append('dob', moment(values.dob).format('YYYY-MM-DD'));
-    formdata.append('gender', values.gender.name == 'Male' ? '0' : '1');
+    formdata.append('gender', values.gender.name == store.lang.male ? '0' : '1');
     formdata.append('country_id', values.country.id);
     formdata.append('state_id', values.state.id);
     formdata.append('city_id', values.city.id);
     formdata.append('candidateLanguage', values.language.id);
     formdata.append('marital_status_id', values.status.id);
     formdata.append('immediate_available', values.availability ? '1' : '0');
-
+// console.log(formdata)
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
@@ -78,57 +78,74 @@ function CGeneralInformation({refRBSheet, data, user}) {
   };
 
   const profile = store.myProfile.user[0].general_information;
-
+// console.log(profile?.marital_status.id)
   return (
     <JScreen headerShown={false}>
       <Formik
         initialValues={{
-          first_name: profile.first_name,
-          last_name: profile.last_name,
-          father: profile.father_name,
-          dob: profile.date_of_birth,
-          gender: profile.gender == '0' ? {name: 'Male'} : {name: 'Female'},
-          country: profile.country_name,
-          state: profile.state_name,
-          city: profile.city_name,
-          language: profile.language,
-          status: profile.marital_status,
+          first_name: profile.first_name==null?'':profile.first_name,
+          last_name: profile.last_name==null?'':profile.last_name,
+          father: profile.father_name==null?'':profile.father_name,
+          dob: profile.date_of_birth==null?'':profile.date_of_birth,
+          gender: profile.gender==null?'':profile.gender == '0' ? {name: store.lang.male} : {name: store.lang.female},
+          country: profile.country_name
+          ?{
+            name: profile.country_name?.name,
+            id: profile.country_name?.id,
+          }
+          : '',
+          state: profile.state_name
+          ?{
+            name: profile.state_name?.name,
+            id: profile.state_name?.id,
+          }
+          
+          :'',
+          city: profile.city_name
+          ?
+          {
+            name: profile.city_name?.name,
+            id: profile.city_name?.id,
+          }
+          : '',
+          language: profile.language
+          ?{
+            name: profile.language[0]?.language,
+            id: profile.language[0]?.id,
+          }
+          : '',
+          status:params?.marital_status?{id:profile?.marital_status.id,name:params?.marital_status}:'',
           availability: profile.immediate_available ? true : false,
         }}
         onSubmit={values => {
           // console.log(values);
           _postData(values);
         }}
-        // validationSchema={yup.object().shape({
-        //   first_name: yup.string().required().label('First Name'),
-        //   last_name: yup.string().required().label('Last Name'),
-        //   father: yup.string().required().label('Father'),
-        //   // dob: yup.string().required().label('dob'),
-        //   gender: yup
-        //   .object()
-        //   .shape()
-        //   .required('Gender is required'),
-        //   county: yup
-        //       .object()
-        //       .shape()
-        //       .required('Country is required'),
-        //       city: yup
-        //       .object()
-        //       .shape()
-        //       .required('City is required'),
-        //       state: yup
-        //       .object()
-        //       .shape()
-        //       .required('State is required'),
-        //       status: yup
-        //       .object()
-        //       .shape()
-        //       .required('Marital Status is required'),
-        //       // language: yup
-        //       // .object()
-        //       // .shape()
-        //       // .required('language Status is required'),
-        // })}
+        validationSchema={yup.object().shape({
+            
+          country: yup
+          .object()
+          .shape()
+          .required('Country is required'),
+          city: yup
+          .object()
+          .shape()
+          .required('City is required'),
+          state: yup
+          .object()
+          .shape()
+          .required('State is required'),
+          language: yup
+          .object()
+          .shape()
+          .required('State is required'),
+          status: yup
+          .object()
+          .shape()
+          .required('State is required'),
+          
+        })}
+     
       >
         {({
           values,
@@ -208,7 +225,7 @@ function CGeneralInformation({refRBSheet, data, user}) {
                 }}
                 containerStyle={{marginTop: RFPercentage(2)}}
                 value={values.father}
-                heading={`${store.lang.father_name}`}
+                heading={`${store.lang.father_name}:`}
                 error={touched.father && errors.father && true}
                 onChangeText={handleChange('father')}
                 onBlur={() => setFieldTouched('father')}
@@ -221,7 +238,7 @@ function CGeneralInformation({refRBSheet, data, user}) {
                 containerStyle={{marginTop: RFPercentage(2)}}
                 value={values.dob && moment(values.dob).format('DD MM YYYY')}
                 isDate
-                heading={`${store.lang.date_of_birth} :`}
+                heading={`${store.lang.date_of_birth}:`}
                 setValue={e => setFieldValue('dob', e)}
                 error={touched.dob && errors.dob && true}
                 rightIcon={
@@ -239,9 +256,9 @@ function CGeneralInformation({refRBSheet, data, user}) {
               <JSelectInput
                 containerStyle={{marginTop: RFPercentage(2)}}
                 value={values.gender?.name}
-                data={data?.Gender}
+                data={store.myProfile.dataEnglish.Gender}
                 header={store.lang.gender}
-                heading={`${store.lang.gender} :`}
+                heading={`${store.lang.gender}:`}
                 setValue={e => setFieldValue('gender', e)}
                 error={touched.gender && errors.gender && true}
                 rightIcon={
@@ -259,7 +276,7 @@ function CGeneralInformation({refRBSheet, data, user}) {
               <JSelectInput
                 containerStyle={{marginTop: RFPercentage(2)}}
                 value={values.country?.name}
-                data={data?.countries}
+                data={store.lang.id==0?store.myProfile.dataEnglish.countries:store.myProfile.dataArabic.countries}
                 header={store.lang.country}
                 heading={`${store.lang.country}:`}
                 setValue={e => {

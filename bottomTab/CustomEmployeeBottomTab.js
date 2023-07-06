@@ -10,6 +10,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import colors from '../config/colors';
 import JText from '../customComponents/JText';
+import JRow from '../customComponents/JRow';
 
 export default function CustomEmployeeBottomTab({
   state,
@@ -17,9 +18,8 @@ export default function CustomEmployeeBottomTab({
   navigation,
 }) {
   return (
-    <View
+    <JRow
       style={{
-        flexDirection: 'row',
         height: heightPercentageToDP(8),
         backgroundColor: colors.white[0],
         shadowColor: 'black',
@@ -108,7 +108,7 @@ export default function CustomEmployeeBottomTab({
           </TouchableOpacity>
         );
       })}
-    </View>
+    </JRow>
   );
 }
 
