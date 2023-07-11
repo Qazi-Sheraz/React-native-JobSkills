@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
 import React, {useContext} from 'react';
 import JScreen from '../../customComponents/JScreen';
 
@@ -15,6 +15,7 @@ import { FlatList } from 'react-native-gesture-handler';
 import { useState } from 'react';
 import url from '../../config/url';
 import { useEffect } from 'react';
+import JEmpty from '../../customComponents/JEmpty';
 
 function Notification ({navigation, route}) {
   const store = useContext(StoreContext);
@@ -74,12 +75,14 @@ function Notification ({navigation, route}) {
         </JText>}
         />
         }>
+          {loader?<ActivityIndicator/>:(<>
           <FlatList
           data={data}
+          ListEmptyComponent={<JEmpty/>}
           renderItem={({item,index})=>
      <JNotification item={item}/>}
      />
-      <JText>{id}</JText>
+      <JText>{id}</JText></>)}
     </JScreen>
   );
 }

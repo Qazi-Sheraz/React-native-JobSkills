@@ -42,6 +42,7 @@
     "notification":"إشعار",
     "find_your_Job":"ابحث عن وظيفتك",
     "add_note":"اضف ملاحظة",
+    "note":"ملحوظة",
     "profile":"حساب تعريفي",
     "search":"يبحث",
     "add_new_job":"أضف وظيفة جديدة",
@@ -339,7 +340,17 @@
     "currently_working": "تعمل حاليا",
     "institute": "معهد",
     "result": "نتيجة",
-    "general": "عام"
+    "general": "عام",
+    "question": "سؤال",
+    "why_do_you_want_this_job": "لماذا تريد هذا الوظيفة؟",
+    "apply_job": "قم بتطبيق هذه الوظيفة",
+    "apply": "يتقدم",
+    "questionnaire": "استبيان",
+    "select_an_option": "حدد اختيارا",
+    "expected_salary_range": "الراتب المتوقع؟ النطاق المقترح من قبل صاحب العمل\n(ريال سعودي من 1222 إلى 3222)",
+    "save_as_draft": "حفظ كمسودة",
+    "no_result_found": "لم يتم العثور على نتائج !"
+
 
 
 

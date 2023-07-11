@@ -30,10 +30,10 @@ export const _search = (e, store,isSearch) => {
     .then(result => {
       // console.log(result.data);
       if (result.data?.length < 1) {
-        JToast({
-          type: 'error',
-          text1: 'No Result Found !',
-        });
+        // JToast({
+        //   type: 'error',
+        //   text1: store.lang.no_result_found,
+        // });
         store.setFilterDataApiLoader(false);
       } else {
         if(isSearch){
@@ -88,10 +88,11 @@ export const _searchFilter = (values, store, navigation) => {
       if (result.data?.length < 1) {
         JToast({
           type: 'error',
-          text1: 'No Result Found !',
+          text1: store.lang.no_result_found,
         });
       } else {
         store.setFilterData(result.data);
+        
       }
     })
     .catch(error => {

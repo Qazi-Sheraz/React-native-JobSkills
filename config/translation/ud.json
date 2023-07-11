@@ -42,6 +42,7 @@
     "notification":"اطلاع",
     "find_your_Job":"اپنی ملازمت تلاش کریں",
     "add_note":"نوٹ شامل",
+    "note":"نوٹ",
     "profile":"پروفائل",
     "search":"تلاش کریں",
     "add_new_job":"ایک نئی نوکری شامل کریں۔",
@@ -338,7 +339,16 @@
     "currently_working": "فی الحال کام کر رہے ہیں",
     "institute": "انسٹی ٹیوٹ",
     "result": "نتیجہ",
-    "general": "جنرل"
+    "general": "جنرل",
+    "question": "سوال",
+    "why_do_you_want_this_job": "آپ یہ نوکری کیوں چاہتے ہیں؟",
+    "apply_job": "اس جاب کو اپلائی کریں",
+    "apply": "درخواست دیں",
+    "questionnaire": "سوالنامہ",
+    "select_an_option": "ایک آپشن منتخب کریں",
+    "expected_salary_range": "متوقع تنخواہ؟ آجر کی طرف سے تجویز کردہ رینج\n(SAR1222 سے 3222)",
+    "save_as_draft": "ڈرافٹ کے طور پر محفوظ کریں",
+    "no_result_found": "کوئی نتیجہ نہیں ملا!"
 
 
 

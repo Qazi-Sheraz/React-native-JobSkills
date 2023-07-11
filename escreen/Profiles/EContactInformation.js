@@ -33,7 +33,7 @@ function EContactInformation({refRBSheet, data, user}) {
   const store = useContext(StoreContext);
   const phoneInput = useRef(null);
   const {params} = useRoute();
-console.log('jkkkkk',params)
+// console.log('jkkkkk',params)
   const _country = values => {
     var myHeaders = new Headers();
     myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
@@ -49,7 +49,7 @@ console.log('jkkkkk',params)
     )
       .then(response => response?.json())
       .then(result => {
-        console.log(result);
+        // console.log(result);
         setInfo(result)
       })
       .catch(error =>{

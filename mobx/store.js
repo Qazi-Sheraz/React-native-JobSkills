@@ -189,7 +189,14 @@ export const StoreProvider = props => {
     jobEmployerData: [],
     setJobEmployerData: action(e => (store.jobEmployerData = e)),
     AddJobEmployerData: action(
-      e => (store.jobEmployerData = [e, ...store.jobEmployerData]),
+      e => (store.jobEmployerData = [...store.jobEmployerData,e]),
+    ),
+    status: [],
+    setStatus: action(e => (store.status = e)),
+    statusLoder:true,
+    setStatusLoder: action(e => (store.statusLoder = e)),
+    AddStatus: action(
+      e => (store.status = [e, ...store.status]),
     ),
 
     // Get Employe Job Details

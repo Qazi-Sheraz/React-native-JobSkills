@@ -9,6 +9,7 @@ import {
   ScrollView,
   ActivityIndicator,
   FlatList,
+  Linking,
 } from 'react-native';
 import React, {useEffect,useContext,useRef, useCallback} from 'react';
 import JScreen from '../../customComponents/JScreen';
@@ -46,6 +47,7 @@ import { Menu, MenuOption, MenuOptions, MenuTrigger } from 'react-native-popup-m
 import JGradientView from '../../customComponents/JGradientView';
 import { _saveToFavoriteList } from '../../functions/Candidate/BottomTab';
 import RBSheet from 'react-native-raw-bottom-sheet';
+import JApplyJob from '../../customComponents/JApplyJob';
 
 const JobDetails = ({route}) => {
   const store = useContext(StoreContext);
@@ -92,6 +94,7 @@ const JobDetails = ({route}) => {
   // const [jobDetail, setJobDetail] = useState([]);
   const [jobCount, setJobCount] = useState();
   const [error, setError] = useState(false);
+  const [status, setStatus] = useState({});
   const [loader, setLoader] = useState(true);
   const refRBSheet = useRef();
   const _addCandidate = (values) => {
@@ -438,6 +441,7 @@ const JobDetails = ({route}) => {
         <ActivityIndicator />
       ) : (
         <>
+    
           <JScrollView style={styles.container}
           refreshing={loader} onRefresh={onRefresh}>
             {/* {store.token?.user?.owner_type.includes('Candidate')&&
@@ -535,21 +539,88 @@ const JobDetails = ({route}) => {
               {store.jobDetail?.job_description?.description}
             </JText>
           </JScrollView>
-          {store.token?.user?.owner_type.includes('Candidate') == false && (
-            <View style={styles.bottomV}>
-              <JButton
-                onPress={() => setModalVisible(true)}
-                fontStyle={{
-                  fontSize: RFPercentage(1.9),
-                  fontWeight: 'bold',
-                  paddingHorizontal: RFPercentage(5),
-                }}
-                children={store.lang.add_candidate}
-              />
-            </View>
-          )}
+         
+
+          <View style={styles.bottomV}>
+          {store.token?.user?.owner_type.includes('Candidate')===false?
+           <JButton
+           onPress={() => {setModalVisible(true)}}
+           fontStyle={{
+             fontSize: RFPercentage(1.9),
+             fontWeight: 'bold',
+             paddingHorizontal: RFPercentage(5),
+           }}
+           children={ store.lang.add_candidate}
+         />:
+         <>
+          {status.success == false && status.message === '3' ? (
+        <JRow
+          style={{
+            paddingHorizontal: RFPercentage(1),
+            paddingVertical: RFPercentage(1),
+            backgroundColor: colors.danger[0],
+            justifyContent: 'center',
+          }}>
+          <JText fontColor={colors.white[0]} fontWeight="bold">
+            {store.lang.assessment_Required}
+          </JText>
+          <JText
+            onPress={() =>
+              Linking.openURL(
+                `https://dev.jobskills.digital/job-details/${store.jobDetail?.job_id}`,
+              )
+            }
+            style={{marginLeft: RFPercentage(1)}}
+            fontColor={colors.primary[0]}
+            fontWeight="bold">
+            {store.lang.click_here}
+          </JText>
+        </JRow>
+      ) : status.success == false && status.message === '2' ? (
+        <JRow
+          style={{
+            paddingHorizontal: RFPercentage(1),
+            paddingVertical: RFPercentage(1),
+            backgroundColor: colors.danger[0],
+            justifyContent: 'center',
+          }}>
+          <JText fontColor={colors.white[0]} fontWeight="bold">
+            {store.lang.upload_your_CV}
+          </JText>
+          <JText
+            onPress={() => navigation.navigate('Resume')}
+            style={{marginLeft: RFPercentage(1)}}
+            fontColor={colors.primary[0]}
+            fontWeight="bold">
+            {store.lang.click_here}
+          </JText>
+        </JRow>
+      ) : status.success == false && status.message === '1' ? (
+        <JRow
+          style={{
+            paddingHorizontal: RFPercentage(1),
+            paddingVertical: RFPercentage(1),
+            backgroundColor: colors.green[0],
+            justifyContent: 'center',
+          }}>
+          <JText fontColor={colors.white[0]} fontWeight="bold">
+            {store.lang.already_applied}
+          </JText>
+        </JRow>
+      ) : null}
+         
+      </>}
+      </View>
+           <JApplyJob
+        status={status}
+        setStatus={setStatus}
+        id={store.jobDetail?.id}
+        token={store.token?.token}
+        jobId={store.jobDetail?.job_id}
+      />
 
           <Modal animationType="fade" transparent={true} visible={modalVisible}>
+          
             <Formik
               initialValues={{
                 firstName: '',

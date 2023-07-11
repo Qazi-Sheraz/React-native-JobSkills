@@ -61,7 +61,12 @@ useEffect(() => {
       header={
         <JHeader
           left={
-            <JChevronIcon color={colors.black[0]} onPress={()=> {store.setFilterData('') ,navigation.goBack()}}/>
+            <JChevronIcon
+              color={colors.black[0]}
+              onPress={() => {
+                store.setFilterData(''), navigation.goBack();
+              }}
+            />
           }
           right={
             <Feather
@@ -83,105 +88,92 @@ useEffect(() => {
           justifyContent: 'space-between',
           paddingLeft: RFPercentage(1),
           height: heightPercentageToDP(6),
-          flexDirection: store.lang.id==0?'row':'row-reverse',
+          flexDirection: store.lang.id == 0 ? 'row' : 'row-reverse',
           alignItems: 'center',
         }}
         isPressable={false}>
         <TextInput
-        
           // autoFocus
           style={{
             color: colors.black[0],
             textAlign: store.lang.id == 0 ? 'left' : 'right',
             width: '85%',
           }}
-          onChangeText={e => {
+          onChangeText={(e,search) => {
             setSearch(e);
-            if (e.length < 1) {
-              store.setFilterData([]);
-            }
+            if(search?.length < 1 )
+            {store.setFilterData('')
+              _search(e, store);}
+            else{
+            _search(e, store);
+          }
+            
+
           }}
           placeholder={store.lang.search}
           placeholderTextColor={colors.placeHolderColor[0]}
         />
-        {store.filterDataApiLoader === true ? (
-          <ActivityIndicator
-            size={RFPercentage(3.5)}
-            color={colors.black[0]}
-            style={{
-              marginRight: RFPercentage(1),
-              position: 'absolute',
-              right: 0,
-            }}
-          />
-        ) : (
-          <Feather
-            onPress={() => {
-              if (search.length > 0) {
-                _search(search, store);
-              } else {
-                JToast({
-                  type: 'error',
-                  text1: 'Enter something...!',
-                });
-              }
-            }}
-            name="search"
-            size={RFPercentage(3.5)}
-            color={search.length > 0 ? colors.black[0] : '#00000040'}
-            style={{
-              marginRight: RFPercentage(1),
-              position: 'absolute',
-              right: 0,
-            }}
-          />
-        )}
-      </JShadowView>
 
-      <JScrollView>
-        {store.filterData?.length > 0 ? (
-          store.filterData.map((item, index) => (
-            <React.Fragment key={index}>
-              <JJobTile
-                favouriteData={store.favouriteList}
-                jobId={item.id}
-                onPress={() =>
-                  navigation.navigate('CJobDetails', {
-                    id: item.job_id,
-                  })
-                }
-                onIconPress={() => alert('Icon Press')}
-                type="job"
-                title={item.job_title}
-                location={item.city_name}
-                category={item.job_shift}
-                img={item.company_url}
-                containerStyle={{marginVertical: RFPercentage(1)}}
-              />
-            </React.Fragment>
-          ))
-        ) : (
-          <>
-            <JText
-              style={{marginBottom: RFPercentage(2)}}
-              fontSize={RFPercentage(3)}>
-              {store.lang.Recent_search}
-            </JText>
-            {store.recentSearch?.map((item, index) => (
-              
-                
-              <JRecentJob
-              key={index}
-                  onPress={() => {
-                    _search(item,store,false);
-                    // refRBSheet.current.open();
-                  }}
-                  JobName={item}
-                />
-              ))}
-          </>
-        )}
-      </JScrollView>
+        <Feather
+          name="search"
+          size={RFPercentage(3.5)}
+          color={search.length > 0 ? colors.black[0] : '#00000040'}
+          style={{
+            marginHorizontal: RFPercentage(1),
+            position: 'absolute',
+            right: 0,
+          }}
+        />
+      </JShadowView>
+      {store.filterDataApiLoader === true ? (
+        <ActivityIndicator size={RFPercentage(3.5)} color={colors.black[0]} />
+      ) : (
+        <JScrollView>
+          { store.filterData?.length > 0 ?
+              store.filterData?.map((item, index) => (
+                <React.Fragment key={index}>
+                  <JJobTile
+                    favouriteData={store.favouriteList}
+                    jobId={item.id}
+                    onPress={() =>
+                      navigation.navigate('CJobDetails', {
+                        id: item.job_id,
+                      })
+                    }
+                    onIconPress={() => alert('Icon Press')}
+                    type="job"
+                    title={item.job_title}
+                    location={item.city_name}
+                    category={item.job_shift}
+                    img={item.company_url}
+                    containerStyle={{marginVertical: RFPercentage(1)}}
+                  />
+                </React.Fragment>
+              ))
+            :
+
+                    (  <>
+                        <JText
+                          style={{marginBottom: RFPercentage(2)}}
+                          fontSize={RFPercentage(3)}>
+                          {store.lang.Recent_search}
+                        </JText>
+
+                    {store.recentSearch?.map((item, index) => (
+
+                          <JRecentJob
+                          key={index}
+                              onPress={() => {
+                                _search(item,store,false);
+                                // refRBSheet.current.open();
+                              }}
+                              JobName={item}
+                            />
+                          ))}
+                      </>)
+          }
+        </JScrollView>
+      )}
       <RBSheet
         ref={refRBSheet}
         closeOnDragDown={false}

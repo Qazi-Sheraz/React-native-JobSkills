@@ -23,6 +23,7 @@ import JChevronIcon from '../../../customComponents/JChevronIcon';
 import JRow from '../../../customComponents/JRow';
 import { JToast } from '../../../functions/Toast';
 import url from '../../../config/url';
+import { values } from 'mobx';
 
 function CContactInformation({refRBSheet, user}) {
   
@@ -31,9 +32,10 @@ function CContactInformation({refRBSheet, user}) {
   const store = useContext(StoreContext);
   const navigation = useNavigation();
   const [loader, setLoader] = useState(false);
-  const [phone, setPhone] = useState(params.phone);
-  const [code, setCode] = useState();
-
+  const [phone, setPhone] = useState(params?.phone);
+  const [code, setCode] = useState(params?.region_code!==null&&params?.region_code);
+// console.log(phone)
+console.log(code)
   const regionalCodeMappings = {
     "93": "AF", // Afghanistan
     "355": "AL", // Albania
@@ -100,9 +102,7 @@ function CContactInformation({refRBSheet, user}) {
     "358": "FI", // Finland
     "33": "FR", // France
   }
-  
-  
-  
+
   
   const _postData = values => {
     var myHeaders = new Headers();
@@ -110,7 +110,7 @@ function CContactInformation({refRBSheet, user}) {
     var formdata = new FormData();
 
     formdata.append('phone', phone);
-    formdata.append('region_code', (code?.callingCode[0]));
+    formdata.append('region_code', code==false?'966':code);
     console.log(formdata)
     var requestOptions = {
       method: 'POST',
@@ -141,14 +141,14 @@ function CContactInformation({refRBSheet, user}) {
         setLoader(false);
       });
   };
-  // console.log(params.regional_code)
+  
   return (
     <Formik
       initialValues={{
-        email: store.myProfile.user[0].contact_information?.email_address,
+        email: store.myProfile.user[0]?.contact_information?.email_address,
         // phone: params.phone?params.phone?.slice(3):'',
-        phone: params.phone!==undefined?params?.phone:'',
-        regional_code: params.region_code?regionalCodeMappings[params.region_code]:'',
+        phone:params.phone!==null?params?.phone:'',
+        regional_code:params.region_code!==null?regionalCodeMappings[params?.region_code]:'',
       }}
       onSubmit={values => {
         // console.log('regional;;;;;;;',values.regional_code);
@@ -156,10 +156,8 @@ function CContactInformation({refRBSheet, user}) {
       }}
       validationSchema={yup.object().shape({
         email: yup.string().email('Must be a valid email'),
-        // phone: yup
-        //   .string()
-        //   .min(13, 'Password Must be at least 7 characters')
-        //   .max(15, 'Password must be at most 15 characters'),
+        phone: yup.string().max(12).required().label('Phone'),
+        // regional_code: yup.string().min(2).required().label('code'),
       })}>
       {({
         values,
@@ -189,7 +187,7 @@ function CContactInformation({refRBSheet, user}) {
                 />
               ) : (
                 <JText
-                  onPress={() => isValid && handleSubmit()}
+                  onPress={() =>  handleSubmit()}
                   fontColor={
                     !isValid ? `${colors.white[0]}70` : colors.white[0]
                   }>
@@ -231,7 +229,7 @@ function CContactInformation({refRBSheet, user}) {
                   ref={phoneInput}
                   defaultValue={values.phone}
                   // defaultCode={code?.cca2?code?.cca2:"SA"}
-                  defaultCode={values.regional_code?values.regional_code  :"SA"}
+                  defaultCode={values.regional_code!==null ? values.regional_code:  params?.region_code!==null?code:"SA"}
                   placeholder={store.lang.phone_number}
                   containerStyle={{
                     width: '100%',
@@ -248,8 +246,7 @@ function CContactInformation({refRBSheet, user}) {
                     setFieldValue('regional_code', c);
                   }}
                   onChangeCountry={(e)=>{
-                    setCode(e)
-                    setFieldValue(e);
+                    setCode(e.callingCode[0])
                   }}
                   onChangeText={(e)=>{
                     setFieldValue(e);

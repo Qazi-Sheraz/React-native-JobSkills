@@ -110,6 +110,7 @@ const Assessment = ({navigation}) => {
         <FlatList
           style={{marginTop: RFPercentage(2)}}
           data={data}
+          ListEmptyComponent={<JEmpty/>}
           renderItem={({item, index}) => (
             <>
               <Pressable
@@ -175,9 +176,10 @@ const Assessment = ({navigation}) => {
           ) : (
             <>
               <FlatList
-                ListEmptyComponent={<JEmpty />}
+                
                 data={selected?.particular_assessments}
                 showsVerticalScrollIndicator={false}
+                ListEmptyComponent={<JEmpty />}
                 renderItem={({item, index}) => (
                   <View style={styles.mainView}>
                     <JRow

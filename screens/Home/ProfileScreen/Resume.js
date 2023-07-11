@@ -36,6 +36,7 @@ import JInput from '../../../customComponents/JInput';
 import JResumeView from '../../../customComponents/JResumeView';
 import url from '../../../config/url';
 import JChevronIcon from '../../../customComponents/JChevronIcon';
+import JEmpty from '../../../customComponents/JEmpty';
 
 const Resume = ({navigation}) => {
   const store = useContext(StoreContext);
@@ -165,6 +166,7 @@ const Resume = ({navigation}) => {
       {loader == true ? null : (
         <FlatList
           numColumns={'2'}
+          ListEmptyComponent={<JEmpty/>}
           // contentContainerStyle={{flex: 1}}
           // ListEmptyComponent={
           //   <View

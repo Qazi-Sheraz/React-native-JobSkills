@@ -40,6 +40,7 @@
     "notification":"Notification",
     "find_your_Job":"Find your Job",
     "add_note":"Add Note",
+    "note":"Note",
     "profile":"Profile",
     "search":"Search",
     "add_new_job":"Add New Job",
@@ -345,7 +346,17 @@
     "currently_working": "Currently Working",
     "institute": "Institute",
     "result": "Result",
-    "general": "General"
+    "general": "General",
+    "question": "Question",
+    "why_do_you_want_this_job": "Why do you want this Job?",
+    "apply_job": "Apply this Job",
+    "apply": "Apply",
+    "questionnaire": "Questionnaire",
+    "select_an_option": "Select an option",
+    "expected_salary_range": "Expected Salary?Suggested Range by Employer\n(SAR1222 to 3222)",
+    "save_as_draft": "Save as Draft",
+    "no_result_found": "No Result Found !"
+
 
     
     

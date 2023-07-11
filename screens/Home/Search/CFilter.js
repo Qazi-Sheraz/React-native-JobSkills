@@ -37,6 +37,7 @@ const CFilter = ({navigation}) => {
       .then(result => {
         // console.log(result);
         store.setFilterList(result);
+        
       })
       .catch(error => {
         // console.log('job===error', error);
@@ -183,7 +184,7 @@ _getFilterList();
                 </ScrollView>
 
                 <JButton
-                  // isValid={!store.filterDataApiLoader}
+                  isValid={!store.filterDataApiLoader}
                   onPress={() => handleSubmit()}
                   style={{
                     position: 'absolute',

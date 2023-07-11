@@ -7,8 +7,9 @@
   SafeAreaView,
   Dimensions,
   ScrollView,
+  Alert,
 } from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useContext, useEffect} from 'react';
 import JButton from './JButton';
 import {heightPercentageToDP} from 'react-native-responsive-screen';
 import {RFPercentage} from 'react-native-responsive-fontsize';
@@ -20,8 +21,12 @@ import JGradientHeader from './JGradientHeader';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import JInput from './JInput';
-
+import DocumentPicker from 'react-native-document-picker';
+import Entypo from 'react-native-vector-icons/Entypo';
 import url from '../config/url';
+import { StoreContext } from '../mobx/store';
+import { JToast } from '../functions/Toast';
+import Pdf from 'react-native-pdf';
 
 const questions = [
   'Its my dream job',
@@ -30,12 +35,15 @@ const questions = [
   `It's allow me to achieve my goals`,
 ];
 const JApplyJob = ({token, jobId, id, setStatus, status}) => {
+  const store= useContext(StoreContext);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisible1, setModalVisible1] = useState(false);
   const [option, setOption] = useState(0);
   const [dropDown, setDropDown] = useState(false);
   const [loader, setLoader] = useState(true);
   const [apiLoader, setApiLoader] = useState(false);
+
+
 
   const resumes = [];
   // console.log('Resume', status.data.resumes);
@@ -49,8 +57,9 @@ const JApplyJob = ({token, jobId, id, setStatus, status}) => {
   // console.log('JOb ID', jobId);
 
   // console.log('ID', id);
+  // console.log('ID', status.data);
 
-  const getStatus = () => {
+  const _getStatus = () => {
     var myHeaders = new Headers();
     myHeaders.append('Authorization', `Bearer ${token}`);
 
@@ -61,23 +70,24 @@ const JApplyJob = ({token, jobId, id, setStatus, status}) => {
     fetch(`${url.baseUrl}/apply-job/${jobId}`, requestOptions)
       .then(response => response.json())
       .then(result => {
-        // console.log('GET APPLIED JOB STATUS', result);
+        console.log('GET APPLIED JOB STATUS', result);
+        // store.setStatus(result);
         setStatus(result);
         setLoader(false);
       })
       .catch(error => {
-        // console.log('GET APPLIED JOB STATUS', error);
+        console.log('GET APPLIED JOB STATUS', error);
         setLoader(false);
       });
   };
   useEffect(() => {
-    getStatus();
+    _getStatus();
     return () => {};
   }, []);
 
   return (
     <>
-      {status.success !== false && loader === false && (
+      {status?.success !== false && loader === false && (
         <JButton
           isValid={!loader}
           onPress={() => setModalVisible(true)}
@@ -87,7 +97,7 @@ const JApplyJob = ({token, jobId, id, setStatus, status}) => {
             position: 'absolute',
             bottom: RFPercentage(1),
           }}
-          children={'Apply this Job'}
+          children={store.lang.apply_job}
         />
       )}
 
@@ -96,7 +106,7 @@ const JApplyJob = ({token, jobId, id, setStatus, status}) => {
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
+          // Alert.alert('Modal has been closed.');
           setModalVisible(!modalVisible);
         }}>
         <SafeAreaView style={styles.centeredView}>
@@ -107,19 +117,19 @@ const JApplyJob = ({token, jobId, id, setStatus, status}) => {
                   fontColor={colors.white[0]}
                   fontWeight="bold"
                   fontSize={RFPercentage(2.5)}>
-                  {'Questionnaire'}
+                  {store.lang.questionnaire}
                 </JText>
               }
             />
             <View style={{padding: RFPercentage(2)}}>
-              <JText fontSize={RFPercentage(2.5)}>Question</JText>
+              <JText fontSize={RFPercentage(2.5)}>{store.lang.question}</JText>
               <JText
                 fontSize={RFPercentage(2)}
                 style={{
                   marginBottom: RFPercentage(2),
                   marginTop: RFPercentage(1),
                 }}>
-                Why do you want this Job?
+                {store.lang.why_do_you_want_this_job}
               </JText>
 
               {questions.map((item, index) => (
@@ -158,7 +168,7 @@ const JApplyJob = ({token, jobId, id, setStatus, status}) => {
                     backgroundColor: colors.white[0],
                     borderColor: colors.black[1],
                   }}
-                  children={'Close'}
+                  children={store.lang.close}
                 />
 
                 <JButton
@@ -169,7 +179,7 @@ const JApplyJob = ({token, jobId, id, setStatus, status}) => {
                   style={{
                     width: '46%',
                   }}
-                  children={'Add'}
+                  children={store.lang.add}
                 />
               </JRow>
             </View>
@@ -182,7 +192,7 @@ const JApplyJob = ({token, jobId, id, setStatus, status}) => {
         transparent={true}
         visible={modalVisible1}
         onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
+          // Alert.alert('Modal has been closed.');
           setModalVisible1(!modalVisible1);
         }}>
         <Formik
@@ -207,7 +217,7 @@ const JApplyJob = ({token, jobId, id, setStatus, status}) => {
             formdata.append('questionnaire_answer', questions[option]);
             formdata.append('application_type', 'apply');
 
-            // console.log(formdata);
+            console.log(formdata);
             var requestOptions = {
               method: 'POST',
               headers: myHeaders,
@@ -220,11 +230,19 @@ const JApplyJob = ({token, jobId, id, setStatus, status}) => {
                 // console.log(result);
 
                 if (result.success === false) {
-                  alert(result.message);
-                  setModalVisible1(false);
+                  JToast({
+                    type: 'error',
+                    text1: result.message,
+                  });
+                  // alert(result.message);
+                  setModalVisible1(false)
                 } else {
-                  alert(result.message);
-                  setModalVisible1(false);
+                  JToast({
+                    type: 'success',
+                    text1: result.message,
+                  });
+                  _getStatus();
+                  setModalVisible1(false)
                 }
                 setApiLoader(false);
               })
@@ -258,13 +276,13 @@ const JApplyJob = ({token, jobId, id, setStatus, status}) => {
                       fontColor={colors.white[0]}
                       fontWeight="bold"
                       fontSize={RFPercentage(2.5)}>
-                      {'Full Detail'}
+                      {store.lang.full_detail}
                     </JText>
                   }
                 />
                 <ScrollView style={{padding: RFPercentage(2)}}>
                   <JRow>
-                    <JText fontSize={RFPercentage(2.5)}>Resume</JText>
+                    <JText fontSize={RFPercentage(2.5)}>{store.lang.resume}</JText>
                     <JText
                       fontColor={colors.danger[0]}
                       fontSize={RFPercentage(2.5)}>
@@ -279,8 +297,88 @@ const JApplyJob = ({token, jobId, id, setStatus, status}) => {
                       marginBottom: RFPercentage(2),
                       marginTop: RFPercentage(1),
                     }}>
-                    Be sure to include an updated resume
+                    {store.lang.sure_updated_resume}
                   </JText>
+                  {/* {values.resume?.uri ? (
+                        values.resume?.size <= 2000000 ? (
+                          <View style={{alignSelf: 'center'}}>
+                            <Pdf
+                              trustAllCerts={false}
+                              source={{uri: values.resume?.uri}}
+                              onLoadComplete={(numberOfPages, filePath) => {
+                                // console.log(
+                                //   `Number of pages: ${numberOfPages}`,
+                                // );
+                              }}
+                              onPageChanged={(page, numberOfPages) => {
+                                // console.log(`Current page: ${page}`);
+                              }}
+                              onError={error => {
+                                // console.log(error);
+                              }}
+                              onPressLink={uri => {
+                                // console.log(`Link pressed: ${uri}`);
+                              }}
+                              style={{
+                                alignSelf: 'center',
+                                width: Dimensions.get('window').width / 3,
+                                height: Dimensions.get('window').height / 3,
+                              }}
+                            />
+                            <Entypo
+                              onPress={() => _selectOneFile(setFieldValue)}
+                              name="circle-with-cross"
+                              size={RFPercentage(3.5)}
+                              color={colors.danger[0]}
+                              style={{
+                                position: 'absolute',
+                                zIndex: 1,
+                                right: RFPercentage(-2),
+                                top: RFPercentage(-1),
+                              }}
+                            />
+                          </View>
+                        ) : (
+                          <>
+                            <JText style={{marginVertical: RFPercentage(1)}}>
+                              File size exceeds 2 MB limit
+                            </JText>
+                            <JRow
+                              style={{
+                                justifyContent: 'center',
+                                marginHorizontal: RFPercentage(3),
+                                borderColor: colors.primary[1],
+                              }}>
+                              <JButton
+                                onPress={() => _selectOneFile(setFieldValue)}
+                                style={{
+                                  width: '46%',
+                                  backgroundColor: colors.white[0],
+                                  borderColor: colors.black[1],
+                                }}
+                                children={store.lang.upload_resume}
+                              />
+                            </JRow>
+                          </>
+                        )
+                      ) : (
+                        <JRow
+                          style={{
+                            justifyContent: 'center',
+                            marginHorizontal: RFPercentage(3),
+                            borderColor: colors.primary[1],
+                          }}>
+                          <JButton
+                            onPress={() => _selectOneFile(setFieldValue)}
+                            style={{
+                              width: '46%',
+                              backgroundColor: colors.white[0],
+                              borderColor: colors.black[1],
+                            }}
+                            children={store.lang.upload_resume}
+                          />
+                        </JRow>
+                      )} */}
 
                   <Pressable
                     onPress={() => setDropDown(true)}
@@ -297,7 +395,7 @@ const JApplyJob = ({token, jobId, id, setStatus, status}) => {
                       }}>
                       {values.resume.name
                         ? values.resume.name
-                        : 'Select an option'}
+                        : store.lang.select_an_option}
                     </JText>
                   </Pressable>
                   {dropDown === true && (
@@ -332,7 +430,7 @@ const JApplyJob = ({token, jobId, id, setStatus, status}) => {
                         </Pressable>
                       ))}
                     </View>
-                  )}
+                  )} 
 
                   {/* {singleFile ? (
                     <Pdf
@@ -372,22 +470,25 @@ const JApplyJob = ({token, jobId, id, setStatus, status}) => {
                         children={'Upload Resume'}
                       />
                     </JRow>
-                  )} */}
+                  )} */} 
+
                   <JText
                     fontSize={RFPercentage(2)}
                     fontColor={colors.placeHolderColor[0]}
                     style={{
                       marginTop: RFPercentage(2),
                     }}>
-                    {
-                      'Expected Salary? Suggested Range by Employer\n(SAR 1222 to 3222)'
-                    }
+                    {store.lang.expected_salary_range}
                   </JText>
 
                   <JInput
+                  style={{
+                    textAlign: store.lang.id == 0 ? 'left' : 'right',
+                  }}
+                  keyboardType={'numeric'}
                     containerStyle={{marginTop: RFPercentage(1)}}
                     isRequired
-                    heading={'Expected Salary'}
+                    heading={store.lang.expected_salary}
                     value={values.expected}
                     error={touched.expected && errors.expected && true}
                     onChangeText={handleChange('expected')}
@@ -395,10 +496,13 @@ const JApplyJob = ({token, jobId, id, setStatus, status}) => {
                   />
 
                   <JInput
+                  style={{
+                    textAlign: store.lang.id == 0 ? 'left' : 'right',
+                  }}
                     containerStyle={{marginTop: RFPercentage(2)}}
                     isRequired
                     value={values.note}
-                    heading={'Note :'}
+                    heading={`${store.lang.note}:`}
                     error={touched.note && errors.note && true}
                     onChangeText={handleChange('note')}
                     onBlur={() => setFieldTouched('note')}
@@ -420,7 +524,7 @@ const JApplyJob = ({token, jobId, id, setStatus, status}) => {
                         backgroundColor: colors.white[0],
                         borderColor: colors.black[1],
                       }}
-                      children={'Save as Draft'}
+                      children={store.lang.save_as_draft}
                     />
 
                     <JButton
@@ -431,7 +535,7 @@ const JApplyJob = ({token, jobId, id, setStatus, status}) => {
                       style={{
                         width: '46%',
                       }}
-                      children={apiLoader ? 'Loading' : 'Apply'}
+                      children={apiLoader ? store.lang.loading : store.lang.apply}
                     />
                   </JRow>
                 </ScrollView>

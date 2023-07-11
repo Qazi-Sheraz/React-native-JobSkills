@@ -414,8 +414,6 @@ function JSelectInput({
         style={[{flexDirection: 'column'}, containerStyle]}>
         <JRow
           style={{
-            // flexDirection: 'row',
-            // alignItems: 'center',
             justifyContent: 'space-between',
           }}>
           {icon}
@@ -463,6 +461,7 @@ function JSelectInput({
         customStyles={{
           wrapper: {
             backgroundColor: '#00000080',
+            
           },
           draggableIcon: {
             backgroundColor: colors.black[0],
@@ -504,7 +503,8 @@ function JSelectInput({
           {loader ? (
             <ActivityIndicator />
           ) : (
-            <View style={{paddingBottom:RFPercentage(-10)}}>
+            // <View style={{paddingBottom:header === store.lang.experience ?RFPercentage(22):RFPercentage(-10)}}>
+            <View style={{marginBottom:RFPercentage(22)}}>
             <FlatList
               data={
                 header === store.lang.country
@@ -605,7 +605,7 @@ function JSelectInput({
                    
               }
               ListHeaderComponent={
-                header !== 'Experience' && (
+                header !== store.lang.experience && (
                   <JShadowView
                     shadowColor={colors.purple[0]}
                     containerStyle={{
@@ -646,6 +646,7 @@ function JSelectInput({
                   }}
                  
                   style={{
+                   
                     paddingVertical: RFPercentage(2),
                     marginHorizontal: RFPercentage(2),
                     marginBottom: RFPercentage(1),

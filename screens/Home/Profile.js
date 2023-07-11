@@ -154,13 +154,14 @@ function Profile({navigation}) {
                               ?.email_address
                       }
                     />
-                    {console.log(store.myProfile?.user[0]?.contact_information?.region_code)}
+                    {/* {console.log(store.myProfile?.user[0]?.contact_information?.region_code)} */}
                     <JProfileInfo
                       title={store.lang.phone_number}
-                      text={store.myProfile?.user[0]?.contact_information?.mobile_number==null?'N/A'
-                       :store.myProfile?.user[0]?.contact_information?.region_code 
-                         + 
-                         store.myProfile?.user[0]?.contact_information?.mobile_number?.replace(/\+/g,'',)
+                      text={store.myProfile?.user[0]?.contact_information?.mobile_number!==null && store.myProfile?.user[0]?.contact_information?.region_code!==null
+                      ? store.myProfile?.user[0]?.contact_information?.region_code
+                      + 
+                      store.myProfile?.user[0]?.contact_information?.mobile_number
+                      :'N/A'
                           
                       }
                     />

@@ -136,7 +136,7 @@ function AppliedJobs({navigation}) {
                 title={item.job_title}
                 location={item.city_name}
                 category={item.job_category}
-                status={item.application_status}
+                status={item.status_id}
               />
             )}
             keyExtractor={(data, index) => index}
