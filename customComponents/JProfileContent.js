@@ -16,6 +16,7 @@ import {useState} from 'react';
 import {StoreContext} from '../mobx/store';
 import {useContext} from 'react';
 import {_getProfile} from '../functions/Candidate/MyProfile';
+import { JToast } from '../functions/Toast';
 export default function JProfileContent({src, name, email, jd}) {
   const store = useContext(StoreContext);
   const [singleFile, setSingleFile] = useState('');
@@ -45,9 +46,21 @@ export default function JProfileContent({src, name, email, jd}) {
     )
       .then(response => response.json())
       .then(result => {
+        console.log(res[0])
         setSingleFile(res[0]);
         _getProfile(store);
-        alert(result.message);
+        // store.setUserAvatar({
+        //   uri: res[0].uri,
+        //   name: res[0].name,
+        //   filename: res[0].name,
+        //   type: res[0].type,
+        // });
+        // alert(result.message);
+        JToast({
+          type: 'success',
+          text1: result.message,
+          visibilityTime:1500,
+        });
         setLoader(false);
       })
       .catch(error => {
@@ -79,10 +92,19 @@ export default function JProfileContent({src, name, email, jd}) {
       //Handling any exception (If any)
       if (DocumentPicker.isCancel(err)) {
         //If user canceled the document selection
-        alert('Canceled from single doc picker');
+        JToast({
+          type: 'error',
+          text1: store.lang.selection_canceled,
+          visibilityTime:1500,
+        });
+        // alert(store.lang.selection_canceled);
       } else {
         //For Unknown Error
-        alert('Unknown Error: ' + JSON.stringify(err));
+        JToast({
+          type: 'error',
+          text1: 'Unknown Error: ' + JSON.stringify(err),
+        });
+        // alert('Unknown Error: ' + JSON.stringify(err));
         throw err;
       }
     }

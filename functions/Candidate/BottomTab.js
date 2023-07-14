@@ -157,7 +157,7 @@ export const _getAllJobData = store => {
     .then(res => res.json())
     .then(res => {
       store.setJobApiLoader(true);
-
+  //  console.log('ressssss',res),
       store.setJobData(res);
       store.setJobApiLoader(false);
     })
@@ -297,6 +297,29 @@ export const _addnewJob = (store) => {
     .finally(() => {
       store.setCreateApiLoader(false);
       
+    });
+};
+
+export const _country = store => {
+  var myHeaders = new Headers();
+  myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
+
+  var requestOptions = {
+    method: 'Get',
+    headers: myHeaders,
+    redirect: 'follow',
+  };
+  fetch(`${url.baseUrl}/country-list`, requestOptions)
+    .then(response => response?.json())
+    .then(result => {
+      // console.log(result);
+      store.setCountry(result);
+    })
+    .catch(error => {
+      store.setCountryApiError(true);
+    })
+    .finally(() => {
+      store.setCountryApiLoader(false);
     });
 };
 

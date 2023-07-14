@@ -27,6 +27,7 @@ import JShadowView from './JShadowView';
 import {memo} from 'react';
 import JChevronIcon from './JChevronIcon';
 import JIcon from './JIcon';
+import JEmpty from './JEmpty';
 
 function JSelectInput({
   containerStyle,
@@ -632,8 +633,8 @@ function JSelectInput({
               }
               initialNumToRender={16}
               renderItem={({item, index}) => (
-                
-                <TouchableOpacity
+
+                 <TouchableOpacity
                 
                   onPress={() => {
                     if (isMultiple == true) {
@@ -663,6 +664,7 @@ function JSelectInput({
                     )}
                   </JRow>
                 </TouchableOpacity>
+               
               )}
               keyExtractor={(item, index) => index}
             /></View>

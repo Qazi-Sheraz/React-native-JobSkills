@@ -41,6 +41,8 @@ import JScrollView from '../../../customComponents/JScrollView';
 import { observer } from 'mobx-react';
 import url from '../../../config/url';
 import { JToast } from '../../../functions/Toast';
+import JModal from '../../../customComponents/JModal';
+
 const CareerInformation = ({navigation}) => {
   const refRBSheet = useRef();
   const [selected, setSelected] = useState(0);
@@ -49,9 +51,14 @@ const CareerInformation = ({navigation}) => {
   const [education, setEducation] = useState([]);
   const [edu, setEdu] = useState([]);
   const [experience, setExpereince] = useState([]);
-
-
+  const [selectedExperience, setSelectedExperience] = useState(null);
+  const [selectedEdu, setSelectedEdu] = useState(null);
   const store = useContext(StoreContext);
+
+  const exp_Id=experience[0]?.id;
+  const edu_Id=education[0]?.id;
+  const [modalVisible, setModalVisible] = useState(false);
+
 
   const _addExperince = values => {
     var myHeaders = new Headers();
@@ -79,7 +86,7 @@ const CareerInformation = ({navigation}) => {
       redirect: 'follow',
     };
     // console.log(requestOptions);
-    fetch('https://dev.jobskills.digital/api/experience-create', requestOptions)
+    fetch(selectedExperience==null?`${url.baseUrl}/experience-create`:`${url.baseUrl}/candidate-experience-update/${exp_Id}`, requestOptions)
       .then(response => response.json())
       .then(result => {
         // console.log(result);
@@ -94,7 +101,10 @@ const CareerInformation = ({navigation}) => {
             setLoader(false);
             }
        else {
-        _addExp(result.candidateExperience);
+        selectedExperience==null?
+        _addExp(result.candidateExperience)
+        :_getExperience();
+        
          JToast({
           type: 'success',
           text1: result.message,
@@ -114,14 +124,14 @@ const CareerInformation = ({navigation}) => {
     myHeaders.append('Authorization', `Bearer ${store.token.token}`);
 
     var formdata = new FormData();
-    formdata.append('degree_level_id', values.level.id);
+    formdata.append('degree_level_id', values.level?.id);
     formdata.append('degree_title', values.title);
-    formdata.append('country_id', values.county.id);
-    formdata.append('state_id', `${values.state.id}`);
-    formdata.append('city_id', `${values.city.id}`);
+    formdata.append('country_id', `${values.county?.id}`);
+    formdata.append('state_id', `${values.state?.id}`);
+    formdata.append('city_id', `${values.city?.id}`);
     formdata.append('institute', values.institude);
     formdata.append('result', values.result);
-    formdata.append('year', `${values.year.name}`);
+    formdata.append('year', `${values.year?.name}`);
 
     console.log(formdata);
     setLoader(true);
@@ -132,13 +142,15 @@ const CareerInformation = ({navigation}) => {
       redirect: 'follow',
     };
     fetch(
-      'https://dev.jobskills.digital/api/candidate-education-create',
+      selectedEdu==null?`${url.baseUrl}/candidate-education-create`:`${url.baseUrl}/candidate-education-update/${edu_Id}`,
       requestOptions,
     )
       .then(response => response.json())
       .then(result => {
         // console.log(result.data);
-        _addEdu(result.data);
+        selectedEdu==null?
+        _addEdu(result.data):
+        _getExperience();
         JToast({
           type: 'success',
           text1: result.message,
@@ -192,7 +204,7 @@ const CareerInformation = ({navigation}) => {
     )
       .then(response => response.json())
       .then(result => {
-        console.log(result);
+        // console.log(result);
         setEdu(result);
         setApiLoader(false);
       })
@@ -201,18 +213,7 @@ const CareerInformation = ({navigation}) => {
         setApiLoader(false);
       });
   };
-
-  const _deleteExperience = id => {
-    Alert.alert('Delete Experience', 'Are you sure to delete?', [
-      {
-        text: 'Cancel',
-
-        style: 'cancel',
-      },
-      {text: 'OK', onPress: () => _delete()},
-    ]);
-
-    const _delete = () => {
+const _Edelete = () => {
       var myHeaders = new Headers();
       myHeaders.append('Authorization', `Bearer ${store.token.token}`);
 
@@ -223,66 +224,107 @@ const CareerInformation = ({navigation}) => {
       };
       // console.log(requestOptions);
       fetch(
-        `https://dev.jobskills.digital/api/candidate-experience-delete/${id}`,
+        `https://dev.jobskills.digital/api/candidate-experience-delete/${exp_Id}`,
         requestOptions,
       )
         .then(response => response.json())
         .then(result => {
           // console.log(result);
-          setExpereince(experience.filter(e => e.id !== id));
+          setExpereince(experience.filter(e => e.exp_Id !== exp_Id));
+          _getExperience()
+          setModalVisible(false)
         })
         // .catch(error => console.log('error', error));
     };
+  const _deleteExperience = id => {
+  setModalVisible(true)
+    // Alert.alert('Delete Experience', 'Are you sure to delete?', [
+    //   {
+    //     text: 'Cancel',
+
+    //     style: 'cancel',
+    //   },
+    //   {text: 'OK', onPress: () => _delete()},
+    // ]);
+
+    
   };
+  const _delete = (edu_Id) => {
+    // console.log(id);
+    var myHeaders = new Headers();
+    myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
 
-  const _deleteEducation = id => {
-    Alert.alert('Delete Education', 'Are you sure to delete?', [
-      {
-        text: 'Cancel',
-
-        style: 'cancel',
-      },
-      {text: 'OK', onPress: () => _delete()},
-    ]);
-
-    const _delete = () => {
-      // console.log(id);
-      var myHeaders = new Headers();
-      myHeaders.append('Authorization', `Bearer ${store.token.token}`);
-
-      var requestOptions = {
-        method: 'DELETE',
-        headers: myHeaders,
-      };
-      fetch(
-        `https://dev.jobskills.digital/api/candidate-education-delete/${id}`,
-        requestOptions,
-      )
-        .then(response => response.json())
-        .then(result => {
-          // console.log(result);
-          setEducation(education.filter(e => e.id !== id));
-        })
-        // .catch(error => console.log('error', error));
+    var requestOptions = {
+      method: 'DELETE',
+      headers: myHeaders,
     };
+    fetch(
+      `https://dev.jobskills.digital/api/candidate-education-delete/${edu_Id}`,
+      requestOptions,
+    )
+      .then(response => response.json())
+      .then(result => {
+        // console.log(result);
+        setEducation(education.filter(e => e.edu_Id !== edu_Id));
+        _getExperience();
+        setModalVisible(false)
+      })
+      // .catch(error => console.log('error', error));
   };
+  const _deleteEducation = edu_Id => {
+   setModalVisible(true,edu_Id)
+    // Alert.alert('Delete Education', 'Are you sure to delete?', [
+    //   {
+    //     text: 'Cancel',
+
+    //     style: 'cancel',
+    //   },
+    //   {text: 'OK', onPress: () => _delete()},
+    // ]);
+   
+    
+
+    // const _delete = (id) => {
+    //   // console.log(id);
+    //   var myHeaders = new Headers();
+    //   myHeaders.append('Authorization', `Bearer ${store.token.token}`);
+
+    //   var requestOptions = {
+    //     method: 'DELETE',
+    //     headers: myHeaders,
+    //   };
+    //   fetch(
+    //     `https://dev.jobskills.digital/api/candidate-education-delete/${id}`,
+    //     requestOptions,
+    //   )
+    //     .then(response => response.json())
+    //     .then(result => {
+    //       // console.log(result);
+    //       setEducation(education.filter(e => e.id !== id));
+    //     })
+    //     // .catch(error => console.log('error', error));
+    // };
+  };
+
+//  console.log(store?.country?.arabic?.state[education?.state_id])
 
   const _addExp = e => {
     let arr = [...experience];
-    arr.push(e);
-
+    // arr.push(e);
+    arr.unshift(e);
     setExpereince(arr);
   };
 
   const _addEdu = e => {
     let arr = [...education];
-    arr.push(e);
+    arr.unshift(e);
 
     setEducation(arr);
   };
   useEffect(() => {
     _getExperience();
     _getEdu();
+ 
   }, []);
   return (
     <JScreen
@@ -298,50 +340,52 @@ const CareerInformation = ({navigation}) => {
               {store.lang.career_information}
             </JText>
           }
-          left={
-            <JChevronIcon/>
-          }
+          left={<JChevronIcon />}
         />
       }>
-        {apiLoader?<ActivityIndicator/>:
-      <ScrollView
-        style={{
-          paddingHorizontal: RFPercentage(2),
-          marginTop: RFPercentage(3),
-        }}
-        contentContainerStyle={{
-          paddingBottom: RFPercentage(5),
-        }}>
-        <Experience
-          loader={apiLoader}
-          select={selected}
-          experience={experience}
-          setSelected={setSelected}
-          refRBSheet={refRBSheet}
-          _deleteExperience={_deleteExperience}
-        />
+      {apiLoader ? (
+        <ActivityIndicator />
+      ) : (
+        <ScrollView
+          style={{
+            paddingHorizontal: RFPercentage(2),
+            marginTop: RFPercentage(3),
+          }}
+          contentContainerStyle={{
+            paddingBottom: RFPercentage(5),
+          }}>
+          <Experience
+            loader={apiLoader}
+            select={selected}
+            experience={experience}
+            setSelected={setSelected}
+            refRBSheet={refRBSheet}
+            _deleteExperience={_deleteExperience}
+            selectedExperience={selectedExperience}
+            setSelectedExperience={setSelectedExperience}
+          />
 
-        <Education
-          loader={apiLoader}
-          select={selected}
-          education={education}
-          setSelected={setSelected}
-          refRBSheet={refRBSheet}
-          _deleteEducation={_deleteEducation}
-        />
-      </ScrollView>}
+          <Education
+            loader={apiLoader}
+            select={selected}
+            education={education}
+            setSelected={setSelected}
+            refRBSheet={refRBSheet}
+            _deleteEducation={_deleteEducation}
+            selectedEdu={selectedEdu}
+            setSelectedEdu={setSelectedEdu}
+          />
+        </ScrollView>
+      )}
 
       <RBSheet
-      
         ref={refRBSheet}
         closeOnDragDown={false}
         closeOnPressMask={false}
         height={heightPercentageToDP(97)}
-
         customStyles={{
           wrapper: {
             backgroundColor: '#00000080',
-            
           },
           draggableIcon: {
             backgroundColor: colors.black[0],
@@ -349,359 +393,452 @@ const CareerInformation = ({navigation}) => {
           },
         }}>
         <JGradientHeader
-        
           center={
             <JText
               fontColor={colors.white[0]}
               fontWeight="bold"
               fontSize={RFPercentage(2.5)}>
-
-                
               {selected == 0 ? store.lang.experience : store.lang.education}
             </JText>
           }
-          left={
-            <JChevronIcon onPress={() => refRBSheet?.current.close()}/>
-          }
+          left={<JChevronIcon onPress={() => refRBSheet?.current.close()} />}
         />
-       <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
-        {selected === 0 ? (
+        {store.countryApiLoader ? (
+          <ActivityIndicator />
+        ) : (
+          console.log(selectedExperience?.start),
+          <KeyboardAvoidingView behavior="padding" style={{flex: 1}}>
+            {selected === 0 ? (
+           
+              <Formik
+                initialValues={{
+                  title:
+                    selectedExperience?.title !== null
+                      ? selectedExperience?.title
+                      : '',
+                  company:
+                    selectedExperience?.company !== null
+                      ? selectedExperience?.company
+                      : '',
+                  county: {
+                    id:
+                      selectedExperience?.country_id !== null
+                        ? selectedExperience?.country_id
+                        : '',
+                    name:
+                      store.lang.id == 0
+                        ? store?.myProfile?.dataEnglish?.countries[
+                            selectedExperience?.country_id
+                          ]
+                        : store?.myProfile?.dataArabic?.countries[
+                            selectedExperience?.country_id
+                          ],
+                  },
+                  city: {
+                    id:
+                      selectedExperience?.city_id !== null
+                        ? selectedExperience?.country_id
+                        : '',
+                    name:
+                      store.lang.id == 0
+                        ? store?.country?.english?.city[
+                            selectedExperience?.city_id
+                          ]
+                        : store?.country?.arabic?.city[
+                            selectedExperience?.city_id
+                          ],
+                  },
 
-          <Formik
-            initialValues={{
-              title: '',
-              company: '',
-              county: '',
-              city: '',
-              state: '',
-              start: '',
-              end: '',
-              working: false,
-              description: '',
-            }}
-            onSubmit={values => {
-              // console.log(values);
-              // moment(values.start).format('DD MM YYYY')===moment(values.end).format('DD MM YYYY') ? 
-              // JToast({
-              //   type: 'error',
-              //   text1: result.end_date[0],
-              // })
-              // :
-              _addExperince(values);
-            }}
-            validationSchema={yup.object().shape({
-              title: yup.string().required().label('Title'),
-              company: yup.string().required().label('Company'),
-              
-              county: yup
-              .object()
-              .shape()
-              .required('Country is required'),
-              city: yup
-              .object()
-              .shape()
-              .required('City is required'),
-              state: yup
-              .object()
-              .shape()
-              .required('State is required'),
-             
-              description: yup.string().required().label('Description'),
-            })}
-          >
-            {({
-              values,
-              handleChange,
-              errors,
-              setFieldTouched,
-              touched,
-              isValid,
-              handleSubmit,
-              setFieldValue,
-            }) => (
-              <>
-              
-                <JScrollView
-                  // contentContainerStyle={{paddingBottom: RFPercentage(8),}}
-                  style={{
-                    marginHorizontal: RFPercentage(2),
-                  }}>
-                  <JInput
-                  style={{
-                    textAlign: store.lang.id == 0 ? 'left' : 'right',
-                  }}
-                    isRequired={true}
-                    containerStyle={{marginTop: RFPercentage(2)}}
-                    heading={`${store.lang.experience_title}:`}
-                    value={values.title}
-                    error={touched.title && errors.title && true}
-                    onChangeText={handleChange('title')}
-                    onBlur={() => setFieldTouched('title')}
-                  />
-                  {touched.title && errors.title && (
-                    <JErrorText>{errors.title}</JErrorText>
-                  )}
-                  <JInput
-                  style={{
-                    textAlign: store.lang.id == 0 ? 'left' : 'right',
-                  }}
-                    isRequired={true}
-                    containerStyle={{marginTop: RFPercentage(2)}}
-                    value={values.company}
-                    heading={`${store.lang.company}:`}
-                    error={touched.company && errors.company && true}
-                    onChangeText={handleChange('company')}
-                    onBlur={() => setFieldTouched('company')}
-                  />
-                  {touched.company && errors.company && (
-                    <JErrorText>{errors.company}</JErrorText>
-                  )}
-{/* {console.log(store.myProfile)} */}
-                  <JSelectInput
-                    containerStyle={{marginTop: RFPercentage(2)}}
-                    data={store.lang.id==0?store.myProfile.dataEnglish.countries:store.myProfile.dataArabic.countries}
-                    value={values.county.name}
-                    header={store.lang.country}
-                    heading={`${store.lang.country}:`}
-                    setValue={e => setFieldValue('county', e)}
-                    error={touched.county && errors.county && true}
-                    rightIcon={
-                      <Feather
-                        name="chevron-down"
-                        size={RFPercentage(2.5)}
-                        color={colors.black[0]}
+                  state: {
+                    id:
+                      selectedExperience?.state_id !== null
+                        ? selectedExperience?.country_id
+                        : '',
+                    name:
+                      store.lang.id == 0
+                        ? store?.country?.english?.state[
+                            selectedExperience?.state_id
+                          ]
+                        : store?.country?.arabic?.state[
+                            selectedExperience?.state_id
+                          ],
+                  },
+                  start:
+                    selectedExperience?.start !== null && selectedExperience?.start !==undefined
+                      ? selectedExperience?.start
+                      : '',
+                  end:
+                    selectedExperience?.end !== null
+                      ? selectedExperience?.end
+                      : '',
+                  working: false,
+                  description:
+                    selectedExperience?.description !== null
+                      ? selectedExperience?.description
+                      : '',
+                }}
+                onSubmit={values => {
+                  _addExperince(values);
+                }}
+                validationSchema={yup.object().shape({
+                  title: yup.string().required().label('Title'),
+                  company: yup.string().required().label('Company'),
+
+                  county: yup.object().shape().required('Country is required'),
+                  city: yup.object().shape().required('City is required'),
+                  state: yup.object().shape().required('State is required'),
+
+                  description: yup.string().required().label('Description'),
+                })}>
+                {({
+                  values,
+                  handleChange,
+                  errors,
+                  setFieldTouched,
+                  touched,
+                  isValid,
+                  handleSubmit,
+                  setFieldValue,
+                }) => (
+                  <>
+                    <JScrollView
+                      // contentContainerStyle={{paddingBottom: RFPercentage(8),}}
+                      style={{
+                        marginHorizontal: RFPercentage(2),
+                      }}>
+                      <JInput
+                        style={{
+                          textAlign: store.lang.id == 0 ? 'left' : 'right',
+                        }}
+                        isRequired={true}
+                        containerStyle={{marginTop: RFPercentage(2)}}
+                        heading={`${store.lang.experience_title}:`}
+                        value={values.title}
+                        error={touched.title && errors.title && true}
+                        onChangeText={handleChange('title')}
+                        onBlur={() => setFieldTouched('title')}
                       />
-                    }
-                  />
-                  {touched.county && errors.county && (
-                    <JErrorText>{errors.county}</JErrorText>
-                  )}
-
-                  <JSelectInput
-                    containerStyle={{marginTop: RFPercentage(2)}}
-                    value={store.lang.id == 0
-                      ? values.state?.name
-                      : values.state?.arabic_title}
-                    id={values.county.id}
-                    setValue={e => setFieldValue('state', e)}
-                    header={store.lang.state}
-                    heading={`${store.lang.state}:`}
-                    error={touched.state && errors.state && true}
-                    rightIcon={
-                      <Feather
-                        name="chevron-down"
-                        size={RFPercentage(2.5)}
-                        color={colors.black[0]}
+                      {touched.title && errors.title && (
+                        <JErrorText>{errors.title}</JErrorText>
+                      )}
+                      <JInput
+                        style={{
+                          textAlign: store.lang.id == 0 ? 'left' : 'right',
+                        }}
+                        isRequired={true}
+                        containerStyle={{marginTop: RFPercentage(2)}}
+                        value={values?.company}
+                        heading={`${store.lang.company}:`}
+                        error={touched.company && errors.company && true}
+                        onChangeText={handleChange('company')}
+                        onBlur={() => setFieldTouched('company')}
                       />
-                    }
-                  />
-                  {touched.state && errors.state && (
-                    <JErrorText>{errors.state}</JErrorText>
-                  )}
-
-                  <JSelectInput
-                    containerStyle={{marginTop: RFPercentage(2)}}
-                    value={ store.lang.id == 0
-                      ? values.city?.name
-                      : values.city?.arabic_title}
-                    setValue={e => setFieldValue('city', e)}
-                    header={store.lang.city}
-                    heading={`${store.lang.city}:`}
-                    id={values.state.id}
-                    error={touched.city && errors.city && true}
-                    rightIcon={
-                      <Feather
-                        name="chevron-down"
-                        size={RFPercentage(2.5)}
-                        color={colors.black[0]}
-                      />
-                    }
-                  />
-                  {touched.city && errors.city && (
-                    <JErrorText>{errors.city}</JErrorText>
-                  )}
-
-                  <JSelectInput
-                    isDate={true}
-                    containerStyle={{marginTop: RFPercentage(2)}}
-                    value={
-                      values.start && moment(values.start).format('DD MMM YYYY')
-                    }
-                    setValue={e => setFieldValue('start', e)}
-                    header={store.lang.start_date}
-                    heading={`${store.lang.start_date}:`}
-                    error={touched.start && errors.start && true}
-                    rightIcon={
-                      <Feather
-                        name="chevron-down"
-                        size={RFPercentage(2.5)}
-                        color={colors.black[0]}
-                      />
-                    }
-                  />
-                  {touched.start && errors.start && (
-                    <JErrorText>{errors.start}</JErrorText>
-                  )}
-
-                  {values.working == false && (
-                    <>
+                      {touched.company && errors.company && (
+                        <JErrorText>{errors.company}</JErrorText>
+                      )}
 
                       <JSelectInput
-                      disabled={values.start!==''?false:true}
-                      date1={moment().add(1, 'day').toDate()}
-                     minimumDate={moment().add(1, 'day')}
                         containerStyle={{marginTop: RFPercentage(2)}}
-                        isDate={true}
-                        value={
-                          values.end && moment(values.end).format('DD MMM YYYY')
+                        data={
+                          store.lang.id == 0
+                            ? store.myProfile?.dataEnglish?.countries
+                            : store.myProfile?.dataArabic?.countries
                         }
-                        setValue={e => setFieldValue('end', e)}
-                        header={store.lang.end_date}
-                    heading={`${store.lang.end_date}:`}
-                        error={touched.end && errors.end && true}
+                        value={values?.county?.name}
+                        header={store.lang.country}
+                        heading={`${store.lang.country}:`}
+                        setValue={e => {
+                          setFieldValue('county', e);
+                          setFieldValue('state', null);
+                          setFieldValue('city', null);
+                        }}
+                        error={touched.county && errors.county && true}
                         rightIcon={
                           <Feather
                             name="chevron-down"
                             size={RFPercentage(2.5)}
-                            color={values.start==''?colors.inputBorder[0]:colors.black[0]}
+                            color={colors.black[0]}
                           />
                         }
-                        // disabled={!values.start}
                       />
-                      {touched.end && errors.end && (
-                        <JErrorText>{errors.end}</JErrorText>
+                      {touched.county && errors.county && (
+                        <JErrorText>{errors.county}</JErrorText>
                       )}
-                    </>
-                  )} 
-                  <JInput
-                  style={{
-                    textAlign: store.lang.id == 0 ? 'left' : 'right',
-                  }}
-                  containerStyle={{marginTop: RFPercentage(2)}}
-                    heading={`${store.lang.description}:`}
-                    value={values.description}
-                    error={touched.description && errors.description && true}
-                    onChangeText={handleChange('description')}
-                    onBlur={() => setFieldTouched('description')}
-                  />
-                  {touched.title && errors.description && (
-                    <JErrorText>{errors.description}</JErrorText>
-                  )}
-                  <JRow
-                    style={{
-                      justifyContent: 'space-between',
-                      marginVertical: RFPercentage(2),
-                    }}>
-                    <JText fontWeight={'500'} fontSize={RFPercentage(2.5)}>
-                      {store.lang.currently_working}
-                    </JText>
 
-                    <Switch
-                      trackColor={{true: colors.purple[0]}}
-                      onValueChange={e => {
-                        setFieldValue('working', e);
-                      }}
-                      value={values.working}
-                    />
-                  </JRow>
-
-                 
-                </JScrollView>
-                <View style={styles.bottomV}>
-                <JButton
-                  isValid={isValid}
-                  onPress={() => handleSubmit()}
-                  style={{
-                    
-                    position: 'absolute',
-                    bottom: RFPercentage(1),
-                    width: RFPercentage(20),
-                  }}>
-                  {loader ? store.lang.loading : store.lang.save}
-                </JButton>
-                </View>
-              </>
-            )}
-          </Formik>
-        ) : (
-          <Formik
-            initialValues={{
-              title: '',
-              level: '',
-              county: '',
-              city: '',
-              state: '',
-              institude: '',
-              result: '',
-              year: '',
-            }}
-            onSubmit={values => {
-              // console.log(values);
-              _addEducation(values);
-            }}
-            validationSchema={yup.object().shape({
-              title: yup.string().required().label('Title'),
-              level: yup
-              .object()
-              .shape()
-              .required('Level is required'),
-              county: yup
-              .object()
-              .shape()
-              .required('Country is required'),
-              city: yup
-              .object()
-              .shape()
-              .required('City is required'),
-              state: yup
-              .object()
-              .shape()
-              .required('State is required'),
-              institude: yup.string().required().label('Institude'),
-              result: yup.string().required().label('Eesult'),
-              year: yup
-              .object()
-              .shape()
-              .required('Year is required'),
-            })}
-          >
-            {({
-              values,
-              handleChange,
-              errors,
-              setFieldTouched,
-              touched,
-              isValid,
-              handleSubmit,
-              setFieldValue,
-            }) => (
-              <>
-                <ScrollView
-                  contentContainerStyle={{paddingBottom: RFPercentage(8)}}
-                  style={{
-                    marginHorizontal: RFPercentage(2),
-                  }}>
-                    <JSelectInput
-                    containerStyle={styles.container}
-                    value={values.level.name}
-                    id={values.level.id}
-                    data={store.lang.id==0?edu?.dataEnglish?.degreeLevels:edu?.dataArabic?.degreeLevels}
-                    header={store.lang.degree_level}
-                    heading={`${store.lang.degree_level}:`}
-                    setValue={e => setFieldValue('level', e)}
-                    error={touched.level && errors.level && true}
-                    rightIcon={
-                      <Feather
-                        name="chevron-down"
-                        size={RFPercentage(2.5)}
-                        color={colors.black[0]}
+                      <JSelectInput
+                        containerStyle={{marginTop: RFPercentage(2)}}
+                        value={
+                          store.lang.id == 0
+                            ? values.state?.name
+                            : values.state?.arabic_title
+                        }
+                        id={values.county?.id}
+                        setValue={e => {
+                          setFieldValue('state', e);
+                          setFieldValue('city', null);
+                        }}
+                        header={store.lang.state}
+                        heading={`${store.lang.state}:`}
+                        error={touched.state && errors.state && true}
+                        rightIcon={
+                          <Feather
+                            name="chevron-down"
+                            size={RFPercentage(2.5)}
+                            color={colors.black[0]}
+                          />
+                        }
                       />
-                    }
-                  />
-                  {touched.level && errors.level && (
-                    <JErrorText>{errors.level}</JErrorText>
-                  )}
-                  {/* <JInput
+                      {touched.state && errors.state && (
+                        <JErrorText>{errors.state}</JErrorText>
+                      )}
+
+                      <JSelectInput
+                        containerStyle={{marginTop: RFPercentage(2)}}
+                        value={
+                          store.lang.id == 0
+                            ? values.city?.name
+                            : values.city?.arabic_title
+                        }
+                        
+                        setValue={e => setFieldValue('city', e)}
+                        header={store.lang.city}
+                        heading={`${store.lang.city}:`}
+                        id={values.state?.id}
+                        error={touched.city && errors.city && true}
+                        rightIcon={
+                          <Feather
+                            name="chevron-down"
+                            size={RFPercentage(2.5)}
+                            color={colors.black[0]}
+                          />
+                        }
+                      />
+                      {touched.city && errors.city && (
+                        <JErrorText>{errors.city}</JErrorText>
+                      )}
+
+                      <JSelectInput
+                        isDate={true}
+                        containerStyle={{marginTop: RFPercentage(2)}}
+                        value={
+                          values.start &&
+                          moment(values.start).format('DD MMM YYYY')
+                        }
+                        setValue={e => setFieldValue('start', e)}
+                        header={store.lang.start_date}
+                        heading={`${store.lang.start_date}:`}
+                        error={touched.start && errors.start && true}
+                        rightIcon={
+                          <Feather
+                            name="chevron-down"
+                            size={RFPercentage(2.5)}
+                            color={colors.black[0]}
+                          />
+                        }
+                      />
+                      {touched.start && errors.start && (
+                        <JErrorText>{errors.start}</JErrorText>
+                      )}
+
+                      {values.working == false && (
+                        <>
+                          <JSelectInput
+                            disabled={values.start !== '' ? false : true}
+                            date1={moment().add(1, 'day').toDate()}
+                            minimumDate={moment().add(1, 'day')}
+                            containerStyle={{marginTop: RFPercentage(2)}}
+                            isDate={true}
+                            value={
+                              values.end &&
+                              moment(values.end).format('DD MMM YYYY')
+                            }
+                            setValue={e => setFieldValue('end', e)}
+                            header={store.lang.end_date}
+                            heading={`${store.lang.end_date}:`}
+                            error={touched.end && errors.end && true}
+                            rightIcon={
+                              <Feather
+                                name="chevron-down"
+                                size={RFPercentage(2.5)}
+                                color={
+                                  values.start == ''
+                                    ? colors.inputBorder[0]
+                                    : colors.black[0]
+                                }
+                              />
+                            }
+                            // disabled={!values.start}
+                          />
+                          {touched.end && errors.end && (
+                            <JErrorText>{errors.end}</JErrorText>
+                          )}
+                        </>
+                      )}
+                      <JInput
+                        style={{
+                          textAlign: store.lang.id == 0 ? 'left' : 'right',
+                        }}
+                        containerStyle={{marginTop: RFPercentage(2)}}
+                        heading={`${store.lang.description}:`}
+                        value={values.description}
+                        error={
+                          touched.description && errors.description && true
+                        }
+                        onChangeText={handleChange('description')}
+                        onBlur={() => setFieldTouched('description')}
+                      />
+                      {touched.title && errors.description && (
+                        <JErrorText>{errors.description}</JErrorText>
+                      )}
+                      <JRow
+                        style={{
+                          justifyContent: 'space-between',
+                          marginVertical: RFPercentage(2),
+                        }}>
+                        <JText fontWeight={'500'} fontSize={RFPercentage(2.5)}>
+                          {store.lang.currently_working}
+                        </JText>
+
+                        <Switch
+                          trackColor={{true: colors.purple[0]}}
+                          onValueChange={e => {
+                            setFieldValue('working', e);
+                          }}
+                          value={values.working}
+                        />
+                      </JRow>
+                    </JScrollView>
+                    <View style={styles.bottomV}>
+                      <JButton
+                        isValid={isValid}
+                        onPress={() => handleSubmit()}
+                        style={{
+                          position: 'absolute',
+                          bottom: RFPercentage(1),
+                          width: RFPercentage(20),
+                        }}>
+                        {loader ? store.lang.loading : store.lang.save}
+                      </JButton>
+                    </View>
+                  </>
+                )}
+              </Formik>
+            ) : (
+            
+              <Formik
+                initialValues={{
+                  title: selectedEdu?.title !== null ? selectedEdu?.title : '',
+                  level: {
+                    id:
+                      selectedEdu?.degree_level_id !== null
+                        ? selectedEdu?.degree_level_id
+                        : '',
+                    name:
+                      selectedEdu?.degree_level !== null
+                        ? selectedEdu?.degree_level
+                        : '',
+                  },
+                  county: {
+                    id:
+                      selectedEdu?.country_id !== null
+                        ? selectedEdu?.country_id
+                        : '',
+                    name:
+                      store.lang.id == 0
+                        ? store?.myProfile?.dataEnglish?.countries[
+                            selectedEdu?.country_id
+                          ]
+                        : store?.myProfile?.dataArabic?.countries[
+                            selectedEdu?.country_id
+                          ],
+                  },
+                  city: {
+                    id:
+                      selectedEdu?.city_id !== null
+                        ? selectedEdu?.city_id
+                        : '',
+                    name:
+                      store.lang.id == 0
+                        ? store?.country?.english ?.city[selectedEdu?.city_id]
+                        : store?.country?.arabic?.city[selectedEdu?.city_id],
+                  },
+
+                  state: {
+                    id:
+                      selectedEdu?.state_id !== null
+                        ? selectedEdu?.state_id
+                        : '',
+                    name:
+                      store.lang.id == 0
+                        ? store?.country?.english ?.state[selectedEdu?.state_id]
+                        : store?.country?.arabic?.state[selectedEdu?.state_id],
+                  },
+                  institude:
+                    selectedEdu?.institute !== null
+                      ? selectedEdu?.institute
+                      : '',
+                  result:
+                    selectedEdu?.result !== null ? selectedEdu?.result : '',
+                  year: {
+                    name: selectedEdu?.year !== null ? selectedEdu?.year : '',
+                  },
+                }}
+                onSubmit={values => {
+                  // console.log(values);
+                  _addEducation(values);
+                }}
+                validationSchema={yup.object().shape({
+                  title: yup.string().required().label('Title'),
+                  level: yup.object().shape().required('Level is required'),
+                  county: yup.object().shape().required('Country is required'),
+                  city: yup.object().shape().required('City is required'),
+                  state: yup.object().shape().required('State is required'),
+                  institude: yup.string().required().label('Institude'),
+                  result: yup.string().required().label('Eesult'),
+                  year: yup.object().shape().required('Year is required'),
+                })}>
+                {({
+                  values,
+                  handleChange,
+                  errors,
+                  setFieldTouched,
+                  touched,
+                  isValid,
+                  handleSubmit,
+                  setFieldValue,
+                }) => (
+                  <>
+                  {/* {console.log(store.country.english?.state)} */}
+                    <ScrollView
+                      contentContainerStyle={{paddingBottom: RFPercentage(8)}}
+                      style={{
+                        marginHorizontal: RFPercentage(2),
+                      }}>
+                      <JSelectInput
+                        containerStyle={styles.container}
+                        value={values.level?.name}
+                        id={values.level?.id}
+                        data={
+                          store.lang.id == 0
+                            ? edu?.dataEnglish?.degreeLevels
+                            : edu?.dataArabic?.degreeLevels
+                        }
+                        header={store.lang.degree_level}
+                        heading={`${store.lang.degree_level}:`}
+                        setValue={e => setFieldValue('level', e)}
+                        error={touched.level && errors.level && true}
+                        rightIcon={
+                          <Feather
+                            name="chevron-down"
+                            size={RFPercentage(2.5)}
+                            color={colors.black[0]}
+                          />
+                        }
+                      />
+                      {touched.level && errors.level && (
+                        <JErrorText>{errors.level}</JErrorText>
+                      )}
+                      {/* <JInput
                   style={{
                     textAlign: store.lang.id == 0 ? 'left' : 'right',
                   }}
@@ -717,158 +854,183 @@ const CareerInformation = ({navigation}) => {
                   {touched.level && errors.level && (
                     <JErrorText>{errors.level}</JErrorText>
                   )} */}
-                  <JInput
-                  style={{
-                    textAlign: store.lang.id == 0 ? 'left' : 'right',
-                  }}
-                    isRequired={true}
-                    containerStyle={styles.container}
-                    value={values.title}
-                    heading={`${store.lang.degree_title}:`}
-                    error={touched.title && errors.title && true}
-                    onChangeText={handleChange('title')}
-                    onBlur={() => setFieldTouched('title')}
-                  />
-                  {touched.title && errors.title && (
-                    <JErrorText>{errors.title}</JErrorText>
-                  )}
-
-                  <JSelectInput
-                    containerStyle={styles.container}
-                    value={values.county.name}
-                    data={store.lang.id==0?store.myProfile.dataEnglish.countries:store.myProfile.dataArabic.countries}
-                    header={store.lang.country}
-                    heading={`${store.lang.country}:`}
-                    setValue={e => setFieldValue('county', e)}
-                    error={touched.county && errors.county && true}
-                    rightIcon={
-                      <Feather
-                        name="chevron-down"
-                        size={RFPercentage(2.5)}
-                        color={colors.black[0]}
+                      <JInput
+                        style={{
+                          textAlign: store.lang.id == 0 ? 'left' : 'right',
+                        }}
+                        isRequired={true}
+                        containerStyle={styles.container}
+                        value={values.title}
+                        heading={`${store.lang.degree_title}:`}
+                        error={touched.title && errors.title && true}
+                        onChangeText={handleChange('title')}
+                        onBlur={() => setFieldTouched('title')}
                       />
-                    }
-                  />
-                  {touched.county && errors.county && (
-                    <JErrorText>{errors.county}</JErrorText>
-                  )}
+                      {touched.title && errors.title && (
+                        <JErrorText>{errors.title}</JErrorText>
+                      )}
 
-                  <JSelectInput
-                    containerStyle={styles.container}
-                    value={store.lang.id == 0
-                      ? values.state?.name
-                      : values.state?.arabic_title}
-                    id={values.county.id}
-                    setValue={e => setFieldValue('state', e)}
-                    header={store.lang.state}
-                    heading={`${store.lang.state}:`}
-                    error={touched.state && errors.state && true}
-                    rightIcon={
-                      <Feather
-                        name="chevron-down"
-                        size={RFPercentage(2.5)}
-                        color={colors.black[0]}
+                      <JSelectInput
+                        containerStyle={styles.container}
+                        value={values.county.name}
+                        data={
+                          store.lang.id == 0
+                            ? store.myProfile.dataEnglish.countries
+                            : store.myProfile.dataArabic.countries
+                        }
+                        header={store.lang.country}
+                        heading={`${store.lang.country}:`}
+                        setValue={e => {
+                          setFieldValue('county', e);
+                          setFieldValue('state', null);
+                          setFieldValue('city', null);
+                        }}
+                        error={touched.county && errors.county && true}
+                        rightIcon={
+                          <Feather
+                            name="chevron-down"
+                            size={RFPercentage(2.5)}
+                            color={colors.black[0]}
+                          />
+                        }
                       />
-                    }
-                  />
-                  {touched.state && errors.state && (
-                    <JErrorText>{errors.state}</JErrorText>
-                  )}
+                      {touched.county && errors.county && (
+                        <JErrorText>{errors.county}</JErrorText>
+                      )}
 
-                  <JSelectInput
-                    containerStyle={styles.container}
-                    value={store.lang.id == 0
-                      ? values.city?.name
-                      : values.city?.arabic_title}
-                    setValue={e => setFieldValue('city', e)}
-                    header={store.lang.city}
-                    heading={`${store.lang.city}:`}
-                    id={values.state.id}
-                    error={touched.city && errors.city && true}
-                    rightIcon={
-                      <Feather
-                        name="chevron-down"
-                        size={RFPercentage(2.5)}
-                        color={colors.black[0]}
+                      <JSelectInput
+                        containerStyle={styles.container}
+                        value={
+                          store.lang.id == 0
+                            ? values.state?.name
+                            : values.state?.arabic_title
+                        }
+                        id={values.county?.id}
+                        setValue={e => {
+                          setFieldValue('state', e);
+                          setFieldValue('city', null);
+                        }}
+                        header={store.lang.state}
+                        heading={`${store.lang.state}:`}
+                        error={touched.state && errors.state && true}
+                        rightIcon={
+                          <Feather
+                            name="chevron-down"
+                            size={RFPercentage(2.5)}
+                            color={colors.black[0]}
+                          />
+                        }
                       />
-                    }
-                  />
-                  {touched.city && errors.city && (
-                    <JErrorText>{errors.city}</JErrorText>
-                  )}
+                      {touched.state && errors.state && (
+                        <JErrorText>{errors.state}</JErrorText>
+                      )}
 
-                  <JInput
-                  style={{
-                    textAlign: store.lang.id == 0 ? 'left' : 'right',
-                  }}
-                    isRequired={true}
-                    containerStyle={styles.container}
-                    heading={`${store.lang.institute}:`}
-                    value={values.institude}
-                    error={touched.institude && errors.institude && true}
-                    onChangeText={handleChange('institude')}
-                    onBlur={() => setFieldTouched('institude')}
-                  />
-                  {touched.institude && errors.institude && (
-                    <JErrorText>{errors.institude}</JErrorText>
-                  )}
-
-                  <JInput
-                  style={{
-                    textAlign: store.lang.id == 0 ? 'left' : 'right',
-                  }}
-                    isRequired
-                     keyboardType={'numeric'}
-                    containerStyle={styles.container}
-                    heading={`${store.lang.result}:`}
-                    value={values.result}
-                    error={touched.result && errors.result && true}
-                    onChangeText={handleChange('result')}
-                    onBlur={() => setFieldTouched('result')}
-                  />
-                  {touched.result && errors.result && (
-                    <JErrorText>{errors.result}</JErrorText>
-                  )}
-
-                  <JSelectInput
-                    isRequired
-                    containerStyle={styles.container}
-                    value={values.year.name}
-                    setValue={e => setFieldValue('year', e)}
-                    header={store.lang.year}
-                    heading={`${store.lang.year}:`}
-                    error={touched.year && errors.year && true}
-                    rightIcon={
-                      <Feather
-                        name="chevron-down"
-                        size={RFPercentage(2.5)}
-                        color={colors.black[0]}
+                      <JSelectInput
+                        containerStyle={styles.container}
+                        value={
+                          store.lang.id == 0
+                            ? values.city?.name
+                            : values.city?.arabic_title
+                        }
+                        setValue={e => setFieldValue('city', e)}
+                        header={store.lang.city}
+                        heading={`${store.lang.city}:`}
+                        id={values.state?.id}
+                        error={touched.city && errors.city && true}
+                        rightIcon={
+                          <Feather
+                            name="chevron-down"
+                            size={RFPercentage(2.5)}
+                            color={colors.black[0]}
+                          />
+                        }
                       />
-                    }
-                  />
-                  {touched.year && errors.year && (
-                    <JErrorText>{errors.year}</JErrorText>
-                  )}
-                </ScrollView>
-                <View style={styles.bottomV}>
-                <JButton
-                  isValid={isValid}
-                  onPress={() => handleSubmit()}
-                  style={{
-                    position: 'absolute',
-                    bottom: RFPercentage(1),
-                    width: RFPercentage(20),
-                  }}>
-                  {loader ? store.lang.loading : store.lang.save}
-                </JButton>
-                </View>
-              </>
+                      {touched.city && errors.city && (
+                        <JErrorText>{errors.city}</JErrorText>
+                      )}
+
+                      <JInput
+                        style={{
+                          textAlign: store.lang.id == 0 ? 'left' : 'right',
+                        }}
+                        isRequired={true}
+                        containerStyle={styles.container}
+                        heading={`${store.lang.institute}:`}
+                        value={values.institude}
+                        error={touched.institude && errors.institude && true}
+                        onChangeText={handleChange('institude')}
+                        onBlur={() => setFieldTouched('institude')}
+                      />
+                      {touched.institude && errors.institude && (
+                        <JErrorText>{errors.institude}</JErrorText>
+                      )}
+
+                      <JInput
+                        style={{
+                          textAlign: store.lang.id == 0 ? 'left' : 'right',
+                        }}
+                        isRequired
+                        keyboardType={'numeric'}
+                        containerStyle={styles.container}
+                        heading={`${store.lang.result}:`}
+                        value={values.result}
+                        error={touched.result && errors.result && true}
+                        onChangeText={handleChange('result')}
+                        onBlur={() => setFieldTouched('result')}
+                      />
+                      {touched.result && errors.result && (
+                        <JErrorText>{errors.result}</JErrorText>
+                      )}
+
+                      <JSelectInput
+                        isRequired
+                        containerStyle={styles.container}
+                        value={values.year?.name}
+                        setValue={e => setFieldValue('year', e)}
+                        header={store.lang.year}
+                        heading={`${store.lang.year}:`}
+                        error={touched.year && errors.year && true}
+                        rightIcon={
+                          <Feather
+                            name="chevron-down"
+                            size={RFPercentage(2.5)}
+                            color={colors.black[0]}
+                          />
+                        }
+                      />
+                      {touched.year && errors.year && (
+                        <JErrorText>{errors.year}</JErrorText>
+                      )}
+                    </ScrollView>
+                    <View style={styles.bottomV}>
+                      <JButton
+                        isValid={isValid}
+                        onPress={() => handleSubmit()}
+                        style={{
+                          position: 'absolute',
+                          bottom: RFPercentage(1),
+                          width: RFPercentage(20),
+                        }}>
+                        {loader ? store.lang.loading : store.lang.save}
+                      </JButton>
+                    </View>
+                  </>
+                )}
+              </Formik>
             )}
-          </Formik>
+          </KeyboardAvoidingView>
         )}
-        </KeyboardAvoidingView>
       </RBSheet>
-      
+      <JModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        alertMsg={store.lang.delete}
+        msg={store.lang.are_you_sure_to_delete}
+        onPress={() => {
+          edu_Id ? _delete(edu_Id) : _Edelete(exp_Id);
+        }}
+        // onPress={()=> {_Edelete(exp_Id)}}
+      />
     </JScreen>
   );
 };

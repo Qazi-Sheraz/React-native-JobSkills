@@ -96,6 +96,7 @@
     "applied":"Applied",
     "rejected":"Rejected",
     "selected":"Selected",
+    "select":"Select",
     "shortlisted":"Shortlisted",
     "interview_scheduled":"Interview Scheduled",
     "invitation_Sent":"Invitation Sent",
@@ -355,7 +356,14 @@
     "select_an_option": "Select an option",
     "expected_salary_range": "Expected Salary?Suggested Range by Employer\n(SAR1222 to 3222)",
     "save_as_draft": "Save as Draft",
-    "no_result_found": "No Result Found !"
+    "no_result_found": "No Result Found !",
+    "selection_canceled": "File selection canceled",
+    "are_you_sure_to_delete": "Are you sure to delete?",
+    "delete": "Delete",
+    "any_category": "Any Category",
+    "any_gender": "Any Gender"
+
+
 
 
     

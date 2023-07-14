@@ -156,7 +156,7 @@ console.log(code)
       }}
       validationSchema={yup.object().shape({
         email: yup.string().email('Must be a valid email'),
-        phone: yup.string().max(12).required().label('Phone'),
+        phone: yup.string().max(14).required().label('Phone'),
         // regional_code: yup.string().min(2).required().label('code'),
       })}>
       {({

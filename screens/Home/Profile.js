@@ -32,8 +32,7 @@ import { ActivityIndicator } from 'react-native';
 function Profile({navigation}) {
 
   const store = useContext(StoreContext);
-  // console.log(store.myProfile?.user[0]);
-  const [update, setUpdate] = useState(false);
+
 
   const BorderView = ({children}) => {
     return (
@@ -106,8 +105,7 @@ function Profile({navigation}) {
               store.myProfileApiLoader === false &&
               store.myProfile?.user[0].general_information?.first_name +
                 '' +
-                (store.myProfile?.user[0]?.general_information?.last_name !==
-                null
+                (store.myProfile?.user[0]?.general_information?.last_name !== null
                   ? store.myProfile?.user[0]?.general_information?.last_name
                   : '')
             }
@@ -517,7 +515,7 @@ function Profile({navigation}) {
                   {store.myProfile?.user?.map((item, index) => (
                     <View key={index}>
                      
-                      {item.social_links?.facebook_url&& (
+                      {item.social_links?.facebook_url!==null&& (
                         <Pressable onPress={()=>{
                           Linking.openURL(item.social_links?.facebook_url)
                             .catch((error) => console.error('Error opening URL:', error));
@@ -545,7 +543,7 @@ function Profile({navigation}) {
                         </Pressable>
                       )}
 
-                      {item.social_links?.twitter_url && (
+                      {item.social_links?.twitter_url !==null && (
                         <Pressable onPress={()=>{
                           Linking.openURL(item.social_links?.twitter_url)
                             .catch((error) => console.error('Error opening URL:', error));
@@ -572,7 +570,7 @@ function Profile({navigation}) {
                         </Pressable>
                       )}
 
-                      {item.social_links?.linkedin_url && (
+                      {item.social_links?.linkedin_url !==null && (
                         <Pressable onPress={()=>{
                           Linking.openURL(item.social_links?.linkedin_url)
                             .catch((error) => console.error('Error opening URL:', error));

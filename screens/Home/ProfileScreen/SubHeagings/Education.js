@@ -25,10 +25,12 @@ export default function Education({
   refRBSheet,
   loader,
   _deleteEducation,
+  selectedEdu,
+  setSelectedEdu,
 }) {
   const store = useContext(StoreContext);
 
-
+  // {console.log(store?.myProfile?.dataEnglish?.countries[])}
   return (
     <Observer>
       {() => (
@@ -52,6 +54,7 @@ export default function Education({
             <AntDesign
               onPress={() => {
                 setSelected(1);
+                setSelectedEdu(null);
                 refRBSheet?.current?.open();
               }}
               color={colors.black[0]}
@@ -85,9 +88,26 @@ export default function Education({
                 }}>{item.degree_level&&
                   <JText fontWeight='bold'>{store.lang.id==0?item.degree_level?.name:item.degree_level?.arabic_title}</JText>}
                 <JRow style={{justifyContent: 'space-between'}}>
-                  
+                 
                   <JText fontWeight='bold'>{item.degree_title}</JText>
                   <TouchableOpacity
+                  onPress={()=>{
+                    setSelectedEdu({
+                      degree_level: store.lang.id==0?item?.degree_level?.name:item?.degree_level?.arabic_title,
+                      degree_level_id:item?.degree_level_id,
+                      title:item?.degree_title,
+                      institute:item?.institute,
+                      year:item?.year,
+                      description:item?.description, 
+                      result:item?.result, 
+                      state_id:item?.state_id, 
+                      city_id:item?.city_id, 
+                      // country:store.lang.id==0?store?.myProfile?.dataEnglish?.countries[item?.country_id]:store?.myProfile?.dataArabic?.countries[item?.country_id],
+                      country_id:item?.country_id,
+                    })
+                    setSelected(1);
+                refRBSheet?.current?.open();
+                  }}
                     style={{
                       justifyContent: 'center',
                       alignItems: 'center',
@@ -103,12 +123,15 @@ export default function Education({
                 </JRow>
                 <JText style={{marginTop: RFPercentage(0.5)}}>(BAS)</JText>
                 <JText style={{marginTop: RFPercentage(0.5)}}>
-                  {item.institute}
+                  {item?.institute}
                 </JText>
                 <JText style={{marginTop: RFPercentage(0.5)}}>
-                  {item.year} |{' '}
-                  {store?.myProfile?.data?.countries[item.country_id]}
+                  {item?.year} |{' '}
+                  {store.lang.id==0?store?.myProfile?.dataEnglish?.countries[item?.country_id]:store?.myProfile?.dataArabic?.countries[item?.country_id]}
+                  
+
                 </JText>
+                
                 {/* <JRow style={{justifyContent: 'space-between'}}>
                   <JText fontColor={colors.black[0]}>{item.institute}</JText> */}
                   <TouchableOpacity

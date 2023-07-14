@@ -3,7 +3,7 @@ export const JToast = ({
   type = 'success',
   text1,
   text2,
-  visibilityTime = 900,
+  visibilityTime = 1500,
 }) => {
   Toast.show({
     type: type,

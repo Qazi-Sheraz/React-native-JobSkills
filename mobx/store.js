@@ -130,10 +130,12 @@ export const StoreProvider = props => {
     //userInfo
     userInfo: {},
     setUserInfo: action(e => (store.userInfo = e)),
+    setUserAvatar: action(e => (store.userInfo.avatar = e)),
 
     //ALL JOBS
     jobData: {},
     setJobData: action(e => (store.jobData = e)),
+    setJob: action(e => (store.jobData.jobs = e)),
     jobApiLoader: true,
     setJobApiLoader: action(e => (store.jobApiLoader = e)),
     jobApiError: false,
@@ -180,6 +182,14 @@ export const StoreProvider = props => {
     setPdfApiLoader: action(e => (store.pdfApiLoader = e)),
     pdfApiError: false,
     setPdfApiError: action(e => (store.pdfApiError = e)),
+
+    // Country city state
+    country: '',
+    setCountry: action(e => (store.country = e)),
+    countryApiLoader: true,
+    setCountryApiLoader: action(e => (store.countryApiLoader = e)),
+    countryApiError: false,
+    setCountryApiError: action(e => (store.countryApiError = e)),
 
     // Update State
     update: true,

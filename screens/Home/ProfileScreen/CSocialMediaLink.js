@@ -33,9 +33,9 @@ function CSocialMediaLink({refRBSheet, data, user}) {
   return (
     <Formik
       initialValues={{
-        facebook_url: params?.fb,
-        linkedin_url: params?.ln,
-        twitter_url: params?.tw,
+        facebook_url: params?.fb!==null?params?.fb:'',
+        linkedin_url: params?.ln!==null?params?.ln:'',
+        twitter_url: params?.tw!==null?params?.tw:'',
       }}
       onSubmit={values => {
         // console.log(values);

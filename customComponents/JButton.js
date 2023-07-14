@@ -18,6 +18,7 @@ export default function  JButton({
   onPress,
   isValid,
   ref,
+  disabled=false
 }) {
   return isValid !== undefined && isValid === false? (
     <View
@@ -43,6 +44,7 @@ export default function  JButton({
     </View>
   ) : (
     <TouchableOpacity
+    disabled={disabled}
       ref={ref}
       onPress={onPress}
       style={[

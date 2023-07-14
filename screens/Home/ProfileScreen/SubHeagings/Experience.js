@@ -18,6 +18,7 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import {Observer} from 'mobx-react';
 import {useContext} from 'react';
 import {StoreContext} from '../../../../mobx/store';
+import { types } from 'react-native-document-picker';
 
 export default function Experience({
 
@@ -26,7 +27,11 @@ export default function Experience({
   experience,
   loader,
   _deleteExperience,
+  selectedExperience,
+  setSelectedExperience,
+ 
 }) {
+  // console.log(store?.myProfile?.data?.countries[experience?.country_id])
   const store =useContext(StoreContext);
   return (
     <Observer>
@@ -51,6 +56,7 @@ export default function Experience({
             <AntDesign
               onPress={() => {
                 setSelected(0);
+                setSelectedExperience(null);
                 refRBSheet?.current?.open();
               }}
               color={colors.black[0]}
@@ -83,9 +89,14 @@ export default function Experience({
                 }}>
                 <JRow style={{justifyContent: 'space-between'}}>
                   <JText fontWeight='bold'>{item?.experience_title}</JText>
+                  
                   <TouchableOpacity
                     onPress={() => {
-                      // console.log(item)
+                      setSelected(0);
+                      
+                      setSelectedExperience({title:item?.experience_title,company:item?.company,start:moment(item?.start_date).format('DD MMM, YYYY'),end:moment(item?.end_date).format('DD MMM, YYYY'),description:item?.description, country_id:item?.country_id,state_id:item?.state_id, 
+                      city_id:item?.city_id, })
+                      refRBSheet?.current?.open({type:1});
                     }}
                     style={{
                       justifyContent: 'center',
@@ -107,7 +118,7 @@ export default function Experience({
                   {moment(item?.start_date).format('DD')}th{' '}
                   {moment(item?.start_date).format('MMM, YYYY')} -{' '}
                   {moment(item?.end_date).format('DD')}th{' '}
-                  {moment(item?.end_date).format('MMM, YYYY')} | {store.lang.pakistan}
+                  {moment(item?.end_date).format('MMM, YYYY')} | {store.lang.id==0?store?.myProfile?.dataEnglish?.countries[item?.country_id]:store?.myProfile?.dataArabic?.countries[item?.country_id]}
                 </JText>
                 <JText style={{marginTop: RFPercentage(0.5)}}>
                   {item?.description}

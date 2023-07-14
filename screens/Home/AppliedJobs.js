@@ -33,7 +33,7 @@ function AppliedJobs({navigation}) {
     }, 2000);
   }, []);
 
-  // console.log(store.appliedJobList.appliedJob);
+  console.log(store.appliedJobList?.statusArray);
 
   return (
     <JScreen
@@ -115,8 +115,8 @@ function AppliedJobs({navigation}) {
                   store.appliedJobSelect !== store.lang.all
                 ? store.appliedJobList?.appliedJob?.filter(
                     e =>
-                      e.application_status.toLowerCase() ===
-                      store.appliedJobSelect.toLowerCase(),
+                      e?.application_status?.toLowerCase() ===
+                      store?.appliedJobSelect?.toLowerCase(),
                   )
                 : store.appliedJobList?.appliedJob
             }
@@ -139,7 +139,7 @@ function AppliedJobs({navigation}) {
                 status={item.status_id}
               />
             )}
-            keyExtractor={(data, index) => index}
+            keyExtractor={(index) => index}
           />
         </React.Fragment>
       )}

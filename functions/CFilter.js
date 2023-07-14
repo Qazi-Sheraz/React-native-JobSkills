@@ -34,6 +34,7 @@ export const _search = (e, store,isSearch) => {
         //   type: 'error',
         //   text1: store.lang.no_result_found,
         // });
+        // store.setFilterData('')
         store.setFilterDataApiLoader(false);
       } else {
         if(isSearch){
@@ -86,11 +87,14 @@ export const _searchFilter = (values, store, navigation) => {
       // console.log(result.data);
 
       if (result.data?.length < 1) {
+        
         JToast({
           type: 'error',
           text1: store.lang.no_result_found,
         });
+        
       } else {
+        
         store.setFilterData(result.data);
         
       }

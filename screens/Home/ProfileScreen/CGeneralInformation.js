@@ -301,7 +301,7 @@ const{params}=useRoute();
                 containerStyle={{marginTop: RFPercentage(2)}}
                 value={values.state?.name}
                 id={values.country?.id}
-                setValue={e => setFieldValue('state', e)}
+                setValue={e => {setFieldValue('state', e);setFieldValue('city', null);}}
                 header={store.lang.state}
                 heading={`${store.lang.state}:`}
                 error={touched.state && errors.state && true}

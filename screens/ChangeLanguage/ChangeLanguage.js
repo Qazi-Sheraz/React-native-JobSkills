@@ -18,6 +18,7 @@ import { observer } from 'mobx-react';
 import url from '../../config/url';
 import Toast from 'react-native-toast-message';
 import RNRestart from 'react-native-restart';
+import { JToast } from '../../functions/Toast';
 
 const ChangeLanguage = () => {
   const navigation=useNavigation();
@@ -47,14 +48,16 @@ const ChangeLanguage = () => {
       .then(response => response.json())
       .then(result => {
         if(result.success== true){
-          Toast.show({
+
+          JToast({
             type: 'success',
             text1: result.message,
           });
+        
             RNRestart.restart()
         }
         else{
-          Toast.show({
+          JToast({
             type: 'error',
             text1: result.message,
           });

@@ -14,6 +14,7 @@ import {
   _getFavouriteJobData,
   _getFilterList,
   _getHomeData,
+  _country,
 } from '../../functions/Candidate/BottomTab';
 
 import ProfileScreen from './ProfileScreen';
@@ -28,6 +29,7 @@ export default function CBottomTab() {
     _getHomeData(store);
     _getAppliedJobData(store);
     _getFollowingCompanyData(store);
+    _country(store);
 
     return () => {
       // getFavouriteJobList();

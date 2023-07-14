@@ -98,6 +98,7 @@
     "applied":"لاگو",
     "rejected":"مسترد",
     "selected":"منتخب شدہ",
+    "select":"منتخب کریں",
     "shortlisted":"شارٹ لسٹ کیا گیا",
     "interview_scheduled":"انٹرویو کا شیڈول",
     "invitation_Sent":"دعوت نامہ بھیجا گیا",
@@ -348,7 +349,13 @@
     "select_an_option": "ایک آپشن منتخب کریں",
     "expected_salary_range": "متوقع تنخواہ؟ آجر کی طرف سے تجویز کردہ رینج\n(SAR1222 سے 3222)",
     "save_as_draft": "ڈرافٹ کے طور پر محفوظ کریں",
-    "no_result_found": "کوئی نتیجہ نہیں ملا!"
+    "no_result_found": "کوئی نتیجہ نہیں ملا!",
+    "selection_canceled": "فائل کا انتخاب منسوخ کر دیا گیا",
+    "are_you_sure_to_delete": "کیا آپ واقعی حذف کرنا چاہتے ہیں؟",
+    "delete": "حذف کریں  ",
+    "any_category": "کوئی بھی زمرہ",
+    "any_gender": "کوئی بھی جنس"
+
 
 
 

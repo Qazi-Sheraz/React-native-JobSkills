@@ -103,7 +103,7 @@ useEffect(() => {
             setSearch(e);
             if(search?.length < 1 )
             {store.setFilterData('')
-              _search(e, store);}
+              }
             else{
             _search(e, store);
           }

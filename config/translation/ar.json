@@ -99,6 +99,7 @@
     "applied":"مُطبَّق",
     "rejected":"مرفوض",
     "selected":"المحدد",
+    "select":"يختار",
     "shortlisted":"القائمة المختصرة",
     "interview_scheduled":"مقابلة مجدولة",
     "invitation_Sent":"دعوة التي وجهت",
@@ -349,7 +350,13 @@
     "select_an_option": "حدد اختيارا",
     "expected_salary_range": "الراتب المتوقع؟ النطاق المقترح من قبل صاحب العمل\n(ريال سعودي من 1222 إلى 3222)",
     "save_as_draft": "حفظ كمسودة",
-    "no_result_found": "لم يتم العثور على نتائج !"
+    "no_result_found": "لم يتم العثور على نتائج !",
+    "selection_canceled": "تم إلغاء اختيار الملف",
+    "are_you_sure_to_delete": "هل انت متأكد من الحذف؟",
+    "delete": "يمسح",
+    "any_category": "أي فئة",
+    "any_gender": "أي جنس"
+
 
 
 

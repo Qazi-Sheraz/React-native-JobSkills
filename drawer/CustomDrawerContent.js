@@ -28,6 +28,7 @@ import JRow from '../customComponents/JRow';
 function CustomDrawerContent(props) {
   const store = useContext(StoreContext);
   const user = store.token?.user;
+  // console.log(store.userInfo.avatar)
   const _navigateToScreen = index => {
     props.navigation.closeDrawer();
     index === 0
