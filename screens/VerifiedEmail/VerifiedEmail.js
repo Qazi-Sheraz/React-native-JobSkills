@@ -46,7 +46,7 @@ const VerifiedEmail = ({route, navigation}) => {
     var formdata = new FormData();
     formdata.append('email', params?.email);
     formdata.append("code", `${value.d1}${value.d2}${value.d3}${value.d4}`);
-    console.log(formdata);
+    // console.log(formdata);
     var requestOptions = {
       method: 'POST',
       body: formdata,
@@ -58,7 +58,7 @@ const VerifiedEmail = ({route, navigation}) => {
     fetch(`${url.baseUrl}/forget-password-verification`, requestOptions)
       .then(response => response.json())
       .then(result => {
-        console.log('Result===>', result);
+        // console.log('Result===>', result);
 
         if (result.success == true) {
          Toast.show({
@@ -88,7 +88,7 @@ const VerifiedEmail = ({route, navigation}) => {
   const _forgetPassword = values => {
     var formdata = new FormData();
     formdata.append('email', params?.email);
-    console.log(formdata);
+    // console.log(formdata);
     var requestOptions = {
       method: 'POST',
       body: formdata,
@@ -100,7 +100,7 @@ const VerifiedEmail = ({route, navigation}) => {
     fetch(`${url.baseUrl}/forget-password`, requestOptions)
       .then(response => response.json())
       .then(result => {
-        console.log('Result===>', result);
+        // console.log('Result===>', result);
 
         if (result.success == true) {
          Toast.show({

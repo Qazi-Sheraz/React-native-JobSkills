@@ -33,7 +33,7 @@ function AppliedJobs({navigation}) {
     }, 2000);
   }, []);
 
-  console.log(store.appliedJobList?.statusArray);
+  // console.log(store.appliedJobList?.statusArray);
 
   return (
     <JScreen

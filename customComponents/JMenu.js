@@ -22,19 +22,20 @@ const store =useContext(StoreContext);
 const [option,setOption]=useState(false);
 const [items,setItems]=useState(null);
 const [selectedItems, setSelectedItems] = useState([]);
-// console.log(filter)
+
+
+
 
   return (
     <>
-    <Pressable
+    <JRow
+    disabled={false}
     onPress={() => {
         setOption(!option) 
     }}
     style={[
       styles.menuV,
-      {
-        flexDirection: store.lang.id === 0 ? 'row' : 'row-reverse',
-      },
+     
     ]}>
     <JText
       fontSize={RFPercentage(2)}
@@ -49,7 +50,7 @@ const [selectedItems, setSelectedItems] = useState([]);
       color={'#00000090'}
       size={RFPercentage(4)}
     />
-  </Pressable>
+  </JRow>
   {option === true && 
       <View
       style={{
@@ -91,12 +92,12 @@ const [selectedItems, setSelectedItems] = useState([]);
             
           </JRow>
         ):
-        <Pressable
+        <JRow
+        disabled={false}
         //   key={index}
           style={{
             padding: 10,
             justifyContent: 'space-between',
-            flexDirection: store.lang.id === 0 ? 'row' : 'row-reverse',
             
           }}
           onPress={() => {
@@ -111,7 +112,7 @@ const [selectedItems, setSelectedItems] = useState([]);
             {item}
             
           </JText>
-        </Pressable>
+        </JRow>
       ))}
        {filter1&&
       filter1.map((item, index) => (
@@ -135,48 +136,6 @@ const [selectedItems, setSelectedItems] = useState([]);
           </JText>
         </Pressable>
       ))}
-       {/* {filter2&&
-      Object.values(filter2).map((item, index) => (
-        <Pressable
-          key={index}
-          style={{
-            padding: 10,
-            justifyContent: 'space-between',
-            flexDirection: store.lang.id === 0 ? 'row' : 'row-reverse',
-            
-          }}
-          onPress={() => {
-           setItems(item)
-        //    setOption(!option)
-        //    _search();
-          }}>
-          <JText fontSize={RFPercentage(2) }style={{width:'100%'}}>
-            {item}
-          </JText>
-        </Pressable>
-      ))} */}
-        {/* {filter3&&
-     Object.values(filter3).map((item, index) => (
-        <Pressable
-          key={index}
-          style={{
-            padding: 10,
-            justifyContent: 'space-between',
-            flexDirection: store.lang.id === 0 ? 'row' : 'row-reverse',
-            
-          }}
-          onPress={() => {
-           setItems(item)
-        //    setOption(!option)
-
-        //    _search(items);
-
-          }}>
-          <JText fontSize={RFPercentage(2) }style={{width:'100%'}}>
-            {item}
-          </JText>
-        </Pressable>
-      ))} */}
     </View>
 }</>
   )
@@ -188,8 +147,6 @@ const styles = StyleSheet.create({menuV:{
     height: RFPercentage(7),
     marginVertical: RFPercentage(1),
     justifyContent: 'space-between',
-    flexDirection: 'row',
-    alignItems: 'center',
     borderRadius: RFPercentage(1),
     backgroundColor: colors.searchBackground[0],
     

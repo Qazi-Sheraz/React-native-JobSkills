@@ -23,7 +23,7 @@ const ResetLoginPassword = () => {
     const store = useContext(StoreContext);
     const [loader,setLoader]=useState();
     const {params}=useRoute();
-    console.log(params);
+    // console.log(params);
     const type = params?.type;
 
     const _resetPass = values => {
@@ -31,7 +31,7 @@ const ResetLoginPassword = () => {
         formdata.append("email", params?.email);
         formdata.append('password', values.password);
     formdata.append('confirm_password', values.password_confirmation);
-        console.log(formdata);
+        // console.log(formdata);
         var requestOptions = {
           method: 'POST',
           body: formdata,
@@ -43,7 +43,7 @@ const ResetLoginPassword = () => {
         fetch(`${url.baseUrl}/password-reset`, requestOptions)
           .then(response => response.json())
           .then(result => {
-            console.log('Result===>', result);
+            // console.log('Result===>', result);
  
             if (result.success == true) {
              Toast.show({

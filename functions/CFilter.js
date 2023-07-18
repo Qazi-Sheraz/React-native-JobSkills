@@ -84,9 +84,10 @@ export const _searchFilter = (values, store, navigation) => {
   fetch('https://dev.jobskills.digital/api/search-jobs', requestOptions)
     .then(response => response.json())
     .then(result => {
-      // console.log(result.data);
+      console.log(result);
 
-      if (result.data?.length < 1) {
+      // if (result.data?.length < 1) {
+      if (result.count==0) {
         
         JToast({
           type: 'error',

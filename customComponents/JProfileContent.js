@@ -46,7 +46,7 @@ export default function JProfileContent({src, name, email, jd}) {
     )
       .then(response => response.json())
       .then(result => {
-        console.log(res[0])
+        // console.log(res[0])
         setSingleFile(res[0]);
         _getProfile(store);
         // store.setUserAvatar({

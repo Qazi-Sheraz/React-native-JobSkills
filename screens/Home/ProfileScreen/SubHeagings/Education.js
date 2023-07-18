@@ -100,10 +100,19 @@ export default function Education({
                       year:item?.year,
                       description:item?.description, 
                       result:item?.result, 
-                      state_id:item?.state_id, 
-                      city_id:item?.city_id, 
-                      // country:store.lang.id==0?store?.myProfile?.dataEnglish?.countries[item?.country_id]:store?.myProfile?.dataArabic?.countries[item?.country_id],
-                      country_id:item?.country_id,
+                      country_id: item?.country_id,
+                        country:
+                        store.lang.id == 0
+                          ?item?.country?.name
+                          :item?.country?.arabic_title,
+                        state_id: item?.state_id,
+                        state:store.lang.id == 0
+                        ?item?.state?.name
+                        :item?.state?.arabic_title,
+                        city_id: item?.city_id,
+                        city:store.lang.id == 0
+                        ?item?.city?.name
+                        :item?.city?.arabic_title,
                     })
                     setSelected(1);
                 refRBSheet?.current?.open();

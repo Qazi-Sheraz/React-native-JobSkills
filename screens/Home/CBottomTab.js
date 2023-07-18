@@ -10,16 +10,15 @@ import CustomCandidateBottomTab from '../../bottomTab/CustomCandidateBottomTab';
 import {StoreContext} from '../../mobx/store';
 
 import {
+  _country,
   _getAppliedJobData,
   _getFavouriteJobData,
   _getFilterList,
   _getHomeData,
-  _country,
 } from '../../functions/Candidate/BottomTab';
 
 import ProfileScreen from './ProfileScreen';
 import {_getFollowingCompanyData} from '../../functions/Candidate/DFollowing';
-import { RFPercentage } from 'react-native-responsive-fontsize';
 export default function CBottomTab() {
   const Tab = createBottomTabNavigator();
   const store = useContext(StoreContext);
@@ -29,7 +28,7 @@ export default function CBottomTab() {
     _getHomeData(store);
     _getAppliedJobData(store);
     _getFollowingCompanyData(store);
-    _country(store);
+    // _country(store);
 
     return () => {
       // getFavouriteJobList();

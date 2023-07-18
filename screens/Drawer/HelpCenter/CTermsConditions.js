@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Linking, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React, { useContext } from 'react'
 import JText from '../../../customComponents/JText'
 import { RFPercentage } from 'react-native-responsive-fontsize'
@@ -11,144 +11,37 @@ const CTermsConditions = () => {
     <ScrollView
             showsVerticalScrollIndicator={false}
             style={{margin: RFPercentage(2)}}>
-            <JText style={styles.header}>Terms and Conditions</JText>
-            <JText style={styles.pgText}>Welcome to jobskills.digital!</JText>
+            <JText style={styles.header}>{store.lang.terms_and_conditions}</JText>
+            <JText style={styles.pgText}>{store.lang.welcome_to_jobskills_digital}</JText>
             <JText style={styles.pgText}>
-              These terms and conditions outline the rules and regulations for
-              the use of JobSkills's Website, located at
-              https://www.jobskills.digital.{'\n'}
-              {'\n'}
-              By accessing this website we assume you accept these terms and
-              conditions. Do not continue to use jobskills.digital if you do not
-              agree to take all of the terms and conditions stated on this page.
-              {'\n'}
-              {'\n'}
-              The following terminology applies to these Terms and Conditions,
-              Privacy Statement and Disclaimer Notice and all Agreements:
-              "Client", "You" and "Your" refers to you, the person log on this
-              website and compliant to the Company’s terms and conditions. "The
-              Company", "Ourselves", "We", "Our" and "Us", refers to our
-              Company. "Party", "Parties", or "Us", refers to both the Client
-              and ourselves. All terms refer to the offer, acceptance and
-              consideration of payment necessary to undertake the process of our
-              assistance to the Client in the most appropriate manner for the
-              express purpose of meeting the Client’s needs in respect of
-              provision of the Company’s stated services, in accordance with and
-              subject to, prevailing law of Netherlands. Any use of the above
-              terminology or other words in the singular, plural, capitalization
-              and/or he/she or they, are taken as interchangeable and therefore
-              as referring to same.
+              {store.lang.these_terms_and_conditions_outline}</JText>
+              <JText onPress={() => {
+                  Linking.openURL('https://www.jobskills.digital');
+                }}
+                style={[styles.headingText,{textDecorationLine: 'underline',color:'skyblue',marginTop: RFPercentage(0),}]}>https://www.jobskills.digital.</JText>
+                <JText style={styles.pgText}>
+              {store.lang.by_accessing_this_website}
             </JText>
-            <JText style={styles.headingText}>Cookies</JText>
+            <JText style={styles.headingText}>{store.lang.cookies}</JText>
+            <JText style={styles.pgText}>{store.lang.employ_the_use_of_cookies} </JText>
+            <JText style={styles.headingText}>{store.lang.license}</JText>
             <JText style={styles.pgText}>
-              We employ the use of cookies. By accessing jobskills.digital, you
-              agreed to use cookies in agreement with the JobSkills's Privacy
-              Policy.{'\n'}
-              {'\n'}
-              Most interactive websites use cookies to let us retrieve the
-              user’s details for each visit. Cookies are used by our website to
-              enable the functionality of certain areas to make it easier for
-              people visiting our website. Some of our affiliate/advertising
-              partners may also use cookies.
+              {store.lang.unless_otherwise_stated}
             </JText>
-            <JText style={styles.headingText}>License</JText>
-            <JText style={styles.pgText}>
-              Unless otherwise stated, JobSkills and/or its licensors own the
-              intellectual property rights for all material on
-              jobskills.digital. All intellectual property rights are reserved.
-              You may access this from jobskills.digital for your own personal
-              use subjected to restrictions set in these terms and conditions.
-            </JText>
-            <JText style={styles.headingText1}>You must not:</JText>
-            <JText style={styles.pgText1}>
-              Republish material from jobskills.digital{'\n'}
-              Sell, rent or sub-license material from jobskills.digital{'\n'}
-              Reproduce, duplicate or copy material from jobskills.digital{'\n'}
-              Redistribute content from jobskills.digital
-            </JText>
-            <JText style={styles.pgText}>
-              This Agreement shall begin on the date hereof. Our Terms and
-              Conditions were created with the help of the Free Terms and
-              Conditions Generator.{'\n'}
-              {'\n'}
-              Parts of this website offer an opportunity for users to post and
-              exchange opinions and information in certain areas of the website.
-              JobSkills does not filter, edit, publish or review Comments prior
-              to their presence on the website. Comments do not reflect the
-              views and opinions of JobSkills,its agents and/or affiliates.
-              Comments reflect the views and opinions of the person who post
-              their views and opinions. To the extent permitted by applicable
-              laws, JobSkills shall not be liable for the Comments or for any
-              liability, damages or expenses caused and/or suffered as a result
-              of any use of and/or posting of and/or appearance of the Comments
-              on this website.{'\n'}
-              {'\n'}
-              JobSkills reserves the right to monitor all Comments and to remove
-              any Comments which can be considered inappropriate, offensive or
-              causes breach of these Terms and Conditions.
-            </JText>
+            <JText style={styles.headingText1}>{store.lang.you_must_not}</JText>
+            <JText style={styles.pgText1}>{store.lang.republish_material}</JText>
+            <JText style={styles.pgText}>{store.lang.this_agreement_shall_begin_on_the_date_hereof}</JText>
+            <JText style={styles.headingText1}>{store.lang.you_warrant_and_represent_that}</JText>
+            <JText style={styles.pgText1}>{store.lang.you_are_entitled_to_post_the_comments}</JText>
+            <JText style={styles.pgText}>{store.lang.you_hereby_grant_jobSkills}</JText>
+            <JText style={styles.headingText}>{store.lang.hyperlinking_to_our_content}</JText>
+            <JText style={styles.headingText1}>{store.lang.the_following_organizations}</JText>
+            <JText style={styles.pgText1}>{store.lang.government_agencies}</JText>
+            <JText style={styles.pgText}>{store.lang.these_organizations_may_link_to_our_home_page} </JText>
             <JText style={styles.headingText1}>
-              You warrant and represent that:
+              {store.lang.we_may_consider_and_approve}
             </JText>
-            <JText style={styles.pgText1}>
-              You are entitled to post the Comments on our website and have all
-              necessary licenses and consents to do so;{'\n'}
-              {'\n'}
-              The Comments do not invade any intellectual property right,
-              including without limitation copyright, patent or trademark of any
-              third party;{'\n'}
-              {'\n'}
-              The Comments do not contain any defamatory, libelous, offensive,
-              indecent or otherwise unlawful material which is an invasion of
-              privacy{'\n'}
-              {'\n'}
-              The Comments will not be used to solicit or promote business or
-              custom or present commercial activities or unlawful activity.
-            </JText>
-            <JText style={styles.pgText}>
-              You hereby grant JobSkills a non-exclusive license to use,
-              reproduce, edit and authorize others to use, reproduce and edit
-              any of your Comments in any and all forms, formats or media.
-            </JText>
-            <JText style={styles.headingText}>
-              Hyperlinking to our Content
-            </JText>
-            <JText style={styles.headingText1}>
-              The following organizations may link to our Website without prior
-              written approval:
-            </JText>
-            <JText style={styles.pgText1}>
-              Government agencies;{'\n'}
-              Search engines;{'\n'}
-              News organizations;{'\n'}
-              Online directory distributors may link to our Website in the same
-              manner as they hyperlink to the Websites of other listed
-              businesses; and{'\n'}
-              System wide Accredited Businesses except soliciting non-profit
-              organizations, charity shopping malls, and charity fundraising
-              groups which may not hyperlink to our Web site.
-            </JText>
-            <JText style={styles.pgText}>
-              These organizations may link to our home page, to publications or
-              to other Website information so long as the link: (a) is not in
-              any way deceptive; (b) does not falsely imply sponsorship,
-              endorsement or approval of the linking party and its products
-              and/or services; and (c) fits within the context of the linking
-              party’s site.
-            </JText>
-            <JText style={styles.headingText1}>
-              We may consider and approve other link requests from the following
-              types of organizations:
-            </JText>
-            <JText style={styles.pgText1}>
-              commonly-known consumer and/or business information sources;{'\n'}
-              dot.com community sites;{'\n'}
-              associations or other groups representing charities;{'\n'}
-              online directory distributors;{'\n'}
-              internet portals;{'\n'}
-              accounting, law and consulting firms; and{'\n'}
-              educational institutions and trade associations.
-            </JText>
+            <JText style={styles.pgText1}>{store.lang.commonly_known_consumer} </JText>
 
             <JText style={styles.pgText}>
               We will approve link requests from these organizations if we
@@ -272,7 +165,7 @@ const styles = StyleSheet.create({
   fontWeight: 'bold',
   fontSize: RFPercentage(2),
   marginTop: RFPercentage(1),
-  textAlign:'justify'
+  // textAlign:'justify'
 },
 headingText1: {
   fontWeight: '600',
@@ -282,10 +175,10 @@ headingText1: {
 pgText: {
   marginVertical: RFPercentage(1),
   fontSize: RFPercentage(1.9),
-  textAlign:'justify',
+  // textAlign:'justify',
 },
 pgText1: {
   marginVertical: RFPercentage(1),
   fontSize: RFPercentage(1.7),
-  textAlign:'justify'
+  // textAlign:'justify'
 },})

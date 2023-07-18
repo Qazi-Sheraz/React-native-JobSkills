@@ -34,7 +34,7 @@ function EContactInformation({refRBSheet, data, user}) {
   const phoneInput = useRef(null);
   const {params} = useRoute();
 // console.log('jkkkkk',params)
-  const _country = values => {
+  const _getcountry = values => {
     var myHeaders = new Headers();
     myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
    
@@ -104,7 +104,7 @@ function EContactInformation({refRBSheet, data, user}) {
       );
   };
 useEffect(() => {
-  _country();
+  _getcountry();
 }, []);
   // console.log('Found value:', store.jobCreate);
   return (

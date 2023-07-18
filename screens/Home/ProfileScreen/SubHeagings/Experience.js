@@ -94,8 +94,26 @@ export default function Experience({
                     onPress={() => {
                       setSelected(0);
                       
-                      setSelectedExperience({title:item?.experience_title,company:item?.company,start:moment(item?.start_date).format('DD MMM, YYYY'),end:moment(item?.end_date).format('DD MMM, YYYY'),description:item?.description, country_id:item?.country_id,state_id:item?.state_id, 
-                      city_id:item?.city_id, })
+                      setSelectedExperience({
+                        title: item?.experience_title,
+                        company: item?.company,
+                        start: moment(item?.start_date).format('DD MMM, YYYY'),
+                        end: moment(item?.end_date).format('DD MMM, YYYY'),
+                        description: item?.description,
+                        country_id: item?.country_id,
+                        country:
+                        store.lang.id == 0
+                          ?item?.country?.name
+                          :item?.country?.arabic_title,
+                        state_id: item?.state_id,
+                        state:store.lang.id == 0
+                        ?item?.state?.name
+                        :item?.state?.arabic_title,
+                        city_id: item?.city_id,
+                        city:store.lang.id == 0
+                        ?item?.city?.name
+                        :item?.city?.arabic_title,
+                      });
                       refRBSheet?.current?.open({type:1});
                     }}
                     style={{

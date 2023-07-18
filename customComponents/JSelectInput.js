@@ -345,7 +345,6 @@ function JSelectInput({
         name: data[key],
       });
     });
-
     setCountry(country);
     setLoader(false);
   };
@@ -382,7 +381,7 @@ function JSelectInput({
       .then(response => response.json())
       .then(result => {
         var myObject = result.state
-// console.log(result.state[0]?.arabic_title)
+console.log(result.state[0]?.arabic_title)
         setState(myObject);
         setLoader(false);
       })
@@ -507,6 +506,7 @@ function JSelectInput({
             // <View style={{paddingBottom:header === store.lang.experience ?RFPercentage(22):RFPercentage(-10)}}>
             <View style={{marginBottom:RFPercentage(22)}}>
             <FlatList
+            
               data={
                 header === store.lang.country
                   ? county.filter(e =>
@@ -633,8 +633,8 @@ function JSelectInput({
               }
               initialNumToRender={16}
               renderItem={({item, index}) => (
-
-                 <TouchableOpacity
+               
+                  <TouchableOpacity
                 
                   onPress={() => {
                     if (isMultiple == true) {

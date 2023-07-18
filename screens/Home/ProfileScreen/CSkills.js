@@ -39,7 +39,7 @@ function CSkills({data}) {
         myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
         var formdata = new FormData();
         formdata.append('candidateSkills', JSON.stringify(values?.skill.map((i)=>i.id).map(Number)));
-       console.log(formdata)
+      //  console.log(formdata)
 
         var requestOptions = {
           method: 'POST',

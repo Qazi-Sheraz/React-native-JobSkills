@@ -35,7 +35,7 @@ function CContactInformation({refRBSheet, user}) {
   const [phone, setPhone] = useState(params?.phone);
   const [code, setCode] = useState(params?.region_code!==null&&params?.region_code);
 // console.log(phone)
-console.log(code)
+// console.log(code)
   const regionalCodeMappings = {
     "93": "AF", // Afghanistan
     "355": "AL", // Albania
@@ -111,7 +111,7 @@ console.log(code)
 
     formdata.append('phone', phone);
     formdata.append('region_code', code==false?'966':code);
-    console.log(formdata)
+    // console.log(formdata)
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,

@@ -45,7 +45,7 @@ function CSocialMediaLink({refRBSheet, data, user}) {
         formdata.append('facebook_url', values?.facebook_url);
         formdata.append('twitter_url', values?.twitter_url);
         formdata.append('linkedin_url', values?.linkedin_url);
-        console.log(formdata)
+        // console.log(formdata)
         var requestOptions = {
           method: 'POST',
           headers: myHeaders,

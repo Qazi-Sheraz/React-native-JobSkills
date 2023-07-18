@@ -205,7 +205,7 @@ const JApplication = ({
     
       .then(response => response.json())
       .then(result => {
-        console.log('result===>', result?.data);
+        // console.log('result===>', result?.data);
         store.setPdf(result?.data) ;        
        })
   

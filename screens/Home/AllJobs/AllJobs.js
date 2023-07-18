@@ -42,7 +42,7 @@ function AllJobs({navigation}) {
   const [loader, setLoader] = useState(true);
   const [error, serError] = useState(false);
 
-   const [value0, setValue0] = useState(0);
+   const [value3, setValue3] = useState(0);
     const [value1, setValue1] = useState(0);
     const [value2, setValue2] = useState(0);
     const [category, setCategory] = useState();
@@ -55,10 +55,12 @@ function AllJobs({navigation}) {
     // console.log(gender)
     // console.log(level)
     // console.log(skills)
-    // console.log(value0)
+    // console.log(value3)
     // console.log(value1)
     // console.log(value2)
   const store = useContext(StoreContext);
+  
+
 
   useEffect(() => {
     _getAllJobData(store);
@@ -72,19 +74,19 @@ function AllJobs({navigation}) {
   }, []);
    
     
-    const handleValueChange = (newValue) => {
-      setValue0(newValue);
-      
-     
-    };
-    const handleValueChange1 = (newValue1) => {
-      
+    const handleValueChange = (newValue1) => {
       setValue1(newValue1);
+      
      
     };
-    const handleValueChange2 = (newValue2) => {
-     
+    const handleValueChange1 = (newValue2) => {
+      
       setValue2(newValue2);
+     
+    };
+    const handleValueChange2 = (newValue3) => {
+     
+      setValue3(newValue3);
 
     };
  
@@ -93,9 +95,9 @@ function AllJobs({navigation}) {
       var myHeaders = new Headers();
       myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
       var formdata = new FormData();
-      formdata.append("title", "com");
-      formdata.append("skill", JSON.stringify(skills?.map(Number)));
-      formdata.append("categories", category);
+      // formdata.append("title", '');
+      formdata.append("skill", skills!==null?JSON.stringify(skills?.map(Number)):'');
+      formdata.append("categories", category!==null?category:'');
       formdata.append(  'gender',
       gender=== 'Male'
         ? '1'
@@ -104,10 +106,10 @@ function AllJobs({navigation}) {
         : '2',
     );
       formdata.append("career_level", level);
-      formdata.append("salaryFrom", value0.toString());
-      formdata.append("salaryTo", value1?.toString());
-      formdata.append("jobExperience", value2.toString());
-    console.log(formdata)
+      formdata.append("salaryFrom", value1.toString());
+      formdata.append("salaryTo", value2?.toString());
+      formdata.append("jobExperience", value3.toString());
+    // console.log(formdata)
     var requestOptions = {
     method: 'POST',
      headers: myHeaders,
@@ -119,8 +121,8 @@ function AllJobs({navigation}) {
         .then(result => {
           console.log('neww=====>',result.data);
           
-            store.setJob(result.data)
-            setModalVisible(false);
+          store.setJob(result.data)
+          setModalVisible(false);
       
       })
         .catch(error => {
@@ -153,8 +155,7 @@ function AllJobs({navigation}) {
         });
     };
 
-    const data2=store.lang.id=0?filterList?.dataEnglish?.jobSkills:filterList?.dataArabic?.jobSkills;
-    console.log(data2);
+   
 useEffect(() => {
   _jobsfilters();
 }, [])
@@ -249,18 +250,16 @@ useEffect(() => {
         </React.Fragment>
       )}
       <Modal animationType="fade" transparent={true} visible={modalVisible}>
-        <JRow style={styles.container}>
-          <View style={styles.modal}>
-            <ScrollView style={{paddingHorizontal: RFPercentage(2)}}>
+        <SafeAreaView style={styles.container}>
+         
+            <ScrollView style={[styles.modal,{paddingHorizontal: RFPercentage(2)}]}>
               {/* <JText style={styles.heading}>{store.lang.job_skills}</JText> */}
               <JMenu
                 isMulti
                 type={store.lang.job_skills}
-                filter={
-                  store.lang.id = 0
+                filter={store.lang.id == 0
                     ? filterList?.dataEnglish?.jobSkills
-                    : filterList?.dataArabic?.jobSkills
-                }
+                    : filterList?.dataArabic?.jobSkills}
                 values={skills}
                 setvalues={setSkills}
               />
@@ -271,7 +270,8 @@ useEffect(() => {
               <JMenu
                 type={store.lang.any_category}
                 filter={
-                  store.lang.id = 0
+                 
+                  store.lang.id == 0
                     ? filterList?.dataEnglish?.jobCategories
                     : filterList?.dataArabic?.jobCategories
                 }
@@ -283,9 +283,10 @@ useEffect(() => {
               <JMenu
                 type={store.lang.any_gender}
                 filter1={
-                  (store.lang.id = 0
+                  store.lang.id == 0
                     ? filterList?.dataEnglish?.genders
-                    : filterList?.dataArabic?.genders)
+                    : filterList?.dataArabic?.genders
+               
                 }
                 values={gender}
                 setvalues={setGender}
@@ -294,9 +295,12 @@ useEffect(() => {
               <JMenu
                 type={`${store.lang.select} ${store.lang.career_level}`}
                 filter={
-                  store.lang.id = 0
+                  store.lang.id == 0
                     ? filterList?.dataEnglish?.careerLevels
                     : filterList?.dataArabic?.careerLevels}
+                  
+                  //   filterList?.dataArabic?.careerLevels
+                  // }
                 values={level}
                 setvalues={setLevel}
               />
@@ -304,31 +308,10 @@ useEffect(() => {
               <JText style={[styles.heading, {marginTop: RFPercentage(3)}]}>
                 {store.lang.salary_from}
               </JText>
-              <JRow style={styles.showValue}>
+              <View style={styles.showValue}>
                 <JText style={styles.value}>0</JText>
                 <JText style={styles.value}>150,000</JText>
-              </JRow>
-
-              <Slider
-                style={styles.slid}
-                minimumValue={0}
-                maximumValue={150000}
-                thumbStyle={{borderWidth: 2, borderColor: 'black'}}
-                trackStyle={{height: 10}}
-                step={100}
-                value={value0}
-                onValueChange={() => {
-                  handleValueChange;
-                }}
-              />
-              <JText style={{textAlign: 'center'}}>{value0}</JText>
-              <JText style={[styles.heading, {marginTop: RFPercentage(3)}]}>
-                {store.lang.salary_to}
-              </JText>
-              <JRow style={styles.showValue}>
-                <JText style={styles.value}>0</JText>
-                <JText style={styles.value}>150,000</JText>
-              </JRow>
+              </View>
 
               <Slider
                 style={styles.slid}
@@ -338,17 +321,36 @@ useEffect(() => {
                 trackStyle={{height: 10}}
                 step={100}
                 value={value1}
-                onValueChange={() => handleValueChange1}
+                onValueChange={handleValueChange}
               />
               <JText style={{textAlign: 'center'}}>{value1}</JText>
+              <JText style={[styles.heading, {marginTop: RFPercentage(3)}]}>
+                {store.lang.salary_to}
+              </JText>
+              <View style={styles.showValue}>
+                <JText style={styles.value}>0</JText>
+                <JText style={styles.value}>150,000</JText>
+              </View>
+
+              <Slider
+                style={styles.slid}
+                minimumValue={0}
+                maximumValue={150000}
+                thumbStyle={{borderWidth: 2, borderColor: 'black'}}
+                trackStyle={{height: 10}}
+                step={100}
+                value={value2}
+                onValueChange={handleValueChange1}
+              />
+              <JText style={{textAlign: 'center'}}>{value2}</JText>
 
               <JText style={[styles.heading, {marginTop: RFPercentage(3)}]}>
                 {store.lang.experience}
               </JText>
-              <JRow style={styles.showValue}>
+              <View style={styles.showValue}>
                 <JText style={styles.value}>0</JText>
                 <JText style={styles.value}>30</JText>
-              </JRow>
+              </View>
 
               <Slider
                 style={styles.slid}
@@ -357,16 +359,15 @@ useEffect(() => {
                 thumbStyle={{borderWidth: 2, borderColor: 'black'}}
                 trackStyle={{height: 10}}
                 step={1}
-                value={value2}
-                onValueChange={() => handleValueChange2}
+                value={value3}
+                onValueChange={handleValueChange2}
               />
 
               <JText
                 style={{textAlign: 'center', marginBottom: RFPercentage(1)}}>
-                {value2}
+                {value3}
               </JText>
-            </ScrollView>
-            <View style={{width: '100%', paddingBottom: RFPercentage(1)}}>
+              <View style={{width: '100%', paddingBottom: RFPercentage(1)}}>
               <JButton
                 disabled={loader && true}
                 onPress={() => {
@@ -391,12 +392,13 @@ useEffect(() => {
                 children={loader ? store.lang.loading : store.lang.search}
               />
             </View>
-          </View>
+            </ScrollView>
+        
           <Pressable
             style={styles.modal1}
             onPress={() => setModalVisible(false)}
           />
-        </JRow>
+        </SafeAreaView>
       </Modal>
     </JScreen>
   );
@@ -405,58 +407,72 @@ useEffect(() => {
 export default observer(AllJobs);
 
 const styles = StyleSheet.create({
-  container: {flex: 1},
+  container: {flex: 1, flexDirection: 'row'},
   modal: {
+    height: '100%',
+    width: '70%',
+    backgroundColor: '#ffff',
+    marginBottom: RFPercentage(2),
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
 
-  height: '100%',
-  width: '70%',
-  backgroundColor: '#ffff',
-  // alignItems: 'center',
- 
-  marginBottom:RFPercentage(2),
-  shadowColor: '#000',  
-  shadowOffset: {
-    width: 0,
-    height: 2,
+    elevation: 5,
   },
-  shadowOpacity: 0.25,
-  shadowRadius: 3.84,
-
-  elevation: 5,
-},
   modal1: {
-  height: '100%',
-  width: '30%',
-  
-},
-menutxt: {
-  fontSize: RFPercentage(2),
-  marginVertical: RFPercentage(0.5),
-  paddingHorizontal: RFPercentage(1),
-  
-},
-heading:{fontSize:RFPercentage(2.5),fontWeight:' bold',marginVertical: RFPercentage(1),marginTop: RFPercentage(2),},
-text:{fontSize:RFPercentage(2.5)},
-menuV:{
-  height: RFPercentage(7),
-  marginVertical: RFPercentage(1),
-  justifyContent: 'space-between',
-  flexDirection: 'row',
-  alignItems: 'center',
-  borderRadius: RFPercentage(1),
-  backgroundColor: colors.white[0],
- 
-  shadowColor: "#000",
-  shadowOffset: {
-    width: 0,
-    height: 1,
+    height: '100%',
+    width: '30%',
   },
-  shadowOpacity: 0.20,
-  shadowRadius: 1.41,
-  
-  elevation: 2,
-},
-value:{textAlign: 'center',backgroundColor:colors.border[0],paddingHorizontal:RFPercentage(1)},
-slid:{ width: '90%', alignSelf: 'center',backgroundColor:colors.inputBorder[0],height:3 ,marginVertical: RFPercentage(1)},
-showValue:{width:'100%',justifyContent:'space-between',flexDirection: 'row'}
+  menutxt: {
+    fontSize: RFPercentage(2),
+    marginVertical: RFPercentage(0.5),
+    paddingHorizontal: RFPercentage(1),
+  },
+  heading: {
+    fontSize: RFPercentage(2.5),
+    fontWeight: ' bold',
+    marginVertical: RFPercentage(1),
+    marginTop: RFPercentage(2),
+  },
+  text: {fontSize: RFPercentage(2.5)},
+  menuV: {
+    height: RFPercentage(7),
+    marginVertical: RFPercentage(1),
+    justifyContent: 'space-between',
+    // flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: RFPercentage(1),
+    backgroundColor: colors.white[0],
+
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+
+    elevation: 2,
+  },
+  value: {
+    textAlign: 'center',
+    backgroundColor: colors.border[0],
+    paddingHorizontal: RFPercentage(1),
+  },
+  slid: {
+    width: '90%',
+    alignSelf: 'center',
+    backgroundColor: colors.inputBorder[0],
+    height: 3,
+    marginVertical: RFPercentage(1),
+  },
+  showValue: {
+    width: '100%',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+  },
 });

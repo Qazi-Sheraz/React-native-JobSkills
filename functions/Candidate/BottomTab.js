@@ -300,7 +300,7 @@ export const _addnewJob = (store) => {
     });
 };
 
-export const _country = store => {
+export const _country = (store) => {
   var myHeaders = new Headers();
   myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
 
@@ -312,8 +312,7 @@ export const _country = store => {
   fetch(`${url.baseUrl}/country-list`, requestOptions)
     .then(response => response?.json())
     .then(result => {
-      // console.log(result);
-      store.setCountry(result);
+      store.setCountry(result.english?.country);
     })
     .catch(error => {
       store.setCountryApiError(true);

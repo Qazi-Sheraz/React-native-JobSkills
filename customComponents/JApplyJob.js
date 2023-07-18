@@ -70,7 +70,7 @@ const JApplyJob = ({token, jobId, id, setStatus, status}) => {
     fetch(`${url.baseUrl}/apply-job/${jobId}`, requestOptions)
       .then(response => response.json())
       .then(result => {
-        console.log('GET APPLIED JOB STATUS', result);
+        // console.log('GET APPLIED JOB STATUS', result);
         // store.setStatus(result);
         setStatus(result);
         setLoader(false);

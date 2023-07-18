@@ -31,7 +31,7 @@ const ForgetPassword = () => {
     const _forgetPassword = values => {
        var formdata = new FormData();
        formdata.append('email', values?.email);
-       console.log(formdata);
+      //  console.log(formdata);
        var requestOptions = {
          method: 'POST',
          body: formdata,
@@ -43,7 +43,7 @@ const ForgetPassword = () => {
        fetch(`${url.baseUrl}/forget-password`, requestOptions)
          .then(response => response.json())
          .then(result => {
-           console.log('Result===>', result);
+          //  console.log('Result===>', result);
 
            if (result.success == true) {
             Toast.show({

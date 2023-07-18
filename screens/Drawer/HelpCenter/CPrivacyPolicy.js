@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Linking, ScrollView, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import JText from '../../../customComponents/JText';
 import {RFPercentage} from 'react-native-responsive-fontsize';
@@ -26,10 +26,7 @@ const CPrivacyPolicy = () => {
           {store.lang.ptext3}
           <JText
             onPress={() =>
-              Toast.show({
-                type: 'success',
-                text1: 'Link pressed',
-              })
+             Linking.openURL('https://www.jobskills.digital')
             }
             style={styles.pgText}>
             https://www.jobskills.digital{'\n'}
