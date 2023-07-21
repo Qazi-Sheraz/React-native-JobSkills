@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import {StyleSheet, View, TouchableOpacity, Image} from 'react-native';
 import {
@@ -19,14 +20,13 @@ import {StoreContext} from '../mobx/store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
 import {observer, Observer} from 'mobx-react';
-import { getDrawerItem } from '../data/edrawer';
+import {getDrawerItem} from '../data/edrawer';
 import JIcon from '../customComponents/JIcon';
-import { useIsFocused, useNavigation } from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import JRow from '../customComponents/JRow';
-import { useEffect } from 'react';
+import {useEffect} from 'react';
 
-function EDrawerContent (props) {
-  
+function EDrawerContent(props) {
   const {navigate} = useNavigation();
   const store = useContext(StoreContext);
   const user = store.token?.user;
@@ -45,7 +45,7 @@ function EDrawerContent (props) {
       : index === 5
       ? AsyncStorage.removeItem('@login')
           .then(res => {
-            store.setToken({})
+            store.setToken({});
             Toast.show({
               type: 'success',
               text1: store.lang.logout_successfully,
@@ -64,54 +64,56 @@ function EDrawerContent (props) {
   const _navigationIcons = index =>
     index === 0 ? (
       <JIcon
-      icon='io'
+        icon="io"
         color={colors.black[0]}
         name="settings-outline"
         size={RFPercentage(3.5)}
       />
     ) : index === 1 ? (
-        <JIcon
-        icon='fe'
+      <JIcon
+        icon="fe"
         color={colors.black[0]}
         name="users"
         size={RFPercentage(3.5)}
       />
     ) : index === 2 ? (
-        <JIcon
-        icon='ma'
+      <JIcon
+        icon="ma"
         color={colors.black[0]}
         name="bell-ring-outline"
         size={RFPercentage(3.5)}
       />
     ) : index === 3 ? (
-        <JIcon
-        icon='ft' color={colors.black[0]} name="bar-chart" size={RFPercentage(2.4)} />
+      <JIcon
+        icon="ft"
+        color={colors.black[0]}
+        name="bar-chart"
+        size={RFPercentage(2.4)}
+      />
     ) : index === 4 ? (
-        <JIcon
-        icon='fe'
+      <JIcon
+        icon="fe"
         color={colors.black[0]}
         name="help-circle"
         size={RFPercentage(3.5)}
       />
     ) : index === 5 ? (
-        <JIcon
-        icon='mi'
+      <JIcon
+        icon="mi"
         color={colors.black[0]}
         name="logout"
         size={RFPercentage(3.5)}
       />
     ) : (
-        <JIcon
-        icon='fe'
+      <JIcon
+        icon="fe"
         color={colors.black[0]}
         name="help-circle"
         size={RFPercentage(3)}
       />
     );
   return (
-    <DrawerContentScrollView {...props}
-    showsVerticalScrollIndicator={false}>
-
+    <DrawerContentScrollView {...props} showsVerticalScrollIndicator={false}>
       {/* <DrawerItemList {...props} /> */}
       {/* <DrawerItem label="Help" onPress={() => alert('Link to help')} /> */}
       <View style={{height: heightPercentageToDP(100)}}>
@@ -158,7 +160,7 @@ function EDrawerContent (props) {
           }}>
           {getDrawerItem().map((item, index) => (
             <JRow
-            disabled={false}
+              disabled={false}
               onPress={() => _navigateToScreen(index)}
               style={{
                 marginVertical: RFPercentage(1.7),
@@ -174,7 +176,7 @@ function EDrawerContent (props) {
             </JRow>
           ))}
         </View>
-      
+
         <JText
           fontWeight="bold"
           fontSize={RFPercentage(2)}

@@ -1,11 +1,11 @@
-import {StyleSheet, Pressable,SafeAreaView, View,Modal, ScrollView} from 'react-native';
-import React,{ useState } from 'react';
-import {observer} from 'mobx-react';
+import { StyleSheet, Pressable, SafeAreaView, View, Modal } from 'react-native';
+import React, { useState } from 'react';
+import { observer } from 'mobx-react';
 import JScreen from '../../customComponents/JScreen';
 import JGradientHeader from '../../customComponents/JGradientHeader';
 import JText from '../../customComponents/JText';
 import colors from '../../config/colors';
-import {RFPercentage} from 'react-native-responsive-fontsize';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 import Feather from 'react-native-vector-icons/Feather';
 import JChevronIcon from '../../customComponents/JChevronIcon';
 import CTermsConditions from './HelpCenter/CTermsConditions';
@@ -13,7 +13,8 @@ import CPrivacyPolicy from './HelpCenter/CPrivacyPolicy';
 import CAboutUS from './HelpCenter/CAboutUS';
 import { useContext } from 'react';
 import { StoreContext } from '../../mobx/store';
-const HelpCenter = ({navigation}) => {
+
+const HelpCenter = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [mname, setName] = useState();
   const store = useContext(StoreContext);
@@ -29,32 +30,33 @@ const HelpCenter = ({navigation}) => {
               {store.lang.help_center}
             </JText>
           }
-          left={<JChevronIcon/>}
+          left={<JChevronIcon />}
         />
       }>
       <View
-        style={{ flex: 1,
+        style={{
+          flex: 1,
         }}>
         <Pressable
           onPress={() => {
             setModalVisible(true), setName(store.lang.terms_condtions);
           }}
           style={styles.view}>
-          <JText style={{fontSize: RFPercentage(2.5)}}>{store.lang.terms_condtions}</JText>
+          <JText style={{ fontSize: RFPercentage(2.5) }}>{store.lang.terms_condtions}</JText>
         </Pressable>
         <Pressable
           onPress={() => {
             setModalVisible(true), setName(store.lang.privacy_policy);
           }}
           style={styles.view}>
-          <JText style={{fontSize: RFPercentage(2.5)}}>{store.lang.privacy_policy}</JText>
+          <JText style={{ fontSize: RFPercentage(2.5) }}>{store.lang.privacy_policy}</JText>
         </Pressable>
         <Pressable
           onPress={() => {
             setModalVisible(true), setName(store.lang.about_us);
           }}
           style={styles.view}>
-          <JText style={{fontSize: RFPercentage(2.5)}}>{store.lang.about_us}</JText>
+          <JText style={{ fontSize: RFPercentage(2.5) }}>{store.lang.about_us}</JText>
         </Pressable>
       </View>
       <Modal animationType="slide" visible={modalVisible}>
@@ -70,7 +72,7 @@ const HelpCenter = ({navigation}) => {
             }
             left={<JChevronIcon onPress={() => setModalVisible(false)} />}
           />
-          
+
           {mname === store.lang.terms_condtions ? (
             <CTermsConditions />
           ) : mname === store.lang.privacy_policy ? (
@@ -102,7 +104,7 @@ const styles = StyleSheet.create({
 
     elevation: 4,
   },
-  container: {marginVertical: RFPercentage(2)},
+  container: { marginVertical: RFPercentage(2) },
   modalView: {
     backgroundColor: colors.white[0],
     // alignItems: 'flex-start',

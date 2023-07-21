@@ -220,7 +220,7 @@ function SelectedJob({route, navigation}) {
             name="mail"
           />
           <JText fontColor={colors.white[0]} fontSize={simpleText}>
-            {companyData.company.user.email}
+            {companyData?.company?.user?.email}
           </JText>
         </JRow>
 

@@ -1,12 +1,13 @@
-import { Linking, ScrollView, StyleSheet, Text, View } from 'react-native';
+
+import {Linking, ScrollView, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import JText from '../../../customComponents/JText';
 import {RFPercentage} from 'react-native-responsive-fontsize';
-import JRow from '../../../customComponents/JRow'
+import JRow from '../../../customComponents/JRow';
 import Toast from 'react-native-toast-message';
-import { useContext } from 'react';
-import { StoreContext } from '../../../mobx/store';
-import { observer } from 'mobx-react';
+import {useContext} from 'react';
+import {StoreContext} from '../../../mobx/store';
+import {observer} from 'mobx-react';
 import colors from '../../../config/colors';
 const CPrivacyPolicy = () => {
   const store = useContext(StoreContext);
@@ -25,9 +26,7 @@ const CPrivacyPolicy = () => {
         <JText style={styles.pgText}>
           {store.lang.ptext3}
           <JText
-            onPress={() =>
-             Linking.openURL('https://www.jobskills.digital')
-            }
+            onPress={() => Linking.openURL('https://www.jobskills.digital')}
             style={styles.pgText}>
             https://www.jobskills.digital{'\n'}
             {'\n'}
@@ -42,10 +41,10 @@ const CPrivacyPolicy = () => {
       </View>
       <JText style={styles.headingText}>{store.lang.usage_Data}</JText>
       <JText style={styles.pgText}>{store.lang.usage_Data}</JText>
-      <JText style={styles.headingText}>{store.lang.third_party_social_media_Services}</JText>
-      <JText style={styles.headingText1}>
-      {store.lang.third_party_para}
+      <JText style={styles.headingText}>
+        {store.lang.third_party_social_media_Services}
       </JText>
+      <JText style={styles.headingText1}>{store.lang.third_party_para}</JText>
       <View style={styles.maginView}>
         <JText style={styles.pgText1}>
           Google{'\n'}
@@ -54,60 +53,45 @@ const CPrivacyPolicy = () => {
         </JText>
       </View>
       <JText style={styles.pgText}>{store.lang.ptext7}</JText>
-      <JText style={styles.headingText}>
-      {store.lang.info_Collect}
-      </JText>
-      <JText style={styles.headingText1}>
-      {store.lang.ptext8}
-      </JText>
+      <JText style={styles.headingText}>{store.lang.info_Collect}</JText>
+      <JText style={styles.headingText1}>{store.lang.ptext8}</JText>
       <View style={styles.maginView}>
-        <JText style={styles.pgText1}>
-        {store.lang.picture_and_info}
-        </JText>
+        <JText style={styles.pgText1}>{store.lang.picture_and_info}</JText>
       </View>
-      <JText style={styles.pgText}>
-      {store.lang.ptext9}
-      </JText>
+      <JText style={styles.pgText}>{store.lang.ptext9}</JText>
       <JText style={styles.headingText}>
-      {store.lang.tracking_technologies_and_Cookies}
+        {store.lang.tracking_technologies_and_Cookies}
       </JText>
-      <JText style={styles.headingText1}>
-      {store.lang.tracking_para}
-      </JText>
+      <JText style={styles.headingText1}>{store.lang.tracking_para}</JText>
 
       <View style={styles.maginView}>
-        <JText style={styles.headingText}>{store.lang.Cookies_or_Browser_Cookies}</JText>
-        <JText style={styles.pgText1}>
-        {store.lang.cookies_para}
+        <JText style={styles.headingText}>
+          {store.lang.Cookies_or_Browser_Cookies}
         </JText>
+        <JText style={styles.pgText1}>{store.lang.cookies_para}</JText>
         <JText style={styles.headingText}>{store.lang.flash_cookies}</JText>
-        <JText style={styles.pgText1}>
-        {store.lang.flash_cookies_para}
-          https://helpx.adobe.com/flash-player/kb/disable-local-shared-objects-flash.html#main_Where_can_I_change_the_settings_for_disabling__or_deleting_local_shared_objects_
+        <JText style={[styles.pgText1,{marginVertical:0}]}>
+          {store.lang.flash_cookies_para}</JText>
+          <JText style={[styles.headingText,{textDecorationLine: 'underline',color:'skyblue',marginTop:0,textAlign:'justify'}]}
+        onPress={() => {
+          Linking.openURL('https://helpx.adobe.com/flash-player/kb/disable-local-shared-objects-flash.html#main_Where_can_I_change_the_settings_for_disabling__or_deleting_local_shared_objects_');
+        }}>https://helpx.adobe.com/flash-player/kb/disable-local-shared-objects-flash.html#main_Where_can_I_change_the_settings_for_disabling__or_deleting_local_shared_objects_
         </JText>
         <JText style={styles.headingText}>{store.lang.web_beacons}</JText>
-        <JText style={styles.pgText1}>
-        {store.lang.web_beacons_para}
-        </JText>
+        <JText style={styles.pgText1}>{store.lang.web_beacons_para}</JText>
       </View>
-      <JText style={styles.pgText}>
-        {store.lang.cookies_can_be}
-      </JText>
+      <JText style={styles.pgText}>{store.lang.cookies_can_be}</JText>
       <JText style={styles.headingText1}>
         {store.lang.we_use_both_session}
       </JText>
       <View style={styles.maginView}>
-        <JText style={styles.pgText1}>
-          {store.lang.necessary_essential}
-        </JText>
+        <JText style={styles.pgText1}>{store.lang.necessary_essential}</JText>
       </View>
-      <JText style={styles.pgText}>
-        {store.lang.For_more_information}
+      <JText style={styles.pgText}>{store.lang.For_more_information}</JText>
+      <JText style={styles.headingText}>
+        {store.lang.use_of_your_personal_data}
       </JText>
-      <JText style={styles.headingText}>{store.lang.use_of_your_personal_data}</JText>
-      <JText style={styles.headingText1}>
-        {store.lang.the_company_may}
-      </JText>
+      <JText style={styles.headingText1}>{store.lang.the_company_may}</JText>
       <View style={styles.maginView}>
         <JText style={styles.pgText1}>
           {store.lang.to_provide_and_maintain}
@@ -117,11 +101,15 @@ const CPrivacyPolicy = () => {
         {store.lang.we_may_share_your_personal}
       </JText>
       <View style={styles.maginView}>
-        <JText style={styles.headingText}>{store.lang.with_service_providers}</JText>
-        <JText style={styles.pgText1}>
-         {store.lang.we_may_share_your_personals}
+        <JText style={styles.headingText}>
+          {store.lang.with_service_providers}
         </JText>
-        <JText style={styles.headingText}>{store.lang.for_business_transfers}</JText>
+        <JText style={styles.pgText1}>
+          {store.lang.we_may_share_your_personals}
+        </JText>
+        <JText style={styles.headingText}>
+          {store.lang.for_business_transfers}
+        </JText>
         <JText style={styles.pgText1}>
           {store.lang.share_or_transfer_your_personal}
         </JText>
@@ -129,7 +117,9 @@ const CPrivacyPolicy = () => {
         <JText style={styles.pgText1}>
           {store.lang.share_your_information_with_our_affiliates}
         </JText>
-        <JText style={styles.headingText}>{store.lang.with_business_partners}</JText>
+        <JText style={styles.headingText}>
+          {store.lang.with_business_partners}
+        </JText>
         <JText style={styles.pgText1}>
           {store.lang.information_with_our_business_partners}
         </JText>
@@ -137,132 +127,65 @@ const CPrivacyPolicy = () => {
         <JText style={styles.pgText1}>
           {store.lang.personal_information_or_otherwise_interact}
         </JText>
-        <JText style={styles.headingText}>With Your consent:</JText>
+        <JText style={styles.headingText}>{store.lang.with_your_consent}</JText>
         <JText style={styles.pgText1}>
-          We may disclose Your personal information for any other purpose with
-          Your consent.
+          {store.lang.we_may_disclose_your_personal}
         </JText>
       </View>
 
-      <JText style={styles.headingText}>Retention of Your Personal Data</JText>
+      <JText style={styles.headingText}>{store.lang.retention_of_your_personal_data}</JText>
       <JText style={styles.pgText}>
-        The Company will retain Your Personal Data only for as long as is
-        necessary for the purposes set out in this Privacy Policy. We will
-        retain and use Your Personal Data to the extent necessary to comply with
-        our legal obligations (for example, if we are required to retain your
-        data to comply with applicable laws), resolve disputes, and enforce our
-        legal agreements and policies.{'\n'}
-        {'\n'}
-        The Company will also retain Usage Data for internal analysis purposes.
-        Usage Data is generally retained for a shorter period of time, except
-        when this data is used to strengthen the security or to improve the
-        functionality of Our Service, or We are legally obligated to retain this
-        data for longer time periods.
+        {store.lang.the_company_will_retain_your_personal_data}
       </JText>
-      <JText style={styles.headingText}>Transfer of Your Personal Data</JText>
+      <JText style={styles.headingText}>{store.lang.transfer_of_your_personal_data}</JText>
       <JText style={styles.pgText}>
-        Your information, including Personal Data, is processed at the Company's
-        operating offices and in any other places where the parties involved in
-        the processing are located. It means that this information may be
-        transferred to — and maintained on — computers located outside of Your
-        state, province, country or other governmental jurisdiction where the
-        data protection laws may differ than those from Your jurisdiction.{'\n'}
-        {'\n'}
-        Your consent to this Privacy Policy followed by Your submission of such
-        information represents Your agreement to that transfer.{'\n'}
-        {'\n'}
-        The Company will take all steps reasonably necessary to ensure that Your
-        data is treated securely and in accordance with this Privacy Policy and
-        no transfer of Your Personal Data will take place to an organization or
-        a country unless there are adequate controls in place including the
-        security of Your data and other personal information.
+        {store.lang.your_information_including_personal_data}
       </JText>
       <JText style={styles.headingText}>
-        Disclosure of Your Personal DataBusiness Transactions
+        {store.lang.disclosure_of_your_personal_dataBusiness_transactions}
       </JText>
       <JText style={styles.pgText}>
-        If the Company is involved in a merger, acquisition or asset sale, Your
-        Personal Data may be transferred. We will provide notice before Your
-        Personal Data is transferred and becomes subject to a different Privacy
-        Policy.
+       {store.lang.if_the_company_is_involved_in_a_merger}
       </JText>
-      <JText style={styles.headingText}>Law enforcement</JText>
+      <JText style={styles.headingText}>{store.lang.law_enforcement}</JText>
       <JText style={styles.pgText}>
-        Under certain circumstances, the Company may be required to disclose
-        Your Personal Data if required to do so by law or in response to valid
-        requests by public authorities (e.g. a court or a government agency).
+        {store.lang.under_certain_circumstances}
       </JText>
-      <JText style={styles.headingText}>Other legal requirements</JText>
-      <JText style={styles.headingText1}>Definitions</JText>
+      <JText style={styles.headingText}>{store.lang.other_legal_requirements}</JText>
+      <JText style={styles.headingText1}>{store.lang.definitions}</JText>
       <View style={styles.maginView}>
         <JText style={styles.pgText1}>
-          Comply with a legal obligation{'\n'}
-          Protect and defend the rights or property of the Company{'\n'}
-          Prevent or investigate possible wrongdoing in connection with the
-          Service{'\n'}
-          Protect the personal safety of Users of the Service or the public
-          {'\n'}
-          Protect against legal liability
+          {store.lang.comply_with_a_legal_obligation}
         </JText>
       </View>
-      <JText style={styles.headingText}>Security of Your Personal Data</JText>
+      <JText style={styles.headingText}>{store.lang.security_of_your_personal_data}</JText>
       <JText style={styles.pgText}>
-        The security of Your Personal Data is important to Us, but remember that
-        no method of transmission over the Internet, or method of electronic
-        storage is 100% secure. While We strive to use commercially acceptable
-        means to protect Your Personal Data, We cannot guarantee its absolute
-        security.
+        {store.lang.the_security_of_your_personal_data}
       </JText>
-      <JText style={styles.headingText}>Children's Privacy</JText>
+      <JText style={styles.headingText}>{store.lang.children_privacy}</JText>
       <JText style={styles.pgText}>
-        Our Service does not address anyone under the age of 13. We do not
-        knowingly collect personally identifiable information from anyone under
-        the age of 13. If You are a parent or guardian and You are aware that
-        Your child has provided Us with Personal Data, please contact Us. If We
-        become aware that We have collected Personal Data from anyone under the
-        age of 13 without verification of parental consent, We take steps to
-        remove that information from Our servers.{'\n'}
-        {'\n'}
-        If We need to rely on consent as a legal basis for processing Your
-        information and Your country requires consent from a parent, We may
-        require Your parent's consent before We collect and use that
-        information.
+        {store.lang.our_Service_does_not_address}
       </JText>
-      <JText style={styles.headingText}>Links to Other Websites</JText>
+      <JText style={styles.headingText}>{store.lang.links_to_other_websites}</JText>
       <JText style={styles.pgText}>
-        Our Service may contain links to other websites that are not operated by
-        Us. If You click on a third party link, You will be directed to that
-        third party's site. We strongly advise You to review the Privacy Policy
-        of every site You visit.{'\n'}
-        {'\n'}
-        We have no control over and assume no responsibility for the content,
-        privacy policies or practices of any third party sites or services.
+        {store.lang.our_service_may_contain_links_to_other_websites}
       </JText>
-      <JText style={styles.headingText}>Changes to this Privacy Policy</JText>
+      <JText style={styles.headingText}>{store.lang.changes_to_this_privacy_policy}</JText>
       <JText style={styles.pgText}>
-        We may update Our Privacy Policy from time to time. We will notify You
-        of any changes by posting the new Privacy Policy on this page.{'\n'}
-        {'\n'}
-        We will let You know via email and/or a prominent notice on Our Service,
-        prior to the change becoming effective and update the "Last updated"
-        date at the top of this Privacy Policy.{'\n'}
-        {'\n'}
-        You are advised to review this Privacy Policy periodically for any
-        changes. Changes to this Privacy Policy are effective when they are
-        posted on this page.
+        {store.lang.we_may_update_our_privacy_policy}
       </JText>
-      <JText style={styles.headingText}>Contact Us</JText>
+      <JText style={styles.headingText}>{store.lang.contact_Us}</JText>
       <JText style={styles.pgText}>
-        If you have any questions about this Privacy Policy, You can contact us:
+        {store.lang.you_can_contact_us}
       </JText>
       <View style={styles.maginView}>
         <JText style={styles.pgText1}>
-          By email: contact@jobskills.digital
+          {store.lang.by_email}: contact@jobskills.digital
         </JText>
       </View>
     </ScrollView>
   );
-}
+};
 
 export default observer(CPrivacyPolicy);
 
@@ -272,28 +195,28 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: colors.primary[0],
   },
-    headingText: {
-        fontWeight: 'bold',
-        fontSize: RFPercentage(2),
-        marginTop: RFPercentage(1),
-        // textAlign:'justify',
-      },
-      headingText1: {
-        fontWeight: '600',
-        fontSize: RFPercentage(2),
-        marginTop: RFPercentage(1),
-        // textAlign:'justify',
-      },
-      pgText: {
-        marginVertical: RFPercentage(1),
-        fontSize: RFPercentage(1.9),
-        // textAlign:'justify',
-      },
-      pgText1: {
-        marginVertical: RFPercentage(1),
-        fontSize: RFPercentage(1.8),
-        // textAlign:'justify',
-        color:'#00000098',
-      },
-      maginView:{marginHorizontal: RFPercentage(2)}
-})
+  headingText: {
+    fontWeight: 'bold',
+    fontSize: RFPercentage(2),
+    marginTop: RFPercentage(1),
+    // textAlign:'justify',
+  },
+  headingText1: {
+    fontWeight: '600',
+    fontSize: RFPercentage(2),
+    marginTop: RFPercentage(1),
+    // textAlign:'justify',
+  },
+  pgText: {
+    marginVertical: RFPercentage(1),
+    fontSize: RFPercentage(1.9),
+    // textAlign:'justify',
+  },
+  pgText1: {
+    marginVertical: RFPercentage(1),
+    fontSize: RFPercentage(1.8),
+    // textAlign:'justify',
+    color: '#00000098',
+  },
+  maginView: {marginHorizontal: RFPercentage(2)},
+});

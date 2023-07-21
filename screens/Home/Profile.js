@@ -103,7 +103,7 @@ function Profile({navigation}) {
           <JProfileContent
             name={
               store.myProfileApiLoader === false &&
-              store.myProfile?.user[0].general_information?.first_name +
+              store.myProfile?.user[0]?.general_information?.first_name +
                 '' +
                 (store.myProfile?.user[0]?.general_information?.last_name !==
                 null

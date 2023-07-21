@@ -155,7 +155,7 @@ function CContactInformation({refRBSheet, user}) {
         _postData(values);
       }}
       validationSchema={yup.object().shape({
-        email: yup.string().email('Must be a valid email'),
+        email: yup.string().max(100, 'Email address must be at most 100 characters long').email('Must be a valid email'),
         phone: yup.string().max(14).required().label('Phone'),
         // regional_code: yup.string().min(2).required().label('code'),
       })}>

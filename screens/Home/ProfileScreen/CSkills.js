@@ -3,6 +3,7 @@ import React, {useRef} from 'react';
 import {observer} from 'mobx-react';
 import JScreen from '../../../customComponents/JScreen';
 import {Formik} from 'formik';
+import * as yup from 'yup'; 
 
 import {RFPercentage} from 'react-native-responsive-fontsize';
 
@@ -27,13 +28,30 @@ function CSkills({data}) {
   const navigation = useNavigation();
   const [loader, setLoader] = useState(true);
   const [loader1, setLoader1] = useState(false);
+ 
+
   return (
     <Formik
       initialValues={{
         skill: [],
       }}
+      validationSchema={yup.object().shape({
+        
+              skill: yup
+              .array()
+              .of(
+                yup.object().shape({
+                  id: yup.string().required('skill ID is required'),
+                  name: yup.string().required('skill name is required'),
+                }),
+              )
+              .required('skill is required')
+              .min(1, 'At least one skill is required'),
+ 
+      })}
       onSubmit={values => {
         // console.log(values);
+       
 
         var myHeaders = new Headers();
         myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
