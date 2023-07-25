@@ -34,8 +34,7 @@ function CContactInformation({refRBSheet, user}) {
   const [loader, setLoader] = useState(false);
   const [phone, setPhone] = useState(params?.phone);
   const [code, setCode] = useState(params?.region_code!==null&&params?.region_code);
-// console.log(phone)
-// console.log(code)
+
   const regionalCodeMappings = {
     "93": "AF", // Afghanistan
     "355": "AL", // Albania
@@ -110,7 +109,7 @@ function CContactInformation({refRBSheet, user}) {
     var formdata = new FormData();
 
     formdata.append('phone', phone);
-    formdata.append('region_code', code==false?'966':code);
+    formdata.append('region_code', code!==false?code:'966');
     // console.log(formdata)
     var requestOptions = {
       method: 'POST',
@@ -147,8 +146,8 @@ function CContactInformation({refRBSheet, user}) {
       initialValues={{
         email: store.myProfile.user[0]?.contact_information?.email_address,
         // phone: params.phone?params.phone?.slice(3):'',
-        phone:params.phone!==null?params?.phone:'',
-        regional_code:params.region_code!==null?regionalCodeMappings[params?.region_code]:'',
+        phone:params?.phone?params?.phone:'',
+        regional_code:params?.region_code?regionalCodeMappings[params?.region_code]:'',
       }}
       onSubmit={values => {
         // console.log('regional;;;;;;;',values.regional_code);
@@ -156,7 +155,7 @@ function CContactInformation({refRBSheet, user}) {
       }}
       validationSchema={yup.object().shape({
         email: yup.string().max(100, 'Email address must be at most 100 characters long').email('Must be a valid email'),
-        phone: yup.string().max(14).required().label('Phone'),
+        phone: yup.string().max(15).required().label('Phone'),
         // regional_code: yup.string().min(2).required().label('code'),
       })}>
       {({
@@ -229,7 +228,7 @@ function CContactInformation({refRBSheet, user}) {
                   ref={phoneInput}
                   defaultValue={values.phone}
                   // defaultCode={code?.cca2?code?.cca2:"SA"}
-                  defaultCode={values.regional_code!==null ? values.regional_code:  params?.region_code!==null?code:"SA"}
+                  defaultCode={values.regional_code? values.regional_code:"SA"}
                   placeholder={store.lang.phone_number}
                   containerStyle={{
                     width: '100%',

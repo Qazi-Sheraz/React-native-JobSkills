@@ -96,7 +96,7 @@ export default function ResetPassword() {
 
       <JFooter
         onPress={() => alert('Footer')}
-        children={'Already have an account? Login'}
+        children={store.lang.already_Login}
       />
     </JScreen>
   );

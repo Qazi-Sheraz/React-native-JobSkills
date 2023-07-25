@@ -217,7 +217,7 @@ const JApplyJob = ({token, jobId, id, setStatus, status}) => {
             formdata.append('questionnaire_answer', questions[option]);
             formdata.append('application_type', 'apply');
 
-            console.log(formdata);
+            // console.log(formdata);
             var requestOptions = {
               method: 'POST',
               headers: myHeaders,

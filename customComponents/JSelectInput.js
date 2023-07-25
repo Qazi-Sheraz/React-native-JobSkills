@@ -381,7 +381,7 @@ function JSelectInput({
       .then(response => response.json())
       .then(result => {
         var myObject = result.state
-console.log(result.state[0]?.arabic_title)
+// console.log(result.state[0]?.arabic_title)
         setState(myObject);
         setLoader(false);
       })

@@ -121,14 +121,17 @@ const Registration = ({navigation, route}) => {
           first_name: yup
             .string()
             .min(3, 'First Name ame Must be at least 3 characters')
+            .max(100, 'First Name must be at most 100 characters long')
             .required('First Name is a required field'),
           last_name: yup
             .string()
             .min(3, 'Last Name Must be at least 3 characters')
+            .max(100, 'Last Name must be at most 100 characters long')
             .required('Last Name is a required field'),
           company_name: yup
             .string()
             .min(3, 'Company Name Must be at least 3 characters')
+            .max(100, 'Company Name must be at most 100 characters long')
             .required('Company Name is a required field'),
           email: yup
             .string()

@@ -70,7 +70,6 @@ export const _saveToFavoriteList = (store, setLoader, id) => {
   setLoader(true);
   var formdata = new FormData();
   formdata.append('jobId', id);
-
   var requestOptions = {
     method: 'POST',
     headers: myHeaders,

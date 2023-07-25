@@ -23,6 +23,7 @@ import url from '../../config/url';
 import JNotfoundData from '../../customComponents/JNotfoundData';
 import JApiError from '../../customComponents/JApiError';
 import { useCallback } from 'react';
+import JEmpty from '../../customComponents/JEmpty';
 
 const Job = () => {
 
@@ -149,7 +150,7 @@ const{params}=useRoute()
           </>
         ))}
       </JScrollView></>):  
-     <JNotfoundData/>}
+     <JEmpty/>}
       <View
         style={{
           height: heightPercentageToDP(6),
@@ -164,28 +165,7 @@ const{params}=useRoute()
           children={store.lang.add_new_job}
         />
       </View>
-      {/* <Modal animationType="fade" transparent={true} visible={modalVisible}>
-        <SafeAreaView style={styles.container}>
-          <View style={styles.modal}>
-            <JText style={styles.header}>Attention!</JText>
-            <JText style={styles.msg}>
-              Are you sure want to change the status?
-            </JText>
-            <JRow style={{justifyContent: 'space-between'}}>
-              <JButton
-                onPress={() => setModalVisible(false)}
-                style={{
-                  backgroundColor: '#E5E5E5',
-                  width: '50%',
-                  borderWidth: RFPercentage(0),
-                }}
-                children={'No'}
-              />
-              <JButton style={{width: '50%'}} children={'Yes'} />
-            </JRow>
-          </View>
-        </SafeAreaView>
-      </Modal> */}
+    
       </>
       )}
     </JScreen>

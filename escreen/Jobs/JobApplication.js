@@ -35,6 +35,7 @@ import url from '../../config/url';
 import JNotfoundData from '../../customComponents/JNotfoundData';
 import JApiError from '../../customComponents/JApiError';
 import { _jobApplication } from '../../functions/Candidate/BottomTab';
+import JEmpty from '../../customComponents/JEmpty';
 
 
 
@@ -241,7 +242,7 @@ const data = [
           </ScrollView>
         </>
       ) : (
-        <JNotfoundData />
+        <JEmpty />
       )}
       {/* <RBSheet
         ref={refRBSheet}

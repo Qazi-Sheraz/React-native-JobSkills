@@ -13,17 +13,17 @@ import React from 'react';
 import JScreen from '../../../customComponents/JScreen';
 import JGradientHeader from '../../../customComponents/JGradientHeader';
 import JText from '../../../customComponents/JText';
-import {RFPercentage} from 'react-native-responsive-fontsize';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 import Feather from 'react-native-vector-icons/Feather';
 import colors from '../../../config/colors';
 import JRow from '../../../customComponents/JRow';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import {useRef} from 'react';
-import {useState} from 'react';
-import {heightPercentageToDP} from 'react-native-responsive-screen';
+import { useRef } from 'react';
+import { useState } from 'react';
+import { heightPercentageToDP } from 'react-native-responsive-screen';
 import JButton from '../../../customComponents/JButton';
-import {Formik} from 'formik';
+import { Formik } from 'formik';
 import * as yup from 'yup';
 import JErrorText from '../../../customComponents/JErrorText';
 import JInput from '../../../customComponents/JInput';
@@ -31,11 +31,11 @@ import moment from 'moment';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import JSelectInput from '../../../customComponents/JSelectInput';
-import {useContext} from 'react';
-import {StoreContext} from '../../../mobx/store';
+import { useContext } from 'react';
+import { StoreContext } from '../../../mobx/store';
 import Experience from './SubHeagings/Experience';
 import Education from './SubHeagings/Education';
-import {useEffect} from 'react';
+import { useEffect } from 'react';
 import JChevronIcon from '../../../customComponents/JChevronIcon';
 import JScrollView from '../../../customComponents/JScrollView';
 import { observer } from 'mobx-react';
@@ -43,7 +43,7 @@ import url from '../../../config/url';
 import { JToast } from '../../../functions/Toast';
 import JModal from '../../../customComponents/JModal';
 
-const CareerInformation = ({navigation}) => {
+const CareerInformation = ({ navigation }) => {
   const refRBSheet = useRef();
   const [selected, setSelected] = useState(0);
   const [loader, setLoader] = useState();
@@ -55,10 +55,12 @@ const CareerInformation = ({navigation}) => {
   const [selectedEdu, setSelectedEdu] = useState(null);
   const store = useContext(StoreContext);
 
-  const exp_Id=experience[0]?.id;
-  const edu_Id=education[0]?.id;
-  const [modalVisible, setModalVisible] = useState(false);
 
+  const [modalVisible, setModalVisible] = useState(false);
+  const [id, setId] = useState({
+    experienceId: '',
+    educationId: ''
+  })
 
   const _addExperince = values => {
     var myHeaders = new Headers();
@@ -74,6 +76,7 @@ const CareerInformation = ({navigation}) => {
     formdata.append('start_date', moment(values.start).format('YYYY/MM/DD'));
 
     values.working === false &&
+
       formdata.append('end_date', moment(values.end).format('YYYY/MM/DD'));
     formdata.append('currently_working', values.working ? '1' : '0');
     formdata.append('description', values.description);
@@ -85,33 +88,31 @@ const CareerInformation = ({navigation}) => {
       body: formdata,
       redirect: 'follow',
     };
-    // console.log(requestOptions);
-    fetch(selectedExperience==null?`${url.baseUrl}/experience-create`:`${url.baseUrl}/candidate-experience-update/${exp_Id}`, requestOptions)
+    fetch(selectedExperience == null ? `${url.baseUrl}/experience-create` : `${url.baseUrl}/candidate-experience-update/${selectedExperience?.experienceId}`, requestOptions)
       .then(response => response.json())
       .then(result => {
-        // console.log(result);
-        if(moment(values.start).format('DD MMM YYYY')===moment(values.end).format('DD MMM YYYY'))
-           {
-              JToast({
-              type: 'error',
-              text1: result.end_date[0],
-              visibilityTime : 1500
-            });
-           
-            setLoader(false);
-            }
-       else {
-        selectedExperience==null?
-        _addExp(result.candidateExperience)
-        :_getExperience();
-        
-         JToast({
-          type: 'success',
-          text1: result.message,
-        });
+        if (moment(values.start).format('DD MMM YYYY') === moment(values.end).format('DD MMM YYYY')) {
+          JToast({
+            type: 'error',
+            text1: result.end_date[0],
+            visibilityTime: 1500
+          });
 
-        setLoader(false);
-        refRBSheet.current.close();}
+          setLoader(false);
+        }
+        else {
+          selectedExperience == null ?
+            _addExp(result.candidateExperience)
+            : _getExperience();
+
+          JToast({
+            type: 'success',
+            text1: result.message,
+          });
+
+          setLoader(false);
+          refRBSheet.current.close();
+        }
       })
       .catch(error => {
         console.log('error', error);
@@ -142,15 +143,15 @@ const CareerInformation = ({navigation}) => {
       redirect: 'follow',
     };
     fetch(
-      selectedEdu==null?`${url.baseUrl}/candidate-education-create`:`${url.baseUrl}/candidate-education-update/${edu_Id}`,
+      selectedEdu == null ? `${url.baseUrl}/candidate-education-create` : `${url.baseUrl}/candidate-education-update/${selectedEdu?.educationId}`,
       requestOptions,
     )
       .then(response => response.json())
       .then(result => {
         // console.log(result.data);
-        selectedEdu==null?
-        _addEdu(result.data):
-        _getExperience();
+        selectedEdu == null ?
+          _addEdu(result.data) :
+          _getExperience();
         JToast({
           type: 'success',
           text1: result.message,
@@ -213,43 +214,32 @@ const CareerInformation = ({navigation}) => {
         setApiLoader(false);
       });
   };
-const _Edelete = () => {
-      var myHeaders = new Headers();
-      myHeaders.append('Authorization', `Bearer ${store.token.token}`);
+  const _Edelete = () => {
+    var myHeaders = new Headers();
+    myHeaders.append('Authorization', `Bearer ${store.token.token}`);
 
-      var requestOptions = {
-        method: 'DELETE',
-        headers: myHeaders,
-        redirect: 'follow',
-      };
-      // console.log(requestOptions);
-      fetch(
-        `https://dev.jobskills.digital/api/candidate-experience-delete/${exp_Id}`,
-        requestOptions,
-      )
-        .then(response => response.json())
-        .then(result => {
-          // console.log(result);
-          setExpereince(experience.filter(e => e.exp_Id !== exp_Id));
-          _getExperience()
-          setModalVisible(false)
-        })
-        // .catch(error => console.log('error', error));
+    var requestOptions = {
+      method: 'DELETE',
+      headers: myHeaders,
+      redirect: 'follow',
     };
-  const _deleteExperience = id => {
-  setModalVisible(true)
-    // Alert.alert('Delete Experience', 'Are you sure to delete?', [
-    //   {
-    //     text: 'Cancel',
+    // console.log(requestOptions);
+    fetch(
+      `https://dev.jobskills.digital/api/candidate-experience-delete/${id?.experienceId}`,
+      requestOptions,
+    )
+      .then(response => response.json())
+      .then(result => {
+        setExpereince(experience.filter(e => e.id?.experienceId !== id?.experienceId));
+        _getExperience()
+        setModalVisible(false)
 
-    //     style: 'cancel',
-    //   },
-    //   {text: 'OK', onPress: () => _delete()},
-    // ]);
-
-    
+      })
+    // .catch(error => console.log('error', error));
   };
-  const _delete = (edu_Id) => {
+ 
+
+  const _delete = () => {
     // console.log(id);
     var myHeaders = new Headers();
     myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
@@ -259,52 +249,20 @@ const _Edelete = () => {
       headers: myHeaders,
     };
     fetch(
-      `https://dev.jobskills.digital/api/candidate-education-delete/${edu_Id}`,
+      `https://dev.jobskills.digital/api/candidate-education-delete/${id?.educationId}`,
       requestOptions,
+
     )
       .then(response => response.json())
       .then(result => {
         // console.log(result);
-        setEducation(education.filter(e => e.edu_Id !== edu_Id));
+        setEducation(education.filter(e => e.id?.educationId !== id?.educationId));
         _getExperience();
         setModalVisible(false)
       })
-      // .catch(error => console.log('error', error));
+    // .catch(error => console.log('error', error));
   };
-  const _deleteEducation = edu_Id => {
-   setModalVisible(true,edu_Id)
-    // Alert.alert('Delete Education', 'Are you sure to delete?', [
-    //   {
-    //     text: 'Cancel',
-
-    //     style: 'cancel',
-    //   },
-    //   {text: 'OK', onPress: () => _delete()},
-    // ]);
-   
-    
-
-    // const _delete = (id) => {
-    //   // console.log(id);
-    //   var myHeaders = new Headers();
-    //   myHeaders.append('Authorization', `Bearer ${store.token.token}`);
-
-    //   var requestOptions = {
-    //     method: 'DELETE',
-    //     headers: myHeaders,
-    //   };
-    //   fetch(
-    //     `https://dev.jobskills.digital/api/candidate-education-delete/${id}`,
-    //     requestOptions,
-    //   )
-    //     .then(response => response.json())
-    //     .then(result => {
-    //       // console.log(result);
-    //       setEducation(education.filter(e => e.id !== id));
-    //     })
-    //     // .catch(error => console.log('error', error));
-    // };
-  };
+ 
 
   const _addExp = e => {
     let arr = [...experience];
@@ -322,7 +280,7 @@ const _Edelete = () => {
   useEffect(() => {
     _getExperience();
     _getEdu();
- 
+
   }, []);
   return (
     <JScreen
@@ -358,7 +316,13 @@ const _Edelete = () => {
             experience={experience}
             setSelected={setSelected}
             refRBSheet={refRBSheet}
-            _deleteExperience={_deleteExperience}
+            _deleteExperience={(id) => {
+              setModalVisible(true)
+              setId({
+                experienceId: id,
+                educationId: ''
+              })
+            }}
             selectedExperience={selectedExperience}
             setSelectedExperience={setSelectedExperience}
           />
@@ -368,7 +332,13 @@ const _Edelete = () => {
             education={education}
             setSelected={setSelected}
             refRBSheet={refRBSheet}
-            _deleteEducation={_deleteEducation}
+            _deleteEducation={(id) => {
+              setModalVisible(true)
+              setId({
+                experienceId: '',
+                educationId: id
+              })
+            }}
             selectedEdu={selectedEdu}
             setSelectedEdu={setSelectedEdu}
           />
@@ -404,7 +374,7 @@ const _Edelete = () => {
           <ActivityIndicator />
         ) : ( */}
         {/* // console.log(selectedExperience?.start), */}
-        <KeyboardAvoidingView behavior="padding" style={{flex: 1}}>
+        <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
           {selected === 0 ? (
             <Formik
               initialValues={{
@@ -440,7 +410,7 @@ const _Edelete = () => {
                 },
                 start:
                   selectedExperience?.start !== null &&
-                  selectedExperience?.start !== undefined
+                    selectedExperience?.start !== undefined
                     ? selectedExperience?.start
                     : '',
                 end:
@@ -487,7 +457,7 @@ const _Edelete = () => {
                         textAlign: store.lang.id == 0 ? 'left' : 'right',
                       }}
                       isRequired={true}
-                      containerStyle={{marginTop: RFPercentage(2)}}
+                      containerStyle={{ marginTop: RFPercentage(2) }}
                       heading={`${store.lang.experience_title}:`}
                       value={values.title}
                       error={touched.title && errors.title && true}
@@ -502,7 +472,7 @@ const _Edelete = () => {
                         textAlign: store.lang.id == 0 ? 'left' : 'right',
                       }}
                       isRequired={true}
-                      containerStyle={{marginTop: RFPercentage(2)}}
+                      containerStyle={{ marginTop: RFPercentage(2) }}
                       value={values?.company}
                       heading={`${store.lang.company}:`}
                       error={touched.company && errors.company && true}
@@ -514,7 +484,7 @@ const _Edelete = () => {
                     )}
 
                     <JSelectInput
-                      containerStyle={{marginTop: RFPercentage(2)}}
+                      containerStyle={{ marginTop: RFPercentage(2) }}
                       data={
                         store.lang.id == 0
                           ? store.myProfile?.dataEnglish?.countries
@@ -542,7 +512,7 @@ const _Edelete = () => {
                     )}
 
                     <JSelectInput
-                      containerStyle={{marginTop: RFPercentage(2)}}
+                      containerStyle={{ marginTop: RFPercentage(2) }}
                       value={values.state?.name}
                       id={values.county?.id}
                       setValue={e => {
@@ -565,8 +535,8 @@ const _Edelete = () => {
                     )}
 
                     <JSelectInput
-                      containerStyle={{marginTop: RFPercentage(2)}}
-                      value={values.city?.name }
+                      containerStyle={{ marginTop: RFPercentage(2) }}
+                      value={values.city?.name}
                       setValue={e => setFieldValue('city', e)}
                       header={store.lang.city}
                       heading={`${store.lang.city}:`}
@@ -586,7 +556,7 @@ const _Edelete = () => {
 
                     <JSelectInput
                       isDate={true}
-                      containerStyle={{marginTop: RFPercentage(2)}}
+                      containerStyle={{ marginTop: RFPercentage(2) }}
                       value={
                         values.start &&
                         moment(values.start).format('DD MMM YYYY')
@@ -613,7 +583,7 @@ const _Edelete = () => {
                           disabled={values.start !== '' ? false : true}
                           date1={moment().add(1, 'day').toDate()}
                           minimumDate={moment().add(1, 'day')}
-                          containerStyle={{marginTop: RFPercentage(2)}}
+                          containerStyle={{ marginTop: RFPercentage(2) }}
                           isDate={true}
                           value={
                             values.end &&
@@ -634,7 +604,7 @@ const _Edelete = () => {
                               }
                             />
                           }
-                          // disabled={!values.start}
+                        // disabled={!values.start}
                         />
                         {touched.end && errors.end && (
                           <JErrorText>{errors.end}</JErrorText>
@@ -645,7 +615,7 @@ const _Edelete = () => {
                       style={{
                         textAlign: store.lang.id == 0 ? 'left' : 'right',
                       }}
-                      containerStyle={{marginTop: RFPercentage(2)}}
+                      containerStyle={{ marginTop: RFPercentage(2) }}
                       heading={`${store.lang.description}:`}
                       value={values.description}
                       error={touched.description && errors.description && true}
@@ -665,7 +635,7 @@ const _Edelete = () => {
                       </JText>
 
                       <Switch
-                        trackColor={{true: colors.purple[0]}}
+                        trackColor={{ true: colors.purple[0] }}
                         onValueChange={e => {
                           setFieldValue('working', e);
                         }}
@@ -689,100 +659,98 @@ const _Edelete = () => {
               )}
             </Formik>
           ) : (
-            (console.log(selectedEdu),
-            (
-              <Formik
-                initialValues={{
-                  title: selectedEdu?.title !== null ? selectedEdu?.title : '',
-                  level: {
-                    id:
-                      selectedEdu?.degree_level_id !== null
-                        ? selectedEdu?.degree_level_id
-                        : '',
-                    name:
-                      selectedEdu?.degree_level !== null
-                        ? selectedEdu?.degree_level
-                        : '',
-                  },
-                  county: {
-                    id: selectedEdu?.country_id,
-                    name: selectedEdu?.country,
-                  },
-                  city: {
-                    id: selectedEdu?.city_id,
-                    name: selectedEdu?.city,
-                  },
-
-                  state: {
-                    id: selectedEdu?.state_id,
-                    name: selectedEdu?.state,
-                  },
-                  institude:
-                    selectedEdu?.institute !== null
-                      ? selectedEdu?.institute
+            <Formik
+              initialValues={{
+                title: selectedEdu?.title !== null ? selectedEdu?.title : '',
+                level: {
+                  id:
+                    selectedEdu?.degree_level_id !== null
+                      ? selectedEdu?.degree_level_id
                       : '',
-                  result:
-                    selectedEdu?.result !== null ? selectedEdu?.result : '',
-                  year: {
-                    name: selectedEdu?.year !== null ? selectedEdu?.year : '',
-                  },
-                }}
-                onSubmit={values => {
-                  // console.log(values);
-                  _addEducation(values);
-                }}
-                validationSchema={yup.object().shape({
-                  title: yup.string().required().label('Title'),
-                  level: yup.object().shape().required('Level is required'),
-                  county: yup.object().shape().required('Country is required'),
-                  city: yup.object().shape().required('City is required'),
-                  state: yup.object().shape().required('State is required'),
-                  institude: yup.string().required().label('Institude'),
-                  result: yup.string().required().label('Eesult'),
-                  year: yup.object().shape().required('Year is required'),
-                })}>
-                {({
-                  values,
-                  handleChange,
-                  errors,
-                  setFieldTouched,
-                  touched,
-                  isValid,
-                  handleSubmit,
-                  setFieldValue,
-                }) => (
-                  <>
-                    {/* {console.log(store.country.english?.state)} */}
-                    <ScrollView
-                      contentContainerStyle={{paddingBottom: RFPercentage(8)}}
-                      style={{
-                        marginHorizontal: RFPercentage(2),
-                      }}>
-                      <JSelectInput
-                        containerStyle={styles.container}
-                        value={values.level?.name}
-                        id={values.level?.id}
-                        data={
-                          store.lang.id == 0
-                            ? edu?.dataEnglish?.degreeLevels
-                            : edu?.dataArabic?.degreeLevels
-                        }
-                        header={store.lang.degree_level}
-                        heading={`${store.lang.degree_level}:`}
-                        setValue={e => setFieldValue('level', e)}
-                        error={touched.level && errors.level && true}
-                        rightIcon={
-                          <Feather
-                            name="chevron-down"
-                            size={RFPercentage(2.5)}
-                            color={colors.black[0]}
-                          />
-                        }
-                      />
-                      {touched.level && errors.level && (
-                        <JErrorText>{errors.level}</JErrorText>
-                      )}
-                      {/* <JInput
+                  name:
+                    selectedEdu?.degree_level !== null
+                      ? selectedEdu?.degree_level
+                      : '',
+                },
+                county: {
+                  id: selectedEdu?.country_id,
+                  name: selectedEdu?.country,
+                },
+                city: {
+                  id: selectedEdu?.city_id,
+                  name: selectedEdu?.city,
+                },
+
+                state: {
+                  id: selectedEdu?.state_id,
+                  name: selectedEdu?.state,
+                },
+                institude:
+                  selectedEdu?.institute !== null
+                    ? selectedEdu?.institute
+                    : '',
+                result:
+                  selectedEdu?.result !== null ? selectedEdu?.result : '',
+                year: {
+                  name: selectedEdu?.year !== null ? selectedEdu?.year : '',
+                },
+              }}
+              onSubmit={values => {
+                // console.log(values);
+                _addEducation(values);
+              }}
+              validationSchema={yup.object().shape({
+                title: yup.string().required().label('Title'),
+                level: yup.object().shape().required('Level is required'),
+                county: yup.object().shape().required('Country is required'),
+                city: yup.object().shape().required('City is required'),
+                state: yup.object().shape().required('State is required'),
+                institude: yup.string().required().label('Institude'),
+                result: yup.string().required().label('Eesult'),
+                year: yup.object().shape().required('Year is required'),
+              })}>
+              {({
+                values,
+                handleChange,
+                errors,
+                setFieldTouched,
+                touched,
+                isValid,
+                handleSubmit,
+                setFieldValue,
+              }) => (
+                <>
+                  {/* {console.log(store.country.english?.state)} */}
+                  <ScrollView
+                    contentContainerStyle={{ paddingBottom: RFPercentage(8) }}
+                    style={{
+                      marginHorizontal: RFPercentage(2),
+                    }}>
+                    <JSelectInput
+                      containerStyle={styles.container}
+                      value={values.level?.name}
+                      id={values.level?.id}
+                      data={
+                        store.lang.id == 0
+                          ? edu?.dataEnglish?.degreeLevels
+                          : edu?.dataArabic?.degreeLevels
+                      }
+                      header={store.lang.degree_level}
+                      heading={`${store.lang.degree_level}:`}
+                      setValue={e => setFieldValue('level', e)}
+                      error={touched.level && errors.level && true}
+                      rightIcon={
+                        <Feather
+                          name="chevron-down"
+                          size={RFPercentage(2.5)}
+                          color={colors.black[0]}
+                        />
+                      }
+                    />
+                    {touched.level && errors.level && (
+                      <JErrorText>{errors.level}</JErrorText>
+                    )}
+                    {/* <JInput
                   style={{
                     textAlign: store.lang.id == 0 ? 'left' : 'right',
                   }}
@@ -798,165 +766,165 @@ const _Edelete = () => {
                   {touched.level && errors.level && (
                     <JErrorText>{errors.level}</JErrorText>
                   )} */}
-                      <JInput
-                        style={{
-                          textAlign: store.lang.id == 0 ? 'left' : 'right',
-                        }}
-                        isRequired={true}
-                        containerStyle={styles.container}
-                        value={values.title}
-                        heading={`${store.lang.degree_title}:`}
-                        error={touched.title && errors.title && true}
-                        onChangeText={handleChange('title')}
-                        onBlur={() => setFieldTouched('title')}
-                      />
-                      {touched.title && errors.title && (
-                        <JErrorText>{errors.title}</JErrorText>
-                      )}
+                    <JInput
+                      style={{
+                        textAlign: store.lang.id == 0 ? 'left' : 'right',
+                      }}
+                      isRequired={true}
+                      containerStyle={styles.container}
+                      value={values.title}
+                      heading={`${store.lang.degree_title}:`}
+                      error={touched.title && errors.title && true}
+                      onChangeText={handleChange('title')}
+                      onBlur={() => setFieldTouched('title')}
+                    />
+                    {touched.title && errors.title && (
+                      <JErrorText>{errors.title}</JErrorText>
+                    )}
 
-                      <JSelectInput
-                        containerStyle={styles.container}
-                        value={values.county.name}
-                        data={
-                          store.lang.id == 0
-                            ? store.myProfile.dataEnglish.countries
-                            : store.myProfile.dataArabic.countries
-                        }
-                        // id={values.county.id}
-                        header={store.lang.country}
-                        heading={`${store.lang.country}:`}
-                        setValue={e => {
-                          setFieldValue('county', e);
-                          setFieldValue('state', null);
-                          setFieldValue('city', null);
-                        }}
-                        error={touched.county && errors.county && true}
-                        rightIcon={
-                          <Feather
-                            name="chevron-down"
-                            size={RFPercentage(2.5)}
-                            color={colors.black[0]}
-                          />
-                        }
-                      />
-                      {touched.county && errors.county && (
-                        <JErrorText>{errors.county}</JErrorText>
-                      )}
+                    <JSelectInput
+                      containerStyle={styles.container}
+                      value={values.county.name}
+                      data={
+                        store.lang.id == 0
+                          ? store.myProfile.dataEnglish.countries
+                          : store.myProfile.dataArabic.countries
+                      }
+                      // id={values.county.id}
+                      header={store.lang.country}
+                      heading={`${store.lang.country}:`}
+                      setValue={e => {
+                        setFieldValue('county', e);
+                        setFieldValue('state', null);
+                        setFieldValue('city', null);
+                      }}
+                      error={touched.county && errors.county && true}
+                      rightIcon={
+                        <Feather
+                          name="chevron-down"
+                          size={RFPercentage(2.5)}
+                          color={colors.black[0]}
+                        />
+                      }
+                    />
+                    {touched.county && errors.county && (
+                      <JErrorText>{errors.county}</JErrorText>
+                    )}
 
-                      <JSelectInput
-                        containerStyle={styles.container}
-                        value={values.state?.name}
-                        id={values.county?.id}
-                        setValue={e => {
-                          setFieldValue('state', e);
-                          setFieldValue('city', null);
-                        }}
-                        header={store.lang.state}
-                        heading={`${store.lang.state}:`}
-                        error={touched.state && errors.state && true}
-                        rightIcon={
-                          <Feather
-                            name="chevron-down"
-                            size={RFPercentage(2.5)}
-                            color={colors.black[0]}
-                          />
-                        }
-                      />
-                      {touched.state && errors.state && (
-                        <JErrorText>{errors.state}</JErrorText>
-                      )}
+                    <JSelectInput
+                      containerStyle={styles.container}
+                      value={values.state?.name}
+                      id={values.county?.id}
+                      setValue={e => {
+                        setFieldValue('state', e);
+                        setFieldValue('city', null);
+                      }}
+                      header={store.lang.state}
+                      heading={`${store.lang.state}:`}
+                      error={touched.state && errors.state && true}
+                      rightIcon={
+                        <Feather
+                          name="chevron-down"
+                          size={RFPercentage(2.5)}
+                          color={colors.black[0]}
+                        />
+                      }
+                    />
+                    {touched.state && errors.state && (
+                      <JErrorText>{errors.state}</JErrorText>
+                    )}
 
-                      <JSelectInput
-                        containerStyle={styles.container}
-                        value={values.city?.name
-                        }
-                        setValue={e => setFieldValue('city', e)}
-                        header={store.lang.city}
-                        heading={`${store.lang.city}:`}
-                        id={values.state?.id}
-                        error={touched.city && errors.city && true}
-                        rightIcon={
-                          <Feather
-                            name="chevron-down"
-                            size={RFPercentage(2.5)}
-                            color={colors.black[0]}
-                          />
-                        }
-                      />
-                      {touched.city && errors.city && (
-                        <JErrorText>{errors.city}</JErrorText>
-                      )}
+                    <JSelectInput
+                      containerStyle={styles.container}
+                      value={values.city?.name
+                      }
+                      setValue={e => setFieldValue('city', e)}
+                      header={store.lang.city}
+                      heading={`${store.lang.city}:`}
+                      id={values.state?.id}
+                      error={touched.city && errors.city && true}
+                      rightIcon={
+                        <Feather
+                          name="chevron-down"
+                          size={RFPercentage(2.5)}
+                          color={colors.black[0]}
+                        />
+                      }
+                    />
+                    {touched.city && errors.city && (
+                      <JErrorText>{errors.city}</JErrorText>
+                    )}
 
-                      <JInput
-                        style={{
-                          textAlign: store.lang.id == 0 ? 'left' : 'right',
-                        }}
-                        isRequired={true}
-                        containerStyle={styles.container}
-                        heading={`${store.lang.institute}:`}
-                        value={values.institude}
-                        error={touched.institude && errors.institude && true}
-                        onChangeText={handleChange('institude')}
-                        onBlur={() => setFieldTouched('institude')}
-                      />
-                      {touched.institude && errors.institude && (
-                        <JErrorText>{errors.institude}</JErrorText>
-                      )}
+                    <JInput
+                      style={{
+                        textAlign: store.lang.id == 0 ? 'left' : 'right',
+                      }}
+                      isRequired={true}
+                      containerStyle={styles.container}
+                      heading={`${store.lang.institute}:`}
+                      value={values.institude}
+                      error={touched.institude && errors.institude && true}
+                      onChangeText={handleChange('institude')}
+                      onBlur={() => setFieldTouched('institude')}
+                    />
+                    {touched.institude && errors.institude && (
+                      <JErrorText>{errors.institude}</JErrorText>
+                    )}
 
-                      <JInput
-                        style={{
-                          textAlign: store.lang.id == 0 ? 'left' : 'right',
-                        }}
-                        isRequired
-                        keyboardType={'numeric'}
-                        containerStyle={styles.container}
-                        heading={`${store.lang.result}:`}
-                        value={values.result}
-                        error={touched.result && errors.result && true}
-                        onChangeText={handleChange('result')}
-                        onBlur={() => setFieldTouched('result')}
-                      />
-                      {touched.result && errors.result && (
-                        <JErrorText>{errors.result}</JErrorText>
-                      )}
+                    <JInput
+                      style={{
+                        textAlign: store.lang.id == 0 ? 'left' : 'right',
+                      }}
+                      isRequired
+                      keyboardType={'numeric'}
+                      containerStyle={styles.container}
+                      heading={`${store.lang.result}:`}
+                      value={values.result}
+                      error={touched.result && errors.result && true}
+                      onChangeText={handleChange('result')}
+                      onBlur={() => setFieldTouched('result')}
+                    />
+                    {touched.result && errors.result && (
+                      <JErrorText>{errors.result}</JErrorText>
+                    )}
 
-                      <JSelectInput
-                        isRequired
-                        containerStyle={styles.container}
-                        value={values.year?.name}
-                        setValue={e => setFieldValue('year', e)}
-                        header={store.lang.year}
-                        heading={`${store.lang.year}:`}
-                        error={touched.year && errors.year && true}
-                        rightIcon={
-                          <Feather
-                            name="chevron-down"
-                            size={RFPercentage(2.5)}
-                            color={colors.black[0]}
-                          />
-                        }
-                      />
-                      {touched.year && errors.year && (
-                        <JErrorText>{errors.year}</JErrorText>
-                      )}
-                    </ScrollView>
-                    <View style={styles.bottomV}>
-                      <JButton
-                        isValid={isValid}
-                        onPress={() => handleSubmit()}
-                        style={{
-                          position: 'absolute',
-                          bottom: RFPercentage(1),
-                          width: RFPercentage(20),
-                        }}>
-                        {loader ? store.lang.loading : store.lang.save}
-                      </JButton>
-                    </View>
-                  </>
-                )}
-              </Formik>
-            ))
-          )}
+                    <JSelectInput
+                      isRequired
+                      containerStyle={styles.container}
+                      value={values.year?.name}
+                      setValue={e => setFieldValue('year', e)}
+                      header={store.lang.year}
+                      heading={`${store.lang.year}:`}
+                      error={touched.year && errors.year && true}
+                      rightIcon={
+                        <Feather
+                          name="chevron-down"
+                          size={RFPercentage(2.5)}
+                          color={colors.black[0]}
+                        />
+                      }
+                    />
+                    {touched.year && errors.year && (
+                      <JErrorText>{errors.year}</JErrorText>
+                    )}
+                  </ScrollView>
+                  <View style={styles.bottomV}>
+                    <JButton
+                      isValid={isValid}
+                      onPress={() => handleSubmit()}
+                      style={{
+                        position: 'absolute',
+                        bottom: RFPercentage(1),
+                        width: RFPercentage(20),
+                      }}>
+                      {loader ? store.lang.loading : store.lang.save}
+                    </JButton>
+                  </View>
+                </>
+              )}
+            </Formik>
+          )
+          }
         </KeyboardAvoidingView>
         {/* )} */}
       </RBSheet>
@@ -965,10 +933,18 @@ const _Edelete = () => {
         setModalVisible={setModalVisible}
         alertMsg={store.lang.delete}
         msg={store.lang.are_you_sure_to_delete}
-        onPress={() => {
-          edu_Id ? _delete(edu_Id) : _Edelete(exp_Id);
+        onPressYes={() => {
+          id.educationId !== '' ? _delete() : _Edelete();
         }}
-        // onPress={()=> {_Edelete(exp_Id)}}
+        onPressNo={() => {
+          setId({
+            experienceId: '',
+            educationId: ''
+          })
+          setModalVisible(false)
+
+        }}
+      // onPress={()=> {_Edelete(exp_Id)}}
       />
     </JScreen>
   );
@@ -977,14 +953,16 @@ const _Edelete = () => {
 export default observer(CareerInformation);
 
 const styles = StyleSheet.create({
-  container: {marginTop: RFPercentage(2)},
-  bottomV: {height: RFPercentage(9), width: '100%', padding: RFPercentage(1),shadowColor: "#000",
-  shadowOffset: {
-    width: 0,
-    height: 2,
+  container: { marginTop: RFPercentage(2) },
+  bottomV: {
+    height: RFPercentage(9), width: '100%', padding: RFPercentage(1), shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5
   },
-  shadowOpacity: 0.25,
-  shadowRadius: 3.84,
-  
-  elevation: 5},
 });

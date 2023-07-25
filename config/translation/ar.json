@@ -351,6 +351,7 @@
     "date_of_birth": "تاريخ الميلاد",
     "marital_status": "الحالة الاجتماعية",
     "immediate_available": "متاح على الفور",
+    "not_immediate_available": "غير متوفر على الفور",
     "score": "نتيجة",
     "year": "سنة",
     "complete": "مكتمل",

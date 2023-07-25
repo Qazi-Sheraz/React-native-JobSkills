@@ -53,9 +53,9 @@ const JApplication = ({
   const [stat, setStat] = useState(parseInt(item.status_id));
   const [selectedStatus, setSelectedStatus] = useState();
   const [modalVisible, setModalVisible] = useState(false);
-// console.log(stat);
+
   const handleStatusSelect = status1 => {
-    // console.log(status1)
+
     setSelectedStatus(status1);
     status1 == 0
       ? _applicantsStatus(0, store.lang.drafted)
@@ -95,10 +95,10 @@ const JApplication = ({
       'interviewType',
       values.interview_type === 'Office Base' ? 0 : 'Zoom' ? 1 : 2,
     );
-    formdata.append('office_location', values.office_location);
-    formdata.append('zoom_link', values.zoom_link);
-    formdata.append('candidateID', item.candidate_user_id);
-    formdata.append('jobid', item.job_id);
+    formdata.append('office_location', values?.office_location);
+    formdata.append('manual_link', values?.manual_link);
+    formdata.append('candidateID', item?.candidate_user_id);
+    formdata.append('jobid', item?.job_id);
     // console.log('formdata', formdata);
 
     fetch(`${url.baseUrl}/meetings-submit`, {
@@ -118,7 +118,7 @@ const JApplication = ({
           setUpdate(!update);
 
         } else {
-          // console.log('error',message);
+          // .log('error',message);
           Toast.show({
             type: 'error',
             text1: result.message,
@@ -409,17 +409,16 @@ const JApplication = ({
                   ? meetings?.interview_topic
                   : '',
                 interview_date_and_time: new Date(),
-                description: meetings?.description ? meetings.description : '',
+                description: meetings?.description ? meetings?.description : '',
                 interview_type:
-                  meetings?.meeting_type && meetings.meeting_type?.length > 0
-                    ? meetings.meeting_type[0]
+                  meetings?.meeting_type && meetings?.meeting_type?.length > 0
+                    ? meetings?.meeting_type[0]
                     : '',
                 office_location: '',
-                zoom_link: '',
+                manual_link: '',
               }}
               onSubmit={values => {
                 _meetingSubmit(values);
-
                 setModalVisible(!modalVisible);
               }}
               // validationSchema={yup.object().shape({
@@ -569,7 +568,7 @@ const JApplication = ({
                           borderRadius: RFPercentage(1),
                           paddingVertical: RFPercentage(1),
                         }}>
-                        {(meetings?.meeting_type).map((item, index) => (
+                        {meetings?.meeting_type.map((item, index) => (
                           <Pressable
                             key={index}
                             style={{
@@ -619,10 +618,10 @@ const JApplication = ({
                         containerStyle={{marginTop: RFPercentage(1)}}
                         placeholder={store.lang.manual_link}
                         //  heading={'Zoom'}
-                        value={values.zoom_link}
-                        error={touched.zoom_link && errors.zoom_link && true}
-                        onChangeText={handleChange('zoom_link')}
-                        onBlur={() => setFieldTouched('zoom_link')}
+                        value={values.manual_link}
+                        error={touched.manual_link && errors.manual_link && true}
+                        onChangeText={handleChange('manual_link')}
+                        onBlur={() => setFieldTouched('manual_link')}
                       />
                     )
                   )}

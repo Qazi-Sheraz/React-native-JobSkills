@@ -108,20 +108,21 @@ function CSocialMediaLink({refRBSheet, data, user}) {
               </JText>
             }
             right={
-              loader ? (
-                <ActivityIndicator
-                  color={colors.white[0]}
-                  size={RFPercentage(2)}
-                />
-              ) : (
+              
                 <JText
-                  onPress={() => isValid && handleSubmit()}
+                disabled={loader?true:false}
+                  onPress={() => {setLoader(true)
+                    isValid && handleSubmit()}}
                   fontColor={
                     !isValid ? `${colors.white[0]}70` : colors.white[0]
                   }>
-                  {store.lang.save}
+                  {loader ? 
+                <ActivityIndicator
+                  color={colors.white[0]}
+                  size={RFPercentage(2)}
+                />:store.lang.save}
                 </JText>
-              )
+              
             }
             left={
               <JChevronIcon/>

@@ -14,7 +14,7 @@ import {
   heightPercentageToDP,
   widthPercentageToDP,
 } from 'react-native-responsive-screen';
-import JShadowView from '../../customComponents/JShadowView';
+
 import colors from '../../config/colors';
 import JGradientView from '../../customComponents/JGradientView';
 import JSideHeading from '../../customComponents/JSideHeading';
@@ -22,7 +22,6 @@ import JJobTile from '../../customComponents/JJobTile';
 import JScrollView from '../../customComponents/JScrollView';
 import JEmpty from '../../customComponents/JEmpty';
 import {_getHomeData} from '../../functions/Candidate/BottomTab';
-import translation from '../../config/translation';
 import JCompanyTile from '../../customComponents/JCompanyTile';
 import {_searchFilter} from '../../functions/CFilter';
 import JFindTitle from '../../customComponents/JFindTitle';
@@ -30,7 +29,7 @@ import JFindTitle from '../../customComponents/JFindTitle';
 function Home({navigation}) {
   const store = useContext(StoreContext);
   const data = store.homeData;
-  
+  const maxLength = 20;
   const onRefresh = useCallback(() => {
     store.setIsRefreshing(true);
     setTimeout(() => {
@@ -82,37 +81,7 @@ function Home({navigation}) {
         <React.Fragment>
 
           <JFindTitle JobTitle={store.lang.jobTitle_Skills_Company}  onPress={() => navigation.navigate('CSearch')}/>
-{/* 
-          <JShadowView
-            onPress={() => navigation.navigate('CSearch')}
-            shadowColor={colors.purple[0]}
-            containerStyle={{
-              marginBottom: RFPercentage(2),
-              borderWidth: RFPercentage(0.1),
-              borderColor: `${colors.purple[0]}50`,
 
-              paddingLeft: RFPercentage(1),
-              height: heightPercentageToDP(6),
-
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-            <Feather
-              name="search"
-              size={RFPercentage(2.8)}
-              color={colors.placeHolderColor[0]}
-              style={{
-                marginRight: RFPercentage(1),
-                // position: 'absolute',
-                // right: 0,
-              }}
-            />
-            <JText
-              fontColor={colors.placeHolderColor[0]}
-              fontSize={RFPercentage(2)}>
-              {store.lang.jobTitle_Skills_Company}
-            </JText>
-          </JShadowView> */}
 
           <JScrollView refreshing={store.isRefreshing} onRefresh={onRefresh}>
             <JSideHeading
@@ -226,7 +195,11 @@ function Home({navigation}) {
                     type="job"
                     title={item?.job_title}
                     location={item?.full_location}
-                    category={`${store.lang.id==0 ? item?.job_category_english:item?.job_category_arabic}`}
+                    category={`${ 
+                      store.lang.id==0 ?
+                         (item?.job_category_english.length>30?item.job_category_english.substring(0, 30) + '....':item.job_category_english)
+                        :(item?.job_category_arabic.length>30?item?.job_category_arabic.substring(0, 30) + '....':item?.job_category_arabic)
+                    }`}
                     img={item?.company_image}
                     containerStyle={{marginVertical: RFPercentage(1)}}
                   />

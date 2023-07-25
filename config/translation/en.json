@@ -357,6 +357,7 @@
     "date_of_birth": "Date of Birth",
     "marital_status": "Marital Status",
     "immediate_available": "Immediate Available",
+    "not_immediate_available": "Not Immediate Available",
     "score": "Score",
     "year": "Year",
     "complete": "Complete",

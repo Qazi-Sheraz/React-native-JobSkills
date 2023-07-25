@@ -197,28 +197,7 @@ const Assessment = ({navigation}) => {
                         {item.assessment_question?.assessment_question}
                       </JText>
                     </JRow>
-                    {/* <JRow
-                      style={{
-                        paddingVertical: RFPercentage(1),
-                        alignItems: 'flex-start',
-                      }}>
-                      <JText
-                        style={{
-                          fontWeight: 'bold',
-                          fontSize: RFPercentage(1.9),
-                        }}>
-                        {store.lang.ques_type}
-                        {'\r'}
-                      </JText>
-                      <JText
-                        style={{
-                          fontWeight: 'bold',
-                          fontSize: RFPercentage(1.9),
-                        }}>
-                        {item.assessment_question?.question_type}
-                      </JText>
-                    </JRow> */}
-
+                   
                     {item.assessment_question?.question_type === 'dropDown' ||
                     item.assessment_question?.question_type === 'mcqs' ? (
                       <View style={{marginVertical: RFPercentage(2)}}>
@@ -253,63 +232,7 @@ const Assessment = ({navigation}) => {
                 keyExtractor={item => item.id}
               />
 
-              {/* <FlatList
-                ListEmptyComponent={
-                  <JEmpty/>
-                }
-                style={{marginTop: RFPercentage(2)}}
-                data={selected.particular_assessments}
-                renderItem={({item, index}) => (
-                  <>
-                    <Pressable
-                      style={{
-                        borderBottomColor: colors.border[0],
-                        borderBottomWidth: RFPercentage(0.1),
-                        padding: RFPercentage(2),
-                      }}>
-                      <JText fontSize={RFPercentage(2.2)}>
-                        {store.lang.questions}{index + 1} {' '}
-                        {item.assessment_question.assessment_question}
-                      </JText>
-
-                      { item.assessment_question?.question_type==="dropDown" || item.assessment_question?.question_type==="mcqs" ? 
-          (  <View style={{marginVertical:RFPercentage(2)}}>
-          
-            {item.answer?.map((answer)=>
-            <JRow style={{marginHorizontal:RFPercentage(2)}}>
-                <JIcon icon={'fa'} name={'circle-thin'} size={RFPercentage(2)}/>
-                <JText style={{marginHorizontal:RFPercentage(1)}}>{answer}</JText>
-            </JRow>)}</View>):null} 
-                      <JRow
-              style={{
-                paddingVertical:RFPercentage(1),
-                alignItems: 'flex-start',
-              }}>
-              <JText
-                style={{ fontWeight: 'bold',
-                fontSize: RFPercentage(1.9)}}>
-                {store.lang.ques_type}{'\r'}
-              </JText>
-              <JText
-                style={{ fontWeight: 'bold',
-                fontSize: RFPercentage(1.9)}}>
-                {item.assessment_question?.question_type}
-              </JText>
-            
-            </JRow>
-
-                      <JText
-                        style={{marginTop: RFPercentage(1)}}
-                        fontSize={RFPercentage(2.2)}
-                        fontWeight="600"
-                        fontColor={colors.purple[0]}>
-                        {store.lang.answer}  {item.answer}
-                      </JText>
-                    </Pressable>
-                  </>
-                )}
-                keyExtractor={(item, index) => index}
-              /> */}
+             
             </>
           )}
         </RBSheet>

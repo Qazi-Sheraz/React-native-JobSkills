@@ -119,7 +119,7 @@ function AllJobs({navigation}) {
       fetch(`${url.baseUrl}/searchJobs`, requestOptions)
         .then(response => response?.json())
         .then(result => {
-          console.log('neww=====>',result.data);
+          // console.log('neww=====>',result.data);
           
           store.setJob(result.data)
           setModalVisible(false);

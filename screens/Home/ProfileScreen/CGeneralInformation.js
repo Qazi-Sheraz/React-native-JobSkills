@@ -90,7 +90,7 @@ const{params}=useRoute();
           gender: profile.gender==null?'':profile.gender == '0' ? {name: store.lang.male} : {name: store.lang.female},
           country: profile.country_name
           ?{
-            name: profile.country_name?.name,
+            name: store.lang.id=0?profile.country_name?.name:profile?.country_name?.arabic_name,
             id: profile.country_name?.id,
           }
           : '',

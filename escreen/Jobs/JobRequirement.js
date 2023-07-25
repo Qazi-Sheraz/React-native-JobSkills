@@ -28,12 +28,7 @@ import { _addnewJob } from '../../functions/Candidate/BottomTab';
 const JobRequirement = () => {
 
   const {params,values}=useRoute()
-  // console.log(
-  //   'params=====================>',
-  //   params,
-  //   'values==============>',
-  //   values,
-  // );
+ 
   const store = useContext(StoreContext);
   const {navigate, goBack} = useNavigation();
   const [isEnabled, setIsEnabled] = useState('0');
@@ -47,10 +42,6 @@ const JobRequirement = () => {
   const [loader, setLoader] = useState(false);
   const [requirements, setRequirements] = useState();
 
-// const arry=params.assessment.map((item)=>item.id).map(Number)
-// // const arr1= arry.map(Number);
-// console.log((params?.jobTag?.map((item)=>item.id).map(Number)))
-// params.assessment.map((item)=>console.log("id",item.id))
   
   const _handleSubmit = values => {
     var myHeaders = new Headers();
@@ -83,7 +74,6 @@ const JobRequirement = () => {
     formdata.append('job_expiry_date', values?.expiry);
     formdata.append('hide_salary',isEnabled);
     formdata.append('is_freelance',isEnabled1);
-  //  console.log('formdata',formdata)
 
 
     fetch(`${url.baseUrl}/employer/jobs/store`, {
@@ -164,7 +154,7 @@ const JobRequirement = () => {
           }}
           onSubmit={values => {
             // console.log({...params, ...values});
-            // console.log(values);
+          
             _handleSubmit(values);
           }}
           validationSchema={yup.object().shape({
@@ -350,32 +340,6 @@ const JobRequirement = () => {
                 <View
                   style={{
                     justifyContent: 'space-between',
-                    paddingTop: RFPercentage(2),
-                    marginBottom: RFPercentage(1),
-                  }}>
-                  <JText
-                    style={{fontSize: RFPercentage(2.5), fontWeight: '500'}}>
-                    {store.lang.expiry_date}:
-                  </JText>
-                  <Pressable
-                    onPress={() => setModalVisible1(true)}
-                    style={{
-                      height: RFPercentage(6),
-                      flexDirection:
-                        store.lang.id === 0 ? 'row' : 'row-reverse',
-                      alignItems: 'center',
-                      borderBottomWidth: RFPercentage(0.2),
-                      // backgroundColor: 'red',
-                      borderBottomColor: error
-                        ? colors.danger[0]
-                        : colors.inputBorder[0],
-                    }}>
-                    <JText fontSize={RFPercentage(2)}>{values.expiry}</JText>
-                  </Pressable>
-                </View>
-                <View
-                  style={{
-                    justifyContent: 'space-between',
                     paddingTop: RFPercentage(1),
                     marginBottom: RFPercentage(1),
                   }}>
@@ -400,6 +364,33 @@ const JobRequirement = () => {
                     </JText>
                   </Pressable>
                 </View>
+                <View
+                  style={{
+                    justifyContent: 'space-between',
+                    paddingTop: RFPercentage(2),
+                    marginBottom: RFPercentage(1),
+                  }}>
+                  <JText
+                    style={{fontSize: RFPercentage(2.5), fontWeight: '500'}}>
+                    {store.lang.expiry_date}:
+                  </JText>
+                  <Pressable
+                    onPress={() => setModalVisible1(true)}
+                    style={{
+                      height: RFPercentage(6),
+                      flexDirection:
+                        store.lang.id === 0 ? 'row' : 'row-reverse',
+                      alignItems: 'center',
+                      borderBottomWidth: RFPercentage(0.2),
+                      // backgroundColor: 'red',
+                      borderBottomColor: error
+                        ? colors.danger[0]
+                        : colors.inputBorder[0],
+                    }}>
+                    <JText fontSize={RFPercentage(2)}>{values.expiry}</JText>
+                  </Pressable>
+                </View>
+                
                 <View
                   style={{
                     marginVertical: RFPercentage(2),
@@ -434,6 +425,7 @@ const JobRequirement = () => {
               </ScrollView>
               </View>
               <JButton
+              disabled={loader?true:false}
                 isValid={isValid}
                 onPress={() => {
                   setLoader(true)
@@ -443,6 +435,8 @@ const JobRequirement = () => {
                   position: 'absolute',
                   bottom: RFPercentage(3),
                   width: RFPercentage(20),
+                  
+                  
                 }}>
                 {loader?store.lang.loading:store.lang.post_job}
               </JButton>
@@ -464,6 +458,7 @@ const JobRequirement = () => {
                         disableTouchEvent: true,
                         selectedDotColor: 'orange',
                       },
+
                     }}
                   />
                 </Pressable>

@@ -22,9 +22,9 @@ import pkg from '../package.json';
 import {useContext} from 'react';
 import {StoreContext} from '../mobx/store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Toast from 'react-native-toast-message';
 import {observer, Observer} from 'mobx-react';
 import JRow from '../customComponents/JRow';
+import { JToast } from '../functions/Toast';
 function CustomDrawerContent(props) {
   const store = useContext(StoreContext);
   const user = store.token?.user;
@@ -45,13 +45,14 @@ function CustomDrawerContent(props) {
           .then(res => {
             store.setToken({});
 
-            Toast.show({
+            JToast({
               type: 'success',
               text1: store.lang.logout_successfully,
             });
           })
           .catch(error => {
-            Toast.show({
+          
+            JToast({
               type: 'error',
               text1: 'Error',
               text2: 'Error while removing token',

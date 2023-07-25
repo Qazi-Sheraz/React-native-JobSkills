@@ -1,4 +1,5 @@
 import Toast from 'react-native-toast-message';
+import colors from '../config/colors';
 export const JToast = ({
   type = 'success',
   text1,

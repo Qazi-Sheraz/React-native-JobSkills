@@ -1,14 +1,14 @@
-import {TouchableOpacity, View} from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import colors from '../config/colors';
-import {RFPercentage} from 'react-native-responsive-fontsize';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 import JText from './JText';
 import {
   heightPercentageToDP,
   widthPercentageToDP,
 } from 'react-native-responsive-screen';
 
-export default function  JButton({
+export default function JButton({
   children,
   style,
   backgroundColor,
@@ -18,9 +18,9 @@ export default function  JButton({
   onPress,
   isValid,
   ref,
-  disabled=false
+  disabled = false
 }) {
-  return isValid !== undefined && isValid === false? (
+  return isValid !== undefined && isValid === false ? (
     <View
       ref={ref}
       style={[
@@ -31,20 +31,20 @@ export default function  JButton({
           backgroundColor: colors.border[0],
           height: heightPercentageToDP(5),
           // width: '100%',
-          paddingHorizontal:RFPercentage(2),
+          paddingHorizontal: RFPercentage(2),
           borderWidth: borderWidth ? borderWidth : RFPercentage(0.1),
           borderColor: borderColor ? borderColor : colors.border[0],
         },
         style,
       ]}>
       <JText
-        style={[{color: colors.placeHolderColor[0], opacity: 0.5}, fontStyle]}>
+        style={[{ color: colors.placeHolderColor[0], opacity: 0.5 }, fontStyle]}>
         {children}
       </JText>
     </View>
   ) : (
     <TouchableOpacity
-    disabled={disabled}
+      disabled={disabled}
       ref={ref}
       onPress={onPress}
       style={[
@@ -54,9 +54,10 @@ export default function  JButton({
           alignSelf: 'center',
           backgroundColor: backgroundColor
             ? backgroundColor
+
             : colors.primary[0],
           height: heightPercentageToDP(5),
-          paddingHorizontal:RFPercentage(2),
+          paddingHorizontal: RFPercentage(2),
           borderWidth: borderWidth ? borderWidth : RFPercentage(0.1),
           borderColor: borderColor ? borderColor : colors.primary[0],
           shadowColor: colors.black[0],

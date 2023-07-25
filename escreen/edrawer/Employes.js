@@ -14,6 +14,7 @@ import url from '../../config/url';
 import JNotfoundData from '../../customComponents/JNotfoundData';
 import JChevronIcon from '../../customComponents/JChevronIcon';
 import { observer } from 'mobx-react';
+import JEmpty from '../../customComponents/JEmpty';
 
 const Employes = () => {
   const {navigate, goBack} = useNavigation();
@@ -123,7 +124,7 @@ const Employes = () => {
             />
           </View>
         </>
-      ):<JNotfoundData/>)}
+      ):<JEmpty/>)}
     </JScreen>
   );
 };

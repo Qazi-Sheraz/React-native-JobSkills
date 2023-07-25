@@ -23,6 +23,7 @@ import url from '../../config/url';
 import { useIsFocused } from '@react-navigation/native';
 import JNotfoundData from '../../customComponents/JNotfoundData';
 import JApiError from '../../customComponents/JApiError';
+import JEmpty from '../../customComponents/JEmpty';
 
 const Meeting = ({isempty=false,}) => {
   const store = useContext(StoreContext);
@@ -135,7 +136,7 @@ const Meeting = ({isempty=false,}) => {
           )}
         />
       ) : (
-        <JNotfoundData />
+        <JEmpty />
       )}
 
       <RBSheet

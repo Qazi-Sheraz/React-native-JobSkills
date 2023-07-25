@@ -16,11 +16,13 @@ export default function JText({
   fontAlign ,
   numberOfLines,
   ellipsizeMode,
+  disabled=false,
 }) {
   const store=useContext(StoreContext)
   
   return (
     <Text
+    disabled={disabled}
       numberOfLines={numberOfLines}
       ellipsizeMode={ellipsizeMode}
       onPress={onPress}

@@ -134,7 +134,7 @@ const AssessmentView = () => {
               <JText style={styles.answer}>
                 {item.assessment_defined_answers[0]?.answer ?item.assessment_defined_answers[0]?.answer:'N/A' }
               </JText>
-              {/* {console.log(item.question_type)} */}
+             
             </JRow>
           </View>
         )}

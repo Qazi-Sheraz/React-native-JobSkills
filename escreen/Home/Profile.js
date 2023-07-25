@@ -212,6 +212,9 @@ const Profile = () => {
                   city_id: profile?.company[0]?.contact_information?.city_id,
                   phone:
                     profile?.company[0]?.contact_information?.phone_number?.replace(/\+/g,'',),
+                   
+                  region_code:profile?.company[0]?.contact_information?.regional_code,
+                    
                 });
               }}
               isEmpty={false}
@@ -232,32 +235,22 @@ const Profile = () => {
                     title={store.lang.phone_number}
                     text={
                       profile?.company[0]?.contact_information?.phone_number
-                        ? profile?.company[0]?.contact_information
-                            ?.regional_code !== null
-                          ? `${profile?.company[0]?.contact_information?.regional_code?.replace(
-                              /\+/g,
-                              '',
-                            )}${profile?.company[0]?.contact_information?.phone_number?.replace(
-                              /\+/g,
-                              '',
-                            )}`
-                          : profile?.company[0]?.contact_information?.phone_number?.replace(
-                              /\+/g,
-                              '',
-                            )
+                        && profile?.company[0]?.contact_information?.regional_code
+                          ? profile?.company[0]?.contact_information?.regional_code 
+                          +profile?.company[0]?.contact_information?.phone_number
                         : 'N/A'
+                        
                     }
                   />
                   <JText
                     onPress={() => {
-                      profile?.company[0]?.contact_information
-                        ?.is_phone_verified == 0
+                      profile?.company[0]?.contact_information?.is_phone_verified == 0
                         ? (navigation.navigate('VerifiedPhone', {
-                            phone:
-                              profile?.company[0]?.contact_information?.phone_number?.replace(
-                                /\+/g,
-                                '',
-                              ),
+                            phone:profile?.company[0]?.contact_information?.phone_number
+                            && profile?.company[0]?.contact_information?.regional_code
+                              && profile?.company[0]?.contact_information?.regional_code 
+                              +profile?.company[0]?.contact_information?.phone_number
+                            
                           }),
                           _otp())
                         : Toast.show({
@@ -431,7 +424,7 @@ const Profile = () => {
                       {item.social_media_link?.facebook_url&& (
                         <Pressable onPress={()=>{
                           Linking.openURL(item.social_media_link?.facebook_url)
-                            .catch((error) => console.error('Error opening URL:', error));
+                            // .catch((error) => console.error('Error opening URL:', error));
                         }} style={{marginBottom: RFPercentage(2)}}>
                           <JRow>
                             <FontAwesome5Brands
@@ -459,7 +452,7 @@ const Profile = () => {
                       {item.social_media_link?.twitter_url && (
                         <Pressable onPress={()=>{
                           Linking.openURL(item.social_media_link?.twitter_url)
-                            .catch((error) => console.error('Error opening URL:', error));
+                            // .catch((error) => console.error('Error opening URL:', error));
                         }} style={{marginBottom: RFPercentage(2)}}>
                           <JRow>
                             <FontAwesome5Brands
@@ -486,7 +479,7 @@ const Profile = () => {
                       {item.social_media_link?.linkedin_url && (
                         <Pressable onPress={()=>{
                           Linking.openURL(item.social_media_link?.linkedin_url)
-                            .catch((error) => console.error('Error opening URL:', error));
+                            // .catch((error) => console.error('Error opening URL:', error));
                         }} style={{marginBottom: RFPercentage(2)}}>
                           <JRow>
                             <FontAwesome5Brands

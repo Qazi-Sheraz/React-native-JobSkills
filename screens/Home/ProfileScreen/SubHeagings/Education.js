@@ -93,6 +93,7 @@ export default function Education({
                   <TouchableOpacity
                   onPress={()=>{
                     setSelectedEdu({
+                      educationId:item.id,
                       degree_level: store.lang.id==0?item?.degree_level?.name:item?.degree_level?.arabic_title,
                       degree_level_id:item?.degree_level_id,
                       title:item?.degree_title,
@@ -144,7 +145,8 @@ export default function Education({
                 {/* <JRow style={{justifyContent: 'space-between'}}>
                   <JText fontColor={colors.black[0]}>{item.institute}</JText> */}
                   <TouchableOpacity
-                    onPress={() => _deleteEducation(item.id)}
+                    onPress={() => {_deleteEducation(item.id)
+                    }}
                     style={{
                       justifyContent: 'center',
                       alignItems: 'center',

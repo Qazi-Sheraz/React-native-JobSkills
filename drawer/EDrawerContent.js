@@ -18,13 +18,12 @@ import pkg from '../package.json';
 import {useContext} from 'react';
 import {StoreContext} from '../mobx/store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Toast from 'react-native-toast-message';
 import {observer, Observer} from 'mobx-react';
 import {getDrawerItem} from '../data/edrawer';
 import JIcon from '../customComponents/JIcon';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import JRow from '../customComponents/JRow';
-import {useEffect} from 'react';
+import { JToast } from '../functions/Toast';
 
 function EDrawerContent(props) {
   const {navigate} = useNavigation();
@@ -46,17 +45,20 @@ function EDrawerContent(props) {
       ? AsyncStorage.removeItem('@login')
           .then(res => {
             store.setToken({});
-            Toast.show({
+            JToast({
               type: 'success',
               text1: store.lang.logout_successfully,
+             
             });
           })
           .catch(error => {
-            Toast.show({
+          
+            JToast({
               type: 'error',
               text1: 'Error',
               text2: 'Error while removing token',
             });
+         
           })
       : null;
   };

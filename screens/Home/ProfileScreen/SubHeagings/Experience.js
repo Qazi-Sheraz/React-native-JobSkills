@@ -95,6 +95,7 @@ export default function Experience({
                       setSelected(0);
                       
                       setSelectedExperience({
+                        experienceId:item.id,
                         title: item?.experience_title,
                         company: item?.company,
                         start: moment(item?.start_date).format('DD MMM, YYYY'),
@@ -145,7 +146,9 @@ export default function Experience({
                 <JRow style={{justifyContent: 'space-between'}}>
                   <JText fontColor={colors.placeHolderColor[0]}>{store.lang.complete}</JText>
                   <TouchableOpacity
-                    onPress={() => _deleteExperience(item?.id)}
+                    onPress={() => {
+                      _deleteExperience(item?.id)
+                  }}
                     style={{
                       justifyContent: 'center',
                       alignItems: 'center',

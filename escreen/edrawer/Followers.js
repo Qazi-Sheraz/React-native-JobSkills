@@ -20,6 +20,7 @@ import { FlatList } from 'react-native';
 import url from '../../config/url';
 import JNotfoundData from '../../customComponents/JNotfoundData';
 import { observer } from 'mobx-react';
+import JEmpty from '../../customComponents/JEmpty';
 
 const Followers = () => {
   const store = useContext(StoreContext);
@@ -153,12 +154,11 @@ const Followers = () => {
                         {item.regional_code}-{item.phone_number}
                       </JText>
                       <JText>
-                        {item.immediate_available === 0 ? (
-                          'Immediate Available'
-                        ) : (
+                        {item.immediate_available === 0 ? 
+                          store.lang.immediate_available
+                        : (
                           <JText fontColor="red">
-                            {' '}
-                            Not Immediate Available
+                            {store.lang.not_immediate_available}
                           </JText>
                         )}
                       </JText>
@@ -169,7 +169,7 @@ const Followers = () => {
             />
           </View>
         </>
-        ): <JNotfoundData/>)}
+        ): <JEmpty/>)}
     </JScreen>
   );
 };
