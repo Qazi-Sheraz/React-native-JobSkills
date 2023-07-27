@@ -63,6 +63,7 @@ export default function ResetPassword() {
             <JInput
               value={values.email}
               error={touched.email && errors.email && true}
+              maxLength={100}
               heading={'Email'}
               icon={
                 <Feather

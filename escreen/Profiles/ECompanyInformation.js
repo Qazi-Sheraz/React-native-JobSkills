@@ -226,6 +226,7 @@ const ECompanyInformation = () => {
                   }}
                   containerStyle={{ marginTop: RFPercentage(2) }}
                   heading={`${store.lang.CEO_name}:`}
+                  maxLength={100}
                   value={values.ceo_name}
                   error={touched.ceo_name && errors.ceo_name && true}
                   onChangeText={handleChange('ceo_name')}
@@ -243,6 +244,7 @@ const ECompanyInformation = () => {
                   value={values.company_name}
                   error={touched.company_name && errors.company_name && true}
                   onChangeText={handleChange('company_name')}
+                  maxLength={100}
                   onBlur={() => setFieldTouched('company_name')}
                 />
                 {touched.company_name && errors.company_name && (

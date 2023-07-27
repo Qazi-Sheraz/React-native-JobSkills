@@ -135,6 +135,7 @@ function CSocialMediaLink({refRBSheet, data, user}) {
               textAlign: store.lang.id == 0 ? 'left' : 'right',
             }}
               value={values.facebook_url}
+              maxLength={255}
               heading={`${store.lang.facebook_url}:`}
               error={touched.facebook_url && errors.facebook_url && true}
               containerStyle={styles.input}
@@ -150,6 +151,7 @@ function CSocialMediaLink({refRBSheet, data, user}) {
             }}
               value={values.linkedin_url}
               containerStyle={styles.input}
+              maxLength={255}
               heading={`${store.lang.linkedIn_url}:`}
               error={touched.linkedin_url && errors.linkedin_url && true}
               //   autoFocus
@@ -164,6 +166,7 @@ function CSocialMediaLink({refRBSheet, data, user}) {
               textAlign: store.lang.id == 0 ? 'left' : 'right',
             }}
               value={values.twitter_url}
+              maxLength={255}
               heading={`${store.lang.twitter_url}:`}
               error={touched.twitter_url && errors.twitter_url && true}
               containerStyle={styles.input}

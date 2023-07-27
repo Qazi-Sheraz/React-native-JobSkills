@@ -24,9 +24,10 @@ import { observer } from 'mobx-react';
 const ChangePassword = () => {
   const navigation = useNavigation();
   const [reset, setReset] = useState();
-  const [loader, setLoader] = useState();
+  const [loader, setLoader] = useState(false);
   const store = useContext(StoreContext);
   const _resetPassword = values => {
+    setLoader(true)
     var formdata = new FormData();
     formdata.append('password_current', values.password_current);
     formdata.append('password', values.password);
@@ -51,6 +52,7 @@ const ChangePassword = () => {
           Toast.show({
             type: 'success',
             text1: result.message,
+            
           });
           navigation.navigate('EAccountSetting');
         } else {
@@ -97,6 +99,9 @@ const ChangePassword = () => {
           password_current: '',
           password: '',
           password_confirmation: '',
+          hide: true,
+          chide: true,
+          newhide: true,
         }}
         onSubmit={values => {
           // console.log(values);
@@ -121,6 +126,7 @@ const ChangePassword = () => {
           touched,
           isValid,
           handleSubmit,
+          setFieldValue,
         }) => (
           <>
             <View style={{flex: 1, marginTop: RFPercentage(4)}}>
@@ -128,6 +134,9 @@ const ChangePassword = () => {
               style={{textAlign: store.lang.id === 0 ? 'left' : 'right'}}
                 headingWeight="bold"
                 heading={store.lang.current_password}
+                eye={values.hide}
+                forPassword={true}
+                onPressEye={() => setFieldValue('hide', !values.hide)}
                 icon={<CurrentP marginHorizontal={RFPercentage(2)} />}
                 value={values.password_current}
                 error={
@@ -143,8 +152,12 @@ const ChangePassword = () => {
               style={{textAlign: store.lang.id === 0 ? 'left' : 'right'}}
                 headingWeight="bold"
                 heading={store.lang.new_password}
+                eye={values.newhide}
+                forPassword={true}
+                onPressEye={() => setFieldValue('newhide', !values.newhide)}
                 icon={<Key marginHorizontal={RFPercentage(2)} />}
                 value={values.password}
+                maxLength={30}
                 error={touched.password && errors.password && true}
                 onChangeText={handleChange('password')}
                 onBlur={() => setFieldTouched('password')}
@@ -157,7 +170,11 @@ const ChangePassword = () => {
               style={{textAlign: store.lang.id === 0 ? 'left' : 'right'}}
                 headingWeight="bold"
                 heading={store.lang.confirm_password}
+                maxLength={30}
                 icon={<Key marginHorizontal={RFPercentage(2)} />}
+                eye={values.chide}
+                onPressEye={() => setFieldValue('chide', !values.chide)}
+                forPassword={true}
                 value={values.password_confirmation}
                 error={
                   touched.password_confirmation &&
@@ -184,10 +201,11 @@ const ChangePassword = () => {
                 children={store.lang.cancel}
               />
               <JButton
+              disabled={loader?true:false}
                 isValid={isValid}
-                onPress={() => handleSubmit()}
+                onPress={() => {handleSubmit()}}
                 style={styles.btn}
-                children={loader ? 'Loading' : store.lang.update}
+                children={loader ? store.lang.loading : store.lang.update}
               />
             </JRow>
           </>

@@ -100,7 +100,7 @@ const JobDetails = ({ route }) => {
   const [phone, setPhone] = useState('');
   const refRBSheet = useRef();
   const _addCandidate = (values) => {
-
+    setLoader1(true)
     var myHeaders = new Headers();
     myHeaders.append(
       'Authorization',
@@ -112,7 +112,7 @@ const JobDetails = ({ route }) => {
     formdata.append('last_name', values?.lastName);
     formdata.append('email', values?.email);
     formdata.append('phone', phone);
-    formdata.append('region_code', code!==false?code:'966');
+    formdata.append('region_code', code !== false ? code : '966');
     formdata.append('file',
       {
         uri: values.resume?.uri,
@@ -142,13 +142,15 @@ const JobDetails = ({ route }) => {
     )
       .then(response => response.json())
       .then(result => {
-        // console.log(result)
+        console.log(result)
 
         if (result.success === true) {
+          store.AddJApplication(result)
           Toast.show({
             type: 'success',
             text1: result.message,
           });
+
           //  console.log(values)
         } else {
           Toast.show({
@@ -475,36 +477,37 @@ const JobDetails = ({ route }) => {
                   {store.lang.id === 0
                     ? skill.name
                     : store.lang.id === 1
-                      ? skill.urdu_title
-                      : skill.arabic_title}
+                      ? skill?.urdu_title
+                      : skill?.arabic_title}
                 </JText>
               ))}
 
               <JText style={styles.headertxt2}>
                 {store.lang.degree_level} :
               </JText>
-              <JScrollView
-                contentContainerStyle={{ flexDirection: store.lang.id == 0 ? 'row' : 'row-reverse' }}
-                horizontal showsHorizontalScrollIndicator={false}>
-                {store.jobDetail?.job_requirement?.degree_level?.map(level => (
-                  <JRow style={{ marginHorizontal: RFPercentage(1) }}>
+              <View>
+                <FlatList
+                  data={store.jobDetail?.job_requirement?.degree_level}
+                  horizontal
+                  renderItem={({ item }) => (
                     <JText style={styles.dg}>
                       {store.lang.id === 0
-                        ? level.name
+                        ? item?.name
                         : store.lang.id === 1
-                          ? level.urdu_title
-                          : level.arabic_title}
+                          ? item?.urdu_title
+                          : item?.arabic_title}
                     </JText>
-                  </JRow>
-                ))}
-              </JScrollView>
+                  )}
+                  keyExtractor={(item) => item.id.toString()}
+                  inverted={store.lang.id == 0 ? false : true} />
+              </View>
 
               <JText style={styles.headertxt2}>
                 {store.lang.assessment_Required}
               </JText>
               {store.jobDetail?.job_requirement?.assessment_required.map(
                 item => (
-                  <JText style={styles.txt1}>{item.assessment_name}</JText>
+                  <JText style={styles.txt1}>{item?.assessment_name}</JText>
                 ),
               )}
             </View>
@@ -682,6 +685,7 @@ const JobDetails = ({ route }) => {
                         }}
                         containerStyle={{ marginTop: RFPercentage(1) }}
                         isRequired
+                        maxLength={100}
                         heading={store.lang.first_name}
                         value={values.firstName}
                         error={touched.firstName && errors.firstName && true}
@@ -694,6 +698,7 @@ const JobDetails = ({ route }) => {
                         }}
                         containerStyle={{ marginTop: RFPercentage(1) }}
                         isRequired
+                        maxLength={100}
                         heading={store.lang.last_name}
                         value={values.lastName}
                         error={touched.lastName && errors.lastName && true}
@@ -706,6 +711,7 @@ const JobDetails = ({ route }) => {
                         }}
                         containerStyle={{ marginTop: RFPercentage(1) }}
                         isRequired
+                        maxLength={100}
                         heading={store.lang.email}
                         value={values.email}
                         error={touched.email && errors.email && true}
@@ -862,16 +868,10 @@ const JobDetails = ({ route }) => {
                         }}>
                         <JButton
                           isValid={isValid}
-                          disabled={loader1?true:false}
+                          disabled={loader1 ? true : false}
                           onPress={() => {
                             if (values.resume?.size <= 2000000) {
-                              setLoader1(true)
                               handleSubmit();
-                            } else {
-                              Toast.show({
-                                type: 'error',
-                                text1: 'error',
-                              });
                             }
                           }}
                           style={{
@@ -972,6 +972,7 @@ const styles = StyleSheet.create({
   container: { paddingVertical: RFPercentage(2) },
   dg: {
     marginVertical: RFPercentage(2),
+    marginHorizontal: RFPercentage(1),
     padding: RFPercentage(1),
     fontSize: RFPercentage(1.8),
     backgroundColor: '#F8FAFC',
@@ -987,7 +988,7 @@ const styles = StyleSheet.create({
 
     elevation: 2,
   },
-  bottomV: { height: RFPercentage(9), width: '100%', padding: RFPercentage(1) },
+  bottomV: { height: RFPercentage(8), width: '100%', padding: RFPercentage(1) },
   centeredView: {
     flex: 1,
 

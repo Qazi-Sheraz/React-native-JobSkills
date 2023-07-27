@@ -80,7 +80,7 @@ function Home({navigation}) {
       ) : (
         <React.Fragment>
 
-          <JFindTitle JobTitle={store.lang.jobTitle_Skills_Company}  onPress={() => navigation.navigate('CSearch')}/>
+          <JFindTitle JobTitle={store.lang.jobTitle_Skills_Company}  onPress={() => navigation.navigate('ESearch')}/>
 
 
           <JScrollView refreshing={store.isRefreshing} onRefresh={onRefresh}>

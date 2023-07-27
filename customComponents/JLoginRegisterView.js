@@ -65,6 +65,7 @@ export default function JLoginRegisterView() {
             <JInput
               value={values.email}
               heading={'Email'}
+              maxLength={100}
               icon={
                 <Feather
                   name="mail"
@@ -87,6 +88,7 @@ export default function JLoginRegisterView() {
               eye={true}
               value={values.password}
               heading={'Password'}
+              maxLength={30}
               icon={
                 <MaterialCommunityIcons
                   name="shield-key-outline"

@@ -65,7 +65,7 @@ function JRecentJobTile({
   const [error, setError] = useState();
   const store = useContext(StoreContext);
   const navigation = useNavigation();
-  const [stat, setStat] = useState(parseInt(item.status_id));
+  const [stat, setStat] = useState(parseInt(item?.status_id));
   const [modalVisible, setModalVisible] = useState(false);
   const[status1,setStatus1] = useState();
   const isFoucs = useIsFocused();
@@ -98,7 +98,7 @@ function JRecentJobTile({
     );
     
 // console.log(`${baseUrl}/employer/job/${item.id}/status/${id}`,item)
-    fetch(`${url.baseUrl}/employer/job/${item.id}/status/${id}`, {
+    fetch(`${url.baseUrl}/employer/job/${item?.id}/status/${id}`, {
       method: 'GET',
       headers: myHeaders,
       redirect: 'follow',
@@ -131,8 +131,8 @@ function JRecentJobTile({
       });
   };
   useEffect(() => {
-    setStat(parseInt(item.status_id));
-  }, [item.status_id]);
+    setStat(parseInt(item?.status_id));
+  }, [item?.status_id]);
 // console.log(stat)
 
   return isempty == true ? (
@@ -193,7 +193,7 @@ function JRecentJobTile({
             }}>
               <JRow>
             <JText style={{width: '80%'}} fontWeight="bold">
-              {item.job_title}
+              {item?.job_title}
             </JText>
             </JRow>
             <JRow

@@ -10,54 +10,56 @@ import JScreen from '../../../customComponents/JScreen';
 import JText from '../../../customComponents/JText';
 import JHeader from '../../../customComponents/JHeader';
 import Feather from 'react-native-vector-icons/Feather';
-import {RFPercentage} from 'react-native-responsive-fontsize';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 import colors from '../../../config/colors';
 import JShadowView from '../../../customComponents/JShadowView';
-import {JToast} from '../../../functions/Toast';
-import {useEffect} from 'react';
-import {useContext} from 'react';
-import {StoreContext} from '../../../mobx/store';
-import {observer} from 'mobx-react';
-import {useState} from 'react';
+import { JToast } from '../../../functions/Toast';
+import { useEffect } from 'react';
+import { useContext } from 'react';
+import { StoreContext } from '../../../mobx/store';
+import { observer } from 'mobx-react';
+import { useState } from 'react';
 import JScrollView from '../../../customComponents/JScrollView';
 import JJobTile from '../../../customComponents/JJobTile';
-import {_search} from '../../../functions/CFilter';
-import {heightPercentageToDP} from 'react-native-responsive-screen';
+import { _search } from '../../../functions/CFilter';
+import { heightPercentageToDP } from 'react-native-responsive-screen';
 import JRecentJob from '../../../customComponents/JRecentJob';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import {useRef} from 'react';
+import { useRef } from 'react';
 import JGradientHeader from '../../../customComponents/JGradientHeader';
 import JRecentJobTile from '../../../customComponents/JRecentJobTile';
 import JChevronIcon from '../../../customComponents/JChevronIcon';
 import url from '../../../config/url';
+import JEmpty from '../../../customComponents/JEmpty';
 
-const CSearch = ({navigation}) => {
-  
+const CSearch = ({ navigation }) => {
+
   const refRBSheet = useRef();
   const [name, setName] = useState('');
-  
+
   const store = useContext(StoreContext);
   const [search, setSearch] = useState('');
+
   const getData = async () => {
     try {
-        // await AsyncStorage.removeItem('@recent')
+      // await AsyncStorage.removeItem('@recent')
       const jsonValue = await AsyncStorage.getItem('@recent')
-   
-     store.setRecentSearch(jsonValue != null ? JSON.parse(jsonValue) : [])
-    //  console.log("job===>>>",store.recentSearch)
-    } catch(e) {
+
+      store.setRecentSearch(jsonValue != null ? JSON.parse(jsonValue) : [])
+      //  console.log("job===>>>",store.recentSearch)
+    } catch (e) {
       // error reading value
     }
   }
 
-useEffect(() => {
+  useEffect(() => {
     getData();
-}, [])
- 
+  }, [])
+
 
   return (
     <JScreen
-      style={{paddingHorizontal: RFPercentage(2)}}
+      style={{ paddingHorizontal: RFPercentage(2) }}
       header={
         <JHeader
           left={
@@ -99,21 +101,21 @@ useEffect(() => {
             textAlign: store.lang.id == 0 ? 'left' : 'right',
             width: '85%',
           }}
-          onChangeText={(e,search) => {
-            setSearch(e);
-            if(search?.length < 1 )
-            {store.setFilterData('')
-              }
-            else{
-            _search(e, store);
-          }
-            
-
+          onChangeText={(search) => {
+            setSearch(search); // Set the 'search' variable to the current input value
+            _search(search, store);
+            // if (search?.length >= 1) {
+            //   _search(search, store); // Call the API if the search input is not empty
+            //   // console.log('fillll');
+            // } else {
+            //   _search(search, store);
+            //   store.setFilterData([])// Clear the filtering data if the search input is empty
+            //   console.log('emptyyyyy',search?.length);
+            // }
           }}
           placeholder={store.lang.search}
           placeholderTextColor={colors.placeHolderColor[0]}
         />
-
         <Feather
           name="search"
           size={RFPercentage(3.5)}
@@ -129,48 +131,45 @@ useEffect(() => {
         <ActivityIndicator size={RFPercentage(3.5)} color={colors.black[0]} />
       ) : (
         <JScrollView>
-          { store.filterData?.length > 0 ?
-              store.filterData?.map((item, index) => (
-                <React.Fragment key={index}>
-                  <JJobTile
-                    favouriteData={store.favouriteList}
-                    jobId={item.id}
-                    onPress={() =>
-                      navigation.navigate('CJobDetails', {
-                        id: item.job_id,
-                      })
-                    }
-                    onIconPress={() => alert('Icon Press')}
-                    type="job"
-                    title={item.job_title}
-                    location={item.city_name}
-                    category={item.job_shift}
-                    img={item.company_url}
-                    containerStyle={{marginVertical: RFPercentage(1)}}
-                  />
-                </React.Fragment>
-              ))
-            :
-
-                    (  <>
-                        <JText
-                          style={{marginBottom: RFPercentage(2)}}
-                          fontSize={RFPercentage(3)}>
-                          {store.lang.Recent_search}
-                        </JText>
-
-                    {store.recentSearch?.map((item, index) => (
-
-                          <JRecentJob
-                          key={index}
-                              onPress={() => {
-                                _search(item,store,false);
-                                // refRBSheet.current.open();
-                              }}
-                              JobName={item}
-                            />
-                          ))}
-                      </>)
+          {store.filterData?.length > 0 ?
+            store.filterData?.map((item, index) => (
+              <React.Fragment key={index}>
+                <JJobTile
+                  favouriteData={store.favouriteList}
+                  jobId={item.id}
+                  onPress={() =>
+                    navigation.navigate('CJobDetails', {
+                      id: item.job_id,
+                    })
+                  }
+                  onIconPress={() => alert('Icon Press')}
+                  type="job"
+                  title={item.job_title}
+                  location={item.full_location}
+                  category={store.lang.id == 0 ? item?.job_category_english : item?.job_category_arabic}
+                  img={item.company_image}
+                  containerStyle={{ marginVertical: RFPercentage(1) }}
+                />
+              </React.Fragment>
+            ))
+            : (<>
+              <JText
+                style={{ marginBottom: RFPercentage(2) }}
+                fontSize={RFPercentage(3)}>
+                {store.lang.Recent_search}
+              </JText>
+              {Array.from(new Set(store.recentSearch)).slice(0, 5).map((item, index) => (
+                <JRecentJob
+                  key={index}
+                  onPress={() => {
+                    setSearch(item)
+                    // _search(item,store,false)
+                    // refRBSheet.current.open();
+                  }}
+                  JobName={item}
+                />
+              ))}
+            </>)
           }
         </JScrollView>
       )}
@@ -209,7 +208,7 @@ useEffect(() => {
               />
             }
           />
-          <JScrollView style={{padding: RFPercentage(2)}}>
+          <JScrollView style={{ padding: RFPercentage(2) }}>
             {/* {[0, 1, 2].map((item, index) => (
               <>
                 <JRecentJobTile

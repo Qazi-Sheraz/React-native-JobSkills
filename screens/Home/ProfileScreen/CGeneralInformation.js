@@ -88,12 +88,10 @@ const{params}=useRoute();
           father: profile.father_name==null?'':profile.father_name,
           dob: profile.date_of_birth==null?'':profile.date_of_birth,
           gender: profile.gender==null?'':profile.gender == '0' ? {name: store.lang.male} : {name: store.lang.female},
-          country: profile.country_name
-          ?{
-            name: store.lang.id=0?profile.country_name?.name:profile?.country_name?.arabic_name,
-            id: profile.country_name?.id,
-          }
-          : '',
+          country:{
+            name:params?.country_name?params?.country_name:'',
+            id: params?.country_id,
+          },
           state: profile.state_name
           ?{
             name: profile.state_name?.name,
@@ -195,6 +193,8 @@ const{params}=useRoute();
                   textAlign: store.lang.id == 0 ? 'left' : 'right',
                 }}
                 containerStyle={{marginTop: RFPercentage(2)}}
+                
+                maxLength={100}
                 heading={store.lang.first_name}
                 value={values.first_name}
                 error={touched.first_name && errors.first_name && true}
@@ -211,6 +211,7 @@ const{params}=useRoute();
                 containerStyle={{marginTop: RFPercentage(2)}}
                 value={values.last_name}
                 heading={store.lang.last_name}
+                maxLength={100}
                 error={touched.last_name && errors.last_name && true}
                 onChangeText={handleChange('last_name')}
                 onBlur={() => setFieldTouched('last_name')}
@@ -226,6 +227,7 @@ const{params}=useRoute();
                 containerStyle={{marginTop: RFPercentage(2)}}
                 value={values.father}
                 heading={`${store.lang.father_name}:`}
+                maxLength={100}
                 error={touched.father && errors.father && true}
                 onChangeText={handleChange('father')}
                 onBlur={() => setFieldTouched('father')}

@@ -29,18 +29,19 @@ export const _search = (e, store,isSearch) => {
     .then(response => response.json())
     .then(result => {
       // console.log(result.data);
-      if (result.data?.length < 1) {
+      if (result.data?.length==0) {
         // JToast({
         //   type: 'error',
         //   text1: store.lang.no_result_found,
         // });
-        // store.setFilterData('')
+      // console.log('search =====:' ,result.data?.length)
+        store.setFilterData([])
         store.setFilterDataApiLoader(false);
       } else {
         if(isSearch){
-
           storeData(e,store);
         }
+        
         store.setFilterData(result.data);
         store.setFilterDataApiLoader(false);
       }
@@ -71,7 +72,7 @@ export const _searchFilter = (values, store, navigation) => {
     );
   values.level && formdata.append('career_level', values.level?.id);
   values.area && formdata.append('functional_area', values.area?.id);
-
+console.log('formdata',formdata)
   var requestOptions = {
     method: 'POST',
     headers: myHeaders,
@@ -84,27 +85,21 @@ export const _searchFilter = (values, store, navigation) => {
   fetch('https://dev.jobskills.digital/api/search-jobs', requestOptions)
     .then(response => response.json())
     .then(result => {
-      // console.log(result);
-
-      // if (result.data?.length < 1) {
-      if (result.count==0) {
+      console.log(result);
+    
+      if (result.data.length==0) {
+        store.setFilterData([])
         
-        JToast({
-          type: 'error',
-          text1: store.lang.no_result_found,
-        });
         
       } else {
-        
         store.setFilterData(result.data);
-        
       }
     })
     .catch(error => {
       // console.log('error', error);
     })
     .finally(() => {
-      navigation.navigate('CSearch');
+      navigation.navigate('ESearch');
       store.setFilterDataApiLoader(false);
     });
 };

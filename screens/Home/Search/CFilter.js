@@ -1,26 +1,27 @@
-import {ScrollView, StyleSheet} from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 import React, { useEffect } from 'react';
-import {Observer, observer} from 'mobx-react';
+import { Observer, observer } from 'mobx-react';
 import JScreen from '../../../customComponents/JScreen';
 import JGradientHeader from '../../../customComponents/JGradientHeader';
 import JText from '../../../customComponents/JText';
 import JButton from '../../../customComponents/JButton';
 import JSelectInput from '../../../customComponents/JSelectInput';
 import colors from '../../../config/colors';
-import {RFPercentage} from 'react-native-responsive-fontsize';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 import Feather from 'react-native-vector-icons/Feather';
 
-import {Formik} from 'formik';
+import { Formik } from 'formik';
 import JErrorText from '../../../customComponents/JErrorText';
-import {useContext} from 'react';
-import {StoreContext} from '../../../mobx/store';
-import {_search, _searchFilter} from '../../../functions/CFilter';
+import { useContext } from 'react';
+import { StoreContext } from '../../../mobx/store';
+import { _search, _searchFilter } from '../../../functions/CFilter';
 import { ActivityIndicator } from 'react-native';
 import url from '../../../config/url';
+import { useState } from 'react';
 
-const CFilter = ({navigation}) => {
+const CFilter = ({ navigation }) => {
   const store = useContext(StoreContext);
-
+const[loader,setLoader]=useState(false);
   const _getFilterList = () => {
     var myHeaders = new Headers();
     myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
@@ -37,7 +38,7 @@ const CFilter = ({navigation}) => {
       .then(result => {
         // console.log(result);
         store.setFilterList(result);
-        
+
       })
       .catch(error => {
         // console.log('job===error', error);
@@ -47,19 +48,19 @@ const CFilter = ({navigation}) => {
         store.setFilterApiLoader(false);
       });
   };
-useEffect(() => {
-  store.setFilterApiLoader(true)
-_getFilterList();
-}, [])
+  useEffect(() => {
+    store.setFilterApiLoader(true)
+    _getFilterList();
+  }, [])
 
   return (
     <Observer>
       {() => (
-<JScreen
- isError={store.filterApiError}
- onTryAgainPress={() => {
-  _getFilterList(), store.setFilterApiError(false);
- }}
+        <JScreen
+          isError={store.filterApiError}
+          onTryAgainPress={() => {
+            _getFilterList(), store.setFilterApiError(false);
+          }}
           header={
             <JGradientHeader
               center={
@@ -72,130 +73,143 @@ _getFilterList();
               }
             />
           }>
-           { store.filterApiLoader?<ActivityIndicator/>
-        :(
-          <Formik
-            initialValues={{
-              category: '',
-              skill: '',
-              gender: '',
-              level: '',
-            }}
-            onSubmit={values => {
-              // console.log(values);
-              _searchFilter(values, store, navigation);
-            }}>
-            {({
-              values,
-              errors,
-              touched,
-              handleSubmit,
-              setFieldValue,
-            }) => (
-              <>
-                <ScrollView
-                  contentContainerStyle={{paddingBottom: RFPercentage(8)}}
-                  style={{
-                    marginHorizontal: RFPercentage(2),
-                  }}>
-                 
+          {store.filterApiLoader ? <ActivityIndicator />
+            : (
+              <Formik
+                initialValues={{
+                  category: '',
+                  skill: '',
+                  gender: '',
+                  level: '',
+                }}
+                onSubmit={values => {
+              //   values.gender==''&&
+              //   values.skill==''&&
+              //   values.level==''&&
+              //   values.category==''?
+              //  ( store.setFilterApiLoader(false),
+              //   JToast({
+              //     type: 'error',
+              //     text1: store.lang.no_result_found,
+              //   }))
+              //     :
+              setLoader(true),
+                  _searchFilter(values, store, navigation);
+                }}>
+                {({
+                  values,
+                  errors,
+                  touched,
+                  handleSubmit,
+                  setFieldValue,
+                }) => (
+                  <>
+                    <ScrollView
+                      contentContainerStyle={{ paddingBottom: RFPercentage(8) }}
+                      style={{
+                        marginHorizontal: RFPercentage(2),
+                      }}>
 
-                  <JSelectInput
-                    containerStyle={{marginTop: RFPercentage(2)}}
-                    data={store.lang.id==0?store.filterList?.dataEnglish?.jobCategories:store.filterList?.dataArabic?.jobCategories}
-                    value={values.category?.name}
-                    header={store.lang.job_category}
-                    heading={`${store.lang.job_category} :`}
-                    setValue={e => setFieldValue('category', e)}
-                    error={touched.category && errors.category && true}
-                    rightIcon={
-                      <Feather
-                        name="chevron-down"
-                        size={RFPercentage(2.5)}
-                        color={colors.black[0]}
+
+                      <JSelectInput
+                        containerStyle={{ marginTop: RFPercentage(2) }}
+                        data={store.lang.id == 0 ? store.filterList?.dataEnglish?.jobCategories : store.filterList?.dataArabic?.jobCategories}
+                        value={values.category?.name}
+                        header={store.lang.job_category}
+                        heading={`${store.lang.job_category} :`}
+                        setValue={e => setFieldValue('category', e)}
+                        error={touched.category && errors.category && true}
+                        rightIcon={
+                          <Feather
+                            name="chevron-down"
+                            size={RFPercentage(2.5)}
+                            color={colors.black[0]}
+                          />
+                        }
                       />
-                    }
-                  />
-                  {touched.category && errors.category && (
-                    <JErrorText>{errors.category}</JErrorText>
-                  )}
+                      {touched.category && errors.category && (
+                        <JErrorText>{errors.category}</JErrorText>
+                      )}
 
-                  <JSelectInput
-                    containerStyle={{marginTop: RFPercentage(2)}}
-                    data={store.lang.id==0?store.filterList?.dataEnglish?.jobSkills:store.filterList?.dataArabic?.jobSkills}
-                    value={values.skill?.name}
-                    header={store.lang.job_skills}
-                    heading={`${store.lang.job_skills} :`}
-                    setValue={e => setFieldValue('skill', e)}
-                    error={touched.skill && errors.skill && true}
-                    rightIcon={
-                      <Feather
-                        name="chevron-down"
-                        size={RFPercentage(2.5)}
-                        color={colors.black[0]}
+                      <JSelectInput
+                        containerStyle={{ marginTop: RFPercentage(2) }}
+                        data={store.lang.id == 0 ? store.filterList?.dataEnglish?.jobSkills : store.filterList?.dataArabic?.jobSkills}
+                        value={values.skill?.name}
+                        header={store.lang.job_skills}
+                        heading={`${store.lang.job_skills} :`}
+                        setValue={e => setFieldValue('skill', e)}
+                        error={touched.skill && errors.skill && true}
+                        rightIcon={
+                          <Feather
+                            name="chevron-down"
+                            size={RFPercentage(2.5)}
+                            color={colors.black[0]}
+                          />
+                        }
                       />
-                    }
-                  />
-                  {touched.skill && errors.skill && (
-                    <JErrorText>{errors.skill}</JErrorText>
-                  )}
+                      {touched.skill && errors.skill && (
+                        <JErrorText>{errors.skill}</JErrorText>
+                      )}
 
-                  <JSelectInput
-                    containerStyle={{marginTop: RFPercentage(2)}}
-                    data={store.lang.id==0?store.filterList?.dataEnglish?.genders:store.filterList?.dataArabic?.genders}
-                    value={values.gender?.name}
-                    header={store.lang.gender}
-                    heading={`${store.lang.gender} :`}
-                    setValue={e => setFieldValue('gender', e)}
-                    error={touched.gender && errors.gender && true}
-                    rightIcon={
-                      <Feather
-                        name="chevron-down"
-                        size={RFPercentage(2.5)}
-                        color={colors.black[0]}
+                      <JSelectInput
+                        containerStyle={{ marginTop: RFPercentage(2) }}
+                        data={store.lang.id == 0 ? store.filterList?.dataEnglish?.genders : store.filterList?.dataArabic?.genders}
+                        value={values.gender?.name}
+                        header={store.lang.gender}
+                        heading={`${store.lang.gender} :`}
+                        setValue={e => setFieldValue('gender', e)}
+                        error={touched.gender && errors.gender && true}
+                        rightIcon={
+                          <Feather
+                            name="chevron-down"
+                            size={RFPercentage(2.5)}
+                            color={colors.black[0]}
+                          />
+                        }
                       />
-                    }
-                  />
-                  {touched.gender && errors.gender && (
-                    <JErrorText>{errors.gender}</JErrorText>
-                  )}
+                      {touched.gender && errors.gender && (
+                        <JErrorText>{errors.gender}</JErrorText>
+                      )}
 
-                  <JSelectInput
-                    containerStyle={{marginTop: RFPercentage(2)}}
-                    data={store.lang.id==0?store.filterList?.dataEnglish?.careerLevels:store.filterList?.dataArabic?.careerLevels}
-                    value={values.level?.name}
-                    header={store.lang.career_level}
-                    heading={`${store.lang.career_level} :`}
-                    setValue={e => setFieldValue('level', e)}
-                    error={touched.level && errors.level && true}
-                    rightIcon={
-                      <Feather
-                        name="chevron-down"
-                        size={RFPercentage(2.5)}
-                        color={colors.black[0]}
+                      <JSelectInput
+                        containerStyle={{ marginTop: RFPercentage(2) }}
+                        data={store.lang.id == 0 ? store.filterList?.dataEnglish?.careerLevels : store.filterList?.dataArabic?.careerLevels}
+                        value={values.level?.name}
+                        header={store.lang.career_level}
+                        heading={`${store.lang.career_level} :`}
+                        setValue={e => setFieldValue('level', e)}
+                        error={touched.level && errors.level && true}
+                        rightIcon={
+                          <Feather
+                            name="chevron-down"
+                            size={RFPercentage(2.5)}
+                            color={colors.black[0]}
+                          />
+                        }
                       />
-                    }
-                  />
-                  {touched.level && errors.level && (
-                    <JErrorText>{errors.level}</JErrorText>
-                  )}
+                      {touched.level && errors.level && (
+                        <JErrorText>{errors.level}</JErrorText>
+                      )}
 
-                 
-                </ScrollView>
 
-                <JButton
-                  isValid={!store.filterDataApiLoader}
-                  onPress={() => handleSubmit()}
-                  style={{
-                    position: 'absolute',
-                    bottom: RFPercentage(5),
-                    width: RFPercentage(20),
-                  }}>
-                  {store.filterDataApiLoader? store.lang.loading: store.lang.save}
-                </JButton>
-              </>
-            )}
-          </Formik>)}
+                    </ScrollView>
+
+                    <JButton
+                      disabled={loader ? true : false}
+                      // isValid={!store.filterDataApiLoader}
+                      onPress={() => {
+                        handleSubmit()
+                      }}
+                      style={{
+                        position: 'absolute',
+                        bottom: RFPercentage(5),
+                        width: RFPercentage(20),
+                      }}>
+                      {loader ? store.lang.loading : store.lang.save}
+                    </JButton>
+                  </>
+                )}
+              </Formik>)}
         </JScreen>
       )}
     </Observer>

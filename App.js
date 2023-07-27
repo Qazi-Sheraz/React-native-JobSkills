@@ -27,7 +27,7 @@ LogBox.ignoreAllLogs();
           
           <MyDrawer />
           {/* <Login /> */}
-          <Toast />
+          <Toast/>
         </MenuProvider>
       </NavigationContainer>
     </StoreProvider>

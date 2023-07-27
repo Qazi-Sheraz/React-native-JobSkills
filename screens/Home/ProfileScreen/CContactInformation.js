@@ -207,6 +207,7 @@ function CContactInformation({refRBSheet, user}) {
             <JInput
               value={values.email}
               heading={`${store.lang.email}:`}
+              maxLength={100}
               error={touched.email && errors.email && true}
               placeholder={store.lang.email}
               onChangeText={handleChange('email')}

@@ -134,6 +134,7 @@ const ForgetPassword = () => {
               style={{textAlign: store.lang.id === 0 ? 'left' : 'right'}}
               value={values.email}
               heading={store.lang.email}
+              maxLength={100}
               icon={
                 <Feather
                   name="mail"

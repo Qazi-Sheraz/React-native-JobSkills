@@ -142,26 +142,22 @@ const Followers = () => {
                         fontWeight: 'bold',
                         marginVertical: RFPercentage(0.5),
                       }}>
-                      {item.candidate_name}
+                      {item?.candidate_name}
                     </JText>
-                    <JText>{item.candidate_email}</JText>
+                    <JText>{item?.candidate_email}</JText>
                     <JRow
                       style={{
                         justifyContent: 'space-between',
                         marginVertical: RFPercentage(0.5),
                       }}>
                       <JText>
-                        {item.regional_code}-{item.phone_number}
+                        {item?.regional_code}-{item?.phone_number}
                       </JText>
-                      <JText>
-                        {item.immediate_available === 0 ? 
-                          store.lang.immediate_available
-                        : (
-                          <JText fontColor="red">
-                            {store.lang.not_immediate_available}
-                          </JText>
-                        )}
-                      </JText>
+                      {item?.immediate_available == 0 ? 
+                      <JText>{store.lang.immediate_available}</JText>
+                      : <JText fontColor="red">{store.lang.not_immediate_available}</JText>
+                        }
+                     
                     </JRow>
                   </View>
                 </JRow>

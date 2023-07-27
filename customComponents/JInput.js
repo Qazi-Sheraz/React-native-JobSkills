@@ -31,6 +31,7 @@ export default function JInput({
   numberOfLines=1,
   multiline=false,
   keyboardType,
+  maxLength,
 }) {
   const store = useContext(StoreContext);
   return (
@@ -83,6 +84,7 @@ export default function JInput({
           onFocus={onFocus}
           numberOfLines={numberOfLines}
           multiline={multiline}
+          maxLength={maxLength}
           keyboardType={keyboardType}
           secureTextEntry={eye ? true : false}
         />

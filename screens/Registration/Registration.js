@@ -173,6 +173,7 @@ const Registration = ({navigation, route}) => {
             style={{marginBottom:RFPercentage(2)}}
             showsVerticalScrollIndicator={false}>
               <JInput
+              maxLength={100}
                 style={{textAlign: store.lang.id === 0 ? 'left' : 'right'}}
                 value={values.first_name}
                 heading={store.lang.first_name}
@@ -202,6 +203,7 @@ const Registration = ({navigation, route}) => {
                 <JErrorText>{errors.first_name}</JErrorText>
               )}
               <JInput
+              maxLength={100}
                 style={{textAlign: store.lang.id === 0 ? 'left' : 'right'}}
                 value={values.last_name}
                 heading={store.lang.last_name}
@@ -233,6 +235,7 @@ const Registration = ({navigation, route}) => {
               )}
               <JInput
                 style={{textAlign: store.lang.id === 0 ? 'left' : 'right'}}
+                maxLength={100}
                 value={values.email}
                 error={touched.email && errors.email && true}
                 heading={store.lang.email}
@@ -297,6 +300,7 @@ const Registration = ({navigation, route}) => {
                 style={{textAlign: store.lang.id === 0 ? 'left' : 'right'}}
                 forPassword={true}
                 eye={values.hide}
+                maxLength={30}
                 onPressEye={() => setFieldValue('hide', !values.hide)}
                 error={touched.password && errors.password && true}
                 value={values.password}
@@ -332,6 +336,7 @@ const Registration = ({navigation, route}) => {
                 style={{textAlign: store.lang.id === 0 ? 'left' : 'right'}}
                 forPassword={true}
                 eye={values.chide}
+                maxLength={30}
                 onPressEye={() => setFieldValue('chide', !values.chide)}
                 error={
                   touched.confirmPassword && errors.confirmPassword && true

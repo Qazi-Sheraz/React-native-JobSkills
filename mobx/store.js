@@ -55,7 +55,7 @@ export const StoreProvider = props => {
     ),
     setFavouriteList: action(e => (store.favouriteList = e)),
     pushFavouriteList: action(e => {
-      store.favouriteList.push(e);
+      store.favouriteList.unshift(e);
     }),
     filterFavouriteList: action(e =>
       store.favouriteList.filter(item => item.job_id !== e),
@@ -93,7 +93,7 @@ export const StoreProvider = props => {
     setAppliedJobError: action(e => (store.appliedJobError = e)),
     appliedJobInput: '',
     setAppliedJobInput: action(e => (store.appliedJobInput = e)),
-    appliedJobSelect: 'All',
+    appliedJobSelect: -1,
     setAppliedJobSelect: action(e => (store.appliedJobSelect = e)),
 
     //MY Profile
@@ -174,7 +174,7 @@ export const StoreProvider = props => {
     // Search Find Job
     recentSearch: [],
     setRecentSearch: action(e => (store.recentSearch = e)),
-    pushSearch: action(e => (store.recentSearch = [...store.recentSearch, e])),
+    pushSearch: action(e => (store.recentSearch =[e, ...store.recentSearch])),
     //PDF Url
     pdf: '',
     setPdf: action(e => (store.pdf = e)),
@@ -220,7 +220,9 @@ export const StoreProvider = props => {
     setJAppLoader: action(e => (store.jAppLoader = e)),
     jAppError: false,
     setJAppError: action(e => (store.jAppError = e)),
-
+    AddJApplication: action(e => {
+      store.jApplication.job_application[0] = [e, store.jApplication.job_application[0]];
+    }),
     // Get Employe Home
     employeHome: {},
     setEmployeHome: action(e => (store.employeHome = e)),

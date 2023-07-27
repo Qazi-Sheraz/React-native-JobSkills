@@ -242,7 +242,7 @@ const ProfileJobApplication = ({route}) => {
             </JText>
             {details?.lastestExperience[0].id && (
               <JText style={styles.titleJob}>
-                {details?.lastestExperience[0].id}
+                {details?.lastestExperience[0]?.experience_title}
               </JText>
             )}
             {details?.candidateDetails[0]?.email && (
@@ -286,8 +286,8 @@ const ProfileJobApplication = ({route}) => {
                       data={details?.candidateAssessment?.slice(0, 4)}
                       renderItem={({item, index}) => (
                         <JAssessmentResult
-                          title={item.assessment_name}
-                          percent={item.percentage && `${item.percentage} %`}
+                          title={item?.assessment_name}
+                          percent={item?.percentage && `${item?.percentage} %`}
                           color={colors.purple[0]}
                         />
                       )}
@@ -331,7 +331,7 @@ const ProfileJobApplication = ({route}) => {
 
               <View style={styles.experience}>
                 <JText style={styles.title}>{store.lang.education}</JText>
-                {details?.candidateExperiences[0]?.degree_title?.length > 0 ? (
+                {details?.candidateEducation[0]?.id ? (
                   <FlatList
                     data={details?.candidateEducation}
                     renderItem={({item, index}) => (

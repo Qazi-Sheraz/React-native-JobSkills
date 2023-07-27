@@ -385,6 +385,7 @@ const Resume = ({navigation}) => {
                     isRequired
                     heading={store.lang.name}
                     value={values.name}
+                    maxLength={100}
                     error={touched.name && errors.name && true}
                     onChangeText={handleChange('name')}
                     onBlur={() => setFieldTouched('name')}

@@ -34,7 +34,19 @@ function AppliedJobs({navigation}) {
   }, []);
 
   // console.log(store.appliedJobList?.statusArray);
-
+const statusArr=[
+  {id: 0, name: store.lang.drafted},
+  {id: 1, name: store.lang.applied},
+  {id: 2, name: store.lang.rejected},
+  {id: 3, name: store.lang.selected},
+  {id: 4, name: store.lang.shortlisted},
+  {id: 5, name: store.lang.invitation_Sent},
+  {id: 6, name: store.lang.interview_scheduled},
+  {id: 7, name: store.lang.interview_accepted},
+  {id: 8, name: store.lang.interview_rescheduled},
+  {id: 9, name: store.lang.interview_completed},
+   
+]
   return (
     <JScreen
       isError={store.appliedJobError}
@@ -74,6 +86,7 @@ function AppliedJobs({navigation}) {
                         onSelect={() => {
                           store.setAppliedJobSelect(item);
                         }}>
+
                         <JText>{item}</JText>
                       </MenuOption>
                     ),

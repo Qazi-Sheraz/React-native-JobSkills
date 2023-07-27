@@ -298,6 +298,7 @@ function EContactInformation({ refRBSheet, data, user }) {
                   }}
                   containerStyle={{ marginTop: RFPercentage(2) }}
                   heading={`${store.lang.name}:`}
+                  maxLength={100}
                   value={values.name}
                   error={touched.name && errors.name && true}
                   onChangeText={handleChange('name')}
@@ -312,6 +313,7 @@ function EContactInformation({ refRBSheet, data, user }) {
                   }}
                   containerStyle={{ marginTop: RFPercentage(2) }}
                   value={values.email}
+                  maxLength={100}
                   heading={`${store.lang.email}:`}
                   error={touched.email && errors.email && true}
                   onChangeText={handleChange('email')}

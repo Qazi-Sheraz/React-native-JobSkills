@@ -88,7 +88,7 @@ const navigation= useNavigation();
                 {item.assessment_name}
               </JText>
               <JText style={{marginTop: RFPercentage(1)}}>
-               Category: {item.job_category}
+               {store.lang.category}: {item.job_category}
               </JText>
             </Pressable>
           </>

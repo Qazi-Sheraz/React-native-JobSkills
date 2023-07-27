@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import CHomeStack from '../stacks/Candidate/CHomeStack';
 import CustomDrawerContent from './CustomDrawerContent';
-import EDrawerContent from './EDrawerContent';
+// import EDrawerContent from './EDrawerContent';
 import EmployeStack from '../stacks/Employee/EmployeStack';
 import {StoreContext} from '../mobx/store';
 import {useContext} from 'react';
@@ -10,6 +10,7 @@ import AuthStack from '../stacks/Auth/AuthStack';
 import { Observer } from 'mobx-react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LangStack from '../stacks/Language/LangStack';
+import EAccountSetting from '../escreen/edrawer/EAccountSetting';
 
 export default function MyDrawer() {
 
@@ -58,6 +59,7 @@ export default function MyDrawer() {
             initialRouteName={'CHome'}
             drawerContent={props => <CustomDrawerContent {...props} />}>
             <Drawer.Screen name="CHomeStack" component={CHomeStack} />
+            
           </Drawer.Navigator>
         ) : (
           <Drawer.Navigator
@@ -66,7 +68,7 @@ export default function MyDrawer() {
               // drawerPosition: store.lang.id == 0 ? 'left' : 'right',
             }}
             initialRouteName={'CHome'}
-            drawerContent={props => <EDrawerContent {...props} />}>
+            drawerContent={props => <CustomDrawerContent {...props} />}>
             <Drawer.Screen name="EHomeStack" component={EmployeStack} />
           </Drawer.Navigator>
         )

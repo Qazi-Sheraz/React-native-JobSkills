@@ -137,6 +137,7 @@ const ResetLoginPassword = () => {
           style={{textAlign: store.lang.id === 0 ? 'left' : 'right'}}
             headingWeight="bold"
             heading={store.lang.new_password}
+            maxLength={30}
             icon={ <JIcon
             icon={'ma'}
                 name="shield-key-outline"
@@ -163,6 +164,7 @@ const ResetLoginPassword = () => {
           style={{textAlign: store.lang.id === 0 ? 'left' : 'right'}}
             headingWeight="bold"
             heading={store.lang.confirm_password}
+            maxLength={30}
             icon={ <JIcon
                 icon={'ma'}
                     name="shield-key-outline"

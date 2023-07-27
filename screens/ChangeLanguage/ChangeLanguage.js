@@ -48,12 +48,10 @@ const ChangeLanguage = () => {
       .then(response => response.json())
       .then(result => {
         if(result.success== true){
-
           JToast({
             type: 'success',
             text1: result.message,
           });
-        
             RNRestart.restart()
         }
         else{

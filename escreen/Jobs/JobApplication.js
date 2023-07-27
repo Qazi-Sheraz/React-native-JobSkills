@@ -42,7 +42,6 @@ import JEmpty from '../../customComponents/JEmpty';
 const JobApplication = ({route}) => {
   const {navigate, goBack} = useNavigation();
   const [selectedItem, setSelectedItem] = useState();
-  // const [jApplication, setJApplication] = useState();
   const store = useContext(StoreContext);
   const handleSelect = status => {
     setSelectedItem(status);

@@ -46,20 +46,13 @@ export default function JProfileContent({src, name, email, jd}) {
     )
       .then(response => response.json())
       .then(result => {
-        // console.log(res[0])
+        console.log(res[0].uri)
         setSingleFile(res[0]);
         _getProfile(store);
-        // store.setUserAvatar({
-        //   uri: res[0].uri,
-        //   name: res[0].name,
-        //   filename: res[0].name,
-        //   type: res[0].type,
-        // });
-        // alert(result.message);
+        store.setUserAvatar(res[0]?.uri);
         JToast({
           type: 'success',
           text1: result.message,
-          visibilityTime:1500,
         });
         setLoader(false);
       })

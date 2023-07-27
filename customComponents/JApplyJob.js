@@ -92,12 +92,11 @@ const JApplyJob = ({token, jobId, id, setStatus, status}) => {
           isValid={!loader}
           onPress={() => setModalVisible(true)}
           style={{
-            width: '40%',
-            height: heightPercentageToDP(5),
+            
             position: 'absolute',
             bottom: RFPercentage(1),
           }}
-          children={store.lang.apply_job}
+          children={`${store.lang.apply_job}`}
         />
       )}
 

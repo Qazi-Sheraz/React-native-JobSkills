@@ -14,8 +14,10 @@ import CLFavouriteJob from '../../loaders/Candidate/FavouriteJob/CLFavouriteJob'
 import JEmpty from '../../customComponents/JEmpty';
 import JGradientHeader from '../../customComponents/JGradientHeader';
 import {_getFavouriteJobData} from '../../functions/Candidate/BottomTab';
-
+import { useEffect } from 'react';
+import { useIsFocused } from '@react-navigation/native';
 function Favourite({navigation}) {
+  const isFocused = useIsFocused();
   const store = useContext(StoreContext);
 
   const onRefresh = useCallback(() => {
@@ -26,6 +28,13 @@ function Favourite({navigation}) {
       store.setIsRefreshing(false);
     }, 2000);
   }, []);
+  useEffect(() => {
+    if (isFocused) {
+      _getFavouriteJobData(store);
+    }
+  }, [isFocused
+  ])
+
 
   return (
     <JScreen

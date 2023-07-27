@@ -134,6 +134,7 @@ const JobAlert = ({navigation}) => {
   };
   useEffect(() => {
     _getData();
+
   }, []);
   return (
     <JScreen
@@ -163,11 +164,14 @@ const JobAlert = ({navigation}) => {
           <JRow
             style={{
               justifyContent: 'space-between',
+              backgroundColor:index === 0 ?colors.white[0]:colors.tileColor[0],
               marginBottom: index === 0 ? RFPercentage(6) : RFPercentage(2),
+              
             }}>
             <JText
               style={{
-                fontSize: index === 0 ? RFPercentage(2.5) : RFPercentage(1.8),
+                width:'85%',
+                fontSize: index === 0 ? RFPercentage(2.5) : RFPercentage(2),
                 fontWeight: index === 0 ? 'bold' : 'normal',
               }}>
               {item.name}
@@ -199,4 +203,5 @@ const JobAlert = ({navigation}) => {
 
 export default observer(JobAlert);
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+});

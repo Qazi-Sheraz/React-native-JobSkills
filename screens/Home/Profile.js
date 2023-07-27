@@ -198,7 +198,16 @@ function Profile({navigation}) {
                   marital_id:
                     store.myProfile?.user[0]?.general_information
                       ?.marital_status.id,
-                  // country_name:store.myProfile?.user[0]?.general_information?.country_name.id,
+                  country_name:store.lang.id == 0
+                  ? store.myProfile?.dataEnglish?.countries[
+                      store.myProfile?.user[0]
+                        ?.general_information?.country_name.id
+                    ]
+                  : store.myProfile?.dataArabic?.countries[
+                      store.myProfile?.user[0]
+                        ?.general_information?.country_name.id
+                    ],
+                  country_id:store.myProfile?.user[0]?.general_information?.country_name.id,
                   // immediate_available:store.myProfile?.user[0]?.general_information?.immediate_available,
                 });
               }}
@@ -500,7 +509,7 @@ function Profile({navigation}) {
               }}
               heading={store.lang.skills}
               icon="add"
-              emptyMsg={'Skills Not Available'}
+              emptyMsg={store.lang.skills_not_available}
               isEmpty={
                 store?.myProfile?.user[0]?.skills !== null ? false : true
               }

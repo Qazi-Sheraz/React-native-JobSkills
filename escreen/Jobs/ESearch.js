@@ -27,15 +27,17 @@ import JRecentJobTile from '../../customComponents/JRecentJobTile';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import JRow from '../../customComponents/JRow';
 import JChevronIcon from '../../customComponents/JChevronIcon';
+import JButton from '../../customComponents/JButton';
   
   const ESearch = ({navigation}) => {
     const refRBSheet = useRef();
     const [name, setName] = useState('');
+    const [seeAll, setSeeAll] = useState(false);
 
     const store = useContext(StoreContext);  
 
     const [search, setSearch] = useState('');
-
+// console.log(search)
     const getData = async () => {
         try {
             // await AsyncStorage.removeItem('@recent')
@@ -65,6 +67,16 @@ import JChevronIcon from '../../customComponents/JChevronIcon';
                 store.setFilterData([]);
               }} color='#00000090'/>
             }
+            right={store.token?.user?.owner_type.includes('Candidate') === true &&
+              <Feather
+                onPress={() => {
+                  navigation.navigate('CFilter'),
+                  store.setFilterData([])}}
+                name="filter"
+                size={RFPercentage(3.5)}
+                color={colors.black[0]}
+              />
+            }
           
           />
         }>
@@ -90,11 +102,16 @@ import JChevronIcon from '../../customComponents/JChevronIcon';
               color: colors.black[0],
               width: '85%',
             }}
+            value={search}
             onChangeText={e => {
               setSearch(e);
-              if (e?.length < 1) {
-                store.setFilterData([]);
-              }
+              // if (e?.length > 0) {
+              //   _search(e, store,true);
+              // } else {
+              //   store.setFilterData([]);
+              
+              // }
+              
             }}
             placeholder={store.lang.search}
             placeholderTextColor={colors.placeHolderColor[0]}
@@ -117,7 +134,7 @@ import JChevronIcon from '../../customComponents/JChevronIcon';
                 } else {
                   JToast({
                     type: 'error',
-                    text1: 'Enter something...!',
+                    text1: store.lang.enter_something,
                   });
                 }
               }}
@@ -147,9 +164,9 @@ import JChevronIcon from '../../customComponents/JChevronIcon';
                   onIconPress={() => alert('Icon Press')}
                   type="job"
                   title={item.job_title}
-                  location={item.city_name}
-                  category={item.job_shift}
-                  img={item.company_url}
+                    location={item.full_location}
+                    category={store.lang.id==0?item?.job_category_english:item?.job_category_arabic}
+                    img={item.company_image}
                   containerStyle={{marginVertical: RFPercentage(1)}}
                 />
               </React.Fragment>
@@ -161,23 +178,24 @@ import JChevronIcon from '../../customComponents/JChevronIcon';
                 fontSize={RFPercentage(3)}>
                 {store.lang.Recent_search}
               </JText>
-             
-              {store.recentSearch?.map((item, index) => (
-              
-                
+             {/* {console.log(store.recentSearch)} */}
+              {Array.from(new Set(store.recentSearch)).slice(0, 5).map((item, index) => (
               <JRecentJob
               key={index}
                   onPress={() => {
-                    _search(item,store,false);
+                    setSearch(item)
+                    // _search(item,store,false)
                     // refRBSheet.current.open();
                   }}
                   JobName={item}
                 />
+                
               ))}
+              {/* <JButton onPress={()=> setSeeAll(true)}/> */}
             </>
           )}
         </JScrollView>
-        <RBSheet
+        {/* <RBSheet
           ref={refRBSheet}
           closeOnDragDown={false}
           closeOnPressMask={false}
@@ -220,14 +238,15 @@ import JChevronIcon from '../../customComponents/JChevronIcon';
                     onSelect={() => setModalVisible(true)}
                     // onPress={() => navigation.navigate('JobDetails')}
                     image={false}
-                    title={'Project'}
+                    star={false}
+                    item={item}
                     key={index}
                   />
                 </>
               ))}
             </JScrollView>
           </SafeAreaView>
-        </RBSheet>
+        </RBSheet> */}
       </JScreen>
     );
   };

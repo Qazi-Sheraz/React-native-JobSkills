@@ -26,6 +26,7 @@ import DatePicker from 'react-native-date-picker';
 import { useRoute,useNavigation, useIsFocused } from '@react-navigation/native';
 import { keys, values } from 'mobx';
 import { observer } from 'mobx-react';
+import { JToast } from '../functions/Toast';
 // import url from '../../config/url';
 const JApplication = ({
   Hname,
@@ -96,10 +97,11 @@ const JApplication = ({
       values.interview_type === 'Office Base' ? 0 : 'Zoom' ? 1 : 2,
     );
     formdata.append('office_location', values?.office_location);
-    formdata.append('manual_link', values?.manual_link);
+    formdata.append('zoom_link', values?.manual_link);
     formdata.append('candidateID', item?.candidate_user_id);
     formdata.append('jobid', item?.job_id);
-    // console.log('formdata', formdata);
+
+    console.log('formdata', formdata);
 
     fetch(`${url.baseUrl}/meetings-submit`, {
       method: 'POST',
@@ -110,22 +112,23 @@ const JApplication = ({
       .then(response => response.json())
       .then(result => {
         if (result.success == true) {
-          Toast.show({
+          setStat(5)
+          setUpdate(!update)
+          JToast({
             type: 'success',
             text1: result.message,
           });
-          setStat(5);
-          setUpdate(!update);
+          setModalVisible(!modalVisible);
 
         } else {
-          // .log('error',message);
-          Toast.show({
+          JToast({
             type: 'error',
             text1: result.message,
           });
+          
         }
       })
-      // .catch(error => console.log('error', error));
+      .catch(error => console.log('error', error));
   };
 
   const _applicantsStatus = (id, selectedStatus) => {
@@ -419,7 +422,7 @@ const JApplication = ({
               }}
               onSubmit={values => {
                 _meetingSubmit(values);
-                setModalVisible(!modalVisible);
+                
               }}
               // validationSchema={yup.object().shape({
               //   interview_topic: yup

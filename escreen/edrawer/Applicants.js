@@ -218,6 +218,7 @@ const Applicants = () => {
             <JInput
               containerStyle={{marginTop: RFPercentage(1)}}
               isRequired
+              maxLength={100}
               heading={store.lang.email}
               value={values.email}
               error={touched.email && errors.email && true}

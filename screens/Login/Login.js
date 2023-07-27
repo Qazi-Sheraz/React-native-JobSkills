@@ -198,6 +198,7 @@ const Login = ({navigation, route}) => {
               style={{textAlign: store.lang.id === 0 ? 'left' : 'right'}}
               value={values.email}
               heading={store.lang.email}
+              maxLength={100}
               error={touched.email && errors.email && true}
               icon={
                 <Feather

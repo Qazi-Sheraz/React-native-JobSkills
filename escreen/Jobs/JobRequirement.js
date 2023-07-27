@@ -44,6 +44,7 @@ const JobRequirement = () => {
 
   
   const _handleSubmit = values => {
+    setLoader(true)
     var myHeaders = new Headers();
     myHeaders.append("Authorization",`Bearer ${store.token?.token}`);
 
@@ -93,7 +94,6 @@ const JobRequirement = () => {
                type: 'success',
                text1: result.message,
              });
-             setLoader(false)
              navigate('Job',{...params,...values})
             
       }
@@ -106,7 +106,10 @@ const JobRequirement = () => {
     }
   }).catch(error => {
       console.log('error', error)
-    });
+    })
+    .finally(() => {
+      setLoader(false)
+    })
    
   };
   
@@ -153,8 +156,6 @@ const JobRequirement = () => {
             expiry: new Date().toDateString(),
           }}
           onSubmit={values => {
-            // console.log({...params, ...values});
-          
             _handleSubmit(values);
           }}
           validationSchema={yup.object().shape({
@@ -428,7 +429,7 @@ const JobRequirement = () => {
               disabled={loader?true:false}
                 isValid={isValid}
                 onPress={() => {
-                  setLoader(true)
+                  
                   handleSubmit();
                 }}
                 style={{
