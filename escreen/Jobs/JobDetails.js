@@ -90,6 +90,8 @@ const JobDetails = ({ route }) => {
 
   };
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible1, setModalVisible1] = useState(false);
+  const [heading, setHeading] = useState();
   const [jobCount, setJobCount] = useState();
   const [jobUrl, setJobUrl] = useState();
   const [error, setError] = useState(false);
@@ -180,7 +182,7 @@ const JobDetails = ({ route }) => {
     fetch(
       store.token?.user?.owner_type.includes('Candidate')
         ? `${url.baseUrl}/job-details/${route.params?.id}`
-        : `${url.baseUrl}/employer/job-details/${route.params.id}`,
+        : `${url.baseUrl}/employer/job-details/${route.params?.id}`,
 
       {
         method: 'GET',
@@ -203,6 +205,96 @@ const JobDetails = ({ route }) => {
         setLoader(false);
       });
   };
+  const _report = values => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization",`Bearer ${store.token?.token}`);
+
+    var formdata = new FormData();
+    formdata.append("userId", store.token?.user?.id);
+    formdata.append("jobId", store.jobDetail?.job_id);
+    formdata.append("note",values.note);
+   console.log('formdata',formdata)
+
+
+    fetch(`${url.baseUrl}/report-job`, {
+      method: 'POST',
+      headers: myHeaders,
+      body: formdata,
+      redirect: 'follow',
+    })
+      .then(response => response.json())
+      .then(result => { 
+        
+      if (result.success === true ){
+             Toast.show({
+               type: 'success',
+               text1:result.message,
+             }); 
+             
+      }
+      
+      else{ 
+        // console.log('error',message);
+        Toast.show({
+        type: 'error',
+        text1: result.message,
+      });
+    }
+  }).catch(error => {}
+      // console.log('error', error)
+      )
+      .finally(() => {
+        setLoader1(false)
+        setModalVisible1(false)
+      });
+   
+  };
+  const _emailfriend = values => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization",`Bearer ${store.token?.token}`);
+
+    var formdata = new FormData();
+    formdata.append("userId", store.token?.user?.id);
+    formdata.append("jobId", store.jobDetail?.job_id);
+    formdata.append("job_url",jobUrl);
+    formdata.append("friend_name",values.friendName);
+    formdata.append("friend_email",values.friendEmail);
+   console.log('formdata',formdata)
+
+
+    fetch(`${url.baseUrl}/email-job`, {
+      method: 'POST',
+      headers: myHeaders,
+      body: formdata,
+      redirect: 'follow',
+    })
+      .then(response => response.json())
+      .then(result => { 
+        
+      if (result.success === true ){
+             Toast.show({
+               type: 'success',
+               text1:result.message,
+             }); 
+            
+      }
+      
+      else{ 
+        // console.log('error',message);
+        Toast.show({
+        type: 'error',
+        text1: result.message,
+      });
+    }
+  }).catch(error => {}
+      // console.log('error', error)
+      )
+      .finally(() => {
+        setLoader1(false)
+        setModalVisible1(false)
+      });
+   
+  };
   const onRefresh = useCallback(() => {
     setLoader(true);
 
@@ -214,6 +306,7 @@ const JobDetails = ({ route }) => {
   useEffect(() => {
     _getjobDetail();
   }, []);
+
 
   const data = [
     {
@@ -277,6 +370,7 @@ const JobDetails = ({ route }) => {
       name: store.jobDetail?.job_details?.is_freelance === false ? store.lang.no : store.lang.yes,
     },
   ];
+
   // console.log('job details',store.token?.user?.owner_type.includes('Candidate'))
   return (
     <JScreen
@@ -348,7 +442,10 @@ const JobDetails = ({ route }) => {
                         }}
                         key={index}
                         onSelect={() => {
-                          refRBSheet.current.open();
+                          item==store.lang.share_job?
+                          refRBSheet.current.open():
+                          setModalVisible1(true)
+                          setHeading(item)
                         }}>
                         <JRow>
                           {index === 0 ? (
@@ -487,6 +584,8 @@ const JobDetails = ({ route }) => {
               </JText>
               <View>
                 <FlatList
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
                   data={store.jobDetail?.job_requirement?.degree_level}
                   horizontal
                   renderItem={({ item }) => (
@@ -890,6 +989,131 @@ const JobDetails = ({ route }) => {
               )}
             </Formik>
           </Modal>
+          <Modal animationType="slide" transparent={true} visible={modalVisible1}>
+        <SafeAreaView style={styles.centeredView}>
+          <JGradientHeader
+            center={
+              <JText
+                fontColor={colors.white[0]}
+                fontWeight="bold"
+                fontSize={RFPercentage(2.5)}>
+                {heading}
+              </JText>
+            }
+          />
+          <Formik
+
+            initialValues={
+              heading === store.lang.email_to_friend
+      ? {
+          friendName: '', // Add additional fields for friend name and email
+          friendEmail: '',
+        }
+      : {
+          note: '',
+        }
+            }
+            onSubmit={values => {
+              // console.log(values.interview_type=== 'Office Base'? 0:'Zoom' && 1);
+              setLoader1(true);
+              heading === store.lang.email_to_friend
+              ? _emailfriend(values)
+             : _report(values);
+            }}
+            validationSchema={yup.object().shape( heading === store.lang.email_to_friend
+              ? {
+                friendName: yup.string().required('Friend Name is required').label('Friend Name'),
+                friendEmail: yup.string().required('Friend Email is required').label('Friend Email'),
+              }
+              :{note: yup.string().required('Note is required').label('Note'),}
+              )}>
+            {({
+              values,
+              handleChange,
+              errors,
+              setFieldTouched,
+              touched,
+              isValid,
+              handleSubmit,
+              setFieldValue,
+            }) => (
+              <ScrollView
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={styles.modalView1}>
+                  {heading==store.lang.email_to_friend?
+                  (<>
+                  <JText style={{fontWeight:'500',fontSize:RFPercentage(2.5),marginVertical: RFPercentage(1),}}>{store.lang.job_URL}</JText>
+                  <JText style={styles.textm}>{jobUrl}</JText>
+                  
+                  <JInput
+                  containerStyle={{marginVertical: RFPercentage(2)}}
+                  style={{
+                    textAlign: store.lang.id == 0 ? 'left' : 'right',
+                  }}
+                  isRequired
+                  heading={store.lang.friend_name}
+                  value={values.friendName}
+                  error={touched.friendName && errors.friendName && true}
+                  multiline={true}
+                  onChangeText={handleChange('friendName')}
+                  onBlur={() => setFieldTouched('friendName')}
+                />
+                  <JInput
+                  containerStyle={{marginVertical: RFPercentage(2)}}
+                  style={{
+                    textAlign: store.lang.id == 0 ? 'left' : 'right',
+                  }}
+                  isRequired
+                  heading={store.lang.friend_email}
+                  value={values.friendEmail}
+                  error={touched.friendEmail && errors.friendEmail && true}
+                  multiline={true}
+                  onChangeText={handleChange('friendEmail')}
+                  onBlur={() => setFieldTouched('friendEmail')}
+                />
+                </>):
+                <JInput
+                  containerStyle={{marginVertical: RFPercentage(2)}}
+                  style={{
+                    textAlign: store.lang.id == 0 ? 'left' : 'right',
+                  }}
+                  isRequired
+                  heading={store.lang.add_note}
+                  value={values.note}
+                  error={touched.note && errors.note && true}
+                  multiline={true}
+                  onChangeText={handleChange('note')}
+                  onBlur={() => setFieldTouched('note')}
+                />}
+                <JRow
+                  style={{
+                    justifyContent: 'flex-end',
+                    marginTop: RFPercentage(5),
+                  }}>
+                  <JButton
+                    onPress={() => setModalVisible1(false)}
+                    style={{
+                      marginHorizontal: RFPercentage(2),
+                      backgroundColor: '#fff',
+                      borderColor: '#000040',
+                    }}>
+                    {store.lang.close}
+                  </JButton>
+                  <JButton
+                  disabled={loader1 ? true : false}
+                  isValid={isValid}
+                   onPress={() => handleSubmit()}>
+                    
+                    {loader1?store.lang.loading: heading==store.lang.report_abuse? store.lang.report:store.lang.send_to_friend}
+                  
+                  </JButton>
+                </JRow>
+              </ScrollView>
+            )}
+          </Formik>
+          {/* <Pressable style={{height:'15%',width:'100%'}} onPress={()=> setModalVisible(!modalVisible)}/> */}
+        </SafeAreaView>
+      </Modal>
           <RBSheet
             ref={refRBSheet}
             closeOnDragDown={true}
@@ -951,6 +1175,7 @@ const styles = StyleSheet.create({
     fontSize: RFPercentage(2),
     fontWeight: '700',
     marginVertical: RFPercentage(1),
+    textAlign:"justify"
   },
   headertxt3: {
     fontSize: RFPercentage(2),
@@ -1009,5 +1234,29 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+  
+  
   },
+  centeredView: {
+    flex: 1, backgroundColor:'#00000090',
+  },
+  modalView1: {
+    padding:RFPercentage(2),
+    justifyContent:'space-between',
+    backgroundColor: colors.white[0],
+    borderBottomLeftRadius: RFPercentage(2),
+    borderBottomRightRadius: RFPercentage(2),
+    width: '100%',
+    // height:'60%',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  textm:{width:'100%',backgroundColor:colors.border[0],padding:RFPercentage(0.5),textAlign:"center",fontSize:RFPercentage(1.9)},
+  
 });

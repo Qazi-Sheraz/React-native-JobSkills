@@ -1,5 +1,5 @@
-import {StyleSheet, Pressable, View, TouchableOpacity} from 'react-native';
-import React, {useContext, useState} from 'react';
+import {StyleSheet, Pressable, View, TouchableOpacity, Platform} from 'react-native';
+import React, { useEffect,useState,useContext } from 'react';
 import JScreen from '../../customComponents/JScreen';  
 import JCircularLogo from '../../customComponents/JCircularLogo'; 
 import JText from '../../customComponents/JText';
@@ -22,7 +22,8 @@ import {StoreContext} from '../../mobx/store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import JRow from '../../customComponents/JRow';
 import { observer } from 'mobx-react';
-
+import messaging from '@react-native-firebase/messaging';
+import DeviceInfo from 'react-native-device-info';
 
 const Login = ({navigation, route}) => {
   const store = useContext(StoreContext);
@@ -30,16 +31,12 @@ const Login = ({navigation, route}) => {
   // console.log(route?.params?.type);
   const type = route?.params?.type;
 
-
-  
-  
   const _storeToken = (token, remember) => {
     if (remember === true) {
       AsyncStorage.setItem('@login', JSON.stringify(token))
         .then(res => {
           store.setToken(token);
-          // console.log('res', token);
-          // navigation.navigate('CHome');
+          console.log('res', token);
         })
         .catch(error => {
           Toast.show({
@@ -52,6 +49,92 @@ const Login = ({navigation, route}) => {
       store.setToken(token);
     }
   };
+  const requestUserPermission = async () => {
+    /**
+     * On iOS, messaging permission must be requested by
+     * the current application before messages can be
+     * received or sent
+     */
+    const authStatus = await messaging().requestPermission();
+    //console.log('Authorization status(authStatus):', authStatus);
+    return (
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL
+    );
+  };
+  const [deviceName, setDeviceName] = useState('');
+  useEffect(() => {
+    const fetchDeviceName = async () => {
+
+      try {
+        const name = await DeviceInfo.getDeviceName();
+        store.setDeviceName(name);
+      } catch (error) {
+        console.log('Error fetching device name:', error);
+      }
+    };
+
+    fetchDeviceName();
+  }, []);
+
+  // console.log('DeviceInfo', deviceName)
+
+  
+  const updateUserDeviceToken = (messagingInstance, userId, deviceName) => {
+    return new Promise((resolve, reject) => {
+      if (requestUserPermission()) {
+        messagingInstance
+          .getToken()
+          .then((fcmToken) => {
+            console.log('FCM Token -> ', fcmToken);
+            var formdata = new FormData();
+            formdata.append("user_id", userId);
+            formdata.append("token", fcmToken);
+            formdata.append("name", deviceName);
+            formdata.append("os", Platform.OS);
+            formdata.append("version", Platform.Version);
+            console.log(formdata);
+            var requestOptions = {
+              method: 'POST',
+              body: formdata,
+              redirect: 'follow'
+            };
+            fetch("https://dev.jobskills.digital/api/device-token-update", requestOptions)
+              .then(response => response.json())
+              .then(result => {
+                console.log('result', result);
+                resolve(result); // Resolve the promise with the result
+              })
+              .catch(error => {
+                console.log('error', error);
+                reject(error); // Reject the promise with the error
+              });
+  
+            messagingInstance
+              .onTokenRefresh((newToken) => {
+                console.log('Updated FCM Token -> ', newToken);
+                // Optionally, you can do something with the newToken here
+              });
+          })
+          .catch(error => {
+            console.log('Error while getting FCM token', error);
+            reject(error); // Reject the promise if there's an error
+          });
+      } else {
+        reject(new Error('User permission not granted'));
+      }
+    });
+  };
+  
+  // Usage example:
+  // updateUserDeviceToken(messaging(), store.userInfo?.id, store.deviceName)
+  //   .then((result) => {
+  //     // Do something with the result if needed
+  //   })
+  //   .catch((error) => {
+  //     // Handle errors here
+  //   });
+ 
 
   const _login = values => {
     var formdata = new FormData();
@@ -73,12 +156,13 @@ const Login = ({navigation, route}) => {
 
         if (result.token) {
           _storeToken(result, values.remember);
-          
+          updateUserDeviceToken();
           Toast.show({
             type: 'success',
             text1: store.lang.login_successfully,
             text2: store.lang.welcome,
           });
+
         } else {
           if (result == "Error Incorrect Password!" || result== "Incorrect Password!") {
             Toast.show({

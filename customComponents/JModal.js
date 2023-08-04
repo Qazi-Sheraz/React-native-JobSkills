@@ -8,7 +8,7 @@ import { RFPercentage } from 'react-native-responsive-fontsize';
 import { useContext } from 'react';
 import { StoreContext } from '../mobx/store';
 
-const JModal = ({msg,alertMsg,modalVisible,setModalVisible,onPressYes,onPressNo}) => {
+const JModal = ({msg,alertMsg,modalVisible,setModalVisible,onPressYes,onPressNo,name2,name1,}) => {
     const store=useContext(StoreContext);
   return (
    
@@ -27,12 +27,12 @@ const JModal = ({msg,alertMsg,modalVisible,setModalVisible,onPressYes,onPressNo}
               width: '50%',
               borderWidth: RFPercentage(0),
             }}
-            children={store.lang.no}
+            children={name2?name2:store.lang.no}
           />
           <JButton
             onPress={onPressYes}
             style={{width: '50%'}}
-            children={store.lang.yes}
+            children={name1?name1:store.lang.yes}
           />
         </JRow>
       </View>

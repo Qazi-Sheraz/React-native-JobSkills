@@ -1,5 +1,5 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
+import React, { useContext, useEffect, useState } from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
 import CBottomTab from '../../screens/Home/CBottomTab';
 import CGeneralInformation from '../../screens/Home/ProfileScreen/CGeneralInformation';
 import CExperienceInformation from '../../screens/Home/ProfileScreen/CExperienceInformation';
@@ -7,8 +7,8 @@ import CContactInformation from '../../screens/Home/ProfileScreen/CContactInform
 import Login from '../../screens/Login/Login';
 import Registration from '../../screens/Registration/Registration';
 import SelectionScreen from '../../screens/SplashScreen/SelectionScreen';
-import {StoreContext} from '../../mobx/store';
-import {observer} from 'mobx-react';
+import { StoreContext } from '../../mobx/store';
+import { observer } from 'mobx-react';
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LogoScreen from '../../screens/SplashScreen/LogoScreen';
@@ -20,7 +20,7 @@ import FeatureCompany from '../../screens/Home/FeatureCompany/FeatureCompany';
 import FeatureJob from '../../screens/Home/FeatureJob/FeatureJob';
 import CSearch from '../../screens/Home/Search/CSearch';
 import messaging from '@react-native-firebase/messaging';
-import {Alert} from 'react-native';
+import { Alert, Platform } from 'react-native';
 import AccountSetting from '../../screens/Drawer/AccountSetting';
 import Followings from '../../screens/Drawer/Followings';
 import JobAlert from '../../screens/Drawer/JobAlert';
@@ -39,19 +39,22 @@ import JChevronIcon from '../../customComponents/JChevronIcon';
 import JobDetails from '../../escreen/Jobs/JobDetails';
 import CSocialMediaLink from '../../screens/Home/ProfileScreen/CSocialMediaLink';
 import ESearch from '../../escreen/Jobs/ESearch';
+import DeviceInfo from 'react-native-device-info';
+import JModal from '../../customComponents/JModal';
+import { JToast } from '../../functions/Toast';
 
 const Stack = createStackNavigator();
 
-function CHomeStack({navigation}) {
+function CHomeStack({ navigation }) {
   const store = useContext(StoreContext);
   const [loader, setLoader] = useState(true);
-
+  const [modalVisible, setModalVisible] = useState(false);
   const _getoken = token => {
     AsyncStorage.getItem(token)
       .then(res => {
         // console.log('Response', res);
         store.setToken(JSON.parse(res));
-        store.setUserInfo(store.token.user);
+        store.setUserInfo(store.token?.user);
 
         setTimeout(() => {
           setLoader(false);
@@ -59,147 +62,119 @@ function CHomeStack({navigation}) {
       })
       .catch(error => {
         // console.log('Error in CHomeStack', error);
-
         setLoader(false);
       });
   };
   useEffect(() => {
     _getoken('@login');
 
-    return () => {};
+    return () => { };
   }, []);
 
-  const requestUserPermission = async () => {
-    /**
-     * On iOS, messaging permission must be requested by
-     * the current application before messages can be
-     * received or sent
-     */
-    const authStatus = await messaging().requestPermission();
-    // console.log('Authorization status(authStatus):', authStatus);
-    return (
-      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-      authStatus === messaging.AuthorizationStatus.PROVISIONAL
-    );
-  };
+  // const requestUserPermission = async () => {
+  //   /**
+  //    * On iOS, messaging permission must be requested by
+  //    * the current application before messages can be
+  //    * received or sent
+  //    */
+  //   const authStatus = await messaging().requestPermission();
+  //   //console.log('Authorization status(authStatus):', authStatus);
+  //   return (
+  //     authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+  //     authStatus === messaging.AuthorizationStatus.PROVISIONAL
+  //   );
+  // };
+  // const [deviceName, setDeviceName] = useState('');
+  // useEffect(() => {
+  //   const fetchDeviceName = async () => {
 
-  useEffect(() => {
-    if (requestUserPermission()) {
-      /**
-       * Returns an FCM token for this device
-       */
-      messaging()
-        .getToken()
-        .then(fcmToken => {
-          // console.log('FCM Token -> ', fcmToken);
-        });
-    } else 
-    // console.log('Not Authorization status:', authStatus);
+  //     try {
+  //       const name = await DeviceInfo.getDeviceName();
+  //       store.setDeviceName(name);
+  //     } catch (error) {
+  //       console.log('Error fetching device name:', error);
+  //     }
+  //   };
 
-    /**
-     * When a notification from FCM has triggered the application
-     * to open from a quit state, this method will return a
-     * `RemoteMessage` containing the notification data, or
-     * `null` if the app was opened via another method.
-     */
+  //   fetchDeviceName();
+  // }, []);
 
-    messaging()
-      .getInitialNotification()
-      .then(async remoteMessage => {
-        if (remoteMessage) {
-          // console.log(
-          //   'getInitialNotification:' +
-          //     'Notification caused app to open from quit state',
-          // );
-          if (remoteMessage) {
-            onMessageReceived(remoteMessage);
-          }
-        }
-      });
+  // // console.log('DeviceInfo', deviceName)
 
-    /**
-     * When the user presses a notification displayed via FCM,
-     * this listener will be called if the app has opened from
-     * a background state. See `getInitialNotification` to see
-     * how to watch for when a notification opens the app from
-     * a quit state.
-     */
-    messaging().onNotificationOpenedApp(async remoteMessage => {
-      if (remoteMessage) {
-        // console.log(
-        //   'onNotificationOpenedApp: ' +
-        //     'Notification caused app to open from background state',
-        // );
-        // console.log(remoteMessage);
-        // alert(
-        //   'onNotificationOpenedApp: Notification caused app to' +
-        //     ' open from background state',
-        // );
+  // useEffect(() => {
 
-        onMessageReceived(remoteMessage);
-      }
-    });
+  //   if (requestUserPermission()) {
+  //     /**
+  //      * Returns an FCM token for this device
+  //      */
+  //     messaging()
+  //       .getToken()
+  //       .then(fcmToken => {
+  //         console.log('FCM Token -> ', fcmToken);
+  //         var formdata = new FormData();
+  //         formdata.append("user_id", store.userInfo?.id);
+  //         formdata.append("token", fcmToken);
+  //         formdata.append("name", store.deviceName);
+  //         formdata.append("os", Platform.OS);
+  //         formdata.append("version", Platform.Version);
+  //         var requestOptions = {
+  //           method: 'POST',
+  //           body: formdata,
+  //           redirect: 'follow'
+  //         };
+  //         fetch("https://dev.jobskills.digital/api/device-token-update", requestOptions)
+  //           .then(response => response.json())
+  //           .then(result => console.log('result', result))
+  //           .catch(error => console.log('error', error));
 
-    /**
-     * Set a message handler function which is called when
-     * the app is in the background or terminated. In Android,
-     * a headless task is created, allowing you to access the
-     * React Native environment to perform tasks such as updating
-     * local storage, or sending a network request.
-     */
-    messaging().setBackgroundMessageHandler(async remoteMessage => {
-      // onMessageReceived(remoteMessage);
-    });
+  //       });
 
-    /**
-     * When any FCM payload is received, the listener callback
-     * is called with a `RemoteMessage`. Returns an unsubscribe
-     * function to stop listening for new messages.
-     */
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
-      if (remoteMessage) {
-        onMessageReceived(remoteMessage);
-      }
-    });
+  //     messaging()
+  //       .onTokenRefresh((newToken) => {
+  //         console.log('Updated FCM Token -> ', newToken);
 
-    /**
-     * Apps can subscribe to a topic, which allows the FCM
-     * server to send targeted messages to only those devices
-     * subscribed to that topic.
-     */
 
-    return () => {
-      unsubscribe;
-      /**
-       * Unsubscribe the device from a topic.
-       */
-      // messaging().unsubscribeFromTopic(TOPIC);
-    };
-  }, []);
+  //       })
 
-  const onMessageReceived = async remoteMessage => {
-    if (remoteMessage) {
-      Alert.alert(
-        remoteMessage.notification.title,
-        remoteMessage.notification.body,
-        [
-          {
-            text: 'Cancel',
-            // onPress: () => console.log('Cancel Pressed'),
-            style: 'cancel',
-          },
-          {
-            text: 'Visit',
-            onPress: () => {
-              navigation.navigate('CSelectedJob', {
-                id: remoteMessage.data && remoteMessage.data.id,
-              });
-            },
-          },
-        ],
-      );
-    }
-  };
+  //   } 
+ 
+  // }, []);
+
+  // const onMessageReceived = async remoteMessage => {
+  //   console.log('remoteMessage', remoteMessage)
+  //   if (remoteMessage) {
+  //     // setModalVisible(true)
+  //     // JToast({
+  //     //   type: 'success',
+  //     //   text1: remoteMessage.notification.title,
+  //     //   text2:remoteMessage.notification.body,
+  //     //   visibilityTime:2500,
+  //     // });
+  //     Alert.alert(
+  //       remoteMessage.notification.title,
+  //       remoteMessage.notification.body,
+  //       [
+  //         {
+  //           text: 'Cancel',
+  //           // onPress: () => console.log('Cancel Pressed'),
+  //           style: 'cancel',
+  //         },
+  //         {
+  //           text: 'Visit',
+  //           onPress: () => {
+  //             if (remoteMessage.data?.type === 'job-details') {
+  //               navigation.navigate('CJobDetails', {
+  //                 id: remoteMessage.data?.job_id,
+  //               });
+  //             }
+
+  //           },
+  //         },
+  //       ],
+  //     );
+
+  //   }
+  // };
 
   return loader === true ? (
     <LogoScreen />
@@ -217,7 +192,7 @@ function CHomeStack({navigation}) {
           <Stack.Screen name="CFeatureCompany" component={FeatureCompany} />
           <Stack.Screen name="CFeatureJob" component={FeatureJob} />
           <Stack.Screen name="CSelectedJob" component={SelectedJob} />
-          <Stack.Screen name="CJobDetails" component={JobDetails} />
+          <Stack.Screen name="JobDetails" component={JobDetails} />
           <Stack.Screen name="CSelectedCompany" component={SelectedCompany} />
           <Stack.Screen name="CSearch" component={CSearch} />
           <Stack.Screen name="ESearch" component={ESearch} />
@@ -241,7 +216,7 @@ function CHomeStack({navigation}) {
           <Stack.Screen name="Assessment" component={Assessment} />
           <Stack.Screen name="EAccountSetting" component={EAccountSetting} />
           <Stack.Screen name="ChangePassword" component={ChangePassword} />
-        <Stack.Screen name="ChangeLanguage" component={ChangeLanguage} />
+          <Stack.Screen name="ChangeLanguage" component={ChangeLanguage} />
           {/* AUTHENTICATION */}
           <Stack.Screen name="CNotification" component={Notification} />
           <Stack.Screen name="VerifiedEmail" component={VerifiedEmail} />
@@ -266,6 +241,7 @@ function CHomeStack({navigation}) {
         </Stack.Navigator>
       )}
     </React.Fragment>
+
   );
 }
 export default observer(CHomeStack);

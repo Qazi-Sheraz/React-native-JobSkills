@@ -79,7 +79,16 @@ const data = [
       ),
     );
   };
-
+  const sortByFitScoreAscending = () => {
+    store.setJApplication(
+      [...store.jApplication].sort((a, b) => a.fit_score - b.fit_score)
+    );
+  };
+  const sortByFitScoreDescending = () => {
+    store.setJApplication(
+      [...store.jApplication].sort((a, b) => b.fit_score - a.fit_score)
+    );
+  };
   const sortByNameDescending = () => {
     store.setJApplication(
       [...store.jApplication].sort((a, b) =>
@@ -96,15 +105,12 @@ const data = [
     );
   };
   
-
-
   const [error, setError] = useState(false);
   const [loader, setLoader] = useState(true);
   const isFoucs = useIsFocused();
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredData1, setFilteredData1] = useState(store.jApplication);
   const [update,setUpdate]=useState(true);
-  // console.log(update)
   const handleSearch = (text) => {
     setSearchQuery(text);
     
@@ -113,13 +119,10 @@ const data = [
     });
     setFilteredData1(filtered);
   };
-  // console.log(store.jApplication);
   const _jobApplication = () => {
     var myHeaders = new Headers();
     myHeaders.append(
-      'Authorization',
-      // `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNzQwYTNkNmY1NWEzZDYzYjM0ODI5ODdmNWZlMzM1N2Y0MTBhZjYxZmJiMTUyNjgxYjhjMjY0OWJmYzMyZTZmMjRhNjBlZTNjMDFkOWM3NGMiLCJpYXQiOjE2ODYwMzcxMDQuMTE5MzA5LCJuYmYiOjE2ODYwMzcxMDQuMTE5MzEzLCJleHAiOjE3MTc2NTk1MDQuMTEyNzcsInN1YiI6Ijg0Iiwic2NvcGVzIjpbXX0.WqyC9fdDZEEUNwcXjEvm_uCgILD2bDOlYKt2SrdUnTN2KGJitVg3bGvpUnKN7Iaa8C6fAo3qUOoDp_2oAeIJLbpvkAMAbB9oV3r5bMXpgABt3p_1ckkekQFkHjbqwL1qNk6YeAtuw8pQKEZwo8hKRr1zh8Nw1CR8NwsKxmmPNB-Uy1FG3gVzZeahmQzB4COicMQlKpXBK4Fx_fMoKZ1FqtVPASck9ZsBie4ETGk9EnBqEou7wpym6X9t0ckQARvIUU5EF8XPd_Z-ZCtvPwoQQCRjbVc1ALCrYPJfRnIS7ysEn9G_wrwpY5Q3_O1tyZ7HEl3zhL2sChHyKokNAhXES3Nhwrka85P08y_ETLcbiLxUBb7A7GY5YPopbtK21QZ9Ay39hgpr8G2RFVr91mEy1dq2DjtAigQNvP2DRDoQpVWm2fod797mu6za85GX5OgFh6QXiQ6Rlp13BFLNBCVVM62U67N6zWs5a5YGFtZIMrE63HXdvFgaYv8pfcAu5Yr5u0jzo_Cz1LKAGUC2iaw1yDfnsIO-xYCzYD27o1GsSHAdcdMd0DiMmy0C23gxjhNwl9u9ZO0P4-59svkV1gMp9JlNW03u3MNfKeQTTE0MdQdupczgUYi2mplRIgTFzasir7_YtKf_N7pT-EKwCklQsY9X7GSz_eLXOCKaytoD7uo`,
-      `Bearer ${store.token?.token}`,
+      'Authorization', `Bearer ${store.token?.token}`,
     );
     fetch(
       `${url.baseUrl}/employer/jobs/${route?.params?.id}/applications`,
@@ -158,7 +161,7 @@ const data = [
             fontColor={colors.white[0]}
             fontWeight="bold"
             fontSize={RFPercentage(2.5)}>
-            {store.lang.job_Applicantes}
+            {store.lang.job_Applicants}
           </JText>
         }
         left={JChevronIcon}
@@ -194,7 +197,7 @@ const data = [
               </MenuTrigger>
               <MenuOptions>
                 <JText style={styles.menuhead}>{store.lang.sort_by}</JText>
-                <MenuOption onSelect={sortByNameAscending}>
+                <MenuOption onSelect={sortByFitScoreDescending}>
                   <JRow>
                     <JText style={styles.menutxt}>
                       {store.lang.candidate_fit_score}
@@ -202,7 +205,7 @@ const data = [
                     <Arrow_Up />
                   </JRow>
                 </MenuOption>
-                <MenuOption onSelect={sortByNameDescending}>
+                <MenuOption onSelect={sortByFitScoreAscending}>
                   <JRow>
                     <JText style={styles.menutxt}>
                       {store.lang.candidate_fit_score}
@@ -284,7 +287,7 @@ const data = [
             {store.jAppLoader?<ActivityIndicator/>:
           <View style={styles.modalView}>
             <JText fontColor={colors.white[0]} fontSize={RFPercentage(1.8)}style={{paddingHorizontal:store.jApplication[0]?.fit_score_information == null?RFPercentage(10):RFPercentage(0)}}>
-              {store.jApplication[0]?.fit_score_information === null?'N/A' :store.jApplication[0]?.fit_score_information}
+              {store.jApplication[0]?.fit_score_information == null?'N/A' :store.jApplication[0]?.fit_score_information}
             
                </JText>
           </View>}

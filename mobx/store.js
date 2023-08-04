@@ -241,6 +241,9 @@ export const StoreProvider = props => {
     setCreateApiLoader: action(e => (store.createApiLoader = e)),
     createApiError: false,
     setCreateApiError: action(e => (store.createApiError = e)),
+
+    deviceName: '',
+    setDeviceName: action(e => (store.deviceName = e)),
   }));
   return (
     <StoreContext.Provider value={store}>

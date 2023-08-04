@@ -23,6 +23,8 @@ target 'jobSkills' do
 
   pod 'react-native-restart', :path => '../node_modules/react-native-restart'
 
+  pod 'RNDeviceInfo', :path => '../node_modules/react-native-device-info'
+
   target 'jobSkillsTests' do
     inherit! :complete
     # Pods for testing

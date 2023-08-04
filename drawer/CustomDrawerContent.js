@@ -31,8 +31,6 @@ function CustomDrawerContent(props) {
   const user = store.token?.user;
 
 
-  // console.log(store.userInfo.avatar)
-
   const _navigateToScreen = index => {
     // props.navigation.closeDrawer()
     index == 0
@@ -47,11 +45,11 @@ function CustomDrawerContent(props) {
               ? props.navigation.navigate('DHelpCenter')
               : AsyncStorage.removeItem('@login')
                 .then(res => {
-                  store.setToken({});
                   JToast({
                     type: 'success',
-                    text1: store.lang.logout_successfully,
+                    text1: 'Logout Successfully',
                   });
+                  store.setToken({});
                 })
                 .catch(error => {
                   JToast({
@@ -118,12 +116,11 @@ function CustomDrawerContent(props) {
               : index == 5
                 ? AsyncStorage.removeItem('@login')
                   .then(res => {
-                    store.setToken({});
-                    JToast({
+                     JToast({
                       type: 'success',
-                      text1: store.lang.logout_successfully,
-
+                      text1: 'Logout Successfully',
                     });
+                    store.setToken({});
                   })
                   .catch(error => {
 

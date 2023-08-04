@@ -136,7 +136,7 @@ function Home({navigation}) {
                 favouriteData={store.favouriteList}
                 jobId={data?.featuredJobs[0]?.id}
                 onPress={() =>
-                  navigation.navigate('CJobDetails', {
+                  navigation.navigate('JobDetails', {
                     id: data?.featuredJobs[0]?.job_id,
                   })
                 }
@@ -187,7 +187,7 @@ function Home({navigation}) {
                     favouriteData={store.favouriteList}
                     jobId={item.id}
                     onPress={() =>
-                      navigation.navigate('CJobDetails', {
+                      navigation.navigate('JobDetails', {
                         id: item.job_id,
                       })
                     }

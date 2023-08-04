@@ -348,7 +348,7 @@ const JApplication = ({
             <JRow>
               <JText style={styles.txt}>
                 {store.lang.fit_score}{' '}
-                {item.fit_scores == null ? 'N/A' : item.fit_scores}{' '}
+                {item.fit_score == null ? 'N/A' : item.fit_score}{' '}
               </JText>
               <JIcon
                 onPress={onPress}

@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import JRow from './JRow'
 import { RFPercentage } from 'react-native-responsive-fontsize'
 import JIcon from './JIcon'
@@ -7,14 +7,32 @@ import JText from './JText'
 import { StoreContext } from '../mobx/store'
 import { useContext } from 'react'
 import moment from 'moment';
+import { useNavigation } from '@react-navigation/native'
 // import 'moment/locale/ur';
 // import 'moment/locale/ar';
 const JNotification = ({item}) => {
+  const navigation=useNavigation();
     const store = useContext(StoreContext);
   //  moment.locale( store.lang.id === 0 ?'en': store.lang.id === 1 ? 'ur':'ar') ; 
+ 
+  const data=JSON.parse(item.text)
+console.log(data?.id)
+
 
   return (
     <JRow
+    disabled={false}
+    onPress={()=> {
+      if(data?.type=='candidate-details'){
+        navigation.navigate('ProfileApplication', {
+          candidate_id: data?.candidate_id,
+        });}
+        else{
+          navigation.navigate('JobDetails', {
+            id: data?.job_id,
+          });
+        
+      }}}
       style={{
         marginVertical: RFPercentage(2),
         backgroundColor: '#F8FAFC',
@@ -42,15 +60,16 @@ const JNotification = ({item}) => {
       <View
         style={{
             width:'75%',
-            height:RFPercentage(10),
+            // height:RFPercentage(10),
             justifyContent:'center',
+            paddingVertical:RFPercentage(2),
             marginHorizontal: RFPercentage(1),
+
         }}
         >
 
-          <JText style={{fontWeight:'700',marginTop:RFPercentage(0.5)}}>{item.title}</JText>
-         {item.text !== null &&
-        <JText style={{marginTop:RFPercentage(1)}}>{item.text!==null? item.text:null}</JText>}
+          <JText style={{fontWeight:'700',marginTop:RFPercentage(0.5),}}>{item.title}</JText>
+         {/* {item.text !== null && <JText style={{marginTop:RFPercentage(1),backgroundColor:'red'}}>{(item.text)}</JText>} */}
       </View>
       <JText style={[styles.txt,{right:store.lang.id===0 ?RFPercentage(2):RFPercentage(2)}]}>{moment(item.created_at).fromNow()}</JText>
     </JRow>

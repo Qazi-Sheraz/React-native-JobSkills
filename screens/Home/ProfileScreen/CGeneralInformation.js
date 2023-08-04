@@ -252,13 +252,13 @@ const{params}=useRoute();
                 }
               />
               {touched.dob && errors.dob && (
-                <JErrorText>{errors.dob}</JErrorText>
+                <JErrorText>{errors.dob}</JErrorText> 
               )}
 
               <JSelectInput
                 containerStyle={{marginTop: RFPercentage(2)}}
                 value={values.gender?.name}
-                data={store.myProfile.dataEnglish.Gender}
+                data={store.lang.id==0?store.myProfile?.dataEnglish?.Gender:store.myProfile?.dataArabic?.Gender}
                 header={store.lang.gender}
                 heading={`${store.lang.gender}:`}
                 setValue={e => setFieldValue('gender', e)}

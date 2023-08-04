@@ -87,7 +87,6 @@ const ProfileJobApplication = ({route}) => {
     myHeaders.append("Authorization",`Bearer ${store.token?.token}`);
 
     var formdata = new FormData();
-    
     formdata.append("userId", store.token?.user?.id);
     formdata.append("candidateId", params?.candidate_user_id);
     formdata.append("note",values.note);
@@ -581,7 +580,6 @@ const styles = StyleSheet.create({
   },
   centeredView: {
     flex: 1, backgroundColor:'#00000090',
-
   },
   modalView: {
     padding:RFPercentage(2),

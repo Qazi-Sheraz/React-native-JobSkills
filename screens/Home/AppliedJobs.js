@@ -86,7 +86,7 @@ const statusArr=[
                         onSelect={() => {
                           store.setAppliedJobSelect(item);
                         }}>
-
+                          
                         <JText>{item}</JText>
                       </MenuOption>
                     ),
@@ -138,7 +138,7 @@ const statusArr=[
             renderItem={({item}) => (
               <JJobTile
                 onPress={() =>
-                  navigation.navigate('CJobDetails', {
+                  navigation.navigate('JobDetails', {
                     id: item.job_unique_id,
                   })
                 }

@@ -89,7 +89,7 @@ function Favourite({navigation}) {
                 favouriteData={store.favouriteList}
                 jobId={item.job_id}
                 onPress={() =>
-                  navigation.navigate('CJobDetails', {
+                  navigation.navigate('JobDetails', {
                     id: item.job_unique_id,
                   })
                 }

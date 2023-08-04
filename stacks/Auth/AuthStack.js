@@ -9,8 +9,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import LogoScreen from '../../screens/SplashScreen/LogoScreen';
 import ForgetPassword from '../../screens/forgetPassword/ForgetPassword';
 import VerifiedEmail from '../../screens/VerifiedEmail/VerifiedEmail';
-import ResetPassword from '../../screens/ResetPassword/ResetPassword';
 import ResetLoginPassword from '../../screens/forgetPassword/ResetLoginPassword';
+import DeviceInfo from 'react-native-device-info';
 
 
 const Stack = createStackNavigator();
@@ -31,8 +31,6 @@ function AuthStack({navigation}) {
         }, 2000);
       })
       .catch(error => {
-        // console.log('Error in CHomeStack', error);
-
         setLoader(false);
       });
   };
@@ -40,6 +38,18 @@ function AuthStack({navigation}) {
     _getoken('@login');
 
     return () => {};
+  }, []);
+  useEffect(() => {
+    const fetchDeviceName = async () => {
+      try {
+        const name = await DeviceInfo.getDeviceName();
+        store.setDeviceName(name);
+      } catch (error) {
+        console.log('Error fetching device name:', error);
+      }
+    };
+
+    fetchDeviceName()
   }, []);
 
   return loader === true ? (
