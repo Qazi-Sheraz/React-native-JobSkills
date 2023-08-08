@@ -82,10 +82,12 @@ function Followings({navigation}) {
             ListEmptyComponent={() => <JEmpty />}
             showsVerticalScrollIndicator={false}
             renderItem={({item}) => (
+              console.log(item.company_id),
               <JCompanyTile
                 onPress={() =>
                   navigation.navigate('CSelectedCompany', {
                     id: item.company_unique_id,
+                    cid: item.company_id,
                   })
                 }
                 containerStyle={{marginTop: RFPercentage(1)}}

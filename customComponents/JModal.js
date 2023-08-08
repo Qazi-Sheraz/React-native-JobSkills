@@ -16,7 +16,7 @@ const JModal = ({msg,alertMsg,modalVisible,setModalVisible,onPressYes,onPressNo,
     <SafeAreaView style={styles.container}>
       <View style={styles.modal}>
         <JText style={styles.header}>{alertMsg}</JText>
-        <JText style={styles.msg}>
+        <JText style={styles.menutxt}>
           {msg}
         </JText>
         <JRow style={{justifyContent: 'space-between'}}>
@@ -65,6 +65,12 @@ modal: {
 menutxt: {
   fontSize: RFPercentage(2),
   marginVertical: RFPercentage(0.5),
+  paddingHorizontal: RFPercentage(1),
+  
+},
+header: {
+  fontSize: RFPercentage(2.5),
+  fontWeight:'bold',
   paddingHorizontal: RFPercentage(1),
   
 },})

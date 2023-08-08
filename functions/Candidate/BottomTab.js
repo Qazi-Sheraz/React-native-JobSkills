@@ -109,6 +109,7 @@ export const _saveToFavoriteList = (store, setLoader, id) => {
     });
 };
 
+
 export const _getAppliedJobData = store => {
   var myHeaders = new Headers();
   myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
@@ -125,7 +126,6 @@ export const _getAppliedJobData = store => {
   fetch(`${url.baseUrl}/applied-jobs`, requestOptions)
     .then(response => response.json())
     .then(res => {
-      // console.log(res);
       store.setAppliedJobList(res);
       store.setAppliedJobApiLoader(false);
     })

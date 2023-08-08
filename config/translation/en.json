@@ -428,6 +428,10 @@
     "friend_name": "Friend Name",
     "friend_email": "Friend Email",
     "job_URL": "Job URL",
-    "report": "Report"
+    "report": "Report",
+    "accept": "Accept",
+    "re_schedule": "Re-schedule",
+    "action_for_interview_schedule": "Action For Interview Schedule",
+    "are_u_sure_you_want_to_report": "Are you sure you want to report"
     
 }

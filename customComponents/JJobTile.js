@@ -37,10 +37,10 @@ function JJobTile({
   status,
   favouriteData = [],
   jobId,
+  onPressStatus,
 }) {
   const [loader, setLoader] = useState();
   const store = useContext(StoreContext);
-
   return isempty === true ? (
     <JNotfoundData/>
   ) : (
@@ -191,15 +191,28 @@ function JJobTile({
           <JRow
             style={{
               justifyContent: 'space-between',
-              paddingRight: RFPercentage(1),
             }}>
             <JText
               style={{
-                textAlign: 'center',
+                width: 
+                  status==4||
+                  status==5||
+                  status==6||
+                  status==7||
+                  status==8
+                   ? '34%':'65%',
+                
               }}>
-              {category}
+              {
+              status==4||
+              status==5||
+              status==6||
+              status==7||
+              status==8
+               ? category.substring(0, 10) + '...' : category}
+             
             </JText>
-            <JStatusChecker status={status} />
+            <JStatusChecker onPressStatus={onPressStatus} status={status} />
           </JRow>
         </View>
       )}

@@ -420,6 +420,15 @@
     "friend_email": "صديق البريد الإلكتروني",
     "friend_name": "اسم صديق",
     "job_URL": "رابط الوظيفة",
-    "report": "تقرير"
+    "report": "تقرير",
+    "accept": "يقبل",
+    "re_schedule": "إعادة الجدولة",
+    "action_for_interview_schedule": "العمل لجدول المقابلة",
+    "are_u_sure_you_want_to_report": "هل أنت متأكد أنك تريد الإبلاغ "
+    
+   
+
+    
+    
     
 }

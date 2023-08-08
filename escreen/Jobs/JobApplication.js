@@ -7,12 +7,12 @@ import {
   Modal,
   ActivityIndicator,
 } from 'react-native';
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import JScreen from '../../customComponents/JScreen';
 import JGradientHeader from '../../customComponents/JGradientHeader';
 import JText from '../../customComponents/JText';
 import colors from '../../config/colors';
-import {RFPercentage} from 'react-native-responsive-fontsize';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 import JSearchInput from '../../customComponents/JSearchInput';
 import JRow from '../../customComponents/JRow';
 import JApplication from '../../customComponents/JApplication';
@@ -25,22 +25,25 @@ import {
   MenuOptions,
   MenuTrigger,
 } from 'react-native-popup-menu';
-import {StoreContext} from '../../mobx/store';
+import { StoreContext } from '../../mobx/store';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import {heightPercentageToDP} from 'react-native-responsive-screen';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
+import { heightPercentageToDP } from 'react-native-responsive-screen';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import JChevronIcon from '../../customComponents/JChevronIcon';
-import {observer} from 'mobx-react';
+import { observer } from 'mobx-react';
 import url from '../../config/url';
 import JNotfoundData from '../../customComponents/JNotfoundData';
 import JApiError from '../../customComponents/JApiError';
 import { _jobApplication } from '../../functions/Candidate/BottomTab';
 import JEmpty from '../../customComponents/JEmpty';
-
-
-
-const JobApplication = ({route}) => {
-  const {navigate, goBack} = useNavigation();
+import DatePicker from 'react-native-date-picker';
+import { Formik } from 'formik';
+import * as yup from 'yup';
+import JButton from '../../customComponents/JButton';
+import JIcon from '../../customComponents/JIcon';
+import moment from 'moment';
+const JobApplication = ({ route }) => {
+  const { navigate, goBack } = useNavigation();
   const [selectedItem, setSelectedItem] = useState();
   const store = useContext(StoreContext);
   const handleSelect = status => {
@@ -51,25 +54,25 @@ const JobApplication = ({route}) => {
   const refRBSheet = useRef();
 
 
-const data = [
-  {status: 'All'},
-  {id:0,status: store.lang.drafted},
-  {id:1,status: store.lang.applied},
-  {id:2,status: store.lang.rejected},
-  {id:3,status: store.lang.selected},
-  {id:4,status: store.lang.shortlisted},
-  {id:5,status: store.lang.invitation_Sent},
-  {id:6,status: store.lang.interview_scheduled},
-  {id:7,status: store.lang.interview_accepted},
-  {id:8,status: store.lang.interview_rescheduled},
-  {id:9,status: store.lang.interview_completed},
-];
+  const data = [
+    { status: 'All' },
+    { id: 0, status: store.lang.drafted },
+    { id: 1, status: store.lang.applied },
+    { id: 2, status: store.lang.rejected },
+    { id: 3, status: store.lang.selected },
+    { id: 4, status: store.lang.shortlisted },
+    { id: 5, status: store.lang.invitation_Sent },
+    { id: 6, status: store.lang.interview_scheduled },
+    { id: 7, status: store.lang.interview_accepted },
+    { id: 8, status: store.lang.interview_rescheduled },
+    { id: 9, status: store.lang.interview_completed },
+  ];
 
   const filterData = status => {
-   
+
     store.setJApplication(store.jApplication.filter(e => e.status == status));
 
-        refRBSheet.current.close();
+    refRBSheet.current.close();
   };
 
   const sortByNameAscending = () => {
@@ -104,16 +107,25 @@ const data = [
       ),
     );
   };
-  
+
   const [error, setError] = useState(false);
   const [loader, setLoader] = useState(true);
+  const [loader1, setLoader1] = useState(true);
   const isFoucs = useIsFocused();
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredData1, setFilteredData1] = useState(store.jApplication);
-  const [update,setUpdate]=useState(true);
+  const [update, setUpdate] = useState(true);
+  const [modalVisible1, setModalVisible1] = useState(false);
+  const [jobID, setJobId] = useState();
+  const [reschedule, setReschedule] = useState(false);
+  const [details, setDetails] = useState();
+
+  const [open, setOpen] = useState(false);
+  console.log(jobID);
+  console.log(store.token?.user?.owner_id);
   const handleSearch = (text) => {
     setSearchQuery(text);
-    
+
     const filtered = store.jApplication.filter((item) => {
       return item.candidate_name.toLowerCase().includes(text.toLowerCase());
     });
@@ -135,9 +147,9 @@ const data = [
     )
       .then(response => response.json())
       .then(result => {
-        
+
         store.setJApplication(result?.job_application)
-        
+
       })
       .catch(error => {
         console.log('application===error', error);
@@ -147,7 +159,112 @@ const data = [
         store.setJAppLoader(false);
       });
   };
- 
+  const _getScheduleDetails = () => {
+    setModalVisible1(true)
+    var myHeaders = new Headers();
+    myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
+
+    var requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+    };
+    fetch(`${url.baseUrl}/scheduleDetail/${store.token?.user?.owner_id}/${jobID}`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        setDetails(result[0]?.start_time);
+      })
+      .catch(error => {
+        console.log('error', error);
+
+      })
+      .finally(() => {
+        setLoader1(false);
+      });
+  };
+  const _acceptSchedule = () => {
+
+    var myHeaders = new Headers();
+    myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
+
+    var formdata = new FormData();
+    formdata.append("candidateid", store.token?.user?.owner_id);
+    formdata.append("jobid", jobID);
+    console.log(formdata)
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: formdata,
+      redirect: 'follow'
+    };
+    fetch(`${url.baseUrl}/acceptSchedule`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        if (result.success) {
+          setStat(7);
+          JToast({
+            type: 'success',
+            text1: result.message,
+          });
+        } else {
+          JToast({
+            type: 'error',
+            text1: result.message,
+          });
+        }
+      })
+      .catch((error) => {
+        console.log('Error:', error);
+        JToast({
+          type: 'error',
+          text1: 'An error occurred. Please try again later.',
+        });
+      })
+      .finally(() => {
+        setLoader(false);
+        setModalVisible(false);
+      });
+  };
+  const _reschedule = (values) => {
+    var myHeaders = new Headers();
+    myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
+
+    var formdata = new FormData();
+    formdata.append("reschedule_time", moment(values.interview_date_and_time).format('YYYY/MM/DD HH:mm'));
+    formdata.append("candidateid", store.token?.user?.owner_id);
+    formdata.append("jobid", jobID);
+    console.log(formdata)
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: formdata,
+      redirect: 'follow'
+    };
+    fetch(`${url.baseUrl}/reschedule`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        console.log(result)
+        if (result.success == true) {
+          JToast({
+            type: 'success',
+            text1: result.message
+          });
+
+        } else {
+          JToast({
+            type: 'error',
+            text1: result.message
+          });
+        }
+      })
+      .catch(error => console.log('eeeeeeeerror', error))
+      .finally(() => {
+        setLoader(false);
+        setReschedule(false);
+        setModalVisible(false);
+      });
+  };
+
   useEffect(() => {
     store.setJAppLoader(true)
     _jobApplication()
@@ -169,65 +286,66 @@ const data = [
 
       {store.jAppLoader ? (
         <ActivityIndicator />
-      ) : 
-      error == true ? 
-        <JApiError
-        onTryAgainPress={() => {
-          _jobApplication();
-        store.setJAppError(false)}}
-        />:
-        store.jApplication?.length > 0 ? (
-        <>
-          <JRow
-            style={{
-              paddingHorizontal: RFPercentage(2),
-              justifyContent: 'space-between',
-            }}>
-            <JSearchInput
-              inputStyle={{width: '75%', alignSelf: 'center'}}
-              length={1}
-              onChangeText={handleSearch}
-              value={searchQuery}
-              onPressIcon={() => alert('Icon Pressed')}
-            />
-            <Menu>
-              <MenuTrigger
-                style={{alignItems: 'center', justifyContent: 'center'}}>
-                <Sort height={RFPercentage(7)} width={RFPercentage(8)} />
-              </MenuTrigger>
-              <MenuOptions>
-                <JText style={styles.menuhead}>{store.lang.sort_by}</JText>
-                <MenuOption onSelect={sortByFitScoreDescending}>
-                  <JRow>
-                    <JText style={styles.menutxt}>
-                      {store.lang.candidate_fit_score}
-                    </JText>
-                    <Arrow_Up />
-                  </JRow>
-                </MenuOption>
-                <MenuOption onSelect={sortByFitScoreAscending}>
-                  <JRow>
-                    <JText style={styles.menutxt}>
-                      {store.lang.candidate_fit_score}
-                    </JText>
-                    <Arrow_Down />
-                  </JRow>
-                </MenuOption>
-                <MenuOption onSelect={sortByRecentApplyDateDescending}>
-                  <JText style={styles.menutxt}>
-                    {store.lang.recent_apply_date}
-                  </JText>
-                </MenuOption>
-                {/* <MenuOption onSelect={() => refRBSheet.current.open()}>
+      ) :
+        error == true ?
+          <JApiError
+            onTryAgainPress={() => {
+              _jobApplication();
+              store.setJAppError(false)
+            }}
+          /> :
+          store.jApplication?.length > 0 ? (
+            <>
+              <JRow
+                style={{
+                  paddingHorizontal: RFPercentage(2),
+                  justifyContent: 'space-between',
+                }}>
+                <JSearchInput
+                  inputStyle={{ width: '75%', alignSelf: 'center' }}
+                  length={1}
+                  onChangeText={handleSearch}
+                  value={searchQuery}
+                  onPressIcon={() => alert('Icon Pressed')}
+                />
+                <Menu>
+                  <MenuTrigger
+                    style={{ alignItems: 'center', justifyContent: 'center' }}>
+                    <Sort height={RFPercentage(7)} width={RFPercentage(8)} />
+                  </MenuTrigger>
+                  <MenuOptions>
+                    <JText style={styles.menuhead}>{store.lang.sort_by}</JText>
+                    <MenuOption onSelect={sortByFitScoreDescending}>
+                      <JRow>
+                        <JText style={styles.menutxt}>
+                          {store.lang.candidate_fit_score}
+                        </JText>
+                        <Arrow_Up />
+                      </JRow>
+                    </MenuOption>
+                    <MenuOption onSelect={sortByFitScoreAscending}>
+                      <JRow>
+                        <JText style={styles.menutxt}>
+                          {store.lang.candidate_fit_score}
+                        </JText>
+                        <Arrow_Down />
+                      </JRow>
+                    </MenuOption>
+                    <MenuOption onSelect={sortByRecentApplyDateDescending}>
+                      <JText style={styles.menutxt}>
+                        {store.lang.recent_apply_date}
+                      </JText>
+                    </MenuOption>
+                    {/* <MenuOption onSelect={() => refRBSheet.current.open()}>
                   <JText style={styles.menutxt}>
                     {store.lang.status_of_application}
                   </JText>
                 </MenuOption> */}
-              </MenuOptions>
-            </Menu>
-          </JRow>
+                  </MenuOptions>
+                </Menu>
+              </JRow>
 
-          <ScrollView style={{flex: 1, paddingHorizontal: RFPercentage(2)}}>
+              {/* <ScrollView style={{flex: 1, paddingHorizontal: RFPercentage(2)}}>
             {(searchQuery?.length > 0 ? filteredData1 : store.jApplication).map(
               (item, index) => (
                 <JApplication
@@ -241,11 +359,30 @@ const data = [
                 />
               ),
             )}
-          </ScrollView>
-        </>
-      ) : (
-        <JEmpty />
-      )}
+          </ScrollView> */}
+              <FlatList
+                style={{ flex: 1, paddingHorizontal: RFPercentage(2) }}
+                data={searchQuery?.length > 0 ? filteredData1 : store.jApplication}
+                renderItem={({ item, index }) => (
+
+                  <JApplication
+                    update={update}
+                    setUpdate={setUpdate}
+                    onPressStatus={() => { `${setJobId(item.id)}${item.status_id == 8 && _getScheduleDetails()}` }}
+                    onPress={() => {
+                      setModalVisible(true);
+                    }}
+                    onSelect={handleSelect}
+                    item={item}
+                  // date={moment(item.apply_date, 'DD-MM-YYYY').format('DD MMM,YYYY')}
+                  />
+                )}
+                keyExtractor={(item) => item.id}
+              />
+            </>
+          ) : (
+            <JEmpty />
+          )}
       {/* <RBSheet
         ref={refRBSheet}
         // closeOnDragDown={false}
@@ -284,14 +421,161 @@ const data = [
         <Pressable
           onPress={() => setModalVisible(!modalVisible)}
           style={styles.centeredView}>
-            {store.jAppLoader?<ActivityIndicator/>:
-          <View style={styles.modalView}>
-            <JText fontColor={colors.white[0]} fontSize={RFPercentage(1.8)}style={{paddingHorizontal:store.jApplication[0]?.fit_score_information == null?RFPercentage(10):RFPercentage(0)}}>
-              {store.jApplication[0]?.fit_score_information == null?'N/A' :store.jApplication[0]?.fit_score_information}
-            
-               </JText>
-          </View>}
+          {store.jAppLoader ? <ActivityIndicator /> :
+            <View style={styles.modalView}>
+              <JText fontColor={colors.white[0]} fontSize={RFPercentage(1.8)} style={{ paddingHorizontal: store.jApplication[0]?.fit_score_information == null ? RFPercentage(10) : RFPercentage(0) }}>
+                {store.jApplication[0]?.fit_score_information == null ? 'N/A' : store.jApplication[0]?.fit_score_information}
+
+              </JText>
+            </View>}
         </Pressable>
+      </Modal>
+      <Modal animationType="slide" visible={modalVisible1}>
+        <View style={{ marginBottom: RFPercentage(10) }}>
+          <JGradientHeader
+            center={
+              <JText
+                fontColor={colors.white[0]}
+                fontWeight="bold"
+                fontSize={RFPercentage(2.5)}>
+                {store.lang.action_for_interview_schedule}
+              </JText>
+            }
+          />
+          {loader1 ? <ActivityIndicator />
+            : <Formik
+              initialValues={{
+                interview_date_and_time: new Date(),
+              }}
+              onSubmit={values => {
+                _reschedule(values);
+                // console.log('values', moment(values.interview_date_and_time).format('YYYY/MM/DD HH:MM'))
+
+              }}
+            // validationSchema={yup.object().shape({
+
+            //   interview_date_and_time: yup
+            //     .string()
+            //     .required()
+            //     .label('interview_date_and_time'),
+
+            // })}
+            >
+              {({
+                values,
+                handleChange,
+                errors,
+                setFieldTouched,
+                touched,
+                isValid,
+                handleSubmit,
+                setFieldValue,
+              }) => (
+                <View
+                  style={{ justifyContent: 'space-between', height: '90%', marginHorizontal: RFPercentage(2) }}>
+                  {reschedule == true ?
+                    <View >
+                      <JText style={styles.headers}>
+                        {store.lang.interview_date} :
+                      </JText>
+                      <JText style={styles.date}>  {!details ? '--/--/--' : moment(details).format('DD/MM/YYYY')}</JText>
+
+                      <JText style={styles.headers}>
+                        {store.lang.interview_time} :
+                      </JText>
+                      <JText style={styles.date}>{!details ? '--/--' : moment(details).format('HH:mm A')}</JText>
+                      <View
+                        style={{
+                          justifyContent: 'space-between',
+                          // flexDirection: store.lang.id===0?'row':'row-reverse',
+                          paddingTop: RFPercentage(1),
+                          marginBottom: RFPercentage(1),
+                        }}>
+                        <JText
+                          style={styles.headers}>
+                          {store.lang.interview_Date_and_Time} :
+                        </JText>
+                        <Pressable
+                          onPress={() => setOpen(true)}
+                          style={{
+                            height: RFPercentage(6),
+                            flexDirection:
+                              store.lang.id === 0 ? 'row' : 'row-reverse',
+                            alignItems: 'center',
+                            borderBottomWidth: RFPercentage(0.2),
+                            borderBottomColor: error
+                              ? colors.danger[0]
+                              : colors.inputBorder[0],
+                          }}>
+                          <JIcon
+                            icon={'ev'}
+                            name={'calendar'}
+                            color={'#000'}
+                            size={RFPercentage(4.5)}
+                          />
+                          <JText fontSize={RFPercentage(2)}>
+                            {moment(values.interview_date_and_time).format('YYYY/MM/DD HH:mm')}
+                          </JText>
+                        </Pressable>
+                      </View>
+                    </View>
+                    : <View >
+                      <JText style={styles.headers}>
+                        {store.lang.interview_date} :
+                      </JText>
+                      <JText style={styles.date}>
+                        {!details ? '--/--/--' : moment(details).format('DD/MM/YYYY')}
+                      </JText>
+
+                      <JText style={styles.headers}>
+                        {store.lang.interview_time} :
+                      </JText>
+                      <JText style={styles.date}>
+                        {!details ? '--/--' : moment(details).format('HH:mm A')}
+                      </JText>
+                    </View>}
+                  <View>
+                    <JButton
+                      style={{ backgroundColor: colors.success[0], marginVertical: RFPercentage(1), borderColor: 'transparent', alignSelf: 'flex-end', }}
+                      onPress={() => {
+                        if (reschedule) {
+                          handleSubmit();
+                        } else {
+                          _acceptSchedule();
+                        }
+                      }}>
+                      {reschedule == true ? store.lang.submit : store.lang.accept}
+                    </JButton>
+                    {reschedule == false &&
+                      <JButton
+                        style={{ marginVertical: RFPercentage(1), alignSelf: 'flex-end', }}
+                        onPress={() => { setReschedule(true), _getScheduleDetails() }}>
+                        {store.lang.re_schedule}
+                      </JButton>}
+                    <JButton
+                      style={{ backgroundColor: colors.border[0], marginVertical: RFPercentage(1), borderColor: 'transparent', alignSelf: 'flex-end', }}
+                      onPress={() => { setReschedule(false), setOpen(false), setModalVisible1(false) }}>
+                      {store.lang.close}
+                    </JButton>
+                  </View>
+                  {open && (
+                    <DatePicker
+                      modal
+                      open={open}
+                      date={values.interview_date_and_time}
+                      onConfirm={e => {
+                        setFieldValue('interview_date_and_time', e);
+                        setOpen(false);
+                      }}
+                      onCancel={() => setOpen(false)}
+                      mode="datetime"
+                      minuteInterval={1}
+                    />
+                  )}
+                </View>
+              )}
+            </Formik>}
+        </View>
       </Modal>
     </JScreen>
   );
@@ -300,7 +584,7 @@ const data = [
 export default observer(JobApplication);
 
 const styles = StyleSheet.create({
-  menu: {marginTop: RFPercentage(5)},
+  menu: { marginTop: RFPercentage(5) },
   menuhead: {
     fontSize: RFPercentage(2),
     fontWeight: 'bold',
@@ -312,7 +596,7 @@ const styles = StyleSheet.create({
     marginVertical: RFPercentage(0.5),
     paddingHorizontal: RFPercentage(1),
   },
-  RBView: {paddingHorizontal: RFPercentage(2.5), paddingTop: RFPercentage(2)},
+  RBView: { paddingHorizontal: RFPercentage(2.5), paddingTop: RFPercentage(2) },
   RBHeader: {
     fontSize: RFPercentage(2.8),
     fontWeight: 'bold',
@@ -345,4 +629,6 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
+  headers: { fontWeight: 'bold', fontSize: RFPercentage(3), marginVertical: RFPercentage(2), },
+  date: { fontSize: RFPercentage(2.5), marginHorizontal: RFPercentage(2), },
 });

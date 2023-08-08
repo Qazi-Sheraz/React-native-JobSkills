@@ -420,7 +420,15 @@
     "friend_email": "دوست ای میل",
     "friend_name": "دوست کا نام",
     "job_URL": "ملازمت کا URL",
-    "report": "رپورٹ"
+    "report": "رپورٹ",
+    "accept": "قبول کریں",
+    "re_schedule": "دوبارہ شیڈول کریں",
+    "action_for_interview_schedule": "انٹرویو کے شیڈول کے لیے کارروائی",
+    "are_u_sure_you_want_to_report": "کیا آپ واقعی رپورٹ کرنا چاہتے ہیں"
+    
+    
+   
+    
     
     
 }

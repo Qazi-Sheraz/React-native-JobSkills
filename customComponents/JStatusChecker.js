@@ -5,14 +5,15 @@ import colors from '../config/colors';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import { StoreContext } from '../mobx/store';
 import { useContext } from 'react';
-export default function JStatusChecker({status,onPress}) {
+export default function JStatusChecker({status,onPressStatus}) {
   const store = useContext(StoreContext); 
  
   return (
     
     <JText
+    onPress={onPressStatus}
       style={{
-        paddingHorizontal: RFPercentage(1.5),
+        paddingHorizontal: RFPercentage(1),
         paddingVertical: RFPercentage(1),
         backgroundColor:status == 0
             ? colors.secondary[0]
@@ -56,7 +57,7 @@ export default function JStatusChecker({status,onPress}) {
         ? store.lang.interview_rescheduled
         : status == 9
         ? store.lang.interview_completed
-        : status}
+        : status} 
     </JText>
   );
 }

@@ -34,6 +34,7 @@ function CHomeStack({navigation}) {
   const store = useContext(StoreContext);
   const [loader, setLoader] = useState(true);
 
+ 
   const _getoken = token => {
     AsyncStorage.getItem(token)
       .then(res => {
