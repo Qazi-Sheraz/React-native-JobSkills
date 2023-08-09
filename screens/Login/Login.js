@@ -93,7 +93,7 @@ const Login = ({navigation, route}) => {
             formdata.append("name", deviceName);
             formdata.append("os", Platform.OS);
             formdata.append("version", Platform.Version);
-            console.log(formdata);
+            // console.log(formdata);
             var requestOptions = {
               method: 'POST',
               body: formdata,
@@ -102,7 +102,7 @@ const Login = ({navigation, route}) => {
             fetch("https://dev.jobskills.digital/api/device-token-update", requestOptions)
               .then(response => response.json())
               .then(result => {
-                console.log('result', result);
+                // console.log('result', result);
                 resolve(result); // Resolve the promise with the result
               })
               .catch(error => {

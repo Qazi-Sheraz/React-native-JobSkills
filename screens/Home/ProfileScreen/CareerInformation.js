@@ -370,11 +370,7 @@ const CareerInformation = ({ navigation }) => {
           }
           left={<JChevronIcon onPress={() => refRBSheet?.current.close()} />}
         />
-        {/* {store.countryApiLoader ? (
-          <ActivityIndicator />
-        ) : ( */}
-        {/* // console.log(selectedExperience?.start), */}
-        <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
+         <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
           {selected === 0 ? (
             <Formik
               initialValues={{
@@ -719,9 +715,7 @@ const CareerInformation = ({ navigation }) => {
                 handleSubmit,
                 setFieldValue,
               }) => (
-                <>
-                  {/* {console.log(store.country.english?.state)} */}
-                  <ScrollView
+                <>  <ScrollView
                     contentContainerStyle={{ paddingBottom: RFPercentage(8) }}
                     style={{
                       marginHorizontal: RFPercentage(2),

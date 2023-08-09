@@ -235,7 +235,7 @@ useEffect(() => {
                         elevation: 4,
                       }}>
                       <JText style={{color: colors.white[0]}}>
-                        {moment(item.start_date_and_time).format('HH:MM')}{' '}
+                        {moment(item.start_date_and_time).format('HH:mm')}{' '}
                         {item.meridiem}
                       </JText>
                       <JText style={{color: colors.white[0]}}>
@@ -247,21 +247,26 @@ useEffect(() => {
                     </View>
                     <View
                       style={{
-                        paddingHorizontal: RFPercentage(2),
+                        paddingHorizontal: RFPercentage(1),
                         width: '75%',
                       }}>
-                      <JText fontWeight="bold" fontSize={RFPercentage(2.2)}>
+                      <JText fontWeight="bold" fontSize={RFPercentage(2)}>
                         {item.meeting_topic}
                       </JText>
-                      <JRow
-                        style={{
+                      <JRow  style={{
                           marginTop: RFPercentage(1),
+                          // backgroundColor:'red',
+                          justifyContent:'space-between'
+                        }}>
+                      <JRow style={{
+                          // backgroundColor:'blue',
+                          width:RFPercentage(22)
                         }}>
                         <Image
                           style={{
                             width: RFPercentage(4),
                             height: RFPercentage(4),
-                            borderRadius: RFPercentage(4),
+                            borderRadius: RFPercentage(2),
                           }}
                           source={{
                             uri:
@@ -290,8 +295,8 @@ useEffect(() => {
                           borderWidth: RFPercentage(0.2),
                           borderColor: colors.purple[0],
                           paddingVertical: RFPercentage(0.5),
-                          paddingHorizontal: RFPercentage(0.8),
-                          marginVertical: RFPercentage(0.5),
+                          paddingHorizontal: RFPercentage(1),
+                          // marginVertical: RFPercentage(0.5),
                         }}>
                         <JText
                           style={{marginRight: RFPercentage(0.5)}}
@@ -303,6 +308,7 @@ useEffect(() => {
                           name="controller-play"
                           size={RFPercentage(2)}
                         />
+                      </JRow>
                       </JRow>
                     </View>
                   </JRow>

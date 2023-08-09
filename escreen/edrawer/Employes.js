@@ -1,12 +1,12 @@
-import {StyleSheet, FlatList, View, RefreshControl,ActivityIndicator} from 'react-native';
-import React, { useCallback, useContext,useEffect,useState } from 'react';
+import { StyleSheet, FlatList, View, RefreshControl, ActivityIndicator } from 'react-native';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import JScreen from '../../customComponents/JScreen';
 import JGradientHeader from '../../customComponents/JGradientHeader';
 import JText from '../../customComponents/JText';
 import JIcon from '../../customComponents/JIcon';
 import colors from '../../config/colors';
-import {RFPercentage} from 'react-native-responsive-fontsize';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
+import { RFPercentage } from 'react-native-responsive-fontsize';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import JSearchInput from '../../customComponents/JSearchInput';
 import JEmployeUser from '../../customComponents/JEmployeUser';
 import { StoreContext } from '../../mobx/store';
@@ -17,17 +17,17 @@ import { observer } from 'mobx-react';
 import JEmpty from '../../customComponents/JEmpty';
 
 const Employes = () => {
-  const {navigate, goBack} = useNavigation();
+  const { navigate, goBack } = useNavigation();
   const store = useContext(StoreContext);
   const [loader, setLoader] = useState(true);
   const [employeeData, setEmployeeData] = useState([]);
-  const [error,setError]=useState(false)
+  const [error, setError] = useState(false)
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredData, setFilteredData] = useState(employeeData);
   const isFoucs = useIsFocused()
   const handleSearch = (text) => {
     setSearchQuery(text);
-    
+
     const filtered = employeeData.filter((item) => {
       return item.name.toLowerCase().includes(text.toLowerCase());
     });
@@ -40,47 +40,47 @@ const Employes = () => {
     var myHeaders = new Headers();
     myHeaders.append('Authorization', `Bearer ${store.token?.token}`,);
 
-    fetch(`${url.baseUrl}/company/employees` ,
-    {
-      method: 'GET',
-      headers: myHeaders,
-      redirect: 'follow'
-    })
+    fetch(`${url.baseUrl}/company/employees`,
+      {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+      })
 
-    .then(response => response.json())
+      .then(response => response.json())
       .then(result => {
         // console.log(result.employee);
         setEmployeeData(result.employee);
-      
+
       })
 
       .catch(error => {
         // console.log('error', error);
-       setError(true)
-   
-      }).finally(()=>{
+        setError(true)
+
+      }).finally(() => {
         setLoader(false);
       });
   };
 
- useEffect(() => {
-  _getEmployeData();
- }, []);
-
- const onRefresh = useCallback(() => {
-  store.setIsRefreshing(true);
-
-  setTimeout(() => {
+  useEffect(() => {
     _getEmployeData();
-    store.setIsRefreshing(false);
-  }, 2000);
-}, [loader,]);
+  }, []);
+
+  const onRefresh = useCallback(() => {
+    store.setIsRefreshing(true);
+
+    setTimeout(() => {
+      _getEmployeData();
+      store.setIsRefreshing(false);
+    }, 2000);
+  }, [loader,]);
 
   return (
     <JScreen
       isError={error}
-      onTryAgainPress={() => {_getEmployeData(),setError(false)}}
-      style={{paddingHorizontal: RFPercentage(2)}}
+      onTryAgainPress={() => { _getEmployeData(), setError(false) }}
+      style={{ paddingHorizontal: RFPercentage(2) }}
       header={
         <JGradientHeader
           center={
@@ -92,39 +92,39 @@ const Employes = () => {
             </JText>
           }
           left={
-            <JChevronIcon/>
+            <JChevronIcon />
           }
         />
       }>
       {loader ? (
         <ActivityIndicator />
       ) : (
-      employeeData?.length > 0 ?(
-        <>
-          <JSearchInput
-            length={1}
-            // autoFocus={false}
-            onChangeText={handleSearch}
-            value={searchQuery}
+        employeeData?.length > 0 ? (
+          <>
+            <JSearchInput
+              length={1}
+              // autoFocus={false}
+              onChangeText={handleSearch}
+              value={searchQuery}
 
-            
-            onPressIcon={() => alert('Icon Pressed')}
-          />
-          <View>
-            <FlatList
-  refreshControl={
-    <RefreshControl
-      refreshing={store.isRefreshing}
-      onRefresh={onRefresh}
-    />
-  }
-             data={searchQuery?.length > 0 ?filteredData :employeeData}
-              renderItem={({item, index}) => <JEmployeUser 
-              item={item} />}
+
+              onPressIcon={() => alert('Icon Pressed')}
             />
-          </View>
-        </>
-      ):<JEmpty/>)}
+            <View>
+              <FlatList
+                refreshControl={
+                  <RefreshControl
+                    refreshing={store.isRefreshing}
+                    onRefresh={onRefresh}
+                  />
+                } showsVerticalScrollIndicator={false} 
+                data={searchQuery?.length > 0 ? filteredData : employeeData}
+                renderItem={({ item, index }) => <JEmployeUser
+                  item={item} />}
+              />
+            </View>
+          </>
+        ) : <JEmpty />)}
     </JScreen>
   );
 };

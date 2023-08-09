@@ -42,6 +42,7 @@ import * as yup from 'yup';
 import JButton from '../../customComponents/JButton';
 import JIcon from '../../customComponents/JIcon';
 import moment from 'moment';
+import { JToast } from '../../functions/Toast';
 const JobApplication = ({ route }) => {
   const { navigate, goBack } = useNavigation();
   const [selectedItem, setSelectedItem] = useState();
@@ -119,18 +120,16 @@ const JobApplication = ({ route }) => {
   const [jobID, setJobId] = useState();
   const [reschedule, setReschedule] = useState(false);
   const [details, setDetails] = useState();
-
+  const cId = store.jApplication[0]?.candidate_user_id;
   const [open, setOpen] = useState(false);
-  console.log(jobID);
-  console.log(store.token?.user?.owner_id);
   const handleSearch = (text) => {
     setSearchQuery(text);
-
     const filtered = store.jApplication.filter((item) => {
       return item.candidate_name.toLowerCase().includes(text.toLowerCase());
     });
     setFilteredData1(filtered);
   };
+  // console.log('rescheduled',store.rescheduled)
   const _jobApplication = () => {
     var myHeaders = new Headers();
     myHeaders.append(
@@ -147,7 +146,7 @@ const JobApplication = ({ route }) => {
     )
       .then(response => response.json())
       .then(result => {
-
+        // console.log(result?.job_application[0].candidate_user_id)
         store.setJApplication(result?.job_application)
 
       })
@@ -160,7 +159,8 @@ const JobApplication = ({ route }) => {
       });
   };
   const _getScheduleDetails = () => {
-    setModalVisible1(true)
+    setModalVisible1(true);
+    setLoader(true);
     var myHeaders = new Headers();
     myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
 
@@ -168,9 +168,10 @@ const JobApplication = ({ route }) => {
       method: 'GET',
       headers: myHeaders,
     };
-    fetch(`${url.baseUrl}/scheduleDetail/${store.token?.user?.owner_id}/${jobID}`, requestOptions)
+    fetch(`${url.baseUrl}/scheduleDetail/${cId}/${jobID}`, requestOptions)
       .then(response => response.json())
       .then(result => {
+        // console.log(result?.start_time)
         setDetails(result[0]?.start_time);
       })
       .catch(error => {
@@ -178,7 +179,7 @@ const JobApplication = ({ route }) => {
 
       })
       .finally(() => {
-        setLoader1(false);
+        setLoader(false);
       });
   };
   const _acceptSchedule = () => {
@@ -187,7 +188,7 @@ const JobApplication = ({ route }) => {
     myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
 
     var formdata = new FormData();
-    formdata.append("candidateid", store.token?.user?.owner_id);
+    formdata.append("candidateid", cId);
     formdata.append("jobid", jobID);
     console.log(formdata)
     var requestOptions = {
@@ -199,13 +200,13 @@ const JobApplication = ({ route }) => {
     fetch(`${url.baseUrl}/acceptSchedule`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         if (result.success) {
-          setStat(7);
+          
           JToast({
             type: 'success',
             text1: result.message,
           });
+          setModalVisible1(false)
         } else {
           JToast({
             type: 'error',
@@ -221,47 +222,59 @@ const JobApplication = ({ route }) => {
         });
       })
       .finally(() => {
-        setLoader(false);
-        setModalVisible(false);
+        setUpdate(!update)
+        _jobApplication()
+        // setLoader1(false);
       });
   };
   const _reschedule = (values) => {
+    // Create headers with Authorization token
     var myHeaders = new Headers();
     myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
 
+    // Create FormData with necessary data
     var formdata = new FormData();
     formdata.append("reschedule_time", moment(values.interview_date_and_time).format('YYYY/MM/DD HH:mm'));
-    formdata.append("candidateid", store.token?.user?.owner_id);
+    formdata.append("candidateid", cId);
     formdata.append("jobid", jobID);
-    console.log(formdata)
+    console.log('formdata', formdata)
+    // Set up request options
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
       body: formdata,
       redirect: 'follow'
     };
+
+    // Send the POST request using Fetch API
     fetch(`${url.baseUrl}/reschedule`, requestOptions)
       .then(response => response.json())
       .then(result => {
-        console.log(result)
-        if (result.success == true) {
+        if (result.success) {
+          // Success message
           JToast({
             type: 'success',
             text1: result.message
           });
-
+          // Update states if needed
+          setReschedule(false)
+          store.setRescheduled(moment(values.interview_date_and_time).format('YYYY/MM/DD HH:mm'))
+          setModalVisible1(false)
         } else {
+          // Error message
           JToast({
             type: 'error',
             text1: result.message
           });
         }
       })
-      .catch(error => console.log('eeeeeeeerror', error))
+      .catch(error => {
+        console.log('Error:', error);
+        // Handle error scenario if needed
+      })
       .finally(() => {
-        setLoader(false);
-        setReschedule(false);
-        setModalVisible(false);
+        // Regardless of success or error, set loader state to false
+        // setLoader1(false);
       });
   };
 
@@ -345,21 +358,6 @@ const JobApplication = ({ route }) => {
                 </Menu>
               </JRow>
 
-              {/* <ScrollView style={{flex: 1, paddingHorizontal: RFPercentage(2)}}>
-            {(searchQuery?.length > 0 ? filteredData1 : store.jApplication).map(
-              (item, index) => (
-                <JApplication
-                  update={update}
-                  setUpdate={setUpdate}
-                  key={index}
-                  onPress={() => {setModalVisible(true)}}
-                  onSelect={handleSelect}
-                  item={item}
-                  // date={moment(item.apply_date, 'DD-MM-YYYY').format('DD MMM,YYYY')}
-                />
-              ),
-            )}
-          </ScrollView> */}
               <FlatList
                 style={{ flex: 1, paddingHorizontal: RFPercentage(2) }}
                 data={searchQuery?.length > 0 ? filteredData1 : store.jApplication}
@@ -368,7 +366,7 @@ const JobApplication = ({ route }) => {
                   <JApplication
                     update={update}
                     setUpdate={setUpdate}
-                    onPressStatus={() => { `${setJobId(item.id)}${item.status_id == 8 && _getScheduleDetails()}` }}
+                    onPressStatus={() => { `${setJobId(item?.job_id)} ${item.status_id == 8 && _getScheduleDetails()}` }}
                     onPress={() => {
                       setModalVisible(true);
                     }}
@@ -430,6 +428,7 @@ const JobApplication = ({ route }) => {
             </View>}
         </Pressable>
       </Modal>
+
       <Modal animationType="slide" visible={modalVisible1}>
         <View style={{ marginBottom: RFPercentage(10) }}>
           <JGradientHeader
@@ -442,13 +441,15 @@ const JobApplication = ({ route }) => {
               </JText>
             }
           />
-          {loader1 ? <ActivityIndicator />
+          {loader ? <ActivityIndicator />
             : <Formik
               initialValues={{
                 interview_date_and_time: new Date(),
               }}
               onSubmit={values => {
-                _reschedule(values);
+                setLoader1(true)
+                _reschedule(values)
+                setLoader1(false)
                 // console.log('values', moment(values.interview_date_and_time).format('YYYY/MM/DD HH:MM'))
 
               }}
@@ -478,7 +479,7 @@ const JobApplication = ({ route }) => {
                       <JText style={styles.headers}>
                         {store.lang.interview_date} :
                       </JText>
-                      <JText style={styles.date}>  {!details ? '--/--/--' : moment(details).format('DD/MM/YYYY')}</JText>
+                      <JText style={styles.date}>{!details ? '--/--/--' : moment(details).format('DD/MM/YYYY')}</JText>
 
                       <JText style={styles.headers}>
                         {store.lang.interview_time} :
@@ -534,19 +535,21 @@ const JobApplication = ({ route }) => {
                         {!details ? '--/--' : moment(details).format('HH:mm A')}
                       </JText>
                     </View>}
+
                   <View>
-                    <JButton
-                      style={{ backgroundColor: colors.success[0], marginVertical: RFPercentage(1), borderColor: 'transparent', alignSelf: 'flex-end', }}
-                      onPress={() => {
-                        if (reschedule) {
-                          handleSubmit();
-                        } else {
-                          _acceptSchedule();
-                        }
-                      }}>
-                      {reschedule == true ? store.lang.submit : store.lang.accept}
-                    </JButton>
-                    {reschedule == false &&
+                    {store.rescheduled !== moment(details).format('YYYY/MM/DD HH:mm') &&
+                      <JButton
+                        style={{ backgroundColor: colors.success[0], marginVertical: RFPercentage(1), borderColor: 'transparent', alignSelf: 'flex-end', }}
+                        onPress={() => {
+                          if (reschedule) {
+                            handleSubmit();
+                          } else {
+                            _acceptSchedule();
+                          }
+                        }}>
+                        {reschedule == true ? store.lang.submit : store.lang.accept}
+                      </JButton>}
+                    {reschedule == false && store.rescheduled !== moment(details).format('YYYY/MM/DD HH:mm') && 
                       <JButton
                         style={{ marginVertical: RFPercentage(1), alignSelf: 'flex-end', }}
                         onPress={() => { setReschedule(true), _getScheduleDetails() }}>
@@ -554,7 +557,10 @@ const JobApplication = ({ route }) => {
                       </JButton>}
                     <JButton
                       style={{ backgroundColor: colors.border[0], marginVertical: RFPercentage(1), borderColor: 'transparent', alignSelf: 'flex-end', }}
-                      onPress={() => { setReschedule(false), setOpen(false), setModalVisible1(false) }}>
+                      onPress={() => {
+                        setReschedule(false), setOpen(false), setModalVisible1(false)
+                        // ,store.setRescheduled('')
+                      }}>
                       {store.lang.close}
                     </JButton>
                   </View>

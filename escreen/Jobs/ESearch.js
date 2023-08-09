@@ -178,7 +178,6 @@ import JButton from '../../customComponents/JButton';
                 fontSize={RFPercentage(3)}>
                 {store.lang.Recent_search}
               </JText>
-             {/* {console.log(store.recentSearch)} */}
               {Array.from(new Set(store.recentSearch)).slice(0, 5).map((item, index) => (
               <JRecentJob
               key={index}

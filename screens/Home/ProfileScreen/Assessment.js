@@ -224,9 +224,7 @@ const Assessment = ({navigation}) => {
                       <JText style={styles.header}>{store.lang.answer}</JText>
                       <JText style={styles.answer}>
                         {item?.answer!==null ? item?.answer : 'N/A'}
-                      </JText>
-                      {/* {console.log(item.question_type)} */}
-                    </JRow>
+                      </JText> </JRow>
                   </View>
                 )}
                 keyExtractor={item => item.id}

@@ -14,7 +14,6 @@ import CLFavouriteJob from '../../loaders/Candidate/FavouriteJob/CLFavouriteJob'
 import JEmpty from '../../customComponents/JEmpty';
 import JGradientHeader from '../../customComponents/JGradientHeader';
 import JCompanyTile from '../../customComponents/JCompanyTile';
-import Feather from 'react-native-vector-icons/Feather';
 import {_getFollowingCompanyData} from '../../functions/Candidate/DFollowing';
 import JChevronIcon from '../../customComponents/JChevronIcon';
 
@@ -79,15 +78,13 @@ function Followings({navigation}) {
                   e.employer_name?.toLowerCase().includes(store.followingInput.toLowerCase())
                   )
             }
-            ListEmptyComponent={() => <JEmpty />}
+            ListEmptyComponent={() => <JEmpty /> }
             showsVerticalScrollIndicator={false}
             renderItem={({item}) => (
-              console.log(item.company_id),
               <JCompanyTile
                 onPress={() =>
                   navigation.navigate('CSelectedCompany', {
                     id: item.company_unique_id,
-                    cid: item.company_id,
                   })
                 }
                 containerStyle={{marginTop: RFPercentage(1)}}

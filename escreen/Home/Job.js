@@ -78,6 +78,7 @@ const Job = () => {
 
     setTimeout(() => {
       _getjobs();
+      setSearchQuery('');
       setLoader(false);
     }, 2000);
   }, []);

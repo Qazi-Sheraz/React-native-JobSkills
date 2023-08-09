@@ -56,7 +56,6 @@ function AppliedJobs({ navigation }) {
     var formdata = new FormData();
     formdata.append("candidateid", store.token?.user?.owner_id);
     formdata.append("jobid", jobID);
-    console.log(formdata)
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
@@ -72,6 +71,7 @@ function AppliedJobs({ navigation }) {
             type: 'success',
             text1: result.message
           });
+          _getAppliedJobData(store)
 
         } else {
           JToast({
@@ -94,7 +94,6 @@ function AppliedJobs({ navigation }) {
     formdata.append("reschedule_time", moment(values.interview_date_and_time).format('YYYY/MM/DD HH:mm'));
     formdata.append("candidateid", store.token?.user?.owner_id);
     formdata.append("jobid", jobID);
-    console.log(formdata)
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
@@ -104,12 +103,14 @@ function AppliedJobs({ navigation }) {
     fetch(`${url.baseUrl}/reschedule`, requestOptions)
       .then(response => response.json())
       .then(result => {
-        console.log(result)
         if (result.success == true) {
           JToast({
             type: 'success',
             text1: result.message
           });
+          store.setRescheduled(moment(values.interview_date_and_time).format('YYYY/MM/DD HH:mm'))
+          _getAppliedJobData(store)
+          setModalVisible(false)
 
         } else {
           JToast({
@@ -122,13 +123,13 @@ function AppliedJobs({ navigation }) {
       .finally(() => {
         setLoader(false);
         setReschedule(false);
-        setModalVisible(false);
+
       });
   };
 
   const _getScheduleDetails = () => {
-    setLoader(true);
     setModalVisible(true);
+    setLoader(true);
     var myHeaders = new Headers();
     myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
 
@@ -139,7 +140,7 @@ function AppliedJobs({ navigation }) {
     fetch(`${url.baseUrl}/scheduleDetail/${store.token?.user?.owner_id}/${jobID}`, requestOptions)
       .then(response => response.json())
       .then(result => {
-         setDetails(result[0]?.start_time);
+        setDetails(result[0]?.start_time);
       })
       .catch(error => {
         console.log('error', error);
@@ -243,6 +244,7 @@ function AppliedJobs({ navigation }) {
                 onRefresh={onRefresh}
               />
             }
+
             data={
               store.appliedJobInput?.length > 0
                 ? store.appliedJobList?.appliedJob?.filter(e =>
@@ -272,7 +274,7 @@ function AppliedJobs({ navigation }) {
                 type="appliedjob"
                 containerStyle={{ marginBottom: RFPercentage(2) }}
                 isJob={true}
-                onPressStatus={() => { ` ${setJobId(item?.job_id)}${item.status_id == 6 && _getScheduleDetails()}` }}
+                onPressStatus={() => { `${setJobId(item?.job_id)} ${item.status_id == 8 && _getScheduleDetails()}` }}
                 img={item.company_url}
                 title={item.job_title}
                 location={item.city_name}
@@ -333,12 +335,12 @@ function AppliedJobs({ navigation }) {
                       <JText style={styles.headers}>
                         {store.lang.interview_date} :
                       </JText>
-                      <JText style={styles.date}>  {!details?'--/--/--':moment(details).format('DD/MM/YYYY')}</JText>
+                      <JText style={styles.date}>  {!details ? '--/--/--' : moment(details).format('DD/MM/YYYY')}</JText>
 
                       <JText style={styles.headers}>
                         {store.lang.interview_time} :
                       </JText>
-                      <JText style={styles.date}>{!details?'--/--':moment(details).format('HH:mm A')}</JText>
+                      <JText style={styles.date}>{!details ? '--/--' : moment(details).format('HH:mm A')}</JText>
                       <View
                         style={{
                           justifyContent: 'space-between',
@@ -379,17 +381,18 @@ function AppliedJobs({ navigation }) {
                         {store.lang.interview_date} :
                       </JText>
                       <JText style={styles.date}>
-                      {!details?'--/--/--':moment(details).format('DD/MM/YYYY')}
+                        {!details ? '--/--/--' : moment(details).format('DD/MM/YYYY')}
                       </JText>
 
                       <JText style={styles.headers}>
                         {store.lang.interview_time} :
                       </JText>
                       <JText style={styles.date}>
-                      {!details?'--/--':moment(details).format('HH:mm A')}
+                        {!details ? '--/--' : moment(details).format('HH:mm A')}
                       </JText>
                     </View>}
                   <View>
+                  {store.rescheduled !== moment(details).format('YYYY/MM/DD HH:mm') &&
                     <JButton
                       style={{ backgroundColor: colors.success[0], marginVertical: RFPercentage(1), borderColor: 'transparent', alignSelf: 'flex-end', }}
                       onPress={() => {
@@ -400,11 +403,11 @@ function AppliedJobs({ navigation }) {
                         }
                       }}>
                       {reschedule == true ? store.lang.submit : store.lang.accept}
-                    </JButton>
-                    {reschedule == false &&
+                    </JButton>}
+                    {reschedule == false && store.rescheduled !== moment(details).format('YYYY/MM/DD HH:mm') && 
                       <JButton
                         style={{ marginVertical: RFPercentage(1), alignSelf: 'flex-end', }}
-                        onPress={() => {setReschedule(true),_getScheduleDetails()}}>
+                        onPress={() => { setReschedule(true), _getScheduleDetails() }}>
                         {store.lang.re_schedule}
                       </JButton>}
                     <JButton

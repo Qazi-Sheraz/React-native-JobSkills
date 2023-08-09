@@ -82,7 +82,7 @@ const FeatureCompany = ({navigation}) => {
             renderItem={({item}) => (
               <JCompanyTile
                 onPress={() =>
-                  navigation.navigate('CSelectedCompany', {
+                  navigation.navigate('CSelectedCompany', { 
                     id: item.unique_id,
                   })
                 }

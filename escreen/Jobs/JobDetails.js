@@ -1,17 +1,16 @@
 import {
   Modal,
-  Alert,
   SafeAreaView,
   Dimensions,
   StyleSheet,
-  Text,
   View,
   ScrollView,
   ActivityIndicator,
   FlatList,
   Linking,
+  Pressable,
 } from 'react-native';
-import React, { useEffect, useContext, useRef, useCallback } from 'react';
+import React, { useEffect, useContext, useRef, useCallback, useState } from 'react';
 import JScreen from '../../customComponents/JScreen';
 import moment from 'moment';
 import JGradientHeader from '../../customComponents/JGradientHeader';
@@ -27,12 +26,10 @@ import Calendar from '../../assets/svg/Icon/Calendar.svg';
 import JScrollView from '../../customComponents/JScrollView';
 import Entypo from 'react-native-vector-icons/Entypo';
 import JButton from '../../customComponents/JButton';
-import { useState } from 'react';
 import JInput from '../../customComponents/JInput';
 import Pdf from 'react-native-pdf';
 import { Formik } from 'formik';
 import * as yup from 'yup';
-import { Pressable } from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
 import { useNavigation } from '@react-navigation/native';
 import PhoneInput from 'react-native-phone-number-input';
@@ -41,7 +38,6 @@ import { observer } from 'mobx-react';
 import Toast from 'react-native-toast-message';
 import JErrorText from '../../customComponents/JErrorText';
 import url from '../../config/url';
-import JTagText from '../../customComponents/JTagText';
 import JIcon from '../../customComponents/JIcon';
 import { Menu, MenuOption, MenuOptions, MenuTrigger } from 'react-native-popup-menu';
 import JGradientView from '../../customComponents/JGradientView';
@@ -144,8 +140,6 @@ const JobDetails = ({ route }) => {
     )
       .then(response => response.json())
       .then(result => {
-        console.log(result)
-
         if (result.success === true) {
           store.AddJApplication(result)
           Toast.show({
@@ -213,7 +207,6 @@ const JobDetails = ({ route }) => {
     formdata.append("userId", store.token?.user?.id);
     formdata.append("jobId", store.jobDetail?.job_id);
     formdata.append("note",values.note);
-   console.log('formdata',formdata)
 
 
     fetch(`${url.baseUrl}/report-job`, {
@@ -259,7 +252,6 @@ const JobDetails = ({ route }) => {
     formdata.append("job_url",jobUrl);
     formdata.append("friend_name",values.friendName);
     formdata.append("friend_email",values.friendEmail);
-   console.log('formdata',formdata)
 
 
     fetch(`${url.baseUrl}/email-job`, {
@@ -776,7 +768,6 @@ const JobDetails = ({ route }) => {
                         </JText>
                       }
                     />
-                    {/* {console.log(route.params.jid)} */}
                     <View style={{ padding: RFPercentage(2) }}>
                       <JInput
                         style={{
@@ -1214,11 +1205,9 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   bottomV: { height: RFPercentage(8), width: '100%', padding: RFPercentage(1) },
-  centeredView: {
+  centeredV: {
     flex: 1,
-
     alignItems: 'center',
-
     backgroundColor: '#00000080',
   },
   modalView: {

@@ -195,6 +195,11 @@ export const StoreProvider = props => {
     update: true,
     setUpdate: action(e => (store.update = e)),
 
+
+    // reschedule Status
+    rescheduled: '',
+    setRescheduled: action(e => (store.rescheduled = e)),
+
     // Get Employe Job
     jobEmployerData: [],
     setJobEmployerData: action(e => (store.jobEmployerData = e)),

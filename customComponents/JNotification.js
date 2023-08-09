@@ -16,7 +16,7 @@ const JNotification = ({item}) => {
   //  moment.locale( store.lang.id === 0 ?'en': store.lang.id === 1 ? 'ur':'ar') ; 
  
   const data=JSON.parse(item.text)
-console.log(data?.id)
+// console.log(data?.id)
 
 
   return (

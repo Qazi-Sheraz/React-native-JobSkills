@@ -102,7 +102,7 @@ const JApplication = ({
     formdata.append('candidateID', item?.candidate_user_id);
     formdata.append('jobid', item?.job_id);
 
-    console.log('formdata', formdata);
+    // console.log('formdata', formdata);
 
     fetch(`${url.baseUrl}/meetings-submit`, {
       method: 'POST',
@@ -281,6 +281,7 @@ const JApplication = ({
                     onSelect={() => handleStatusSelect(1, store.lang.applied)}>
                     <JText style={styles.menutxt}>{store.lang.applied}</JText>
                   </MenuOption>}
+                  
                 <MenuOption
                   onSelect={() => handleStatusSelect(2, store.lang.rejected)}>
                   <JText style={styles.menutxt}>{store.lang.rejected}</JText>
@@ -289,16 +290,18 @@ const JApplication = ({
                   onSelect={() => handleStatusSelect(3, store.lang.selected)}>
                   <JText style={styles.menutxt}>{store.lang.selected}</JText>
                 </MenuOption>
+                {stat !== 4 &&
                 <MenuOption
                   onSelect={() => handleStatusSelect(4, store.lang.shortlisted)}>
                   <JText style={styles.menutxt}>{store.lang.shortlisted}</JText>
-                </MenuOption>
+                </MenuOption>}
                 {/* <MenuOption
                 onSelect={() => handleStatusSelect(store.lang.invitation_Sent)}>
                 <JText style={styles.menutxt}>
                   {store.lang.invitation_Sent}
                 </JText>
               </MenuOption> */}
+              {stat !== 6 &&
                 <MenuOption
                   onSelect={() => {
                     setModalVisible(true),
@@ -311,8 +314,9 @@ const JApplication = ({
                   <JText style={styles.menutxt}>
                     {store.lang.interview_scheduled}
                   </JText>
-                </MenuOption>
-                <MenuOption
+                </MenuOption>}
+                
+                {/* <MenuOption
                   onSelect={() =>
                     handleStatusSelect(7, store.lang.interview_accepted)
                   }>
@@ -335,7 +339,7 @@ const JApplication = ({
                   <JText style={styles.menutxt}>
                     {store.lang.interview_completed}
                   </JText>
-                </MenuOption>}
+                </MenuOption>} */}
               </MenuOptions>
             </Menu>
           )}

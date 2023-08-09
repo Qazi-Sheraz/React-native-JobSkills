@@ -25,7 +25,7 @@ export default function SplashScreen() {
     );
   };
   const [deviceName, setDeviceName] = useState('');
-  console.log(deviceName)
+  // console.log(deviceName)
   useEffect(() => {
     const fetchDeviceName = async () => {
 

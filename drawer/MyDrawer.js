@@ -36,7 +36,7 @@ export default function MyDrawer() {
             
           }
 
-          console.log('initialMessageeeeeeeeee', remoteMessage)
+          // console.log('initialMessageeeeeeeeee', remoteMessage)
           // alert('hellooooo')
         }
       });
@@ -129,7 +129,7 @@ export default function MyDrawer() {
     // };
   }, []);
   const onMessageReceived = async remoteMessage => {
-    console.log('remoteMessage', remoteMessage)
+    // console.log('remoteMessage', remoteMessage)
     if (remoteMessage) {
       Alert.alert(
         remoteMessage.notification.title,

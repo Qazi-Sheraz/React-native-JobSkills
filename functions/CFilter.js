@@ -72,7 +72,6 @@ export const _searchFilter = (values, store, navigation) => {
     );
   values.level && formdata.append('career_level', values.level?.id);
   values.area && formdata.append('functional_area', values.area?.id);
-console.log('formdata',formdata)
   var requestOptions = {
     method: 'POST',
     headers: myHeaders,
@@ -85,8 +84,6 @@ console.log('formdata',formdata)
   fetch('https://dev.jobskills.digital/api/search-jobs', requestOptions)
     .then(response => response.json())
     .then(result => {
-      console.log(result);
-    
       if (result.data.length==0) {
         store.setFilterData([])
         
