@@ -1,7 +1,7 @@
 import React from 'react';
 // import { useLocalStore, useObserver } from "mobx-react";
-import {useLocalObservable} from 'mobx-react-lite';
-import {action} from 'mobx';
+import { useLocalObservable } from 'mobx-react-lite';
+import { action } from 'mobx';
 import ar from '../config/translation/ar.json'
 import en from '../config/translation/en.json'
 import ud from '../config/translation/ud.json'
@@ -49,9 +49,9 @@ export const StoreProvider = props => {
     favouriteList: [],
     removeFavoriteList: action(
       id =>
-        (store.favouriteList = store.favouriteList.filter(
-          e => e.job_id !== id,
-        )),
+      (store.favouriteList = store.favouriteList.filter(
+        e => e.job_id !== id,
+      )),
     ),
     setFavouriteList: action(e => (store.favouriteList = e)),
     pushFavouriteList: action(e => {
@@ -174,7 +174,7 @@ export const StoreProvider = props => {
     // Search Find Job
     recentSearch: [],
     setRecentSearch: action(e => (store.recentSearch = e)),
-    pushSearch: action(e => (store.recentSearch =[e, ...store.recentSearch])),
+    pushSearch: action(e => (store.recentSearch = [e, ...store.recentSearch])),
     //PDF Url
     pdf: '',
     setPdf: action(e => (store.pdf = e)),
@@ -197,18 +197,21 @@ export const StoreProvider = props => {
 
 
     // reschedule Status
-    rescheduled: '',
+    rescheduled: [],
     setRescheduled: action(e => (store.rescheduled = e)),
+    pushRescheduled: action(e => (store.rescheduled.push(e))),
+    findItem: action((id, time) => store.rescheduled.find(e => e.id === id && e.time === time),
+    ),
 
     // Get Employe Job
     jobEmployerData: [],
     setJobEmployerData: action(e => (store.jobEmployerData = e)),
     AddJobEmployerData: action(
-      e => (store.jobEmployerData = [...store.jobEmployerData,e]),
+      e => (store.jobEmployerData = [e,...store.jobEmployerData]),
     ),
     status: [],
     setStatus: action(e => (store.status = e)),
-    statusLoder:true,
+    statusLoder: true,
     setStatusLoder: action(e => (store.statusLoder = e)),
     AddStatus: action(
       e => (store.status = [e, ...store.status]),
@@ -226,7 +229,7 @@ export const StoreProvider = props => {
     jAppError: false,
     setJAppError: action(e => (store.jAppError = e)),
     AddJApplication: action(e => {
-      store.jApplication.job_application[0] = [e, store.jApplication.job_application[0]];
+      store.jApplication.job_application[0] = [e, store.jApplication?.job_application[0]];
     }),
     // Get Employe Home
     employeHome: {},

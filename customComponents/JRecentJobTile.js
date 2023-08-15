@@ -203,7 +203,7 @@ function JRecentJobTile({
               <JText fontColor={colors.danger[0]}>{store.lang.expire_on}</JText>
               <JText>
                 {/* 12 MAR 2023 */}
-                {moment(item?.job_expiry_date, 'DD-MM-YYYY').format('DD MMM,YYYY')}
+                {moment(item?.job_expiry_date, 'DD-MM-YYYY').format('DD-MM-YYYY')}
               </JText>
             </JRow>
             <JRow

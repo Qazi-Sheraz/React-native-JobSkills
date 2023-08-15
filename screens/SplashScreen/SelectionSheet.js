@@ -14,7 +14,7 @@ const SelectionSheet = ({navigation}) => {
   const store = useContext(StoreContext);
   return (
     <Animatable.View style={styles.sheetContainer} animation="slideInUp">
-      <StatusBar backgroundColor={colors.purple[0]}/>
+      <StatusBar backgroundColor={colors.purple[0]} />
       <View style={styles.sheetItemContainer}>
 
         <JButton

@@ -209,6 +209,7 @@ function CHomeStack({navigation}) {
         <Stack.Screen name="CSelectedCompany" component={SelectedCompany} />
         <Stack.Screen name="CSearch" component={CSearch} />
         <Stack.Screen name="CFilter" component={CFilter} />
+        <Stack.Screen name="Reschedule" component={Reschedule} />
         <Stack.Screen
           name="CContacttInformation"
           component={CContactInformation}

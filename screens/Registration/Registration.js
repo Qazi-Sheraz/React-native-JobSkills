@@ -1,9 +1,9 @@
-import {StyleSheet, TouchableOpacity, View, ScrollView} from 'react-native';
-import React, {useContext, useState} from 'react';
+import { StyleSheet, TouchableOpacity, View, ScrollView } from 'react-native';
+import React, { useContext, useState } from 'react';
 import JScreen from '../../customComponents/JScreen';
 import JCircularLogo from '../../customComponents/JCircularLogo';
 import JText from '../../customComponents/JText';
-import {RFPercentage} from 'react-native-responsive-fontsize';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from '../../config/colors';
@@ -13,7 +13,7 @@ import JButton from '../../customComponents/JButton';
 import JDivider from '../../customComponents/JDivider';
 import axios from 'axios';
 import * as yup from 'yup';
-import {Formik} from 'formik';
+import { Formik } from 'formik';
 import JErrorText from '../../customComponents/JErrorText';
 import JFooter from '../../customComponents/JFooter';
 import CheckBox from '@react-native-community/checkbox';
@@ -23,7 +23,7 @@ import JIcon from '../../customComponents/JIcon';
 import { StoreContext } from '../../mobx/store';
 import { observer } from 'mobx-react';
 import JRow from '../../customComponents/JRow';
-const Registration = ({navigation, route}) => {
+const Registration = ({ navigation, route }) => {
   const [loader, setLoader] = useState(false);
   const store = useContext(StoreContext);
   const _register = values => {
@@ -91,13 +91,13 @@ const Registration = ({navigation, route}) => {
   };
   return (
     <JScreen>
-      <View style={{flex: 0.2, justifyContent: 'center', alignItems: 'center'}}>
+      <View style={{ flex: 0.2, justifyContent: 'center', alignItems: 'center' }}>
         <JCircularLogo multiple={1.2} />
         <JText
           fontSize={RFPercentage(2.8)}
           fontWeight={'bold'}
           children={store.lang.create_account}
-          style={{marginTop: RFPercentage(2)}}
+          style={{ marginTop: RFPercentage(2) }}
         />
       </View>
       <Formik
@@ -122,16 +122,23 @@ const Registration = ({navigation, route}) => {
             .string()
             .min(3, 'First Name ame Must be at least 3 characters')
             .max(100, 'First Name must be at most 100 characters long')
+            .transform(value => value.trim())
+            .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'First Name must contain at least 1 alphabet character and can include English, Urdu, Arabic, and spaces')
+            .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the First Name')
             .required('First Name is a required field'),
           last_name: yup
             .string()
             .min(3, 'Last Name Must be at least 3 characters')
             .max(100, 'Last Name must be at most 100 characters long')
+            .transform(value => value.trim())
+            .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'Last Name must contain at least 1 alphabet character and can include English, Urdu, Arabic, and spaces')
+            .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the Last Name')
             .required('Last Name is a required field'),
           company_name: yup
             .string()
             .min(3, 'Company Name Must be at least 3 characters')
             .max(100, 'Company Name must be at most 100 characters long')
+            .matches(/^[A-Za-z0-9]*[A-Za-z][A-Za-z0-9]*$/, 'Company Name must contain at least 1 alphabet character')
             .required('Company Name is a required field'),
           email: yup
             .string()
@@ -169,12 +176,12 @@ const Registration = ({navigation, route}) => {
               marginHorizontal: RFPercentage(3),
               justifyContent: 'center',
             }}>
-            <ScrollView 
-            style={{marginBottom:RFPercentage(2)}}
-            showsVerticalScrollIndicator={false}>
+            <ScrollView
+              style={{ marginBottom: RFPercentage(2) }}
+              showsVerticalScrollIndicator={false}>
               <JInput
-              maxLength={100}
-                style={{textAlign: store.lang.id === 0 ? 'left' : 'right'}}
+                maxLength={100}
+                style={{ textAlign: store.lang.id === 0 ? 'left' : 'right' }}
                 value={values.first_name}
                 heading={store.lang.first_name}
                 error={touched.first_name && errors.first_name && true}
@@ -203,8 +210,8 @@ const Registration = ({navigation, route}) => {
                 <JErrorText>{errors.first_name}</JErrorText>
               )}
               <JInput
-              maxLength={100}
-                style={{textAlign: store.lang.id === 0 ? 'left' : 'right'}}
+                maxLength={100}
+                style={{ textAlign: store.lang.id === 0 ? 'left' : 'right' }}
                 value={values.last_name}
                 heading={store.lang.last_name}
                 error={touched.last_name && errors.last_name && true}
@@ -228,13 +235,13 @@ const Registration = ({navigation, route}) => {
                 placeholder={store.lang.last_name}
                 onChangeText={handleChange('last_name')}
                 onBlur={() => setFieldTouched('last_name')}
-                containerStyle={{marginTop: RFPercentage(3)}}
+                containerStyle={{ marginTop: RFPercentage(3) }}
               />
               {touched.last_name && errors.last_name && (
                 <JErrorText>{errors.last_name}</JErrorText>
               )}
               <JInput
-                style={{textAlign: store.lang.id === 0 ? 'left' : 'right'}}
+                style={{ textAlign: store.lang.id === 0 ? 'left' : 'right' }}
                 maxLength={100}
                 value={values.email}
                 error={touched.email && errors.email && true}
@@ -259,13 +266,13 @@ const Registration = ({navigation, route}) => {
                 placeholder={store.lang.email}
                 onChangeText={handleChange('email')}
                 onBlur={() => setFieldTouched('email')}
-                containerStyle={{marginTop: RFPercentage(3)}}
+                containerStyle={{ marginTop: RFPercentage(3) }}
               />
               {touched.email && errors.email && (
                 <JErrorText>{errors.email}</JErrorText>
               )}
               <JInput
-                style={{textAlign: store.lang.id === 0 ? 'left' : 'right'}}
+                style={{ textAlign: store.lang.id === 0 ? 'left' : 'right' }}
                 value={values.company_name}
                 error={touched.company_name && errors.company_name && true}
                 heading={store.lang.company_name}
@@ -290,14 +297,14 @@ const Registration = ({navigation, route}) => {
                 placeholder={store.lang.company_name}
                 onChangeText={handleChange('company_name')}
                 onBlur={() => setFieldTouched('company_name')}
-                containerStyle={{marginTop: RFPercentage(3)}}
+                containerStyle={{ marginTop: RFPercentage(3) }}
               />
               {touched.company_name && errors.company_name && (
                 <JErrorText>{errors.company_name}</JErrorText>
               )}
 
               <JInput
-                style={{textAlign: store.lang.id === 0 ? 'left' : 'right'}}
+                style={{ textAlign: store.lang.id === 0 ? 'left' : 'right' }}
                 forPassword={true}
                 eye={values.hide}
                 maxLength={30}
@@ -325,7 +332,7 @@ const Registration = ({navigation, route}) => {
                 }
                 placeholder={store.lang.password}
                 onChangeText={handleChange('password')}
-                containerStyle={{marginTop: RFPercentage(2)}}
+                containerStyle={{ marginTop: RFPercentage(2) }}
                 onBlur={() => setFieldTouched('password')}
               />
               {touched.password && errors.password && (
@@ -333,7 +340,7 @@ const Registration = ({navigation, route}) => {
               )}
 
               <JInput
-                style={{textAlign: store.lang.id === 0 ? 'left' : 'right'}}
+                style={{ textAlign: store.lang.id === 0 ? 'left' : 'right' }}
                 forPassword={true}
                 eye={values.chide}
                 maxLength={30}
@@ -363,7 +370,7 @@ const Registration = ({navigation, route}) => {
                 }
                 placeholder={store.lang.confirm_password}
                 onChangeText={handleChange('confirmPassword')}
-                containerStyle={{marginTop: RFPercentage(3)}}
+                containerStyle={{ marginTop: RFPercentage(3) }}
                 onBlur={() => setFieldTouched('confirmPassword')}
               />
               {touched.confirmPassword && errors.confirmPassword && (
@@ -376,17 +383,17 @@ const Registration = ({navigation, route}) => {
                   paddingLeft: RFPercentage(1),
                 }}>
                 <CheckBox
-                  tintColors={{true: colors.purple[0], false: 'black'}}
+                  tintColors={{ true: colors.purple[0], false: 'black' }}
                   boxType="square"
                   value={values.policy}
                   onValueChange={value => setFieldValue('policy', value)}
                 />
 
-                <JText style={{marginHorizontal: RFPercentage(2)}}>
+                <JText style={{ marginHorizontal: RFPercentage(2) }}>
                   {store.lang.you_agree_to_the_JobSkills}{'\n'}
                   <JText
                     fontWeight="bold"
-                    style={{marginHorizontal: RFPercentage(2)}}>
+                    style={{ marginHorizontal: RFPercentage(2) }}>
                     {store.lang.terms_and_conditions}
                   </JText>
                 </JText>
@@ -397,21 +404,21 @@ const Registration = ({navigation, route}) => {
 
               <JButton
                 isValid={isValid}
-                style={{marginTop: RFPercentage(3)}}
+                style={{ marginTop: RFPercentage(3) }}
                 onPress={() => handleSubmit()}
                 children={
                   loader
                     ? store.lang.loading
                     : route.params?.type === 1 ? store.lang.login_as_candidate
-                        : store.lang.login_as_employee
-                      
+                      : store.lang.login_as_employee
+
                 }
               />
             </ScrollView>
           </View>
         )}
       </Formik>
-      <View style={{flex: 0.1, alignItems: 'center'}}>
+      <View style={{ flex: 0.1, alignItems: 'center' }}>
         <JDivider children={store.lang.or_register_with} />
         <View
           style={{
@@ -434,7 +441,7 @@ const Registration = ({navigation, route}) => {
 
       <JFooter
         onPress={() =>
-          navigation.navigate('CLogin', {type: route.params?.type})
+          navigation.navigate('CLogin', { type: route.params?.type })
         }
         children={store.lang.already_Login}
       />

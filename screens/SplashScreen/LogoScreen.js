@@ -9,6 +9,7 @@ import JGradientScreen from '../../customComponents/JGradientScreen';
 import colors from '../../config/colors';
 import messaging from '@react-native-firebase/messaging';
 import { StoreContext } from '../../mobx/store';
+import JText from '../../customComponents/JText';
 export default function SplashScreen() {
   const store =useContext(StoreContext)
   const requestUserPermission = async () => {
@@ -82,7 +83,7 @@ export default function SplashScreen() {
   }, []);
   return (
     <JGradientScreen style={styles.container}>
-      <StatusBar backgroundColor={colors.purple[0]}/>
+      <StatusBar backgroundColor={colors.purple[0]} />
       <Image
         source={require('../../assets/images/logo/logo.png')}
         style={{

@@ -110,18 +110,11 @@ const JobApplication = ({ route }) => {
   };
 
   const [error, setError] = useState(false);
-  const [loader, setLoader] = useState(true);
-  const [loader1, setLoader1] = useState(true);
-  const isFoucs = useIsFocused();
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredData1, setFilteredData1] = useState(store.jApplication);
   const [update, setUpdate] = useState(true);
-  const [modalVisible1, setModalVisible1] = useState(false);
-  const [jobID, setJobId] = useState();
-  const [reschedule, setReschedule] = useState(false);
-  const [details, setDetails] = useState();
-  const cId = store.jApplication[0]?.candidate_user_id;
   const [open, setOpen] = useState(false);
+
   const handleSearch = (text) => {
     setSearchQuery(text);
     const filtered = store.jApplication.filter((item) => {
@@ -129,7 +122,7 @@ const JobApplication = ({ route }) => {
     });
     setFilteredData1(filtered);
   };
-  // console.log('rescheduled',store.rescheduled)
+  // console.log('jApplication',store.jApplication)
   const _jobApplication = () => {
     var myHeaders = new Headers();
     myHeaders.append(
@@ -158,125 +151,7 @@ const JobApplication = ({ route }) => {
         store.setJAppLoader(false);
       });
   };
-  const _getScheduleDetails = () => {
-    setModalVisible1(true);
-    setLoader(true);
-    var myHeaders = new Headers();
-    myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
 
-    var requestOptions = {
-      method: 'GET',
-      headers: myHeaders,
-    };
-    fetch(`${url.baseUrl}/scheduleDetail/${cId}/${jobID}`, requestOptions)
-      .then(response => response.json())
-      .then(result => {
-        // console.log(result?.start_time)
-        setDetails(result[0]?.start_time);
-      })
-      .catch(error => {
-        console.log('error', error);
-
-      })
-      .finally(() => {
-        setLoader(false);
-      });
-  };
-  const _acceptSchedule = () => {
-
-    var myHeaders = new Headers();
-    myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
-
-    var formdata = new FormData();
-    formdata.append("candidateid", cId);
-    formdata.append("jobid", jobID);
-    console.log(formdata)
-    var requestOptions = {
-      method: 'POST',
-      headers: myHeaders,
-      body: formdata,
-      redirect: 'follow'
-    };
-    fetch(`${url.baseUrl}/acceptSchedule`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        if (result.success) {
-          
-          JToast({
-            type: 'success',
-            text1: result.message,
-          });
-          setModalVisible1(false)
-        } else {
-          JToast({
-            type: 'error',
-            text1: result.message,
-          });
-        }
-      })
-      .catch((error) => {
-        console.log('Error:', error);
-        JToast({
-          type: 'error',
-          text1: 'An error occurred. Please try again later.',
-        });
-      })
-      .finally(() => {
-        setUpdate(!update)
-        _jobApplication()
-        // setLoader1(false);
-      });
-  };
-  const _reschedule = (values) => {
-    // Create headers with Authorization token
-    var myHeaders = new Headers();
-    myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
-
-    // Create FormData with necessary data
-    var formdata = new FormData();
-    formdata.append("reschedule_time", moment(values.interview_date_and_time).format('YYYY/MM/DD HH:mm'));
-    formdata.append("candidateid", cId);
-    formdata.append("jobid", jobID);
-    console.log('formdata', formdata)
-    // Set up request options
-    var requestOptions = {
-      method: 'POST',
-      headers: myHeaders,
-      body: formdata,
-      redirect: 'follow'
-    };
-
-    // Send the POST request using Fetch API
-    fetch(`${url.baseUrl}/reschedule`, requestOptions)
-      .then(response => response.json())
-      .then(result => {
-        if (result.success) {
-          // Success message
-          JToast({
-            type: 'success',
-            text1: result.message
-          });
-          // Update states if needed
-          setReschedule(false)
-          store.setRescheduled(moment(values.interview_date_and_time).format('YYYY/MM/DD HH:mm'))
-          setModalVisible1(false)
-        } else {
-          // Error message
-          JToast({
-            type: 'error',
-            text1: result.message
-          });
-        }
-      })
-      .catch(error => {
-        console.log('Error:', error);
-        // Handle error scenario if needed
-      })
-      .finally(() => {
-        // Regardless of success or error, set loader state to false
-        // setLoader1(false);
-      });
-  };
 
   useEffect(() => {
     store.setJAppLoader(true)
@@ -366,7 +241,9 @@ const JobApplication = ({ route }) => {
                   <JApplication
                     update={update}
                     setUpdate={setUpdate}
-                    onPressStatus={() => { `${setJobId(item?.job_id)} ${item.status_id == 8 && _getScheduleDetails()}` }}
+                    onPressStatus={() => {
+                      if (item.status_id == 8) { navigate('Reschedule',{cID:item.candidate_user_id,jobID:item?.job_id}) }
+                    }}
                     onPress={() => {
                       setModalVisible(true);
                     }}
@@ -429,160 +306,7 @@ const JobApplication = ({ route }) => {
         </Pressable>
       </Modal>
 
-      <Modal animationType="slide" visible={modalVisible1}>
-        <View style={{ marginBottom: RFPercentage(10) }}>
-          <JGradientHeader
-            center={
-              <JText
-                fontColor={colors.white[0]}
-                fontWeight="bold"
-                fontSize={RFPercentage(2.5)}>
-                {store.lang.action_for_interview_schedule}
-              </JText>
-            }
-          />
-          {loader ? <ActivityIndicator />
-            : <Formik
-              initialValues={{
-                interview_date_and_time: new Date(),
-              }}
-              onSubmit={values => {
-                setLoader1(true)
-                _reschedule(values)
-                setLoader1(false)
-                // console.log('values', moment(values.interview_date_and_time).format('YYYY/MM/DD HH:MM'))
-
-              }}
-            // validationSchema={yup.object().shape({
-
-            //   interview_date_and_time: yup
-            //     .string()
-            //     .required()
-            //     .label('interview_date_and_time'),
-
-            // })}
-            >
-              {({
-                values,
-                handleChange,
-                errors,
-                setFieldTouched,
-                touched,
-                isValid,
-                handleSubmit,
-                setFieldValue,
-              }) => (
-                <View
-                  style={{ justifyContent: 'space-between', height: '90%', marginHorizontal: RFPercentage(2) }}>
-                  {reschedule == true ?
-                    <View >
-                      <JText style={styles.headers}>
-                        {store.lang.interview_date} :
-                      </JText>
-                      <JText style={styles.date}>{!details ? '--/--/--' : moment(details).format('DD/MM/YYYY')}</JText>
-
-                      <JText style={styles.headers}>
-                        {store.lang.interview_time} :
-                      </JText>
-                      <JText style={styles.date}>{!details ? '--/--' : moment(details).format('HH:mm A')}</JText>
-                      <View
-                        style={{
-                          justifyContent: 'space-between',
-                          // flexDirection: store.lang.id===0?'row':'row-reverse',
-                          paddingTop: RFPercentage(1),
-                          marginBottom: RFPercentage(1),
-                        }}>
-                        <JText
-                          style={styles.headers}>
-                          {store.lang.interview_Date_and_Time} :
-                        </JText>
-                        <Pressable
-                          onPress={() => setOpen(true)}
-                          style={{
-                            height: RFPercentage(6),
-                            flexDirection:
-                              store.lang.id === 0 ? 'row' : 'row-reverse',
-                            alignItems: 'center',
-                            borderBottomWidth: RFPercentage(0.2),
-                            borderBottomColor: error
-                              ? colors.danger[0]
-                              : colors.inputBorder[0],
-                          }}>
-                          <JIcon
-                            icon={'ev'}
-                            name={'calendar'}
-                            color={'#000'}
-                            size={RFPercentage(4.5)}
-                          />
-                          <JText fontSize={RFPercentage(2)}>
-                            {moment(values.interview_date_and_time).format('YYYY/MM/DD HH:mm')}
-                          </JText>
-                        </Pressable>
-                      </View>
-                    </View>
-                    : <View >
-                      <JText style={styles.headers}>
-                        {store.lang.interview_date} :
-                      </JText>
-                      <JText style={styles.date}>
-                        {!details ? '--/--/--' : moment(details).format('DD/MM/YYYY')}
-                      </JText>
-
-                      <JText style={styles.headers}>
-                        {store.lang.interview_time} :
-                      </JText>
-                      <JText style={styles.date}>
-                        {!details ? '--/--' : moment(details).format('HH:mm A')}
-                      </JText>
-                    </View>}
-
-                  <View>
-                    {store.rescheduled !== moment(details).format('YYYY/MM/DD HH:mm') &&
-                      <JButton
-                        style={{ backgroundColor: colors.success[0], marginVertical: RFPercentage(1), borderColor: 'transparent', alignSelf: 'flex-end', }}
-                        onPress={() => {
-                          if (reschedule) {
-                            handleSubmit();
-                          } else {
-                            _acceptSchedule();
-                          }
-                        }}>
-                        {reschedule == true ? store.lang.submit : store.lang.accept}
-                      </JButton>}
-                    {reschedule == false && store.rescheduled !== moment(details).format('YYYY/MM/DD HH:mm') && 
-                      <JButton
-                        style={{ marginVertical: RFPercentage(1), alignSelf: 'flex-end', }}
-                        onPress={() => { setReschedule(true), _getScheduleDetails() }}>
-                        {store.lang.re_schedule}
-                      </JButton>}
-                    <JButton
-                      style={{ backgroundColor: colors.border[0], marginVertical: RFPercentage(1), borderColor: 'transparent', alignSelf: 'flex-end', }}
-                      onPress={() => {
-                        setReschedule(false), setOpen(false), setModalVisible1(false)
-                        // ,store.setRescheduled('')
-                      }}>
-                      {store.lang.close}
-                    </JButton>
-                  </View>
-                  {open && (
-                    <DatePicker
-                      modal
-                      open={open}
-                      date={values.interview_date_and_time}
-                      onConfirm={e => {
-                        setFieldValue('interview_date_and_time', e);
-                        setOpen(false);
-                      }}
-                      onCancel={() => setOpen(false)}
-                      mode="datetime"
-                      minuteInterval={1}
-                    />
-                  )}
-                </View>
-              )}
-            </Formik>}
-        </View>
-      </Modal>
+    
     </JScreen>
   );
 };

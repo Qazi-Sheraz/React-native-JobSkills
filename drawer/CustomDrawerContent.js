@@ -47,7 +47,7 @@ function CustomDrawerContent(props) {
                 .then(res => {
                   JToast({
                     type: 'success',
-                    text1: 'Logout Successfully',
+                    text1:'Logout Successfully',
                   });
                   store.setToken({});
                 })
@@ -114,23 +114,23 @@ function CustomDrawerContent(props) {
             : index == 4
               ? props.navigation.navigate('DHelpCenter')
               : index == 5
-                ? AsyncStorage.removeItem('@login')
-                  .then(res => {
-                     JToast({
+                ?AsyncStorage.removeItem('@login')
+                .then(res => {
+                  if (res !== null) {
+                    JToast({
                       type: 'success',
                       text1: 'Logout Successfully',
                     });
                     store.setToken({});
-                  })
-                  .catch(error => {
-
-                    JToast({
-                      type: 'error',
-                      text1: 'Error',
-                      text2: 'Error while removing token',
-                    });
-
-                  })
+                  }
+                })
+                .catch(error => {
+                  JToast({
+                    type: 'error',
+                    text1: 'Error',
+                    text2: 'Error while removing token',
+                  });
+                })
                 : null;
   };
 

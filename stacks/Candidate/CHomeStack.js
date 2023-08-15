@@ -42,6 +42,7 @@ import ESearch from '../../escreen/Jobs/ESearch';
 import DeviceInfo from 'react-native-device-info';
 import JModal from '../../customComponents/JModal';
 import { JToast } from '../../functions/Toast';
+import Reschedule from '../../escreen/Jobs/Reschedule';
 
 const Stack = createStackNavigator();
 
@@ -96,6 +97,7 @@ function CHomeStack({ navigation }) {
           <Stack.Screen name="CFilter" component={CFilter} />
           <Stack.Screen name="CEditProfile" component={EditProfile} />
           <Stack.Screen name="CSocialMediaLink" component={CSocialMediaLink} />
+          <Stack.Screen name="Reschedule" component={Reschedule} />
           <Stack.Screen
             name="CContacttInformation"
             component={CContactInformation}

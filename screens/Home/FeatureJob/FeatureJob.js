@@ -1,24 +1,24 @@
-import {FlatList, StyleSheet, Text, RefreshControl, ActivityIndicator} from 'react-native';
-import React, {useEffect, useCallback} from 'react';
-import {observer} from 'mobx-react';
+import { FlatList, StyleSheet, Text, RefreshControl, ActivityIndicator } from 'react-native';
+import React, { useEffect, useCallback } from 'react';
+import { observer } from 'mobx-react';
 import JScreen from '../../../customComponents/JScreen';
-import {_getAllFeatureJobData} from '../../../functions/Candidate/BottomTab';
+import { _getAllFeatureJobData } from '../../../functions/Candidate/BottomTab';
 import JText from '../../../customComponents/JText';
-import {useContext} from 'react';
-import {StoreContext} from '../../../mobx/store';
+import { useContext } from 'react';
+import { StoreContext } from '../../../mobx/store';
 import JJobTile from '../../../customComponents/JJobTile';
 import JEmpty from '../../../customComponents/JEmpty';
-import {RFPercentage} from 'react-native-responsive-fontsize';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 import JGradientHeader from '../../../customComponents/JGradientHeader';
 import colors from '../../../config/colors';
 import JSearchInput from '../../../customComponents/JSearchInput';
 import Feather from 'react-native-vector-icons/Feather';
 import JChevronIcon from '../../../customComponents/JChevronIcon';
-const FeatureJob = ({navigation}) => {
+const FeatureJob = ({ navigation }) => {
   const store = useContext(StoreContext);
   useEffect(() => {
     _getAllFeatureJobData(store);
-    return () => {};
+    return () => { };
   }, [store.favouriteList]);
 
   const onRefresh = useCallback(() => {
@@ -42,12 +42,12 @@ const FeatureJob = ({navigation}) => {
               {store.lang.featured_job}
             </JText>
           }
-          left={<JChevronIcon onPress={()=>{ store.setAllFeatureJobInput(''),navigation.goBack()}}/>}
+          left={<JChevronIcon onPress={() => { store.setAllFeatureJobInput(''), navigation.goBack() }} />}
         />
       }
-      style={{marginHorizontal: RFPercentage(2)}}>
+      style={{ marginHorizontal: RFPercentage(2) }}>
       {store.featureJobApiLoader === true ? (
-       <ActivityIndicator/>
+        <ActivityIndicator />
       ) : (
         <React.Fragment>
           <JSearchInput
@@ -69,14 +69,14 @@ const FeatureJob = ({navigation}) => {
               store.allFeatureJobInput?.length === 0
                 ? store.featureJobData?.featuredJobs
                 : store.featureJobData?.featuredJobs.filter(e =>
-                    e.job_title
-                      .toLowerCase()
-                      .includes(store.allFeatureJobInput.toLowerCase()),
-                  )
+                  e.job_title
+                    .toLowerCase()
+                    .includes(store.allFeatureJobInput.toLowerCase()),
+                )
             }
             ListEmptyComponent={() => <JEmpty />}
             showsVerticalScrollIndicator={false}
-            renderItem={({item}) => (
+            renderItem={({ item }) => (
               <JJobTile
                 favouriteData={store.favouriteList}
                 jobId={item.id}
@@ -84,13 +84,14 @@ const FeatureJob = ({navigation}) => {
                   navigation.navigate('JobDetails', {
                     id: item.job_id,
                   })
+
                 }
                 type="job"
-                containerStyle={{marginBottom: RFPercentage(2)}}
+                containerStyle={{ marginBottom: RFPercentage(2) }}
                 img={item.image}
                 title={item?.job_title}
-                location={`${item?.city_name!==null?item?.city_name:''} ${item?.state_name!==null?item?.state_name:''} ${item?.country_name!==null?item?.country_name:'N/A'}`}
-                category={store.lang.id==0?item?.job_category_english:item?.job_category_arabic}
+                location={`${item?.city_name !== null ? item?.city_name : ''} ${item?.state_name !== null ? item?.state_name : ''} ${item?.country_name !== null ? item?.country_name : 'N/A'}`}
+                category={store.lang.id == 0 ? item?.job_category_english : item?.job_category_arabic}
               />
             )}
             keyExtractor={data => data.id}

@@ -27,9 +27,7 @@ LogBox.ignoreAllLogs();
         //fallback={<ActivityIndicator color={colors.primary[0]} size="small" />}
       >
         <MenuProvider>
-          
           <MyDrawer />
-          {/* <Login /> */}
           <Toast/>
         </MenuProvider>
       </NavigationContainer>

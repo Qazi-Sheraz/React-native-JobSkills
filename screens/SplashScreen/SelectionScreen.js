@@ -29,7 +29,7 @@ export default function SelectionScreen({navigation}) {
   // };
   return (
     <JGradientScreen>
-      <StatusBar backgroundColor={colors.purple[0]}/>
+      <StatusBar backgroundColor={colors.purple[0]} />
       {/* <JSkip children="Skip" onPress={() => alert('Skip')} /> */}
       <View style={styles.logo}>
         <Image

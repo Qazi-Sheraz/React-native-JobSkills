@@ -54,6 +54,7 @@ import AssessmentView from '../../escreen/edrawer/AssessmentView';
 import AuthStack from '../Auth/AuthStack';
 import DeviceInfo from 'react-native-device-info';
 import { JToast } from '../../functions/Toast';
+import Reschedule from '../../escreen/Jobs/Reschedule';
 
 const Stack = createStackNavigator();
 
@@ -310,6 +311,7 @@ function EmployeStack({navigation}) {
           <Stack.Screen name="JobPreference" component={JobPreference} />
           <Stack.Screen name="JobRequirement" component={JobRequirement} />
           <Stack.Screen name="JobApplication" component={JobApplication} />
+          <Stack.Screen name="Reschedule" component={Reschedule} />
           <Stack.Screen
             name="ProfileApplication"
             component={ProfileJobApplication}

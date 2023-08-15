@@ -26,14 +26,11 @@ function Favourite({navigation}) {
     setTimeout(() => {
       _getFavouriteJobData(store);
       store.setIsRefreshing(false);
-    }, 2000);
+    }, 1000);
   }, []);
   useEffect(() => {
-    if (isFocused) {
       _getFavouriteJobData(store);
-    }
-  }, [isFocused
-  ])
+  }, [])
 
 
   return (
