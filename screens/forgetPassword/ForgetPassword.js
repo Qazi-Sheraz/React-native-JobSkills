@@ -46,23 +46,26 @@ const ForgetPassword = () => {
           //  console.log('Result===>', result);
 
            if (result.success == true) {
-            Toast.show({
+            JToast({
               type: 'success',
-              text1: result.message,
+              text1: store.lang.success,
+              text2: result.message,
             });
              navigation.navigate('CVerifiedEmail',{email: values.email ,type: type})
            } else {
-            Toast.show({
-              type: 'error',
-              text1: result.message,
+            JToast({
+              type: 'danger',
+              text1: store.lang.eror,
+              text2: result.message,
             });
              
            }
          })
          .catch(error => {
-          Toast.show({
-            type: 'error',
-            text1: error.message,
+          JToast({
+            type: 'danger',
+            text1: store.lang.eror,
+            text2: error.message,
           });
            
          })

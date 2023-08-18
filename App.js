@@ -5,11 +5,8 @@ import MyDrawer from './drawer/MyDrawer';
 import {MenuProvider} from 'react-native-popup-menu';
 import { Alert, LogBox } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
-
-
-import Toast from 'react-native-toast-message';
-
 import {linking} from './linking';
+import FlashMessage from 'react-native-flash-message';
 
 export default function App() {
 
@@ -28,7 +25,8 @@ LogBox.ignoreAllLogs();
       >
         <MenuProvider>
           <MyDrawer />
-          <Toast/>
+          {/* <Toast/> */}
+          <FlashMessage position="top" />
         </MenuProvider>
       </NavigationContainer>
     </StoreProvider>

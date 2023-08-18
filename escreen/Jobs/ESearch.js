@@ -133,7 +133,8 @@ import JButton from '../../customComponents/JButton';
                   _search(search, store,true);
                 } else {
                   JToast({
-                    type: 'error',
+                    type: 'danger',
+                    text1: store.lang.eror,
                     text1: store.lang.enter_something,
                   });
                 }

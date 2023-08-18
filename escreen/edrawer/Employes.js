@@ -15,6 +15,7 @@ import JNotfoundData from '../../customComponents/JNotfoundData';
 import JChevronIcon from '../../customComponents/JChevronIcon';
 import { observer } from 'mobx-react';
 import JEmpty from '../../customComponents/JEmpty';
+import { JToast } from '../../functions/Toast';
 
 const Employes = () => {
   const { navigate, goBack } = useNavigation();
@@ -56,6 +57,11 @@ const Employes = () => {
 
       .catch(error => {
         // console.log('error', error);
+        JToast({
+          type: 'danger',
+          text1: store.lang.eror,
+          text2: store.lang.error_while_getting_data,
+        });
         setError(true)
 
       }).finally(() => {

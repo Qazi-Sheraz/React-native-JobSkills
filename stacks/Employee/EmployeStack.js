@@ -55,6 +55,7 @@ import AuthStack from '../Auth/AuthStack';
 import DeviceInfo from 'react-native-device-info';
 import { JToast } from '../../functions/Toast';
 import Reschedule from '../../escreen/Jobs/Reschedule';
+import JToastr from '../../customComponents/JToastr';
 
 const Stack = createStackNavigator();
 
@@ -297,6 +298,7 @@ function EmployeStack({navigation}) {
           }}
           initialRouteName={'CHome'}>
           <Stack.Screen name="CHome" component={EBottomTab} />
+          <Stack.Screen name="JToastr" component={JToastr} />
 
           <Stack.Screen name="Assessments" component={Assessments} />
           <Stack.Screen name="CAllJobs" component={AllJobs} />

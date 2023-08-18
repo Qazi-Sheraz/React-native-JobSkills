@@ -28,6 +28,7 @@ import FontAwesome5Brands from 'react-native-vector-icons/FontAwesome5';
 import {_getProfile} from '../../functions/Candidate/MyProfile';
 import JChevronIcon from '../../customComponents/JChevronIcon';
 import { ActivityIndicator } from 'react-native';
+import { JToast } from '../../functions/Toast';
 
 function Profile({navigation}) {
 
@@ -55,14 +56,14 @@ function Profile({navigation}) {
           token: null,
         });
 
-        Toast.show({
+        JToast({
           type: 'success',
           text1: 'Logout Successfully',
         });
       })
       .catch(error => {
-        Toast.show({
-          type: 'error',
+        JToast({
+          type: 'danger',
           text1: 'Error',
           text2: 'Error while removing token',
         });

@@ -22,6 +22,7 @@ import { useEffect } from 'react'
 import url from '../../config/url'
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable'
 import { _getAppliedJobData } from '../../functions/Candidate/BottomTab'
+import JSelectInput from '../../customComponents/JSelectInput'
 const Reschedule = () => {
     const store = useContext(StoreContext)
     const { navigate, goBack } = useNavigation();
@@ -77,31 +78,34 @@ const Reschedule = () => {
                 if (result.success == true) {
                     JToast({
                         type: 'success',
-                        text1: result.message,
+                        text1: store.lang.success,
+                        text2: result.message,
                     });
                     goBack()
                 } else {
                     JToast({
-                        type: 'error',
-                        text1: result.message,
+                        type: 'danger',
+                        text1: store.lang.eror,
+                        text2: result.message,
                     });
                 }
             })
             .catch((error) => {
                 console.log('Error:', error);
                 JToast({
-                    type: 'error',
-                    text1: 'An error occurred. Please try again later.',
+                    type: 'danger',
+                    text1: store.lang.eror,
+                    text2: store.lang.an_error_occurred_please_try_again_later,
                 });
             })
             .finally(() => {
-                store.token?.user?.owner_type.includes('Candidate') === true&&
-                _getAppliedJobData(store)
+                store.token?.user?.owner_type.includes('Candidate') === true &&
+                    _getAppliedJobData(store)
             });
     };
 
     const _reschedule = (values) => {
-        
+
         // Create headers with Authorization token
         var myHeaders = new Headers();
         myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
@@ -127,15 +131,17 @@ const Reschedule = () => {
                     // Success message
                     JToast({
                         type: 'success',
-                        text1: result.message
+                        text1: store.lang.success,
+                        text2: result.message
                     });
                     setReschedule(false)
                     goBack();
                 } else {
                     // Error message
                     JToast({
-                        type: 'error',
-                        text1: result.message
+                        type: 'danger',
+                        text1: store.lang.eror,
+                        text2: result.message
                     });
                 }
             })
@@ -151,43 +157,45 @@ const Reschedule = () => {
     const _CandidateReschedule = (values) => {
         var myHeaders = new Headers();
         myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
-    
+
         var formdata = new FormData();
         formdata.append("reschedule_time", moment(values.interview_date_and_time).format('YYYY/MM/DD HH:mm'));
         formdata.append("candidateid", params?.cID);
         formdata.append("jobid", params?.jobID);
         var requestOptions = {
-          method: 'POST',
-          headers: myHeaders,
-          body: formdata,
-          redirect: 'follow'
+            method: 'POST',
+            headers: myHeaders,
+            body: formdata,
+            redirect: 'follow'
         };
         fetch(`${url.baseUrl}/reschedule`, requestOptions)
-          .then(response => response.json())
-          .then(result => {
-            if (result.success) {
-              JToast({
-                type: 'success',
-                text1: result.message
-              });
-              _getAppliedJobData(store)
-              setReschedule(false)
-              goBack();
-    
-            } else {
-              JToast({
-                type: 'error',
-                text1: result.message
-              });
-            }
-          })
-          .catch(error => console.log('error', error))
-          .finally(() => {
-            setOpen(false)
-            setDetails('')
-    
-          });
-      };
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    JToast({
+                        type: 'success',
+                        text1: store.lang.success,
+                        text2: result.message
+                    });
+                    _getAppliedJobData(store)
+                    setReschedule(false)
+                    goBack();
+
+                } else {
+                    JToast({
+                        type: 'danger',
+                        text1: store.lang.eror,
+                        text2: result.message
+                    });
+                }
+            })
+            .catch(error => console.log('error', error))
+            .finally(() => {
+                setOpen(false)
+                setDetails('')
+
+            });
+    };
     useEffect(() => {
         _getScheduleDetails()
     }, [])
@@ -203,7 +211,7 @@ const Reschedule = () => {
                         {store.lang.action_for_interview_schedule}
                     </JText>
                 }
-            left={reschedule&&<JChevronIcon onPress={()=> setReschedule(false)}/>}
+                left={reschedule && <JChevronIcon onPress={() => setReschedule(false)} />}
             />
             {loader ? <ActivityIndicator />
                 : <Formik
@@ -212,8 +220,8 @@ const Reschedule = () => {
                     }}
                     onSubmit={values => {
                         store.token?.user?.owner_type.includes('Candidate') === false
-                        ?_reschedule(values)
-                        :_CandidateReschedule(values)
+                            ? _reschedule(values)
+                            : _CandidateReschedule(values)
                         // console.log('values', moment(values.interview_date_and_time).format('YYYY/MM/DD HH:MM'))
 
                     }}
@@ -249,40 +257,38 @@ const Reschedule = () => {
                                         {store.lang.interview_time} :
                                     </JText>
                                     <JText style={styles.date}>{!details ? '--/--' : moment(details?.start_time).format('HH:mm A')}</JText>
-                                    <View
-                                        style={{
-                                            justifyContent: 'space-between',
-                                            // flexDirection: store.lang.id===0?'row':'row-reverse',
-                                            paddingTop: RFPercentage(1),
-                                            marginBottom: RFPercentage(1),
-                                        }}>
-                                        <JText
-                                            style={styles.headers}>
-                                            {store.lang.interview_Date_and_Time} :
-                                        </JText>
-                                        <Pressable
-                                            onPress={() => setOpen(true)}
-                                            style={{
-                                                height: RFPercentage(6),
-                                                flexDirection:
-                                                    store.lang.id === 0 ? 'row' : 'row-reverse',
-                                                alignItems: 'center',
-                                                borderBottomWidth: RFPercentage(0.2),
-                                                borderBottomColor: error
-                                                    ? colors.danger[0]
-                                                    : colors.inputBorder[0],
-                                            }}>
+                                    <JSelectInput
+                                        mode="datetime"
+                                        isDate={true}
+                                        minimumDate={new Date()}
+                                        // minimumDate={moment().add(0, 'day')}
+                                        containerStyle={{ marginTop: RFPercentage(2) }}
+                                        value={moment(values.interview_date_and_time).format('YYYY/MM/DD HH:mm')}
+                                        setValue={e => setFieldValue('interview_date_and_time', e)}
+
+                                        heading={`${store.lang.interview_Date_and_Time}:`}
+                                        error={touched.interview_date_and_time && errors.interview_date_and_time && true}
+                                        rightIcon={
+                                            <JIcon
+                                                icon={'fe'}
+                                                name="chevron-down"
+                                                size={RFPercentage(2.5)}
+                                                color={colors.black[0]}
+                                            />
+                                        }
+                                        Licon={
                                             <JIcon
                                                 icon={'ev'}
                                                 name={'calendar'}
                                                 color={'#000'}
                                                 size={RFPercentage(4.5)}
                                             />
-                                            <JText fontSize={RFPercentage(2)}>
-                                                {moment(values.interview_date_and_time).format('YYYY/MM/DD HH:mm')}
-                                            </JText>
-                                        </Pressable>
-                                    </View>
+                                        }
+
+                                    />
+                                    {touched.interview_date_and_time && errors.interview_date_and_time && (
+                                        <JErrorText>{errors.interview_date_and_time}</JErrorText>
+                                    )}
                                 </View>
                                 : <View >
                                     <JText style={styles.headers}>
@@ -299,67 +305,67 @@ const Reschedule = () => {
                                         {!details ? '--/--' : moment(details?.start_time).format('HH:mm A')}
                                     </JText>
                                 </View>}
-                                {store.token?.user?.owner_type.includes('Candidate') === false?
-                            <View>
-                                {details?.scheduled_by == 1 &&
+                            {store.token?.user?.owner_type.includes('Candidate') === false ?
+                                <View>
+                                    {details?.scheduled_by == 1 &&
+                                        <JButton
+                                            style={{ backgroundColor: colors.success[0], marginVertical: RFPercentage(1), borderColor: 'transparent', alignSelf: 'flex-end', }}
+                                            onPress={() => {
+                                                if (reschedule) {
+                                                    handleSubmit();
+                                                } else {
+                                                    _acceptSchedule();
+                                                }
+                                            }}>
+                                            {reschedule == true ? store.lang.submit : store.lang.accept}
+                                        </JButton>}
+                                    {!reschedule && details?.scheduled_by == 1 &&
+                                        <JButton
+                                            style={{ marginVertical: RFPercentage(1), alignSelf: 'flex-end', }}
+                                            onPress={() => { setReschedule(true) }}>
+                                            {store.lang.re_schedule}
+                                        </JButton>}
                                     <JButton
-                                        style={{ backgroundColor: colors.success[0], marginVertical: RFPercentage(1), borderColor: 'transparent', alignSelf: 'flex-end', }}
+                                        style={{ backgroundColor: colors.border[0], marginVertical: RFPercentage(1), borderColor: 'transparent', alignSelf: 'flex-end', }}
                                         onPress={() => {
-                                            if (reschedule) {
-                                                handleSubmit();
-                                            } else {
-                                                _acceptSchedule();
-                                            }
+                                            setReschedule(false)
+                                            setOpen(false)
+                                            setDetails('')
+                                            goBack()
                                         }}>
-                                        {reschedule == true ? store.lang.submit : store.lang.accept}
-                                    </JButton>}
-                                {!reschedule && details?.scheduled_by == 1 &&
+                                        {store.lang.close}
+                                    </JButton>
+                                </View>
+                                : <View>
+                                    {details?.scheduled_by == 0 &&
+                                        <JButton
+                                            style={{ backgroundColor: colors.success[0], marginVertical: RFPercentage(1), borderColor: 'transparent', alignSelf: 'flex-end', }}
+                                            onPress={() => {
+                                                if (reschedule) {
+                                                    handleSubmit();
+                                                } else {
+                                                    _acceptSchedule();
+                                                }
+                                            }}>
+                                            {reschedule == true ? store.lang.submit : store.lang.accept}
+                                        </JButton>}
+                                    {!reschedule && details?.scheduled_by == 0 &&
+                                        <JButton
+                                            style={{ marginVertical: RFPercentage(1), alignSelf: 'flex-end', }}
+                                            onPress={() => { setReschedule(true) }}>
+                                            {store.lang.re_schedule}
+                                        </JButton>}
                                     <JButton
-                                        style={{ marginVertical: RFPercentage(1), alignSelf: 'flex-end', }}
-                                        onPress={() => { setReschedule(true) }}>
-                                        {store.lang.re_schedule}
-                                    </JButton>}
-                                <JButton
-                                    style={{ backgroundColor: colors.border[0], marginVertical: RFPercentage(1), borderColor: 'transparent', alignSelf: 'flex-end', }}
-                                    onPress={() => {
-                                        setReschedule(false)
-                                        setOpen(false)
-                                        setDetails('')
-                                        goBack()
-                                    }}>
-                                    {store.lang.close}
-                                </JButton>
-                            </View>
-                            :<View>
-                                {details?.scheduled_by == 0 &&
-                                    <JButton
-                                        style={{ backgroundColor: colors.success[0], marginVertical: RFPercentage(1), borderColor: 'transparent', alignSelf: 'flex-end', }}
+                                        style={{ backgroundColor: colors.border[0], marginVertical: RFPercentage(1), borderColor: 'transparent', alignSelf: 'flex-end', }}
                                         onPress={() => {
-                                            if (reschedule) {
-                                                handleSubmit();
-                                            } else {
-                                                _acceptSchedule();
-                                            }
+                                            setReschedule(false)
+                                            setOpen(false)
+                                            setDetails('')
+                                            goBack()
                                         }}>
-                                        {reschedule == true ? store.lang.submit : store.lang.accept}
-                                    </JButton>}
-                                {!reschedule && details?.scheduled_by == 0 &&
-                                    <JButton
-                                        style={{ marginVertical: RFPercentage(1), alignSelf: 'flex-end', }}
-                                        onPress={() => { setReschedule(true) }}>
-                                        {store.lang.re_schedule}
-                                    </JButton>}
-                                <JButton
-                                    style={{ backgroundColor: colors.border[0], marginVertical: RFPercentage(1), borderColor: 'transparent', alignSelf: 'flex-end', }}
-                                    onPress={() => {
-                                        setReschedule(false)
-                                        setOpen(false)
-                                        setDetails('')
-                                        goBack()
-                                    }}>
-                                    {store.lang.close}
-                                </JButton>
-                            </View>}
+                                        {store.lang.close}
+                                    </JButton>
+                                </View>}
                             {open && (
                                 <DatePicker
                                     modal

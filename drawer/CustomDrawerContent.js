@@ -26,10 +26,11 @@ import { observer, Observer } from 'mobx-react';
 import JRow from '../customComponents/JRow';
 import { JToast } from '../functions/Toast';
 import JIcon from '../customComponents/JIcon';
+import FlashMessage from 'react-native-flash-message';
+
 function CustomDrawerContent(props) {
   const store = useContext(StoreContext);
   const user = store.token?.user;
-
 
   const _navigateToScreen = index => {
     // props.navigation.closeDrawer()
@@ -47,14 +48,14 @@ function CustomDrawerContent(props) {
                 .then(res => {
                   JToast({
                     type: 'success',
-                    text1:'Logout Successfully',
+                    text1: store.lang.logout_successfully,
                   });
                   store.setToken({});
                 })
                 .catch(error => {
                   JToast({
-                    type: 'error',
-                    text1: 'Error',
+                    type: 'danger',
+                    text1: store.lang.eror,
                     text2: 'Error while removing token',
                   });
                 });
@@ -114,23 +115,23 @@ function CustomDrawerContent(props) {
             : index == 4
               ? props.navigation.navigate('DHelpCenter')
               : index == 5
-                ?AsyncStorage.removeItem('@login')
-                .then(res => {
-                  if (res !== null) {
+                ? AsyncStorage.removeItem('@login')
+                  .then(res => {
+                    if (res !== null) {
+                      JToast({
+                        type: 'success',
+                        text1: store.lang.logout_successfully,
+                      });
+                      store.setToken({});
+                    }
+                  })
+                  .catch(error => {
                     JToast({
-                      type: 'success',
-                      text1: 'Logout Successfully',
+                      type: 'danger',
+                      text1: store.lang.eror,
+                      text2: 'Error while removing token',
                     });
-                    store.setToken({});
-                  }
-                })
-                .catch(error => {
-                  JToast({
-                    type: 'error',
-                    text1: 'Error',
-                    text2: 'Error while removing token',
-                  });
-                })
+                  })
                 : null;
   };
 
@@ -187,9 +188,9 @@ function CustomDrawerContent(props) {
     );
 
   return (
+
     store.token?.user?.owner_type.includes('Candidate')
       ? <DrawerContentScrollView {...props}>
-
         {/* <DrawerItemList {...props} /> */}
         <View style={{ height: heightPercentageToDP(100) }}>
           <View
@@ -233,7 +234,7 @@ function CustomDrawerContent(props) {
               paddingHorizontal: RFPercentage(2),
               marginTop: RFPercentage(3),
             }}>
-          
+
             {getDrawerItems().map((item, index) => (
               <JRow
                 disabled={false}
@@ -267,6 +268,7 @@ function CustomDrawerContent(props) {
         </View>
       </DrawerContentScrollView>
       : <DrawerContentScrollView {...props} showsVerticalScrollIndicator={false}>
+
         {/* <DrawerItemList {...props} /> */}
         {/* <DrawerItem label="Help" onPress={() => alert('Link to help')} /> */}
         <View style={{ height: heightPercentageToDP(100) }}>
@@ -407,7 +409,7 @@ onPress={() => {
 }} /> */}
 
 // Employe
-   {/* <DrawerItem
+{/* <DrawerItem
               icon={() => <JIcon icon="io" color={colors.black[0]} name="settings-outline" size={RFPercentage(3)} />}
               labelStyle={{ fontSize: RFPercentage(2.2), fontWeight: 'bold', color: 'black',backgroundColor:'red' }}
               label={`${store.lang.account_settings}`}

@@ -21,6 +21,7 @@ import url from '../../config/url';
 import JNotfoundData from '../../customComponents/JNotfoundData';
 import { observer } from 'mobx-react';
 import JEmpty from '../../customComponents/JEmpty';
+import { JToast } from '../../functions/Toast';
 
 const Followers = () => {
   const store = useContext(StoreContext);
@@ -59,6 +60,11 @@ const Followers = () => {
       })
       .catch(error => {
         // console.log('error', error);
+        JToast({
+          type: 'danger',
+          text1: store.lang.eror,
+          text2: store.lang.error_while_getting_data,
+        });
         setError(true);
       })
       .finally(() => {

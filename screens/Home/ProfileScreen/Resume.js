@@ -16,20 +16,20 @@ import React from 'react';
 import JScreen from '../../../customComponents/JScreen';
 import JGradientHeader from '../../../customComponents/JGradientHeader';
 import JText from '../../../customComponents/JText';
-import {RFPercentage} from 'react-native-responsive-fontsize';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 import Feather from 'react-native-vector-icons/Feather';
 import colors from '../../../config/colors';
 import Pdf from 'react-native-pdf';
 import Entypo from 'react-native-vector-icons/Entypo';
-import {useState} from 'react';
+import { useState } from 'react';
 import JRow from '../../../customComponents/JRow';
 // import FontAwesome from 'react-native-vector-icons/FontAwesome';
 // import AntDesign from 'react-native-vector-icons/AntDesign';
 import DocumentPicker from 'react-native-document-picker';
-import {useContext} from 'react';
-import {StoreContext} from '../../../mobx/store';
-import {useEffect} from 'react';
-import {Formik} from 'formik';
+import { useContext } from 'react';
+import { StoreContext } from '../../../mobx/store';
+import { useEffect } from 'react';
+import { Formik } from 'formik';
 import * as yup from 'yup';
 import JButton from '../../../customComponents/JButton';
 import JInput from '../../../customComponents/JInput';
@@ -37,8 +37,9 @@ import JResumeView from '../../../customComponents/JResumeView';
 import url from '../../../config/url';
 import JChevronIcon from '../../../customComponents/JChevronIcon';
 import JEmpty from '../../../customComponents/JEmpty';
+import { JToast } from '../../../functions/Toast';
 
-const Resume = ({navigation}) => {
+const Resume = ({ navigation }) => {
   const store = useContext(StoreContext);
   const [loader, setLoader] = useState(true);
   const [apiLoader, setApiLoader] = useState(false);
@@ -69,7 +70,12 @@ const Resume = ({navigation}) => {
       //Handling any exception (If any)
       if (DocumentPicker.isCancel(err)) {
         //If user canceled the document selection
-        alert('Canceled from single doc picker');
+        JToast({
+          type: 'success',
+          text1: 'Success!',
+          text2: 'Canceled from single doc picker',
+        });
+        // alert('Canceled from single doc picker');
       } else {
         //For Unknown Error
         alert('Unknown Error: ' + JSON.stringify(err));
@@ -85,7 +91,7 @@ const Resume = ({navigation}) => {
         //  onPress: () => console.log('Cancel Pressed'),
         style: 'cancel',
       },
-      {text: 'OK', onPress: () => _delete()},
+      { text: 'OK', onPress: () => _delete() },
     ]);
 
     const _delete = () => {
@@ -103,7 +109,7 @@ const Resume = ({navigation}) => {
           // console.log(result);
           setResumes(resumes.filter(e => e.id !== id));
         })
-        // .catch(error => console.log('error', error));
+      // .catch(error => console.log('error', error));
     };
   };
   const _getResume = () => {
@@ -125,6 +131,11 @@ const Resume = ({navigation}) => {
       })
       .catch(error => {
         // console.log('error', error);
+        JToast({
+          type: 'danger',
+          text1: store.lang.eror,
+          text2: store.lang.error_while_getting_data,
+        });
         setLoader(false);
       });
   };
@@ -134,7 +145,7 @@ const Resume = ({navigation}) => {
   }, []);
   return (
     <JScreen
-    // style={{marginHorizontal: RFPercentage(2),}}
+      // style={{marginHorizontal: RFPercentage(2),}}
       headerShown={true}
       header={
         <JGradientHeader
@@ -147,7 +158,7 @@ const Resume = ({navigation}) => {
             </JText>
           }
           left={
-            <JChevronIcon/>
+            <JChevronIcon />
           }
           right={
             loader ? (
@@ -166,7 +177,7 @@ const Resume = ({navigation}) => {
       {loader == true ? null : (
         <FlatList
           numColumns={'2'}
-          ListEmptyComponent={<JEmpty/>}
+          ListEmptyComponent={<JEmpty />}
           // contentContainerStyle={{flex: 1}}
           // ListEmptyComponent={
           //   <View
@@ -195,7 +206,7 @@ const Resume = ({navigation}) => {
           // }
           data={resumes?.reverse()}
           keyExtractor={(item, index) => index}
-          renderItem={({item, index}) => (
+          renderItem={({ item, index }) => (
             <JResumeView
               item={item}
               setModalVisible={setModalVisible}
@@ -252,14 +263,22 @@ const Resume = ({navigation}) => {
               .then(response => response.json())
               .then(result => {
                 // console.log(result);
-                alert(result.message);
                 _getResume();
+                JToast({
+                  type: 'success',
+                  text1: store.lang.success,
+                  text2: result.message,
+                });
                 setApiLoader(false);
                 setModalVisible(false);
               })
               .catch(error => {
                 // console.log('error', error);
-                alert('Error while uploading CV');
+                JToast({
+                  type: 'danger',
+                  text1: store.lang.eror,
+                  text2: store.lang.error_while_uploading_CV,
+                });
                 setApiLoader(false);
                 // setModalVisible(false);
               });
@@ -270,7 +289,10 @@ const Resume = ({navigation}) => {
             resume: yup.object().shape({
               uri: yup.string().required('PDF'),
             }),
-            name: yup.string().required().label('Name'),
+            name: yup.string()
+              .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'Name must contain at least 1 alphabet character and can include English, Urdu, Arabic, and spaces')
+              .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the Name')
+              .required().label('Name'),
           })}>
           {({
             values,
@@ -305,7 +327,7 @@ const Resume = ({navigation}) => {
                     />
                   }
                 />
-                <ScrollView style={{padding: RFPercentage(2)}}>
+                <ScrollView style={{ padding: RFPercentage(2) }}>
                   <JRow>
                     <JText fontSize={RFPercentage(2.5)}>{store.lang.resume}</JText>
                     <JText
@@ -326,10 +348,10 @@ const Resume = ({navigation}) => {
                   </JText>
 
                   {values.resume?.uri ? (
-                    <View style={{alignSelf: 'center'}}>
+                    <View style={{ alignSelf: 'center' }}>
                       <Pdf
                         trustAllCerts={false}
-                        source={{uri: values.resume.uri}}
+                        source={{ uri: values.resume.uri }}
                         onLoadComplete={(numberOfPages, filePath) => {
                           // console.log(`Number of pages: ${numberOfPages}`);
                         }}
@@ -381,7 +403,7 @@ const Resume = ({navigation}) => {
                   )}
 
                   <JInput
-                    containerStyle={{marginTop: RFPercentage(1)}}
+                    containerStyle={{ marginTop: RFPercentage(1) }}
                     isRequired
                     heading={store.lang.name}
                     value={values.name}
@@ -396,11 +418,11 @@ const Resume = ({navigation}) => {
                       marginVertical: RFPercentage(2),
                     }}>
                     <JText fontWeight={'500'} fontSize={RFPercentage(2.5)}>
-                      {store.lang.is_default }
+                      {store.lang.is_default}
                     </JText>
 
                     <Switch
-                      trackColor={{true: colors.purple[0]}}
+                      trackColor={{ true: colors.purple[0] }}
                       onValueChange={e => {
                         setFieldValue('is_default', e);
                       }}
@@ -415,6 +437,7 @@ const Resume = ({navigation}) => {
                       borderColor: colors.primary[1],
                     }}>
                     <JButton
+                    disabled={apiLoader?true:false}
                       isValid={isValid}
                       onPress={() => {
                         handleSubmit();

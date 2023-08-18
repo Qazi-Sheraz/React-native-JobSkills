@@ -116,15 +116,16 @@ const JobAlert = ({navigation}) => {
       .then(result => {
         // console.log(result);
 
-        JToast({
+        JToasts({
           type: 'success',
-          text1: 'Successfully Updated',
+          text1: store.lang.success,
+          text2: store.lang.successfully_update,
         });
       })
       .catch(error => {
         // console.log('error', error);
         JToast({
-          type: 'error',
+          type: 'danger',
           text1: 'Error while Updating',
         });
       })

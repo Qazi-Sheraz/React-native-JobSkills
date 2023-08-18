@@ -20,6 +20,7 @@ import url from '../../config/url';
 import { useContext } from 'react';
 import { StoreContext } from '../../mobx/store';
 import JErrorText from '../../customComponents/JErrorText';
+import { JToast } from '../../functions/Toast';
 
 const ECompanyInformation = () => {
   const [loader, setLoader] = useState(true);
@@ -61,18 +62,20 @@ const ECompanyInformation = () => {
       .then(result => {
         // console.log(result)
 
-        Toast.show({
+        JToast({
           type: 'success',
-          text1: 'Successfully update',
+          text1: store.lang.success,
+          text2: store.lang.successfully_update,
         })
         setLoader1(false)
         navigation.goBack()
       })
       .catch(error => {
         // console.log('error====',error)
-        Toast.show({
-          type: 'error',
-          text1: 'Oops! Something went wrong',
+        JToast({
+          type: 'danger',
+          text1: store.lang.eror,
+          text2: store.lang.an_error_occurred_please_try_again_later,
         })
       })
   };
@@ -170,10 +173,10 @@ const ECompanyInformation = () => {
             company_name: yup.string().required(),
             location: yup.string().max(288).required('Location is required'),
             ceo_name: yup.string()
-            .transform(value => value.trim())
-            .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'Ceo Name must contain at least 1 alphabet character and can include English, Urdu, Arabic, and spaces')
-            .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the Ceo Name')
-            .required(),
+              .transform(value => value.trim())
+              .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'Ceo Name must contain at least 1 alphabet character and can include English, Urdu, Arabic, and spaces')
+              .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the Ceo Name')
+              .required(),
             website: yup.string().required('Website is required'),
             // fax: yup.string().max(14).required(),
           })}
@@ -200,7 +203,7 @@ const ECompanyInformation = () => {
                 }
                 right={
                   <JText
-                  disabled={loader1?true:false}
+                    disabled={loader1 ? true : false}
                     onPress={() => {
                       setLoader1(true)
                       isValid && handleSubmit();

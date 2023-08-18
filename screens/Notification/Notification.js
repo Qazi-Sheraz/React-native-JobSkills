@@ -16,6 +16,7 @@ import { useState } from 'react';
 import url from '../../config/url';
 import { useEffect } from 'react';
 import JEmpty from '../../customComponents/JEmpty';
+import { JToast } from '../../functions/Toast';
 
 function Notification ({navigation, route}) {
   const store = useContext(StoreContext);
@@ -46,7 +47,11 @@ function Notification ({navigation, route}) {
       })
 
       .catch(error => {
-        //  console.log('error', error);
+        JToast({
+          type: 'danger',
+          text1: store.lang.eror,
+          text2: store.lang.error_while_getting_data,
+        });
       })
       .finally(() => {
         setLoader(false);

@@ -71,8 +71,8 @@
     "descriptions": "Description",
     "add_candidate": "Add Candidate",
     "candidate": "Candidate",
-    "first_name": "First Name:",
-    "last_name": "Last Name:",
+    "first_name": "First Name",
+    "last_name": "Last Name",
     "email": "Email",
     "phone": "Phone:",
     "resume": "Resume",
@@ -432,6 +432,30 @@
     "accept": "Accept",
     "re_schedule": "Re-schedule",
     "action_for_interview_schedule": "Action For Interview Schedule",
-    "are_u_sure_you_want_to_report": "Are you sure you want to report"
+    "are_u_sure_you_want_to_report": "Are you sure you want to report",
+    "otp_sent_to_your_registered_phone_number": "OTP has been sent to your registered phone number",
+    "sent_to_your_phone_number": "Sent Code Successfully",
+    "check_your_phone": "Check your Phone",
+    "success": "Success!",
+    "eror": "Error!",
+    "already_confirmed": "Already confirmed",
+    "successfully_update": "Successfully update",
+    "something_went_wrong": "Something went wrong",
+    "error_while_saving_data": "Error while saving data",
+    "register_error": "Register Error",
+    "kindly_check_your_email": "Kindly check your Email",
+    "kindly_check_your_email_address": "Kindly check your email address and verify your email address",
+    "kindly_register_with_that_email_address": "Kindly register with that email address",
+    "cannot_proceed_your_request": "Cannot proceed your request at this moment.Try Again!",
+    "no_email_found": "No Email Found",
+    "an_error_occurred_please_try_again_later": "An error occurred. Please try again later",
+    "error_while_uploading_CV": "Error while uploading CV",
+    "error_while_getting_data": "Error while getting Data"
+     
+    
+
+    
+
+    
     
 }

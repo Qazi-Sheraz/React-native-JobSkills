@@ -23,6 +23,7 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 import url from '../../../config/url';
 import Toast from 'react-native-toast-message';
 import JChevronIcon from '../../../customComponents/JChevronIcon';
+import { JToast } from '../../../functions/Toast';
 
 function CSocialMediaLink({refRBSheet, data, user}) {
   const store = useContext(StoreContext);
@@ -57,22 +58,27 @@ function CSocialMediaLink({refRBSheet, data, user}) {
         fetch(store.token?.user?.owner_type.includes('Candidate') == false?`${url.baseUrl}/companyUpdate/${store.token?.user?.owner_id}`:`${url.baseUrl}/update-profile`, requestOptions)
           .then(response => response.json())
           .then(result => {
-            // console.log(result);
             if (result.success === false) {
-              Toast.show({
-                type: 'error',
-                text1: 'Error while saving data',
+              JToast({
+                type: 'danger',
+                text1: store.lang.eror,
+                text2: store.lang.error_while_saving_data,
               });
             } else {
-              Toast.show({
+              store.token?.user?.owner_type.includes('Candidate') == false?
+              JToast({
                 type: 'success',
-                text1: 'Successfully update',
-              });
+                text1: store.lang.success,
+                text2: store.lang.successfully_update,
+              }):
+              JToast({
+                type: 'success',
+                text1: store.lang.success,
+                text2: result,
+              })
               store.token?.user?.owner_type.includes('Candidate') == true&& _getProfile(store)
               navigation.goBack()
 
-              // _getProfile(store);
-              // alert(result);
             }
             setLoader(false);
           })

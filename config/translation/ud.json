@@ -73,8 +73,8 @@
     "descriptions": "تفصیل",
     "add_candidate": "امیدوار شامل کریں",
     "candidate": "امیدوار",
-    "first_name": "پہلا نام:",
-    "last_name": "آخری نام:",
+    "first_name": "پہلا نام",
+    "last_name": "آخری نام",
     "email": "ای میل",
     "phone": "فون:",
     "resume": "دوبارہ شروع کریں",
@@ -424,7 +424,31 @@
     "accept": "قبول کریں",
     "re_schedule": "دوبارہ شیڈول کریں",
     "action_for_interview_schedule": "انٹرویو کے شیڈول کے لیے کارروائی",
-    "are_u_sure_you_want_to_report": "کیا آپ واقعی رپورٹ کرنا چاہتے ہیں"
+    "are_u_sure_you_want_to_report": "کیا آپ واقعی رپورٹ کرنا چاہتے ہیں",
+    "otp_sent_to_your_registered_phone_number": "otp آپ کے رجسٹرڈ فون نمبر پر بھیج دیا گیا ہے",
+    "sent_to_your_phone_number": "کوڈ کامیابی کے ساتھ بھیجا گیا",
+    "check_your_phone": "اپنا فون چیک کریں",
+    "eror": "غلطی!",
+    "success": "کامیابی!",
+    "already_confirmed": "پہلے ہی تصدیق ہو چکی ہے",
+    "successfully_update": "کامیابی کے ساتھ اپ ڈیٹ ہو گیا",
+    "something_went_wrong": "کچھ غلط ہو گیا",
+    "error_while_saving_data": "ڈیٹا محفوظ کرتے وقت خرابی",
+    "register_error": "رجسٹر میں خرابی",
+    "kindly_check_your_email": "برائے مہربانی اپنا ای میل چیک کریں",
+    "cannot_proceed_your_request": "اس وقت آپ کی درخواست کو آگے نہیں بڑھا سکتا۔ دوبارہ کوشش کریں!",
+    "kindly_check_your_email_address": "برائے مہربانی اپنا ای میل پتہ چیک کریں اور اپنے ای میل ایڈریس کی تصدیق کریں",
+    "kindly_register_with_that_email_address": "برائے مہربانی اس ای میل ایڈریس کے ساتھ رجسٹر کریں",
+    "no_email_found": "کوئی ای میل نہیں ملا",
+    "an_error_occurred_please_try_again_later": "ایک خرابی آگئی. براہ کرم کچھ دیر بعد کوشش کریں",
+    "error_while_uploading_CV": "CV اپ لوڈ کرتے وقت خرابی",
+    "error_while_getting_data": "ڈیٹا حاصل کرتے وقت خرابی"
+   
+    
+    
+    
+   
+    
     
     
    

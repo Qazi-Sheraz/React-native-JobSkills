@@ -70,7 +70,7 @@ const JApplyJob = ({token, jobId, id, setStatus, status}) => {
     fetch(`${url.baseUrl}/apply-job/${jobId}`, requestOptions)
       .then(response => response.json())
       .then(result => {
-        // console.log('GET APPLIED JOB STATUS', result);
+        // console.log('GET APPLIED JOB STATUSsssss', result);
         // store.setStatus(result);
         setStatus(result);
         setLoader(false);
@@ -82,12 +82,11 @@ const JApplyJob = ({token, jobId, id, setStatus, status}) => {
   };
   useEffect(() => {
     _getStatus();
-    return () => {};
   }, []);
 
   return (
     <>
-      {status?.success !== false && loader === false && (
+      {status?.success !== false && loader === false || status?.data?.isApplied == false && (
         <JButton
           isValid={!loader}
           onPress={() => setModalVisible(true)}
@@ -230,15 +229,17 @@ const JApplyJob = ({token, jobId, id, setStatus, status}) => {
 
                 if (result.success === false) {
                   JToast({
-                    type: 'error',
-                    text1: result.message,
+                    type: 'danger',
+                    text1: store.lang.eror,
+                    text2: result.message,
                   });
                   // alert(result.message);
                   setModalVisible1(false)
                 } else {
                   JToast({
                     type: 'success',
-                    text1: result.message,
+                    text1: store.lang.success,
+                    text2: result.message,
                   });
                   _getStatus();
                   setModalVisible1(false)

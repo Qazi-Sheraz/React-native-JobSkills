@@ -80,9 +80,10 @@ function SelectedJob({ route, navigation }) {
         // console.log(error);
         setError(true);
 
-        Toast.show({
-          type: 'error',
-          text1: 'Error while getting Data',
+        JToast({
+          type: 'danger',
+          text1: store.lang.eror,
+          text2: store.lang.error_while_getting_data,
         });
         setLoader(false);
       });
@@ -108,7 +109,8 @@ function SelectedJob({ route, navigation }) {
         if (result.success) {
           JToast({
             type: 'success',
-            text1: result.message,
+            text1: store.lang.success,
+            text2: result.message,
           });
           setModalVisible(false)
         }
@@ -116,8 +118,9 @@ function SelectedJob({ route, navigation }) {
       .catch((error) => {
         console.log('Error:', error);
         JToast({
-          type: 'error',
-          text1: 'An error occurred. Please try again later.',
+          type: 'danger',
+          text1: store.lang.eror,
+          text2: store.lang.an_error_occurred_please_try_again_later,
         });
       })
       .finally(() => {

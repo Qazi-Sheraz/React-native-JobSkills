@@ -24,6 +24,7 @@ import JNotfoundData from '../../customComponents/JNotfoundData';
 import JApiError from '../../customComponents/JApiError';
 import { useCallback } from 'react';
 import JEmpty from '../../customComponents/JEmpty';
+import { JToast } from '../../functions/Toast';
 
 const Job = () => {
   const navigation = useNavigation();
@@ -35,7 +36,7 @@ const Job = () => {
   const [update, setUpdate] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredData, setFilteredData] = useState(jobData);
-  console.log('loader', loader)
+  // console.log('loader', loader)
   const handleSearch = (text) => {
     setSearchQuery(text);
 
@@ -63,6 +64,11 @@ const Job = () => {
       })
       .catch(error => {
         // console.log('job===error', error);
+        JToast({
+          type: 'danger',
+          text1: store.lang.eror,
+          text2: store.lang.error_while_getting_data,
+        });
         setError(true);
       })
       .finally(() => {
@@ -75,12 +81,12 @@ const Job = () => {
       _getjobs();
       setSearchQuery('');
       setLoader(false);
-    }, 2000);
+    }, 1000);
   }, []);
 
   useEffect(() => {
     _getjobs()
-  }, []);
+  }, [isFoucs]);
 
   return (
 
@@ -108,7 +114,7 @@ const Job = () => {
           <JApiError
             onTryAgainPress={() => {
               _getjobs(),
-                setError(false)
+               setError(false)
             }}
           /> :
           <>

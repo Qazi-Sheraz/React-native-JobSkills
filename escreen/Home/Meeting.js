@@ -24,6 +24,7 @@ import { useIsFocused } from '@react-navigation/native';
 import JNotfoundData from '../../customComponents/JNotfoundData';
 import JApiError from '../../customComponents/JApiError';
 import JEmpty from '../../customComponents/JEmpty';
+import { JToast } from '../../functions/Toast';
 
 const Meeting = ({isempty=false,}) => {
   const store = useContext(StoreContext);
@@ -54,6 +55,11 @@ const Meeting = ({isempty=false,}) => {
 
       .catch(error => {
         // console.log('error', error);
+        JToast({
+          type: 'danger',
+          text1: store.lang.eror,
+          text2: store.lang.error_while_getting_data,
+        });
         setError(true);
       })
 

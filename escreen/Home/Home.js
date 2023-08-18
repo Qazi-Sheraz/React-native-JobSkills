@@ -1,4 +1,4 @@
-import {FlatList, StyleSheet, Image, View, ActivityIndicator} from 'react-native';
+import {FlatList, StyleSheet, Image, View, ActivityIndicator, Button} from 'react-native';
 import React, {useRef, useState, useEffect} from 'react';
 import JScreen from '../../customComponents/JScreen';
 import JHeader from '../../customComponents/JHeader';
@@ -25,13 +25,10 @@ import EDrawerContent from '../../drawer/EDrawerContent';
 import {observer} from 'mobx-react';
 import JRow from '../../customComponents/JRow';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
-import url from '../../config/url';
 import JIcon from '../../customComponents/JIcon';
 import JNotfoundData from '../../customComponents/JNotfoundData';
 import JApiError from '../../customComponents/JApiError';
 import { _dashboard } from '../../functions/Candidate/BottomTab';
-import { refresh } from '@react-native-community/netinfo';
-import { RefreshControl } from 'react-native';
 import { useCallback } from 'react';
 import { Linking } from 'react-native';
 
@@ -45,7 +42,6 @@ const Home = () => {
   
   const onRefresh = useCallback(() => {
     store.setEHomeApiLoader(true);
-
     setTimeout(() => {
       _dashboard(store);
       store.setEHomeApiLoader(false);
@@ -54,7 +50,6 @@ const Home = () => {
 
 useEffect(() => {
   _dashboard(store);
-  
 }, [isFoucs])
   return (
     <JScreen
@@ -101,6 +96,7 @@ useEffect(() => {
       ) : (
         // <JText>Loading</JText>
         <React.Fragment>
+         
           <JFindTitle
             JobTitle={store.lang.job_title}
             onPress={() => navigation.navigate('ESearch')}

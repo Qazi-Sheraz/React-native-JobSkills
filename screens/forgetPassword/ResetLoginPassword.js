@@ -18,6 +18,7 @@ import { observer } from 'mobx-react';
 import JErrorText from '../../customComponents/JErrorText';
 import url from '../../config/url';
 import Toast from 'react-native-toast-message';
+import { JToast } from '../../functions/Toast';
 const ResetLoginPassword = () => {
     const navigation=useNavigation();
     const store = useContext(StoreContext);
@@ -46,22 +47,22 @@ const ResetLoginPassword = () => {
             // console.log('Result===>', result);
  
             if (result.success == true) {
-             Toast.show({
+              JToast({
                type: 'success',
                text1: result.message,
              });
              navigation.navigate('CLogin',{type: type})
             } else {
-             Toast.show({
-               type: 'error',
+              JToast({
+               type: 'danger',
                text1: result.message,
              });
               
             }
           })
           .catch(error => {
-           Toast.show({
-             type: 'error',
+            JToast({
+             type: 'danger',
              text1: error.message,
            });
             

@@ -128,7 +128,7 @@ const JobDetails = ({ route }) => {
     formdata.append('title', values.resume?.name);
     formdata.append('type', '1');
 
-    console.log('formdata', formdata)
+    // console.log('formdata', formdata)
     fetch(
       `${url.baseUrl}/employer/add-candidate`,
 
@@ -144,25 +144,27 @@ const JobDetails = ({ route }) => {
         if (result.success == true) {
           JToast({
             type: 'success',
-            text1: result.message,
+            text1: store.lang.success,
+            text2: result.message,
           });
           setModalVisible(!modalVisible)
           //  console.log(values)
         } else {
           JToast({
-            type: 'error',
-            text1: result.message,
+            type: 'danger',
+            text1: store.lang.eror,
+            text2: result.message,
           });
           setModalVisible(!modalVisible)
         }
       })
       .catch(error => {
         console.log('error===>>>>>', error);
-        
+
       })
       .finally(() => {
         setLoader1(false)
-        
+
       });
   };
 
@@ -221,14 +223,16 @@ const JobDetails = ({ route }) => {
         if (result.success) {
           JToast({
             type: 'success',
-            text1: result.message,
+            text1: store.lang.success,
+            text2: result.message,
           });
         }
 
         else {
           JToast({
-            type: 'error',
-            text1: result.message,
+            type: 'danger',
+            text1: store.lang.eror,
+            text2: result.message,
           });
         }
       }).catch(error => { }
@@ -262,14 +266,16 @@ const JobDetails = ({ route }) => {
         if (result.success) {
           JToast({
             type: 'success',
-            text1: result.message,
+            text1: store.lang.success,
+            text2: result.message,
           });
         }
 
         else {
           JToast({
-            type: 'error',
-            text1: result.message,
+            type: 'danger',
+            text1: store.lang.eror,
+            text2: result.message,
           });
         }
       }).catch(error => { }
@@ -356,7 +362,6 @@ const JobDetails = ({ route }) => {
       name: store.jobDetail?.job_details?.is_freelance === false ? store.lang.no : store.lang.yes,
     },
   ];
-console.log('status_id',route.params?.status_id)
   // console.log('job details',store.token?.user?.owner_type.includes('Candidate'))
   return (
     <JScreen
@@ -634,86 +639,85 @@ console.log('status_id',route.params?.status_id)
             </JText>
           </JScrollView>
 
-          {route.params?.status_id!==2 &&
           <>
-          <View style={styles.bottomV}>
-            {store.token?.user?.owner_type.includes('Candidate') === false ?
-              <JButton
-                onPress={() => {
-                  setModalVisible(true)
-                  setCode('')
-                }}
-                fontStyle={{
-                  fontSize: RFPercentage(1.9),
-                  fontWeight: 'bold',
-                  paddingHorizontal: RFPercentage(5),
-                }}
-                children={store.lang.add_candidate}
-              /> :
-              <>
-                {status.success == false && status.message === '3' ? (
-                  <JRow
-                    style={{
-                      paddingHorizontal: RFPercentage(1),
-                      paddingVertical: RFPercentage(1),
-                      backgroundColor: colors.danger[0],
-                      justifyContent: 'center',
-                    }}>
-                    <JText fontColor={colors.white[0]} fontWeight="bold">
-                      {store.lang.assessment_Required}
-                    </JText>
-                    <JText
-                      onPress={() =>
-                        Linking.openURL(jobUrl)
-                      }
-                      style={{ marginLeft: RFPercentage(1) }}
-                      fontColor={colors.primary[0]}
-                      fontWeight="bold">
-                      {store.lang.click_here}
-                    </JText>
-                  </JRow>
-                ) : status.success == false && status.message === '2' ? (
-                  <JRow
-                    style={{
-                      paddingHorizontal: RFPercentage(1),
-                      paddingVertical: RFPercentage(1),
-                      backgroundColor: colors.danger[0],
-                      justifyContent: 'center',
-                    }}>
-                    <JText fontColor={colors.white[0]} fontWeight="bold">
-                      {store.lang.upload_your_CV}
-                    </JText>
-                    <JText
-                      onPress={() => navigation.navigate('Resume')}
-                      style={{ marginLeft: RFPercentage(1) }}
-                      fontColor={colors.primary[0]}
-                      fontWeight="bold">
-                      {store.lang.click_here}
-                    </JText>
-                  </JRow>
-                ) : status.success == false && status.message === '1' ? (
-                  <JRow
-                    style={{
-                      paddingHorizontal: RFPercentage(1),
-                      paddingVertical: RFPercentage(1),
-                      backgroundColor: colors.green[0],
-                      justifyContent: 'center',
-                    }}>
-                    <JText fontColor={colors.white[0]} fontWeight="bold">
-                      {store.lang.already_applied}
-                    </JText>
-                  </JRow>
-                ) : null}
+            <View style={styles.bottomV}>
+              {store.token?.user?.owner_type.includes('Candidate') === false ?
+                <JButton
+                  onPress={() => {
+                    setModalVisible(true)
+                    setCode('')
+                  }}
+                  fontStyle={{
+                    fontSize: RFPercentage(1.9),
+                    fontWeight: 'bold',
+                    paddingHorizontal: RFPercentage(5),
+                  }}
+                  children={store.lang.add_candidate}
+                /> :
+                <>
+                  {status.success == false && status.message === '3' ? (
+                    <JRow
+                      style={{
+                        paddingHorizontal: RFPercentage(1),
+                        paddingVertical: RFPercentage(1),
+                        backgroundColor: colors.danger[0],
+                        justifyContent: 'center',
+                      }}>
+                      <JText fontColor={colors.white[0]} fontWeight="bold">
+                        {store.lang.assessment_Required}
+                      </JText>
+                      <JText
+                        onPress={() =>
+                          Linking.openURL(jobUrl)
+                        }
+                        style={{ marginLeft: RFPercentage(1) }}
+                        fontColor={colors.primary[0]}
+                        fontWeight="bold">
+                        {store.lang.click_here}
+                      </JText>
+                    </JRow>
+                  ) : status.success == false && status.message === '2' ? (
+                    <JRow
+                      style={{
+                        paddingHorizontal: RFPercentage(1),
+                        paddingVertical: RFPercentage(1),
+                        backgroundColor: colors.danger[0],
+                        justifyContent: 'center',
+                      }}>
+                      <JText fontColor={colors.white[0]} fontWeight="bold">
+                        {store.lang.upload_your_CV}
+                      </JText>
+                      <JText
+                        onPress={() => navigation.navigate('Resume')}
+                        style={{ marginLeft: RFPercentage(1) }}
+                        fontColor={colors.primary[0]}
+                        fontWeight="bold">
+                        {store.lang.click_here}
+                      </JText>
+                    </JRow>
+                  ) : status.success == false && status.message === '1'|| status?.data?.isApplied == true ? (
+                    <JRow
+                      style={{
+                        paddingHorizontal: RFPercentage(1),
+                        paddingVertical: RFPercentage(1),
+                        backgroundColor: colors.green[0],
+                        justifyContent: 'center',
+                      }}>
+                      <JText fontColor={colors.white[0]} fontWeight="bold">
+                        {store.lang.already_applied}
+                      </JText>
+                    </JRow>
+                  ) : null}
 
-              </>}
-          </View>
-          <JApplyJob
-            status={status}
-            setStatus={setStatus}
-            id={store.jobDetail?.id}
-            token={store.token?.token}
-            jobId={store.jobDetail?.job_id}
-          /></>}
+                </>}
+            </View>
+            <JApplyJob
+              status={status}
+              setStatus={setStatus}
+              id={store.jobDetail?.id}
+              token={store.token?.token}
+              jobId={store.jobDetail?.job_id}
+            /></>
 
           <Modal animationType="fade" transparent={true} visible={modalVisible}>
 
@@ -1025,7 +1029,10 @@ console.log('status_id',route.params?.status_id)
                 }}
                 validationSchema={yup.object().shape(heading === store.lang.email_to_friend
                   ? {
-                    friendName: yup.string().required('Friend Name is required').label('Friend Name'),
+                    friendName: yup.string()
+                      .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'Friend Name must contain at least 1 alphabet character and can include English, Urdu, Arabic, and spaces')
+                      .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the Friend Name')
+                      .required('Friend Name is required').label('Friend Name'),
                     friendEmail: yup.string().max(100, 'Email address must be at most 100 characters long')
                       .email('Must be a valid email').required('Friend Email is required').label('Friend Email'),
                   }
@@ -1197,7 +1204,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
 
-  container: { paddingVertical: RFPercentage(2),marginBottom:RFPercentage(1) },
+  container: { paddingVertical: RFPercentage(2), marginBottom: RFPercentage(1) },
   dg: {
     marginVertical: RFPercentage(2),
     marginHorizontal: RFPercentage(1),
@@ -1216,7 +1223,7 @@ const styles = StyleSheet.create({
 
     elevation: 2,
   },
-  bottomV: { height: RFPercentage(8), width: '100%', padding: RFPercentage(1) },
+  bottomV: { height: RFPercentage(7), width: '100%', padding: RFPercentage(1) },
   centeredV: {
     flex: 1,
     alignItems: 'center',

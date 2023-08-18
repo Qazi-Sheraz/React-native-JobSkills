@@ -11,20 +11,20 @@ import {
 } from 'react-native';
 import React from 'react';
 import JText from './JText';
-import {RFPercentage} from 'react-native-responsive-fontsize';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 import colors from '../config/colors';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import {useRef} from 'react';
+import { useRef } from 'react';
 import Feather from 'react-native-vector-icons/Feather';
 import JGradientHeader from './JGradientHeader';
-import {heightPercentageToDP} from 'react-native-responsive-screen';
+import { heightPercentageToDP } from 'react-native-responsive-screen';
 import DatePicker from 'react-native-date-picker';
-import {useState} from 'react';
+import { useState } from 'react';
 import JRow from './JRow';
-import {useContext} from 'react';
-import {StoreContext} from '../mobx/store';
+import { useContext } from 'react';
+import { StoreContext } from '../mobx/store';
 import JShadowView from './JShadowView';
-import {memo} from 'react';
+import { memo } from 'react';
 import JChevronIcon from './JChevronIcon';
 import JIcon from './JIcon';
 import JEmpty from './JEmpty';
@@ -39,7 +39,7 @@ function JSelectInput({
   value,
   forPassword = false,
   error,
-  isMultiple=false,
+  isMultiple = false,
   isRequired = false,
   rightIcon,
   header,
@@ -49,12 +49,14 @@ function JSelectInput({
   mode = 'date',
   data,
   date1,
-  disabled=false,
+  Licon,
+
+  disabled = false,
 }) {
   const store = useContext(StoreContext);
   const refRBSheet = useRef();
   const [open, setOpen] = useState(false);
-  const [date, setDate] = useState(date1?date1:new Date());
+  const [date, setDate] = useState(date1 ? date1 : new Date());
   const [county, setCountry] = useState({});
   const [city, setCity] = useState([]);
   const [state, setState] = useState([]);
@@ -85,7 +87,7 @@ function JSelectInput({
   const [selectedItems, setSelectedItems] = useState(id);
   // console.log('>>',selectedItems)
   const handleSelectItem = item => {
-    if (selectedItems?.find((e)=>e.id === item.id)) {
+    if (selectedItems?.find((e) => e.id === item.id)) {
       setSelectedItems(selectedItems.filter(i => i.id !== item.id));
     } else {
       setSelectedItems([...selectedItems, item]);
@@ -103,7 +105,7 @@ function JSelectInput({
       years = [];
     startYear = startYear || 1980;
     while (startYear <= currentYear) {
-      years.push({name: startYear++});
+      years.push({ name: startYear++ });
     }
     setYears(years);
     setLoader(false);
@@ -381,7 +383,7 @@ function JSelectInput({
       .then(response => response.json())
       .then(result => {
         var myObject = result.state
-// console.log(result.state[0]?.arabic_title)
+        // console.log(result.state[0]?.arabic_title)
         setState(myObject);
         setLoader(false);
       })
@@ -394,36 +396,36 @@ function JSelectInput({
   return (
     <>
       <Pressable
-      disabled={disabled}
+        disabled={disabled}
         onPress={() => {
           if (isDate === false) {
             refRBSheet.current.open();
             header === store.lang.country
               ? _getCountryList()
               : header === store.lang.city
-              ? _getCityList()
-              : header === store.lang.year
-              ? _years(2019 - 20)
-              : header === store.lang.state
-              ? _getStateList()
-              : _getProfile();
+                ? _getCityList()
+                : header === store.lang.year
+                  ? _years(2019 - 20)
+                  : header === store.lang.state
+                    ? _getStateList()
+                    : _getProfile();
           } else {
             setOpen(true);
           }
         }}
-        style={[{flexDirection: 'column'}, containerStyle]}>
+        style={[{ flexDirection: 'column' }, containerStyle]}>
         <JRow
           style={{
             justifyContent: 'space-between',
           }}>
           {icon}
           <JRow>
-            <JText fontWeight={headingWeight} fontSize={RFPercentage(2.5)} fontColor={disabled==true?colors.inputBorder[0]:colors.black[0]}>
+            <JText fontWeight={headingWeight} fontSize={RFPercentage(2.5)} fontColor={disabled == true ? colors.inputBorder[0] : colors.black[0]}>
               {heading}
             </JText>
             {isRequired && (
               <JText
-                style={{marginHorizontal: RFPercentage(0.5)}}
+                style={{ marginHorizontal: RFPercentage(0.5) }}
                 fontColor={colors.danger[0]}
                 fontWeight={headingWeight}
                 fontSize={RFPercentage(2.5)}>
@@ -435,10 +437,11 @@ function JSelectInput({
         </JRow>
         <JRow
           style={{
-            marginTop:RFPercentage(1),
+            marginTop: RFPercentage(1),
             borderBottomWidth: RFPercentage(0.2),
             borderBottomColor: error ? colors.danger[0] : colors.inputBorder[0],
           }}>
+
           <View
             style={{
               paddingBottom: RFPercentage(0.5),
@@ -446,10 +449,12 @@ function JSelectInput({
               width: forPassword ? '90%' : '100%',
               color: colors.black[0],
             }}>
-            <JText>{value}</JText>
-            
+            <JRow> 
+              {Licon}
+              <JText>{value}</JText></JRow>
+
           </View>
-          
+
         </JRow>
       </Pressable>
 
@@ -461,7 +466,7 @@ function JSelectInput({
         customStyles={{
           wrapper: {
             backgroundColor: '#00000080',
-            
+
           },
           draggableIcon: {
             backgroundColor: colors.black[0],
@@ -504,186 +509,185 @@ function JSelectInput({
             <ActivityIndicator />
           ) : (
             // <View style={{paddingBottom:header === store.lang.experience ?RFPercentage(22):RFPercentage(-10)}}>
-            <View style={{marginBottom:RFPercentage(22)}}>
-            <FlatList
-            
-              data={
-                header === store.lang.country
-                  ? county.filter(e =>
-                      e.name.toLowerCase().includes(query.toLowerCase()),
-                    )
-                  : header === store.lang.city
-                  ? city.filter(e =>
-                      e.name.toLowerCase().includes(query.toLowerCase()),
-                    )
-                  : header === store.lang.year
-                  ? years
-                  : header === store.lang.gender
-                  ? genders.filter(e =>
-                      e.name.toLowerCase().includes(query.toLowerCase()),
-                    )
-                  : header === store.lang.language
-                  ? languages?.filter(e =>
-                      e.name.toLowerCase().includes(query.toLowerCase()),
-                    )
-                  : header === store.lang.marital_status
-                  ? martial.filter(e =>
-                      e.name.toLowerCase().includes(query.toLowerCase()),
-                    )
-                  : header === store.lang.functional_Area
-                  ? area.filter(e =>
-                      e.name.toLowerCase().includes(query.toLowerCase()),
-                    )
-                  : header === store.lang.Industry
-                  ? industry.filter(e =>
-                      e.name.toLowerCase().includes(query.toLowerCase()),
-                    )
-                  : header === store.lang.career_level
-                  ? careerLevel?.filter(e =>
-                      e.name.toLowerCase().includes(query.toLowerCase()),
-                    )
-                  : header === store.lang.salary_currency
-                  ? currencies.filter(e =>!e.name?'N/A':
-                      e.name.toLowerCase().includes(query.toLowerCase()),
-                  )
-                  : header === store.lang.job_type
-                  ? jobType.filter(e =>
-                      e.name.toLowerCase().includes(query.toLowerCase()),
-                    )
-                  : header === store.lang.job_category
-                  ? categories.filter(e =>
-                      e.name.toLowerCase().includes(query.toLowerCase()),
-                    )
-                  : header === store.lang.job_skills
-                  ? skills.filter(e =>!e.name?'N/A':
-                      e.name.toLowerCase().includes(query.toLowerCase()),
-                    )
-                  : header === 'Job Title'
-                  ? title.filter(e =>
-                      e.name.toLowerCase().includes(query.toLowerCase()),
-                    )
-                  : header === store.lang.job_Shift
-                  ? shift.filter(e =>
-                      e.name.toLowerCase().includes(query.toLowerCase()),
-                    )
-                  : header === store.lang.job_tag
-                  ? tags.filter(e =>
-                      e.name.toLowerCase().includes(query.toLowerCase()),
-                    )
-                  : header === store.lang.required_assessment
-                  ? Assessments.filter(e =>
-                      e.name.toLowerCase().includes(query.toLowerCase()),
-                    )
-                  : header === store.lang.Salary_Period
-                  ? periods.filter(e =>
-                      e.name.toLowerCase().includes(query.toLowerCase()),
-                    )
-                  : header === store.lang.gender_preference
-                  ? preference.filter(e =>
-                      e.name.toLowerCase().includes(query.toLowerCase()),
-                    )
-                  : header === store.lang.degree_level
-                  ? degreeLevel?.filter(e =>
-                      e.name.toLowerCase().includes(query.toLowerCase()),
-                    )
-                  : header === store.lang.job_nationality
-                  ? nationality?.filter(e =>
-                      e.name.toLowerCase().includes(query.toLowerCase()),
-                    )
-                  : header === store.lang.ownership_type
-                  ? ownership.filter(e =>
-                      e.name.toLowerCase().includes(query.toLowerCase()),
-                    )
-                  : header === store.lang.size
-                  ? companySize.filter(e =>
-                      e.name.toLowerCase().includes(query.toLowerCase()),
-                    )
-                  : header === store.lang.experience
-                  ? experience
-                  : header === store.lang.state
-                  && state.filter(e =>
-                    e.name.toLowerCase().includes(query.toLowerCase()),)
-                   
-              }
-              ListHeaderComponent={
-                header !== store.lang.experience && (
-                  <JShadowView
-                    shadowColor={colors.purple[0]}
-                    containerStyle={{
-                      marginVertical: RFPercentage(2),
-                      borderWidth: RFPercentage(0.1),
-                      borderColor: `${colors.purple[0]}50`,
-                      justifyContent: 'space-between',
-                      paddingLeft: RFPercentage(1),
-                      height: heightPercentageToDP(6),
-                      flexDirection: store.lang.id===0?'row':'row-reverse',
-                      alignItems: 'center',
-                      marginHorizontal: RFPercentage(2),
-                    }}
-                    isPressable={false}>
-                    <TextInput
-                    
-                      onChangeText={e => setQuery(e)}
-                      placeholderTextColor={colors.placeHolderColor[0]}
-                      placeholder={store.lang.search}
-                      style={{color: colors.black[0],textAlign:store.lang.id===0?'left':'right'}}
-                    />
-                  </JShadowView>
-                )
-              }
-              initialNumToRender={16}
-              renderItem={({item, index}) => (
-               
-                  <TouchableOpacity
-                
-                  onPress={() => {
-                    if (isMultiple == true) {
-                      handleSelectItem(item);
-                    } else {
-                      setValue(item);
-                      refRBSheet.current.close();
-                    }
-                    // console.log(item);
-                  }}
-                 
-                  style={{
-                   
-                    paddingVertical: RFPercentage(2),
-                    marginHorizontal: RFPercentage(2),
-                    marginBottom: RFPercentage(1),
-                    borderBottomColor: colors.border[0],
-                    borderBottomWidth: RFPercentage(0.1),
-                  }}>
-                  <JRow >
-                    {header ===store.lang.state || header === store.lang.city
-                    ?<JText fontSize={RFPercentage(1.8)}>{store.lang.id==0 ?item?.name:item?.arabic_title}</JText>
-                   :<JText fontSize={RFPercentage(1.8)}>{item?.name}</JText>}
+            <View style={{ marginBottom: RFPercentage(22) }}>
+              <FlatList
 
-                    {isMultiple === true && selectedItems?.find((e)=>e.id == item.id) && (
-                      <JIcon icon="fe" name="check" size={RFPercentage(2)} color={colors.black[0]}/>
-                    )}
-                  </JRow>
-                </TouchableOpacity>
-               
-              )}
-              keyExtractor={(item, index) => index}
-            /></View>
+                data={
+                  header === store.lang.country
+                    ? county.filter(e =>
+                      e.name.toLowerCase().includes(query.toLowerCase()),
+                    )
+                    : header === store.lang.city
+                      ? city.filter(e =>
+                        e.name.toLowerCase().includes(query.toLowerCase()),
+                      )
+                      : header === store.lang.year
+                        ? years
+                        : header === store.lang.gender
+                          ? genders.filter(e =>
+                            e.name.toLowerCase().includes(query.toLowerCase()),
+                          )
+                          : header === store.lang.language
+                            ? languages?.filter(e =>
+                              e.name.toLowerCase().includes(query.toLowerCase()),
+                            )
+                            : header === store.lang.marital_status
+                              ? martial.filter(e =>
+                                e.name.toLowerCase().includes(query.toLowerCase()),
+                              )
+                              : header === store.lang.functional_Area
+                                ? area.filter(e =>
+                                  e.name.toLowerCase().includes(query.toLowerCase()),
+                                )
+                                : header === store.lang.Industry
+                                  ? industry.filter(e =>
+                                    e.name.toLowerCase().includes(query.toLowerCase()),
+                                  )
+                                  : header === store.lang.career_level
+                                    ? careerLevel?.filter(e =>
+                                      e.name.toLowerCase().includes(query.toLowerCase()),
+                                    )
+                                    : header === store.lang.salary_currency
+                                      ? currencies.filter(e => !e.name ? 'N/A' :
+                                        e.name.toLowerCase().includes(query.toLowerCase()),
+                                      )
+                                      : header === store.lang.job_type
+                                        ? jobType.filter(e =>
+                                          e.name.toLowerCase().includes(query.toLowerCase()),
+                                        )
+                                        : header === store.lang.job_category
+                                          ? categories.filter(e =>
+                                            e.name.toLowerCase().includes(query.toLowerCase()),
+                                          )
+                                          : header === store.lang.job_skills
+                                            ? skills.filter(e => !e.name ? 'N/A' :
+                                              e.name.toLowerCase().includes(query.toLowerCase()),
+                                            )
+                                            : header === 'Job Title'
+                                              ? title.filter(e =>
+                                                e.name.toLowerCase().includes(query.toLowerCase()),
+                                              )
+                                              : header === store.lang.job_Shift
+                                                ? shift.filter(e =>
+                                                  e.name.toLowerCase().includes(query.toLowerCase()),
+                                                )
+                                                : header === store.lang.job_tag
+                                                  ? tags.filter(e =>
+                                                    e.name.toLowerCase().includes(query.toLowerCase()),
+                                                  )
+                                                  : header === store.lang.required_assessment
+                                                    ? Assessments.filter(e =>
+                                                      e.name.toLowerCase().includes(query.toLowerCase()),
+                                                    )
+                                                    : header === store.lang.Salary_Period
+                                                      ? periods.filter(e =>
+                                                        e.name.toLowerCase().includes(query.toLowerCase()),
+                                                      )
+                                                      : header === store.lang.gender_preference
+                                                        ? preference.filter(e =>
+                                                          e.name.toLowerCase().includes(query.toLowerCase()),
+                                                        )
+                                                        : header === store.lang.degree_level
+                                                          ? degreeLevel?.filter(e =>
+                                                            e.name.toLowerCase().includes(query.toLowerCase()),
+                                                          )
+                                                          : header === store.lang.job_nationality
+                                                            ? nationality?.filter(e =>
+                                                              e.name.toLowerCase().includes(query.toLowerCase()),
+                                                            )
+                                                            : header === store.lang.ownership_type
+                                                              ? ownership.filter(e =>
+                                                                e.name.toLowerCase().includes(query.toLowerCase()),
+                                                              )
+                                                              : header === store.lang.size
+                                                                ? companySize.filter(e =>
+                                                                  e.name.toLowerCase().includes(query.toLowerCase()),
+                                                                )
+                                                                : header === store.lang.experience
+                                                                  ? experience
+                                                                  : header === store.lang.state
+                                                                  && state.filter(e =>
+                                                                    e.name.toLowerCase().includes(query.toLowerCase()),)
+
+                }
+                ListHeaderComponent={
+                  header !== store.lang.experience && (
+                    <JShadowView
+                      shadowColor={colors.purple[0]}
+                      containerStyle={{
+                        marginVertical: RFPercentage(2),
+                        borderWidth: RFPercentage(0.1),
+                        borderColor: `${colors.purple[0]}50`,
+                        justifyContent: 'space-between',
+                        paddingLeft: RFPercentage(1),
+                        height: heightPercentageToDP(6),
+                        flexDirection: store.lang.id === 0 ? 'row' : 'row-reverse',
+                        alignItems: 'center',
+                        marginHorizontal: RFPercentage(2),
+                      }}
+                      isPressable={false}>
+                      <TextInput
+
+                        onChangeText={e => setQuery(e)}
+                        placeholderTextColor={colors.placeHolderColor[0]}
+                        placeholder={store.lang.search}
+                        style={{ color: colors.black[0], textAlign: store.lang.id === 0 ? 'left' : 'right' }}
+                      />
+                    </JShadowView>
+                  )
+                }
+                initialNumToRender={16}
+                renderItem={({ item, index }) => (
+
+                  <TouchableOpacity
+
+                    onPress={() => {
+                      if (isMultiple == true) {
+                        handleSelectItem(item);
+                      } else {
+                        setValue(item);
+                        refRBSheet.current.close();
+                      }
+                      // console.log(item);
+                    }}
+
+                    style={{
+
+                      paddingVertical: RFPercentage(2),
+                      marginHorizontal: RFPercentage(2),
+                      marginBottom: RFPercentage(1),
+                      borderBottomColor: colors.border[0],
+                      borderBottomWidth: RFPercentage(0.1),
+                    }}>
+                    <JRow >
+                      {header === store.lang.state || header === store.lang.city
+                        ? <JText fontSize={RFPercentage(1.8)}>{store.lang.id == 0 ? item?.name : item?.arabic_title}</JText>
+                        : <JText fontSize={RFPercentage(1.8)}>{item?.name}</JText>}
+
+                      {isMultiple === true && selectedItems?.find((e) => e.id == item.id) && (
+                        <JIcon icon="fe" name="check" size={RFPercentage(2)} color={colors.black[0]} />
+                      )}
+                    </JRow>
+                  </TouchableOpacity>
+
+                )}
+                keyExtractor={(item, index) => index}
+              /></View>
           )}
         </SafeAreaView>
       </RBSheet>
       <DatePicker
         modal
-        
-  minimumDate={minimumDate}
-  maximumDate={maximumDate}
+
+        minimumDate={minimumDate}
+        maximumDate={maximumDate}
         mode={mode}
         open={open}
         date={date}
-        
+
         onConfirm={date => {
+          setValue(date)
           setOpen(false);
-          // console.log(date);
-          setValue(date);
         }}
         onCancel={() => {
           setOpen(false);

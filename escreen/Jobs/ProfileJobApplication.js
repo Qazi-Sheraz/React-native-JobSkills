@@ -33,6 +33,7 @@ import JInput from '../../customComponents/JInput';
 import Toast from 'react-native-toast-message';
 import JApiError from '../../customComponents/JApiError';
 import JNotfoundData from '../../customComponents/JNotfoundData';
+import { JToast } from '../../functions/Toast';
 
 const ProfileJobApplication = ({ route }) => {
   const store = useContext(StoreContext);
@@ -103,9 +104,10 @@ const ProfileJobApplication = ({ route }) => {
       .then(result => {
 
         if (result.success === true) {
-          Toast.show({
+          JToast({
             type: 'success',
-            text1: result.message,
+            text1: store.lang.success,
+            text2: result.message,
           });
           setLoader(false);
           setModalVisible(!modalVisible);
@@ -113,9 +115,10 @@ const ProfileJobApplication = ({ route }) => {
 
         else {
           // console.log('error',message);
-          Toast.show({
-            type: 'error',
-            text1: result.message,
+          JToast({
+            type: 'danger',
+            text1: store.lang.eror,
+            text2: result.message,
           });
         }
       }).catch(error => { }

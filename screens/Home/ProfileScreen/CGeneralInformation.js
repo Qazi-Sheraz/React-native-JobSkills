@@ -65,7 +65,8 @@ const{params}=useRoute();
           _getProfile(store);
           JToast({
             type: 'success',
-            text1: result,
+            text1: store.lang.success,
+            text2: result,
           });
           navigation.navigate('Aboutme')
         }
@@ -183,7 +184,8 @@ const{params}=useRoute();
               }
               left={<JChevronIcon />}
             />
-            <ScrollView
+            <ScrollView 
+            showsVerticalScrollIndicator={false}
               contentContainerStyle={{paddingBottom: RFPercentage(8)}}
               style={{
                 marginHorizontal: RFPercentage(2),
@@ -239,6 +241,7 @@ const{params}=useRoute();
               <JSelectInput
                 containerStyle={{marginTop: RFPercentage(2)}}
                 value={values.dob && moment(values.dob).format('DD MM YYYY')}
+                maximumDate={new Date()}
                 isDate
                 heading={`${store.lang.date_of_birth}:`}
                 setValue={e => setFieldValue('dob', e)}

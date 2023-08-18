@@ -93,7 +93,6 @@ export default function Experience({
                   <TouchableOpacity
                     onPress={() => {
                       setSelected(0);
-                      
                       setSelectedExperience({
                         experienceId:item.id,
                         title: item?.experience_title,

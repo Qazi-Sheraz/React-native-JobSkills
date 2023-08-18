@@ -38,22 +38,22 @@ const Profile = () => {
   const isFoucs = useIsFocused();
   // console.log('store====>>>' , profile?.company[0]?.contact_information?.is_phone_verified);
 
-
+  console.log('phone',profile?.company[0]?.contact_information?.phone_number)
   const _removeToken = () => {
     AsyncStorage.removeItem('@login')
       .then(res => {
         store.setToken({
           token: null,
         })
-        Toast.show({
+        JToast({
           type: 'success',
           text1: store.lang.logout_successfully,
         });
       })
       .catch(error => {
-        Toast.show({
-          type: 'error',
-          text1: 'Error',
+        JToast({
+          type: 'danger',
+          text1: store.lang.eror,
           text2: 'Error while removing token',
         });
       });
@@ -100,12 +100,14 @@ const Profile = () => {
       });
   };
   const maxLength = 20;
+ 
   const _otp =()=>{
     var myHeaders = new Headers();
     myHeaders.append("Accept", "application/json");
     var formdata = new FormData();
     formdata.append("phone", profile?.company[0]?.contact_information?.phone_number);
-    // console.log(profile?.company[0]?.contact_information?.phone_number)
+    formdata.append("region_code",profile?.company[0]?.contact_information?.regional_code);
+    console.log('form',formdata)
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
@@ -115,19 +117,21 @@ const Profile = () => {
     fetch(`${url.baseUrl}/send-code`, requestOptions)
       .then(response => response.json())
       .then(result => {
-        // console.log(result)
-        Toast.show({
+        console.log('result',result)
+        JToast({
           type: 'success',
-          text1: 'OTP has been sent to your registered phone number',
+          text1: store.lang.success,
+          text2: store.lang?.otp_sent_to_your_registered_phone_number,
         });
         
 
       })
       .catch(error => {
         // console.log('error', error)
-      Toast.show({
-        type: 'error',
-        text1: 'Oops! Something went wrong',
+        JToast({
+        type: 'danger',
+        text1: store.lang.eror,
+          text2: store.lang.an_error_occurred_please_try_again_later,
       });});
     };
 
@@ -231,6 +235,7 @@ const Profile = () => {
                   <JText fontColor={colors.shortlisted[0]}>
                     {store.lang.confirmed}
                   </JText>
+                  {/* {console.log(profile?.company[0]?.contact_information?.regional_code+profile?.company[0]?.contact_information?.phone_number)} */}
                   <JProfileInfo
                     title={store.lang.phone_number}
                     text={
@@ -238,24 +243,20 @@ const Profile = () => {
                         && profile?.company[0]?.contact_information?.regional_code
                           ? profile?.company[0]?.contact_information?.regional_code 
                           +profile?.company[0]?.contact_information?.phone_number
-                        : 'N/A'
-                        
+                        : 'N/A'   
                     }
                   />
                   <JText
                     onPress={() => {
                       profile?.company[0]?.contact_information?.is_phone_verified == 0
                         ? (navigation.navigate('VerifiedPhone', {
-                            phone:profile?.company[0]?.contact_information?.phone_number
-                            && profile?.company[0]?.contact_information?.regional_code
-                              && profile?.company[0]?.contact_information?.regional_code 
-                              +profile?.company[0]?.contact_information?.phone_number
-                            
+                            phone:profile?.company[0]?.contact_information?.phone_number&&profile?.company[0]?.contact_information?.phone_number,
+                              region_code:profile?.company[0]?.contact_information?.regional_code&&profile?.company[0]?.contact_information?.regional_code
                           }),
                           _otp())
-                        : Toast.show({
+                        : JToast({
                             type: 'success',
-                            text1: 'Already confiremd',
+                            text1: store.lang.already_confirmed,
                           });
                     }}
                     fontColor={

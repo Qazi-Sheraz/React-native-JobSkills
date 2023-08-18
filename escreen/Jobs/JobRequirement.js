@@ -26,6 +26,7 @@ import JChevronIcon from '../../customComponents/JChevronIcon';
 import { _addnewJob } from '../../functions/Candidate/BottomTab';
 import moment from 'moment';
 import Feather from 'react-native-vector-icons/Feather';
+import { JToast } from '../../functions/Toast';
 const JobRequirement = () => {
 
   const { params, values } = useRoute()
@@ -92,22 +93,29 @@ console.log(formdata)
           console.log('new jobsssssss', result.data)
           store.AddJobEmployerData(result.data[0])
           store.AddRecentJobs(result.data[0])
-          Toast.show({
+          JToast({
             type: 'success',
-            text1: result.message,
+            text1: store.lang.success,
+            text2: result.message,
           });
           navigate('Job')
 
         }
 
         else {
-          Toast.show({
-            type: 'error',
-            text1: result.message,
+          JToast({
+            type: 'danger',
+            text1: store.lang.eror,
+            text2: result.message,
           });
         }
       }).catch(error => {
         console.log('error', error)
+        JToast({
+          type: 'danger',
+          text1: store.lang.eror,
+          text2: store.lang.an_error_occurred_please_try_again_later,
+        });
       })
       .finally(() => {
         setLoader(false)
@@ -395,6 +403,7 @@ console.log(formdata)
                 </View> */}
                 <JSelectInput
                       isDate={true}
+                      minimumDate={new Date()}
                       containerStyle={{ marginTop: RFPercentage(2) }}
                       value={
                         values.publishDate &&
@@ -416,9 +425,7 @@ console.log(formdata)
                       <JErrorText>{errors.publishDate}</JErrorText>
                     )}
                   <JSelectInput
-                    // disabled={values.start !== '' ? false : true}
-                    // date1={moment().add(1, 'day').toDate()}
-                    // minimumDate={moment().add(1, 'day')}
+                    minimumDate={new Date()}
                     containerStyle={{ marginTop: RFPercentage(2) }}
                     isDate={true}
                     value={

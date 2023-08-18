@@ -24,6 +24,7 @@ import JRow from '../../customComponents/JRow';
 import { observer } from 'mobx-react';
 import messaging from '@react-native-firebase/messaging';
 import DeviceInfo from 'react-native-device-info';
+import { JToast } from '../../functions/Toast';
 
 const Login = ({navigation, route}) => {
   const store = useContext(StoreContext);
@@ -39,9 +40,9 @@ const Login = ({navigation, route}) => {
           console.log('res', token);
         })
         .catch(error => {
-          Toast.show({
-            type: 'error',
-            text1: 'Error',
+          JToast({
+            type: 'danger',
+            text1: store.lang.eror,
             text2: error,
           });
         });
@@ -83,8 +84,7 @@ const Login = ({navigation, route}) => {
   const updateUserDeviceToken = (messagingInstance, userId, deviceName) => {
     return new Promise((resolve, reject) => {
       if (requestUserPermission()) {
-        messagingInstance
-          .getToken()
+        messagingInstance?.getToken()
           .then((fcmToken) => {
             console.log('FCM Token -> ', fcmToken);
             var formdata = new FormData();
@@ -157,7 +157,7 @@ const Login = ({navigation, route}) => {
         if (result.token) {
           _storeToken(result, values.remember);
           updateUserDeviceToken();
-          Toast.show({
+         JToast({
             type: 'success',
             text1: store.lang.login_successfully,
             text2: store.lang.welcome,
@@ -165,15 +165,15 @@ const Login = ({navigation, route}) => {
 
         } else {
           if (result == "Error Incorrect Password!" || result== "Incorrect Password!") {
-            Toast.show({
-              type: 'error',
-              text1: 'Error',
+            JToast({
+              type: 'danger',
+              text1: store.lang.eror,
               text2: result,
             });
           } else if (result == 'Error Incorrect Email!' || result =="Incorrect Email") {
-            Toast.show({
-              type: 'error',
-              text1: 'Error',
+            JToast({
+              type: 'danger',
+              text1: store.lang.eror,
               text2: result,
             });
           } else if  (result == 'Please verify your Email!') {
@@ -183,10 +183,10 @@ const Login = ({navigation, route}) => {
         setLoader(false);
       })
       .catch(error => {
-        Toast.show({
-          type: 'error',
-          text1: 'Error',
-          text2: 'Cannot proceed your request at this moment.Try Again!',
+        JToast({
+          type: 'danger',
+          text1: store.lang.eror,
+          text2: store.lang.cannot_proceed_your_request,
         });
         setLoader(false);
       });
@@ -207,25 +207,24 @@ const Login = ({navigation, route}) => {
       .then(result => {
         // console.log(result);
         if (result === 'No Email Found') {
-          Toast.show({
-            type: 'error',
-            text1: 'No Email Found',
-            text2: 'Kindly register with that email address',
+          JToast({
+            type: 'danger',
+            text1: store.lang.no_email_found,
+            text2:store.lang.kindly_register_with_that_email_address,
           });
         } else {
-          Toast.show({
+          JToast({
             type: 'success',
-            text1: 'Verify Email Send',
-            text2:
-              'Kindly check your email address and verify your email address',
+            text1: result,
+            text2:store.lang.kindly_check_your_email_address,
           });
         }
       })
       .catch(error => {
-        Toast.show({
-          type: 'error',
-          text1: 'Error',
-          text2: 'Cannot proceed your request at this moment.Try Again!',
+        JToast({
+          type: 'danger',
+          text1: store.lang.eror,
+          text2: store.lang.cannot_proceed_your_request,
         });
       });
   };

@@ -20,6 +20,7 @@ import DocumentPicker from 'react-native-document-picker';
 import Pdf from 'react-native-pdf';
 import Toast from 'react-native-toast-message';
 import url from '../../config/url';
+import { JToast } from '../../functions/Toast';
 
 const Applicants = () => {
   const {navigate,goBack}=useNavigation();
@@ -102,15 +103,15 @@ const Applicants = () => {
         // console.log(result)
        
         if (result.success === true) {
-          Toast.show({
+          JToast({
             type: 'success',
             text1: 'success',
           });
 
           //  console.log(values)
         } else {
-          Toast.show({
-            type: 'error',
+          JToast({
+            type:'danger',
             text1:result.message
            
           });

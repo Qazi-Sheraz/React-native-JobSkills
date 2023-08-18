@@ -86,7 +86,7 @@ export default function JProfileContent({src, name, email, jd}) {
       if (DocumentPicker.isCancel(err)) {
         //If user canceled the document selection
         JToast({
-          type: 'error',
+          type: 'danger',
           text1: store.lang.selection_canceled,
           visibilityTime:1500,
         });
@@ -94,7 +94,7 @@ export default function JProfileContent({src, name, email, jd}) {
       } else {
         //For Unknown Error
         JToast({
-          type: 'error',
+          type: 'danger',
           text1: 'Unknown Error: ' + JSON.stringify(err),
         });
         // alert('Unknown Error: ' + JSON.stringify(err));

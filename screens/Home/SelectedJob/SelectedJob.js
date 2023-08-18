@@ -41,6 +41,7 @@ import {_saveToFavoriteList} from '../../../functions/Candidate/BottomTab';
 import {observer, useObserver} from 'mobx-react';
 import JChevronIcon from '../../../customComponents/JChevronIcon';
 import { ScrollView } from 'react-native-gesture-handler';
+import { JToast } from '../../../functions/Toast';
 
 
  
@@ -79,8 +80,8 @@ function SelectedJob({route, navigation}) {
         // console.log(error);
         setError(true);
 
-        Toast.show({
-          type: 'error',
+        JToast({
+          type: 'danger',
           text1: 'Error while getting Data',
         });
         setLoader(false);

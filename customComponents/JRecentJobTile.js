@@ -42,6 +42,7 @@ import Toast from 'react-native-toast-message';
 import url from '../config/url';
 import { Share } from 'react-native';
 import JNotfoundData from './JNotfoundData';
+import { JToast } from '../functions/Toast';
 
 function JRecentJobTile({
   isempty = false,
@@ -109,16 +110,18 @@ function JRecentJobTile({
 
         if (result.success === true) {
            setStat(id),
-           Toast.show({
+           JToast({
             type: 'success',
-            text1: result.message,});
+            text1: store.lang.success,
+            text2: result?.message,});
             setUpdate(!update)
         }
         else{
 
-          Toast.show({
-            type: 'error',
-            text1: result.message,
+          JToast({
+            type: 'danger',
+            text1: store.lang.eror,
+            text2: result?.message,
           });
         }
       })
@@ -439,7 +442,7 @@ function JRecentJobTile({
               // // </Menu>
               <JRow
               onPress={()=>{
-                Toast.show({
+                JToast({
                   type: 'success',
                   text1: 'Icon pressd',
                 })

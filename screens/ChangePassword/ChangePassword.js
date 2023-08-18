@@ -21,6 +21,7 @@ import { StoreContext } from '../../mobx/store';
 import JChevronIcon from '../../customComponents/JChevronIcon';
 
 import { observer } from 'mobx-react';
+import { JToast } from '../../functions/Toast';
 const ChangePassword = () => {
   const navigation = useNavigation();
   const [reset, setReset] = useState();
@@ -49,25 +50,28 @@ const ChangePassword = () => {
         // console.log(result);
         if (result?.success == true) {
           setReset(result);
-          Toast.show({
+          JToast({
             type: 'success',
-            text1: result.message,
+            text1: store.lang.success,
+            text2: result.message,
             
           });
           navigation.navigate('EAccountSetting');
         } else {
-          Toast.show({
-            type: 'error',
-            text1: result?.message,
+          JToast({
+            type: 'danger',
+            text1: store.lang.eror,
+            text2: result?.message,
           });
         }
       })
 
       .catch(error => {
         // console.log('error', error);
-        Toast.show({
-          type: 'error',
-          text1: error,
+        JToast({
+          type: 'danger',
+          text1: store.lang.eror,
+          text2: store.lang.an_error_occurred_please_try_again_later,
         });
       })
 

@@ -22,8 +22,8 @@ export const _getHomeData = store => {
     .catch(error => {
       // console.log(error);
       JToast({
-        type: 'error',
-        text1: 'Error',
+        type: 'danger',
+        text1: store.lang.eror,
         text2: error.response && error.response.data,
       });
       store.setHomeApiError(true);
@@ -54,8 +54,8 @@ export const _getFavouriteJobData = store => {
     .catch(error => {
       // console.log(error);
       JToast({
-        type: 'error',
-        text1: 'Error',
+        type: 'danger',
+        text1: store.lang.eror,
         text2: error.response && error.response.data,
       });
       store.setFavouriteApiError(true);
@@ -84,14 +84,16 @@ export const _saveToFavoriteList = (store, setLoader, id) => {
       if (result.data) {
         JToast({
           type: 'success',
-          text1: result.message,
+          text1: store.lang.success,
+          text2: result.message,
         });
         // _getFavouriteJobData(store);
         store.pushFavouriteList(result.data[0]);
       } else if (result.data === false) {
         JToast({
-          type: 'error',
-          text1: result.message,
+          type: 'danger',
+          text1: store.lang.success,
+          text2: result.message,
         });
         store.removeFavoriteList(id);
       }
@@ -101,8 +103,8 @@ export const _saveToFavoriteList = (store, setLoader, id) => {
     .catch(error => {
       // console.log(error);
       JToast({
-        type: 'error',
-        text1: 'Error',
+        type: 'danger',
+        text1: store.lang.eror,
         text2: error.response && error.response.data,
       });
       setLoader(false);
@@ -131,9 +133,9 @@ export const _getAppliedJobData = store => {
     })
     .catch(error => {
       // console.log('Applied Job Error',error)
-      JToast.show({
-        type: 'error',
-        text1: 'Error',
+      JToast({
+        type: 'danger',
+        text1: store.lang.eror,
         text2: error.response && error.response.data,
       });
       setAppliedJobError(true);
@@ -163,8 +165,8 @@ export const _getAllJobData = store => {
     .catch(error => {
       // console.log(error);
       JToast({
-        type: 'error',
-        text1: 'Error',
+        type: 'danger',
+        text1: store.lang.eror,
         text2: error.response && error.response.data,
       });
       store.setJobApiError(true);
@@ -194,8 +196,8 @@ export const _getAllFeatureJobData = store => {
     .catch(error => {
       // console.log(error);
       JToast({
-        type: 'error',
-        text1: 'Error',
+        type: 'danger',
+        text1: store.lang.eror,
         text2: error.response && error.response.data,
       });
       store.setFeatureApiError(true);
@@ -225,8 +227,8 @@ export const _getAllFeatureCompanyData = store => {
     .catch(error => {
       // console.log(error);
       JToast({
-        type: 'error',
-        text1: 'Error',
+        type: 'danger',
+        text1: store.lang.eror,
         text2: error.response && error.response.data,
       });
       store.setFeatureApiError(true);
@@ -258,6 +260,11 @@ export const _dashboard = (store) => {
     })
     .catch(error => {
       console.log('home==error', error);
+      JToast({
+        type: 'danger',
+        text1: store.lang.eror,
+        text2: store.lang.error_while_getting_data,
+      });
       store.setEHomeApiError(true);
     })
     .finally(() => {
@@ -290,6 +297,11 @@ export const _addnewJob = (store) => {
     })
     .catch(error => {
       // console.log('error', error);
+      JToast({
+        type: 'danger',
+        text1: store.lang.eror,
+        text2: store.lang.error_while_getting_data,
+      });
       store.setCreateApiError(true);
 
     })
@@ -314,6 +326,11 @@ export const _country = (store) => {
       store.setCountry(result.english?.country);
     })
     .catch(error => {
+      JToast({
+        type: 'danger',
+        text1: store.lang.eror,
+        text2: store.lang.error_while_getting_data,
+      });
       store.setCountryApiError(true);
     })
     .finally(() => {

@@ -148,6 +148,11 @@ function AllJobs({navigation}) {
           setFilterList(result);
         })
         .catch(error => {
+          JToast({
+            type: 'danger',
+            text1: store.lang.eror,
+            text2: store.lang.error_while_getting_data,
+          });
           serError(true);
         })
         .finally(() => {

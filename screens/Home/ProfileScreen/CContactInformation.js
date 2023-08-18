@@ -100,6 +100,143 @@ function CContactInformation({refRBSheet, user}) {
     "679": "FJ", // Fiji
     "358": "FI", // Finland
     "33": "FR", // France
+    "241": "GA", // Gabon
+    "220": "GM", // Gambia
+    "995": "GE", // Georgia
+    "49": "DE", // Germany
+    "233": "GH", // Ghana
+    "30": "GR", // Greece
+    "1-473": "GD", // Grenada
+    "502": "GT", // Guatemala
+    "224": "GN", // Guinea
+    "245": "GW", // Guinea-Bissau
+    "592": "GY", // Guyana
+    "509": "HT", // Haiti
+    "504": "HN", // Honduras
+    "36": "HU", // Hungary
+    "354": "IS", // Iceland
+    "91": "IN", // India
+    "62": "ID", // Indonesia
+    "98": "IR", // Iran
+    "964": "IQ", // Iraq
+    "353": "IE", // Ireland
+    "972": "IL", // Israel
+    "39": "IT", // Italy
+    "1-876": "JM", // Jamaica
+    "81": "JP", // Japan
+    "962": "JO", // Jordan
+    "7": "KZ", // Kazakhstan
+    "254": "KE", // Kenya
+    "686": "KI", // Kiribati
+    "850": "KP", // North Korea
+    "82": "KR", // South Korea
+    "383": "XK", // Kosovo
+    "965": "KW", // Kuwait
+    "996": "KG", // Kyrgyzstan
+    "856": "LA", // Laos
+    "371": "LV", // Latvia
+    "961": "LB", // Lebanon
+    "266": "LS", // Lesotho
+    "231": "LR", // Liberia
+    "218": "LY", // Libya
+    "423": "LI", // Liechtenstein
+    "370": "LT", // Lithuania
+    "352": "LU", // Luxembourg
+    "261": "MG", // Madagascar
+    "265": "MW", // Malawi
+    "60": "MY", // Malaysia
+    "960": "MV", // Maldives
+    "223": "ML", // Mali
+    "356": "MT", // Malta
+    "692": "MH", // Marshall Islands
+    "222": "MR", // Mauritania
+    "230": "MU", // Mauritius
+    "52": "MX", // Mexico
+    "691": "FM", // Micronesia
+    "373": "MD", // Moldova
+    "377": "MC", // Monaco
+    "976": "MN", // Mongolia
+    "382": "ME", // Montenegro
+    "212": "MA", // Morocco
+    "258": "MZ", // Mozambique
+    "95": "MM", // Myanmar (Burma)
+    "264": "NA", // Namibia
+    "674": "NR", // Nauru
+    "977": "NP", // Nepal
+    "31": "NL", // Netherlands
+    "64": "NZ", // New Zealand
+    "505": "NI", // Nicaragua
+    "227": "NE", // Niger
+    "234": "NG", // Nigeria
+    "850": "MP", // Northern Mariana Islands
+    "47": "NO", // Norway
+    "968": "OM", // Oman
+    "92": "PK", // Pakistan
+    "680": "PW", // Palau
+    "970": "PS", // Palestine
+    "507": "PA", // Panama
+    "675": "PG", // Papua New Guinea
+    "595": "PY", // Paraguay
+    "51": "PE", // Peru
+    "63": "PH", // Philippines
+    "48": "PL", // Poland
+    "351": "PT", // Portugal
+    "1-787": "PR", // Puerto Rico
+    "974": "QA", // Qatar
+    "262": "RE", // Reunion
+    "40": "RO", // Romania
+    "7": "RU", // Russia
+    "250": "RW", // Rwanda
+    "290": "SH", // Saint Helena
+    "1-869": "KN", // Saint Kitts and Nevis
+    "1-758": "LC", // Saint Lucia
+    "508": "PM", // Saint Pierre and Miquelon
+    "1-784": "VC", // Saint Vincent and the Grenadines
+    "685": "WS", // Samoa
+    "378": "SM", // San Marino
+    "239": "ST", // Sao Tome and Principe
+    "966": "SA", // Saudi Arabia
+    "221": "SN", // Senegal
+    "381": "RS", // Serbia
+    "248": "SC", // Seychelles
+    "232": "SL", // Sierra Leone
+    "65": "SG", // Singapore
+    "421": "SK", // Slovakia
+    "386": "SI", // Slovenia
+    "677": "SB", // Solomon Islands
+    "252": "SO", // Somalia
+    "27": "ZA", // South Africa
+    "211": "SS", // South Sudan
+    "34": "ES", // Spain
+    "94": "LK", // Sri Lanka
+    "249": "SD", // Sudan
+    "597": "SR", // Suriname
+    "47": "SJ", // Svalbard and Jan Mayen
+    "46": "SE", // Sweden
+    "41": "CH", // Switzerland
+    "963": "SY", // Syria
+    "886": "TW", // Taiwan
+    "992": "TJ", // Tajikistan
+    "255": "TZ", // Tanzania
+    "66": "TH", // Thailand
+    "228": "TG", // Togo
+    "690": "TK", // Tokelau
+    "676": "TO", // Tonga
+    "1-868": "TT", // Trinidad and Tobago
+    "216": "TN", // Tunisia
+    "90": "TR", // Turkey
+    "993": "TM", // Turkmenistan
+    "1-649": "TC", // Turks and Caicos Islands
+    "688": "TV", // Tuvalu
+    "256": "UG", // Uganda
+    "380": "UA", // Ukraine
+    "971": "AE", // United Arab Emirates
+    "44": "GB", // United Kingdom
+    "1": "US", // United States
+    "598": "UY", // Uruguay
+    "998": "UZ", // Uzbekistan
+    "678": "VU", // Vanuatu
+    "379": "VA", // Vatican City
   }
 
   
@@ -128,7 +265,8 @@ function CContactInformation({refRBSheet, user}) {
           _getProfile(store);
           JToast({
             type: 'success',
-            text1: result,
+            text1: store.lang.success,
+            text2: result,
           });
           // alert(result);
           navigation.navigate('Aboutme')

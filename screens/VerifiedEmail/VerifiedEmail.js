@@ -1,8 +1,8 @@
-import {StyleSheet, Image, View, TextInput, Keyboard} from 'react-native';
-import React, {useRef, useState} from 'react';
+import { StyleSheet, Image, View, TextInput, Keyboard } from 'react-native';
+import React, { useRef, useState } from 'react';
 import JScreen from '../../customComponents/JScreen';
 import JText from '../../customComponents/JText';
-import {RFPercentage} from 'react-native-responsive-fontsize';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 import colors from '../../config/colors';
 
 import JButton from '../../customComponents/JButton';
@@ -14,11 +14,12 @@ import { useContext } from 'react';
 import { StoreContext } from '../../mobx/store';
 import { useRoute } from '@react-navigation/native';
 import url from '../../config/url';
+import { JToast } from '../../functions/Toast';
 
 
 
-const VerifiedEmail = ({route, navigation}) => {
-  const store =useContext(StoreContext);
+const VerifiedEmail = ({ route, navigation }) => {
+  const store = useContext(StoreContext);
   const [loader, setLoader] = useState();
   const [value, setValue] = useState({
     d1: '',
@@ -26,7 +27,7 @@ const VerifiedEmail = ({route, navigation}) => {
     d3: '',
     d4: '',
   });
-  const {params}=useRoute();
+  const { params } = useRoute();
   const type = params?.type;
   let _hideEmail = function (email) {
     return email.replace(/(.{2})(.*)(?=@)/, function (gp1, gp2, gp3) {
@@ -61,25 +62,28 @@ const VerifiedEmail = ({route, navigation}) => {
         // console.log('Result===>', result);
 
         if (result.success == true) {
-         Toast.show({
-           type: 'success',
-           text1: result.message,
-         });
-         navigation.navigate('LoginPassword',{email: params?.email ,type: type})
+          JToast({
+            type: 'success',
+            text1: store.lang.success,
+            text2: result.message,
+          });
+          navigation.navigate('LoginPassword', { email: params?.email, type: type })
         } else {
-         Toast.show({
-           type: 'error',
-           text1: result.message,
-         });
-          
+          JToast({
+            type: 'danger',
+            text1: store.lang.eror,
+            text2: result.message,
+          });
+
         }
       })
       .catch(error => {
-       Toast.show({
-         type: 'error',
-         text1: error.message,
-       });
-        
+        JToast({
+          type: 'danger',
+          text1: store.lang.eror,
+          text2: error.message,
+        });
+
       })
       .finally(() => {
         setLoader(false);
@@ -103,24 +107,27 @@ const VerifiedEmail = ({route, navigation}) => {
         // console.log('Result===>', result);
 
         if (result.success == true) {
-         Toast.show({
-           type: 'success',
-           text1: result.message,
-         });
+          JToast({
+            type: 'success',
+            text1: store.lang.success,
+            text2: result.message,
+          });
         } else {
-         Toast.show({
-           type: 'error',
-           text1: result.message,
-         });
-          
+          JToast({
+            type: 'danger',
+            text1: store.lang.eror,
+            text2: result.message,
+          });
+
         }
       })
       .catch(error => {
-       Toast.show({
-         type: 'error',
-         text1: error.message,
-       });
-        
+        JToast({
+          type: 'danger',
+          text1: store.lang.eror,
+          text2: error.message,
+        });
+
       })
       .finally(() => {
         setLoader(false);
@@ -128,7 +135,7 @@ const VerifiedEmail = ({route, navigation}) => {
   };
   return (
     <JScreen>
-      <View style={{flex: 0.5, justifyContent: 'center', alignItems: 'center'}}>
+      <View style={{ flex: 0.5, justifyContent: 'center', alignItems: 'center' }}>
         <Image
           style={{
             alignSelf: 'center',
@@ -143,14 +150,14 @@ const VerifiedEmail = ({route, navigation}) => {
           fontSize={RFPercentage(2.8)}
           fontWeight={'bold'}
           children={store.lang.verify_your_email}
-          style={{marginTop: RFPercentage(2)}}
+          style={{ marginTop: RFPercentage(2) }}
         />
         <JText
           fontWeight={'500'}
           fontAlign="center"
           children={`${store.lang.enter_4_digit_code}
           ${_hideEmail(route.params.email)}`}
-          style={{marginTop: RFPercentage(0.5), width: '70%'}}
+          style={{ marginTop: RFPercentage(0.5), width: '70%' }}
         />
       </View>
 
@@ -160,7 +167,7 @@ const VerifiedEmail = ({route, navigation}) => {
           marginHorizontal: RFPercentage(3),
           alignItems: 'center',
         }}>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{ flexDirection: 'row' }}>
           <View style={styles.inputContainer}>
             <TextInput
               autoFocus
@@ -169,7 +176,7 @@ const VerifiedEmail = ({route, navigation}) => {
               ref={d1}
               value={value.d1}
               onChangeText={e => {
-                setValue({...value, d1: e});
+                setValue({ ...value, d1: e });
                 if (e) {
                   d2.current.focus();
                 }
@@ -180,9 +187,9 @@ const VerifiedEmail = ({route, navigation}) => {
           </View>
           <View style={styles.inputContainer}>
             <TextInput
-              onKeyPress={({nativeEvent}) => {
+              onKeyPress={({ nativeEvent }) => {
                 if (nativeEvent.key === 'Backspace') {
-                  setValue({...value, d2: ''});
+                  setValue({ ...value, d2: '' });
                   d1.current.focus();
                 }
               }}
@@ -191,7 +198,7 @@ const VerifiedEmail = ({route, navigation}) => {
               value={value.d2}
               ref={d2}
               onChangeText={e => {
-                setValue({...value, d2: e});
+                setValue({ ...value, d2: e });
                 if (e) {
                   d3.current.focus();
                 }
@@ -202,9 +209,9 @@ const VerifiedEmail = ({route, navigation}) => {
           </View>
           <View style={styles.inputContainer}>
             <TextInput
-              onKeyPress={({nativeEvent}) => {
+              onKeyPress={({ nativeEvent }) => {
                 if (nativeEvent.key === 'Backspace') {
-                  setValue({...value, d3: ''});
+                  setValue({ ...value, d3: '' });
                   d2.current.focus();
                 }
               }}
@@ -213,7 +220,7 @@ const VerifiedEmail = ({route, navigation}) => {
               value={value.d3}
               style={styles.input}
               onChangeText={e => {
-                setValue({...value, d3: e});
+                setValue({ ...value, d3: e });
                 if (e) {
                   d4.current.focus();
                 }
@@ -224,9 +231,9 @@ const VerifiedEmail = ({route, navigation}) => {
           </View>
           <View style={styles.inputContainer}>
             <TextInput
-              onKeyPress={({nativeEvent}) => {
+              onKeyPress={({ nativeEvent }) => {
                 if (nativeEvent.key === 'Backspace') {
-                  setValue({...value, d4: ''});
+                  setValue({ ...value, d4: '' });
                   d3.current.focus();
                 }
               }}
@@ -235,7 +242,7 @@ const VerifiedEmail = ({route, navigation}) => {
               ref={d4}
               value={value.d4}
               onChangeText={e => {
-                setValue({...value, d4: e});
+                setValue({ ...value, d4: e });
                 if (e.length > 0) {
                   Keyboard.dismiss();
                 }
@@ -276,7 +283,7 @@ const VerifiedEmail = ({route, navigation}) => {
             // });
             // setValue({...value, d1: '', d2: '', d3: '', d4: ''});
           }}
-          children={loader?store.lang.loading:store.lang.continue}
+          children={loader ? store.lang.loading : store.lang.continue}
         />
         <View
           style={{
@@ -284,7 +291,7 @@ const VerifiedEmail = ({route, navigation}) => {
             flexDirection: 'row',
             alignItems: 'center',
           }}>
-          <JText style={{marginRight: RFPercentage(0.8)}}>{store.lang.resend_Code}</JText>
+          <JText style={{ marginRight: RFPercentage(0.8) }}>{store.lang.resend_Code}</JText>
           <JReload
             onPress={() => {
               _forgetPassword();

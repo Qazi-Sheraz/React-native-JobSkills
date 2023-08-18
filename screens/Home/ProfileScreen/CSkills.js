@@ -75,7 +75,8 @@ function CSkills({data}) {
           // console.log(result)
               JToast({
                 type: 'success',
-                text1: result,
+                text1: store.lang.success,
+                text2: result,
               });
               _getProfile(store)
               setLoader1(false)

@@ -11,10 +11,12 @@ import Toast from 'react-native-toast-message';
 import url from '../../config/url';
 import { StoreContext } from '../../mobx/store';
 import { useRoute } from '@react-navigation/native';
+import { JToast } from '../../functions/Toast';
 
 export default function VerifiedPhone({ navigation}) {
   const store = useContext(StoreContext);
   const{params}=useRoute();
+  // console.log('params',params)
   const [value, setValue] = useState({
     d1: '',
     d2: '',
@@ -46,31 +48,37 @@ fetch(`${url.baseUrl}/phone-code-verification`, requestOptions)
   .then(response => response.json())
   .then(result =>{ 
     // console.log(result)
-  if(result.success===true){
-    Toast.show({
+  if(result.success == true){
+    JToast({
       type: 'success',
-      text1: result.message,
+      text1: store.lang.success,
+      text2: result.message,
     
     });
     navigation.goBack();
   }
-  else{Toast.show({
-    type: 'error',
-    text1: result.message,
+  else{
+    JToast({
+    type: 'danger',
+    text1: store.lang.eror,
+    text2: result.message,
   });}
   }
   )
-  .catch(error => Toast.show({
-    type: 'error',
-    text1: 'something went wrong',
+  .catch(error =>
+    JToast({
+    type: 'danger',
+    text1: store.lang.eror,
+    text2: store.lang.an_error_occurred_please_try_again_later,
   }))
   }
   const _otp =()=>{
     var myHeaders = new Headers();
     myHeaders.append("Accept", "application/json");
     var formdata = new FormData();
-    formdata.append("phone", params.phone);
-    // console.log(profile?.company[0]?.contact_information?.phone_number)
+    formdata.append("phone", params?.phone);
+    formdata.append("region_code",params?.region_code);
+    console.log(formdata)
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
@@ -80,10 +88,11 @@ fetch(`${url.baseUrl}/phone-code-verification`, requestOptions)
     fetch(`${url.baseUrl}/send-code`, requestOptions)
       .then(response => response.json())
       .then(result => {
-        Toast.show({
+        console.log(result);
+        JToast({
           type: 'success',
-          text1: 'Send Code Successfully',
-          text2: 'Check your Phone',
+          text1: store.lang.sent_to_your_phone_number,
+          text2: store.lang.check_your_phone,
         });
         
         
@@ -91,9 +100,10 @@ fetch(`${url.baseUrl}/phone-code-verification`, requestOptions)
       })
       .catch(error => {
         // console.log('error', error)
-      Toast.show({
-        type: 'error',
-        text1: 'Oops! Something went wrong',
+        JToast({
+        type: 'danger',
+        text1: store.lang.eror,
+        text2: store.lang.an_error_occurred_please_try_again_later,
       });});
     };
   return (

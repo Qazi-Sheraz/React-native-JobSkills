@@ -73,8 +73,8 @@
     "descriptions": "وصف",
     "add_candidate": "أضف المرشح",
     "candidate": "مُرَشَّح",
-    "first_name": "الاسم الأول:",
-    "last_name": "اسم العائلة:",
+    "first_name": "الاسم الأول",
+    "last_name": "اسم العائلة",
     "email": "بريد إلكتروني",
     "phone": "هاتف:",
     "resume": "سيرة ذاتية",
@@ -156,7 +156,7 @@
     "start_career": "ابدأ حياتك المهنية الجديدة من خلال العمل مع واحدة من أنجح الشركات",
     "frequently_asked_questions": "أسئلة مكررة",
     "frequently_not_available": "الأسئلة المتداولة غير متوفرة.",
-    "company_name": "اسم الشركة :",
+    "company_name": "اسم الشركة",
     "confirmed": "مؤكد",
     "confirm_your_num": "قم بتاكيد رقمك",
     "followers": "متابعون",
@@ -424,7 +424,35 @@
     "accept": "يقبل",
     "re_schedule": "إعادة الجدولة",
     "action_for_interview_schedule": "العمل لجدول المقابلة",
-    "are_u_sure_you_want_to_report": "هل أنت متأكد أنك تريد الإبلاغ "
+    "are_u_sure_you_want_to_report": "هل أنت متأكد أنك تريد الإبلاغ ",
+     "otp_sent_to_your_registered_phone_number": "تم إرسال otp إلى رقم هاتفك المسجل",
+     "sent_to_your_phone_number": "تم إرسال الرمز بنجاح",
+     "check_your_phone": "افحص هاتفك",
+     "eror": "خطأ!",
+     "success": "نجاح!",
+     "already_confirmed": "تم تأكيده بالفعل",
+     "successfully_update": "تم التحديث بنجاح",
+     "something_went_wrong": "هناك خطأ ما",
+     "error_while_saving_data": "خطأ أثناء حفظ البيانات",
+     "register_error": "خطأ في التسجيل",
+     "kindly_check_your_email": "يرجى التحقق من البريد الإلكتروني الخاص بك",
+     "cannot_proceed_your_request": "لا يمكن متابعة طلبك في هذه اللحظة. حاول مرة أخرى!",
+     "kindly_check_your_email_address": "يرجى التحقق من عنوان البريد الإلكتروني الخاص بك والتحقق من عنوان البريد الإلكتروني الخاص بك",
+     "kindly_register_with_that_email_address": "يرجى التسجيل باستخدام عنوان البريد الإلكتروني هذا",
+     "no_email_found": "لم يتم العثور على بريد إلكتروني",
+     "an_error_occurred_please_try_again_later": "حدث خطأ. الرجاء معاودة المحاولة في وقت لاحق",
+     "error_while_uploading_CV": "خطأ أثناء تحميل السيرة الذاتية",
+     "error_while_getting_data": "خطأ أثناء الحصول على البيانات"
+     
+    
+     
+    
+
+    
+
+    
+    
+     
     
    
 

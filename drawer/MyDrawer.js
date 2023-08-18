@@ -189,7 +189,9 @@ export default function MyDrawer() {
 
 
   return (
+    
     <Observer>
+      
       {() =>
         store.langType == 'false' && !store?.token ? (
           <LangStack />

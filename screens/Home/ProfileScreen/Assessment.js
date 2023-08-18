@@ -24,6 +24,7 @@ import {StoreContext} from '../../../mobx/store';
 import JChevronIcon from '../../../customComponents/JChevronIcon';
 import JEmpty from '../../../customComponents/JEmpty';
 import JIcon from '../../../customComponents/JIcon';
+import { JToast } from '../../../functions/Toast';
 const Assessment = ({navigation}) => {
   const refRBSheet = useRef();
   const [selected, setSelected] = useState('');
@@ -82,6 +83,11 @@ const Assessment = ({navigation}) => {
       })
       .catch(error => {
         // console.log('error', error);
+        JToast({
+          type: 'danger',
+          text1: store.lang.eror,
+          text2: store.lang.error_while_getting_data,
+        });
         setLoader1(false);
       });
   };

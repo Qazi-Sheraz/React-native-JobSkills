@@ -23,8 +23,8 @@ export const _getFollowingCompanyData = store => {
     .catch(error => {
       // console.log('Error while getting Favourite Company', error);
       JToast({
-        type: 'error',
-        text1: 'Error',
+        type: 'danger',
+        text1: store.lang.eror,
         text2: error.response && error.response.data,
       });
       store.setFollowingApiError(true);
@@ -53,15 +53,17 @@ export const _saveToFollowing = (store, setLoader, id) => {
       if (result.data) {
         JToast({
           type: 'success',
-          text1: result.message,
+          text1: store.lang.success,
+          text2: result.message,
         });
 
         // store.pushFollowingList(result);
         _getFollowingCompanyData(store);
       } else if (result.data === false) {
         JToast({
-          type: 'error',
-          text1: result.message,
+          type: 'danger',
+          text1: store.lang.eror,
+          text2: result.message,
         });
         _getFollowingCompanyData(store);
         // store.filterFollowingList(id);
@@ -70,8 +72,8 @@ export const _saveToFollowing = (store, setLoader, id) => {
     .catch(error => {
       // console.log(error);
       JToast({
-        type: 'error',
-        text1: 'Error',
+        type: 'danger',
+        text1: store.lang.eror,
         text2: error.response && error.response.data,
       });
     })

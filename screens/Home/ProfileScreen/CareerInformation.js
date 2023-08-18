@@ -93,23 +93,24 @@ const CareerInformation = ({ navigation }) => {
       .then(result => {
         if (moment(values.start).format('DD MMM YYYY') === moment(values.end).format('DD MMM YYYY')) {
           JToast({
-            type: 'error',
-            text1: result.end_date[0],
-            visibilityTime: 1500
+            type: 'danger',
+            text1: store.lang.eror,
+            text2: result.end_date[0],
+            // visibilityTime: 1500
           });
 
           setLoader(false);
         }
         else {
-          selectedExperience == null ?
-            _addExp(result.candidateExperience)
-            : _getExperience();
-
+          selectedExperience !== null && (
+            _addExp(result.data?.candidateExperience))
+             
           JToast({
             type: 'success',
-            text1: result.message,
+            text1: store.lang.success,
+            text2: result.message,
           });
-
+          _getExperience();
           setLoader(false);
           refRBSheet.current.close();
         }
@@ -149,12 +150,13 @@ const CareerInformation = ({ navigation }) => {
       .then(response => response.json())
       .then(result => {
         // console.log(result.data);
-        selectedEdu == null ?
-          _addEdu(result.data) :
+        selectedEdu !== null &&(
+          _addEdu(result.data)) 
           _getExperience();
         JToast({
           type: 'success',
-          text1: result.message,
+          text1: store.lang.success,
+          text2: result.message,
         });
         setLoader(false);
         refRBSheet.current.close();
@@ -187,6 +189,11 @@ const CareerInformation = ({ navigation }) => {
       })
       .catch(error => {
         // console.log('error', error);
+        JToast({
+          type: 'danger',
+          text1: store.lang.eror,
+          text2: store.lang.error_while_getting_data,
+        });
         setApiLoader(false);
       });
   };
@@ -211,6 +218,11 @@ const CareerInformation = ({ navigation }) => {
       })
       .catch(error => {
         // console.log('error', error);
+        JToast({
+          type: 'danger',
+          text1: store.lang.eror,
+          text2: store.lang.error_while_getting_data,
+        });
         setApiLoader(false);
       });
   };
@@ -230,14 +242,20 @@ const CareerInformation = ({ navigation }) => {
     )
       .then(response => response.json())
       .then(result => {
+        if(result.success){
         setExpereince(experience.filter(e => e.id?.experienceId !== id?.experienceId));
+        JToast({
+          type: 'danger',
+          text1: store.lang.success,
+          text2: result.message,
+        });
         _getExperience()
         setModalVisible(false)
-
+}
       })
     // .catch(error => console.log('error', error));
   };
- 
+
 
   const _delete = () => {
     // console.log(id);
@@ -256,13 +274,20 @@ const CareerInformation = ({ navigation }) => {
       .then(response => response.json())
       .then(result => {
         // console.log(result);
+        if(result.success){
         setEducation(education.filter(e => e.id?.educationId !== id?.educationId));
+        JToast({
+          type: 'danger',
+          text1: store.lang.success,
+          text2: result.message,
+        });
         _getExperience();
-        setModalVisible(false)
+        setModalVisible(false)}
+        
       })
     // .catch(error => console.log('error', error));
   };
- 
+
 
   const _addExp = e => {
     let arr = [...experience];
@@ -280,8 +305,13 @@ const CareerInformation = ({ navigation }) => {
   useEffect(() => {
     _getExperience();
     _getEdu();
-
   }, []);
+
+  const currentDate = new Date();
+
+  // Calculate the maximum start date (1 day before the current date)
+  const maximumStartDate = new Date(currentDate);
+  maximumStartDate.setDate(currentDate.getDate() - 1);
   return (
     <JScreen
       headerShown={true}
@@ -370,10 +400,11 @@ const CareerInformation = ({ navigation }) => {
           }
           left={<JChevronIcon onPress={() => refRBSheet?.current.close()} />}
         />
-         <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
-          {selected === 0 ? (
-            <Formik
-              initialValues={{
+        <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
+          {/* {selected === 0 ? ( */}
+          <Formik
+            initialValues={
+              selected === 0 ? {
                 title:
                   selectedExperience?.title !== null
                     ? selectedExperience?.title
@@ -418,11 +449,49 @@ const CareerInformation = ({ navigation }) => {
                   selectedExperience?.description !== null
                     ? selectedExperience?.description
                     : '',
-              }}
-              onSubmit={values => {
-                _addExperince(values);
-              }}
-              validationSchema={yup.object().shape({
+              }
+                : {
+                  title: selectedEdu?.title !== null ? selectedEdu?.title : '',
+                  level: {
+                    id:
+                      selectedEdu?.degree_level_id !== null
+                        ? selectedEdu?.degree_level_id
+                        : '',
+                    name:
+                      selectedEdu?.degree_level !== null
+                        ? selectedEdu?.degree_level
+                        : '',
+                  },
+                  county: {
+                    id: selectedEdu?.country_id,
+                    name: selectedEdu?.country,
+                  },
+                  city: {
+                    id: selectedEdu?.city_id,
+                    name: selectedEdu?.city,
+                  },
+
+                  state: {
+                    id: selectedEdu?.state_id,
+                    name: selectedEdu?.state,
+                  },
+                  institude:
+                    selectedEdu?.institute !== null
+                      ? selectedEdu?.institute
+                      : '',
+                  result:
+                    selectedEdu?.result !== null ? selectedEdu?.result : '',
+                  year: {
+                    name: selectedEdu?.year !== null ? selectedEdu?.year : '',
+                  },
+                }}
+            onSubmit={values => {
+              selected === 0 ?
+                _addExperince(values)
+                : _addEducation(values);
+            }}
+            validationSchema={yup.object().shape(
+              selected === 0 ? {
                 title: yup.string().required().label('Title'),
                 company: yup.string().required().label('Company'),
 
@@ -431,18 +500,30 @@ const CareerInformation = ({ navigation }) => {
                 state: yup.object().shape().required('State is required'),
 
                 description: yup.string().required().label('Description'),
-              })}>
-              {({
-                values,
-                handleChange,
-                errors,
-                setFieldTouched,
-                touched,
-                isValid,
-                handleSubmit,
-                setFieldValue,
-              }) => (
-                <>
+              }
+                :
+                {
+                  title: yup.string().required().label('Title'),
+                  level: yup.object().shape().required('Level is required'),
+                  county: yup.object().shape().required('Country is required'),
+                  city: yup.object().shape().required('City is required'),
+                  state: yup.object().shape().required('State is required'),
+                  institude: yup.string().required().label('Institude'),
+                  result: yup.string().required().label('Eesult'),
+                  year: yup.object().shape().required('Year is required'),
+                })}>
+            {({
+              values,
+              handleChange,
+              errors,
+              setFieldTouched,
+              touched,
+              isValid,
+              handleSubmit,
+              setFieldValue,
+            }) => (
+              selected === 0 ?
+                (<>
                   <JScrollView
                     // contentContainerStyle={{paddingBottom: RFPercentage(8),}}
                     style={{
@@ -553,11 +634,20 @@ const CareerInformation = ({ navigation }) => {
                     <JSelectInput
                       isDate={true}
                       containerStyle={{ marginTop: RFPercentage(2) }}
+                      date1={maximumStartDate}
+                      maximumDate={maximumStartDate}
                       value={
                         values.start &&
                         moment(values.start).format('DD MMM YYYY')
                       }
-                      setValue={e => setFieldValue('start', e)}
+                      setValue={e => {
+                        {
+                          values.start ?
+                            setFieldValue('start', e)
+                            : setFieldValue('start', maximumStartDate)
+                        }
+                        setFieldValue('end', '')
+                      }}
                       header={store.lang.start_date}
                       heading={`${store.lang.start_date}:`}
                       error={touched.start && errors.start && true}
@@ -577,15 +667,16 @@ const CareerInformation = ({ navigation }) => {
                       <>
                         <JSelectInput
                           disabled={values.start !== '' ? false : true}
-                          date1={moment().add(1, 'day').toDate()}
-                          minimumDate={moment().add(1, 'day')}
+                          date={moment(values.end).format('DD MMM YYYY')}
+                          // minimumDate={moment(values.start, 'DD MMM YYYY').add(1, 'day')}
+                          minimumDate={new Date()}
                           containerStyle={{ marginTop: RFPercentage(2) }}
                           isDate={true}
-                          value={
-                            values.end &&
-                            moment(values.end).format('DD MMM YYYY')
-                          }
-                          setValue={e => setFieldValue('end', e)}
+                          value={values.end && moment(values.end).format('DD MMM YYYY')}
+                          setValue={e => {
+                            setFieldValue('end', e)
+                            console.log(moment(e, 'DD MMM YYYY'))
+                          }}
                           header={store.lang.end_date}
                           heading={`${store.lang.end_date}:`}
                           error={touched.end && errors.end && true}
@@ -618,7 +709,7 @@ const CareerInformation = ({ navigation }) => {
                       onChangeText={handleChange('description')}
                       onBlur={() => setFieldTouched('description')}
                     />
-                    {touched.title && errors.description && (
+                    {touched.description && errors.description && (
                       <JErrorText>{errors.description}</JErrorText>
                     )}
                     <JRow
@@ -639,6 +730,7 @@ const CareerInformation = ({ navigation }) => {
                       />
                     </JRow>
                   </JScrollView>
+
                   <View style={styles.bottomV}>
                     <JButton
                       isValid={isValid}
@@ -651,71 +743,9 @@ const CareerInformation = ({ navigation }) => {
                       {loader ? store.lang.loading : store.lang.save}
                     </JButton>
                   </View>
-                </>
-              )}
-            </Formik>
-          ) : (
-            <Formik
-              initialValues={{
-                title: selectedEdu?.title !== null ? selectedEdu?.title : '',
-                level: {
-                  id:
-                    selectedEdu?.degree_level_id !== null
-                      ? selectedEdu?.degree_level_id
-                      : '',
-                  name:
-                    selectedEdu?.degree_level !== null
-                      ? selectedEdu?.degree_level
-                      : '',
-                },
-                county: {
-                  id: selectedEdu?.country_id,
-                  name: selectedEdu?.country,
-                },
-                city: {
-                  id: selectedEdu?.city_id,
-                  name: selectedEdu?.city,
-                },
-
-                state: {
-                  id: selectedEdu?.state_id,
-                  name: selectedEdu?.state,
-                },
-                institude:
-                  selectedEdu?.institute !== null
-                    ? selectedEdu?.institute
-                    : '',
-                result:
-                  selectedEdu?.result !== null ? selectedEdu?.result : '',
-                year: {
-                  name: selectedEdu?.year !== null ? selectedEdu?.year : '',
-                },
-              }}
-              onSubmit={values => {
-                // console.log(values);
-                _addEducation(values);
-              }}
-              validationSchema={yup.object().shape({
-                title: yup.string().required().label('Title'),
-                level: yup.object().shape().required('Level is required'),
-                county: yup.object().shape().required('Country is required'),
-                city: yup.object().shape().required('City is required'),
-                state: yup.object().shape().required('State is required'),
-                institude: yup.string().required().label('Institude'),
-                result: yup.string().required().label('Eesult'),
-                year: yup.object().shape().required('Year is required'),
-              })}>
-              {({
-                values,
-                handleChange,
-                errors,
-                setFieldTouched,
-                touched,
-                isValid,
-                handleSubmit,
-                setFieldValue,
-              }) => (
-                <>  <ScrollView
+                </>)
+                : (<>
+                  <JScrollView
                     contentContainerStyle={{ paddingBottom: RFPercentage(8) }}
                     style={{
                       marginHorizontal: RFPercentage(2),
@@ -745,21 +775,21 @@ const CareerInformation = ({ navigation }) => {
                       <JErrorText>{errors.level}</JErrorText>
                     )}
                     {/* <JInput
-                  style={{
-                    textAlign: store.lang.id == 0 ? 'left' : 'right',
-                  }}
-                  keyboardType={'numeric'}
-                    isRequired={true}
-                    containerStyle={styles.container}
-                    heading={`${store.lang.degree_level}:`}
-                    value={values.level}
-                    error={touched.level && errors.level && true}
-                    onChangeText={handleChange('level')}
-                    onBlur={() => setFieldTouched('level')}
-                  />
-                  {touched.level && errors.level && (
-                    <JErrorText>{errors.level}</JErrorText>
-                  )} */}
+                   style={{
+                     textAlign: store.lang.id == 0 ? 'left' : 'right',
+                   }}
+                   keyboardType={'numeric'}
+                     isRequired={true}
+                     containerStyle={styles.container}
+                     heading={`${store.lang.degree_level}:`}
+                     value={values.level}
+                     error={touched.level && errors.level && true}
+                     onChangeText={handleChange('level')}
+                     onBlur={() => setFieldTouched('level')}
+                   />
+                   {touched.level && errors.level && (
+                     <JErrorText>{errors.level}</JErrorText>
+                   )} */}
                     <JInput
                       style={{
                         textAlign: store.lang.id == 0 ? 'left' : 'right',
@@ -901,7 +931,7 @@ const CareerInformation = ({ navigation }) => {
                     {touched.year && errors.year && (
                       <JErrorText>{errors.year}</JErrorText>
                     )}
-                  </ScrollView>
+                  </JScrollView>
                   <View style={styles.bottomV}>
                     <JButton
                       isValid={isValid}
@@ -914,13 +944,12 @@ const CareerInformation = ({ navigation }) => {
                       {loader ? store.lang.loading : store.lang.save}
                     </JButton>
                   </View>
-                </>
-              )}
-            </Formik>
-          )
-          }
+                </>)
+            )}
+          </Formik>
+
         </KeyboardAvoidingView>
-        {/* )} */}
+
       </RBSheet>
       <JModal
         modalVisible={modalVisible}

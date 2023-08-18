@@ -110,7 +110,7 @@ function CExperienceInformation({refRBSheet, data}) {
               // console.log(result);
               if (result.success === false) {
                 JToast({
-                  type: 'error',
+                  type: 'danger',
                   text1: result,
                 });
               } else {

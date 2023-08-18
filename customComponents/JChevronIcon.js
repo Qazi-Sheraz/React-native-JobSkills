@@ -13,7 +13,7 @@ const JChevronIcon = ({color = '#fff',onPress}) => {
     <JIcon
       onPress={onPress? onPress:() => navigation.canGoBack() ? navigation.goBack():navigation.navigate('EmployeeStack')}
       icon={'io'}
-      name={store.lang.id == 0 ? 'chevron-back' : 'chevron-forward'}
+      name={store.lang?.id == 0 ? 'chevron-back' : 'chevron-forward'}
       size={RFPercentage(3)}
       color={color}
     />

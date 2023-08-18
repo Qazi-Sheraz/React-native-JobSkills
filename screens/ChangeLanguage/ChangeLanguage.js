@@ -50,14 +50,16 @@ const ChangeLanguage = () => {
         if(result.success== true){
           JToast({
             type: 'success',
+            // text1: store.lang.success,
             text1: result.message,
           });
             RNRestart.restart()
         }
         else{
           JToast({
-            type: 'error',
-            text1: result.message,
+            type: 'danger',
+            text1: store.lang.error,
+            text2: result.message,
           });
         }
       })

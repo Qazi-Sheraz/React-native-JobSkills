@@ -23,6 +23,7 @@ import JIcon from '../../customComponents/JIcon';
 import { StoreContext } from '../../mobx/store';
 import { observer } from 'mobx-react';
 import JRow from '../../customComponents/JRow';
+import { JToast } from '../../functions/Toast';
 const Registration = ({ navigation, route }) => {
   const [loader, setLoader] = useState(false);
   const store = useContext(StoreContext);
@@ -51,19 +52,19 @@ const Registration = ({ navigation, route }) => {
     fetch('https://dev.jobskills.digital/api/users/register', requestOptions)
       .then(response => response.json())
       .then(result => {
-        // console.log(result);
+        console.log(result);
         // console.log('Response', JSON.stringify(response.token));
         if (result.success == false) {
-          Toast.show({
-            type: 'error',
-            text1: 'Register Error',
+          JToast({
+            type: 'danger',
+            text1: store.lang.register_error,
             text2: result.message,
           });
         } else {
-          Toast.show({
+          JToast({
             type: 'success',
-            text1: 'Register Successfully',
-            text2: 'Kindly check your Email',
+            text1: result,
+            text2: store.lang.kindly_check_your_email
           });
           navigation.navigate('CLogin', {
             type: route.params,
@@ -80,10 +81,10 @@ const Registration = ({ navigation, route }) => {
         // });
       })
       .catch(error => {
-        // console.log('Error', error);
-        Toast.show({
-          type: 'error',
-          text1: 'Error',
+        console.log('Error', error);
+        JToast({
+          type: 'danger',
+         text1: store.lang.eror,
           text2: error.response && error.response.data,
         });
         setLoader(false);
@@ -124,8 +125,8 @@ const Registration = ({ navigation, route }) => {
             .max(100, 'First Name must be at most 100 characters long')
             .transform(value => value.trim())
             .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'First Name must contain at least 1 alphabet character and can include English, Urdu, Arabic, and spaces')
-            .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the First Name')
-            .required('First Name is a required field'),
+            .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the First Name'),
+            // .required('First Name is a required field'),
           last_name: yup
             .string()
             .min(3, 'Last Name Must be at least 3 characters')
@@ -138,7 +139,11 @@ const Registration = ({ navigation, route }) => {
             .string()
             .min(3, 'Company Name Must be at least 3 characters')
             .max(100, 'Company Name must be at most 100 characters long')
-            .matches(/^[A-Za-z0-9]*[A-Za-z][A-Za-z0-9]*$/, 'Company Name must contain at least 1 alphabet character')
+            .transform(value => value.trim())
+            .matches(
+              /^[A-Za-z\u0600-\u06FF\s]*[A-Za-z\u0600-\u06FF][A-Za-z\u0600-\u06FF\s\d\W]*$/,
+              'Company Name must only contain alphabetic characters'
+            )
             .required('Company Name is a required field'),
           email: yup
             .string()

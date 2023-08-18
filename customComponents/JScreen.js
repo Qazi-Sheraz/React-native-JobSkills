@@ -16,6 +16,7 @@ import JButton from './JButton';
 import JErrorText from './JErrorText';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import NetInfo from '@react-native-community/netinfo';
+import FlashMessage from 'react-native-flash-message';
 export default function JScreen({
   children,
   style,
@@ -49,6 +50,7 @@ export default function JScreen({
         flex: 1,
         backgroundColor: '#ffffff',
       }}>
+         {/* <FlashMessage position="top" /> */}
         <StatusBar backgroundColor={colors.purple[0]}/>
       {headerShown && header}
 
