@@ -153,6 +153,7 @@ const Job = () => {
                 height: heightPercentageToDP(6),
                 paddingTop: RFPercentage(0.3),
                 backgroundColor: 'transparent',
+                
               }}>
               <JButton
                 style={{ paddingHorizontal: RFPercentage(5) }}

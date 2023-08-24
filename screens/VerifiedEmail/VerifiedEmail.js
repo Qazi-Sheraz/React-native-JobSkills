@@ -65,14 +65,15 @@ const VerifiedEmail = ({ route, navigation }) => {
           JToast({
             type: 'success',
             text1: store.lang.success,
-            text2: result.message,
+            text2: store.lang.code_is_verified,
+            
           });
           navigation.navigate('LoginPassword', { email: params?.email, type: type })
         } else {
           JToast({
             type: 'danger',
             text1: store.lang.eror,
-            text2: result.message,
+            text2: store.lang.your_OTP_is_wrong,
           });
 
         }
@@ -110,7 +111,7 @@ const VerifiedEmail = ({ route, navigation }) => {
           JToast({
             type: 'success',
             text1: store.lang.success,
-            text2: result.message,
+            text2: store.lang.kindly_check_your_email_address,
           });
         } else {
           JToast({

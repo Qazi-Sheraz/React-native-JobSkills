@@ -234,7 +234,7 @@ useEffect(() => {
                 favouriteData={store.favouriteList}
                 jobId={item.id}
                 onPress={() =>
-                  navigation.navigate('JobDetails', {
+                  navigation.navigate('CJobDetails', {
                     id: item.job_id,
                   })
                 }

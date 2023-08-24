@@ -45,6 +45,7 @@ import { _saveToFavoriteList } from '../../functions/Candidate/BottomTab';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import JApplyJob from '../../customComponents/JApplyJob';
 import { JToast } from '../../functions/Toast';
+import { Share } from 'react-native';
 
 const JobDetails = ({ route }) => {
   const store = useContext(StoreContext);
@@ -298,8 +299,25 @@ const JobDetails = ({ route }) => {
   useEffect(() => {
     _getjobDetail();
   }, []);
+// console.log('jobUrl')
+const id =store.jobDetail?.job_id;
+console.log(id)
+  const shareItem = async () => {
+    try {
+      await Share.share({
+        title:'Job Url',
+        message: `https://dev.jobskills.digital/${store.jobDetail?.company_name}/job-details/${id}/${store.jobDetail?.job_title}`,
+      });
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+  const jobExpiryDate = moment(store.jobDetail?.job_expiry_date, 'DD,MM,YYYY');
+  const currentDate = moment(); // Current date and time
 
-
+  // Compare the job expiry date with the current date and time
+  const isExpired = jobExpiryDate.isBefore(currentDate, 'day');
+// console.log('isExpired',isExpired)
   const data = [
     {
       heading: `${store.lang.job_category} :`,
@@ -434,7 +452,7 @@ const JobDetails = ({ route }) => {
                         key={index}
                         onSelect={() => {
                           item == store.lang.share_job ?
-                            refRBSheet.current.open() :
+                            shareItem() :
                             setModalVisible1(true)
                           setHeading(item)
                         }}>
@@ -482,10 +500,7 @@ const JobDetails = ({ route }) => {
               <JText style={{ fontSize: RFPercentage(1.8), color: '#ffff' }}>
                 {'\r'}
                 {store.lang.date_posted}
-                {moment(
-                  store.jobDetail.job_publish_date,
-                  'DD,MM,YYYY',
-                ).format('DD MMM,YYYY')}
+                {moment(store.jobDetail.job_publish_date,'DD,MM,YYYY',).format('DD MMM,YYYY')}
               </JText>
             </JRow>
             <JRow>
@@ -519,10 +534,7 @@ const JobDetails = ({ route }) => {
 
                 <JText style={styles.txt}>
                   {store.lang.expire_on}{' '}
-                  {moment(
-                    store.jobDetail?.job_expiry_date,
-                    'DD,MM,YYYY',
-                  ).format('DD MMM,YYYY')}
+                  {moment(store.jobDetail?.job_expiry_date,'DD,MM,YYYY').format('DD MMM,YYYY')}
                 </JText>
               </JRow>
               <JText style={styles.txt}>
@@ -640,6 +652,7 @@ const JobDetails = ({ route }) => {
           </JScrollView>
 
           <>
+          {console.log('status',!loader&& status.message)}
             <View style={styles.bottomV}>
               {store.token?.user?.owner_type.includes('Candidate') === false ?
                 <JButton
@@ -655,7 +668,7 @@ const JobDetails = ({ route }) => {
                   children={store.lang.add_candidate}
                 /> :
                 <>
-                  {status.success == false && status.message === '3' ? (
+                  {status.message == '4' ? (
                     <JRow
                       style={{
                         paddingHorizontal: RFPercentage(1),
@@ -676,7 +689,7 @@ const JobDetails = ({ route }) => {
                         {store.lang.click_here}
                       </JText>
                     </JRow>
-                  ) : status.success == false && status.message === '2' ? (
+                  ) : status.message == '3' ? (
                     <JRow
                       style={{
                         paddingHorizontal: RFPercentage(1),
@@ -695,7 +708,7 @@ const JobDetails = ({ route }) => {
                         {store.lang.click_here}
                       </JText>
                     </JRow>
-                  ) : status.success == false && status.message === '1'|| status?.data?.isApplied == true ? (
+                  ) : status.message == '2' ? (
                     <JRow
                       style={{
                         paddingHorizontal: RFPercentage(1),

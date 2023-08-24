@@ -83,7 +83,8 @@ export default function SplashScreen() {
   }, []);
   return (
     <JGradientScreen style={styles.container}>
-      <StatusBar backgroundColor={colors.purple[0]} />
+      
+      {/* <StatusBar backgroundColor={'transparent'} translucent/> */}
       <Image
         source={require('../../assets/images/logo/logo.png')}
         style={{

@@ -167,14 +167,14 @@ const Login = ({navigation, route}) => {
           if (result == "Error Incorrect Password!" || result== "Incorrect Password!") {
             JToast({
               type: 'danger',
-              text1: store.lang.eror,
-              text2: result,
+              // text1: store.lang.eror,
+              text1: result,
             });
           } else if (result == 'Error Incorrect Email!' || result =="Incorrect Email") {
             JToast({
               type: 'danger',
-              text1: store.lang.eror,
-              text2: result,
+              // text1: store.lang.eror,
+              text1: result,
             });
           } else if  (result == 'Please verify your Email!') {
             _verifyEmail(values.email);
@@ -215,8 +215,8 @@ const Login = ({navigation, route}) => {
         } else {
           JToast({
             type: 'success',
-            text1: result,
-            text2:store.lang.kindly_check_your_email_address,
+            // text: result,
+            text1:store.lang.kindly_check_your_email_address,
           });
         }
       })
@@ -357,6 +357,7 @@ const Login = ({navigation, route}) => {
             </JRow>
 
             <JButton
+            disabled={loader?true:false}
               isValid={isValid}
               style={{marginTop: RFPercentage(3)}}
               onPress={() => handleSubmit()}

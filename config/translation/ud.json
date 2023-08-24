@@ -437,13 +437,16 @@
     "register_error": "رجسٹر میں خرابی",
     "kindly_check_your_email": "برائے مہربانی اپنا ای میل چیک کریں",
     "cannot_proceed_your_request": "اس وقت آپ کی درخواست کو آگے نہیں بڑھا سکتا۔ دوبارہ کوشش کریں!",
-    "kindly_check_your_email_address": "برائے مہربانی اپنا ای میل پتہ چیک کریں اور اپنے ای میل ایڈریس کی تصدیق کریں",
+    "kindly_check_your_email_address": "توثیق کے لیے براہ کرم اپنا ای میل چیک کریں",
     "kindly_register_with_that_email_address": "برائے مہربانی اس ای میل ایڈریس کے ساتھ رجسٹر کریں",
     "no_email_found": "کوئی ای میل نہیں ملا",
     "an_error_occurred_please_try_again_later": "ایک خرابی آگئی. براہ کرم کچھ دیر بعد کوشش کریں",
     "error_while_uploading_CV": "CV اپ لوڈ کرتے وقت خرابی",
-    "error_while_getting_data": "ڈیٹا حاصل کرتے وقت خرابی"
-   
+    "error_while_getting_data": "ڈیٹا حاصل کرتے وقت خرابی",
+    "code_is_verified": "کوڈ تصدیق شدہ ہے",
+    "your_OTP_is_wrong": "آپ کا OTP غلط ہے"
+    
+    
     
     
     

@@ -437,13 +437,16 @@
      "register_error": "خطأ في التسجيل",
      "kindly_check_your_email": "يرجى التحقق من البريد الإلكتروني الخاص بك",
      "cannot_proceed_your_request": "لا يمكن متابعة طلبك في هذه اللحظة. حاول مرة أخرى!",
-     "kindly_check_your_email_address": "يرجى التحقق من عنوان البريد الإلكتروني الخاص بك والتحقق من عنوان البريد الإلكتروني الخاص بك",
+     "kindly_check_your_email_address": "يرجى التحقق من بريدك الإلكتروني للتحقق",
      "kindly_register_with_that_email_address": "يرجى التسجيل باستخدام عنوان البريد الإلكتروني هذا",
      "no_email_found": "لم يتم العثور على بريد إلكتروني",
      "an_error_occurred_please_try_again_later": "حدث خطأ. الرجاء معاودة المحاولة في وقت لاحق",
      "error_while_uploading_CV": "خطأ أثناء تحميل السيرة الذاتية",
-     "error_while_getting_data": "خطأ أثناء الحصول على البيانات"
-     
+     "error_while_getting_data": "خطأ أثناء الحصول على البيانات",
+     "code_is_verified": "تم التحقق من الرمز",
+     "your_OTP_is_wrong": "OTP الخاص بك خاطئ"
+    
+
     
      
     

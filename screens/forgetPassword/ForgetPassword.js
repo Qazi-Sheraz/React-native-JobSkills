@@ -49,7 +49,7 @@ const ForgetPassword = () => {
             JToast({
               type: 'success',
               text1: store.lang.success,
-              text2: result.message,
+              text2: store.lang.kindly_check_your_email_address,
             });
              navigation.navigate('CVerifiedEmail',{email: values.email ,type: type})
            } else {
@@ -114,7 +114,7 @@ const ForgetPassword = () => {
             email: yup
               .string()
               .min(0, 'Email address cannot be empty')
-              .max(255, 'Email address must be at most 255 characters long')
+              .max(100, 'Email address must be at most 100 characters long')
               .required('Email is a required field'),
           })}
       >

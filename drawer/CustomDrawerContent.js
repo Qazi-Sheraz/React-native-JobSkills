@@ -27,11 +27,12 @@ import JRow from '../customComponents/JRow';
 import { JToast } from '../functions/Toast';
 import JIcon from '../customComponents/JIcon';
 import FlashMessage from 'react-native-flash-message';
+import { useState } from 'react';
 
 function CustomDrawerContent(props) {
   const store = useContext(StoreContext);
   const user = store.token?.user;
-
+const[loader, setLoader]=useState(false);
   const _navigateToScreen = index => {
     // props.navigation.closeDrawer()
     index == 0
@@ -46,11 +47,14 @@ function CustomDrawerContent(props) {
               ? props.navigation.navigate('DHelpCenter')
               : AsyncStorage.removeItem('@login')
                 .then(res => {
+                  setLoader(true)
                   JToast({
                     type: 'success',
                     text1: store.lang.logout_successfully,
                   });
                   store.setToken({});
+                  // console.log('object')
+                  setLoader(false)
                 })
                 .catch(error => {
                   JToast({
@@ -58,6 +62,7 @@ function CustomDrawerContent(props) {
                     text1: store.lang.eror,
                     text2: 'Error while removing token',
                   });
+                  setLoader(false)
                 });
   };
 
@@ -117,12 +122,14 @@ function CustomDrawerContent(props) {
               : index == 5
                 ? AsyncStorage.removeItem('@login')
                   .then(res => {
+                    setLoader(true)
                     if (res !== null) {
                       JToast({
                         type: 'success',
                         text1: store.lang.logout_successfully,
                       });
                       store.setToken({});
+                      setLoader(false)
                     }
                   })
                   .catch(error => {
@@ -131,6 +138,7 @@ function CustomDrawerContent(props) {
                       text1: store.lang.eror,
                       text2: 'Error while removing token',
                     });
+                    setLoader(false)
                   })
                 : null;
   };
@@ -237,7 +245,7 @@ function CustomDrawerContent(props) {
 
             {getDrawerItems().map((item, index) => (
               <JRow
-                disabled={false}
+              disabled={loader? true:false}
                 onPress={() => _navigateToScreen(index)}
                 style={{
                   marginVertical: RFPercentage(1.7),
@@ -315,7 +323,7 @@ function CustomDrawerContent(props) {
 
             {getDrawerItems().map((item, index) => (
               <JRow
-                disabled={false}
+                disabled={loader? true:false}
                 onPress={() => _EnavigateToScreen(index)}
                 style={{
                   marginVertical: RFPercentage(1.7),

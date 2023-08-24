@@ -14,7 +14,7 @@ export default function JEmpty({
   imgWidth = RFPercentage(75 / 2),
   tintColor,
   resizeMode = 'contain',
-  height = heightPercentageToDP(80),
+  height = heightPercentageToDP(75),
   msg,
 }) {
   const store=useContext(StoreContext);

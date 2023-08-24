@@ -1,4 +1,4 @@
-import {StyleSheet, Image, View} from 'react-native';
+import {StyleSheet, Image, View, StatusBar} from 'react-native';
 import React from 'react';
 import JGradientScreen from '../../customComponents/JGradientScreen';
 import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen';
@@ -52,7 +52,7 @@ useEffect(() => {
   return (
     
     <JGradientScreen style={{justifyContent: 'space-between'}}>
-      
+      {/* <StatusBar backgroundColor={'transparent'} translucent/> */}
       <View style={styles.logo}>
         <Image
           source={require('../../assets/images/logo/logo.png')}

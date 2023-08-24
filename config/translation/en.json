@@ -444,13 +444,16 @@
     "error_while_saving_data": "Error while saving data",
     "register_error": "Register Error",
     "kindly_check_your_email": "Kindly check your Email",
-    "kindly_check_your_email_address": "Kindly check your email address and verify your email address",
+    "kindly_check_your_email_address": "Kindly check your email for verification",
     "kindly_register_with_that_email_address": "Kindly register with that email address",
     "cannot_proceed_your_request": "Cannot proceed your request at this moment.Try Again!",
     "no_email_found": "No Email Found",
     "an_error_occurred_please_try_again_later": "An error occurred. Please try again later",
     "error_while_uploading_CV": "Error while uploading CV",
-    "error_while_getting_data": "Error while getting Data"
+    "error_while_getting_data": "Error while getting Data",
+    "code_is_verified": "Code is verified",
+    "your_OTP_is_wrong": "Your OTP is wrong"
+    
      
     
 

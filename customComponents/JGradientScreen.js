@@ -1,6 +1,7 @@
-import {StyleSheet, ImageBackground, SafeAreaView} from 'react-native';
+import {StyleSheet, ImageBackground, SafeAreaView, StatusBar} from 'react-native';
 import React from 'react';
 import LinearGradient from 'react-native-linear-gradient';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 
 export default function JGradientScreen({
   containerStyle,
@@ -8,8 +9,12 @@ export default function JGradientScreen({
   style,
   background = true,
 }) {
+
+  
+
   return (
     <SafeAreaView style={[styles.container, containerStyle]}>
+      <StatusBar backgroundColor={'transparent'} translucent />
       <ImageBackground
         style={styles.imageBackground}
         source={
@@ -36,9 +41,10 @@ export default function JGradientScreen({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    
   },
   imageBackground: {
-    width: '100%',
+    // width: '100%',
     flex: 1,
   },
   gradient: {

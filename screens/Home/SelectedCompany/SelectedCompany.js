@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Linking,
   Modal,
+  Share,
 } from 'react-native';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import JScreen from '../../../customComponents/JScreen';
@@ -43,8 +44,10 @@ import JGradientHeader from '../../../customComponents/JGradientHeader';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import JInput from '../../../customComponents/JInput';
+import { useRoute } from '@react-navigation/native';
 
 function SelectedJob({ route, navigation }) {
+  const{params}=useRoute;
   const [companyData, setCompanyData] = useState({});
   const [loader, setLoader] = useState(true);
   const [loader1, setLoader1] = useState(false);
@@ -127,6 +130,17 @@ function SelectedJob({ route, navigation }) {
         setLoader1(false)
       });
   };
+  const shareItem = async () => {
+    try {
+      await Share.share({
+        title:'Company_url',
+        message: `https://dev.jobskills.digital/${companyData?.company?.company_name}`,
+      });
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+  // console.log(companyData?.company_url)
   useEffect(() => {
     _getDetail();
 
@@ -169,8 +183,10 @@ function SelectedJob({ route, navigation }) {
                       key={index}
                       onSelect={() => {
                         item == store.lang.report_to_company ? (
-                          setHeading(item), setModalVisible(true))
-                          : refRBSheet.current.open();
+                          setHeading(item), 
+                          setModalVisible(true))
+
+                          : shareItem();
                       }}>
                       <JRow>
                         {index === 0 ? (
@@ -210,13 +226,13 @@ function SelectedJob({ route, navigation }) {
                 width: RFPercentage(4),
                 marginHorizontal: RFPercentage(1),
               }}
-              source={{ uri: companyData.company.company_url }}
+              source={{ uri: companyData?.company?.company_url }}
             />
             <JText
               fontWeight={headingWeight.weight}
               fontSize={headingWeight.size}
               fontColor={colors.white[0]}>
-              {companyData.company?.company_name}
+              {companyData?.company?.company_name}
             </JText>
           </JRow>
           {apiLoader ? (
@@ -235,7 +251,7 @@ function SelectedJob({ route, navigation }) {
           ) : (
             <TouchableOpacity
               onPress={() =>
-                _saveToFollowing(store, setApiLoader, companyData.company?.id)
+                _saveToFollowing(store, setApiLoader, companyData?.company?.id)
               }
               style={{
                 justifyContent: 'center',
@@ -246,7 +262,7 @@ function SelectedJob({ route, navigation }) {
               }}>
               <JText fontColor={colors.white[0]} fontSize={simpleText}>
                 {store.followingList.some(
-                  item => item.company_id === companyData.company?.id,
+                  item => item?.company_id === companyData?.company?.id,
                 )
                   ? store.lang.followed
                   : store.lang.follow}
@@ -351,7 +367,7 @@ function SelectedJob({ route, navigation }) {
                 favouriteData={store.favouriteList}
                 jobId={item.id}
                 onPress={() =>
-                  navigation.navigate('JobDetails', {
+                  navigation.navigate('CJobDetails', {
                     id: item.job_id,
                   })
                 }
@@ -481,7 +497,7 @@ function SelectedJob({ route, navigation }) {
           {/* <Pressable style={{height:'15%',width:'100%'}} onPress={()=> setModalVisible(!modalVisible)}/> */}
         </View>
       </Modal>
-      <RBSheet
+      {/* <RBSheet
         ref={refRBSheet}
         closeOnDragDown={true}
         closeOnPressMask={false}
@@ -520,7 +536,7 @@ function SelectedJob({ route, navigation }) {
             ),
           )}
         </JRow>
-      </RBSheet>
+      </RBSheet> */}
     </JScreen>
   );
 }

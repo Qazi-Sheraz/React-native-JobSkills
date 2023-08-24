@@ -152,7 +152,7 @@ function AppliedJobs({ navigation }) {
             renderItem={({ item }) => (
               <JJobTile
                 onPress={() =>
-                  navigation.navigate('JobDetails', {
+                  navigation.navigate('CJobDetails', {
                     id: item.job_unique_id,
                     status_id: item.status_id,
                   })

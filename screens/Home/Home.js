@@ -136,7 +136,7 @@ function Home({navigation}) {
                 favouriteData={store.favouriteList}
                 jobId={data?.featuredJobs[0]?.id}
                 onPress={() =>
-                  navigation.navigate('JobDetails', {
+                  navigation.navigate('CJobDetails', {
                     id: data?.featuredJobs[0]?.job_id,
                   })
                 }
@@ -164,12 +164,13 @@ function Home({navigation}) {
                 onPress={() =>
                   navigation.navigate('CSelectedCompany', {
                     id: data?.featuredCompanies[0]?.unique_id,
+                    c_name:data?.featuredCompanies[0]?.company_name,
                   })
                 }
                 onIconPress={() => alert('Icon Press')}
                 location={`${data?.featuredCompanies[0]?.city_name!==null?data?.featuredCompanies[0]?.city_name:''} ${data?.featuredCompanies[0]?.state_name!==null?data?.featuredCompanies[0]?.state_name:''} ${data?.featuredCompanies[0]?.country_name!==null?data?.featuredCompanies[0]?.country_name:'N/A'}`}
                 img={data?.featuredCompanies[0]?.company_url}
-                title={data?.featuredCompanies[0]?.company_name}
+                title={data?.featuredCompanies[0]?.full_name}
               />
             ) : (
               <JJobTile isempty={true} />
@@ -187,7 +188,7 @@ function Home({navigation}) {
                     favouriteData={store.favouriteList}
                     jobId={item.id}
                     onPress={() =>
-                      navigation.navigate('JobDetails', {
+                      navigation.navigate('CJobDetails', {
                         id: item.job_id,
                       })
                     }

@@ -16,12 +16,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect } from 'react';
 import { observer } from 'mobx-react';
 import url from '../../config/url';
-import Toast from 'react-native-toast-message';
 import RNRestart from 'react-native-restart';
 import { JToast } from '../../functions/Toast';
 
 const ChangeLanguage = () => {
-  const navigation=useNavigation();
   const [selectedLanguage, setSelectedLanguage] = useState(null);
   const store = useContext(StoreContext);
   const isFoucs = useIsFocused();
@@ -86,9 +84,9 @@ const ChangeLanguage = () => {
     if (selectedLanguage) {
       const lang = selectedLanguage;
       try {
-        await AsyncStorage.setItem('selectedLanguage', selectedLanguage);
-        store.setLang(selectedLanguage);
-        _changeLanguage(selectedLanguage);
+        await AsyncStorage.setItem('selectedLanguage', selectedLanguage)
+        store.setLang(selectedLanguage)
+        _changeLanguage(selectedLanguage)
       } catch (error) {
         console.log('Error storing language:', error);
       }
@@ -96,13 +94,13 @@ const ChangeLanguage = () => {
   };
   const getStoredLanguage = async () => {
     try {
-      const storedLanguage = await AsyncStorage.getItem('selectedLanguage');
+      const storedLanguage = await AsyncStorage.getItem('selectedLanguage')
       if (storedLanguage) {
         // Language was found in AsyncStorage, set it as the selected language
-        setSelectedLanguage(storedLanguage);
+        setSelectedLanguage(storedLanguage)
       } else {
         // Set the default language as the selected language
-        setSelectedLanguage(data.find(item => item.selected).short);
+        setSelectedLanguage(data.find(item => item.selected).short)
       }
     } catch (error) {
       console.log('Error retrieving stored language:', error);

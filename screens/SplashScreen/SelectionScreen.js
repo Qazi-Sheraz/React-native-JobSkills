@@ -28,9 +28,7 @@ export default function SelectionScreen({navigation}) {
   //   return true;
   // };
   return (
-    <JGradientScreen>
-      <StatusBar backgroundColor={colors.purple[0]} />
-      {/* <JSkip children="Skip" onPress={() => alert('Skip')} /> */}
+    <JGradientScreen >
       <View style={styles.logo}>
         <Image
           source={require('../../assets/images/logo/logo.png')}

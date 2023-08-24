@@ -35,7 +35,8 @@ function JCompanyTile({
 }) {
   const [loader, setLoader] = useState();
   const store = useContext(StoreContext);
-
+// console.log('companyId',companyId)
+// console.log('followingList',followingList)
   return isempty === true ? (
   <JChevronIcon/>
   ) : (

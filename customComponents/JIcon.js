@@ -19,88 +19,88 @@ import { RFPercentage } from 'react-native-responsive-fontsize'
 import colors from '../config/colors'
 
 export default function JIcon(
-    {
-      onPress,
-        icon,
-        name,
-        color=colors.drafted[0],
-        size=RFPercentage(2.5),
-        style
-    }
+  {
+    onPress,
+    icon,
+    name,
+    color = colors.drafted[0],
+    size = RFPercentage(2.5),
+    style
+  }
 ) {
   return (
     icon === 'an' ?
 
- 
-   <AntDesign onPress={onPress} name={name} color={color} size={size} style={style}/>
-   :
-   icon === 'en' ?
 
- 
-   <Entypo onPress={onPress} name={name} color={color} size={size} style={style}/>
-   :
-   icon === 'ev' ?
+      <AntDesign onPress={onPress} name={name} color={color} size={size} style={style} />
+      :
+      icon === 'en' ?
 
- 
-   <EvilIcons onPress={onPress} name={name} color={color} size={size} style={style}/>
-   :
 
-   icon === 'fe' ?
+        <Entypo onPress={onPress} name={name} color={color} size={size} style={style} />
+        :
+        icon === 'ev' ?
 
- 
-   <Feather onPress={onPress} name={name} color={color} size={size} style={style}/>
-   :
-   icon === 'fa' ?
 
- 
-   <FontAwesome onPress={onPress} name={name} color={color} size={size} style={style}/>
-   :  icon === 'fa5' ?
+          <EvilIcons onPress={onPress} name={name} color={color} size={size} style={style} />
+          :
 
- 
-   <FontAwesome5 onPress={onPress} name={name} color={color} size={size} style={style}/>
-   :
-   icon === 'fa5pro' ?
+          icon === 'fe' ?
 
- 
-   <FontAwesome5Pro onPress={onPress} name={name} color={color} size={size} style={style}/>
-   :
-   icon === 'ft' ?
 
- 
-   <Fontisto onPress={onPress} name={name} color={color} size={size} style={style}/>
-   :
-   icon === 'fd' ?
+            <Feather onPress={onPress} name={name} color={color} size={size} style={style} />
+            :
+            icon === 'fa' ?
 
- 
-   <Foundation onPress={onPress} name={name} color={color} size={size} style={style}/>
-   :
 
-   icon === 'io' ?
+              <FontAwesome onPress={onPress} name={name} color={color} size={size} style={style} />
+              : icon === 'fa5' ?
 
- 
-   <Ionicons onPress={onPress} name={name} color={color} size={size} style={style}/>
-   :
-   icon === 'ma' ?
 
- 
-   <MaterialCommunityIcons onPress={onPress} name={name} color={color} size={size} style={style}/>
-   :
-   icon === 'mi' ?
+                <FontAwesome5 onPress={onPress} name={name} color={color} size={size} style={style} />
+                :
+                icon === 'fa5pro' ?
 
- 
-   <MaterialIcons onPress={onPress} name={name} color={color} size={size} style={style}/>
-   :
-   icon === 'oc' ?
 
- 
-   <Octicons onPress={onPress} name={name} color={color} size={size} style={style}/>
-   :
-   icon === 'sm' ?
+                  <FontAwesome5Pro onPress={onPress} name={name} color={color} size={size} style={style} />
+                  :
+                  icon === 'ft' ?
 
- 
-   <SimpleLineIcons onPress={onPress} name={name} color={color} size={size} style={style}/>
-   :
-   <Zocial onPress={onPress} name={name} color={color} size={size} style={style}/>
+
+                    <Fontisto onPress={onPress} name={name} color={color} size={size} style={style} />
+                    :
+                    icon === 'fd' ?
+
+
+                      <Foundation onPress={onPress} name={name} color={color} size={size} style={style} />
+                      :
+
+                      icon === 'io' ?
+
+
+                        <Ionicons onPress={onPress} name={name} color={color} size={size} style={style} />
+                        :
+                        icon === 'ma' ?
+
+
+                          <MaterialCommunityIcons onPress={onPress} name={name} color={color} size={size} style={style} />
+                          :
+                          icon === 'mi' ?
+
+
+                            <MaterialIcons onPress={onPress} name={name} color={color} size={size} style={style} />
+                            :
+                            icon === 'oc' ?
+
+
+                              <Octicons onPress={onPress} name={name} color={color} size={size} style={style} />
+                              :
+                              icon === 'sm' ?
+
+
+                                <SimpleLineIcons onPress={onPress} name={name} color={color} size={size} style={style} />
+                                :
+                                <Zocial onPress={onPress} name={name} color={color} size={size} style={style} />
 
 
   )

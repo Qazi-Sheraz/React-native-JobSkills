@@ -7,7 +7,8 @@ export const JToast = ({
   type = 'success',
   text1,
   text2,
-  visibilityTime = 1500,
+  animationDuration=100,
+ 
 }) => {
   // Toast.show({
   //   type: type,
@@ -17,8 +18,10 @@ export const JToast = ({
   // });
  
   showMessage({
+    animationDuration:animationDuration,
     message: text1,
     description: text2,
+    // autoHide:autoHide,
     // backgroundColor:'white',
     // icon: props => <Image source={require("../assets/images/gradient/bg_splash.jpeg")} {...props} />,
     type: type,

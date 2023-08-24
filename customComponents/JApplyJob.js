@@ -47,17 +47,17 @@ const JApplyJob = ({token, jobId, id, setStatus, status}) => {
 
   const resumes = [];
   // console.log('Resume', status.data.resumes);
-  if (status?.success !== true && loader === false) {
+  if (status?.success !== true && loader === false ) {
     status.data &&
-      Object.keys(status.data.resumes).map((item, index) => {
+      Object.keys(status.data?.resumes).map((item, index) => {
         resumes.push({id: item, name: status.data.resumes[item]});
       });
   }
 
-  // console.log('JOb ID', jobId);
+  console.log('JOb ID', resumes);
 
   // console.log('ID', id);
-  // console.log('ID', status.data);
+  console.log('ID', status.data);
 
   const _getStatus = () => {
     var myHeaders = new Headers();
@@ -83,10 +83,10 @@ const JApplyJob = ({token, jobId, id, setStatus, status}) => {
   useEffect(() => {
     _getStatus();
   }, []);
-
+// console.log('isApplied',status?.data?.isApplied)
   return (
     <>
-      {status?.success !== false && loader === false || status?.data?.isApplied == false && (
+      {loader === false && status?.data?.isApplied == false && (
         <JButton
           isValid={!loader}
           onPress={() => setModalVisible(true)}
@@ -381,7 +381,7 @@ const JApplyJob = ({token, jobId, id, setStatus, status}) => {
                       )} */}
 
                   <Pressable
-                    onPress={() => setDropDown(true)}
+                    onPress={() => {setDropDown(!dropDown)}}
                     style={{
                       borderWidth: RFPercentage(0.2),
                       width: '100%',
@@ -399,14 +399,17 @@ const JApplyJob = ({token, jobId, id, setStatus, status}) => {
                     </JText>
                   </Pressable>
                   {dropDown === true && (
-                    <View
+                    <ScrollView
+                    
                       style={{
                         position: 'absolute',
                         top: RFPercentage(15.9),
+                        height:RFPercentage(30),
                         width: '100%',
                         backgroundColor: colors.white[0],
                         zIndex: 1,
                       }}>
+
                       {resumes.map((item, index) => (
                         <Pressable
                           onPress={() => {
@@ -429,7 +432,7 @@ const JApplyJob = ({token, jobId, id, setStatus, status}) => {
                           </JText>
                         </Pressable>
                       ))}
-                    </View>
+                    </ScrollView>
                   )} 
 
                   {/* {singleFile ? (

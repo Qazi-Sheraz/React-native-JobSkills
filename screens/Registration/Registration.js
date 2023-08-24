@@ -125,8 +125,8 @@ const Registration = ({ navigation, route }) => {
             .max(100, 'First Name must be at most 100 characters long')
             .transform(value => value.trim())
             .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'First Name must contain at least 1 alphabet character and can include English, Urdu, Arabic, and spaces')
-            .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the First Name'),
-            // .required('First Name is a required field'),
+            .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the First Name')
+            .required('First Name is a required field'),
           last_name: yup
             .string()
             .min(3, 'Last Name Must be at least 3 characters')

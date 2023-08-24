@@ -73,12 +73,12 @@ function JRecentJobTile({
 // console.log()
 
 
-
+const id =item?.job_id;
   const shareItem = async () => {
     try {
       await Share.share({
-        message: item?.job_title, // The content you want to share
-        url: 'https://example.com/item', // Optional URL to share
+        message: `https://dev.jobskills.digital/${item.company_name}/job-details/${item?.job_id}/${item?.job_title}`,// The content you want to share
+        // url: `https://dev.jobskills.digital/${item?.id}/${item?.job_title}`, // Optional URL to share
         title: item?.job_title,// Optional title for the message
       });
     } catch (error) {
@@ -137,7 +137,7 @@ function JRecentJobTile({
     setStat(parseInt(item?.status_id));
   }, [item?.status_id]);
 // console.log(stat)
-
+console.log(item?.company_name)
   return isempty == true ? (
    <JNotfoundData/>
   ) : (
@@ -442,11 +442,11 @@ function JRecentJobTile({
               // // </Menu>
               <JRow
               onPress={()=>{
-                JToast({
-                  type: 'success',
-                  text1: 'Icon pressd',
-                })
-                // shareItem()
+                // JToast({
+                //   type: 'success',
+                //   text1: 'Icon pressd',
+                // })
+                shareItem()
               }}
              disabled={false}
                 style={{

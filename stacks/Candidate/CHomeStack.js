@@ -3,9 +3,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import CBottomTab from '../../screens/Home/CBottomTab';
 import CGeneralInformation from '../../screens/Home/ProfileScreen/CGeneralInformation';
 import CContactInformation from '../../screens/Home/ProfileScreen/CContactInformation';
-import Login from '../../screens/Login/Login';
-import Registration from '../../screens/Registration/Registration';
-import SelectionScreen from '../../screens/SplashScreen/SelectionScreen';
 import { StoreContext } from '../../mobx/store';
 import { observer } from 'mobx-react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -31,17 +28,20 @@ import Notification from '../../screens/Notification/Notification';
 import EAccountSetting from '../../escreen/edrawer/EAccountSetting';
 import ChangePassword from '../../screens/ChangePassword/ChangePassword';
 import ChangeLanguage from '../../screens/ChangeLanguage/ChangeLanguage';
-import JobDetails from '../../escreen/Jobs/JobDetails';
 import CSocialMediaLink from '../../screens/Home/ProfileScreen/CSocialMediaLink';
 import ESearch from '../../escreen/Jobs/ESearch';
 import Reschedule from '../../escreen/Jobs/Reschedule';
+import AuthStack from '../Auth/AuthStack';
+import JobDetails from '../../escreen/Jobs/JobDetails';
 
 const Stack = createStackNavigator();
 
 function CHomeStack({ navigation }) {
+
   const store = useContext(StoreContext);
   const [loader, setLoader] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
+
   const _getoken = token => {
     AsyncStorage.getItem(token)
       .then(res => {
@@ -60,17 +60,17 @@ function CHomeStack({ navigation }) {
   };
   useEffect(() => {
     _getoken('@login');
-
-    return () => { };
+    return () => {};
   }, []);
 
  
 
-  return loader === true ? (
+  return(
+   loader === true ? (
     <LogoScreen />
   ) : (
     <React.Fragment>
-      {store?.token?.token ? (
+      {store.token?.token ? 
         <Stack.Navigator
           screenOptions={{
             headerShown: false,
@@ -82,7 +82,7 @@ function CHomeStack({ navigation }) {
           <Stack.Screen name="CFeatureCompany" component={FeatureCompany} />
           <Stack.Screen name="CFeatureJob" component={FeatureJob} />
           <Stack.Screen name="CSelectedJob" component={SelectedJob} />
-          <Stack.Screen name="JobDetails" component={JobDetails} />
+          <Stack.Screen name="CJobDetails" component={JobDetails} />
           <Stack.Screen name="CSelectedCompany" component={SelectedCompany} />
           <Stack.Screen name="CSearch" component={CSearch} />
           <Stack.Screen name="ESearch" component={ESearch} />
@@ -118,21 +118,9 @@ function CHomeStack({ navigation }) {
           <Stack.Screen name="DJobAlert" component={JobAlert} />
           <Stack.Screen name="DHelpCenter" component={HelpCenter} />
         </Stack.Navigator>
-      ) : (
-        <Stack.Navigator
-          screenOptions={{
-            headerShown: false,
-            // gestureEnabled: false,
-          }}
-          initialRouteName={'SelectionScreen'}>
-          <Stack.Screen name="SelectionScreen" component={SelectionScreen} />
-
-          <Stack.Screen name="CLogin" component={Login} />
-          <Stack.Screen name="CRegister" component={Registration} />
-        </Stack.Navigator>
-      )}
+      :<AuthStack/>}
     </React.Fragment>
-
+  )
   );
 }
 export default observer(CHomeStack);
