@@ -48,6 +48,7 @@ import { JToast } from '../../functions/Toast';
 import { Share } from 'react-native';
 
 const JobDetails = ({ route }) => {
+
   const store = useContext(StoreContext);
   const phoneInput = useRef(null);
   const navigation = useNavigation();
@@ -300,24 +301,27 @@ const JobDetails = ({ route }) => {
     _getjobDetail();
   }, []);
 // console.log('jobUrl')
-const id =store.jobDetail?.job_id;
-console.log(id)
+// const id =store.jobDetail?.job_id;
+// console.log(id)
+const baseUrl = "https://dev.jobskills.digital";
+const id=route.params?.id;
+const companyNames = encodeURIComponent(store.jobDetail?.company_name || "");
+const jobTitle = encodeURIComponent(store.jobDetail?.job_title || "");
+// console.log(encodeURIComponent(store.jobDetail?.company_name || ""))
   const shareItem = async () => {
     try {
       await Share.share({
-        title:'Job Url',
-        message: `https://dev.jobskills.digital/${store.jobDetail?.company_name}/job-details/${id}/${store.jobDetail?.job_title}`,
+        message: `${baseUrl}/${companyNames}/job-details/${id}/${jobTitle}`,
+        // message: `https://dev.jobskills.digital/${encodeURIComponent(store.jobDetail?.company_name || "")}/job-details/${route.params?.id}/${encodeURIComponent(store.jobDetail?.job_title || "")}`,
+        
       });
     } catch (error) {
       console.error(error.message);
     }
   };
-  const jobExpiryDate = moment(store.jobDetail?.job_expiry_date, 'DD,MM,YYYY');
-  const currentDate = moment(); // Current date and time
 
-  // Compare the job expiry date with the current date and time
-  const isExpired = jobExpiryDate.isBefore(currentDate, 'day');
-// console.log('isExpired',isExpired)
+
+
   const data = [
     {
       heading: `${store.lang.job_category} :`,
@@ -494,7 +498,7 @@ console.log(id)
           <View style={{ marginTop: RFPercentage(2), width: '100%' }}>
             <JRow style={{ justifyContent: 'space-between' }}>
               <JText style={styles.headertxt}>
-                {store.jobDetail?.job_title}
+                {store.jobDetail?.job_title?.length > 25 ? store.jobDetail?.job_title?.slice(0, 25) + " . . . ." : store.jobDetail?.job_title}
               </JText>
 
               <JText style={{ fontSize: RFPercentage(1.8), color: '#ffff' }}>
@@ -505,7 +509,7 @@ console.log(id)
             </JRow>
             <JRow>
               <DEVOTEAM />
-              <JText style={styles.txt}>{store.jobDetail.company_name}</JText>
+              <JText style={styles.txt}>{store.jobDetail?.company_name}</JText>
             </JRow>
             <JRow>
               <Placeholder />
@@ -652,7 +656,7 @@ console.log(id)
           </JScrollView>
 
           <>
-          {console.log('status',!loader&& status.message)}
+          {/* {console.log('status',!loader&& status.message)} */}
             <View style={styles.bottomV}>
               {store.token?.user?.owner_type.includes('Candidate') === false ?
                 <JButton

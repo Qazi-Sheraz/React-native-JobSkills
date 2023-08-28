@@ -76,8 +76,8 @@ function CHomeStack({ navigation }) {
             headerShown: false,
             // gestureEnabled: false,
           }}
-          initialRouteName={'CHome'}>
-          <Stack.Screen name="CHome" component={CBottomTab} />
+          initialRouteName={'Home'}>
+          <Stack.Screen name="Home" component={CBottomTab} />
           <Stack.Screen name="CAllJobs" component={AllJobs} />
           <Stack.Screen name="CFeatureCompany" component={FeatureCompany} />
           <Stack.Screen name="CFeatureJob" component={FeatureJob} />

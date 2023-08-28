@@ -33,9 +33,9 @@ const Reschedule = () => {
     const [loader, setLoader] = useState(true)
     const [error, setError] = useState(false);
 
-    console.log('details', details?.start_time)
-    console.log('jobID', params.jobID)
-    console.log('cId', params.cID)
+    // console.log('details', details?.start_time)
+    // console.log('jobID', params.jobID)
+    // console.log('cId', params.cID)
 
     const _getScheduleDetails = () => {
         var myHeaders = new Headers();
@@ -65,7 +65,7 @@ const Reschedule = () => {
         var formdata = new FormData();
         formdata.append("candidateid", params?.cID);
         formdata.append("jobid", params?.jobID);
-        console.log(formdata)
+        // console.log(formdata)
         var requestOptions = {
             method: 'POST',
             headers: myHeaders,
@@ -116,7 +116,7 @@ const Reschedule = () => {
         formdata.append("reschedule_time", moment(values.interview_date_and_time).format('YYYY/MM/DD HH:mm'));
         formdata.append("candidateID", params?.cID);
         formdata.append("jobid", params?.jobID);
-        console.log('formdata', formdata)
+        // console.log('formdata', formdata)
         // Set up request options
         var requestOptions = {
             method: 'POST',

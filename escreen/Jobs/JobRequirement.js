@@ -78,7 +78,7 @@ const JobRequirement = () => {
     formdata.append('job_expiry_date', moment(values.expiry).format('DD-MM-YYYY'));
     formdata.append('hide_salary', isEnabled);
     formdata.append('is_freelance', isEnabled1);
-console.log(formdata)
+// console.log(formdata)
 
     fetch(`${url.baseUrl}/employer/jobs/store`, {
       method: 'POST',
@@ -90,7 +90,7 @@ console.log(formdata)
       .then(response => response.json())
       .then(result => {
         if (result.success === true) {
-          console.log('new jobsssssss', result.data)
+          // console.log('new jobsssssss', result.data)
           store.AddJobEmployerData(result.data[0])
           store.AddRecentJobs(result.data[0])
           JToast({

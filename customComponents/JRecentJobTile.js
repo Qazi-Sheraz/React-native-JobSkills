@@ -73,11 +73,14 @@ function JRecentJobTile({
 // console.log()
 
 
-const id =item?.job_id;
+const id = item?.job_id;
+const companyName = encodeURIComponent(item.company_name || "");
+const jobTitle = encodeURIComponent(item?.job_title || "");
+
   const shareItem = async () => {
     try {
       await Share.share({
-        message: `https://dev.jobskills.digital/${item.company_name}/job-details/${item?.job_id}/${item?.job_title}`,// The content you want to share
+        message: `https://dev.jobskills.digital/${companyName}/job-details/${id}/${jobTitle}`,// The content you want to share
         // url: `https://dev.jobskills.digital/${item?.id}/${item?.job_title}`, // Optional URL to share
         title: item?.job_title,// Optional title for the message
       });
@@ -137,7 +140,7 @@ const id =item?.job_id;
     setStat(parseInt(item?.status_id));
   }, [item?.status_id]);
 // console.log(stat)
-console.log(item?.company_name)
+// console.log(item?.company_name)
   return isempty == true ? (
    <JNotfoundData/>
   ) : (
@@ -166,7 +169,7 @@ console.log(item?.company_name)
               }}>
               <TouchableOpacity
                 onPress={() =>
-                  navigation.navigate('JobDetails', {id: item?.job_id,jid:item?.id})
+                  navigation.navigate('CJobDetails', {id: item?.job_id,jid:item?.id})
                 }
                 style={{
                   // height: RFPercentage(12),

@@ -52,7 +52,7 @@ const Registration = ({ navigation, route }) => {
     fetch('https://dev.jobskills.digital/api/users/register', requestOptions)
       .then(response => response.json())
       .then(result => {
-        console.log(result);
+        // console.log(result);
         // console.log('Response', JSON.stringify(response.token));
         if (result.success == false) {
           JToast({

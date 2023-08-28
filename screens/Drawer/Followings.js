@@ -6,9 +6,7 @@ import {StoreContext} from '../../mobx/store';
 import {observer} from 'mobx-react';
 import JJobTile from '../../customComponents/JJobTile';
 import {RFPercentage} from 'react-native-responsive-fontsize';
-
 import colors from '../../config/colors';
-
 import JSearchInput from '../../customComponents/JSearchInput';
 import CLFavouriteJob from '../../loaders/Candidate/FavouriteJob/CLFavouriteJob';
 import JEmpty from '../../customComponents/JEmpty';
@@ -81,18 +79,19 @@ function Followings({navigation}) {
             ListEmptyComponent={() => <JEmpty /> }
             showsVerticalScrollIndicator={false}
             renderItem={({item}) => (
+             
               <JCompanyTile
-                onPress={() =>
-                  navigation.navigate('CSelectedCompany', {
-                    id: item.company_unique_id,
-                  })
-                }
+                onPress={() =>{
+                  navigation.navigate('CSelectedCompany',{id: item?.company_unique_id,  c_name:item.company_name})
+                  
+                }}
                 containerStyle={{marginTop: RFPercentage(1)}}
                 followingList={store.followingList}
-                companyId={item.company_id}
+                companyId={item?.company_id}
                 location={`${item?.city_name!==null?item?.city_name:''} ${item?.state_name!==null?item?.state_name:''} ${item?.country_name!==null?item?.country_name:'N/A'}`}
-                img={item.company_url}
-                title={item.company_name?item.company_name:item.employer_name}
+                img={item?.company_url}
+                title={item?.company_name}
+                // ?item.company_name:item.employer_name}
               />
             )}
             keyExtractor={data => data.id}

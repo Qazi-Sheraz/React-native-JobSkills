@@ -1,33 +1,23 @@
 const config = {
-   
+
   screens: {
-    CHomeStack: {
+    HomeStack: {
       screens: {
         CJobDetails: {
-          path: '/:company_name/job-details/:id/:job_title',
-        },
+          path: '/:companyNames/job-details/:id/:job_title',
+        }, 
         CSelectedCompany: {
-          path: 'chome/:company_name',
+          path: '/:companyName',
         },
       },
     },
-
-
-    EHomeStack: {
-      screens: {
-        JobDetails: {
-          path: ':company_name/job-details/:id/:job_title',
-  
-        },
-      },
     },
-  },
-  
+
 };
 
 export const linking = {
   // prefixes: ['jobskills://'],
-  prefixes: [ 'https://dev.jobskills.digital'],
+  prefixes: ['https://dev.jobskills.digital'],
   config,
-  
+
 };

@@ -138,7 +138,7 @@ const Job = () => {
                         setUpdate={setUpdate}
                         onSelect={() => setModalVisible(true)}
                         onPress={() => {
-                          navigation.navigate('JobDetails', { id: item.job_id, jid: item.id })
+                          navigation.navigate('CJobDetails', { id: item.job_id, jid: item.id })
                         }}
                         image={false}
                         item={item}

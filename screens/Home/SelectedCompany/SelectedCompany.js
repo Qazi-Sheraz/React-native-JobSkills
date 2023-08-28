@@ -47,7 +47,7 @@ import JInput from '../../../customComponents/JInput';
 import { useRoute } from '@react-navigation/native';
 
 function SelectedJob({ route, navigation }) {
-  const{params}=useRoute;
+  const{params}=useRoute();
   const [companyData, setCompanyData] = useState({});
   const [loader, setLoader] = useState(true);
   const [loader1, setLoader1] = useState(false);
@@ -130,11 +130,17 @@ function SelectedJob({ route, navigation }) {
         setLoader1(false)
       });
   };
+
+
+  // console.log('paramsssss',params?.c_name);
+  const baseUrl = "https://dev.jobskills.digital";
+const companyName = encodeURIComponent(params?.c_name || "");
   const shareItem = async () => {
+
     try {
       await Share.share({
-        title:'Company_url',
-        message: `https://dev.jobskills.digital/${companyData?.company?.company_name}`,
+        // title:'Company_url',
+        message: `https://dev.jobskills.digital/${companyName}`,
       });
     } catch (error) {
       console.error(error.message);
@@ -299,7 +305,7 @@ function SelectedJob({ route, navigation }) {
             style={styles.gradient_headings}
             fontColor={colors.white[0]}
             fontSize={simpleText}>
-            {companyData.company.location}
+            {companyData?.company?.location}
           </JText>
         </JRow>
 
@@ -317,8 +323,8 @@ function SelectedJob({ route, navigation }) {
                 name="phone"
               />
               <JText fontColor={colors.white[0]} fontSize={simpleText}>
-                {companyData.company.user.phone
-                  ? companyData.company.user.phone
+                {companyData?.company?.user?.phone
+                  ? companyData?.company?.user?.phone
                   : 'N/A'}
               </JText>
             </JRow>
@@ -365,15 +371,15 @@ function SelectedJob({ route, navigation }) {
             <React.Fragment key={index}>
               <JJobTile
                 favouriteData={store.favouriteList}
-                jobId={item.id}
+                jobId={item?.id}
                 onPress={() =>
                   navigation.navigate('CJobDetails', {
-                    id: item.job_id,
+                    id: item?.job_id,
                   })
                 }
                 onIconPress={() => alert('Icon Press')}
                 type="job"
-                title={item.job_title}
+                title={item?.job_title}
                 location={`${store.lang.id == 0
                   ? item.city?.name !== null && item.city?.name
                   : item.city?.arabic_title !== null &&

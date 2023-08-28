@@ -65,7 +65,7 @@ const LangStack = () => {
       messaging()
         .getToken()
         .then(fcmToken => {
-          console.log('FCM Token -> ', fcmToken);
+          // console.log('FCM Token -> ', fcmToken);
           var formdata = new FormData();
           formdata.append("token", fcmToken);
           formdata.append("name", store.deviceName);

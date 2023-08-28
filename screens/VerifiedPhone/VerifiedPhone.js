@@ -78,7 +78,7 @@ fetch(`${url.baseUrl}/phone-code-verification`, requestOptions)
     var formdata = new FormData();
     formdata.append("phone", params?.phone);
     formdata.append("region_code",params?.region_code);
-    console.log(formdata)
+    // console.log(formdata)
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,

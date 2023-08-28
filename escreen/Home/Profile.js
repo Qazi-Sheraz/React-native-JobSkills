@@ -38,7 +38,7 @@ const Profile = () => {
   const isFoucs = useIsFocused();
   // console.log('store====>>>' , profile?.company[0]?.contact_information?.is_phone_verified);
 
-  console.log('phone',profile?.company[0]?.contact_information?.phone_number)
+  // console.log('phone',profile?.company[0]?.contact_information?.phone_number)
   const _removeToken = () => {
     AsyncStorage.removeItem('@login')
       .then(res => {
@@ -107,7 +107,7 @@ const Profile = () => {
     var formdata = new FormData();
     formdata.append("phone", profile?.company[0]?.contact_information?.phone_number);
     formdata.append("region_code",profile?.company[0]?.contact_information?.regional_code);
-    console.log('form',formdata)
+    // console.log('form',formdata)
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
@@ -117,7 +117,7 @@ const Profile = () => {
     fetch(`${url.baseUrl}/send-code`, requestOptions)
       .then(response => response.json())
       .then(result => {
-        console.log('result',result)
+        // console.log('result',result)
         JToast({
           type: 'success',
           text1: store.lang.success,

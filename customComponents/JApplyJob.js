@@ -54,10 +54,10 @@ const JApplyJob = ({token, jobId, id, setStatus, status}) => {
       });
   }
 
-  console.log('JOb ID', resumes);
+  // console.log('JOb ID', resumes);
 
   // console.log('ID', id);
-  console.log('ID', status.data);
+  // console.log('ID', status.data);
 
   const _getStatus = () => {
     var myHeaders = new Headers();

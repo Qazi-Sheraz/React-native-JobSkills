@@ -83,8 +83,8 @@ function EmployeStack({navigation}) {
             headerShown: false,
             // gestureEnabled: false,
           }}
-          initialRouteName={'EHome'}>
-          <Stack.Screen name="EHome" component={EBottomTab} />
+          initialRouteName={'Home'}>
+          <Stack.Screen name="Home" component={EBottomTab} />
           <Stack.Screen name="JToastr" component={JToastr} />
           <Stack.Screen name="Assessments" component={Assessments} />
           <Stack.Screen name="CAllJobs" component={AllJobs} />
@@ -94,7 +94,7 @@ function EmployeStack({navigation}) {
           <Stack.Screen name="CSelectedCompany" component={SelectedCompany} />
           <Stack.Screen name="ESearch" component={ESearch} />
           <Stack.Screen name="CFilter" component={CFilter} />
-          <Stack.Screen name="JobDetails" component={JobDetails} />
+          <Stack.Screen name="CJobDetails" component={JobDetails} />
           <Stack.Screen name="AddNew_Job" component={AddNew_Job} />
           <Stack.Screen name="JobPreference" component={JobPreference} />
           <Stack.Screen name="JobRequirement" component={JobRequirement} />

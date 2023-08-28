@@ -29,7 +29,7 @@ export default function MyDrawer() {
               candidate_id: remoteMessage.data && remoteMessage.data?.candidate_id,
             });}
             else{
-              navigation.navigate('JobDetails', {
+              navigation.navigate('CJobDetails', {
                 id: remoteMessage.data &&remoteMessage.data?.job_id,
               });
             
@@ -54,7 +54,7 @@ export default function MyDrawer() {
             candidate_id: remoteMessage.data && remoteMessage.data?.candidate_id,
           });}
           else{
-            navigation.navigate('JobDetails', {
+            navigation.navigate('CJobDetails', {
               id: remoteMessage.data &&remoteMessage.data?.job_id,
             });
           
@@ -92,7 +92,7 @@ export default function MyDrawer() {
             candidate_id: remoteMessage.data && remoteMessage.data?.candidate_id,
           });}
           else{
-            navigation.navigate('JobDetails', {
+            navigation.navigate('CJobDetails', {
               id: remoteMessage.data &&remoteMessage.data?.job_id,
             });
           
@@ -147,7 +147,7 @@ export default function MyDrawer() {
                 candidate_id: remoteMessage.data && remoteMessage.data?.candidate_id,
               });}
               else{
-                navigation.navigate('JobDetails', {
+                navigation.navigate('CJobDetails', {
                   id: remoteMessage.data &&remoteMessage.data?.job_id,
                 });
               }
@@ -204,9 +204,9 @@ export default function MyDrawer() {
                 headerShown: false,
                 // drawerPosition: store.lang.id == 0 ? 'left' : 'right',
               }}
-              initialRouteName={'CHomeStack'}
+              initialRouteName={'HomeStack'}
               drawerContent={props => <CustomDrawerContent {...props} />}>
-              <Drawer.Screen name="CHomeStack" component={CHomeStack} />
+              <Drawer.Screen name="HomeStack" component={CHomeStack} />
               {/* <Drawer.Screen name="JobDetails" component={JobDetails} /> */}
 
             </Drawer.Navigator>
@@ -216,9 +216,9 @@ export default function MyDrawer() {
                 headerShown: false,
                 // drawerPosition: store.lang.id == 0 ? 'left' : 'right',
               }}
-              initialRouteName={'EHomeStack'}
+              initialRouteName={'HomeStack'}
               drawerContent={props => <CustomDrawerContent {...props} />}>
-              <Drawer.Screen name="EHomeStack" component={EmployeStack} />
+              <Drawer.Screen name="HomeStack" component={EmployeStack} />
               {/* <Drawer.Screen name="JobDetails" component={JobDetails} /> */}
             </Drawer.Navigator>
           )
