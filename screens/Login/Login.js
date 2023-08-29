@@ -164,17 +164,17 @@ const Login = ({navigation, route}) => {
           });
 
         } else {
-          if (result == "Error Incorrect Password!" || result== "Incorrect Password!") {
+          if (result == "Incorrect Password!") {
             JToast({
               type: 'danger',
               // text1: store.lang.eror,
-              text1: result,
+              text1: store.lang.incorrect_password,
             });
-          } else if (result == 'Error Incorrect Email!' || result =="Incorrect Email") {
+          } else if (result == 'Incorrect Email') {
             JToast({
               type: 'danger',
               // text1: store.lang.eror,
-              text1: result,
+              text1: store.lang.incorrect_email,
             });
           } else if  (result == 'Please verify your Email!') {
             _verifyEmail(values.email);

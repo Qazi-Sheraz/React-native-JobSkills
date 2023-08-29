@@ -7,7 +7,7 @@ const config = {
           path: '/:companyNames/job-details/:id/:job_title',
         }, 
         CSelectedCompany: {
-          path: '/:companyName',
+          path: '/:companyName/:id',
         },
       },
     },

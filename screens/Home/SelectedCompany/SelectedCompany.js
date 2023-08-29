@@ -132,15 +132,14 @@ function SelectedJob({ route, navigation }) {
   };
 
 
-  // console.log('paramsssss',params?.c_name);
   const baseUrl = "https://dev.jobskills.digital";
-const companyName = encodeURIComponent(params?.c_name || "");
+const companyName = params?.c_name?encodeURIComponent(params?.c_name || ""):encodeURIComponent(companyData?.company?.user?.first_name || "");
   const shareItem = async () => {
 
     try {
       await Share.share({
         // title:'Company_url',
-        message: `https://dev.jobskills.digital/${companyName}`,
+        message: `https://dev.jobskills.digital/${companyName}/${route.params.id}`,
       });
     } catch (error) {
       console.error(error.message);

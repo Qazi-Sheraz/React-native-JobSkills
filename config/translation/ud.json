@@ -444,7 +444,11 @@
     "error_while_uploading_CV": "CV اپ لوڈ کرتے وقت خرابی",
     "error_while_getting_data": "ڈیٹا حاصل کرتے وقت خرابی",
     "code_is_verified": "کوڈ تصدیق شدہ ہے",
-    "your_OTP_is_wrong": "آپ کا OTP غلط ہے"
+    "your_OTP_is_wrong": "آپ کا OTP غلط ہے",
+    "incorrect_email": "غلط ای میل",
+    "incorrect_password": "غلط پاس ورڈ!"
+    
+    
     
     
     

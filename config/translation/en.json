@@ -452,7 +452,9 @@
     "error_while_uploading_CV": "Error while uploading CV",
     "error_while_getting_data": "Error while getting Data",
     "code_is_verified": "Code is verified",
-    "your_OTP_is_wrong": "Your OTP is wrong"
+    "your_OTP_is_wrong": "Your OTP is wrong",
+    "incorrect_email": "Incorrect Email",
+    "incorrect_password": "Incorrect Password!"
     
      
     

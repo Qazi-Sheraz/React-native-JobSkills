@@ -444,7 +444,11 @@
      "error_while_uploading_CV": "خطأ أثناء تحميل السيرة الذاتية",
      "error_while_getting_data": "خطأ أثناء الحصول على البيانات",
      "code_is_verified": "تم التحقق من الرمز",
-     "your_OTP_is_wrong": "OTP الخاص بك خاطئ"
+     "your_OTP_is_wrong": "OTP الخاص بك خاطئ",
+     "incorrect_email": "غير صحيح البريد الإلكتروني",
+     "incorrect_password": "كلمة سر خاطئة!"
+    
+    
     
 
     

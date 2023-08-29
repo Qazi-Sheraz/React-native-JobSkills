@@ -15,6 +15,7 @@ import messaging from '@react-native-firebase/messaging';
 import DeviceInfo from 'react-native-device-info';
 import { Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import JobDetails from '../escreen/Jobs/JobDetails';
 export default function MyDrawer() {
   const navigation = useNavigation();
   useEffect(() => {
@@ -207,8 +208,7 @@ export default function MyDrawer() {
               initialRouteName={'HomeStack'}
               drawerContent={props => <CustomDrawerContent {...props} />}>
               <Drawer.Screen name="HomeStack" component={CHomeStack} />
-              {/* <Drawer.Screen name="JobDetails" component={JobDetails} /> */}
-
+              <Drawer.Screen name="CJobDetails" component={JobDetails} />
             </Drawer.Navigator>
           ) : (
             <Drawer.Navigator
@@ -219,7 +219,8 @@ export default function MyDrawer() {
               initialRouteName={'HomeStack'}
               drawerContent={props => <CustomDrawerContent {...props} />}>
               <Drawer.Screen name="HomeStack" component={EmployeStack} />
-              {/* <Drawer.Screen name="JobDetails" component={JobDetails} /> */}
+              <Drawer.Screen name="CJobDetails" component={JobDetails} />
+              
             </Drawer.Navigator>
           )
       }

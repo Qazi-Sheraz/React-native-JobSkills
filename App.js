@@ -28,9 +28,7 @@ LogBox.ignoreAllLogs();
       >
         <MenuProvider>
           <MyDrawer />
-          
           <FlashMessage position="top"  statusBarHeight={RFPercentage(3.5)} />
-
         </MenuProvider>
       </NavigationContainer>
     </StoreProvider>

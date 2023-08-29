@@ -170,7 +170,7 @@ function Home({navigation}) {
                 onIconPress={() => alert('Icon Press')}
                 location={`${data?.featuredCompanies[0]?.city_name!==null?data?.featuredCompanies[0]?.city_name:''} ${data?.featuredCompanies[0]?.state_name!==null?data?.featuredCompanies[0]?.state_name:''} ${data?.featuredCompanies[0]?.country_name!==null?data?.featuredCompanies[0]?.country_name:'N/A'}`}
                 img={data?.featuredCompanies[0]?.company_url}
-                title={data?.featuredCompanies[0]?.full_name}
+                title={data?.featuredCompanies[0]?.company_name?data?.featuredCompanies[0]?.company_name:'N/A'}
               />
             ) : (
               <JJobTile isempty={true} />

@@ -43,13 +43,11 @@ import AssessmentView from '../../escreen/edrawer/AssessmentView';
 import AuthStack from '../Auth/AuthStack';
 import Reschedule from '../../escreen/Jobs/Reschedule';
 import JToastr from '../../customComponents/JToastr';
-
 const Stack = createStackNavigator();
 
 function EmployeStack({navigation}) {
   const store = useContext(StoreContext);
   const [loader, setLoader] = useState(true);
-
   const _getoken = token => {
     AsyncStorage.getItem(token)
       .then(res => {
@@ -66,6 +64,8 @@ function EmployeStack({navigation}) {
         setLoader(false);
       });
   };
+  
+  
   useEffect(() => {
     _getoken('@login');
 
