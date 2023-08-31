@@ -10,6 +10,8 @@ import colors from '../../config/colors';
 import messaging from '@react-native-firebase/messaging';
 import { StoreContext } from '../../mobx/store';
 import JText from '../../customComponents/JText';
+import url from '../../config/url';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function SplashScreen() {
   const store =useContext(StoreContext)
   const requestUserPermission = async () => {
@@ -27,7 +29,38 @@ export default function SplashScreen() {
   };
   const [deviceName, setDeviceName] = useState('');
   // console.log(deviceName)
+
+  const _getlangApi =()=>{
+    var myHeaders = new Headers();
+    myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
+
+    var requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow'
+    };
+    fetch(`${url.baseUrl}/get-language`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        // console.log(result)
+        handleSave(result)
+      })
+      .catch(error => console.log('error', error));
+  };
+  const handleSave = async lang => {
+    // Switch to the selected language
+   
+       try {
+         await AsyncStorage.setItem('selectedLanguage', lang);
+         store.setLang(lang);
+        
+         console.log('lang',lang)
+       } catch (error) {
+         console.log('Error storing language:', error);
+       }
+     };
   useEffect(() => {
+    store.token?.token && _getlangApi()
     const fetchDeviceName = async () => {
 
       try {

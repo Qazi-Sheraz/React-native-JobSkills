@@ -237,7 +237,7 @@ const Profile = () => {
                   </JText>
                   {/* {console.log(profile?.company[0]?.contact_information?.regional_code+profile?.company[0]?.contact_information?.phone_number)} */}
                   <JProfileInfo
-                    title={store.lang.phone_number}
+                    title={`${store.lang.phone_number}:`}
                     text={
                       profile?.company[0]?.contact_information?.phone_number
                         && profile?.company[0]?.contact_information?.regional_code
@@ -408,8 +408,16 @@ const Profile = () => {
 
               //   // refRBSheet.current.open();
               // }}
-              isEmpty={false}
-              // icon="1"
+              isEmpty={
+                profile?.company[0]?.social_media_link?.facebook_url == null &&
+                profile?.company[0]?.social_media_link?.linkedin_url == null &&
+                profile?.company[0]?.social_media_link?.twitter_url == null
+                  ? true
+                  : false
+              }
+              // heading={store.lang.social_media_links}
+              // icon="add"
+              // emptyMsg={store.lang.social_links_not_available}
               heading={store.lang.social_media_links}
               emptyMsg={store.lang.social_links_not_available}
               children={

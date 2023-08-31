@@ -39,7 +39,7 @@ const Home = () => {
   const store = useContext(StoreContext);
   const [update, setUpdate] = useState(true);
   const [data1, setData1] = useState();
-  
+  // console.log('userInfo',store?.userInfo?.id)
   const onRefresh = useCallback(() => {
     store.setEHomeApiLoader(true);
     setTimeout(() => {

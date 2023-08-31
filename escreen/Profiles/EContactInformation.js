@@ -1,4 +1,4 @@
-import { ActivityIndicator, ScrollView, StyleSheet, Switch } from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet, Switch, View } from 'react-native';
 import React, { useState, useRef, useEffect } from 'react';
 import { observer } from 'mobx-react';
 import JInput from '../../customComponents/JInput';
@@ -22,6 +22,7 @@ import { StoreContext } from '../../mobx/store';
 import Toast from 'react-native-toast-message';
 import { _addnewJob } from '../../functions/Candidate/BottomTab';
 import { JToast } from '../../functions/Toast';
+import JRow from '../../customComponents/JRow';
 
 function EContactInformation({ refRBSheet, data, user }) {
   //   const store = useContext(StoreContext);
@@ -35,7 +36,7 @@ function EContactInformation({ refRBSheet, data, user }) {
   const phoneInput = useRef(null);
   const { params } = useRoute();
   const [phone, setPhone] = useState(params?.phone);
-  const [code, setCode] = useState(params?.region_code!==null&&params?.region_code);
+  const [code, setCode] = useState(params?.region_code !== null && params?.region_code);
 
   const regionalCodeMappings = {
     "93": "AF", // Afghanistan
@@ -276,7 +277,7 @@ function EContactInformation({ refRBSheet, data, user }) {
     var formdata = new FormData();
     formdata.append('name', values?.name);
     formdata.append('phone', phone);
-    formdata.append('region_code', code!==false?code:'966');
+    formdata.append('region_code', code !== false ? code : '966');
     formdata.append('industry_id', '2');
     formdata.append('country_id', values?.countries.id);
     formdata.append('state_id', values?.state.id);
@@ -359,8 +360,8 @@ function EContactInformation({ refRBSheet, data, user }) {
                   id: params?.city_id,
                 })
                 : '',
-            phone:params?.phone?params?.phone:'',
-            regional_code:params?.region_code?regionalCodeMappings[params?.region_code]:'',
+            phone: params?.phone ? params?.phone : '',
+            regional_code: params?.region_code ? regionalCodeMappings[params?.region_code] : '',
           }}
           onSubmit={values => {
             _contactInfo(values);
@@ -463,38 +464,47 @@ function EContactInformation({ refRBSheet, data, user }) {
                 {touched.email && errors.email && (
                   <JErrorText>{errors.email}</JErrorText>
                 )}
-
-                <PhoneInput
-                  ref={phoneInput}
-                  defaultValue={values.phone}
-                  // defaultCode={code?.cca2?code?.cca2:"SA"}
-                  defaultCode={values.regional_code ? values.regional_code : "SA"}
-                  placeholder={store.lang.phone_number}
-                  containerStyle={{
-                    width: '100%',
-                    borderBottomWidth: RFPercentage(0.1),
-                    paddingTop: 15,
-                    marginBottom: RFPercentage(2),
-                  }}
-                  textContainerStyle={{
-                    paddingVertical: 5,
-                    backgroundColor: 'transparent',
-                  }}
-                  onChangeFormattedText={(text, c) => {
-                    setFieldValue('phone', text);
-                    setFieldValue('regional_code', c);
-                  }}
-                  onChangeCountry={(e) => {
-                    setCode(e.callingCode[0])
-                  }}
-                  onChangeText={(e) => {
-                    setFieldValue(e);
-                    setPhone(e)
-                  }}
-                />
-                {touched.phone && errors.phone && (
-                  <JErrorText>{errors.phone}</JErrorText>
-                )}
+                <View>
+                  <JRow
+                    style={{
+                      marginTop: RFPercentage(2),
+                    }}>
+                    <JText fontWeight="500" fontSize={RFPercentage(2.5)}>
+                      {store.lang.phone_number}:
+                    </JText>
+                  </JRow>
+                  <PhoneInput
+                    ref={phoneInput}
+                    defaultValue={values.phone}
+                    // defaultCode={code?.cca2?code?.cca2:"SA"}
+                    defaultCode={values.regional_code ? values.regional_code : "SA"}
+                    placeholder={store.lang.enter_your_phone_number}
+                    containerStyle={{
+                      width: '100%',
+                      borderBottomWidth: RFPercentage(0.1),
+                      paddingTop: 15,
+                      marginBottom: RFPercentage(2),
+                    }}
+                    textContainerStyle={{
+                      paddingVertical: 5,
+                      backgroundColor: 'transparent',
+                    }}
+                    onChangeFormattedText={(text, c) => {
+                      setFieldValue('phone', text);
+                      setFieldValue('regional_code', c);
+                    }}
+                    onChangeCountry={(e) => {
+                      setCode(e.callingCode[0])
+                    }}
+                    onChangeText={(e) => {
+                      setFieldValue(e);
+                      setPhone(e)
+                    }}
+                  />
+                  {touched.phone && errors.phone && (
+                    <JErrorText>{errors.phone}</JErrorText>
+                  )}
+                </View>
 
                 <JSelectInput
                   containerStyle={{ marginTop: RFPercentage(2) }}

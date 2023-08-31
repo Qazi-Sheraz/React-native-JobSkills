@@ -27,6 +27,8 @@
     "password": "پاس ورڈ",
     "login_as_employee": "ملازم کے طور پر لاگ ان کریں",
     "login_as_candidate": "امیدوار کے طور پر لاگ ان کریں",
+    "register_as_employee": "بطور ملازم رجسٹر کریں",
+    "register_as_candidate": "بطور امیدوار رجسٹر کریں",
     "remember": "یاد رکھیں",
     "forgot_password": "پاس ورڈ بھول گئے ہیں؟",
     "forgot_pass": "پاسورڈ بھول گے",
@@ -117,7 +119,8 @@
     "contact_Info_not_available": "رابطے کی معلومات دستیاب نہیں ہے",
     "general_Info_not_available": "عام معلومات دستیاب نہیں ہے",
     "email_address": "ای میل اڈریس:",
-    "phone_number": "فون نمبر:",
+    "phone_number": "فون نمبر",
+    "enter_your_phone_number": "اپنا فون نمبر درج کریں",
     "company_info": "کمپنی کی معلومات",
     "company_info_not_available": "کمپنی کی معلومات دستیاب نہیں ہے",
     "social_media_links": "سوشل میڈیا لنکس",
@@ -446,7 +449,11 @@
     "code_is_verified": "کوڈ تصدیق شدہ ہے",
     "your_OTP_is_wrong": "آپ کا OTP غلط ہے",
     "incorrect_email": "غلط ای میل",
-    "incorrect_password": "غلط پاس ورڈ!"
+    "incorrect_password": "غلط پاس ورڈ!",
+    "file_size_exceeds_MB_limit": "فائل کا سائز 1 MB کی حد سے زیادہ ہے",
+    "canceled_from_single_doc_picker": "تم الإلغاء من منتقي مستند واحد"
+   
+    
     
     
     

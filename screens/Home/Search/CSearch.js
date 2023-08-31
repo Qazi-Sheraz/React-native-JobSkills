@@ -38,7 +38,7 @@ const CSearch = ({ navigation }) => {
   const [name, setName] = useState('');
 
   const store = useContext(StoreContext);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState(['']);
 
   const getData = async () => {
     try {
@@ -158,15 +158,15 @@ const CSearch = ({ navigation }) => {
                 fontSize={RFPercentage(3)}>
                 {store.lang.Recent_search}
               </JText>
-              {Array.from(new Set(store.recentSearch)).slice(0, 5).map((item, index) => (
+              {Array.from(new Set(store.recentSearch)).filter(e => e.token === store.token.token).slice(0, 5).map((item, index) => (
                 <JRecentJob
                   key={index}
                   onPress={() => {
-                    setSearch(item)
+                    setSearch(item.search)
                     // _search(item,store,false)
                     // refRBSheet.current.open();
                   }}
-                  JobName={item}
+                  JobName={item.search}
                 />
               ))}
             </>)

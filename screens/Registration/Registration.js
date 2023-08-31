@@ -27,6 +27,7 @@ import { JToast } from '../../functions/Toast';
 const Registration = ({ navigation, route }) => {
   const [loader, setLoader] = useState(false);
   const store = useContext(StoreContext);
+  console.log(route.params?.type)
   const _register = values => {
     var myHeaders = new Headers();
     myHeaders.append('Accept', 'application/json');
@@ -37,10 +38,11 @@ const Registration = ({ navigation, route }) => {
     formdata.append('password', values.password);
     formdata.append('first_name', values.first_name);
     formdata.append('last_name', values.last_name);
-    formdata.append('company_name', values.company_name);
     formdata.append('password_confirmation', values.confirmPassword);
     formdata.append('privacyPolicy', values.policy ? '1' : '0');
-    // console.log(formdata);
+    route.params?.type !== 1 &&(
+    formdata.append('company_name', values.company_name))
+    console.log(formdata);
 
     var requestOptions = {
       method: 'POST',
@@ -102,8 +104,20 @@ const Registration = ({ navigation, route }) => {
         />
       </View>
       <Formik
-        initialValues={{
-          // type: route.params.type.type,
+        initialValues={
+          route.params?.type == 1?
+          {
+          email: '',
+          password: '',
+          first_name: '',
+          last_name: '',
+          // company_name: '',
+          confirmPassword: '',
+          hide: true,
+          chide: true,
+          policy: false,
+        }
+       : {
           email: '',
           password: '',
           first_name: '',
@@ -118,7 +132,47 @@ const Registration = ({ navigation, route }) => {
           // console.log(values);
           _register(values);
         }}
-        validationSchema={yup.object().shape({
+        validationSchema={yup.object().shape(
+          route.params?.type == 1?
+          {
+          first_name: yup
+            .string()
+            .min(3, 'First Name ame Must be at least 3 characters')
+            .max(100, 'First Name must be at most 100 characters long')
+            .transform(value => value.trim())
+            .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'First Name must contain at least 1 alphabet character and can include English, Urdu, Arabic, and spaces')
+            .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the First Name')
+            .required('First Name is a required field'),
+          last_name: yup
+            .string()
+            .min(3, 'Last Name Must be at least 3 characters')
+            .max(100, 'Last Name must be at most 100 characters long')
+            .transform(value => value.trim())
+            .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'Last Name must contain at least 1 alphabet character and can include English, Urdu, Arabic, and spaces')
+            .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the Last Name')
+            .required('Last Name is a required field'),
+          
+          email: yup
+            .string()
+            .min(0, 'Email address cannot be empty')
+            .max(100, 'Email address must be at most 100 characters long')
+            .email('Must be a valid email')
+            .required('Email is a required field'),
+          password: yup
+            .string()
+            .min(8, 'Password Must be at least 8 characters')
+            .max(16, 'Password must be at most 15 characters')
+            .required('Password is a required field'),
+          confirmPassword: yup
+            .string()
+            .required('Confirm Password is a required field')
+            .oneOf([yup.ref('password'), null], 'Passwords must match'),
+          policy: yup
+            .boolean()
+            .required('Policy is a required field')
+            .test('is boolean', 'Must be true', value => value === true),
+        }
+         : {
           first_name: yup
             .string()
             .min(3, 'First Name ame Must be at least 3 characters')
@@ -164,7 +218,8 @@ const Registration = ({ navigation, route }) => {
             .boolean()
             .required('Policy is a required field')
             .test('is boolean', 'Must be true', value => value === true),
-        })}>
+        }
+        )}>
         {({
           values,
           handleChange,
@@ -276,6 +331,7 @@ const Registration = ({ navigation, route }) => {
               {touched.email && errors.email && (
                 <JErrorText>{errors.email}</JErrorText>
               )}
+              {route.params?.type !== 1 &&
               <JInput
                 style={{ textAlign: store.lang.id === 0 ? 'left' : 'right' }}
                 value={values.company_name}
@@ -303,7 +359,7 @@ const Registration = ({ navigation, route }) => {
                 onChangeText={handleChange('company_name')}
                 onBlur={() => setFieldTouched('company_name')}
                 containerStyle={{ marginTop: RFPercentage(3) }}
-              />
+              />}
               {touched.company_name && errors.company_name && (
                 <JErrorText>{errors.company_name}</JErrorText>
               )}
@@ -414,8 +470,8 @@ const Registration = ({ navigation, route }) => {
                 children={
                   loader
                     ? store.lang.loading
-                    : route.params?.type === 1 ? store.lang.login_as_candidate
-                      : store.lang.login_as_employee
+                    : route.params?.type === 1 ? store.lang.register_as_candidate
+                      : store.lang.register_as_employee
 
                 }
               />

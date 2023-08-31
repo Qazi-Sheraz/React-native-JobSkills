@@ -72,13 +72,13 @@ function CSkills({data}) {
         )
           .then(response => response.json())
           .then(result => {
-          // console.log(result)
+          console.log(result)
               JToast({
                 type: 'success',
                 text1: store.lang.success,
                 text2: result,
               });
-              _getProfile(store)
+              // _getProfile(store)
               setLoader1(false)
               navigation.navigate('Aboutme')
                

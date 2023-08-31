@@ -1,27 +1,19 @@
 import {ActivityIndicator, Alert, StyleSheet, View} from 'react-native';
-import React, {useRef} from 'react';
+import React, {useRef, useContext, useState} from 'react';
 import {observer} from 'mobx-react';
 import JScreen from '../../../customComponents/JScreen';
-import JGradientProfileHeader from '../../../customComponents/JGradientProfileHeader';
 import JInput from '../../../customComponents/JInput';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import {RFPercentage} from 'react-native-responsive-fontsize';
-
 import JErrorText from '../../../customComponents/JErrorText';
-import PhoneInput from 'react-native-phone-number-input';
-
 import JText from '../../../customComponents/JText';
 import JGradientHeader from '../../../customComponents/JGradientHeader';
 import colors from '../../../config/colors';
-import Feather from 'react-native-vector-icons/Feather';
-import {useContext} from 'react';
 import {StoreContext} from '../../../mobx/store';
 import {_getProfile} from '../../../functions/Candidate/MyProfile';
-import {useState} from 'react';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import url from '../../../config/url';
-import Toast from 'react-native-toast-message';
 import JChevronIcon from '../../../customComponents/JChevronIcon';
 import { JToast } from '../../../functions/Toast';
 
@@ -64,6 +56,7 @@ function CSocialMediaLink({refRBSheet, data, user}) {
                 text1: store.lang.eror,
                 text2: store.lang.error_while_saving_data,
               });
+              setLoader(false);
             } else {
               store.token?.user?.owner_type.includes('Candidate') == false?
               JToast({
@@ -88,11 +81,14 @@ function CSocialMediaLink({refRBSheet, data, user}) {
           });
       }}
       // validationSchema={yup.object().shape({
-      //   fb: yup.string().url().required().label('Facebook'),
-      //   ln: yup.string().url().required().label('LinkedIn'),
-      //   tw: yup.string().url().required().label('Twitter'),
+      //   facebook_url: yup.string().url().required().label('Facebook'),
+      //   linkedin_url: yup.string().url().required().label('LinkedIn'),
+      //   twitter_url: yup.string().url().required().label('Twitter'),
       // })}
     >
+      
+   
+
       {({
         values,
         handleChange,
@@ -117,7 +113,7 @@ function CSocialMediaLink({refRBSheet, data, user}) {
               
                 <JText
                 disabled={loader?true:false}
-                  onPress={() => {setLoader(true)
+                  onPress={() => {
                     isValid && handleSubmit()}}
                   fontColor={
                     !isValid ? `${colors.white[0]}70` : colors.white[0]

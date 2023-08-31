@@ -46,7 +46,8 @@ import JModal from '../../../customComponents/JModal';
 const CareerInformation = ({ navigation }) => {
   const refRBSheet = useRef();
   const [selected, setSelected] = useState(0);
-  const [loader, setLoader] = useState();
+  const [loader, setLoader] = useState(true);
+  const [loader1, setLoader1] = useState(false);
   const [apiLoader, setApiLoader] = useState(true);
   const [education, setEducation] = useState([]);
   const [edu, setEdu] = useState([]);
@@ -63,6 +64,7 @@ const CareerInformation = ({ navigation }) => {
   })
 
   const _addExperince = values => {
+    setLoader1(true);
     var myHeaders = new Headers();
     myHeaders.append('Authorization', `Bearer ${store.token.token}`);
 
@@ -81,7 +83,6 @@ const CareerInformation = ({ navigation }) => {
     formdata.append('currently_working', values.working ? '1' : '0');
     formdata.append('description', values.description);
 
-    setLoader(true);
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
@@ -99,7 +100,7 @@ const CareerInformation = ({ navigation }) => {
             // visibilityTime: 1500
           });
 
-          setLoader(false);
+          setLoader1(false);
         }
         else {
           selectedExperience !== null && (
@@ -111,17 +112,18 @@ const CareerInformation = ({ navigation }) => {
             text2: result.message,
           });
           _getExperience();
-          setLoader(false);
+          setLoader1(false);
           refRBSheet.current.close();
         }
       })
       .catch(error => {
         console.log('error', error);
-        setLoader(false);
+        setLoader1(false);
       });
   };
 
   const _addEducation = values => {
+    setLoader1(true);
     var myHeaders = new Headers();
     myHeaders.append('Authorization', `Bearer ${store.token.token}`);
 
@@ -135,8 +137,6 @@ const CareerInformation = ({ navigation }) => {
     formdata.append('result', values.result);
     formdata.append('year', `${values.year?.name}`);
 
-    // console.log(formdata);
-    setLoader(true);
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
@@ -158,12 +158,12 @@ const CareerInformation = ({ navigation }) => {
           text1: store.lang.success,
           text2: result.message,
         });
-        setLoader(false);
+        setLoader1(false);
         refRBSheet.current.close();
       })
       .catch(error => {
         console.log('error', error);
-        setLoader(false);
+        setLoader1(false);
       });
   };
 
@@ -732,7 +732,9 @@ const CareerInformation = ({ navigation }) => {
                   </JScrollView>
 
                   <View style={styles.bottomV}>
+
                     <JButton
+                    disabled={loader1?true:false}
                       isValid={isValid}
                       onPress={() => handleSubmit()}
                       style={{
@@ -740,7 +742,7 @@ const CareerInformation = ({ navigation }) => {
                         bottom: RFPercentage(1),
                         width: RFPercentage(20),
                       }}>
-                      {loader ? store.lang.loading : store.lang.save}
+                      {loader1 ? store.lang.loading : store.lang.save}
                     </JButton>
                   </View>
                 </>)
@@ -934,6 +936,7 @@ const CareerInformation = ({ navigation }) => {
                   </JScrollView>
                   <View style={styles.bottomV}>
                     <JButton
+                    disabled={loader1?true:false}
                       isValid={isValid}
                       onPress={() => handleSubmit()}
                       style={{
@@ -941,7 +944,7 @@ const CareerInformation = ({ navigation }) => {
                         bottom: RFPercentage(1),
                         width: RFPercentage(20),
                       }}>
-                      {loader ? store.lang.loading : store.lang.save}
+                      {loader1 ? store.lang.loading : store.lang.save}
                     </JButton>
                   </View>
                 </>)

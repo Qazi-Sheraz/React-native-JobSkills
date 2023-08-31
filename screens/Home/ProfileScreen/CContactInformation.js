@@ -1,29 +1,23 @@
 import {ActivityIndicator, Alert, StyleSheet, View} from 'react-native';
-import React, {useRef} from 'react';
+import React, {useRef,useState,useContext} from 'react';
 import {observer} from 'mobx-react';
 import JScreen from '../../../customComponents/JScreen';
-import JGradientProfileHeader from '../../../customComponents/JGradientProfileHeader';
 import JInput from '../../../customComponents/JInput';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import {RFPercentage} from 'react-native-responsive-fontsize';
-import Feather from 'react-native-vector-icons/Feather';
 import JErrorText from '../../../customComponents/JErrorText';
 import PhoneInput from 'react-native-phone-number-input';
-
 import JText from '../../../customComponents/JText';
 import JGradientHeader from '../../../customComponents/JGradientHeader';
 import colors from '../../../config/colors';
-import {useContext} from 'react';
 import {StoreContext} from '../../../mobx/store';
 import {_getProfile} from '../../../functions/Candidate/MyProfile';
-import {useState} from 'react';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import JChevronIcon from '../../../customComponents/JChevronIcon';
 import JRow from '../../../customComponents/JRow';
 import { JToast } from '../../../functions/Toast';
 import url from '../../../config/url';
-import { values } from 'mobx';
 
 function CContactInformation({refRBSheet, user}) {
   
@@ -357,10 +351,10 @@ function CContactInformation({refRBSheet, user}) {
             <View>
               <JRow
                 style={{
-                  marginTop: RFPercentage(3),
+                  marginTop: RFPercentage(2),
                 }}>
                 <JText fontWeight="500" fontSize={RFPercentage(2.5)}>
-                  {store.lang.phone_number}
+                  {store.lang.phone_number}:
                 </JText>
               </JRow>
               <PhoneInput
@@ -368,7 +362,7 @@ function CContactInformation({refRBSheet, user}) {
                   defaultValue={values.phone}
                   // defaultCode={code?.cca2?code?.cca2:"SA"}
                   defaultCode={values.regional_code? values.regional_code:"SA"}
-                  placeholder={store.lang.phone_number}
+                  placeholder={store.lang.enter_your_phone_number}
                   containerStyle={{
                     width: '100%',
                     borderBottomWidth: RFPercentage(0.1),

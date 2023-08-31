@@ -115,7 +115,8 @@
     "contact_Info_not_available": "Contact Information Not Available",
     "general_Info_not_available": " General Information Not Available",
     "email_address": "Email Address:",
-    "phone_number": "Phone Number:",
+    "phone_number": "Phone Number",
+    "enter_your_phone_number": "Enter your phone number",
     "company_info": "Company Information",
     "company_info_not_available": "Company Information Not Available",
     "social_media_links": "Social Media Links",
@@ -150,6 +151,8 @@
     "employer": "Employer",
     "login_as_employee": "Login as Employee",
     "login_as_candidate": "Login as Candidate",
+    "register_as_employee": "Register as Employee",
+    "register_as_candidate": "Register as Candidate",
     "or": "OR",
     "register_Btn": "Don’t have an account? Register",
     "login_with": "or login with",
@@ -454,7 +457,9 @@
     "code_is_verified": "Code is verified",
     "your_OTP_is_wrong": "Your OTP is wrong",
     "incorrect_email": "Incorrect Email",
-    "incorrect_password": "Incorrect Password!"
+    "incorrect_password": "Incorrect Password!",
+    "file_size_exceeds_MB_limit": "File size exceeds 1 MB limit",
+    "canceled_from_single_doc_picker": "Canceled from single doc picker"
     
      
     

@@ -19,20 +19,50 @@ import {
 
 import ProfileScreen from './ProfileScreen';
 import {_getFollowingCompanyData} from '../../functions/Candidate/DFollowing';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import url from '../../config/url';
 export default function CBottomTab() {
   const Tab = createBottomTabNavigator();
   const store = useContext(StoreContext);
-
+  const _getlangApi = ()=>{
+    var myHeaders = new Headers();
+    myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
+  
+    var requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow'
+    };
+    fetch(`${url.baseUrl}/get-language`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        // console.log(result)
+        handleSave(result)
+      })
+      .catch(error => console.log('error', error));
+  };
+  const handleSave = async lang => {
+    // Switch to the selected language
+   
+       try {
+         await AsyncStorage.setItem('selectedLanguage', lang);
+         store.setLang(lang);
+        
+         console.log('lang',lang)
+       } catch (error) {
+         console.log('Error storing language:', error);
+       }
+     };
   useEffect(() => {
+    _getlangApi();
     _getFavouriteJobData(store);
     _getHomeData(store);
     _getAppliedJobData(store);
     _getFollowingCompanyData(store);
-    // _country(store);
+   
 
     return () => {
-      // getFavouriteJobList();
-      // _getData();
+     
     };
   }, []);
 

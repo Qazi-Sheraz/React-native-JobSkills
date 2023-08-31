@@ -139,7 +139,7 @@ const companyName = params?.c_name?encodeURIComponent(params?.c_name || ""):enco
     try {
       await Share.share({
         // title:'Company_url',
-        message: `https://dev.jobskills.digital/${companyName}/${route.params.id}`,
+        message: `https://dev.jobskills.digital/${companyName}?id=${route.params.id}`,
       });
     } catch (error) {
       console.error(error.message);

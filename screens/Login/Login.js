@@ -1,10 +1,10 @@
-import {StyleSheet, Pressable, View, TouchableOpacity, Platform} from 'react-native';
-import React, { useEffect,useState,useContext } from 'react';
-import JScreen from '../../customComponents/JScreen';  
-import JCircularLogo from '../../customComponents/JCircularLogo'; 
+import { StyleSheet, Pressable, View, TouchableOpacity, Platform } from 'react-native';
+import React, { useEffect, useState, useContext } from 'react';
+import JScreen from '../../customComponents/JScreen';
+import JCircularLogo from '../../customComponents/JCircularLogo';
 import JText from '../../customComponents/JText';
-import {RFPercentage} from 'react-native-responsive-fontsize';
-import {Formik} from 'formik';
+import { RFPercentage } from 'react-native-responsive-fontsize';
+import { Formik } from 'formik';
 import * as yup from 'yup';
 import JDivider from '../../customComponents/JDivider';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -18,7 +18,7 @@ import CheckBox from '@react-native-community/checkbox';
 import JErrorText from '../../customComponents/JErrorText';
 import url from '../../config/url';
 import Toast from 'react-native-toast-message';
-import {StoreContext} from '../../mobx/store';
+import { StoreContext } from '../../mobx/store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import JRow from '../../customComponents/JRow';
 import { observer } from 'mobx-react';
@@ -26,9 +26,12 @@ import messaging from '@react-native-firebase/messaging';
 import DeviceInfo from 'react-native-device-info';
 import { JToast } from '../../functions/Toast';
 
-const Login = ({navigation, route}) => {
+const Login = ({ navigation, route }) => {
   const store = useContext(StoreContext);
   const [loader, setLoader] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState(null);
+  // console.log(selectedLanguage)
+
   // console.log(route?.params?.type);
   const type = route?.params?.type;
 
@@ -65,6 +68,7 @@ const Login = ({navigation, route}) => {
   };
   const [deviceName, setDeviceName] = useState('');
   useEffect(() => {
+    getStoredLanguage();
     const fetchDeviceName = async () => {
 
       try {
@@ -80,7 +84,7 @@ const Login = ({navigation, route}) => {
 
   // console.log('DeviceInfo', deviceName)
 
-  
+
   const updateUserDeviceToken = (messagingInstance, userId, deviceName) => {
     return new Promise((resolve, reject) => {
       if (requestUserPermission()) {
@@ -109,7 +113,7 @@ const Login = ({navigation, route}) => {
                 console.log('error', error);
                 reject(error); // Reject the promise with the error
               });
-  
+
             messagingInstance
               .onTokenRefresh((newToken) => {
                 console.log('Updated FCM Token -> ', newToken);
@@ -125,7 +129,7 @@ const Login = ({navigation, route}) => {
       }
     });
   };
-  
+
   // Usage example:
   // updateUserDeviceToken(messaging(), store.userInfo?.id, store.deviceName)
   //   .then((result) => {
@@ -134,13 +138,13 @@ const Login = ({navigation, route}) => {
   //   .catch((error) => {
   //     // Handle errors here
   //   });
- 
+
 
   const _login = values => {
     var formdata = new FormData();
     formdata.append('email', values.email);
     formdata.append('password', values.password);
-// console.log(formdata)
+    // console.log(formdata)
     var requestOptions = {
       method: 'POST',
       body: formdata,
@@ -149,7 +153,7 @@ const Login = ({navigation, route}) => {
 
     setLoader(true);
 
-    fetch(type == 1 ?`${url.baseUrl}/users/login`:`${url.baseUrl}/employer/login`, requestOptions)
+    fetch(type == 1 ? `${url.baseUrl}/users/login` : `${url.baseUrl}/employer/login`, requestOptions)
       .then(response => response.json())
       .then(result => {
         // console.log('Result===>',result);
@@ -157,11 +161,35 @@ const Login = ({navigation, route}) => {
         if (result.token) {
           _storeToken(result, values.remember);
           updateUserDeviceToken();
-         JToast({
+          JToast({
             type: 'success',
             text1: store.lang.login_successfully,
             text2: store.lang.welcome,
           });
+
+          var myHeaders = new Headers();
+          myHeaders.append("Authorization", `Bearer ${result.token}`);
+          var formdata = new FormData();
+          formdata.append("languageName", selectedLanguage);
+          console.log(formdata)
+          fetch(`${url.baseUrl}/change-language`, {
+            method: 'POST',
+            headers: myHeaders,
+            body: formdata,
+            redirect: 'follow'
+          })
+            .then(response => response.json())
+            .then(result => {
+              if (result.success) {
+
+                console.log(result.message)
+                // RNRestart.restart()
+              }
+              else {
+                console.log(result.message)
+              }
+            })
+            .catch(error => console.log('error', error));
 
         } else {
           if (result == "Incorrect Password!") {
@@ -176,7 +204,7 @@ const Login = ({navigation, route}) => {
               // text1: store.lang.eror,
               text1: store.lang.incorrect_email,
             });
-          } else if  (result == 'Please verify your Email!') {
+          } else if (result == 'Please verify your Email!') {
             _verifyEmail(values.email);
           }
         }
@@ -210,13 +238,13 @@ const Login = ({navigation, route}) => {
           JToast({
             type: 'danger',
             text1: store.lang.no_email_found,
-            text2:store.lang.kindly_register_with_that_email_address,
+            text2: store.lang.kindly_register_with_that_email_address,
           });
         } else {
           JToast({
             type: 'success',
             // text: result,
-            text1:store.lang.kindly_check_your_email_address,
+            text1: store.lang.kindly_check_your_email_address,
           });
         }
       })
@@ -228,15 +256,52 @@ const Login = ({navigation, route}) => {
         });
       });
   };
+
+  const getStoredLanguage = async () => {
+    try {
+      const storedLanguage = await AsyncStorage.getItem('selectedLanguage')
+      if (storedLanguage) {
+        setSelectedLanguage(storedLanguage)
+      }
+    } catch (error) {
+      console.log('Error retrieving stored language:', error);
+    }
+  };
+
+  // const _changeLanguage = (selectedLanguage) => {
+  //   var myHeaders = new Headers();
+  //   myHeaders.append("Authorization", `Bearer ${store.token?.token}`);
+  //   var formdata = new FormData();
+  //   formdata.append("languageName", selectedLanguage);
+  //   // console.log(formdata);
+  //   fetch(`${url.baseUrl}/change-language`, {
+  //     method: 'POST',
+  //     headers: myHeaders,
+  //     body: formdata,
+  //     redirect: 'follow'
+  //   })
+  //     .then(response => response.json())
+  //     .then(result => {
+  //       if (result.success) {
+
+  //         console.log(result.message)
+  //         // RNRestart.restart()
+  //       }
+  //       else {
+  //         console.log(result.message)
+  //       }
+  //     })
+  //     .catch(error => console.log('error', error));
+  // };
   return (
     <JScreen>
-      <View style={{flex: 0.3, justifyContent: 'center', alignItems: 'center'}}>
+      <View style={{ flex: 0.3, justifyContent: 'center', alignItems: 'center' }}>
         <JCircularLogo multiple={1.4} />
         <JText
           fontSize={RFPercentage(2.8)}
           fontWeight={'bold'}
           children={store.lang.welcome}
-          style={{marginTop: RFPercentage(2)}}
+          style={{ marginTop: RFPercentage(2) }}
         />
       </View>
       <Formik
@@ -278,7 +343,7 @@ const Login = ({navigation, route}) => {
               justifyContent: 'center',
             }}>
             <JInput
-              style={{textAlign: store.lang.id === 0 ? 'left' : 'right'}}
+              style={{ textAlign: store.lang.id === 0 ? 'left' : 'right' }}
               value={values.email}
               heading={store.lang.email}
               maxLength={100}
@@ -304,7 +369,7 @@ const Login = ({navigation, route}) => {
               <JErrorText>{errors.email}</JErrorText>
             )}
             <JInput
-              style={{textAlign: store.lang.id === 0 ? 'left' : 'right'}}
+              style={{ textAlign: store.lang.id === 0 ? 'left' : 'right' }}
               forPassword={true}
               eye={values.hide}
               error={touched.password && errors.password && true}
@@ -327,7 +392,7 @@ const Login = ({navigation, route}) => {
               }
               placeholder={store.lang.password}
               onChangeText={handleChange('password')}
-              containerStyle={{marginTop: RFPercentage(3)}}
+              containerStyle={{ marginTop: RFPercentage(3) }}
               onBlur={() => setFieldTouched('password')}
             />
             {touched.password && errors.password && (
@@ -341,38 +406,38 @@ const Login = ({navigation, route}) => {
               }}>
               <JRow>
                 <CheckBox
-                  tintColors={{true: colors.purple[0], false: 'black'}}
+                  tintColors={{ true: colors.purple[0], false: 'black' }}
                   boxType="square"
                   value={values.remember}
                   onValueChange={value => setFieldValue('remember', value)}
                 />
 
-                <JText style={{marginHorizontal: RFPercentage(1)}}>
+                <JText style={{ marginHorizontal: RFPercentage(1) }}>
                   {store.lang.remember}
                 </JText>
               </JRow>
-                <JText onPress={() => navigation.navigate('ForgetPassword',{type: type, email: values.email })}>
-                  {store.lang.forgot_password}
-                </JText>
+              <JText onPress={() => navigation.navigate('ForgetPassword', { type: type, email: values.email })}>
+                {store.lang.forgot_password}
+              </JText>
             </JRow>
 
             <JButton
-            disabled={loader?true:false}
+              disabled={loader ? true : false}
               isValid={isValid}
-              style={{marginTop: RFPercentage(3)}}
+              style={{ marginTop: RFPercentage(3) }}
               onPress={() => handleSubmit()}
               children={
                 loader
                   ? store.lang.loading
                   : type === 1
-                  ? store.lang.login_as_candidate
-                  : store.lang.login_as_employee
+                    ? store.lang.login_as_candidate
+                    : store.lang.login_as_employee
               }
             />
           </View>
         )}
       </Formik>
-      <View style={{flex: 0.15, alignItems: 'center'}}>
+      <View style={{ flex: 0.15, alignItems: 'center' }}>
         <JDivider children={store.lang.login_with} />
         <View
           style={{
@@ -394,7 +459,7 @@ const Login = ({navigation, route}) => {
       </View>
 
       <JFooter
-        onPress={() => navigation.navigate('CRegister', {type: type})}
+        onPress={() => navigation.navigate('CRegister', { type: type })}
         children={store.lang.register_Btn}
       />
     </JScreen>

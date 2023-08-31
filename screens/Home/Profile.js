@@ -159,7 +159,7 @@ function Profile({navigation}) {
                     />
                     {/* {console.log(store.myProfile?.user[0]?.contact_information?.region_code)} */}
                     <JProfileInfo
-                      title={store.lang.phone_number}
+                      title={`${store.lang.phone_number}:`}
                       text={
                         store.myProfile?.user[0]?.contact_information
                           ?.mobile_number !== null &&

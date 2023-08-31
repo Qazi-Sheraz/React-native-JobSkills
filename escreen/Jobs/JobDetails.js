@@ -35,7 +35,6 @@ import { useNavigation } from '@react-navigation/native';
 import PhoneInput from 'react-native-phone-number-input';
 import JChevronIcon from '../../customComponents/JChevronIcon';
 import { observer } from 'mobx-react';
-import Toast from 'react-native-toast-message';
 import JErrorText from '../../customComponents/JErrorText';
 import url from '../../config/url';
 import JIcon from '../../customComponents/JIcon';
@@ -48,7 +47,6 @@ import { JToast } from '../../functions/Toast';
 import { Share } from 'react-native';
 
 const JobDetails = ({ route }) => {
-
   const store = useContext(StoreContext);
   const phoneInput = useRef(null);
   const navigation = useNavigation();
@@ -79,7 +77,11 @@ const JobDetails = ({ route }) => {
       //Handling any exception (If any)
       if (DocumentPicker.isCancel(err)) {
         //If user canceled the document selection
-        alert('Canceled from single doc picker');
+
+        JToast({
+          type: 'error',
+          text2: store.lang.canceled_from_single_doc_picker,
+        });
       } else {
         //For Unknown Error
         alert('Unknown Error: ' + JSON.stringify(err));
@@ -149,6 +151,7 @@ const JobDetails = ({ route }) => {
             text1: store.lang.success,
             text2: result.message,
           });
+          setLoader1(false)
           setModalVisible(!modalVisible)
           //  console.log(values)
         } else {
@@ -157,6 +160,7 @@ const JobDetails = ({ route }) => {
             text1: store.lang.eror,
             text2: result.message,
           });
+          setLoader1(false)
           setModalVisible(!modalVisible)
         }
       })
@@ -300,20 +304,18 @@ const JobDetails = ({ route }) => {
   useEffect(() => {
     _getjobDetail();
   }, []);
-// console.log('jobUrl')
-// const id =store.jobDetail?.job_id;
-// console.log(id)
-const baseUrl = "https://dev.jobskills.digital";
-const id=route.params?.id;
-const companyNames = encodeURIComponent(store.jobDetail?.company_name || "");
-const jobTitle = encodeURIComponent(store.jobDetail?.job_title || "");
-// console.log(encodeURIComponent(store.jobDetail?.company_name || ""))
+  // console.log('jobUrl')
+  // const id =store.jobDetail?.job_id;
+  // console.log(id)
+  const baseUrl = "https://dev.jobskills.digital";
+  const id = route.params?.id;
+  const companyNames = encodeURIComponent(store.jobDetail?.company_name || "");
+  const jobTitle = encodeURIComponent(store.jobDetail?.job_title || "");
+  // console.log(encodeURIComponent(store.jobDetail?.company_name || ""))
   const shareItem = async () => {
     try {
       await Share.share({
         message: `${baseUrl}/${companyNames}/job-details/${id}/${jobTitle}`,
-        // message: `https://dev.jobskills.digital/${encodeURIComponent(store.jobDetail?.company_name || "")}/job-details/${route.params?.id}/${encodeURIComponent(store.jobDetail?.job_title || "")}`,
-        
       });
     } catch (error) {
       console.error(error.message);
@@ -504,7 +506,7 @@ const jobTitle = encodeURIComponent(store.jobDetail?.job_title || "");
               <JText style={{ fontSize: RFPercentage(1.8), color: '#ffff' }}>
                 {'\r'}
                 {store.lang.date_posted}
-                {moment(store.jobDetail.job_publish_date,'DD,MM,YYYY',).format('DD MMM,YYYY')}
+                {moment(store.jobDetail.job_publish_date, 'DD,MM,YYYY',).format('DD MMM,YYYY')}
               </JText>
             </JRow>
             <JRow>
@@ -538,7 +540,7 @@ const jobTitle = encodeURIComponent(store.jobDetail?.job_title || "");
 
                 <JText style={styles.txt}>
                   {store.lang.expire_on}{' '}
-                  {moment(store.jobDetail?.job_expiry_date,'DD,MM,YYYY').format('DD MMM,YYYY')}
+                  {moment(store.jobDetail?.job_expiry_date, 'DD,MM,YYYY').format('DD MMM,YYYY')}
                 </JText>
               </JRow>
               <JText style={styles.txt}>
@@ -656,7 +658,7 @@ const jobTitle = encodeURIComponent(store.jobDetail?.job_title || "");
           </JScrollView>
 
           <>
-          {/* {console.log('status',!loader&& status.message)} */}
+            {/* {console.log('status',!loader&& status.message)} */}
             <View style={styles.bottomV}>
               {store.token?.user?.owner_type.includes('Candidate') === false ?
                 <JButton
@@ -736,6 +738,11 @@ const jobTitle = encodeURIComponent(store.jobDetail?.job_title || "");
               jobId={store.jobDetail?.job_id}
             /></>
 
+          {/* <JModal 
+          modalVisible={modalVisible2}
+          onPressNo={modalVisible2}
+          msg={'Canceled from single doc picker'}
+          btn={false} /> */}
           <Modal animationType="fade" transparent={true} visible={modalVisible}>
 
             <Formik
@@ -749,10 +756,7 @@ const jobTitle = encodeURIComponent(store.jobDetail?.job_title || "");
               }}
 
               onSubmit={values => {
-                setLoader1(true)
-                // console.log('values',values)
                 _addCandidate(values);
-                // setLoader1(false)
               }}
               validationSchema={yup.object().shape({
                 resume: yup.object().shape({
@@ -847,14 +851,14 @@ const jobTitle = encodeURIComponent(store.jobDetail?.job_title || "");
                             marginTop: RFPercentage(1),
                           }}>
                           <JText fontWeight="500" fontSize={RFPercentage(2.5)}>
-                            {store.lang.phone}
+                            {store.lang.phone_number}
                           </JText>
                         </JRow>
                         <PhoneInput
                           ref={phoneInput}
                           defaultValue={values.phone}
                           defaultCode={'SA'}
-                          placeholder={store.lang.phone_number}
+                          placeholder={store.lang.enter_your_phone_number}
                           containerStyle={{
                             width: '100%',
                             borderBottomWidth: RFPercentage(0.1),
@@ -903,7 +907,7 @@ const jobTitle = encodeURIComponent(store.jobDetail?.job_title || "");
                         {store.lang.sure_updated_resume}
                       </JText>
                       {values.resume?.uri ? (
-                        values.resume?.size <= 2000000 ? (
+                        values.resume?.size <= 1000000 ? (
                           <View style={{ alignSelf: 'center' }}>
                             <Pdf
                               trustAllCerts={false}
@@ -943,8 +947,8 @@ const jobTitle = encodeURIComponent(store.jobDetail?.job_title || "");
                           </View>
                         ) : (
                           <>
-                            <JText style={{ marginVertical: RFPercentage(1) }}>
-                              File size exceeds 2 MB limit
+                            <JText style={{ marginVertical: RFPercentage(1) ,color:'red' }}>
+                              {store.lang.file_size_exceeds_MB_limit}
                             </JText>
                             <JRow
                               style={{
@@ -993,9 +997,10 @@ const jobTitle = encodeURIComponent(store.jobDetail?.job_title || "");
                           isValid={isValid}
                           disabled={loader1 ? true : false}
                           onPress={() => {
-                            if (values.resume?.size <= 2000000) {
-                              handleSubmit();
-                            }
+                            if(values.resume?.size <= 1000000)
+                              {
+                                handleSubmit();
+                          }
                           }}
                           style={{
                             width: '46%',
@@ -1142,6 +1147,7 @@ const jobTitle = encodeURIComponent(store.jobDetail?.job_title || "");
               {/* <Pressable style={{height:'15%',width:'100%'}} onPress={()=> setModalVisible(!modalVisible)}/> */}
             </SafeAreaView>
           </Modal>
+
           <RBSheet
             ref={refRBSheet}
             closeOnDragDown={true}

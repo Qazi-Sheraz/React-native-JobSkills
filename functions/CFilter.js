@@ -16,7 +16,7 @@ export const _search = (e, store,isSearch) => {
 
   var formdata = new FormData();
 
-  formdata.append('title', e);
+  formdata.append('title', e.search);
   var requestOptions = {
     method: 'POST',
     headers: myHeaders,

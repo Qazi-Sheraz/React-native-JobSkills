@@ -6,32 +6,23 @@ import {
   Switch,
   View,
 } from 'react-native';
-import React, {useRef} from 'react';
+import React, {useRef, useEffect ,useState, useContext} from 'react';
 import {observer} from 'mobx-react';
 import JScreen from '../../../customComponents/JScreen';
-import JGradientProfileHeader from '../../../customComponents/JGradientProfileHeader';
 import JInput from '../../../customComponents/JInput';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import {RFPercentage} from 'react-native-responsive-fontsize';
-
 import JErrorText from '../../../customComponents/JErrorText';
-import PhoneInput from 'react-native-phone-number-input';
-
 import JText from '../../../customComponents/JText';
 import JSelectInput from '../../../customComponents/JSelectInput';
 import Feather from 'react-native-vector-icons/Feather';
 import colors from '../../../config/colors';
-import JRow from '../../../customComponents/JRow';
-import JButton from '../../../customComponents/JButton';
 import JGradientHeader from '../../../customComponents/JGradientHeader';
-import {useContext} from 'react';
 import {StoreContext} from '../../../mobx/store';
 import {_getProfile} from '../../../functions/Candidate/MyProfile';
-import {useState} from 'react';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import url from '../../../config/url';
-import { useEffect } from 'react';
 import JChevronIcon from '../../../customComponents/JChevronIcon';
 import { JToast } from '../../../functions/Toast';
 

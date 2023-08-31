@@ -71,8 +71,7 @@ const Resume = ({ navigation }) => {
       if (DocumentPicker.isCancel(err)) {
         //If user canceled the document selection
         JToast({
-          type: 'success',
-          text1: 'Success!',
+          type: 'error',
           text2: 'Canceled from single doc picker',
         });
         // alert('Canceled from single doc picker');
@@ -113,6 +112,7 @@ const Resume = ({ navigation }) => {
     };
   };
   const _getResume = () => {
+    setModalVisible(false);
     var myHeaders = new Headers();
     myHeaders.append('Authorization', `Bearer ${store.token.token}`);
 
@@ -348,41 +348,67 @@ const Resume = ({ navigation }) => {
                   </JText>
 
                   {values.resume?.uri ? (
-                    <View style={{ alignSelf: 'center' }}>
-                      <Pdf
-                        trustAllCerts={false}
-                        source={{ uri: values.resume.uri }}
-                        onLoadComplete={(numberOfPages, filePath) => {
-                          // console.log(`Number of pages: ${numberOfPages}`);
-                        }}
-                        onPageChanged={(page, numberOfPages) => {
-                          // console.log(`Current page: ${page}`);
-                        }}
-                        onError={error => {
-                          // console.log(error);
-                        }}
-                        onPressLink={uri => {
-                          // console.log(`Link pressed: ${uri}`);
-                        }}
-                        style={{
-                          alignSelf: 'center',
-                          width: Dimensions.get('window').width / 3,
-                          height: Dimensions.get('window').height / 3,
-                        }}
-                      />
-                      <Entypo
-                        onPress={() => _selectOneFile(setFieldValue)}
-                        name="circle-with-cross"
-                        size={RFPercentage(3.5)}
-                        color={colors.danger[0]}
-                        style={{
-                          position: 'absolute',
-                          zIndex: 1,
-                          right: RFPercentage(-2),
-                          top: RFPercentage(-1),
-                        }}
-                      />
-                    </View>
+                    values.resume?.size <= 1000000 ? (
+                      <View style={{ alignSelf: 'center' }}>
+                        <Pdf
+                          trustAllCerts={false}
+                          source={{ uri: values.resume?.uri }}
+                          onLoadComplete={(numberOfPages, filePath) => {
+                            // console.log(
+                            //   `Number of pages: ${numberOfPages}`,
+                            // );
+                          }}
+                          onPageChanged={(page, numberOfPages) => {
+                            // console.log(`Current page: ${page}`);
+                          }}
+                          onError={error => {
+                            // console.log(error);
+                          }}
+                          onPressLink={uri => {
+                            // console.log(`Link pressed: ${uri}`);
+                          }}
+                          style={{
+                            alignSelf: 'center',
+                            width: Dimensions.get('window').width / 3,
+                            height: Dimensions.get('window').height / 3,
+                          }}
+                        />
+                        <Entypo
+                          onPress={() => _selectOneFile(setFieldValue)}
+                          name="circle-with-cross"
+                          size={RFPercentage(3.5)}
+                          color={colors.danger[0]}
+                          style={{
+                            position: 'absolute',
+                            zIndex: 1,
+                            right: RFPercentage(-2),
+                            top: RFPercentage(-1),
+                          }}
+                        />
+                      </View>
+                    ) : (
+                      <>
+                        <JText style={{ marginVertical: RFPercentage(1) ,color:'red' }}>
+                          {store.lang.file_size_exceeds_MB_limit}
+                        </JText>
+                        <JRow
+                          style={{
+                            justifyContent: 'center',
+                            marginHorizontal: RFPercentage(3),
+                            borderColor: colors.primary[1],
+                          }}>
+                          <JButton
+                            onPress={() => _selectOneFile(setFieldValue)}
+                            style={{
+                              width: '46%',
+                              backgroundColor: colors.white[0],
+                              borderColor: colors.black[1],
+                            }}
+                            children={store.lang.upload_resume}
+                          />
+                        </JRow>
+                      </>
+                    )
                   ) : (
                     <JRow
                       style={{
@@ -440,7 +466,9 @@ const Resume = ({ navigation }) => {
                     disabled={apiLoader?true:false}
                       isValid={isValid}
                       onPress={() => {
+                       if( values.resume?.size <= 1000000){
                         handleSubmit();
+                      }
                       }}
                       style={{
                         width: '46%',

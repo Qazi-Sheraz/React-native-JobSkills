@@ -27,6 +27,8 @@
     "password": "كلمة المرور",
     "login_as_employee": "تسجيل الدخول كموظف",
     "login_as_candidate": "تسجيل الدخول كمرشح",
+    "register_as_employee": "سجل كموظف",
+    "register_as_candidate": "سجل كمرشح",
     "remember": "يتذكر",
     "forgot_password": "نسيت كلمة المرور؟",
     "forgot_pass": "هل نسيت كلمة السر",
@@ -117,7 +119,8 @@
     "contact_Info_not_available": "معلومات الاتصال غير متوفرة",
     "general_Info_not_available": "معلومات عامة غير متوفرة",
     "email_address": "عنوان البريد الإلكتروني:",
-    "phone_number": "رقم التليفون:",
+    "phone_number": "رقم التليفون",
+    "enter_your_phone_number": "أدخل رقم هاتفك",
     "company_info": "معلومات الشركة",
     "company_info_not_available": "معلومات الشركة غير متوفرة",
     "social_media_links": "روابط وسائل التواصل الاجتماعي",
@@ -446,7 +449,10 @@
      "code_is_verified": "تم التحقق من الرمز",
      "your_OTP_is_wrong": "OTP الخاص بك خاطئ",
      "incorrect_email": "غير صحيح البريد الإلكتروني",
-     "incorrect_password": "كلمة سر خاطئة!"
+     "incorrect_password": "كلمة سر خاطئة!",
+     "file_size_exceeds_MB_limit": "يتجاوز حجم الملف الحد المسموح به وهو 1 ميغابايت",
+     "canceled_from_single_doc_picker": "واحد دستاویز چنندہ سے منسوخ کر دیا گیا"
+    
     
     
     

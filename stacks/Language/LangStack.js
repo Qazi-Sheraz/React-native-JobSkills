@@ -78,7 +78,10 @@ const LangStack = () => {
           };
           fetch("https://dev.jobskills.digital/api/device-token", requestOptions)
             .then(response => response.json())
-            .then(result => console.log('resulttttttttttttttt',result))
+            .then(result => 
+              // console.log('resulttttttttttttttt',result)
+              ''
+              )
             .catch(error => console.log('error', error));
 
         });
