@@ -25,6 +25,7 @@ import JChevronIcon from '../../../customComponents/JChevronIcon';
 import JEmpty from '../../../customComponents/JEmpty';
 import JIcon from '../../../customComponents/JIcon';
 import { JToast } from '../../../functions/Toast';
+import CLNotification from '../../../loaders/Candidate/Notification/CLNotification';
 const Assessment = ({navigation}) => {
   const refRBSheet = useRef();
   const [selected, setSelected] = useState('');
@@ -111,7 +112,8 @@ const Assessment = ({navigation}) => {
         />
       }>
       {loader ? (
-        <ActivityIndicator />
+        // <ActivityIndicator />
+        <CLNotification/>
       ) : (
         <FlatList
           style={{marginTop: RFPercentage(2)}}

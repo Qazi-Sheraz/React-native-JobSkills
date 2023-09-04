@@ -101,7 +101,7 @@ const JobAlert = ({navigation}) => {
     formdata.append('job_types', JSON.stringify(arr));
 
     var myHeaders = new Headers();
-    myHeaders.append('Authorization', `Bearer ${store.token.token}`);
+    myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
 
     var requestOptions = {
       method: 'POST',
@@ -116,7 +116,7 @@ const JobAlert = ({navigation}) => {
       .then(result => {
         // console.log(result);
 
-        JToasts({
+        JToast({
           type: 'success',
           text1: store.lang.success,
           text2: store.lang.successfully_update,

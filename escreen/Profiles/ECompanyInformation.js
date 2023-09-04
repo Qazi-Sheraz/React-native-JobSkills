@@ -1,10 +1,8 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import React, { useState, useRef } from 'react';
 import JScreen from '../../customComponents/JScreen';
 import JGradientHeader from '../../customComponents/JGradientHeader';
 import JText from '../../customComponents/JText';
-import { ActivityIndicator } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
 import JInput from '../../customComponents/JInput';
 import * as yup from 'yup';
 import JSelectInput from '../../customComponents/JSelectInput';

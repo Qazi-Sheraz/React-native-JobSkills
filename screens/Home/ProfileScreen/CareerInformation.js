@@ -42,6 +42,7 @@ import { observer } from 'mobx-react';
 import url from '../../../config/url';
 import { JToast } from '../../../functions/Toast';
 import JModal from '../../../customComponents/JModal';
+import CLCareerInfo from '../../../loaders/Candidate/CareerInfo/CLCareerInfo';
 
 const CareerInformation = ({ navigation }) => {
   const refRBSheet = useRef();
@@ -330,7 +331,9 @@ const CareerInformation = ({ navigation }) => {
         />
       }>
       {apiLoader ? (
-        <ActivityIndicator />
+        // <ActivityIndicator />
+        <CLCareerInfo/>
+
       ) : (
         <ScrollView
           style={{

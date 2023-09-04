@@ -478,11 +478,11 @@ function EContactInformation({ refRBSheet, data, user }) {
                     defaultValue={values.phone}
                     // defaultCode={code?.cca2?code?.cca2:"SA"}
                     defaultCode={values.regional_code ? values.regional_code : "SA"}
-                    placeholder={store.lang.enter_your_phone_number}
+                    placeholder={store.lang.phone_number}
                     containerStyle={{
                       width: '100%',
                       borderBottomWidth: RFPercentage(0.1),
-                      paddingTop: 15,
+                      // paddingTop: 15,
                       marginBottom: RFPercentage(2),
                     }}
                     textContainerStyle={{

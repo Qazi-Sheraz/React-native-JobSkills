@@ -28,7 +28,7 @@ const JNotification = ({item}) => {
           candidate_id: data?.candidate_id,
         });}
         else{
-          navigation.navigate('JobDetails', {
+          navigation.navigate('CJobDetails', {
             id: data?.job_id,
           });
         

@@ -323,7 +323,7 @@ const companyName = params?.c_name?encodeURIComponent(params?.c_name || ""):enco
               />
               <JText fontColor={colors.white[0]} fontSize={simpleText}>
                 {companyData?.company?.user?.phone
-                  ? companyData?.company?.user?.phone
+                  ?companyData?.company?.user?.region_code + companyData?.company?.user?.phone
                   : 'N/A'}
               </JText>
             </JRow>

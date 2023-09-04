@@ -4,6 +4,7 @@ import {
   Linking,
   StyleSheet,
   View,
+  ScrollView
 } from 'react-native';
 import React, {useEffect, useRef} from 'react';
 import JScreen from '../../../customComponents/JScreen';
@@ -40,7 +41,6 @@ import JRow from '../../../customComponents/JRow';
 import {_saveToFavoriteList} from '../../../functions/Candidate/BottomTab';
 import {observer, useObserver} from 'mobx-react';
 import JChevronIcon from '../../../customComponents/JChevronIcon';
-import { ScrollView } from 'react-native-gesture-handler';
 import { JToast } from '../../../functions/Toast';
 
 

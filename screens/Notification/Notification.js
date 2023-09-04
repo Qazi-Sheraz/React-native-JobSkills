@@ -1,22 +1,18 @@
-import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
-import React, {useContext} from 'react';
+import {ActivityIndicator, StyleSheet, FlatList, View} from 'react-native';
+import React, {useContext , useEffect , useState} from 'react';
 import JScreen from '../../customComponents/JScreen';
-
 import {StoreContext} from '../../mobx/store';
 import {observer} from 'mobx-react';
 import JText from '../../customComponents/JText';
 import JGradientHeader from '../../customComponents/JGradientHeader';
 import colors from '../../config/colors';
 import { RFPercentage } from 'react-native-responsive-fontsize';
-import JIcon from '../../customComponents/JIcon';
 import JNotification from '../../customComponents/JNotification';
 import JChevronIcon from '../../customComponents/JChevronIcon';
-import { FlatList } from 'react-native-gesture-handler';
-import { useState } from 'react';
 import url from '../../config/url';
-import { useEffect } from 'react';
 import JEmpty from '../../customComponents/JEmpty';
 import { JToast } from '../../functions/Toast';
+import CLNotification from '../../loaders/Candidate/Notification/CLNotification';
 
 function Notification ({navigation, route}) {
   const store = useContext(StoreContext);
@@ -80,7 +76,10 @@ function Notification ({navigation, route}) {
         </JText>}
         />
         }>
-          {loader?<ActivityIndicator/>:(<>
+          {loader?
+          // <ActivityIndicator/>
+          <CLNotification/>
+          :(<>
           <FlatList
           data={data}
           ListEmptyComponent={<JEmpty/>}

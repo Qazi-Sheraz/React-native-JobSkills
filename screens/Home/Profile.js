@@ -29,6 +29,7 @@ import {_getProfile} from '../../functions/Candidate/MyProfile';
 import JChevronIcon from '../../customComponents/JChevronIcon';
 import { ActivityIndicator } from 'react-native';
 import { JToast } from '../../functions/Toast';
+import CLProfile from '../../loaders/Candidate/Profile/CLProfile';
 
 function Profile({navigation}) {
 
@@ -71,14 +72,23 @@ function Profile({navigation}) {
   };
 
   useEffect(() => {
+    _getProfile(store)
     return () => {};
-  }, [store.myProfileApiLoader]);
+  }, []);
 
  
   const onRefresh = useCallback(() => {
-    _getProfile(store);
-  }, []);
+    store.setMyProfileApiLoader(true)
+    setTimeout(() => {
+      _getProfile(store);
+      store.setMyProfileApiLoader(false)
+    }, 1000);
+  }, [store]);
   return (
+    store.myProfileApiLoader ? (
+      // <ActivityIndicator />
+      <CLProfile/>
+    ) : (
     <JScreen
       header={
         <JGradientHeader
@@ -97,9 +107,7 @@ function Profile({navigation}) {
           // }
         />
       }>
-      {store.myProfileApiLoader ? (
-        <ActivityIndicator />
-      ) : (
+      
         <>
           <JProfileContent
             name={
@@ -784,8 +792,8 @@ function Profile({navigation}) {
             /> */}
           </JScrollView>
         </>
-      )}
-    </JScreen>
+      
+    </JScreen>)
   );
 }
 export default observer(Profile);

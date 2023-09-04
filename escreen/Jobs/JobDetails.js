@@ -45,6 +45,7 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import JApplyJob from '../../customComponents/JApplyJob';
 import { JToast } from '../../functions/Toast';
 import { Share } from 'react-native';
+import CLSelectedJob from '../../loaders/Candidate/SelectedJob/CLSelectedJob';
 
 const JobDetails = ({ route }) => {
   const store = useContext(StoreContext);
@@ -295,7 +296,6 @@ const JobDetails = ({ route }) => {
   };
   const onRefresh = useCallback(() => {
     setLoader(true);
-
     setTimeout(() => {
       _getjobDetail(store);
       setLoader(false);
@@ -388,6 +388,9 @@ const JobDetails = ({ route }) => {
   ];
   // console.log('job details',store.token?.user?.owner_type.includes('Candidate'))
   return (
+    loader ? (
+      <CLSelectedJob />
+    ) : (
     <JScreen
       isError={error}
       onTryAgainPress={() => _getjobDetail()}
@@ -551,9 +554,7 @@ const JobDetails = ({ route }) => {
         </JGradientView>
 
       }>
-      {loader ? (
-        <ActivityIndicator />
-      ) : (
+    
         <>
 
           <JScrollView style={styles.container}
@@ -646,7 +647,7 @@ const JobDetails = ({ route }) => {
                   <JText key={index} style={styles.headertxt3}>
                     {item.heading}
                   </JText>
-                  <JText style={styles.txt2}>{item.name}</JText>
+                  <JText style={[styles.txt2, { width: '60%' }]}>{item.name}</JText>
                 </JRow>
               ),
             )}
@@ -858,11 +859,11 @@ const JobDetails = ({ route }) => {
                           ref={phoneInput}
                           defaultValue={values.phone}
                           defaultCode={'SA'}
-                          placeholder={store.lang.enter_your_phone_number}
+                          placeholder={store.lang.phone_number}
                           containerStyle={{
                             width: '100%',
                             borderBottomWidth: RFPercentage(0.1),
-                            paddingTop: 15,
+                            // paddingTop: 15,
                             marginBottom: RFPercentage(2),
                           }}
                           textContainerStyle={{
@@ -1190,8 +1191,8 @@ const JobDetails = ({ route }) => {
             </JRow>
           </RBSheet>
         </>
-      )}
-    </JScreen>
+    
+    </JScreen>  )
   );
 };
 

@@ -1,5 +1,5 @@
 import {StyleSheet, Linking, View, ActivityIndicator, Pressable} from 'react-native';
-import React, { useEffect, useState} from 'react';
+import React, { useEffect, useState ,useContext} from 'react';
 import JScreen from '../../customComponents/JScreen';
 import JGradientHeader from '../../customComponents/JGradientHeader';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -20,12 +20,9 @@ import {_getProfile} from '../../functions/Candidate/MyProfile';
 import {observer} from 'mobx-react';
 import url from '../../config/url';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Toast from 'react-native-toast-message';
-import JNotfoundData from '../../customComponents/JNotfoundData';
-
-import { useContext } from 'react';
 import JApiError from '../../customComponents/JApiError';
 import { JToast } from '../../functions/Toast';
+import CLProfile from '../../loaders/Candidate/Profile/CLProfile';
 // import token from '../../mobx/store';
 
 const Profile = () => {
@@ -152,7 +149,8 @@ const Profile = () => {
   }, [isFoucs]);
 
   return loader ? (
-    <ActivityIndicator />
+    // <ActivityIndicator />
+    <CLProfile/>
   ) : (
     <JScreen
       header={
@@ -171,9 +169,7 @@ const Profile = () => {
           }
         />
       }>
-      {loader ? (
-        <ActivityIndicator />
-      ) : error == true ? (
+      {error == true ? (
         <JApiError
           onTryAgainPress={() => {
             _jobProfile(), setError(false);
