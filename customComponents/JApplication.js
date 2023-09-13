@@ -203,36 +203,7 @@ const JApplication = ({
         setLoader(false);
       });
   };
-  const _viewResum = () => {
-    var myHeaders = new Headers();
-    // myHeaders.append('Authorization', `Bearer ${store.token?.token}`, {
-    //   // 'Accept': 'application/json',
-    //   // 'Content-Type': 'application/json',
-    // });
 
-    fetch(`${url.baseUrl}/employer/resume-view/${item.id}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${store.token?.token}`,
-        'Accept': 'application/json',
-      },
-      redirect: 'follow',
-    })
-
-      .then(response => response.json())
-      .then(result => {
-        // console.log('result===>', result?.data);
-        store.setPdf(result?.data);
-      })
-
-      .catch(error => {
-        console.log('error===>', error);
-        store.setPdfApiError(true);
-      })
-      .finally(() => {
-        store.setPdfApiLoader(false);
-      });
-  };
 
 
   useEffect(() => {
@@ -249,7 +220,6 @@ const JApplication = ({
     <>
       <Pressable
         onPress={() => {
-          _viewResum();
           navigation.navigate('ProfileApplication', {
             candidate_id: item.candidate_id,
             candidate_user_id: item.candidate_user_id,

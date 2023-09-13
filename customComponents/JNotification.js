@@ -15,9 +15,16 @@ const JNotification = ({item}) => {
     const store = useContext(StoreContext);
   //  moment.locale( store.lang.id === 0 ?'en': store.lang.id === 1 ? 'ur':'ar') ; 
  
-  const data=JSON.parse(item.text)
-// console.log(data?.id)
-
+  let data;
+  try {
+    data = JSON.parse(item?.text);
+  } catch (error) {
+    // Handle the JSON parsing error here
+    console.error('Error parsing JSON:', error);
+  }
+// console.log('notii',data)
+// console.log('notii',data?.candidate_id)
+console.log(data?.job_id)
 
   return (
     <JRow
@@ -25,8 +32,12 @@ const JNotification = ({item}) => {
     onPress={()=> {
       if(data?.type=='candidate-details'){
         navigation.navigate('ProfileApplication', {
+          id: data?.id,
+          job_id: data?.job_id,
           candidate_id: data?.candidate_id,
+         
         });}
+        
         else{
           navigation.navigate('CJobDetails', {
             id: data?.job_id,

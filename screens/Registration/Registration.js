@@ -1,5 +1,5 @@
-import { StyleSheet, TouchableOpacity, View, ScrollView } from 'react-native';
-import React, { useContext, useState } from 'react';
+import { StyleSheet, View, ScrollView } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
 import JScreen from '../../customComponents/JScreen';
 import JCircularLogo from '../../customComponents/JCircularLogo';
 import JText from '../../customComponents/JText';
@@ -11,19 +11,17 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import JInput from '../../customComponents/JInput';
 import JButton from '../../customComponents/JButton';
 import JDivider from '../../customComponents/JDivider';
-import axios from 'axios';
 import * as yup from 'yup';
 import { Formik } from 'formik';
 import JErrorText from '../../customComponents/JErrorText';
 import JFooter from '../../customComponents/JFooter';
 import CheckBox from '@react-native-community/checkbox';
-import url from '../../config/url';
-import Toast from 'react-native-toast-message';
 import JIcon from '../../customComponents/JIcon';
 import { StoreContext } from '../../mobx/store';
 import { observer } from 'mobx-react';
 import JRow from '../../customComponents/JRow';
 import { JToast } from '../../functions/Toast';
+import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 const Registration = ({ navigation, route }) => {
   const [loader, setLoader] = useState(false);
   const store = useContext(StoreContext);
@@ -92,6 +90,38 @@ const Registration = ({ navigation, route }) => {
         setLoader(false);
       });
   };
+  const gooleLogin = async () => {
+    try {
+        await GoogleSignin.hasPlayServices();
+
+        const userInfo = await GoogleSignin.signIn();
+        store.setGoogleUserInfo(userInfo);
+        const getToken = await GoogleSignin.getTokens()
+        store.setGoogleToken(getToken.accessToken);
+        console.log('getToken=====>',getToken.accessToken)
+
+    } catch (error) {
+        if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+            console.log('user cancelled the login flow', error);
+            // user cancelled the login flow
+        } else if (error.code === statusCodes.IN_PROGRESS) {
+            // operation (e.g. sign in) is in progress already
+            console.log('operation (e.g. sign in) is in progress already', error);
+        } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+            console.log('play services not available or outdated', error);
+            // play services not available or outdated
+        } else {
+            console.log('some other error happened', error);
+            // some other error happened
+        }
+    }
+};
+console.log('GoogleData========>', store.googleUserInfo?.user?.email)
+useEffect(() => {
+  GoogleSignin.configure();
+  // store.setGoogleUserInfo({})
+  // store.setGoogleToken({})
+}, [])
   return (
     <JScreen>
       <View style={{ flex: 0.2, justifyContent: 'center', alignItems: 'center' }}>
@@ -450,7 +480,7 @@ const Registration = ({ navigation, route }) => {
                   onValueChange={value => setFieldValue('policy', value)}
                 />
 
-                <JText style={{ marginHorizontal: RFPercentage(2) }}>
+                <JText style={{ marginHorizontal: RFPercentage(2)}}>
                   {store.lang.you_agree_to_the_JobSkills}{'\n'}
                   <JText
                     fontWeight="bold"
@@ -490,7 +520,22 @@ const Registration = ({ navigation, route }) => {
           }}>
           {['google', 'facebook', 'linkedin', 'twitter'].map((item, index) => (
             <FontAwesome
-              onPress={() => alert(item)}
+            onPress={() => {
+              if (item == 'google') {
+                // gooleLogin()
+                alert('google')
+              }
+              else if (item == 'facebook') {
+                // store.setGoogleUserInfo('')
+                alert('facebook')
+              }
+              else if (item == 'linkedin') {
+                alert('linkedin')
+              }
+              else {
+                alert('twitter')
+              }
+            }}
               key={index}
               name={item}
               size={RFPercentage(3.5)}

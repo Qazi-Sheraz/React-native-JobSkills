@@ -17,7 +17,6 @@ import JButton from '../../customComponents/JButton';
 import CheckBox from '@react-native-community/checkbox';
 import JErrorText from '../../customComponents/JErrorText';
 import url from '../../config/url';
-import Toast from 'react-native-toast-message';
 import { StoreContext } from '../../mobx/store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import JRow from '../../customComponents/JRow';
@@ -25,12 +24,18 @@ import { observer } from 'mobx-react';
 import messaging from '@react-native-firebase/messaging';
 import DeviceInfo from 'react-native-device-info';
 import { JToast } from '../../functions/Toast';
+import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 
 const Login = ({ navigation, route }) => {
+  GoogleSignin.configure({
+    webClientId: '970988747590-38mp324576qepd86ldekiq9addnr2cb7.apps.googleusercontent.com',
+    // webClientId: '505367788352-ksm57f116p8vo9jgvmfrv44nbo38h7s9.apps.googleusercontent.com',
+    offlineAccess: false
+})
   const store = useContext(StoreContext);
   const [loader, setLoader] = useState(false);
+  const [googleData, setGoogleData] = useState();
   const [selectedLanguage, setSelectedLanguage] = useState(null);
-  // console.log(selectedLanguage)
 
   // console.log(route?.params?.type);
   const type = route?.params?.type;
@@ -66,7 +71,6 @@ const Login = ({ navigation, route }) => {
       authStatus === messaging.AuthorizationStatus.PROVISIONAL
     );
   };
-  const [deviceName, setDeviceName] = useState('');
   useEffect(() => {
     getStoredLanguage();
     const fetchDeviceName = async () => {
@@ -80,6 +84,8 @@ const Login = ({ navigation, route }) => {
     };
 
     fetchDeviceName();
+    
+  
   }, []);
 
   // console.log('DeviceInfo', deviceName)
@@ -268,31 +274,46 @@ const Login = ({ navigation, route }) => {
     }
   };
 
-  // const _changeLanguage = (selectedLanguage) => {
-  //   var myHeaders = new Headers();
-  //   myHeaders.append("Authorization", `Bearer ${store.token?.token}`);
-  //   var formdata = new FormData();
-  //   formdata.append("languageName", selectedLanguage);
-  //   // console.log(formdata);
-  //   fetch(`${url.baseUrl}/change-language`, {
-  //     method: 'POST',
-  //     headers: myHeaders,
-  //     body: formdata,
-  //     redirect: 'follow'
-  //   })
-  //     .then(response => response.json())
-  //     .then(result => {
-  //       if (result.success) {
+const gooleLogin = async () => {
+    try {
+        await GoogleSignin.hasPlayServices();
+        
+        // const { idToken } = await GoogleSignin.getTokens();
+        // console.log('Identity Token:--', idToken);
+        const userInfo = await GoogleSignin.signIn();
 
-  //         console.log(result.message)
-  //         // RNRestart.restart()
-  //       }
-  //       else {
-  //         console.log(result.message)
-  //       }
-  //     })
-  //     .catch(error => console.log('error', error));
-  // };
+        store.setGoogleUserInfo(userInfo);
+        const getToken = await GoogleSignin.getTokens()
+        store.setGoogleToken(getToken.accessToken);
+        console.log('getToken=====>',getToken.accessToken)
+
+    } catch (error) {
+        if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+            console.log('user cancelled the login flow', error);
+            // user cancelled the login flow
+        } else if (error.code === statusCodes.IN_PROGRESS) {
+            // operation (e.g. sign in) is in progress already
+            console.log('operation (e.g. sign in) is in progress already', error);
+        } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+            console.log('play services not available or outdated', error);
+            // play services not available or outdated
+        } else {
+            console.log('some other error happened', error);
+            // some other error happened
+        }
+    }
+};
+const googleSignOut = async () => {
+  try {
+    await GoogleSignin.revokeAccess(); // Revoke access to the app
+    await GoogleSignin.signOut(); // Sign out from the Google account
+    // Now, the user can sign in with a different Google account next time.
+  } catch (error) {
+    console.error('Error signing out:', error);
+  }
+};
+console.log('GoogleData========>', store.googleUserInfo)
+
   return (
     <JScreen>
       <View style={{ flex: 0.3, justifyContent: 'center', alignItems: 'center' }}>
@@ -448,7 +469,22 @@ const Login = ({ navigation, route }) => {
           }}>
           {['google', 'facebook', 'linkedin', 'twitter'].map((item, index) => (
             <FontAwesome
-              onPress={() => alert(item)}
+              onPress={() => {
+                if (item == 'google') {
+                  // gooleLogin()
+                  alert('google')
+                }
+                else if (item == 'facebook') {
+                  // googleSignOut();
+                  alert('facebook')
+                }
+                else if (item == 'linkedin') {
+                  alert('linkedin')
+                }
+                else {
+                  alert('twitter')
+                }
+              }}
               key={index}
               name={item}
               size={RFPercentage(3.5)}

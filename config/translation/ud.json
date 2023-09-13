@@ -451,7 +451,9 @@
     "incorrect_email": "غلط ای میل",
     "incorrect_password": "غلط پاس ورڈ!",
     "file_size_exceeds_MB_limit": "فائل کا سائز 1 MB کی حد سے زیادہ ہے",
-    "canceled_from_single_doc_picker": "تم الإلغاء من منتقي مستند واحد"
+    "canceled_from_single_doc_picker": "تم الإلغاء من منتقي مستند واحد",
+    "modal_has_been_closed": "موڈل بند کر دیا گیا ہے"
+    
    
     
     

@@ -9,7 +9,8 @@
     "test": "jest",
     "lint": "eslint .",
     "apk": "cd android && gradlew assembleRelease && cd ..",
-    "aab": "cd android && gradlew bundleRelease && cd .."
+    "aab": "cd android && gradlew bundleRelease && cd ..",
+    "var": "react-native run-android --variant=release"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.17.6",
@@ -18,7 +19,9 @@
     "@react-native-community/netinfo": "^9.0.0",
     "@react-native-community/slider": "^4.4.2",
     "@react-native-firebase/app": "^14.5.0",
+    "@react-native-firebase/auth": "^14.5.0",
     "@react-native-firebase/messaging": "^14.5.0",
+    "@react-native-google-signin/google-signin": "^10.0.1",
     "@react-navigation/bottom-tabs": "^6.3.1",
     "@react-navigation/drawer": "^6.6.3",
     "@react-navigation/native": "^6.0.10",

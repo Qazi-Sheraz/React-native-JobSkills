@@ -174,7 +174,7 @@ const JobDetails = ({ route }) => {
 
       });
   };
-
+console.log('id:',route.params?.id)
   const _getjobDetail = () => {
     var myHeaders = new Headers();
     myHeaders.append(
@@ -863,8 +863,11 @@ const JobDetails = ({ route }) => {
                           containerStyle={{
                             width: '100%',
                             borderBottomWidth: RFPercentage(0.1),
-                            // paddingTop: 15,
-                            marginBottom: RFPercentage(2),
+                          }}
+                          textInputStyle= {{
+                            color: colors.black[0],
+                            fontSize: RFPercentage(2.1),
+                            marginTop: RFPercentage(0.1),
                           }}
                           textContainerStyle={{
                             paddingVertical: 5,

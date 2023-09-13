@@ -199,7 +199,8 @@ function JJobTile({
                   status==5||
                   status==6||
                   status==7||
-                  status==8
+                  status==8||
+                  status==9
                    ? '34%':'65%',
                 
               }}>

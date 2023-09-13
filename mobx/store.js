@@ -131,6 +131,13 @@ export const StoreProvider = props => {
     userInfo: {},
     setUserInfo: action(e => (store.userInfo = e)),
     setUserAvatar: action(e => (store.userInfo.avatar = e)),
+    
+    //google Login
+    googleToken: {},
+    setGoogleToken: action(e => (store.googleToken = e)),
+
+    googleUserInfo: {},
+    setGoogleUserInfo: action(e => (store.googleUserInfo = e)),
 
     //ALL JOBS
     jobData: {},

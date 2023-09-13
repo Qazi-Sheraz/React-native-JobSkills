@@ -429,48 +429,29 @@
     "re_schedule": "إعادة الجدولة",
     "action_for_interview_schedule": "العمل لجدول المقابلة",
     "are_u_sure_you_want_to_report": "هل أنت متأكد أنك تريد الإبلاغ ",
-     "otp_sent_to_your_registered_phone_number": "تم إرسال otp إلى رقم هاتفك المسجل",
-     "sent_to_your_phone_number": "تم إرسال الرمز بنجاح",
-     "check_your_phone": "افحص هاتفك",
-     "eror": "خطأ!",
-     "success": "نجاح!",
-     "already_confirmed": "تم تأكيده بالفعل",
-     "successfully_update": "تم التحديث بنجاح",
-     "something_went_wrong": "هناك خطأ ما",
-     "error_while_saving_data": "خطأ أثناء حفظ البيانات",
-     "register_error": "خطأ في التسجيل",
-     "kindly_check_your_email": "يرجى التحقق من البريد الإلكتروني الخاص بك",
-     "cannot_proceed_your_request": "لا يمكن متابعة طلبك في هذه اللحظة. حاول مرة أخرى!",
-     "kindly_check_your_email_address": "يرجى التحقق من بريدك الإلكتروني للتحقق",
-     "kindly_register_with_that_email_address": "يرجى التسجيل باستخدام عنوان البريد الإلكتروني هذا",
-     "no_email_found": "لم يتم العثور على بريد إلكتروني",
-     "an_error_occurred_please_try_again_later": "حدث خطأ. الرجاء معاودة المحاولة في وقت لاحق",
-     "error_while_uploading_CV": "خطأ أثناء تحميل السيرة الذاتية",
-     "error_while_getting_data": "خطأ أثناء الحصول على البيانات",
-     "code_is_verified": "تم التحقق من الرمز",
-     "your_OTP_is_wrong": "OTP الخاص بك خاطئ",
-     "incorrect_email": "غير صحيح البريد الإلكتروني",
-     "incorrect_password": "كلمة سر خاطئة!",
-     "file_size_exceeds_MB_limit": "يتجاوز حجم الملف الحد المسموح به وهو 1 ميغابايت",
-     "canceled_from_single_doc_picker": "واحد دستاویز چنندہ سے منسوخ کر دیا گیا"
-    
-    
-    
-    
-
-    
-     
-    
-
-    
-
-    
-    
-     
-    
-   
-
-    
-    
-    
+    "otp_sent_to_your_registered_phone_number": "تم إرسال otp إلى رقم هاتفك المسجل",
+    "sent_to_your_phone_number": "تم إرسال الرمز بنجاح",
+    "check_your_phone": "افحص هاتفك",
+    "eror": "خطأ!",
+    "success": "نجاح!",
+    "already_confirmed": "تم تأكيده بالفعل",
+    "successfully_update": "تم التحديث بنجاح",
+    "something_went_wrong": "هناك خطأ ما",
+    "error_while_saving_data": "خطأ أثناء حفظ البيانات",
+    "register_error": "خطأ في التسجيل",
+    "kindly_check_your_email": "يرجى التحقق من البريد الإلكتروني الخاص بك",
+    "cannot_proceed_your_request": "لا يمكن متابعة طلبك في هذه اللحظة. حاول مرة أخرى!",
+    "kindly_check_your_email_address": "يرجى التحقق من بريدك الإلكتروني للتحقق",
+    "kindly_register_with_that_email_address": "يرجى التسجيل باستخدام عنوان البريد الإلكتروني هذا",
+    "no_email_found": "لم يتم العثور على بريد إلكتروني",
+    "an_error_occurred_please_try_again_later": "حدث خطأ. الرجاء معاودة المحاولة في وقت لاحق",
+    "error_while_uploading_CV": "خطأ أثناء تحميل السيرة الذاتية",
+    "error_while_getting_data": "خطأ أثناء الحصول على البيانات",
+    "code_is_verified": "تم التحقق من الرمز",
+    "your_OTP_is_wrong": "OTP الخاص بك خاطئ",
+    "incorrect_email": "غير صحيح البريد الإلكتروني",
+    "incorrect_password": "كلمة سر خاطئة!",
+    "file_size_exceeds_MB_limit": "يتجاوز حجم الملف الحد المسموح به وهو 1 ميغابايت",
+    "canceled_from_single_doc_picker": "واحد دستاویز چنندہ سے منسوخ کر دیا گیا",
+    "modal_has_been_closed": "تم إغلاق المشروط"
 }

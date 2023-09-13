@@ -14,15 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "970988747590-g5jusq04capuuckri1452f7fdtu5nb36.apps.googleusercontent.com",
+          "client_id": "970988747590-9d2r2frscvvv46qek2khulomihkpnqbs.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.jobskills",
-            "certificate_hash": "b3647fc98447fe8ef3b4ffc713face9b1006d6ca"
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
           }
         },
         {
-          "client_id": "970988747590-cfgdfnuvlbp68986nr7i5oefb948d3t0.apps.googleusercontent.com",
+          "client_id": "970988747590-38mp324576qepd86ldekiq9addnr2cb7.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -35,8 +35,15 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "970988747590-cfgdfnuvlbp68986nr7i5oefb948d3t0.apps.googleusercontent.com",
+              "client_id": "970988747590-38mp324576qepd86ldekiq9addnr2cb7.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "970988747590-tu4p2l8epqh57q0j0anpec3d86cs40hj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.jobskills.digital"
+              }
             }
           ]
         }

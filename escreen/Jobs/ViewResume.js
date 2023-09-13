@@ -1,4 +1,4 @@
-import { ScrollView, Dimensions, ActivityIndicator, Button,Linking } from 'react-native'
+import { ScrollView, Dimensions, ActivityIndicator, Button, Linking } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import JScreen from '../../customComponents/JScreen'
 import JGradientHeader from '../../customComponents/JGradientHeader'
@@ -14,13 +14,15 @@ import { View } from 'react-native-animatable'
 import { StoreContext } from '../../mobx/store'
 import url from '../../config/url'
 import { observer } from 'mobx-react'
+import JEmpty from '../../customComponents/JEmpty'
 
 
 
-const ViewResume = () => {
-    const store = useContext(StoreContext);
-    const [error, setError] = useState(false);
-   
+const ViewResume = (navigation) => {
+
+  const store = useContext(StoreContext);
+  const [error, setError] = useState(false);
+
   return (
     <JScreen>
       <JGradientHeader
@@ -32,66 +34,70 @@ const ViewResume = () => {
             {store.lang.test_cV}
           </JText>
         }
-        left={JChevronIcon}
+        left={<JChevronIcon/>}
       />
 
       {store.pdfApiLoader === true ? (
         <ActivityIndicator />
       ) : (
-        <View style={{flex:1 }}>
-        <ScrollView 
-         
-           showsVerticalScrollIndicator={false}>
-          <Pdf
-            trustAllCerts={false}
-            source={{uri: store.pdf&&store.pdf}}
-            onLoadComplete={(numberOfPages, filePath) => {
-              // console.log(`Number of pages: ${numberOfPages}`);
-            }}
-            onPageChanged={(page, numberOfPages) => {
-              // console.log(`Current page: ${page}`);
-            }}
-            onError={error => {
-              // console.log(error);
-            }}
-            onPressLink={uri => {
-              // console.log(`Link pressed: ${uri}`);
-            }}
-            style={{
-              alignSelf: 'center',
-              backgroundColor: '#ffff',
-              width: Dimensions.get('window').width/1.1,
-              height: Dimensions.get('window').height/1.5,
-              marginTop:RFPercentage(5),
-            // width:'100%',
-            // height:'80%',
-              shadowColor: '#000',
-              shadowOffset: {
-                width: 0,
-                height: 2,
-              },
-              shadowOpacity: 0.25,
-              shadowRadius: 3.84,
+        store.pdf ?(
+          <View style={{ flex: 1 }}>
+            <ScrollView
 
-              elevation: 5,
-            }}
-          />
-         
-        </ScrollView>
-        <JButton
-            // isValid={isValid}
-            onPress={() => {
-              Linking.openURL(store.pdf&&store.pdf);
-            }}
-            style={{
-            //   width: '46%',
-            padding:RFPercentage(1),
-              position:'absolute',
-              bottom:20
-            }}
-            children={store.lang.downloadResume}
-          /></View>
-      )}
+              showsVerticalScrollIndicator={false}>
+              <Pdf
+                trustAllCerts={false}
+                source={{ uri: store.pdf && store.pdf }}
+                onLoadComplete={(numberOfPages, filePath) => {
+                  // console.log(`Number of pages: ${numberOfPages}`);
+                }}
+                onPageChanged={(page, numberOfPages) => {
+                  // console.log(`Current page: ${page}`);
+                }}
+                onError={error => {
+                  // console.log(error);
+                }}
+                onPressLink={uri => {
+                  // console.log(`Link pressed: ${uri}`);
+                }}
+                style={{
+                  alignSelf: 'center',
+                  backgroundColor: '#ffff',
+                  width: Dimensions.get('window').width / 1.1,
+                  height: Dimensions.get('window').height / 1.5,
+                  marginTop: RFPercentage(5),
+                  // width:'100%',
+                  // height:'80%',
+                  shadowColor: '#000',
+                  shadowOffset: {
+                    width: 0,
+                    height: 2,
+                  },
+                  shadowOpacity: 0.25,
+                  shadowRadius: 3.84,
+
+                  elevation: 5,
+                }}
+              />
+
+            </ScrollView>
+
+            <JButton
+              // isValid={isValid}
+              disabled={store.pdfApiLoader ? true : false}
+              onPress={() => {
+                Linking.openURL(store.pdf && store.pdf);
+              }}
+              style={{
+                //   width: '46%',
+                padding: RFPercentage(1),
+                position: 'absolute',
+                bottom: 20
+              }}
+              children={store.lang.downloadResume}
+            /></View>
+          
+      ): <JEmpty />)}
     </JScreen>
   );
 }

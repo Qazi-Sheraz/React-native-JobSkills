@@ -84,18 +84,18 @@ const Resume = ({ navigation }) => {
   };
 
   const _deleteCV = id => {
-    Alert.alert('Delete CV', 'Are you sure to delete?', [
-      {
-        text: 'Cancel',
-        //  onPress: () => console.log('Cancel Pressed'),
-        style: 'cancel',
-      },
-      { text: 'OK', onPress: () => _delete() },
-    ]);
+    // Alert.alert('Delete CV', 'Are you sure to delete?', [
+    //   {
+    //     text: 'Cancel',
+    //     //  onPress: () => console.log('Cancel Pressed'),
+    //     style: 'cancel',
+    //   },
+    //   { text: 'OK', onPress: () => _delete() },
+    // ]);
 
-    const _delete = () => {
+    // const _delete = () => {
       var myHeaders = new Headers();
-      myHeaders.append('Authorization', `Bearer ${store.token.token}`);
+      myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
 
       var requestOptions = {
         method: 'DELETE',
@@ -107,9 +107,12 @@ const Resume = ({ navigation }) => {
         .then(result => {
           // console.log(result);
           setResumes(resumes.filter(e => e.id !== id));
+          setLoader(true)
+          _getResume()
+          setLoader(false)
         })
       // .catch(error => console.log('error', error));
-    };
+    // };
   };
   const _getResume = () => {
     setModalVisible(false);
@@ -221,7 +224,10 @@ const Resume = ({ navigation }) => {
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
+          JToast({
+            type: 'danger',
+            text1: store.lang.modal_has_been_closed,
+          });
           setModalVisible(!modalVisible);
         }}>
         <Formik

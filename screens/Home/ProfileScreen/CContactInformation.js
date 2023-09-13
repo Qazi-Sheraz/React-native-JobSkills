@@ -366,12 +366,15 @@ function CContactInformation({refRBSheet, user}) {
                   containerStyle={{
                     width: '100%',
                     borderBottomWidth: RFPercentage(0.1),
-                    // paddingTop: 15,
-                    marginBottom: RFPercentage(2),
                   }}
                   textContainerStyle={{
                     paddingVertical: 5,
                     backgroundColor: 'transparent',
+                  }}
+                  textInputStyle= {{
+                    color: colors.black[0],
+                    fontSize: RFPercentage(2.1),
+                    marginTop: RFPercentage(0.1),
                   }}
                   onChangeFormattedText={(text,c) => {
                     setFieldValue('phone', text);

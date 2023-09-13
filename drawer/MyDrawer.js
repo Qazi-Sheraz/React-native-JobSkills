@@ -193,7 +193,7 @@ export default function MyDrawer() {
     <Observer>
       
       {() =>
-        store.langType == 'false' && !store?.token ? (
+        store.langType == 'false' && !store?.token  ? (
           <LangStack />
 
         ) : store.langType == 'true' && !store?.token ? (

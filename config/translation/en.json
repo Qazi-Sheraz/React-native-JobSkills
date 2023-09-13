@@ -459,8 +459,8 @@
     "incorrect_email": "Incorrect Email",
     "incorrect_password": "Incorrect Password!",
     "file_size_exceeds_MB_limit": "File size exceeds 1 MB limit",
-    "canceled_from_single_doc_picker": "Canceled from single doc picker"
-    
+    "canceled_from_single_doc_picker": "Canceled from single doc picker",
+    "modal_has_been_closed": "Modal has been closed"
      
     
 

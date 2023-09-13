@@ -25,6 +25,7 @@ import JApiError from '../../customComponents/JApiError';
 import { useCallback } from 'react';
 import JEmpty from '../../customComponents/JEmpty';
 import { JToast } from '../../functions/Toast';
+import CLFavouriteJob from '../../loaders/Candidate/FavouriteJob/CLFavouriteJob';
 
 const Job = () => {
   const navigation = useNavigation();
@@ -108,7 +109,8 @@ const Job = () => {
     >
 
       {loader ? (
-        <ActivityIndicator />
+        // <ActivityIndicator />
+        <CLFavouriteJob />
       ) : (
         error ?
           <JApiError

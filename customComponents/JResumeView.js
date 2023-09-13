@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   Linking,
 } from 'react-native';
-import React from 'react';
+import React,{ useState,useContext } from 'react';
 
 import JText from './JText';
 import {RFPercentage} from 'react-native-responsive-fontsize';
@@ -17,11 +17,14 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import colors from '../config/colors';
 import moment from 'moment';
-
+import JModal from './JModal';
+import { StoreContext } from '../mobx/store';
 export default function JResumeView({item, setModalVisible, _deleteCV}) {
   const custom_properties = item.custom_properties;
-
+  const [modalVisible1, setModalVisible1] = useState(false);
+  const store = useContext(StoreContext);
   return (
+    <>
     <View
       style={{
         alignItems: 'center',
@@ -112,7 +115,7 @@ export default function JResumeView({item, setModalVisible, _deleteCV}) {
         </TouchableOpacity>
         <TouchableOpacity
         
-          onPress={() => _deleteCV(item.id)}
+          onPress={() => setModalVisible1(true)}
           style={{
             marginHorizontal: RFPercentage(0.5),
             justifyContent: 'center',
@@ -129,6 +132,18 @@ export default function JResumeView({item, setModalVisible, _deleteCV}) {
         </TouchableOpacity>
       </JRow>
     </View>
+    
+     <JModal
+     modalVisible={modalVisible1}
+     setModalVisible={setModalVisible1}
+     alertMsg={store.lang.delete}
+     msg={store.lang.are_you_sure_to_delete}
+     onPressYes={() => {  _deleteCV(item.id)}}
+     onPressNo={() => {
+       setModalVisible1(false)
+     }}
+   />
+   </>
   );
 }
 

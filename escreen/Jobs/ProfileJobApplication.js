@@ -1,4 +1,4 @@
-import { ActivityIndicator, Image, ScrollView, SafeAreaView, StyleSheet, FlatList, View, Modal, Pressable, Linking } from 'react-native';
+import { ActivityIndicator, Image, SafeAreaView, StyleSheet, FlatList, View, Modal, Linking } from 'react-native';
 import React, { useState, useRef, useContext, useEffect } from 'react';
 import JScreen from '../../customComponents/JScreen';
 import JHeader from '../../customComponents/JHeader';
@@ -30,22 +30,27 @@ import url from '../../config/url';
 import JGradientHeader from '../../customComponents/JGradientHeader';
 import { Formik } from 'formik';
 import JInput from '../../customComponents/JInput';
-import Toast from 'react-native-toast-message';
 import JApiError from '../../customComponents/JApiError';
 import JNotfoundData from '../../customComponents/JNotfoundData';
 import { JToast } from '../../functions/Toast';
+import JScrollView from '../../customComponents/JScrollView';
+import CLCandidateDetails from '../../loaders/Employer/candidateDetails/CLCandidateDetails';
 
 const ProfileJobApplication = ({ route }) => {
   const store = useContext(StoreContext);
   const { params } = useRoute();
-  // console.log(store.pdf);
+  console.log('params', params);
 
   const [details, setDetails] = useState();
-  const [resume, setResume] = useState();
+  const [applicationId, setApplicationID] = useState();
+  const [statusIndex, setStatusIndex] = useState();
   const [loader, setLoader] = useState(true);
+  const [loaderStatus, setLoaderStatus] = useState(true);
   const [error, setError] = useState(false);
   const [buttonPressed, setButtonPressed] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+
+
 
   const handleButtonPress = (button) => {
     setButtonPressed(button);
@@ -62,7 +67,7 @@ const ProfileJobApplication = ({ route }) => {
       `Bearer ${store.token?.token}`,
     );
 
-    fetch(`${url.baseUrl}/candidate-details/${params?.candidate_id}`, {
+    fetch(`${url.baseUrl}/candidate-details/${params?.candidate_id}?job_id=${params?.job_id}`, {
       method: 'GET',
       headers: myHeaders,
       redirect: 'follow',
@@ -70,7 +75,9 @@ const ProfileJobApplication = ({ route }) => {
       .then(response => response.json())
       .then(result => {
         // console.log(result);
-        setDetails(result);
+        setApplicationID(result?.job_application_id[0])
+        setDetails(result)
+
       })
 
       .catch(error => {
@@ -89,7 +96,7 @@ const ProfileJobApplication = ({ route }) => {
 
     var formdata = new FormData();
     formdata.append("userId", store.token?.user?.id);
-    formdata.append("candidateId", params?.candidate_user_id);
+    formdata.append("candidateId", details?.candidateDetails[0]?.id);
     formdata.append("note", values.note);
     //  console.log('formdata',formdata)
 
@@ -126,43 +133,69 @@ const ProfileJobApplication = ({ route }) => {
       );
 
   };
-  // const _viewResum = () => {
-  //   var myHeaders = new Headers();
-  //   // myHeaders.append('Authorization', `Bearer ${store.token?.token}`, {
-  //   //   // 'Accept': 'application/json',
-  //   //   // 'Content-Type': 'application/json',
-  //   // });
 
-  //   fetch(`${url.baseUrl}/employer/resume-view/${params?.id}`, {
-  //     method: 'GET',
-  //     headers: {'Authorization': `Bearer ${store.token?.token}`,
-  //     'Accept': 'application/json',
-  //    },
-  //     redirect: 'follow',
-  //   })
+  const _getStatusbar = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${store.token?.token}`, {
+      // 'Accept': 'application/json',
+      // 'Content-Type': 'application/json'
+    });
+    var requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow'
+    };
+    fetch(
+      `${url.baseUrl}/candidate/job-application/${params?.job_id}/status/${params.candidate_id}`,
+      requestOptions,
+    )
+      .then(response => response.json())
+      .then(result => {
+        // console.log('jobApplicationStatus',result.jobApplicationStatus)
+        setStatusIndex(result.jobApplicationStatus);
+      })
+      .catch(error => { })
+      .finally(() => {
+        setLoaderStatus(false);
+      });
+  };
+  console.log('applicationId', applicationId)
+  const _viewResum = () => {
+    var myHeaders = new Headers();
 
-  //     .then(response => response.json())
-  //     .then(result => {
-  //       console.log('result===>', result?.data);
-  //       store.setPdf(result?.data) ;        
-  //      })
+    fetch(`${url.baseUrl}/employer/resume-view/${applicationId}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${store.token?.token}`,
+        'Accept': 'application/json',
+      },
+      redirect: 'follow',
+    })
 
-  //     .catch(error => {
-  //       console.log('error===>', error);
-  //        setError(true);
-  //     })
-  //     .finally(() => {
-  //       store.setPdfApiLoader(false);
-  //     });
-  // };
+      .then(response => response.json())
+      .then(result => {
+        console.log('result===>', result?.data);
+        store.setPdf(result?.data);
+      })
+
+      .catch(error => {
+        console.log('error===>', error);
+        store.setPdfApiError(true);
+      })
+      .finally(() => {
+        store.setPdfApiLoader(false);
+      });
+  };
   useEffect(() => {
+    _getStatusbar()
     _candidateDetails()
+    _viewResum();
+
   }, []);
-  // console.log(resume?.data)
   return (
     <>
       {loader ? (
-        <ActivityIndicator />
+        <CLCandidateDetails />
       ) : error == true ?
         <JApiError
           onTryAgainPress={() => {
@@ -172,8 +205,7 @@ const ProfileJobApplication = ({ route }) => {
         /> : (
           <View style={styles.maincontainer}>
             <JHeader
-
-              left={<JChevronIcon color={'Black'} />}
+              left={<JChevronIcon color={colors.black[0]} />}
               right={
                 store.pdfApiLoader ? (
                   <ActivityIndicator />
@@ -200,9 +232,18 @@ const ProfileJobApplication = ({ route }) => {
                           </JText>
                         </JRow>
                       </MenuOption>
-                      <MenuOption
+                      {/* <MenuOption
                         onSelect={() => {
-                          Linking.openURL(store.pdf && store.pdf);
+                          _viewResum();
+                          if (store.pdf) {
+                            Linking.openURL(store.pdf);
+                          }
+                          else {
+                            JToast({
+                              type: 'error',
+                              text1: 'Invaild URl',
+                            });
+                          }
                         }}>
                         <JRow>
                           <Download />
@@ -210,10 +251,13 @@ const ProfileJobApplication = ({ route }) => {
                             {store.lang.download_resume}
                           </JText>
                         </JRow>
-                      </MenuOption>
+                      </MenuOption> */}
                       <MenuOption
                         onSelect={() => {
-                          navigation.navigate('ViewResume', { ...params });
+                          store.setPdfApiLoader(true)
+                          _viewResum()
+                          navigation.navigate('ViewResume', { ...params })
+                          
                         }}>
                         <JRow>
                           <Eyes />
@@ -253,11 +297,14 @@ const ProfileJobApplication = ({ route }) => {
                   {details?.candidateDetails[0]?.email}
                 </JText>
               )}
-              {details?.candidateDetails[0]?.full_location && (
+              {details?.lastestExperience[0]?.country?.id && (
                 <JText style={styles.txt}>
-                  {store.lang.id==0? details?.candidateDetails[0]?.full_location:`${details?.candidateDetails[0]?.country},${details?.candidateDetails[0]?.state},${details?.candidateDetails[0]?.city}`}
+                  {store.lang.id == 0 ? `${details?.lastestExperience[0]?.country?.name}, ${details?.lastestExperience[0]?.state?.name}, ${details?.lastestExperience[0]?.city?.name}` : `${details?.lastestExperience[0]?.country?.arabic_title}, ${details?.lastestExperience[0]?.state?.arabic_title}, ${details?.lastestExperience[0]?.city?.arabic_title}`}
                 </JText>
               )}
+
+
+
               <JRow
                 style={{
                   width: '60%',
@@ -275,9 +322,11 @@ const ProfileJobApplication = ({ route }) => {
                 </JText>
               </JRow>
 
-              <JStatusbar />
+              {loader ?
+                <ActivityIndicator /> :
+                <JStatusbar item={statusIndex} />}
 
-              <ScrollView
+              <JScrollView
                 style={{ width: '100%', marginVertical: RFPercentage(1.5) }}>
                 <View style={styles.rView}>
                   <JText style={styles.results}>
@@ -285,17 +334,14 @@ const ProfileJobApplication = ({ route }) => {
                   </JText>
                   {details?.candidateAssessment[0]?.assessment_name?.length > 0 ? (
                     <>
-                      <FlatList
-                        data={details?.candidateAssessment?.slice(0, 4)}
-                        renderItem={({ item, index }) => (
-                          <JAssessmentResult
-                            title={item?.assessment_name}
-                            percent={item?.percentage && `${item?.percentage} %`}
-                            color={colors.purple[0]}
-                          />
-                        )}
-                        keyExtractor={(item, index) => index}
-                      />
+                      {details?.candidateAssessment?.slice(0, 4).map((item, index) => (
+
+                        <JAssessmentResult
+                          title={item?.assessment_name}
+                          percent={item?.percentage && `${item?.percentage} %`}
+                          color={colors.purple[0]}
+                        />
+                      ))}
 
                       <JButton
                         style={{ marginTop: RFPercentage(0.5) }}
@@ -346,7 +392,7 @@ const ProfileJobApplication = ({ route }) => {
                           txt={item.degree_level}
                         />
                       )}
-                      keyExtractor={(item, index) => index}
+                      keyExtractor={(item) => item.toString()}
                     />
                   ) : (
                     <JNotfoundData />
@@ -357,17 +403,13 @@ const ProfileJobApplication = ({ route }) => {
                   <JText style={styles.results}>{store.lang.skills}</JText>
                   {details?.candidateSkill[0]?.skill_name?.length > 0 ? (
                     <>
-                      <FlatList
-                        data={details?.candidateSkill?.slice(0, 4)}
-                        renderItem={({ item, index }) => (
-                          <JAssessmentResult
-                            title={store.lang.id==0?item.skill_name:item.arabic_title}
-                            percent={item.percentage && `${item.percentage} %`}
-                            color={'#B7834A'}
-                          />
-                        )}
-                        keyExtractor={item => item.toString()}
-                      />
+                      {details?.candidateSkill?.slice(0, 4).map((item, index) => (
+                        <JAssessmentResult
+                          title={store.lang.id == 0 ? item.skill_name : item.arabic_title}
+                          percent={item.percentage && `${item.percentage} %`}
+                          color={'#B7834A'}
+                        />
+                      ))}
 
                       <JButton
                         style={{ marginTop: RFPercentage(0.5) }}
@@ -380,7 +422,7 @@ const ProfileJobApplication = ({ route }) => {
                   )}
                 </View>
 
-              </ScrollView>
+              </JScrollView>
             </View>
           </View>)}
       <RBSheet
@@ -430,7 +472,7 @@ const ProfileJobApplication = ({ route }) => {
               data={details?.candidateSkill}
               renderItem={({ item, index }) => (
                 <JAssessmentResult
-                  title={store.lang.id==0?item.skill_name:item.arabic_title}
+                  title={store.lang.id == 0 ? item.skill_name : item.arabic_title}
                   percent={item.percentage && `${item.percentage} %`}
                   color={'#B7834A'}
                 />
@@ -475,7 +517,7 @@ const ProfileJobApplication = ({ route }) => {
               handleSubmit,
               setFieldValue,
             }) => (
-              <ScrollView
+              <JScrollView
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={styles.modalView}>
                 <JInput
@@ -511,7 +553,7 @@ const ProfileJobApplication = ({ route }) => {
                     {loader ? store.lang.loading : store.lang.submit}
                   </JButton>
                 </JRow>
-              </ScrollView>
+              </JScrollView>
             )}
           </Formik>
           {/* <Pressable style={{height:'15%',width:'100%'}} onPress={()=> setModalVisible(!modalVisible)}/> */}

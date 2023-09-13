@@ -12,16 +12,16 @@ import { observer } from 'mobx-react';
 
 
 const JStatusbar = ({item}) => {
-  const [index, setIndex] = useState();
+  const [index, setIndex] = useState(item);
   const [loader, setLoader] = useState(true);
   const {params}= useRoute()
   const store = useContext(StoreContext);
+  console.log(item)
   const _getStatusbar=()=> {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", `Bearer ${store.token?.token}`,{
       // 'Accept': 'application/json',
       // 'Content-Type': 'application/json'
-
     });
     var requestOptions = {
       method: 'GET',
@@ -34,7 +34,7 @@ const JStatusbar = ({item}) => {
     )
       .then(response => response.json())
       .then(result => {
-        // console.log(result.jobApplicationStatus)
+        console.log(result.jobApplicationStatus)
         setIndex(result.jobApplicationStatus);
       })
       .catch(error => {})
@@ -42,14 +42,15 @@ const JStatusbar = ({item}) => {
         setLoader(false);
       });
   };
-  useEffect(() => {
-  _getStatusbar();
-  }, [loader])
+  // useEffect(() => {
+  // _getStatusbar();
+  // }, [loader])
 
   return (
-    loader?<ActivityIndicator/>:
-    (
+    // loader?<ActivityIndicator/>:
+    // (
     <>
+    
       <JRow
         style={{
 
@@ -59,7 +60,6 @@ const JStatusbar = ({item}) => {
           // marginHorizontal: RFPercentage(2),
         }}>
         <JIcon
-       
           style={{
             marginRight: 0,
           }}
@@ -156,7 +156,7 @@ const JStatusbar = ({item}) => {
       <JText>{store.lang.Interview}{'\n'}{store.lang.scheduled}</JText>
       <JText>{store.lang.Interview}{'\n'}{store.lang.completed}</JText>
       </JRow>
-    </>)
+    </>
   );
 };
 

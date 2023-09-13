@@ -25,6 +25,7 @@ import JNotfoundData from '../../customComponents/JNotfoundData';
 import JApiError from '../../customComponents/JApiError';
 import JEmpty from '../../customComponents/JEmpty';
 import { JToast } from '../../functions/Toast';
+import CLNotification from '../../loaders/Candidate/Notification/CLNotification';
 
 const Meeting = ({isempty=false,}) => {
   const store = useContext(StoreContext);
@@ -100,9 +101,7 @@ const Meeting = ({isempty=false,}) => {
       });
   };
   useEffect(() => {
-
     _getmeeting();
-    
   }, [isFoucs]);
 
   const refRBSheet = useRef();
@@ -126,7 +125,8 @@ const Meeting = ({isempty=false,}) => {
       }>
         
       {loader ? (
-        <ActivityIndicator />
+        // <ActivityIndicator />
+        <CLNotification/>
       ) : data?.length > 0 ? (
         <FlatList
           data={data}
