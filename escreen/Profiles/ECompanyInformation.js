@@ -175,7 +175,10 @@ const ECompanyInformation = () => {
               .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'Ceo Name must contain at least 1 alphabet character and can include English, Urdu, Arabic, and spaces')
               .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the Ceo Name')
               .required(),
-            website: yup.string().required('Website is required'),
+              website: yup
+              .string()
+              .url('Invalid URL format')
+              .required('Website URL is required'),
             // fax: yup.string().max(14).required(),
           })}
         >

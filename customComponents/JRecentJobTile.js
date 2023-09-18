@@ -151,7 +151,8 @@ const jobTitle = encodeURIComponent(item?.job_title || "");
           onPress={onPress}
           style={[
             {
-              height: heightPercentageToDP(12),
+              // height: heightPercentageToDP(12),
+              paddingVertical:RFPercentage(0.5),
               borderBottomWidth: RFPercentage(0.1),
               borderBottomColor: colors.border[0],
               // marginBottom: RFPercentage(1),
@@ -199,7 +200,7 @@ const jobTitle = encodeURIComponent(item?.job_title || "");
             }}>
               <JRow>
             <JText style={{width: '80%'}} fontWeight="bold">
-              {item?.job_title}
+              {item?.job_title?.length > 30 ? item?.job_title?.slice(0, 30) + " . . . .":item?.job_title}
             </JText>
             </JRow>
             <JRow
@@ -222,7 +223,7 @@ const jobTitle = encodeURIComponent(item?.job_title || "");
                 onPress={() =>
                   navigation.navigate('JobApplication', {id: item?.id})
                 }>
-                <JIcon icon={'ev'} name="user" size={RFPercentage(3)} />
+                <JIcon icon={'fa5'} name="user-circle" size={RFPercentage(2.1)} color={colors.drafted[0]}style={{marginHorizontal:RFPercentage(0.2) }}/>
                 <JText>
                   {item?.applicant?item?.applicant:'0'} {store.lang.applicant}
                 </JText>

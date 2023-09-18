@@ -51,15 +51,39 @@ const ProfileJobApplication = ({ route }) => {
   const [modalVisible, setModalVisible] = useState(false);
 
 
-
+// console.log(params?.job_id)
   const handleButtonPress = (button) => {
     setButtonPressed(button);
     bottomSheetRef.current.open();
   };
-
   const bottomSheetRef = useRef();
   const navigation = useNavigation();
 
+  const _getStatusbar = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${store.token?.token}`, {
+      // 'Accept': 'application/json',
+      // 'Content-Type': 'application/json'
+    });
+    var requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow'
+    };
+    fetch(
+      `${url.baseUrl}/candidate/job-application/${params?.job_id}/status/${params?.candidate_id}`,
+      requestOptions,
+    )
+      .then(response => response.json())
+      .then(result => {
+        // console.log('jobApplicationStatus',result.jobApplicationStatus)
+        setStatusIndex(result.jobApplicationStatus);
+      })
+      .catch(error => { })
+      .finally(() => {
+        setLoaderStatus(false);
+      });
+  };
   const _candidateDetails = () => {
     var myHeaders = new Headers();
     myHeaders.append(
@@ -134,35 +158,10 @@ const ProfileJobApplication = ({ route }) => {
 
   };
 
-  const _getStatusbar = () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", `Bearer ${store.token?.token}`, {
-      // 'Accept': 'application/json',
-      // 'Content-Type': 'application/json'
-    });
-    var requestOptions = {
-      method: 'GET',
-      headers: myHeaders,
-      redirect: 'follow'
-    };
-    fetch(
-      `${url.baseUrl}/candidate/job-application/${params?.job_id}/status/${params.candidate_id}`,
-      requestOptions,
-    )
-      .then(response => response.json())
-      .then(result => {
-        // console.log('jobApplicationStatus',result.jobApplicationStatus)
-        setStatusIndex(result.jobApplicationStatus);
-      })
-      .catch(error => { })
-      .finally(() => {
-        setLoaderStatus(false);
-      });
-  };
-  console.log('applicationId', applicationId)
+ 
+  // console.log('applicationId', applicationId)
   const _viewResum = () => {
     var myHeaders = new Headers();
-
     fetch(`${url.baseUrl}/employer/resume-view/${applicationId}`, {
       method: 'GET',
       headers: {
@@ -174,7 +173,7 @@ const ProfileJobApplication = ({ route }) => {
 
       .then(response => response.json())
       .then(result => {
-        console.log('result===>', result?.data);
+        // console.log('result===>', result?.data);
         store.setPdf(result?.data);
       })
 
@@ -188,9 +187,10 @@ const ProfileJobApplication = ({ route }) => {
   };
   useEffect(() => {
     _getStatusbar()
-    _candidateDetails()
-    _viewResum();
-
+    setTimeout(() => {
+       _candidateDetails()
+    },1000);
+   
   }, []);
   return (
     <>
@@ -207,9 +207,6 @@ const ProfileJobApplication = ({ route }) => {
             <JHeader
               left={<JChevronIcon color={colors.black[0]} />}
               right={
-                store.pdfApiLoader ? (
-                  <ActivityIndicator />
-                ) : (
                   <Menu>
                     <MenuTrigger
                       style={{
@@ -268,7 +265,6 @@ const ProfileJobApplication = ({ route }) => {
                       </MenuOption>
                     </MenuOptions>
                   </Menu>
-                )
               }
             />
 

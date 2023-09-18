@@ -30,7 +30,7 @@ function Notification ({navigation, route}) {
       `Bearer ${store.token?.token}`,
     );
 
-    fetch(store.token?.user?.owner_type.includes('Candidate') == false?`${url.baseUrl}/get-notification`:`${url.baseUrl}/get-candidate-notification `, {
+    fetch(store.token?.user?.owner_type.includes('Candidate') == false?`${url.baseUrl}/get-notification`:`${url.baseUrl}/get-candidate-notification`, {
       method: 'GET',
       headers: myHeaders,
       redirect: 'follow',

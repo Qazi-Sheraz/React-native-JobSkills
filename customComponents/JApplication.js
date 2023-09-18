@@ -13,37 +13,34 @@ import {
   MenuOptions,
   MenuTrigger,
 } from 'react-native-popup-menu';
-import Toast from 'react-native-toast-message';
 import { StoreContext } from '../mobx/store';
-
 import url from '../config/url';
 import JGradientHeader from './JGradientHeader';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import JInput from './JInput';
 import JButton from './JButton';
-import DatePicker from 'react-native-date-picker';
 import { useRoute, useNavigation, useIsFocused } from '@react-navigation/native';
 import { keys, values } from 'mobx';
 import { observer } from 'mobx-react';
 import { JToast } from '../functions/Toast';
 import JSelectInput from './JSelectInput';
+import { _jobApplication } from '../escreen/Jobs/JobApplication';
 // import url from '../../config/url';
 const JApplication = ({
-  Hname,
-  status,
-  ApplyDate,
-  onSelect,
+
   onPress,
   item,
   onPressStatus,
   update,
   setUpdate,
+  api,
 }) => {
   const { params } = useRoute();
   const [error, setError] = useState(false);
   const [loader, setLoader] = useState(true);
   const [loader1, setLoader1] = useState(false);
+  const [btnloader, setBtnLoader] = useState(false);
   const [option, setOption] = useState(false);
   const [meetings, setMeetings] = useState();
   const isFoucs = useIsFocused();
@@ -58,31 +55,71 @@ const JApplication = ({
   const [modalVisible, setModalVisible] = useState(false);
 
   const handleStatusSelect = status1 => {
-
+    setLoader1(true)
     setSelectedStatus(status1);
     status1 == 0
-      ? _applicantsStatus(0, store.lang.drafted)
+      ? _applicantsStatus(0)
       : status1 == 1
-        ? _applicantsStatus(1, store.lang.applied)
+        ? _applicantsStatus(1)
         : status1 == 2
-          ? _applicantsStatus(2, store.lang.rejected)
+          ? _applicantsStatus(2)
           : status1 == 3
-            ? _applicantsStatus(3, store.lang.selected)
+            ? _applicantsStatus(3)
             : status1 == 4
-              ? _applicantsStatus(4, store.lang.shortlisted)
+              ? _applicantsStatus(4)
               : status1 == 5
-                ? _applicantsStatus(5, store.lang.invitation_Sent)
+                ? _applicantsStatus(5)
                 : status1 == 6
-                  ? _applicantsStatus(6, store.lang.interview_scheduled)
+                  ? _applicantsStatus(6)
                   : status1 == 7
-                    ? _applicantsStatus(7, store.lang.interview_accepted)
+                    ? _applicantsStatus(7)
                     : status1 == 8
-                      ? _applicantsStatus(8, store.lang.interview_rescheduled)
-                      : status1 == 9 &&
-                      _applicantsStatus(9, store.lang.interview_completed);
+                      ? _applicantsStatus(8)
+                      : status1 == 9
+                      && _applicantsStatus(9);
     // console.log(status1)
   };
+  // console.log('itemmmmmm',item.id)
+  const _applicantsStatus = (id, selectedStatus) => {
+    var myHeaders = new Headers();
+    myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
+
+    fetch(`${url.baseUrl}/employer/job-applications/${item?.id}/status/${id}`, {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow',
+    })
+      .then(response => response.json())
+      .then(result => {
+        if (result.success == true) {
+          setStat(id)
+          setUpdate(!update)
+          api()
+          JToast({
+            type: 'success',
+            text1: store.lang.success,
+            text2: result.message,
+          });
+
+        } else {
+          JToast({
+            type: 'danger',
+            text1: store.lang.eror,
+            text2: result.message,
+          });
+        }
+      })
+      .catch(error => {
+        // console.log('error', error);
+        setError(true);
+      })
+      .finally(() => {
+        setLoader(false)
+        setLoader1(false)
+      });
+  };
   const _meetingSubmit = values => {
+    setBtnLoader(true)
     var myHeaders = new Headers();
     myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
 
@@ -121,62 +158,33 @@ const JApplication = ({
             text1: 'Success!',
             text2: result.message,
           });
+          setBtnLoader(false)
           setModalVisible(!modalVisible);
 
+
         } else {
+          setBtnLoader(false)
           JToast({
             type: 'danger',
             text1: store.lang.eror,
             text2: result.message,
           });
 
-        }
-      })
-      .catch(error =>{
-         console.log('error', error)
-         JToast({
-          type: 'danger',
-          text1: store.lang.eror,
-          text2: store.lang.an_error_occurred_please_try_again_later,
-        });});
-  };
-
-  const _applicantsStatus = (id, selectedStatus) => {
-    var myHeaders = new Headers();
-    myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
-
-    fetch(`${url.baseUrl}/employer/job-applications/${item.id}/status/${id}`, {
-      method: 'GET',
-      headers: myHeaders,
-      redirect: 'follow',
-    })
-      .then(response => response.json())
-      .then(result => {
-        if (result.success == true) {
-
-          setStat(id)
-          JToast({
-            type: 'success',
-            text1: store.lang.success,
-            text2: result.message,
-          });
-          setUpdate(!update)
-        } else {
-          JToast({
-            type: 'danger',
-            text1: store.lang.eror,
-            text2: result.message,
-          });
         }
       })
       .catch(error => {
-        // console.log('error', error);
-        setError(true);
-      })
-      .finally(() => {
-        setLoader(false);
+        setBtnLoader(false)
+        console.log('error', error)
+        JToast({
+          type: 'danger',
+          text1: store.lang.eror,
+          text2: store.lang.an_error_occurred_please_try_again_later,
+        });
       });
   };
+
+
+
   const _interviewScheduled = () => {
     var myHeaders = new Headers();
     myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
@@ -243,6 +251,7 @@ const JApplication = ({
             stat === 2 ? null : (
             <Menu>
               <MenuTrigger
+                disabled={loader1 ? true : false}
                 style={{
                   width: RFPercentage(3),
                   height: RFPercentage(4),
@@ -257,11 +266,11 @@ const JApplication = ({
                   onSelect={() => handleStatusSelect(store.lang.drafted)}>
                   <JText style={styles.menutxt}>{store.lang.drafted}</JText>
                 </MenuOption> */}
-                {stat !== 1 &&
+                {/* {stat !== 1 &&
                   <MenuOption
                     onSelect={() => handleStatusSelect(1, store.lang.applied)}>
                     <JText style={styles.menutxt}>{store.lang.applied}</JText>
-                  </MenuOption>}
+                  </MenuOption>} */}
 
                 <MenuOption
                   onSelect={() => handleStatusSelect(2, store.lang.rejected)}>
@@ -402,7 +411,7 @@ const JApplication = ({
                 interview_topic: meetings?.interview_topic
                   ? meetings?.interview_topic
                   : '',
-                interview_date_and_time: new Date(),
+                interview_date_and_time: moment().add(30, 'minutes').toDate(),
                 description: meetings?.description ? meetings?.description : '',
                 interview_type:
                   meetings?.meeting_type && meetings?.meeting_type?.length > 0
@@ -415,21 +424,27 @@ const JApplication = ({
                 _meetingSubmit(values);
 
               }}
-            // validationSchema={yup.object().shape({
-            //   interview_topic: yup
-            //     .string()
-            //     .required()
-            //     .label('interview_topic'),
-            //   interview_date_and_time: yup
-            //     .string()
-            //     .required()
-            //     .label('interview_date_and_time'),
-            //   description: yup.string().required().label('description'),
-            //   interview_type: yup
-            //     .string()
-            //     .required()
-            //     .label('interview_topic'),
-            // })}
+              validationSchema={yup.object().shape(
+                meetings?.meeting_type == 'Office Base' ? {
+                  // interview_topic: yup
+                  //   .string()
+                  //   .required()
+                  //   .label('interview_topic'),
+                  // interview_date_and_time: yup
+                  //   .string()
+                  //   .required()
+                  //   .label('interview_date_and_time'),
+                  // description: yup.string().required().label('description'),
+                  // interview_type: yup
+                  //   .string()
+                  //   .required()
+                  //   .label('interview_topic'),
+                  manual_link: yup.string().url('Invalid URL format')
+                    .required('URL is required').label('manual_link'),
+                } : {
+                  office_location: yup.string().url('Invalid URL format')
+                    .required('URL is required').label('office_location'),
+                })}
             >
               {({
                 values,
@@ -462,37 +477,38 @@ const JApplication = ({
                     onChangeText={handleChange('interview_topic')}
                     onBlur={() => setFieldTouched('interview_topic')}
                   />
-                 
-                    <JSelectInput
-                      mode="datetime"
-                      isDate={true}
-                      minimumDate={new Date()}
-                      containerStyle={{ marginTop: RFPercentage(2) }}
-                      value={moment(values.interview_date_and_time).format('YYYY/MM/DD HH:mm')}
-                      setValue={e => setFieldValue('interview_date_and_time', e)}
-                      heading={`${store.lang.interview_Date_and_Time}:`}
-                      error={touched.interview_date_and_time && errors.interview_date_and_time && true}
-                      rightIcon={
-                        <JIcon
-                          icon={'fe'}
-                          name="chevron-down"
-                          size={RFPercentage(2.5)}
-                          color={colors.black[0]}
-                        />
-                      }
-                      Licon={
-                        <JIcon
-                          icon={'ev'}
-                          name={'calendar'}
-                          color={'#000'}
-                          size={RFPercentage(4.5)}
-                        />
-                      }
 
-                    />
-                    {touched.interview_date_and_time && errors.interview_date_and_time && (
-                      <JErrorText>{errors.interview_date_and_time}</JErrorText>
-                    )}
+                  <JSelectInput
+                    mode="datetime"
+                    isDate={true}
+                    date1={moment().add(30, 'minutes').toDate()}
+                    minimumDate={moment().add(30, 'minutes')}
+                    containerStyle={{ marginTop: RFPercentage(2) }}
+                    value={moment(values.interview_date_and_time).format('YYYY/MM/DD HH:mm')}
+                    setValue={e => setFieldValue('interview_date_and_time', e)}
+                    heading={`${store.lang.interview_Date_and_Time}:`}
+                    error={touched.interview_date_and_time && errors.interview_date_and_time && true}
+                    rightIcon={
+                      <JIcon
+                        icon={'fe'}
+                        name="chevron-down"
+                        size={RFPercentage(2.5)}
+                        color={colors.black[0]}
+                      />
+                    }
+                    Licon={
+                      <JIcon
+                        icon={'ev'}
+                        name={'calendar'}
+                        color={'#000'}
+                        size={RFPercentage(4.5)}
+                      />
+                    }
+
+                  />
+                  {touched.interview_date_and_time && errors.interview_date_and_time && (
+                    <JErrorText>{errors.interview_date_and_time}</JErrorText>
+                  )}
 
                   <JInput
                     style={{
@@ -630,8 +646,10 @@ const JApplication = ({
                       }}>
                       {store.lang.close}
                     </JButton>
-                    <JButton onPress={() => handleSubmit()}>
-                      {store.lang.submit}
+                    <JButton
+                      disabled={btnloader ? true : false}
+                      onPress={() => handleSubmit()}>
+                      {btnloader ? store.lang.loading : store.lang.submit}
                     </JButton>
                   </JRow>
                   {/* {open && (

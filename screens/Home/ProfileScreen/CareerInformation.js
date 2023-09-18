@@ -67,23 +67,22 @@ const CareerInformation = ({ navigation }) => {
   const _addExperince = values => {
     setLoader1(true);
     var myHeaders = new Headers();
-    myHeaders.append('Authorization', `Bearer ${store.token.token}`);
+    myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
 
     var formdata = new FormData();
 
     formdata.append('experience_title', values.title);
     formdata.append('company', values.company);
-    formdata.append('country_id', values.county.id);
-    formdata.append('state_id', `${values.state.id}`);
-    formdata.append('city_id', `${values.city.id}`);
-    formdata.append('start_date', moment(values.start).format('YYYY/MM/DD'));
-
-    values.working === false &&
-
-      formdata.append('end_date', moment(values.end).format('YYYY/MM/DD'));
-    formdata.append('currently_working', values.working ? '1' : '0');
+    formdata.append('country_id', values.county?.id);
+    formdata.append('state_id', `${values.state?.id}`);
+    formdata.append('city_id', `${values.city?.id}`);
+    formdata.append('start_date', moment(values.start).format('MM/DD/YYYY'));
     formdata.append('description', values.description);
+    formdata.append('currently_working', values.working ? '1' : '0')
+    values.working == false &&
+      formdata.append('end_date', moment(values.end).format('MM/DD/YYYY'))
 
+    console.log('formdata', formdata)
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
@@ -93,20 +92,19 @@ const CareerInformation = ({ navigation }) => {
     fetch(selectedExperience == null ? `${url.baseUrl}/experience-create` : `${url.baseUrl}/candidate-experience-update/${selectedExperience?.experienceId}`, requestOptions)
       .then(response => response.json())
       .then(result => {
-        if (moment(values.start).format('DD MMM YYYY') === moment(values.end).format('DD MMM YYYY')) {
+        if (moment(values.start).format('MM/DD/YYYY') === moment(values.end).format('MM/DD/YYYY')) {
           JToast({
             type: 'danger',
             text1: store.lang.eror,
             text2: result.end_date[0],
             // visibilityTime: 1500
           });
-
           setLoader1(false);
         }
         else {
           selectedExperience !== null && (
             _addExp(result.data?.candidateExperience))
-             
+
           JToast({
             type: 'success',
             text1: store.lang.success,
@@ -151,9 +149,9 @@ const CareerInformation = ({ navigation }) => {
       .then(response => response.json())
       .then(result => {
         // console.log(result.data);
-        selectedEdu !== null &&(
-          _addEdu(result.data)) 
-          _getExperience();
+        selectedEdu !== null && (
+          _addEdu(result.data))
+        _getExperience();
         JToast({
           type: 'success',
           text1: store.lang.success,
@@ -243,16 +241,16 @@ const CareerInformation = ({ navigation }) => {
     )
       .then(response => response.json())
       .then(result => {
-        if(result.success){
-        setExpereince(experience.filter(e => e.id?.experienceId !== id?.experienceId));
-        JToast({
-          type: 'danger',
-          text1: store.lang.success,
-          text2: result.message,
-        });
-        _getExperience()
-        setModalVisible(false)
-}
+        if (result.success) {
+          setExpereince(experience.filter(e => e.id?.experienceId !== id?.experienceId));
+          JToast({
+            type: 'danger',
+            text1: store.lang.success,
+            text2: result.message,
+          });
+          _getExperience()
+          setModalVisible(false)
+        }
       })
     // .catch(error => console.log('error', error));
   };
@@ -275,16 +273,17 @@ const CareerInformation = ({ navigation }) => {
       .then(response => response.json())
       .then(result => {
         // console.log(result);
-        if(result.success){
-        setEducation(education.filter(e => e.id?.educationId !== id?.educationId));
-        JToast({
-          type: 'danger',
-          text1: store.lang.success,
-          text2: result.message,
-        });
-        _getExperience();
-        setModalVisible(false)}
-        
+        if (result.success) {
+          setEducation(education.filter(e => e.id?.educationId !== id?.educationId));
+          JToast({
+            type: 'danger',
+            text1: store.lang.success,
+            text2: result.message,
+          });
+          _getExperience();
+          setModalVisible(false)
+        }
+
       })
     // .catch(error => console.log('error', error));
   };
@@ -307,7 +306,7 @@ const CareerInformation = ({ navigation }) => {
     _getExperience();
     _getEdu();
   }, []);
-
+console.log(selectedExperience?.end)
   const currentDate = new Date();
 
   // Calculate the maximum start date (1 day before the current date)
@@ -332,7 +331,7 @@ const CareerInformation = ({ navigation }) => {
       }>
       {apiLoader ? (
         // <ActivityIndicator />
-        <CLCareerInfo/>
+        <CLCareerInfo />
 
       ) : (
         <ScrollView
@@ -441,13 +440,13 @@ const CareerInformation = ({ navigation }) => {
                 start:
                   selectedExperience?.start !== null &&
                     selectedExperience?.start !== undefined
-                    ? selectedExperience?.start
+                    ? moment(selectedExperience?.start).format('MM/DD/YYYY')
                     : '',
                 end:
-                  selectedExperience?.end !== null
-                    ? selectedExperience?.end
+                  selectedExperience?.end 
+                    ?  moment(selectedExperience?.end).format('MM/DD/YYYY')
                     : '',
-                working: false,
+                working: selectedExperience?.working ? selectedExperience?.working : false,
                 description:
                   selectedExperience?.description !== null
                     ? selectedExperience?.description
@@ -641,7 +640,7 @@ const CareerInformation = ({ navigation }) => {
                       maximumDate={maximumStartDate}
                       value={
                         values.start &&
-                        moment(values.start).format('DD MMM YYYY')
+                        moment(values.start).format('MM/DD/YYYY')
                       }
                       setValue={e => {
                         {
@@ -670,15 +669,15 @@ const CareerInformation = ({ navigation }) => {
                       <>
                         <JSelectInput
                           disabled={values.start !== '' ? false : true}
-                          date={moment(values.end).format('DD MMM YYYY')}
+                          date={moment(values.end).format('MM/DD/YYYY')}
                           // minimumDate={moment(values.start, 'DD MMM YYYY').add(1, 'day')}
                           minimumDate={new Date()}
                           containerStyle={{ marginTop: RFPercentage(2) }}
                           isDate={true}
-                          value={values.end && moment(values.end).format('DD MMM YYYY')}
+                          value={values.end && moment(values.end).format('MM/DD/YYYY')}
                           setValue={e => {
                             setFieldValue('end', e)
-                            console.log(moment(e, 'DD MMM YYYY'))
+                            // console.log(moment(e, 'DD MMM YYYY'))
                           }}
                           header={store.lang.end_date}
                           heading={`${store.lang.end_date}:`}
@@ -728,8 +727,10 @@ const CareerInformation = ({ navigation }) => {
                         trackColor={{ true: colors.purple[0] }}
                         onValueChange={e => {
                           setFieldValue('working', e);
+                          console.log('eeeeeeee', e)
                         }}
                         value={values.working}
+
                       />
                     </JRow>
                   </JScrollView>
@@ -737,7 +738,7 @@ const CareerInformation = ({ navigation }) => {
                   <View style={styles.bottomV}>
 
                     <JButton
-                    disabled={loader1?true:false}
+                      disabled={loader1 ? true : false}
                       isValid={isValid}
                       onPress={() => handleSubmit()}
                       style={{
@@ -939,7 +940,7 @@ const CareerInformation = ({ navigation }) => {
                   </JScrollView>
                   <View style={styles.bottomV}>
                     <JButton
-                    disabled={loader1?true:false}
+                      disabled={loader1 ? true : false}
                       isValid={isValid}
                       onPress={() => handleSubmit()}
                       style={{

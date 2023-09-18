@@ -9,6 +9,7 @@ import {
   FlatList,
   Linking,
   Pressable,
+  Image,
 } from 'react-native';
 import React, { useEffect, useContext, useRef, useCallback, useState } from 'react';
 import JScreen from '../../customComponents/JScreen';
@@ -46,6 +47,7 @@ import JApplyJob from '../../customComponents/JApplyJob';
 import { JToast } from '../../functions/Toast';
 import { Share } from 'react-native';
 import CLSelectedJob from '../../loaders/Candidate/SelectedJob/CLSelectedJob';
+
 
 const JobDetails = ({ route }) => {
   const store = useContext(StoreContext);
@@ -174,7 +176,7 @@ const JobDetails = ({ route }) => {
 
       });
   };
-console.log('id:',route.params?.id)
+  // console.log('id:',route.params?.id)
   const _getjobDetail = () => {
     var myHeaders = new Headers();
     myHeaders.append(
@@ -387,174 +389,178 @@ console.log('id:',route.params?.id)
     },
   ];
   // console.log('job details',store.token?.user?.owner_type.includes('Candidate'))
+  console.log(store.jobDetail?.company_image)
   return (
     loader ? (
       <CLSelectedJob />
     ) : (
-    <JScreen
-      isError={error}
-      onTryAgainPress={() => _getjobDetail()}
-      style={{ paddingHorizontal: RFPercentage(2) }}
-      header={
+      <JScreen
+        isError={error}
+        onTryAgainPress={() => _getjobDetail()}
+        style={{ paddingHorizontal: RFPercentage(2) }}
+        header={
 
-        <JGradientView
-          containerStyle={{
-            height: heightPercentageToDP(25),
-            paddingHorizontal: RFPercentage(2),
-          }}>
-          {/* height={heightPercentageToDP(25)}
+          <JGradientView
+            containerStyle={{
+              height: heightPercentageToDP(25),
+              paddingHorizontal: RFPercentage(2),
+            }}>
+            {/* height={heightPercentageToDP(25)}
             alignItems={store.lang.id == 0 ? 'flex-start' : 'flex-end'}
             paddingTop={RFPercentage(1)}
             left={JChevronIcon} */}
-          <JRow
-            style={{
-              justifyContent: 'space-between',
-              paddingVertical: RFPercentage(1.5),
-            }}>
-            <JChevronIcon />
-            {store.token?.user?.owner_type.includes('Candidate') &&
-              <JRow>
-                {loader ? (
-                  <ActivityIndicator
-                    size={RFPercentage(3)}
-                    style={{ marginRight: RFPercentage(2) }}
-                    color={colors.white[0]}
-                  />
-                ) : (
-                  <JIcon
-                    icon={'fa'}
-                    style={{ marginHorizontal: RFPercentage(2) }}
-                    onPress={() =>
-                      _saveToFavoriteList(store, setLoader, store.jobDetail?.id)
-                    }
-                    name={
-                      store.favouriteList.some(e => e.job_id === store.jobDetail?.id)
-                        ? 'star'
-                        : 'star-o'
-                    }
-                    size={RFPercentage(3)}
-                    color={colors.white[0]}
-                  />
-                )}
-
-                <Menu>
-                  <MenuTrigger>
-                    <JIcon
-                      icon={'en'}
-                      name="dots-three-vertical"
-                      size={RFPercentage(2.6)}
+            <JRow
+              style={{
+                justifyContent: 'space-between',
+                paddingVertical: RFPercentage(1.5),
+              }}>
+              <JChevronIcon />
+              {store.token?.user?.owner_type.includes('Candidate') &&
+                <JRow>
+                  {loader ? (
+                    <ActivityIndicator
+                      size={RFPercentage(3)}
+                      style={{ marginRight: RFPercentage(2) }}
                       color={colors.white[0]}
                     />
-                  </MenuTrigger>
+                  ) : (
+                    <JIcon
+                      icon={'fa'}
+                      style={{ marginHorizontal: RFPercentage(2) }}
+                      onPress={() =>
+                        _saveToFavoriteList(store, setLoader, store.jobDetail?.id)
+                      }
+                      name={
+                        store.favouriteList.some(e => e.job_id === store.jobDetail?.id)
+                          ? 'star'
+                          : 'star-o'
+                      }
+                      size={RFPercentage(3)}
+                      color={colors.white[0]}
+                    />
+                  )}
 
-                  <MenuOptions>
-                    {[
-                      store.lang.share_job,
-                      store.lang.email_to_friend,
-                      store.lang.report_abuse,
-                    ].map((item, index) => (
-                      <MenuOption
-                        style={{
-                          marginHorizontal: RFPercentage(1),
-                          paddingVertical: RFPercentage(1.3),
-                        }}
-                        key={index}
-                        onSelect={() => {
-                          item == store.lang.share_job ?
-                            shareItem() :
-                            setModalVisible1(true)
-                          setHeading(item)
-                        }}>
-                        <JRow>
-                          {index === 0 ? (
-                            <JIcon
-                              icon={'an'}
-                              size={RFPercentage(3)}
-                              color={colors.black[0]}
-                              name="sharealt"
-                            />
-                          ) : index === 1 ? (
-                            <JIcon
-                              icon={'an'}
-                              size={RFPercentage(3)}
-                              color={colors.black[0]}
-                              name="mail"
-                            />
-                          ) : (
-                            <JIcon
-                              icon={'fe'}
-                              size={RFPercentage(3)}
-                              color={colors.black[0]}
-                              name="flag"
-                            />
-                          )}
-                          <JText
-                            style={{ marginHorizontal: RFPercentage(1) }}
-                            fontSize={RFPercentage(2)}>
-                            {item}
-                          </JText>
-                        </JRow>
-                      </MenuOption>
-                    ))}
-                  </MenuOptions>
-                </Menu>
-              </JRow>}
-          </JRow>
-          <View style={{ marginTop: RFPercentage(2), width: '100%' }}>
-            <JRow style={{ justifyContent: 'space-between' }}>
-              <JText style={styles.headertxt}>
-                {store.jobDetail?.job_title?.length > 25 ? store.jobDetail?.job_title?.slice(0, 25) + " . . . ." : store.jobDetail?.job_title}
-              </JText>
+                  <Menu>
+                    <MenuTrigger>
+                      <JIcon
+                        icon={'en'}
+                        name="dots-three-vertical"
+                        size={RFPercentage(2.6)}
+                        color={colors.white[0]}
+                      />
+                    </MenuTrigger>
 
-              <JText style={{ fontSize: RFPercentage(1.8), color: '#ffff' }}>
-                {'\r'}
-                {store.lang.date_posted}
-                {moment(store.jobDetail.job_publish_date, 'DD,MM,YYYY',).format('DD MMM,YYYY')}
-              </JText>
+                    <MenuOptions>
+                      {[
+                        store.lang.share_job,
+                        store.lang.email_to_friend,
+                        store.lang.report_abuse,
+                      ].map((item, index) => (
+                        <MenuOption
+                          style={{
+                            marginHorizontal: RFPercentage(1),
+                            paddingVertical: RFPercentage(1.3),
+                          }}
+                          key={index}
+                          onSelect={() => {
+                            item == store.lang.share_job ?
+                              shareItem() :
+                              setModalVisible1(true)
+                            setHeading(item)
+                          }}>
+                          <JRow>
+                            {index === 0 ? (
+                              <JIcon
+                                icon={'an'}
+                                size={RFPercentage(3)}
+                                color={colors.black[0]}
+                                name="sharealt"
+                              />
+                            ) : index === 1 ? (
+                              <JIcon
+                                icon={'an'}
+                                size={RFPercentage(3)}
+                                color={colors.black[0]}
+                                name="mail"
+                              />
+                            ) : (
+                              <JIcon
+                                icon={'fe'}
+                                size={RFPercentage(3)}
+                                color={colors.black[0]}
+                                name="flag"
+                              />
+                            )}
+                            <JText
+                              style={{ marginHorizontal: RFPercentage(1) }}
+                              fontSize={RFPercentage(2)}>
+                              {item}
+                            </JText>
+                          </JRow>
+                        </MenuOption>
+                      ))}
+                    </MenuOptions>
+                  </Menu>
+                </JRow>}
             </JRow>
-            <JRow>
-              <DEVOTEAM />
-              <JText style={styles.txt}>{store.jobDetail?.company_name}</JText>
-            </JRow>
-            <JRow>
-              <Placeholder />
-              <JText style={styles.txt}>
-                {store.lang.id === 0
-                  ? store.jobDetail?.city_name
-                  : store.lang.id === 1
-                    ? store.jobDetail?.city_name_urdu
-                    : store.jobDetail?.city_name_arabic}
-                ,
-                {store.lang.id === 0
-                  ? store.jobDetail?.state_name
-                  : store.lang.id === 1
-                    ? store.jobDetail?.state_name_urdu
-                    : store.jobDetail?.state_name_arabic}
-                {store.lang.id === 0
-                  ? store.jobDetail?.country_name
-                  : store.lang.id === 1
-                    ? store.jobDetail?.country_name_urdu
-                    : store.jobDetail?.country_name_arabic}
-              </JText>
-            </JRow>
-            <JRow style={{ justifyContent: 'space-between' }}>
-              <JRow>
-                <Calendar />
+            <View style={{ marginTop: RFPercentage(2), width: '100%' }}>
+              <JRow style={{ justifyContent: 'space-between' }}>
+                <JText style={styles.headertxt}>
+                  {store.jobDetail?.job_title?.length > 25 ? store.jobDetail?.job_title?.slice(0, 25) + " . . . ." : store.jobDetail?.job_title}
+                </JText>
 
-                <JText style={styles.txt}>
-                  {store.lang.expire_on}{' '}
-                  {moment(store.jobDetail?.job_expiry_date, 'DD,MM,YYYY').format('DD MMM,YYYY')}
+                <JText style={{ fontSize: RFPercentage(1.8), color: '#ffff' }}>
+                  {'\r'}
+                  {store.lang.date_posted}{' '}
+                  {moment(store.jobDetail.job_publish_date, 'DD-MM-YYYY',).format('DD-MM-YYYY')}
                 </JText>
               </JRow>
-              <JText style={styles.txt}>
-                {jobCount?.jobCount} {store.lang.open_jobs}
-              </JText>
-            </JRow>
-          </View>
-        </JGradientView>
+              <JRow>
+               
+                <Image
+                  style={{ height: RFPercentage(2.8), width: RFPercentage(2.8)}}
+                  source={{ uri: store.jobDetail?.company_image }}
+                />
+                <JText style={styles.txt}>{store.jobDetail?.company_name}</JText>
+              </JRow>
+              <JRow>
+                <Placeholder />
+                <JText style={styles.txt}>
+                  {store.lang.id === 0
+                    ? store.jobDetail?.city_name
+                    : store.lang.id === 1
+                      ? store.jobDetail?.city_name_urdu
+                      : store.jobDetail?.city_name_arabic}
+                  ,
+                  {store.lang.id === 0
+                    ? store.jobDetail?.state_name
+                    : store.lang.id === 1
+                      ? store.jobDetail?.state_name_urdu
+                      : store.jobDetail?.state_name_arabic}
+                  {store.lang.id === 0
+                    ? store.jobDetail?.country_name
+                    : store.lang.id === 1
+                      ? store.jobDetail?.country_name_urdu
+                      : store.jobDetail?.country_name_arabic}
+                </JText>
+              </JRow>
+              <JRow style={{ justifyContent: 'space-between' }}>
+                <JRow>
+                  <Calendar />
 
-      }>
-    
+                  <JText style={styles.txt}>
+                    {store.lang.expire_on}{' '}{moment(store.jobDetail?.job_expiry_date, 'DD-MM-YYYY').format('DD-MM-YYYY')}
+                  </JText>
+                </JRow>
+                <JText style={styles.txt}>
+                  {jobCount?.jobCount} {store.lang.open_jobs}
+                </JText>
+              </JRow>
+            </View>
+          </JGradientView>
+
+        }>
+
         <>
 
           <JScrollView style={styles.container}
@@ -864,7 +870,7 @@ console.log('id:',route.params?.id)
                             width: '100%',
                             borderBottomWidth: RFPercentage(0.1),
                           }}
-                          textInputStyle= {{
+                          textInputStyle={{
                             color: colors.black[0],
                             fontSize: RFPercentage(2.1),
                             marginTop: RFPercentage(0.1),
@@ -951,7 +957,7 @@ console.log('id:',route.params?.id)
                           </View>
                         ) : (
                           <>
-                            <JText style={{ marginVertical: RFPercentage(1) ,color:'red' }}>
+                            <JText style={{ marginVertical: RFPercentage(1), color: 'red' }}>
                               {store.lang.file_size_exceeds_MB_limit}
                             </JText>
                             <JRow
@@ -1001,10 +1007,9 @@ console.log('id:',route.params?.id)
                           isValid={isValid}
                           disabled={loader1 ? true : false}
                           onPress={() => {
-                            if(values.resume?.size <= 1000000)
-                              {
-                                handleSubmit();
-                          }
+                            if (values.resume?.size <= 1000000) {
+                              handleSubmit();
+                            }
                           }}
                           style={{
                             width: '46%',
@@ -1194,8 +1199,8 @@ console.log('id:',route.params?.id)
             </JRow>
           </RBSheet>
         </>
-    
-    </JScreen>  )
+
+      </JScreen>)
   );
 };
 

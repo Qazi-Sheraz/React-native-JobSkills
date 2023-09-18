@@ -47,7 +47,7 @@
     "profile": "پروفائل",
     "search": "تلاش کریں",
     "add_new_job": "ایک نئی نوکری شامل کریں۔",
-    "date_posted": "پوسٹ کی تاریخ:",
+    "date_posted": "پوسٹ کی تاریخ :",
     "devoteam": "عقیدت مند",
     "open_jobs": "کھلی ملازمتیں",
     "job_Requirement": "ملازمت کی ضرورت",
@@ -372,7 +372,7 @@
     "apply": "درخواست دیں",
     "questionnaire": "سوالنامہ",
     "select_an_option": "ایک آپشن منتخب کریں",
-    "expected_salary_range": "متوقع تنخواہ؟ آجر کی طرف سے تجویز کردہ رینج\n(SAR1222 سے 3222)",
+    "expected_salary_range": "متوقع تنخواہ؟ آجر کی طرف سے تجویز کردہ رینج",
     "save_as_draft": "ڈرافٹ کے طور پر محفوظ کریں",
     "no_result_found": "کوئی نتیجہ نہیں ملا!",
     "selection_canceled": "فائل کا انتخاب منسوخ کر دیا گیا",
@@ -452,7 +452,9 @@
     "incorrect_password": "غلط پاس ورڈ!",
     "file_size_exceeds_MB_limit": "فائل کا سائز 1 MB کی حد سے زیادہ ہے",
     "canceled_from_single_doc_picker": "تم الإلغاء من منتقي مستند واحد",
-    "modal_has_been_closed": "موڈل بند کر دیا گیا ہے"
+    "modal_has_been_closed": "موڈل بند کر دیا گیا ہے",
+    "the_URL_is_not_valid": "URL درست نہیں ہے"
+    
     
    
     

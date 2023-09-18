@@ -209,8 +209,10 @@ function JJobTile({
               status==5||
               status==6||
               status==7||
-              status==8
-               ? category.substring(0, 10) + '...' : category}
+              status==8||
+              status==9
+               ? category.substring(0, 10) + '...' : category
+                }
              
             </JText>
             <JStatusChecker onPressStatus={onPressStatus} status={status} />

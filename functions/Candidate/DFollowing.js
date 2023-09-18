@@ -62,7 +62,7 @@ export const _saveToFollowing = (store, setLoader, id) => {
       } else if (result.data === false) {
         JToast({
           type: 'danger',
-          text1: store.lang.eror,
+          text1: store.lang.success,
           text2: result.message,
         });
         _getFollowingCompanyData(store);

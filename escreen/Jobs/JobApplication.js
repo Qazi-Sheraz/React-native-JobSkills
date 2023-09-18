@@ -44,12 +44,21 @@ import JIcon from '../../customComponents/JIcon';
 import moment from 'moment';
 import { JToast } from '../../functions/Toast';
 const JobApplication = ({ route }) => {
+
+  const isFoucs = useIsFocused();
   const { navigate, goBack } = useNavigation();
   const [selectedItem, setSelectedItem] = useState();
+  
+  const [error, setError] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredData1, setFilteredData1] = useState(store?.jApplication);
+  const [update, setUpdate] = useState(true);
+  const [loader1,setLoader1] = useState(false);
+
   const store = useContext(StoreContext);
   const handleSelect = status => {
     setSelectedItem(status);
-
+ 
   };
   const [modalVisible, setModalVisible] = useState(false);
   const refRBSheet = useRef();
@@ -71,31 +80,31 @@ const JobApplication = ({ route }) => {
 
   const filterData = status => {
 
-    store.setJApplication(store.jApplication.filter(e => e.status == status));
+    store.setJApplication(store?.jApplication.filter(e => e.status == status));
 
     refRBSheet.current.close();
   };
 
   const sortByNameAscending = () => {
     store.setJApplication(
-      [...store.jApplication].sort((a, b) =>
+      [...store?.jApplication].sort((a, b) =>
         a.candidate_name.localeCompare(b.candidate_name),
       ),
     );
   };
   const sortByFitScoreAscending = () => {
     store.setJApplication(
-      [...store.jApplication].sort((a, b) => a.fit_score - b.fit_score)
+      [...store?.jApplication].sort((a, b) => a.fit_score - b.fit_score)
     );
   };
   const sortByFitScoreDescending = () => {
     store.setJApplication(
-      [...store.jApplication].sort((a, b) => b.fit_score - a.fit_score)
+      [...store?.jApplication].sort((a, b) => b.fit_score - a.fit_score)
     );
   };
   const sortByNameDescending = () => {
     store.setJApplication(
-      [...store.jApplication].sort((a, b) =>
+      [...store?.jApplication].sort((a, b) =>
         b.candidate_name.localeCompare(a.candidate_name),
       ),
     );
@@ -103,27 +112,23 @@ const JobApplication = ({ route }) => {
 
   const sortByRecentApplyDateDescending = () => {
     store.setJApplication(
-      [...store.jApplication].sort(
+      [...store?.jApplication].sort(
         (a, b) => new Date(b.apply_date) - new Date(a.apply_date),
       ),
     );
   };
 
-  const [error, setError] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filteredData1, setFilteredData1] = useState(store.jApplication);
-  const [update, setUpdate] = useState(true);
-  const [open, setOpen] = useState(false);
 
   const handleSearch = (text) => {
     setSearchQuery(text);
-    const filtered = store.jApplication.filter((item) => {
+    const filtered = store?.jApplication.filter((item) => {
       return item.candidate_name.toLowerCase().includes(text.toLowerCase());
     });
     setFilteredData1(filtered);
   };
   // console.log('jApplication',store.jApplication)
   const _jobApplication = () => {
+
     var myHeaders = new Headers();
     myHeaders.append(
       'Authorization', `Bearer ${store.token?.token}`,
@@ -151,6 +156,7 @@ const JobApplication = ({ route }) => {
         store.setJAppLoader(false);
       });
   };
+
 
 
   useEffect(() => {
@@ -182,7 +188,7 @@ const JobApplication = ({ route }) => {
               store.setJAppError(false)
             }}
           /> :
-          store.jApplication?.length > 0 ? (
+          store?.jApplication?.length > 0 ? (
             <>
               <JRow
                 style={{
@@ -235,12 +241,13 @@ const JobApplication = ({ route }) => {
 
               <FlatList
                 style={{ flex: 1, paddingHorizontal: RFPercentage(2) }}
-                data={searchQuery?.length > 0 ? filteredData1 : store.jApplication}
+                data={searchQuery?.length > 0 ? filteredData1 : store?.jApplication}
                 renderItem={({ item, index }) => (
 
                   <JApplication
                     update={update}
                     setUpdate={setUpdate}
+                    api={()=>_jobApplication()}
                     onPressStatus={() => {
                       if (item.status_id == 8) { navigate('Reschedule',{cID:item.candidate_user_id,jobID:item?.job_id}) }
                     }}
@@ -298,8 +305,8 @@ const JobApplication = ({ route }) => {
           style={styles.centeredView}>
           {store.jAppLoader ? <ActivityIndicator /> :
             <View style={styles.modalView}>
-              <JText fontColor={colors.white[0]} fontSize={RFPercentage(1.8)} style={{ paddingHorizontal: store.jApplication[0]?.fit_score_information == null ? RFPercentage(10) : RFPercentage(0) }}>
-                {store.jApplication[0]?.fit_score_information == null ? 'N/A' : store.jApplication[0]?.fit_score_information}
+              <JText fontColor={colors.white[0]} fontSize={RFPercentage(1.8)} style={{ paddingHorizontal: store?.jApplication[0]?.fit_score_information == null ? RFPercentage(10) : RFPercentage(0) }}>
+                {store?.jApplication[0]?.fit_score_information == null ? 'N/A' : store?.jApplication[0]?.fit_score_information}
 
               </JText>
             </View>}

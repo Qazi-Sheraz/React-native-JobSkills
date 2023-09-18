@@ -31,6 +31,7 @@ const Reschedule = () => {
     const [open, setOpen] = useState(false);
     const { params } = useRoute();
     const [loader, setLoader] = useState(true)
+    const [loader1, setLoader1] = useState(false)
     const [error, setError] = useState(false);
 
     // console.log('details', details?.start_time)
@@ -59,6 +60,7 @@ const Reschedule = () => {
             });
     };
     const _acceptSchedule = (values) => {
+        setLoader1(true)
         var myHeaders = new Headers();
         myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
 
@@ -99,13 +101,14 @@ const Reschedule = () => {
                 });
             })
             .finally(() => {
+                setLoader1(false)
                 store.token?.user?.owner_type.includes('Candidate') === true &&
                     _getAppliedJobData(store)
             });
     };
 
     const _reschedule = (values) => {
-
+        setLoader1(true)
         // Create headers with Authorization token
         var myHeaders = new Headers();
         myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
@@ -149,12 +152,15 @@ const Reschedule = () => {
                 console.log('Error:', error);
             })
             .finally(() => {
+                setLoader1(false)
                 setOpen(false)
                 setDetails('')
+
 
             });
     };
     const _CandidateReschedule = (values) => {
+        setLoader1(true)
         var myHeaders = new Headers();
         myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
 
@@ -191,6 +197,7 @@ const Reschedule = () => {
             })
             .catch(error => console.log('error', error))
             .finally(() => {
+                setLoader1(false)
                 setOpen(false)
                 setDetails('')
 
@@ -216,7 +223,7 @@ const Reschedule = () => {
             {loader ? <ActivityIndicator />
                 : <Formik
                     initialValues={{
-                        interview_date_and_time: new Date(),
+                        interview_date_and_time: moment().add(30, 'minutes').toDate(),
                     }}
                     onSubmit={values => {
                         store.token?.user?.owner_type.includes('Candidate') === false
@@ -260,7 +267,8 @@ const Reschedule = () => {
                                     <JSelectInput
                                         mode="datetime"
                                         isDate={true}
-                                        minimumDate={new Date()}
+                                        date1={moment().add(30, 'minutes').toDate()}
+                                        minimumDate={moment().add(30, 'minutes').toDate()}
                                         // minimumDate={moment().add(0, 'day')}
                                         containerStyle={{ marginTop: RFPercentage(2) }}
                                         value={moment(values.interview_date_and_time).format('YYYY/MM/DD HH:mm')}
@@ -309,6 +317,7 @@ const Reschedule = () => {
                                 <View>
                                     {details?.scheduled_by == 1 &&
                                         <JButton
+                                            disabled={loader1 ? true : false}
                                             style={{ backgroundColor: colors.success[0], marginVertical: RFPercentage(1), borderColor: 'transparent', alignSelf: 'flex-end', }}
                                             onPress={() => {
                                                 if (reschedule) {
@@ -317,10 +326,11 @@ const Reschedule = () => {
                                                     _acceptSchedule();
                                                 }
                                             }}>
-                                            {reschedule == true ? store.lang.submit : store.lang.accept}
+                                            {loader1 ? store.lang.loading : reschedule == true ? store.lang.submit : store.lang.accept}
                                         </JButton>}
                                     {!reschedule && details?.scheduled_by == 1 &&
                                         <JButton
+
                                             style={{ marginVertical: RFPercentage(1), alignSelf: 'flex-end', }}
                                             onPress={() => { setReschedule(true) }}>
                                             {store.lang.re_schedule}
@@ -331,6 +341,7 @@ const Reschedule = () => {
                                             setReschedule(false)
                                             setOpen(false)
                                             setDetails('')
+                                            setLoader1(false)
                                             goBack()
                                         }}>
                                         {store.lang.close}
@@ -339,6 +350,7 @@ const Reschedule = () => {
                                 : <View>
                                     {details?.scheduled_by == 0 &&
                                         <JButton
+                                            disabled={loader1 ? true : false}
                                             style={{ backgroundColor: colors.success[0], marginVertical: RFPercentage(1), borderColor: 'transparent', alignSelf: 'flex-end', }}
                                             onPress={() => {
                                                 if (reschedule) {
@@ -347,20 +359,23 @@ const Reschedule = () => {
                                                     _acceptSchedule();
                                                 }
                                             }}>
-                                            {reschedule == true ? store.lang.submit : store.lang.accept}
+                                            {loader1 ? store.lang.loading : reschedule == true ? store.lang.submit : store.lang.accept}
                                         </JButton>}
                                     {!reschedule && details?.scheduled_by == 0 &&
                                         <JButton
+
                                             style={{ marginVertical: RFPercentage(1), alignSelf: 'flex-end', }}
                                             onPress={() => { setReschedule(true) }}>
                                             {store.lang.re_schedule}
                                         </JButton>}
                                     <JButton
+
                                         style={{ backgroundColor: colors.border[0], marginVertical: RFPercentage(1), borderColor: 'transparent', alignSelf: 'flex-end', }}
                                         onPress={() => {
                                             setReschedule(false)
                                             setOpen(false)
                                             setDetails('')
+                                            setLoader1(false)
                                             goBack()
                                         }}>
                                         {store.lang.close}

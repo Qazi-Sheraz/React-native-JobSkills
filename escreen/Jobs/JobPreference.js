@@ -80,7 +80,14 @@ const JobPreference = () => {
             salaryTo: yup
               .string()
               .max(10, 'Maximum 10 digits allowed')
-              .required('salaryTo is required'),
+              .required('salaryTo is required')
+              .test('is-greater-than-salaryFrom', 'Salary To must be greater than salary From', function (value) {
+                const salaryFrom = this.parent.salaryFrom; // Accessing the value of salaryFrom from the parent object
+                if (value && salaryFrom) {
+                  return parseFloat(value) > parseFloat(salaryFrom); // Compare the numeric values
+                }
+                return true; // If either field is empty, don't perform the comparison
+              }),
             preference: yup
               .object()
               .required('Gender is required'),

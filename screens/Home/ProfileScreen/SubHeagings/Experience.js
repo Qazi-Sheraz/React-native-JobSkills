@@ -31,7 +31,7 @@ export default function Experience({
   setSelectedExperience,
  
 }) {
-  // console.log(store?.myProfile?.data?.countries[experience?.country_id])
+  console.log(experience[0]?.currently_working)
   const store =useContext(StoreContext);
   return (
     <Observer>
@@ -97,8 +97,8 @@ export default function Experience({
                         experienceId:item.id,
                         title: item?.experience_title,
                         company: item?.company,
-                        start: moment(item?.start_date).format('DD MMM, YYYY'),
-                        end: moment(item?.end_date).format('DD MMM, YYYY'),
+                        start: moment(item?.start_date).format('MM/DD/YYYY'),
+                        end: moment(item?.end_date).format('MM/DD/YYYY'),
                         description: item?.description,
                         country_id: item?.country_id,
                         country:
@@ -113,6 +113,7 @@ export default function Experience({
                         city:store.lang.id == 0
                         ?item?.city?.name
                         :item?.city?.arabic_title,
+                        working:item?.currently_working,
                       });
                       refRBSheet?.current?.open({type:1});
                     }}
@@ -132,12 +133,10 @@ export default function Experience({
                 <JText style={{marginTop: RFPercentage(0.5),color:colors.searchPlaceholder[0],fontWeight:'bold'}}>
                   {item?.company}
                 </JText> 
+                
                 <JText style={{marginTop: RFPercentage(0.5),color:colors.searchPlaceholder[0]}}>
-                  {moment(item?.start_date).format('DD')}th{' '}
-                  {moment(item?.start_date).format('MMM, YYYY')} -{' '}
-                  {moment(item?.end_date).format('DD')}th{' '}
-                  {moment(item?.end_date).format('MMM, YYYY')} | {store.lang.id==0?store?.myProfile?.dataEnglish?.countries[item?.country_id]:store?.myProfile?.dataArabic?.countries[item?.country_id]}
-                </JText>
+                 { `${moment(item?.start_date).format('DD')+'th '+moment(item?.start_date).format('MMM, YYYY')} - ${item.currently_working ?'Prasent' :moment(item?.end_date).format('DD')+'th '+moment(item?.end_date).format('MMM, YYYY')} | ${store.lang.id==0?store?.myProfile?.dataEnglish?.countries[item?.country_id]:store?.myProfile?.dataArabic?.countries[item?.country_id]}`} </JText>
+              
                 <JText style={{marginTop: RFPercentage(0.5)}}>
                   {item?.description}
                 </JText>

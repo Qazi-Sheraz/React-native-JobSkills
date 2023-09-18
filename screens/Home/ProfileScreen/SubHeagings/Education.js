@@ -131,7 +131,7 @@ export default function Education({
                     />
                   </TouchableOpacity>
                 </JRow>
-                <JText style={{marginTop: RFPercentage(0.5)}}>(BAS)</JText>
+                {/* <JText style={{marginTop: RFPercentage(0.5)}}>(BAS)</JText> */}
                 <JText style={{marginTop: RFPercentage(0.5)}}>
                   {item?.institute}
                 </JText>

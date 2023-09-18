@@ -47,7 +47,7 @@
     "profile": "حساب تعريفي",
     "search": "يبحث",
     "add_new_job": "أضف وظيفة جديدة",
-    "date_posted": "تاريخ الإعلان:",
+    "date_posted": "تاريخ الإعلان :",
     "devoteam": "ديفوتيم",
     "open_jobs": "وظائف مفتوحة",
     "job_Requirement": "متطلبات الوظائف",
@@ -372,7 +372,7 @@
     "apply": "يتقدم",
     "questionnaire": "استبيان",
     "select_an_option": "حدد اختيارا",
-    "expected_salary_range": "الراتب المتوقع؟ النطاق المقترح من قبل صاحب العمل\n(ريال سعودي من 1222 إلى 3222)",
+    "expected_salary_range": "الراتب المتوقع؟ النطاق المقترح من قبل صاحب العمل",
     "save_as_draft": "حفظ كمسودة",
     "no_result_found": "لم يتم العثور على نتائج !",
     "selection_canceled": "تم إلغاء اختيار الملف",
@@ -453,5 +453,7 @@
     "incorrect_password": "كلمة سر خاطئة!",
     "file_size_exceeds_MB_limit": "يتجاوز حجم الملف الحد المسموح به وهو 1 ميغابايت",
     "canceled_from_single_doc_picker": "واحد دستاویز چنندہ سے منسوخ کر دیا گیا",
-    "modal_has_been_closed": "تم إغلاق المشروط"
+    "modal_has_been_closed": "تم إغلاق المشروط",
+    "the_URL_is_not_valid": "عنوان URL غير صالح"
+    
 }

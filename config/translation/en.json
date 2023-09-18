@@ -43,7 +43,7 @@
     "profile": "Profile",
     "search": "Search",
     "add_new_job": "Add New Job",
-    "date_posted": "Date Posted: ",
+    "date_posted": "Date Posted :",
     "devoteam": "Devoteam",
     "open_jobs": "open jobs",
     "job_Requirement": "Jobs Requirement",
@@ -379,7 +379,7 @@
     "apply": "Apply",
     "questionnaire": "Questionnaire",
     "select_an_option": "Select an option",
-    "expected_salary_range": "Expected Salary?Suggested Range by Employer\n(SAR1222 to 3222)",
+    "expected_salary_range": "Expected Salary? Suggested Range by Employer",
     "save_as_draft": "Save as Draft",
     "no_result_found": "No Result Found !",
     "selection_canceled": "File selection canceled",
@@ -460,7 +460,8 @@
     "incorrect_password": "Incorrect Password!",
     "file_size_exceeds_MB_limit": "File size exceeds 1 MB limit",
     "canceled_from_single_doc_picker": "Canceled from single doc picker",
-    "modal_has_been_closed": "Modal has been closed"
+    "modal_has_been_closed": "Modal has been closed",
+    "the_URL_is_not_valid": "The URL is not valid"
      
     
 

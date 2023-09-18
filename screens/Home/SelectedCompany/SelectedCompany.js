@@ -6,6 +6,7 @@ import {
   Linking,
   Modal,
   Share,
+  Alert,
 } from 'react-native';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import JScreen from '../../../customComponents/JScreen';
@@ -57,11 +58,14 @@ function SelectedJob({ route, navigation }) {
   const [error, setError] = useState();
   const store = useContext(StoreContext);
   const refRBSheet = useRef();
+
+  const urlPattern = /^(http|https):\/\/([\w.-]+)(\/[\w-]*)*\/?$/;
   const simpleText = RFPercentage(2);
   const headingWeight = {
     weight: 'bold',
     size: RFPercentage(3),
   };
+  // console.log(route.params.id)
   const _getDetail = () => {
     var myHeaders = new Headers();
     myHeaders.append('Authorization', `Bearer ${store.token.token}`);
@@ -139,7 +143,7 @@ const companyName = params?.c_name?encodeURIComponent(params?.c_name || ""):enco
     try {
       await Share.share({
         // title:'Company_url',
-        message: `https://dev.jobskills.digital/${companyName}?id=${route.params.id}`,
+        message: `https://dev.jobskills.digital/${companyName}?id=${route.params?.id}`,
       });
     } catch (error) {
       console.error(error.message);
@@ -411,7 +415,18 @@ const companyName = params?.c_name?encodeURIComponent(params?.c_name || ""):enco
       </JScrollView>
 
       <JButton
-        onPress={() => Linking.openURL(companyData.company.website)}
+       onPress={() => {
+        const url = companyData?.company?.website;
+    
+        if (url && urlPattern.test(url)) {
+          Linking.openURL(url);
+        } else {
+          JToast({
+            type:'danger',
+            text1:store.lang.the_URL_is_not_valid,
+          }); }
+      }}
+        // onPress={() => Linking.openURL(companyData?.company?.website)}
         style={{
           width: '60%',
           height: heightPercentageToDP(5),

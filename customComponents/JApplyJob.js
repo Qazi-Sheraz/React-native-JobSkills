@@ -21,12 +21,9 @@ import JGradientHeader from './JGradientHeader';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import JInput from './JInput';
-import DocumentPicker from 'react-native-document-picker';
-import Entypo from 'react-native-vector-icons/Entypo';
 import url from '../config/url';
 import { StoreContext } from '../mobx/store';
 import { JToast } from '../functions/Toast';
-import Pdf from 'react-native-pdf';
 
 const questions = [
   'Its my dream job',
@@ -481,7 +478,7 @@ const JApplyJob = ({token, jobId, id, setStatus, status}) => {
                     style={{
                       marginTop: RFPercentage(2),
                     }}>
-                    {store.lang.expected_salary_range}
+                    {store.lang.expected_salary_range}({status?.data?.job?.salary_from+status?.data?.job?.currency?.currency_name}-{status?.data?.job?.salary_to+status?.data?.job?.currency?.currency_name})
                   </JText>
 
                   <JInput

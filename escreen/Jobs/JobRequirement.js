@@ -78,7 +78,7 @@ const JobRequirement = () => {
     formdata.append('job_expiry_date', moment(values.expiry).format('DD-MM-YYYY'));
     formdata.append('hide_salary', isEnabled);
     formdata.append('is_freelance', isEnabled1);
-// console.log(formdata)
+    // console.log(formdata)
 
     fetch(`${url.baseUrl}/employer/jobs/store`, {
       method: 'POST',
@@ -124,7 +124,11 @@ const JobRequirement = () => {
   };
 
 
+  const currentDate = new Date();
 
+  // Calculate the maximum start date (1 day before the current date)
+  const maximumStartDate = new Date(currentDate);
+  maximumStartDate.setDate(currentDate.getDate() - 1);
 
   return (
     <JScreen
@@ -162,13 +166,36 @@ const JobRequirement = () => {
             jobLanguage: [],
             position: '',
             experience: '',
-            publishDate: new Date().toDateString(),
-            expiry: new Date().toDateString(),
+            publishDate: '',
+            expiry:'',
+            // publishDate: new Date().toDateString(),
+            // expiry:moment(values.publishDate).add(1, 'days').toDate(),
           }}
           onSubmit={values => {
             _handleSubmit(values);
           }}
           validationSchema={yup.object().shape({
+        
+            publishDate: yup
+              .date()
+              .required('Publish date is required')
+              .typeError('Publish date must be a valid date'),
+
+            expiry: yup
+              .date()
+              // .when('publishDate', (publishDate, schema) => {
+              //   if (publishDate) {
+              //     // Calculate one day ahead of publishDate
+              //     const nextDay = new Date(publishDate);
+              //     nextDay.setDate(nextDay.getDate() + 1);
+
+              //     return schema.min(nextDay, 'Expiry date must be at least one day after publish date');
+              //   }
+              //   return schema; // No validation if publishDate is not selected yet
+              // })
+              .required('Expiry date is required')
+              .typeError('Expiry date must be a valid date'),
+
             position: yup
               .string()
               .max(4, 'Maximum 4 digits allowed')
@@ -401,31 +428,32 @@ const JobRequirement = () => {
                     <JText fontSize={RFPercentage(2)}>{values.expiry}</JText>
                   </Pressable>
                 </View> */}
-                <JSelectInput
-                      isDate={true}
-                      minimumDate={new Date()}
-                      containerStyle={{ marginTop: RFPercentage(2) }}
-                      value={
-                        values.publishDate &&
-                        moment(values.publishDate).format('DD-MM-YYYY')
-                      }
-                      setValue={e => setFieldValue('publishDate', e)}
-                      header={store.lang.publish_date}
-                      heading={`${store.lang.publish_date}:`}
-                      error={touched.publishDate && errors.publishDate && true}
-                      rightIcon={
-                        <Feather
-                          name="chevron-down"
-                          size={RFPercentage(2.5)}
-                          color={colors.black[0]}
-                        />
-                      }
-                    />
-                    {touched.publishDate && errors.publishDate && (
-                      <JErrorText>{errors.publishDate}</JErrorText>
-                    )}
                   <JSelectInput
+                    isDate={true}
                     minimumDate={new Date()}
+                    containerStyle={{ marginTop: RFPercentage(2) }}
+                    value={
+                      values.publishDate &&
+                      moment(values.publishDate).format('DD-MM-YYYY')
+                    }
+                    setValue={e => setFieldValue('publishDate', e)}
+                    header={store.lang.publish_date}
+                    heading={`${store.lang.publish_date}:`}
+                    error={touched.publishDate && errors.publishDate && true}
+                    rightIcon={
+                      <Feather
+                        name="chevron-down"
+                        size={RFPercentage(2.5)}
+                        color={colors.black[0]}
+                      />
+                    }
+                  />
+                  {touched.publishDate && errors.publishDate && (
+                    <JErrorText>{errors.publishDate}</JErrorText>
+                  )}
+                  <JSelectInput
+                    date1={moment().add(1, 'days').toDate()}
+                    minimumDate={moment().add(1, 'days').toDate()}
                     containerStyle={{ marginTop: RFPercentage(2) }}
                     isDate={true}
                     value={
@@ -447,7 +475,6 @@ const JobRequirement = () => {
                         }
                       />
                     }
-                  // disabled={!values.start}
                   />
                   {touched.expiry && errors.expiry && (
                     <JErrorText>{errors.expiry}</JErrorText>
