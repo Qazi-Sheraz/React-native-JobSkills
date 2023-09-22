@@ -451,7 +451,7 @@ console.log('GoogleData========>', store.googleUserInfo)
                 loader
                   ? store.lang.loading
                   : type === 1
-                    ? store.lang.login_as_candidate
+                    ? store.lang.login_as_jobseeker
                     : store.lang.login_as_employee
               }
             />

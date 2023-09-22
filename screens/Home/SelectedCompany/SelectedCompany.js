@@ -46,7 +46,7 @@ import { Formik } from 'formik';
 import * as yup from 'yup';
 import JInput from '../../../customComponents/JInput';
 import { useRoute } from '@react-navigation/native';
-
+import validUrl from 'valid-url';
 function SelectedJob({ route, navigation }) {
   const{params}=useRoute();
   const [companyData, setCompanyData] = useState({});
@@ -59,11 +59,10 @@ function SelectedJob({ route, navigation }) {
   const store = useContext(StoreContext);
   const refRBSheet = useRef();
 
-  const urlPattern = /^(http|https):\/\/([\w.-]+)(\/[\w-]*)*\/?$/;
   const simpleText = RFPercentage(2);
   const headingWeight = {
     weight: 'bold',
-    size: RFPercentage(3),
+    size: RFPercentage(2.5),
   };
   // console.log(route.params.id)
   const _getDetail = () => {
@@ -162,8 +161,9 @@ const companyName = params?.c_name?encodeURIComponent(params?.c_name || ""):enco
     <JScreen isError={error} onTryAgainPress={() => _getDetail()}>
       <JGradientView
         containerStyle={{
-          height: heightPercentageToDP(25),
+          // height: heightPercentageToDP(25),
           paddingHorizontal: RFPercentage(2),
+          paddingBottom: RFPercentage(2),
         }}>
         <JRow
           style={{
@@ -227,21 +227,24 @@ const companyName = params?.c_name?encodeURIComponent(params?.c_name || ""):enco
         <JRow
           style={{
             justifyContent: 'space-between',
+            width:'100%',
           }}>
-          <JRow>
+          <JRow style={{width:'60%'}}>
             <Image
               style={{
-                height: RFPercentage(4),
-                width: RFPercentage(4),
-                marginHorizontal: RFPercentage(1),
+                height: RFPercentage(3),
+                width: RFPercentage(3),
+                marginHorizontal: RFPercentage(0.2),
               }}
               source={{ uri: companyData?.company?.company_url }}
             />
             <JText
               fontWeight={headingWeight.weight}
+              style={{marginHorizontal:RFPercentage(0.5)}}
               fontSize={headingWeight.size}
               fontColor={colors.white[0]}>
-              {companyData?.company?.company_name}
+                
+              {companyData?.company?.company_name?.length > 40 ? companyData?.company?.company_name?.slice(0, 40) + ".... " :companyData?.company?.company_name}
             </JText>
           </JRow>
           {apiLoader ? (
@@ -308,7 +311,7 @@ const companyName = params?.c_name?encodeURIComponent(params?.c_name || ""):enco
             style={styles.gradient_headings}
             fontColor={colors.white[0]}
             fontSize={simpleText}>
-            {companyData?.company?.location}
+            {companyData?.company?.location?.length > 35 ? companyData?.company?.location?.slice(0, 35) + " . . . .":companyData?.company?.location }
           </JText>
         </JRow>
 
@@ -321,7 +324,7 @@ const companyName = params?.c_name?encodeURIComponent(params?.c_name || ""):enco
             <JRow>
               <AntDesign
                 style={{ marginHorizontal: RFPercentage(0.5) }}
-                size={RFPercentage(2.8)}
+                size={RFPercentage(2.6)}
                 color={colors.white[0]}
                 name="phone"
               />
@@ -335,15 +338,26 @@ const companyName = params?.c_name?encodeURIComponent(params?.c_name || ""):enco
           <JRow>
             <FontAwesome
               style={{ marginHorizontal: RFPercentage(0.5) }}
-              size={RFPercentage(2.8)}
+              size={RFPercentage(2.5)}
               color={colors.white[0]}
               name="globe"
             />
+          
             <JText
-              onPress={() => Linking.openURL(companyData?.company?.website)}
+             onPress={() => {
+              const url = companyData?.company?.website;
+              if (validUrl.isWebUri(url)) {
+                Linking.openURL(url);
+              } else {
+                JToast({
+                  type: 'danger',
+                  text1: store.lang.the_URL_is_not_valid,
+                });
+              }
+            }}
               fontColor={colors.white[0]}
               fontSize={simpleText}>
-              {companyData?.company?.website}
+              {companyData?.company?.website?.length > 20 ? companyData?.company?.website?.slice(0, 20) + " . . .":companyData?.company?.website }
             </JText>
           </JRow>
         </JRow>
@@ -415,16 +429,16 @@ const companyName = params?.c_name?encodeURIComponent(params?.c_name || ""):enco
       </JScrollView>
 
       <JButton
-       onPress={() => {
+      onPress={() => {
         const url = companyData?.company?.website;
-    
-        if (url && urlPattern.test(url)) {
+        if (validUrl.isWebUri(url)) {
           Linking.openURL(url);
         } else {
           JToast({
-            type:'danger',
-            text1:store.lang.the_URL_is_not_valid,
-          }); }
+            type: 'danger',
+            text1: store.lang.the_URL_is_not_valid,
+          });
+        }
       }}
         // onPress={() => Linking.openURL(companyData?.company?.website)}
         style={{

@@ -26,6 +26,7 @@ import { observer } from 'mobx-react';
 import { JToast } from '../functions/Toast';
 import JSelectInput from './JSelectInput';
 import { _jobApplication } from '../escreen/Jobs/JobApplication';
+import JErrorText from './JErrorText';
 // import url from '../../config/url';
 const JApplication = ({
 
@@ -46,7 +47,8 @@ const JApplication = ({
   const isFoucs = useIsFocused();
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
-
+  const [links,setLink]=useState();
+  
   const [open, setOpen] = useState(false);
   const store = useContext(StoreContext);
   const navigation = useNavigation();
@@ -199,8 +201,9 @@ const JApplication = ({
     )
       .then(response => response.json())
       .then(result => {
-        // console.log(result)
-        setMeetings(result);
+        console.log(result)
+        setMeetings(result)
+        setLink(result?.meeting_type[0])
       })
 
       .catch(error => {
@@ -211,7 +214,7 @@ const JApplication = ({
         setLoader(false);
       });
   };
-
+  console.log('linksssssss',links)
 
 
   useEffect(() => {
@@ -425,8 +428,7 @@ const JApplication = ({
 
               }}
               validationSchema={yup.object().shape(
-                meetings?.meeting_type == 'Office Base' ? {
-                  // interview_topic: yup
+                 // interview_topic: yup
                   //   .string()
                   //   .required()
                   //   .label('interview_topic'),
@@ -439,11 +441,14 @@ const JApplication = ({
                   //   .string()
                   //   .required()
                   //   .label('interview_topic'),
-                  manual_link: yup.string().url('Invalid URL format')
+                  links ==='Office Base' ? {
+                 
+                    office_location:
+                     yup.string().url('Invalid URL format')
+                      .required('URL is required').label('office_location'),
+                  }
+                  :{manual_link: yup.string().url('Invalid URL format')
                     .required('URL is required').label('manual_link'),
-                } : {
-                  office_location: yup.string().url('Invalid URL format')
-                    .required('URL is required').label('office_location'),
                 })}
             >
               {({
@@ -514,6 +519,7 @@ const JApplication = ({
                     style={{
                       textAlign: store.lang.id == 0 ? 'left' : 'right',
                     }}
+                    editable={false}
                     containerStyle={{ marginTop: RFPercentage(1) }}
                     isRequired
                     multiline={true}
@@ -527,6 +533,7 @@ const JApplication = ({
                     error={touched.description && errors.description && true}
                     onChangeText={handleChange('description')}
                     onBlur={() => setFieldTouched('description')}
+                    
                   />
 
                   <View
@@ -585,7 +592,9 @@ const JApplication = ({
                             }}
                             onPress={() => {
                               setFieldValue('interview_type', item);
+                              setLink(item);
                               setOption(false);
+                              
                             }}>
                             <JText fontSize={RFPercentage(2)}>
                               {item === 'Office Base'
@@ -597,14 +606,16 @@ const JApplication = ({
                       </View>
                     )}
                   </View>
+                 
                   {values.interview_type === 'Office Base' ? (
+                    
                     <JInput
                       style={{
                         textAlign: store.lang.id == 0 ? 'left' : 'right',
                       }}
                       containerStyle={{ marginTop: RFPercentage(1) }}
                       isRequired
-                      placeholder={'https//map.app.goo.gl/B31UbkjUXD5XrvkHA'}
+                      placeholder={'https://map.app.goo.gl/B31Ubk'}
                       heading={store.lang.office_location}
                       value={values.office_location}
                       error={
@@ -615,6 +626,7 @@ const JApplication = ({
                       onChangeText={handleChange('office_location')}
                       onBlur={() => setFieldTouched('office_location')}
                     />
+                    
                   ) : (
                     values.interview_type === 'Manual Link' && (
                       <JInput
@@ -622,8 +634,8 @@ const JApplication = ({
                           textAlign: store.lang.id == 0 ? 'left' : 'right',
                         }}
                         containerStyle={{ marginTop: RFPercentage(1) }}
-                        placeholder={store.lang.manual_link}
-                        //  heading={'Zoom'}
+                        placeholder={'https://map.app.goo.gl/B31Ubk'}
+                        heading={store.lang.manual_link}
                         value={values.manual_link}
                         error={touched.manual_link && errors.manual_link && true}
                         onChangeText={handleChange('manual_link')}
@@ -631,6 +643,13 @@ const JApplication = ({
                       />
                     )
                   )}
+                    {touched.office_location && errors.office_location && (
+                    <JErrorText>{errors.office_location}</JErrorText>
+                  )}
+                    {touched.manual_link && errors.manual_link && (
+                    <JErrorText>{errors.manual_link}</JErrorText>
+                  )}
+
 
                   <JRow
                     style={{

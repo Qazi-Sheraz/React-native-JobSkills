@@ -26,9 +26,9 @@
     "meeting_ID": "معرف الاجتماع",
     "password": "كلمة المرور",
     "login_as_employee": "تسجيل الدخول كموظف",
-    "login_as_candidate": "تسجيل الدخول كمرشح",
+    "login_as_jobseeker": "تسجيل الدخول كباحث عن عمل",
     "register_as_employee": "سجل كموظف",
-    "register_as_candidate": "سجل كمرشح",
+    "register_as_jobseeker": "سجل كباحث عن عمل",
     "remember": "يتذكر",
     "forgot_password": "نسيت كلمة المرور؟",
     "forgot_pass": "هل نسيت كلمة السر",
@@ -73,7 +73,7 @@
     "post_job": "وظيفة بعد",
     "description": "المسمى الوظيفي",
     "descriptions": "وصف",
-    "add_candidate": "أضف المرشح",
+    "add_jobseeker": "إضافة الباحث عن عمل",
     "candidate": "مُرَشَّح",
     "first_name": "الاسم الأول",
     "last_name": "اسم العائلة",
@@ -86,7 +86,7 @@
     "upload": "رفع",
     "add": "يضيف",
     "create_account": "إنشاء حساب",
-    "report_candidate": "تقرير المرشح",
+    "report_jobseeker": "الإبلاغ عن الباحث عن عمل",
     "download_resume": "تحميل السيرة الذاتية",
     "view_resume": "انظر السيرة الذاتية",
     "assessment_result": "نتيجة التقييم",
@@ -454,6 +454,10 @@
     "file_size_exceeds_MB_limit": "يتجاوز حجم الملف الحد المسموح به وهو 1 ميغابايت",
     "canceled_from_single_doc_picker": "واحد دستاویز چنندہ سے منسوخ کر دیا گیا",
     "modal_has_been_closed": "تم إغلاق المشروط",
-    "the_URL_is_not_valid": "عنوان URL غير صالح"
+    "the_URL_is_not_valid": "عنوان URL غير صالح",
+    "jobseeker": "الباحث عن عمل",
+    "image_sise": "يجب أن يكون حجم الصورة أقل من 2 ميجابايت"
+    
+
     
 }

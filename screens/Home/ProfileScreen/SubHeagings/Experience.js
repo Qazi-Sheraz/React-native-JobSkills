@@ -88,7 +88,10 @@ export default function Experience({
                   padding: RFPercentage(2),
                 }}>
                 <JRow style={{justifyContent: 'space-between'}}>
-                  <JText fontWeight='bold'>{item?.experience_title}</JText>
+                  <JText style={{width:'90%'}} fontWeight='bold'>
+                    {/* {item?.experience_title} */}
+                    {item?.experience_title?.length > 35 ? item?.experience_title?.slice(0, 35) + " . . . " :item?.experience_title}
+                    </JText>
                   
                   <TouchableOpacity
                     onPress={() => {
@@ -131,14 +134,15 @@ export default function Experience({
                   </TouchableOpacity>
                 </JRow>
                 <JText style={{marginTop: RFPercentage(0.5),color:colors.searchPlaceholder[0],fontWeight:'bold'}}>
-                  {item?.company}
+                  {item?.company?.length > 40 ? item?.company?.slice(0, 40) + " . . . " :item?.company}
                 </JText> 
                 
                 <JText style={{marginTop: RFPercentage(0.5),color:colors.searchPlaceholder[0]}}>
-                 { `${moment(item?.start_date).format('DD')+'th '+moment(item?.start_date).format('MMM, YYYY')} - ${item.currently_working ?'Prasent' :moment(item?.end_date).format('DD')+'th '+moment(item?.end_date).format('MMM, YYYY')} | ${store.lang.id==0?store?.myProfile?.dataEnglish?.countries[item?.country_id]:store?.myProfile?.dataArabic?.countries[item?.country_id]}`} </JText>
+                 { `${moment(item?.start_date).format('DD')+'th '+moment(item?.start_date).format('MMM, YYYY')} - ${item?.currently_working ?'Prasent' :moment(item?.end_date).format('DD')+'th '+moment(item?.end_date).format('MMM, YYYY')} | ${store.lang.id==0?store?.myProfile?.dataEnglish?.countries[item?.country_id]:store?.myProfile?.dataArabic?.countries[item?.country_id]}`} </JText>
               
                 <JText style={{marginTop: RFPercentage(0.5)}}>
-                  {item?.description}
+                  {/* {item?.description} */}
+                  {item?.description?.length > 100 ? item?.description?.slice(0, 100) + " . . . " :item?.description}
                 </JText>
                
                 <JRow style={{justifyContent: 'space-between'}}>

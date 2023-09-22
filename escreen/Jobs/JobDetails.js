@@ -389,7 +389,7 @@ const JobDetails = ({ route }) => {
     },
   ];
   // console.log('job details',store.token?.user?.owner_type.includes('Candidate'))
-  console.log(store.jobDetail?.company_image)
+  // console.log(store.jobDetail?.company_image)
   return (
     loader ? (
       <CLSelectedJob />
@@ -402,8 +402,9 @@ const JobDetails = ({ route }) => {
 
           <JGradientView
             containerStyle={{
-              height: heightPercentageToDP(25),
+              // height: heightPercentageToDP(25),/
               paddingHorizontal: RFPercentage(2),
+              paddingBottom: RFPercentage(1),
             }}>
             {/* height={heightPercentageToDP(25)}
             alignItems={store.lang.id == 0 ? 'flex-start' : 'flex-end'}
@@ -503,45 +504,42 @@ const JobDetails = ({ route }) => {
                   </Menu>
                 </JRow>}
             </JRow>
-            <View style={{ marginTop: RFPercentage(2), width: '100%' }}>
-              <JRow style={{ justifyContent: 'space-between' }}>
-                <JText style={styles.headertxt}>
-                  {store.jobDetail?.job_title?.length > 25 ? store.jobDetail?.job_title?.slice(0, 25) + " . . . ." : store.jobDetail?.job_title}
+            <View style={{ marginVertical: RFPercentage(1), width: '100%' }}>
+              <JRow style={{ justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                <JText style={[styles.headertxt, { width: '52%', }]}>
+                  {store.jobDetail?.job_title?.length > 40 ? store.jobDetail?.job_title?.slice(0, 40) + " . . . " : store.jobDetail?.job_title}
                 </JText>
 
-                <JText style={{ fontSize: RFPercentage(1.8), color: '#ffff' }}>
+                <JText style={{ fontSize: RFPercentage(1.8), color: '#ffff', }}>
                   {'\r'}
                   {store.lang.date_posted}{' '}
                   {moment(store.jobDetail.job_publish_date, 'DD-MM-YYYY',).format('DD-MM-YYYY')}
                 </JText>
               </JRow>
               <JRow>
-               
+
                 <Image
-                  style={{ height: RFPercentage(2.8), width: RFPercentage(2.8)}}
+                  style={{ height: RFPercentage(2.8), width: RFPercentage(2.8) }}
                   source={{ uri: store.jobDetail?.company_image }}
                 />
-                <JText style={styles.txt}>{store.jobDetail?.company_name}</JText>
+                <JText style={styles.companyTxt}>{store.jobDetail?.company_name?.length > 45 ? store.jobDetail?.company_name?.slice(0, 45) + " . . . ." : store.jobDetail?.company_name}</JText>
               </JRow>
               <JRow>
                 <Placeholder />
                 <JText style={styles.txt}>
-                  {store.lang.id === 0
+                  {`${store.lang.id === 0
                     ? store.jobDetail?.city_name
                     : store.lang.id === 1
                       ? store.jobDetail?.city_name_urdu
-                      : store.jobDetail?.city_name_arabic}
-                  ,
-                  {store.lang.id === 0
-                    ? store.jobDetail?.state_name
-                    : store.lang.id === 1
-                      ? store.jobDetail?.state_name_urdu
-                      : store.jobDetail?.state_name_arabic}
-                  {store.lang.id === 0
-                    ? store.jobDetail?.country_name
-                    : store.lang.id === 1
-                      ? store.jobDetail?.country_name_urdu
-                      : store.jobDetail?.country_name_arabic}
+                      : store.jobDetail?.city_name_arabic}, ${store.lang.id === 0
+                        ? store.jobDetail?.state_name
+                        : store.lang.id === 1
+                          ? store.jobDetail?.state_name_urdu
+                          : store.jobDetail?.state_name_arabic}, ${store.lang.id === 0
+                            ? store.jobDetail?.country_name
+                            : store.lang.id === 1
+                              ? store.jobDetail?.country_name_urdu
+                              : store.jobDetail?.country_name_arabic}`}
                 </JText>
               </JRow>
               <JRow style={{ justifyContent: 'space-between' }}>
@@ -678,7 +676,7 @@ const JobDetails = ({ route }) => {
                     fontWeight: 'bold',
                     paddingHorizontal: RFPercentage(5),
                   }}
-                  children={store.lang.add_candidate}
+                  children={store.lang.add_jobseeker}
                 /> :
                 <>
                   {status.message == '4' ? (
@@ -771,12 +769,12 @@ const JobDetails = ({ route }) => {
                 }),
                 firstName: yup.string()
                   .transform(value => value.trim())
-                  .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'First Name must contain at least 1 alphabet character and can include English, Urdu, Arabic, and spaces')
+                  .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'First Name must contain  alphabet character')
                   .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the First Name')
                   .required().label('First Name'),
                 lastName: yup.string()
                   .transform(value => value.trim())
-                  .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'Last Name must contain at least 1 alphabet character and can include English, Urdu, Arabic, and spaces')
+                  .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'Last Name must contain alphabet character')
                   .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the Last Name')
                   .required().label('Last Name'),
                 email: yup
@@ -786,7 +784,8 @@ const JobDetails = ({ route }) => {
                   .email('Must be a valid email')
                   .required()
                   .label('Email'),
-                phone: yup.string().max(14).required().label('Phone'),
+                // phone: yup.string().max(14).required().label('Phone'),
+                phone: yup.string().max(15).matches(/^\+?[0-9]\d*$/, 'Phone Number must be a digit').required().label('Phone'),
               })}>
 
               {({
@@ -807,7 +806,7 @@ const JobDetails = ({ route }) => {
                           fontColor={colors.white[0]}
                           fontWeight="bold"
                           fontSize={RFPercentage(2.5)}>
-                          {store.lang.add_candidate}
+                          {store.lang.add_jobseeker}
                         </JText>
                       }
                     />
@@ -825,6 +824,9 @@ const JobDetails = ({ route }) => {
                         onChangeText={handleChange('firstName')}
                         onBlur={() => setFieldTouched('firstName')}
                       />
+                      {touched.firstName && errors.firstName && (
+                        <JErrorText>{errors.firstName}</JErrorText>
+                      )}
                       <JInput
                         style={{
                           textAlign: store.lang.id == 0 ? 'left' : 'right',
@@ -838,6 +840,9 @@ const JobDetails = ({ route }) => {
                         onChangeText={handleChange('lastName')}
                         onBlur={() => setFieldTouched('lastName')}
                       />
+                      {touched.lastName && errors.lastName && (
+                        <JErrorText>{errors.lastName}</JErrorText>
+                      )}
                       <JInput
                         style={{
                           textAlign: store.lang.id == 0 ? 'left' : 'right',
@@ -851,7 +856,9 @@ const JobDetails = ({ route }) => {
                         onChangeText={handleChange('email')}
                         onBlur={() => setFieldTouched('email')}
                       />
-
+                      {touched.email && errors.email && (
+                        <JErrorText>{errors.email}</JErrorText>
+                      )}
                       <View style={{ marginBottom: RFPercentage(2) }}>
                         <JRow
                           style={{
@@ -892,10 +899,11 @@ const JobDetails = ({ route }) => {
                             setPhone(e)
                           }}
                         />
-                        {touched.phone && errors.phone && (
-                          <JErrorText>{errors.phone}</JErrorText>
-                        )}
+
                       </View>
+                      {touched.phone && errors.phone && (
+                        <JErrorText>{errors.phone}</JErrorText>
+                      )}
                       <JRow>
                         <JText fontSize={RFPercentage(2.5)}>
                           {store.lang.resume}
@@ -1207,17 +1215,20 @@ const JobDetails = ({ route }) => {
 export default observer(JobDetails);
 
 const styles = StyleSheet.create({
-  headertxt: { fontSize: RFPercentage(1.9), fontWeight: 'bold', color: '#ffff' },
+  headertxt: { fontSize: RFPercentage(2.2), fontWeight: 'bold', color: '#ffff' },
   headertxt1: {
     fontSize: RFPercentage(3),
     fontWeight: 'bold',
     marginVertical: RFPercentage(1),
+
+
   },
 
   headertxt2: {
     fontSize: RFPercentage(2),
     fontWeight: '700',
     marginVertical: RFPercentage(1),
+
   },
   headertxt3: {
     fontSize: RFPercentage(2),
@@ -1225,6 +1236,7 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     marginVertical: RFPercentage(1),
   },
+  companyTxt: { fontSize: RFPercentage(1.8), width: '90%', color: '#ffff', margin: RFPercentage(1) },
   txt: { fontSize: RFPercentage(1.8), color: '#ffff', margin: RFPercentage(1) },
   txt1: {
     fontSize: RFPercentage(1.9),

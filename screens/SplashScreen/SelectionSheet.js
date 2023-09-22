@@ -33,7 +33,7 @@ const SelectionSheet = ({navigation}) => {
           onPress={() => navigation.navigate('CLogin', {type: 1})}
           borderColor={colors.black[0]}
           backgroundColor={colors.white[0]}>
-          {store.lang.candidate}
+          {store.lang.jobseeker}
         </JButton>
       </View>
     </Animatable.View>

@@ -16,6 +16,7 @@ import JChevronIcon from '../../customComponents/JChevronIcon';
 import { observer } from 'mobx-react';
 import JEmpty from '../../customComponents/JEmpty';
 import { JToast } from '../../functions/Toast';
+import CLFavouriteJob from '../../loaders/Candidate/FavouriteJob/CLFavouriteJob';
 
 const Employes = () => {
   const { navigate, goBack } = useNavigation();
@@ -79,7 +80,7 @@ const Employes = () => {
     setTimeout(() => {
       _getEmployeData();
       store.setIsRefreshing(false);
-    }, 2000);
+    }, 1000);
   }, [loader,]);
 
   return (
@@ -103,7 +104,7 @@ const Employes = () => {
         />
       }>
       {loader ? (
-        <ActivityIndicator />
+        <CLFavouriteJob />
       ) : (
         employeeData?.length > 0 ? (
           <>
@@ -113,10 +114,8 @@ const Employes = () => {
               onChangeText={handleSearch}
               value={searchQuery}
 
-
-              onPressIcon={() => alert('Icon Pressed')}
             />
-            <View>
+            <View style={{flex:1,}}>
               <FlatList
                 refreshControl={
                   <RefreshControl
@@ -125,9 +124,9 @@ const Employes = () => {
                   />
                 } showsVerticalScrollIndicator={false} 
                 data={searchQuery?.length > 0 ? filteredData : employeeData}
-                renderItem={({ item, index }) => <JEmployeUser
-                  item={item} />}
-              />
+                renderItem={({ item, index }) => 
+                <JEmployeUser item={item} />
+              }/>
             </View>
           </>
         ) : <JEmpty />)}

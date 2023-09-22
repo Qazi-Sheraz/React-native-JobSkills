@@ -33,9 +33,10 @@ myHeaders.append("Authorization",  `Bearer ${store.token?.token}`);
 
 var formdata = new FormData();
 formdata.append("phone", params?.phone);
+formdata.append("region_code",params?.region_code);
 formdata.append("code",`${value.d1}${value.d2}${value.d3}${value.d4}`
  );
-//  console.log(formdata)
+ console.log(formdata)
 
 var requestOptions = {
   method: 'POST',
@@ -128,7 +129,7 @@ fetch(`${url.baseUrl}/phone-code-verification`, requestOptions)
         <JText
           fontWeight={'500'}
           fontAlign="center"
-          children={`${store.lang.enter_number} ${params.phone}`}
+          children={`${store.lang.enter_number} ${params?.region_code}${params?.phone}`}
           style={{marginTop: RFPercentage(0.5), width: '70%'}}
         />
       </View>

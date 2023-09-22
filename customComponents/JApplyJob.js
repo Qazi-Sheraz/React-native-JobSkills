@@ -1,4 +1,4 @@
- import {
+import {
   Modal,
   StyleSheet,
   Pressable,
@@ -9,16 +9,16 @@
   ScrollView,
   Alert,
 } from 'react-native';
-import React, {useContext, useEffect} from 'react';
+import React, { useContext, useEffect } from 'react';
 import JButton from './JButton';
-import {heightPercentageToDP} from 'react-native-responsive-screen';
-import {RFPercentage} from 'react-native-responsive-fontsize';
-import {useState} from 'react';
+import { heightPercentageToDP } from 'react-native-responsive-screen';
+import { RFPercentage } from 'react-native-responsive-fontsize';
+import { useState } from 'react';
 import colors from '../config/colors';
 import JText from './JText';
 import JRow from './JRow';
 import JGradientHeader from './JGradientHeader';
-import {Formik} from 'formik';
+import { Formik } from 'formik';
 import * as yup from 'yup';
 import JInput from './JInput';
 import url from '../config/url';
@@ -31,8 +31,8 @@ const questions = [
   `It's My only option`,
   `It's allow me to achieve my goals`,
 ];
-const JApplyJob = ({token, jobId, id, setStatus, status}) => {
-  const store= useContext(StoreContext);
+const JApplyJob = ({ token, jobId, id, setStatus, status }) => {
+  const store = useContext(StoreContext);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisible1, setModalVisible1] = useState(false);
   const [option, setOption] = useState(0);
@@ -44,10 +44,10 @@ const JApplyJob = ({token, jobId, id, setStatus, status}) => {
 
   const resumes = [];
   // console.log('Resume', status.data.resumes);
-  if (status?.success !== true && loader === false ) {
+  if (status?.success !== true && loader === false) {
     status.data &&
       Object.keys(status.data?.resumes).map((item, index) => {
-        resumes.push({id: item, name: status.data.resumes[item]});
+        resumes.push({ id: item, name: status.data.resumes[item] });
       });
   }
 
@@ -80,7 +80,7 @@ const JApplyJob = ({token, jobId, id, setStatus, status}) => {
   useEffect(() => {
     _getStatus();
   }, []);
-// console.log('isApplied',status?.data?.isApplied)
+  // console.log('isApplied',status?.data?.isApplied)
   return (
     <>
       {loader === false && status?.data?.isApplied == false && (
@@ -88,7 +88,7 @@ const JApplyJob = ({token, jobId, id, setStatus, status}) => {
           isValid={!loader}
           onPress={() => setModalVisible(true)}
           style={{
-            
+
             position: 'absolute',
             bottom: RFPercentage(1),
           }}
@@ -116,7 +116,7 @@ const JApplyJob = ({token, jobId, id, setStatus, status}) => {
                 </JText>
               }
             />
-            <View style={{padding: RFPercentage(2)}}>
+            <View style={{ padding: RFPercentage(2) }}>
               <JText fontSize={RFPercentage(2.5)}>{store.lang.question}</JText>
               <JText
                 fontSize={RFPercentage(2)}
@@ -277,7 +277,7 @@ const JApplyJob = ({token, jobId, id, setStatus, status}) => {
                     </JText>
                   }
                 />
-                <ScrollView style={{padding: RFPercentage(2)}}>
+                <ScrollView style={{ padding: RFPercentage(2) }}>
                   <JRow>
                     <JText fontSize={RFPercentage(2.5)}>{store.lang.resume}</JText>
                     <JText
@@ -378,7 +378,7 @@ const JApplyJob = ({token, jobId, id, setStatus, status}) => {
                       )} */}
 
                   <Pressable
-                    onPress={() => {setDropDown(!dropDown)}}
+                    onPress={() => { setDropDown(!dropDown) }}
                     style={{
                       borderWidth: RFPercentage(0.2),
                       width: '100%',
@@ -397,11 +397,11 @@ const JApplyJob = ({token, jobId, id, setStatus, status}) => {
                   </Pressable>
                   {dropDown === true && (
                     <ScrollView
-                    
+
                       style={{
                         position: 'absolute',
                         top: RFPercentage(15.9),
-                        height:RFPercentage(30),
+                        height: RFPercentage(30),
                         width: '100%',
                         backgroundColor: colors.white[0],
                         zIndex: 1,
@@ -430,7 +430,7 @@ const JApplyJob = ({token, jobId, id, setStatus, status}) => {
                         </Pressable>
                       ))}
                     </ScrollView>
-                  )} 
+                  )}
 
                   {/* {singleFile ? (
                     <Pdf
@@ -470,80 +470,80 @@ const JApplyJob = ({token, jobId, id, setStatus, status}) => {
                         children={'Upload Resume'}
                       />
                     </JRow>
-                  )} */} 
-
-                  <JText
+                  )} */}
+                  {!status?.data?.job?.hide_salary &&
+                    <JText
                     fontSize={RFPercentage(2)}
-                    fontColor={colors.placeHolderColor[0]}
-                    style={{
-                      marginTop: RFPercentage(2),
-                    }}>
-                    {store.lang.expected_salary_range}({status?.data?.job?.salary_from+status?.data?.job?.currency?.currency_name}-{status?.data?.job?.salary_to+status?.data?.job?.currency?.currency_name})
-                  </JText>
+                  fontColor={colors.placeHolderColor[0]}
+                  style={{
+                    marginTop: RFPercentage(2),
+                  }}>
+                  {store.lang.expected_salary_range}({status?.data?.job?.salary_from + status?.data?.job?.currency?.currency_name}-{status?.data?.job?.salary_to + status?.data?.job?.currency?.currency_name})
+                </JText>}
 
-                  <JInput
+                <JInput
                   style={{
                     textAlign: store.lang.id == 0 ? 'left' : 'right',
                   }}
                   keyboardType={'numeric'}
-                    containerStyle={{marginTop: RFPercentage(1)}}
-                    isRequired
-                    heading={store.lang.expected_salary}
-                    value={values.expected}
-                    error={touched.expected && errors.expected && true}
-                    onChangeText={handleChange('expected')}
-                    onBlur={() => setFieldTouched('expected')}
-                  />
+                  containerStyle={{ marginTop: RFPercentage(1) }}
+                  isRequired
+                  heading={store.lang.expected_salary}
+                  value={values.expected}
+                  error={touched.expected && errors.expected && true}
+                  onChangeText={handleChange('expected')}
+                  onBlur={() => setFieldTouched('expected')}
+                />
 
-                  <JInput
+                <JInput
                   style={{
                     textAlign: store.lang.id == 0 ? 'left' : 'right',
                   }}
-                    containerStyle={{marginTop: RFPercentage(2)}}
-                    isRequired
-                    value={values.note}
-                    heading={`${store.lang.note}:`}
-                    error={touched.note && errors.note && true}
-                    onChangeText={handleChange('note')}
-                    onBlur={() => setFieldTouched('note')}
+                  containerStyle={{ marginTop: RFPercentage(2) }}
+                  isRequired
+                  value={values.note}
+                  heading={`${store.lang.note}:`}
+                  error={touched.note && errors.note && true}
+                  onChangeText={handleChange('note')}
+                  onBlur={() => setFieldTouched('note')}
+                />
+
+                <JRow
+                  style={{
+                    marginTop: RFPercentage(5),
+                    justifyContent: 'space-between',
+                    marginHorizontal: RFPercentage(3),
+                    borderColor: colors.primary[1],
+                  }}>
+                  <JButton
+                    onPress={() => {
+                      setModalVisible1(!modalVisible1);
+                    }}
+                    style={{
+                      width: '46%',
+                      backgroundColor: colors.white[0],
+                      borderColor: colors.black[1],
+                    }}
+                    children={store.lang.save_as_draft}
                   />
 
-                  <JRow
+                  <JButton
+                    isValid={!apiLoader}
+                    onPress={() => {
+                      handleSubmit();
+                    }}
                     style={{
-                      marginTop: RFPercentage(5),
-                      justifyContent: 'space-between',
-                      marginHorizontal: RFPercentage(3),
-                      borderColor: colors.primary[1],
-                    }}>
-                    <JButton
-                      onPress={() => {
-                        setModalVisible1(!modalVisible1);
-                      }}
-                      style={{
-                        width: '46%',
-                        backgroundColor: colors.white[0],
-                        borderColor: colors.black[1],
-                      }}
-                      children={store.lang.save_as_draft}
-                    />
-
-                    <JButton
-                      isValid={!apiLoader}
-                      onPress={() => {
-                        handleSubmit();
-                      }}
-                      style={{
-                        width: '46%',
-                      }}
-                      children={apiLoader ? store.lang.loading : store.lang.apply}
-                    />
-                  </JRow>
-                </ScrollView>
-              </View>
+                      width: '46%',
+                    }}
+                    children={apiLoader ? store.lang.loading : store.lang.apply}
+                  />
+                </JRow>
+              </ScrollView>
+            </View>
             </SafeAreaView>
           )}
-        </Formik>
-      </Modal>
+      </Formik>
+    </Modal >
     </>
   );
 };

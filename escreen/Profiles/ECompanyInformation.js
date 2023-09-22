@@ -31,6 +31,7 @@ const ECompanyInformation = () => {
   const { params } = useRoute();
   // console.log(params?.details)
   const _companyInfo = values => {
+    setLoader1(true)
     var myHeaders = new Headers();
     myHeaders.append(
       'Authorization',
@@ -49,6 +50,7 @@ const ECompanyInformation = () => {
     formdata.append('website', values?.website);
     // formdata.append('fax', values?.fax);
     // console.log(formdata);
+
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
@@ -75,6 +77,7 @@ const ECompanyInformation = () => {
           text1: store.lang.eror,
           text2: store.lang.an_error_occurred_please_try_again_later,
         })
+        setLoader1(false)
       })
   };
 
@@ -152,6 +155,7 @@ const ECompanyInformation = () => {
           }}
           onSubmit={values => {
             // console.log(values);
+
             _companyInfo(values);
           }}
           validationSchema={yup.object().shape({
@@ -175,7 +179,7 @@ const ECompanyInformation = () => {
               .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'Ceo Name must contain at least 1 alphabet character and can include English, Urdu, Arabic, and spaces')
               .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the Ceo Name')
               .required(),
-              website: yup
+            website: yup
               .string()
               .url('Invalid URL format')
               .required('Website URL is required'),
@@ -206,7 +210,6 @@ const ECompanyInformation = () => {
                   <JText
                     disabled={loader1 ? true : false}
                     onPress={() => {
-                      setLoader1(true)
                       isValid && handleSubmit();
                     }}
                     fontColor={
@@ -363,6 +366,7 @@ const ECompanyInformation = () => {
                   }}
                   containerStyle={{ marginTop: RFPercentage(2) }}
                   heading={`${store.lang.website}:`}
+                  placeholder={'https://map.app.goo.gl/B31Ubk'}
                   value={values.website}
                   error={touched.website && errors.website && true}
                   onChangeText={handleChange('website')}

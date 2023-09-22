@@ -26,7 +26,9 @@ const Registration = ({ navigation, route }) => {
   const [loader, setLoader] = useState(false);
   const store = useContext(StoreContext);
   console.log(route.params?.type)
+
   const _register = values => {
+    setLoader(true);
     var myHeaders = new Headers();
     myHeaders.append('Accept', 'application/json');
 
@@ -48,7 +50,7 @@ const Registration = ({ navigation, route }) => {
       body: formdata,
       redirect: 'follow',
     };
-    setLoader(true);
+    
     fetch('https://dev.jobskills.digital/api/users/register', requestOptions)
       .then(response => response.json())
       .then(result => {
@@ -72,7 +74,6 @@ const Registration = ({ navigation, route }) => {
             password: values.password,
           });
         }
-
         setLoader(false);
         // navigation.navigate('CVerifiedEmail', {
         //   email: values.email,
@@ -494,13 +495,14 @@ useEffect(() => {
               )}
 
               <JButton
+              disabled={loader?true:false}
                 isValid={isValid}
                 style={{ marginTop: RFPercentage(3) }}
                 onPress={() => handleSubmit()}
                 children={
                   loader
                     ? store.lang.loading
-                    : route.params?.type === 1 ? store.lang.register_as_candidate
+                    : route.params?.type === 1 ? store.lang.register_as_jobseeker
                       : store.lang.register_as_employee
 
                 }

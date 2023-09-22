@@ -19,16 +19,15 @@ import JChevronIcon from '../../customComponents/JChevronIcon';
 import url from '../../config/url';
 import { useContext } from 'react';
 import { StoreContext } from '../../mobx/store';
-import Toast from 'react-native-toast-message';
 import { _addnewJob } from '../../functions/Candidate/BottomTab';
 import { JToast } from '../../functions/Toast';
 import JRow from '../../customComponents/JRow';
 
 function EContactInformation({ refRBSheet, data, user }) {
   //   const store = useContext(StoreContext);
-  const [loader, setLoader] = useState(false);
+  const [loader, setLoader] = useState(true);
+  const [loader1, setLoader1] = useState(false);
   const [info, setInfo] = useState();
-  const [update, setUpdate] = useState();
   const [error, setError] = useState(false);
   const navigation = useNavigation();
 
@@ -272,6 +271,7 @@ function EContactInformation({ refRBSheet, data, user }) {
   };
 
   const _contactInfo = values => {
+    setLoader1(true)
     var myHeaders = new Headers();
     myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
     var formdata = new FormData();
@@ -304,7 +304,7 @@ function EContactInformation({ refRBSheet, data, user }) {
           text1: store.lang.success,
           text2: store.lang.successfully_update,
         });
-        setLoader(false)
+        setLoader1(false)
         navigation.goBack();
       })
       .catch(error =>
@@ -313,7 +313,11 @@ function EContactInformation({ refRBSheet, data, user }) {
           text1: store.lang.eror,
           text2: store.lang.an_error_occurred_please_try_again_later,
         }),
-      );
+       
+      )
+      .finally(() => {
+        setLoader1(false);
+      })
   };
   useEffect(() => {
     _getcountry();
@@ -413,13 +417,12 @@ function EContactInformation({ refRBSheet, data, user }) {
                   <JText
                     disabled={loader ? true : false}
                     onPress={() => {
-                      setLoader(true)
                       handleSubmit()
                     }}
                     fontColor={
                       isValid ? colors.white[0] : `${colors.white[0]}70`
                     }>
-                    {loader ?
+                    {loader1 ?
                       <ActivityIndicator
                         color={colors.white[0]}
                         size={RFPercentage(2)}

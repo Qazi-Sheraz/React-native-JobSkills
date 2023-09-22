@@ -96,7 +96,7 @@ const Profile = () => {
         setLoader(false);
       });
   };
-  const maxLength = 20;
+  const maxLength = 50;
  
   const _otp =()=>{
     var myHeaders = new Headers();
@@ -309,7 +309,7 @@ const Profile = () => {
                     title={`${store.lang.CEO_name}:`}
                     text={
                       profile?.company[0]?.company_information?.ceo
-                        ? profile?.company[0]?.company_information?.ceo
+                        ? profile?.company[0]?.company_information?.ceo.length > maxLength ? profile?.company[0]?.company_information?.ceo?.substring(0, maxLength) + "...." :profile?.company[0]?.company_information?.ceo
                         : 'N/A'
                     }
                   />
@@ -317,7 +317,7 @@ const Profile = () => {
                     title={`${store.lang.company_name}:`}
                     text={
                       profile?.company[0]?.company_information?.company_name
-                        ? profile?.company[0]?.company_information?.company_name
+                        ? profile?.company[0]?.company_information?.company_name?.length > maxLength ? profile?.company[0]?.company_information?.company_name?.substring(0, maxLength) + "...." :profile?.company[0]?.company_information?.company_name
                         : 'N/A'
                     }
                   />
@@ -355,7 +355,7 @@ const Profile = () => {
                     title={`${store.lang.location}:`}
                     text={
                       profile?.company[0]?.company_information?.location
-                        ? profile?.company[0]?.company_information?.location
+                        ? profile?.company[0]?.company_information?.location?.length > maxLength ? profile?.company[0]?.company_information?.location?.substring(0, maxLength) + "...." :profile?.company[0]?.company_information?.location
                         : 'N/A'
                     }
                   />
@@ -373,7 +373,7 @@ const Profile = () => {
                     title={`${store.lang.website}:`}
                     text={
                       profile?.company[0]?.company_information?.website
-                        ?( profile?.company[0]?.company_information?.website.length>maxLength? profile?.company[0]?.company_information?.website.substring(0, 25) + '....':profile?.company[0]?.company_information?.website)
+                        ?( profile?.company[0]?.company_information?.website.length>maxLength? profile?.company[0]?.company_information?.website.substring(0, maxLength) + '....':profile?.company[0]?.company_information?.website)
                         : 'N/A'
                     }
                   />

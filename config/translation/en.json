@@ -69,7 +69,7 @@
     "post_job": "Post Job",
     "description": "Job Description",
     "descriptions": "Description",
-    "add_candidate": "Add Candidate",
+    "add_jobseeker": "Add JobSeeker",
     "candidate": "Candidate",
     "first_name": "First Name",
     "last_name": "Last Name",
@@ -82,7 +82,7 @@
     "upload": "Upload",
     "add": "Add",
     "create_account": "Create Account",
-    "report_candidate": "Report Candidate",
+    "report_jobseeker": "Report JobSeeker",
     "download_resume": "Download Resume",
     "view_resume": "View Resume",
     "assessment_result": "Assessment Result",
@@ -150,9 +150,9 @@
     "employees": "Employees",
     "employer": "Employer",
     "login_as_employee": "Login as Employee",
-    "login_as_candidate": "Login as Candidate",
+    "login_as_jobseeker": "Login as JobSeeker",
     "register_as_employee": "Register as Employee",
-    "register_as_candidate": "Register as Candidate",
+    "register_as_jobseeker": "Register as JobSeeker",
     "or": "OR",
     "register_Btn": "Don’t have an account? Register",
     "login_with": "or login with",
@@ -461,7 +461,11 @@
     "file_size_exceeds_MB_limit": "File size exceeds 1 MB limit",
     "canceled_from_single_doc_picker": "Canceled from single doc picker",
     "modal_has_been_closed": "Modal has been closed",
-    "the_URL_is_not_valid": "The URL is not valid"
+    "the_URL_is_not_valid": "The URL is not valid",
+    "jobseeker": "JobSeeker",
+    "image_sise": "Image size must be less than 2MB"
+    
+    
      
     
 

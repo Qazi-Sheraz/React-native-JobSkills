@@ -271,6 +271,7 @@ function CExperienceInformation({refRBSheet, data}) {
                 error={touched.current && errors.current && true}
                 onChangeText={handleChange('current')}
                 onBlur={() => setFieldTouched('current')}
+                keyboardType={'numeric'}
               />
               {touched.current && errors.current && (
                 <JErrorText>{errors.current}</JErrorText>
@@ -285,6 +286,7 @@ function CExperienceInformation({refRBSheet, data}) {
                 error={touched.expected && errors.expected && true}
                 onChangeText={handleChange('expected')}
                 onBlur={() => setFieldTouched('expected')}
+                keyboardType={'numeric'}
               />
               {touched.expected && errors.expected && (
                 <JErrorText>{errors.expected}</JErrorText>

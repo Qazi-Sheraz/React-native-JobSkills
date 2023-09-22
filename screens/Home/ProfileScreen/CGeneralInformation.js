@@ -195,7 +195,6 @@ const{params}=useRoute();
                   textAlign: store.lang.id == 0 ? 'left' : 'right',
                 }}
                 containerStyle={{marginTop: RFPercentage(2)}}
-                
                 maxLength={100}
                 heading={store.lang.first_name}
                 value={values.first_name}

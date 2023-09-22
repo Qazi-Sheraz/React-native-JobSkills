@@ -39,7 +39,7 @@ import CLCandidateDetails from '../../loaders/Employer/candidateDetails/CLCandid
 const ProfileJobApplication = ({ route }) => {
   const store = useContext(StoreContext);
   const { params } = useRoute();
-  console.log('params', params);
+  // console.log('params', params);
 
   const [details, setDetails] = useState();
   const [applicationId, setApplicationID] = useState();
@@ -225,7 +225,7 @@ const ProfileJobApplication = ({ route }) => {
                         <JRow>
                           <Flag />
                           <JText style={styles.menutxt}>
-                            {store.lang.report_candidate}
+                            {store.lang.report_jobseeker}
                           </JText>
                         </JRow>
                       </MenuOption>

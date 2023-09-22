@@ -22,6 +22,7 @@ import JNotfoundData from '../../customComponents/JNotfoundData';
 import { observer } from 'mobx-react';
 import JEmpty from '../../customComponents/JEmpty';
 import { JToast } from '../../functions/Toast';
+import CLFavouriteJob from '../../loaders/Candidate/FavouriteJob/CLFavouriteJob';
 
 const Followers = () => {
   const store = useContext(StoreContext);
@@ -102,8 +103,8 @@ const Followers = () => {
         />
       }>
 
-      {loader === true ? (
-        <ActivityIndicator />
+      {loader ? (
+        <CLFavouriteJob />
       ) 
       : (followerdata?.length > 0 ? (
         <>
@@ -111,11 +112,11 @@ const Followers = () => {
             length={1}
             onChangeText={handleSearch}
             value={searchQuery}
-            onPressIcon={() => alert('Icon Pressed')}
           />
           <View
             style={{
-              marginVertical: RFPercentage(1),
+              flex:1,
+              // marginVertical: RFPercentage(1),
             }}>
             <FlatList
             refreshControl={

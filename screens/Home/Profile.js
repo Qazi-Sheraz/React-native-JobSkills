@@ -227,17 +227,16 @@ function Profile({navigation}) {
                 store.myProfileApiLoader === false && (
                   <BorderView>
                     <JProfileInfo
-                      title={store.lang.father_name}
+                      title={`${store.lang.father_name}:`}
                       text={
                         store.myProfile?.user[0]?.general_information
                           ?.father_name == null
                           ? 'N/A'
-                          : store.myProfile?.user[0]?.general_information
-                              ?.father_name
+                          : store.myProfile?.user[0]?.general_information?.father_name?.length > 50 ? store.myProfile?.user[0]?.general_information?.father_name?.substring(0, 50) + " . . . .":store.myProfile?.user[0]?.general_information?.father_name 
                       }
                     />
                     <JProfileInfo
-                      title={store.lang.date_of_birth}
+                      title={`${store.lang.date_of_birth}:`}
                       text={
                         store.myProfileApiLoader === false &&
                         (store.myProfile?.user[0]?.general_information
@@ -250,7 +249,7 @@ function Profile({navigation}) {
                       }
                     />
                     <JProfileInfo
-                      title={store.lang.gender}
+                      title={`${store.lang.gender}:`}
                       text={
                         store.myProfile?.user[0]?.general_information?.gender ==
                         null
@@ -263,7 +262,7 @@ function Profile({navigation}) {
                     />
 
                     <JProfileInfo
-                      title={store.lang.marital_status}
+                      title={`${store.lang.marital_status}:`}
                       text={
                         store.myProfile?.user[0]?.general_information
                           ?.marital_status.id == null
@@ -281,7 +280,7 @@ function Profile({navigation}) {
                     />
 
                     <JProfileInfo
-                      title={store.lang.location}
+                      title={`${store.lang.location}:`}
                       text={
                         store.myProfile?.user[0]?.general_information
                           ?.country_name.id !== null
@@ -307,7 +306,7 @@ function Profile({navigation}) {
                     />
 
                     <JProfileInfo
-                      title={store.lang.language}
+                      title={`${store.lang.language}:`}
                       text={store.myProfile?.user[0]?.general_information?.language
                         .map((l, index) =>
                           store.lang.id == 0
@@ -318,7 +317,7 @@ function Profile({navigation}) {
                     />
 
                     <JProfileInfo
-                      title={store.lang.immediate_available}
+                      title={`${store.lang.immediate_available}:`}
                       text={
                         store.myProfile?.user[0]?.general_information
                           ?.immediate_available == null
@@ -401,7 +400,7 @@ function Profile({navigation}) {
                 store.myProfileApiLoader === false && (
                   <BorderView>
                     <JProfileInfo
-                      title={store.lang.experience}
+                      title={`${store.lang.experience}:`}
                       text={
                         store.myProfile?.user[0]?.experience_information
                           ?.experience == null
@@ -412,7 +411,7 @@ function Profile({navigation}) {
                     />
 
                     <JProfileInfo
-                      title={store.lang.career_level}
+                      title={`${store.lang.career_level}:`}
                       text={
                         store.myProfile?.user[0]?.experience_information
                           ?.career_level.id == null
@@ -430,7 +429,7 @@ function Profile({navigation}) {
                     />
 
                     <JProfileInfo
-                      title={store.lang.Industry}
+                      title={`${store.lang.Industry}:`}
                       text={
                         store.myProfile?.user[0]?.experience_information
                           ?.industry?.id == null
@@ -448,7 +447,7 @@ function Profile({navigation}) {
                     />
 
                     <JProfileInfo
-                      title={store.lang.functional_Area}
+                      title={`${store.lang.functional_Area}:`}
                       text={
                         store.myProfile?.user[0]?.experience_information
                           ?.functional_area.id == null
@@ -466,7 +465,7 @@ function Profile({navigation}) {
                     />
 
                     <JProfileInfo
-                      title={store.lang.current_salary}
+                      title={`${store.lang.current_salary}:`}
                       text={
                         store.myProfile?.user[0]?.experience_information
                           ?.current_salary == null
@@ -486,7 +485,7 @@ function Profile({navigation}) {
                     />
 
                     <JProfileInfo
-                      title={store.lang.expected_salary}
+                      title={`${store.lang.expected_salary}:`}
                       text={
                         store.myProfile?.user[0]?.experience_information
                           ?.expected_salary == null

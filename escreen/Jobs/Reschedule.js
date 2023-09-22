@@ -20,7 +20,6 @@ import { useContext } from 'react'
 import { StoreContext } from '../../mobx/store'
 import { useEffect } from 'react'
 import url from '../../config/url'
-import Pressable from 'react-native/Libraries/Components/Pressable/Pressable'
 import { _getAppliedJobData } from '../../functions/Candidate/BottomTab'
 import JSelectInput from '../../customComponents/JSelectInput'
 const Reschedule = () => {
@@ -264,11 +263,22 @@ const Reschedule = () => {
                                         {store.lang.interview_time} :
                                     </JText>
                                     <JText style={styles.date}>{!details ? '--/--' : moment(details?.start_time).format('HH:mm A')}</JText>
-                                    <JSelectInput
+                                      <JSelectInput
                                         mode="datetime"
                                         isDate={true}
-                                        date1={moment().add(30, 'minutes').toDate()}
-                                        minimumDate={moment().add(30, 'minutes').toDate()}
+                                        date1={moment().format() === moment(details?.start_time).format() 
+                                        ? moment().add(30, 'minutes').toDate() 
+                                        : moment().format() < moment(details?.start_time).format() 
+                                        ? moment(details?.start_time).add(30, 'minutes').format('HH:mm A') 
+                                        : moment().format() > moment(details?.start_time).format() 
+                                        && moment().add(30, 'minutes').toDate()}
+                                        // date1={moment(details?.start_time).add(30, 'minutes').toDate()}
+                                        minimumDate={moment().format() === moment(details?.start_time).format() 
+                                            ? moment().add(30, 'minutes').toDate() 
+                                            : moment().format() < moment(details?.start_time).format() 
+                                            ? moment(details?.start_time).add(30, 'minutes').format('HH:mm A') 
+                                            : moment().format() > moment(details?.start_time).format() 
+                                            && moment().add(30, 'minutes').toDate()}
                                         // minimumDate={moment().add(0, 'day')}
                                         containerStyle={{ marginTop: RFPercentage(2) }}
                                         value={moment(values.interview_date_and_time).format('YYYY/MM/DD HH:mm')}

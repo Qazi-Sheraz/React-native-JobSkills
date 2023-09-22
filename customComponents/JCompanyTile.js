@@ -13,8 +13,6 @@ import {
 import colors from '../config/colors';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import JText from './JText';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import JStatusChecker from './JStatusChecker';
 import {useState} from 'react';
 import {StoreContext} from '../mobx/store';
 import {_saveToFavoriteList} from '../functions/Candidate/BottomTab.js';
@@ -35,8 +33,6 @@ function JCompanyTile({
 }) {
   const [loader, setLoader] = useState();
   const store = useContext(StoreContext);
-// console.log('companyId',companyId)
-// console.log('followingList',followingList)
   return isempty === true ? (
   <JChevronIcon/>
   ) : (
@@ -44,6 +40,7 @@ function JCompanyTile({
       style={[
         {
           height: heightPercentageToDP(14),
+        
           backgroundColor: colors.tileColor[0],
         },
         containerStyle,
@@ -77,16 +74,16 @@ function JCompanyTile({
 
       <View
         style={{
-          width: '72%',
+          width: '75%',
           justifyContent: 'center',
-          // paddingHorizontal: RFPercentage(1),
+          paddingHorizontal: RFPercentage(1),
         }}>
         <JRow
           style={{
             justifyContent: 'space-between',
-            paddingHorizontal: RFPercentage(1),
+           
           }}>
-          <JText>{title}</JText>
+          <JText style={{width:'85%'}}>{title?.length > 50 ? title?.slice(0, 50) + " . . . ." :title}</JText>
 
           {loader ? (
             <ActivityIndicator
@@ -117,7 +114,7 @@ function JCompanyTile({
             />
           )}
         </JRow>
-        <JText style={{marginVertical: RFPercentage(0.5),paddingHorizontal: RFPercentage(1)}}>{location}</JText>
+        <JText style={{marginVertical: RFPercentage(0.5),}}>{location}</JText>
 
         <JText
           style={{

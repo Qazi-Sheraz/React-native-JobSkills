@@ -45,7 +45,7 @@ const JMeetingJob = ({item,startonPress,onPress}) => {
             {moment(item.start_date_and_time).format('DD MMM,YYYY')}
           </JText>
           <JText>
-            {moment(item.start_date_and_time).format('HH:MM')}
+            {moment(item.start_date_and_time).format('HH:mm')}
             {'\r'}
             {item.meridiem}
           </JText>

@@ -200,7 +200,7 @@ const jobTitle = encodeURIComponent(item?.job_title || "");
             }}>
               <JRow>
             <JText style={{width: '80%'}} fontWeight="bold">
-              {item?.job_title?.length > 30 ? item?.job_title?.slice(0, 30) + " . . . .":item?.job_title}
+              {item?.job_title?.length > 60 ? item?.job_title?.slice(0, 60) + " . . . .":item?.job_title}
             </JText>
             </JRow>
             <JRow

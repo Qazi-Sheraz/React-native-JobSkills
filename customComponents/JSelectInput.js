@@ -9,13 +9,12 @@ import {
   TextInput,
   SafeAreaView,
 } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import JText from './JText';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import colors from '../config/colors';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import { useRef } from 'react';
-import Feather from 'react-native-vector-icons/Feather';
 import JGradientHeader from './JGradientHeader';
 import { heightPercentageToDP } from 'react-native-responsive-screen';
 import DatePicker from 'react-native-date-picker';
@@ -27,7 +26,6 @@ import JShadowView from './JShadowView';
 import { memo } from 'react';
 import JChevronIcon from './JChevronIcon';
 import JIcon from './JIcon';
-import JEmpty from './JEmpty';
 
 function JSelectInput({
   containerStyle,
@@ -44,11 +42,14 @@ function JSelectInput({
   rightIcon,
   header,
   isDate = false,
+  isDate1 = false,
   setValue,
   id,
   mode = 'date',
   data,
-  date1,
+  date1='',
+  date= date1 ? date1 : new Date(),
+  setDate,
   Licon,
 
   disabled = false,
@@ -56,7 +57,7 @@ function JSelectInput({
   const store = useContext(StoreContext);
   const refRBSheet = useRef();
   const [open, setOpen] = useState(false);
-  const [date, setDate] = useState(date1 ? date1 : new Date());
+  // const [date, setDate] = useState(isDate1||date1 ? date1 : new Date());
   const [county, setCountry] = useState({});
   const [city, setCity] = useState([]);
   const [state, setState] = useState([]);
@@ -85,7 +86,8 @@ function JSelectInput({
   const [ownership, setOwnership] = useState([]);
   const [companySize, setCompanySize] = useState([]);
   const [selectedItems, setSelectedItems] = useState(id);
-  // console.log('>>',selectedItems)
+ 
+  // console.log('date1111>>',date1)
   const handleSelectItem = item => {
     if (selectedItems?.find((e) => e.id === item.id)) {
       setSelectedItems(selectedItems.filter(i => i.id !== item.id));
@@ -393,6 +395,10 @@ function JSelectInput({
       });
   };
 
+   useEffect(() => {
+   
+   }, [date1])
+
   return (
     <>
       <Pressable
@@ -433,7 +439,8 @@ function JSelectInput({
               </JText>
             )}
           </JRow>
-          {rightIcon}
+          {!isDate&&
+          rightIcon}
         </JRow>
         <JRow
           style={{
@@ -678,14 +685,13 @@ function JSelectInput({
       </RBSheet>
       <DatePicker
         modal
-
         minimumDate={minimumDate}
         maximumDate={maximumDate}
         mode={mode}
         open={open}
         date={date}
 
-        onConfirm={date => {
+        onConfirm={(date) => {
           setValue(date)
           setOpen(false);
         }}

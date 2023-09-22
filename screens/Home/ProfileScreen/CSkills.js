@@ -78,7 +78,7 @@ function CSkills({data}) {
                 text1: store.lang.success,
                 text2: result,
               });
-              // _getProfile(store)
+              _getProfile(store)
               setLoader1(false)
               navigation.navigate('Aboutme')
                

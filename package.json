@@ -36,7 +36,7 @@
     "react-native-blob-util": "^0.17.0",
     "react-native-calendars": "^1.1295.0",
     "react-native-confirmation-code-field": "^7.3.0",
-    "react-native-date-picker": "4.2.6",
+    "react-native-date-picker": "^4.3.3",
     "react-native-device-info": "^10.8.0",
     "react-native-document-picker": "^8.1.2",
     "react-native-flash-message": "^0.4.2",
@@ -58,6 +58,7 @@
     "react-native-svg-transformer": "^1.0.0",
     "react-native-toast-message": "^2.1.6",
     "react-native-vector-icons": "^9.1.0",
+    "valid-url": "^1.0.9",
     "yarn": "^1.22.19",
     "yup": "^0.32.11"
   },

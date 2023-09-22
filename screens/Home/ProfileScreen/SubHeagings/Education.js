@@ -87,9 +87,12 @@ export default function Education({
                   padding: RFPercentage(2),
                 }}>{item.degree_level&&
                   <JText fontWeight='bold'>{store.lang.id==0?item.degree_level?.name:item.degree_level?.arabic_title}</JText>}
-                <JRow style={{justifyContent: 'space-between'}}>
+                <JRow style={{justifyContent: 'space-between', }}>
                  
-                  <JText fontWeight='bold'>{item.degree_title}</JText>
+                  <JText style={{width:'90%'}}fontWeight='bold'>
+                    {/* {item.degree_title} */}
+                    {item.degree_title?.length > 35 ? item?.degree_title?.slice(0, 35) + " . . . " :item?.degree_title}
+                    </JText>
                   <TouchableOpacity
                   onPress={()=>{
                     setSelectedEdu({
@@ -133,7 +136,8 @@ export default function Education({
                 </JRow>
                 {/* <JText style={{marginTop: RFPercentage(0.5)}}>(BAS)</JText> */}
                 <JText style={{marginTop: RFPercentage(0.5)}}>
-                  {item?.institute}
+                  {item?.institute?.length > 70 ? item?.institute?.slice(0, 70) + " . . . " :item?.institute}
+                  {/* {item?.institute?.length > 70 ? item?.institute?.slice(0, 70) + " . . . " :item?.institute} */}
                 </JText>
                 <JText style={{marginTop: RFPercentage(0.5)}}>
                   {item?.year} |{' '}

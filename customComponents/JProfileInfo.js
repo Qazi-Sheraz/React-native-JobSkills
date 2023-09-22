@@ -17,7 +17,7 @@ const JProfileInfo = ({title, text, style, titleStyle, textStyle}) => {
       <JText fontWeight="bold" fontSize={RFPercentage(1.7)} style={{titleStyle}}>
         {title}
       </JText>
-      <JText fontSize={RFPercentage(1.7)} style={textStyle}>
+      <JText fontSize={RFPercentage(1.7)}  style={[{width:'65%',textAlign:store.lang.id==0?'left':'right',paddingHorizontal: RFPercentage(0.3),},textStyle]}>
         {text}
       </JText>
     </JRow>

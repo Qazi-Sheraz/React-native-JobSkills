@@ -306,12 +306,14 @@ const CareerInformation = ({ navigation }) => {
     _getExperience();
     _getEdu();
   }, []);
-console.log(selectedExperience?.end)
   const currentDate = new Date();
 
   // Calculate the maximum start date (1 day before the current date)
   const maximumStartDate = new Date(currentDate);
   maximumStartDate.setDate(currentDate.getDate() - 1);
+  useEffect(() => {
+
+  }, [maximumStartDate])
   return (
     <JScreen
       headerShown={true}
@@ -443,8 +445,9 @@ console.log(selectedExperience?.end)
                     ? moment(selectedExperience?.start).format('MM/DD/YYYY')
                     : '',
                 end:
-                  selectedExperience?.end 
-                    ?  moment(selectedExperience?.end).format('MM/DD/YYYY')
+                  selectedExperience?.end !== null &&
+                    selectedExperience?.end !== undefined
+                    ? moment(selectedExperience?.end).format('MM/DD/YYYY')
                     : '',
                 working: selectedExperience?.working ? selectedExperience?.working : false,
                 description:
@@ -494,23 +497,25 @@ console.log(selectedExperience?.end)
             }}
             validationSchema={yup.object().shape(
               selected === 0 ? {
-                title: yup.string().required().label('Title'),
+                title: yup.string().max(100, 'Title must not exceed 100 characters').required().label('Title'),
                 company: yup.string().required().label('Company'),
+                start: yup.string().required('Start Date is required').label('start'),
+                // end: yup.string().required('End Date is required').label('end'),
 
                 county: yup.object().shape().required('Country is required'),
                 city: yup.object().shape().required('City is required'),
                 state: yup.object().shape().required('State is required'),
 
-                description: yup.string().required().label('Description'),
+                description: yup.string().max(500, 'Title must not exceed 500 characters').required().label('Description'),
               }
                 :
                 {
-                  title: yup.string().required().label('Title'),
+                  title: yup.string().max(100, 'Title must not exceed 100 characters').required().label('Title'),
                   level: yup.object().shape().required('Level is required'),
                   county: yup.object().shape().required('Country is required'),
                   city: yup.object().shape().required('City is required'),
                   state: yup.object().shape().required('State is required'),
-                  institude: yup.string().required().label('Institude'),
+                  institude: yup.string().max(250, 'institude must not exceed 250 characters').required().label('Institude'),
                   result: yup.string().required().label('Eesult'),
                   year: yup.object().shape().required('Year is required'),
                 })}>
@@ -636,8 +641,8 @@ console.log(selectedExperience?.end)
                     <JSelectInput
                       isDate={true}
                       containerStyle={{ marginTop: RFPercentage(2) }}
-                      date1={maximumStartDate}
-                      maximumDate={maximumStartDate}
+                      date1={maximumStartDate && maximumStartDate}
+                      maximumDate={maximumStartDate && maximumStartDate}
                       value={
                         values.start &&
                         moment(values.start).format('MM/DD/YYYY')
@@ -648,7 +653,9 @@ console.log(selectedExperience?.end)
                             setFieldValue('start', e)
                             : setFieldValue('start', maximumStartDate)
                         }
-                        setFieldValue('end', '')
+                        const nextDayDate = new Date(e);
+                        nextDayDate.setDate(nextDayDate.getDate() + 1);
+                        setFieldValue('end', nextDayDate)
                       }}
                       header={store.lang.start_date}
                       heading={`${store.lang.start_date}:`}
@@ -669,9 +676,8 @@ console.log(selectedExperience?.end)
                       <>
                         <JSelectInput
                           disabled={values.start !== '' ? false : true}
-                          date={moment(values.end).format('MM/DD/YYYY')}
-                          // minimumDate={moment(values.start, 'DD MMM YYYY').add(1, 'day')}
-                          minimumDate={new Date()}
+                          date1={values.end ? new Date(values.end) :new Date()}
+                          minimumDate={values.start && moment(values.start, 'MM/DD/YYYY').clone().add(1, 'day')}
                           containerStyle={{ marginTop: RFPercentage(2) }}
                           isDate={true}
                           value={values.end && moment(values.end).format('MM/DD/YYYY')}

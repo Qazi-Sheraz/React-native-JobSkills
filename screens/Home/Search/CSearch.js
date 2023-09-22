@@ -119,7 +119,7 @@ const CSearch = ({ navigation }) => {
         <Feather
           name="search"
           size={RFPercentage(3.5)}
-          color={search.length > 0 ? colors.black[0] : '#00000040'}
+          color={search?.length > 0 ? colors.black[0] : '#00000040'}
           style={{
             marginHorizontal: RFPercentage(1),
             position: 'absolute',
