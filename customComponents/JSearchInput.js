@@ -29,7 +29,7 @@ import { Observer, observer } from 'mobx-react';
       containerStyle={[
         {
           height: heightPercentageToDP(6),
-          marginVertical: RFPercentage(3),
+          marginVertical: RFPercentage(2),
           backgroundColor: colors.white[0],
           borderWidth: RFPercentage(0.1),
           borderColor: `${colors.purple[0]}50`,
