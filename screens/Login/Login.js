@@ -1,4 +1,4 @@
-import { StyleSheet, Pressable, View, TouchableOpacity, Platform } from 'react-native';
+import { StyleSheet,  View, Platform } from 'react-native';
 import React, { useEffect, useState, useContext } from 'react';
 import JScreen from '../../customComponents/JScreen';
 import JCircularLogo from '../../customComponents/JCircularLogo';
@@ -28,13 +28,14 @@ import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-si
 
 const Login = ({ navigation, route }) => {
   GoogleSignin.configure({
+    
     webClientId: '970988747590-38mp324576qepd86ldekiq9addnr2cb7.apps.googleusercontent.com',
     // webClientId: '505367788352-ksm57f116p8vo9jgvmfrv44nbo38h7s9.apps.googleusercontent.com',
     offlineAccess: false
 })
   const store = useContext(StoreContext);
   const [loader, setLoader] = useState(false);
-  const [googleData, setGoogleData] = useState();
+  const [googleData, setGoogleData] = useState(); 
   const [selectedLanguage, setSelectedLanguage] = useState(null);
 
   // console.log(route?.params?.type);
@@ -471,12 +472,12 @@ console.log('GoogleData========>', store.googleUserInfo)
             <FontAwesome
               onPress={() => {
                 if (item == 'google') {
-                  // gooleLogin()
-                  alert('google')
+                  gooleLogin()
+                  // alert('google')
                 }
                 else if (item == 'facebook') {
-                  // googleSignOut();
-                  alert('facebook')
+                  googleSignOut();
+                  // alert('facebook')
                 }
                 else if (item == 'linkedin') {
                   alert('linkedin')

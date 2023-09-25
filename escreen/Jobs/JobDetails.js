@@ -731,17 +731,24 @@ const JobDetails = ({ route }) => {
                         {store.lang.already_applied}
                       </JText>
                     </JRow>
-                  ) : null}
+                  ) :  <JApplyJob
+                  status={status}
+                  setStatus={setStatus}
+                  id={store.jobDetail?.id}
+                  token={store.token?.token}
+                  jobId={store.jobDetail?.job_id}
+                />}
 
                 </>}
             </View>
-            <JApplyJob
+            {/* <JApplyJob
               status={status}
               setStatus={setStatus}
               id={store.jobDetail?.id}
               token={store.token?.token}
               jobId={store.jobDetail?.job_id}
-            /></>
+            /> */}
+            </>
 
           {/* <JModal 
           modalVisible={modalVisible2}

@@ -439,7 +439,7 @@ function JSelectInput({
               </JText>
             )}
           </JRow>
-          {!isDate&&
+          {!disabled&&
           rightIcon}
         </JRow>
         <JRow

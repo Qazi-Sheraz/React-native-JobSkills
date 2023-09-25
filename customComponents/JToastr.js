@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import colors from '../config/colors';
 import { JToast } from '../functions/Toast';
-import FlashMessage, { showMessage, hideMessage } from "react-native-flash-message";
+import FlashMessage, { showMessage, } from "react-native-flash-message";
 import { Button, Image, View } from 'react-native';
 const JToastr = () => {
   

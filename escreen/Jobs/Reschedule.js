@@ -222,7 +222,9 @@ const Reschedule = () => {
             {loader ? <ActivityIndicator />
                 : <Formik
                     initialValues={{
-                        interview_date_and_time: moment().add(30, 'minutes').toDate(),
+                        interview_date_and_time: moment().isBefore(details?.start_time)
+                        ? moment(details?.start_time).add(30, 'minutes').toDate()
+                        : moment().add(30, 'minutes').toDate(),
                     }}
                     onSubmit={values => {
                         store.token?.user?.owner_type.includes('Candidate') === false
@@ -263,23 +265,23 @@ const Reschedule = () => {
                                         {store.lang.interview_time} :
                                     </JText>
                                     <JText style={styles.date}>{!details ? '--/--' : moment(details?.start_time).format('HH:mm A')}</JText>
-                                      <JSelectInput
+                                    <JSelectInput
                                         mode="datetime"
                                         isDate={true}
-                                        date1={moment().format() === moment(details?.start_time).format() 
-                                        ? moment().add(30, 'minutes').toDate() 
-                                        : moment().format() < moment(details?.start_time).format() 
-                                        ? moment(details?.start_time).add(30, 'minutes').format('HH:mm A') 
-                                        : moment().format() > moment(details?.start_time).format() 
-                                        && moment().add(30, 'minutes').toDate()}
+                                        // date1={details&&moment(details?.start_time).add(30, 'minutes')}
                                         // date1={moment(details?.start_time).add(30, 'minutes').toDate()}
-                                        minimumDate={moment().format() === moment(details?.start_time).format() 
-                                            ? moment().add(30, 'minutes').toDate() 
-                                            : moment().format() < moment(details?.start_time).format() 
-                                            ? moment(details?.start_time).add(30, 'minutes').format('HH:mm A') 
-                                            : moment().format() > moment(details?.start_time).format() 
-                                            && moment().add(30, 'minutes').toDate()}
-                                        // minimumDate={moment().add(0, 'day')}
+                                        // minimumDate={()=>{moment().format() === details?.start_time && moment(details?.start_time).format()
+                                        //     ? moment().add(30, 'minutes').toDate()
+                                        //     : moment().format() < details?.start_time && moment(details?.start_time).format()
+                                        //         ? moment(details?.start_time).add(30, 'minutes').format('HH:mm A')
+                                        //         : moment().format() >details?.start_time && moment(details?.start_time).format()
+                                        //         && moment().add(30, 'minutes').toDate()}}
+                                        date1={moment().isBefore(details?.start_time)
+                                            ? moment(details?.start_time).add(30, 'minutes').toDate()
+                                            : moment().add(30, 'minutes').toDate()} // Specify the initial date and time
+                                        minimumDate={moment().isBefore(details?.start_time)
+                                          ? moment(details?.start_time).add(30, 'minutes').toDate()
+                                          : moment().add(30, 'minutes').toDate()}
                                         containerStyle={{ marginTop: RFPercentage(2) }}
                                         value={moment(values.interview_date_and_time).format('YYYY/MM/DD HH:mm')}
                                         setValue={e => setFieldValue('interview_date_and_time', e)}

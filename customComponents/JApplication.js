@@ -47,9 +47,9 @@ const JApplication = ({
   const isFoucs = useIsFocused();
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
-  const [links,setLink]=useState();
-  
-  const [open, setOpen] = useState(false);
+  const [links, setLink] = useState();
+
+  const [change, setChange] = useState(false);
   const store = useContext(StoreContext);
   const navigation = useNavigation();
   const [stat, setStat] = useState(parseInt(item.status_id));
@@ -201,7 +201,7 @@ const JApplication = ({
     )
       .then(response => response.json())
       .then(result => {
-        console.log(result)
+        // console.log(result)
         setMeetings(result)
         setLink(result?.meeting_type[0])
       })
@@ -214,7 +214,7 @@ const JApplication = ({
         setLoader(false);
       });
   };
-  console.log('linksssssss',links)
+  // console.log('linksssssss', links)
 
 
   useEffect(() => {
@@ -424,32 +424,34 @@ const JApplication = ({
                 manual_link: '',
               }}
               onSubmit={values => {
+                // console.log(values)
                 _meetingSubmit(values);
 
               }}
               validationSchema={yup.object().shape(
-                 // interview_topic: yup
-                  //   .string()
-                  //   .required()
-                  //   .label('interview_topic'),
-                  // interview_date_and_time: yup
-                  //   .string()
-                  //   .required()
-                  //   .label('interview_date_and_time'),
-                  // description: yup.string().required().label('description'),
-                  // interview_type: yup
-                  //   .string()
-                  //   .required()
-                  //   .label('interview_topic'),
-                  links ==='Office Base' ? {
-                 
-                    office_location:
-                     yup.string().url('Invalid URL format')
+                // interview_topic: yup
+                //   .string()
+                //   .required()
+                //   .label('interview_topic'),
+                // interview_date_and_time: yup
+                //   .string()
+                //   .required()
+                //   .label('interview_date_and_time'),
+                // description: yup.string().required().label('description'),
+                // interview_type: yup
+                //   .string()
+                //   .required()
+                //   .label('interview_topic'),
+                links === 'Office Base' ? {
+
+                  office_location:
+                    yup.string().url('Invalid URL format')
                       .required('URL is required').label('office_location'),
-                  }
-                  :{manual_link: yup.string().url('Invalid URL format')
-                    .required('URL is required').label('manual_link'),
-                })}
+                }
+                  : {
+                    manual_link: yup.string().url('Invalid URL format')
+                      .required('URL is required').label('manual_link'),
+                  })}
             >
               {({
                 values,
@@ -490,7 +492,9 @@ const JApplication = ({
                     minimumDate={moment().add(30, 'minutes')}
                     containerStyle={{ marginTop: RFPercentage(2) }}
                     value={moment(values.interview_date_and_time).format('YYYY/MM/DD HH:mm')}
-                    setValue={e => setFieldValue('interview_date_and_time', e)}
+                    setValue={e => {
+                      setFieldValue('interview_date_and_time', e)
+                    }}
                     heading={`${store.lang.interview_Date_and_Time}:`}
                     error={touched.interview_date_and_time && errors.interview_date_and_time && true}
                     rightIcon={
@@ -519,23 +523,26 @@ const JApplication = ({
                     style={{
                       textAlign: store.lang.id == 0 ? 'left' : 'right',
                     }}
-                    editable={false}
+                    // editable={false}
                     containerStyle={{ marginTop: RFPercentage(1) }}
                     isRequired
                     multiline={true}
                     heading={store.lang.descriptions}
-                    value={updatedDescription(
-                      values.description,
-                      moment(values.interview_date_and_time).format(
-                        'YYYY/MM/DD HH:mm',
-                      ),
-                    )}
+                    value={values.description
+                      // updatedDescription(
+                      //   values.description,
+                      //   moment(values.interview_date_and_time).format(
+                      //     'YYYY/MM/DD HH:mm',
+                      //   ),)
+                    }
                     error={touched.description && errors.description && true}
-                    onChangeText={handleChange('description')}
+                    onChangeText={(text)=>{
+                     
+                    setFieldValue('description', text);
+                  }}
                     onBlur={() => setFieldTouched('description')}
-                    
                   />
-
+                 
                   <View
                     style={{
                       justifyContent: 'space-between',
@@ -594,7 +601,7 @@ const JApplication = ({
                               setFieldValue('interview_type', item);
                               setLink(item);
                               setOption(false);
-                              
+
                             }}>
                             <JText fontSize={RFPercentage(2)}>
                               {item === 'Office Base'
@@ -606,9 +613,9 @@ const JApplication = ({
                       </View>
                     )}
                   </View>
-                 
+
                   {values.interview_type === 'Office Base' ? (
-                    
+
                     <JInput
                       style={{
                         textAlign: store.lang.id == 0 ? 'left' : 'right',
@@ -626,7 +633,7 @@ const JApplication = ({
                       onChangeText={handleChange('office_location')}
                       onBlur={() => setFieldTouched('office_location')}
                     />
-                    
+
                   ) : (
                     values.interview_type === 'Manual Link' && (
                       <JInput
@@ -643,10 +650,10 @@ const JApplication = ({
                       />
                     )
                   )}
-                    {touched.office_location && errors.office_location && (
+                  {touched.office_location && errors.office_location && (
                     <JErrorText>{errors.office_location}</JErrorText>
                   )}
-                    {touched.manual_link && errors.manual_link && (
+                  {touched.manual_link && errors.manual_link && (
                     <JErrorText>{errors.manual_link}</JErrorText>
                   )}
 

@@ -83,7 +83,7 @@ function EmployeStack({navigation}) {
             headerShown: false,
             // gestureEnabled: false,
           }}
-          initialRouteName={'JobRequirement'}>
+          initialRouteName={'Home'}>
           <Stack.Screen name="Home" component={EBottomTab} />
           <Stack.Screen name="JToastr" component={JToastr} />
           <Stack.Screen name="Assessments" component={Assessments} />

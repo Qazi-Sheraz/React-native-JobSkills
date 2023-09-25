@@ -27,7 +27,7 @@ export default function JIcon(
     size = RFPercentage(2.5),
     style
   }
-) {
+) { 
   return (
     icon === 'an' ?
 
