@@ -249,7 +249,7 @@ const JobApplication = ({ route }) => {
                     setUpdate={setUpdate}
                     api={()=>_jobApplication()}
                     onPressStatus={() => {
-                      if (item.status_id == 8) { navigate('Reschedule',{cID:item.candidate_user_id,jobID:item?.job_id}) }
+                      if (item.status_id == 8) {navigate('Reschedule',{cID:item.candidate_user_id,jobID:item?.job_id})}
                     }}
                     onPress={() => {
                       setModalVisible(true);

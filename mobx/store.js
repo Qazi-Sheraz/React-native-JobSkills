@@ -259,6 +259,8 @@ export const StoreProvider = props => {
 
     deviceName: '',
     setDeviceName: action(e => (store.deviceName = e)),
+
+   
   }));
   return (
     <StoreContext.Provider value={store}>

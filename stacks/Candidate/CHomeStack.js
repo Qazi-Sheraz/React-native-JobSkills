@@ -33,6 +33,8 @@ import ESearch from '../../escreen/Jobs/ESearch';
 import Reschedule from '../../escreen/Jobs/Reschedule';
 import AuthStack from '../Auth/AuthStack';
 import JobDetails from '../../escreen/Jobs/JobDetails';
+import ExperienceInfo from '../../screens/Home/ProfileScreen/ExperienceInfo';
+import EducationInfo from '../../screens/Home/ProfileScreen/EducationInfo';
 
 const Stack = createStackNavigator();
 
@@ -105,6 +107,8 @@ function CHomeStack({ navigation }) {
             component={CareerInformation}
           />
           <Stack.Screen name="Assessment" component={Assessment} />
+          <Stack.Screen name="ExperienceInfo" component={ExperienceInfo} />
+          <Stack.Screen name="EducationInfo" component={EducationInfo} />
           <Stack.Screen name="EAccountSetting" component={EAccountSetting} />
           <Stack.Screen name="ChangePassword" component={ChangePassword} />
           <Stack.Screen name="ChangeLanguage" component={ChangeLanguage} />

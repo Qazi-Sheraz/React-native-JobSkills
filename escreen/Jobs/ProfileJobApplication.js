@@ -310,7 +310,7 @@ const ProfileJobApplication = ({ route }) => {
                 {details?.candidateDetails[0]?.region_code &&
                   details?.candidateDetails[0]?.phone && (
                     <JText style={styles.txt}>
-                      {`+${details?.candidateDetails[0]?.region_code}-${details?.candidateDetails[0]?.phone}`}
+                      {`+${details?.candidateDetails[0]?.region_code}${details?.candidateDetails[0]?.phone}`}
                     </JText>
                   )}
                 <JText style={styles.txt}>

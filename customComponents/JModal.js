@@ -1,4 +1,4 @@
-import { Modal, StyleSheet, Text, View } from 'react-native'
+import { ActivityIndicator, Modal, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import JText from './JText';
@@ -8,7 +8,7 @@ import { RFPercentage } from 'react-native-responsive-fontsize';
 import { useContext } from 'react';
 import { StoreContext } from '../mobx/store';
 
-const JModal = ({ msg, alertMsg, modalVisible, setModalVisible, onPressYes, onPressNo, name2, name1, btn = true, btn2 = true, }) => {
+const JModal = ({ msg, alertMsg, modalVisible, loader, onPressYes, onPressNo, name2, name1, btn = true, btn2 = true, }) => {
   const store = useContext(StoreContext);
   return (
 
@@ -33,7 +33,7 @@ const JModal = ({ msg, alertMsg, modalVisible, setModalVisible, onPressYes, onPr
             {btn && <JButton
               onPress={onPressYes}
               style={{ width: '50%' }}
-              children={name1 ? name1 : store.lang.yes}
+              children={loader?<ActivityIndicator/>:name1 ? name1 : store.lang.yes}
             />}
           </JRow>
         </View>

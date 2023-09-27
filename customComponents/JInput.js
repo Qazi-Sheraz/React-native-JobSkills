@@ -88,6 +88,7 @@ export default function JInput({
             maxLength={maxLength}
             keyboardType={keyboardType}
             secureTextEntry={eye ? true : false}
+            
           />
           {forPassword && (
             <FontAwesome
