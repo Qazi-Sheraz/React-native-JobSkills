@@ -24,6 +24,8 @@ import JInput from './JInput';
 import url from '../config/url';
 import { StoreContext } from '../mobx/store';
 import { JToast } from '../functions/Toast';
+import JErrorText from './JErrorText';
+import JIcon from './JIcon';
 
 const questions = [
   'Its my dream job',
@@ -197,7 +199,7 @@ const JApplyJob = ({ token, jobId, id, setStatus, status }) => {
             note: '',
           }}
           onSubmit={values => {
-            // console.log(values);
+            console.log(values);
             //  setModalVisible(!modalVisible);
 
             // console.log(token);
@@ -212,7 +214,7 @@ const JApplyJob = ({ token, jobId, id, setStatus, status }) => {
             formdata.append('questionnaire_answer', questions[option]);
             formdata.append('application_type', 'apply');
 
-            // console.log(formdata);
+            console.log(formdata);
             var requestOptions = {
               method: 'POST',
               headers: myHeaders,
@@ -250,9 +252,9 @@ const JApplyJob = ({ token, jobId, id, setStatus, status }) => {
           }}
           validationSchema={yup.object().shape({
             resume: yup.object().shape({
-              id: yup.string().required('PDF'),
+              id: yup.string().required().label('PDF'),
             }),
-            expected: yup.string().required().label('Expected'),
+            expected: yup.number().typeError('Expected must be a valid number').required().label('Expected'),
             note: yup.string().required().label('Note'),
           })}>
           {({
@@ -380,13 +382,14 @@ const JApplyJob = ({ token, jobId, id, setStatus, status }) => {
                   <Pressable
                     onPress={() => { setDropDown(!dropDown) }}
                     style={{
-                      borderWidth: RFPercentage(0.2),
+                      borderWidth: RFPercentage(0.1),
                       width: '100%',
                     }}>
+                      <JRow style={{justifyContent: 'space-between',paddingHorizontal:RFPercentage(2)}}>
                     <JText
                       style={{
                         paddingVertical: RFPercentage(2),
-                        paddingHorizontal: RFPercentage(1),
+                        // paddingHorizontal: RFPercentage(1),
                         fontWeight: 'bold',
                         fontSize: RFPercentage(1.8),
                       }}>
@@ -394,6 +397,13 @@ const JApplyJob = ({ token, jobId, id, setStatus, status }) => {
                         ? values.resume.name
                         : store.lang.select_an_option}
                     </JText>
+                    <JIcon
+                     icon={'fe'}
+                     name={dropDown?"chevron-up":"chevron-down"}
+                     size={RFPercentage(2.5)}
+                     color={colors.black[0]}
+                    />
+                    </JRow>
                   </Pressable>
                   {dropDown === true && (
                     <ScrollView
@@ -429,8 +439,10 @@ const JApplyJob = ({ token, jobId, id, setStatus, status }) => {
                           </JText>
                         </Pressable>
                       ))}
+
                     </ScrollView>
                   )}
+
 
                   {/* {singleFile ? (
                     <Pdf
@@ -471,79 +483,90 @@ const JApplyJob = ({ token, jobId, id, setStatus, status }) => {
                       />
                     </JRow>
                   )} */}
+                  {errors
+                    && <View style={{marginTop: RFPercentage(0.5),}} >
+                      <JErrorText>{errors.resume?.id}</JErrorText>
+                    </View>}
                   {!status?.data?.job?.hide_salary &&
                     <JText
-                    fontSize={RFPercentage(2)}
-                  fontColor={colors.placeHolderColor[0]}
-                  style={{
-                    marginTop: RFPercentage(2),
-                  }}>
-                  {store.lang.expected_salary_range}({status?.data?.job?.salary_from + status?.data?.job?.currency?.currency_name}-{status?.data?.job?.salary_to + status?.data?.job?.currency?.currency_name})
-                </JText>}
+                      fontSize={RFPercentage(2)}
+                      fontColor={colors.placeHolderColor[0]}
+                      style={{
+                        marginTop: RFPercentage(2),
+                      }}>
+                      {store.lang.expected_salary_range}({status?.data?.job?.salary_from + status?.data?.job?.currency?.currency_name}-{status?.data?.job?.salary_to + status?.data?.job?.currency?.currency_name})
+                    </JText>}
 
-                <JInput
-                  style={{
-                    textAlign: store.lang.id == 0 ? 'left' : 'right',
-                  }}
-                  keyboardType={'numeric'}
-                  containerStyle={{ marginTop: RFPercentage(1) }}
-                  isRequired
-                  heading={store.lang.expected_salary}
-                  value={values.expected}
-                  error={touched.expected && errors.expected && true}
-                  onChangeText={handleChange('expected')}
-                  onBlur={() => setFieldTouched('expected')}
-                />
-
-                <JInput
-                  style={{
-                    textAlign: store.lang.id == 0 ? 'left' : 'right',
-                  }}
-                  containerStyle={{ marginTop: RFPercentage(2) }}
-                  isRequired
-                  value={values.note}
-                  heading={`${store.lang.note}:`}
-                  error={touched.note && errors.note && true}
-                  onChangeText={handleChange('note')}
-                  onBlur={() => setFieldTouched('note')}
-                />
-
-                <JRow
-                  style={{
-                    marginTop: RFPercentage(5),
-                    justifyContent: 'space-between',
-                    marginHorizontal: RFPercentage(3),
-                    borderColor: colors.primary[1],
-                  }}>
-                  <JButton
-                    onPress={() => {
-                      setModalVisible1(!modalVisible1);
-                    }}
+                  <JInput
                     style={{
-                      width: '46%',
-                      backgroundColor: colors.white[0],
-                      borderColor: colors.black[1],
+                      textAlign: store.lang.id == 0 ? 'left' : 'right',
                     }}
-                    children={store.lang.save_as_draft}
+                    keyboardType={'numeric'}
+                    containerStyle={{ marginTop: RFPercentage(1) }}
+                    isRequired
+                    heading={store.lang.expected_salary}
+                    value={values.expected}
+                    error={touched.expected && errors.expected && true}
+                    onChangeText={handleChange('expected')}
+                    onBlur={() => setFieldTouched('expected')}
+                    maxLength={10}
                   />
+                  {touched.expected && errors.expected && (
+                    <JErrorText>{errors.expected}</JErrorText>
+                  )}
 
-                  <JButton
-                    isValid={!apiLoader}
-                    onPress={() => {
-                      handleSubmit();
-                    }}
+                  <JInput
                     style={{
-                      width: '46%',
+                      textAlign: store.lang.id == 0 ? 'left' : 'right',
                     }}
-                    children={apiLoader ? store.lang.loading : store.lang.apply}
+                    containerStyle={{ marginTop: RFPercentage(2) }}
+                    isRequired
+                    value={values.note}
+                    heading={`${store.lang.note}:`}
+                    error={touched.note && errors.note && true}
+                    onChangeText={handleChange('note')}
+                    onBlur={() => setFieldTouched('note')}
                   />
-                </JRow>
-              </ScrollView>
-            </View>
+                  {touched.note && errors.note && (
+                    <JErrorText>{errors.note}</JErrorText>
+                  )}
+
+                  <JRow
+                    style={{
+                      marginTop: RFPercentage(5),
+                      justifyContent: 'space-between',
+                      marginHorizontal: RFPercentage(3),
+                      borderColor: colors.primary[1],
+                    }}>
+                    <JButton
+                      onPress={() => {
+                        setModalVisible1(!modalVisible1);
+                      }}
+                      style={{
+                        width: '46%',
+                        backgroundColor: colors.white[0],
+                        borderColor: colors.black[1],
+                      }}
+                      children={store.lang.save_as_draft}
+                    />
+
+                    <JButton
+                      isValid={!apiLoader}
+                      onPress={() => {
+                        handleSubmit();
+                      }}
+                      style={{
+                        width: '46%',
+                      }}
+                      children={apiLoader ? store.lang.loading : store.lang.apply}
+                    />
+                  </JRow>
+                </ScrollView>
+              </View>
             </SafeAreaView>
           )}
-      </Formik>
-    </Modal >
+        </Formik>
+      </Modal >
     </>
   );
 };

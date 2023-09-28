@@ -285,7 +285,7 @@ const ProfileJobApplication = ({ route }) => {
               </JText>
               {details?.lastestExperience[0].id && (
                 <JText style={styles.titleJob}>
-                  {details?.lastestExperience[0]?.experience_title}
+                  {details?.lastestExperience[0]?.experience_title.length> 60 ? details?.lastestExperience[0]?.experience_title?.slice(0, 60) + " . . . ." : details?.lastestExperience[0]?.experience_title}
                 </JText>
               )}
               {details?.candidateDetails[0]?.email && (
@@ -303,17 +303,17 @@ const ProfileJobApplication = ({ route }) => {
 
               <JRow
                 style={{
-                  width: '60%',
-                  justifyContent: 'space-between',
+                  justifyContent:'center',
+                  alignItems: 'center',
                   marginVertical: RFPercentage(1),
                 }}>
                 {details?.candidateDetails[0]?.region_code &&
                   details?.candidateDetails[0]?.phone && (
-                    <JText style={styles.txt}>
+                    <JText style={styles.txtRow}>
                       {`+${details?.candidateDetails[0]?.region_code}${details?.candidateDetails[0]?.phone}`}
                     </JText>
                   )}
-                <JText style={styles.txt}>
+                <JText style={styles.txtRow}>
                   {details?.candidateDetails[0]?.dob}
                 </JText>
               </JRow>
@@ -357,7 +357,7 @@ const ProfileJobApplication = ({ route }) => {
                     <JSkills
                       JobTitle={
                         details?.candidateExperiences[0]?.experience_title &&
-                        details?.candidateExperiences[0]?.experience_title
+                        details?.candidateExperiences[0]?.experience_title.length> 50 ? details?.candidateExperiences[0]?.experience_title?.slice(0, 50) + " . . . ." : details?.candidateExperiences[0]?.experience_title
                       }
                       date={details?.candidateExperiences[0]?.start_date}
                       Locate={
@@ -382,7 +382,7 @@ const ProfileJobApplication = ({ route }) => {
                       data={details?.candidateEducation}
                       renderItem={({ item, index }) => (
                         <JSkills
-                          JobTitle={item.degree_title}
+                          JobTitle={item.degree_title.length> 40 ? item.degree_title?.slice(0, 40) + " . . . ." :item.degree_title}
                           date={item.year}
                           Locate={`${item.institute}, ${store.lang.id == 0 ? item?.country_name : item?.country_arabic_name}`}
                           txt={item.degree_level}
@@ -581,11 +581,14 @@ const styles = StyleSheet.create({
     marginVertical: RFPercentage(0.5),
   },
   titleJob: {
+    textAlign:'center',
+    width:'90%',
     fontSize: RFPercentage(2),
     fontWeight: 'bold',
     marginVertical: RFPercentage(0.5),
   },
   txt: { fontSize: RFPercentage(2), marginVertical: RFPercentage(0.5) },
+  txtRow: { fontSize: RFPercentage(2), marginVertical: RFPercentage(0.5),marginHorizontal:RFPercentage(1)},
   rView: {
     // width: '100%',
     backgroundColor: '#ffff',

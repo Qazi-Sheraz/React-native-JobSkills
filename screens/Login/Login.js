@@ -38,9 +38,9 @@ const Login = ({ navigation, route }) => {
   const [googleData, setGoogleData] = useState(); 
   const [selectedLanguage, setSelectedLanguage] = useState(null);
 
-  // console.log(route?.params?.type);
+  
   const type = route?.params?.type;
-
+console.log('type',type);
   const _storeToken = (token, remember) => {
     if (remember === true) {
       AsyncStorage.setItem('@login', JSON.stringify(token))

@@ -69,7 +69,7 @@ const Registration = ({ navigation, route }) => {
             text2: store.lang.kindly_check_your_email
           });
           navigation.navigate('CLogin', {
-            type: route.params,
+            type: route.params?.type,
             email: values.email,
             password: values.password,
           });

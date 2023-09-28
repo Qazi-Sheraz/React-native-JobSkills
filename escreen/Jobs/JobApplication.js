@@ -48,17 +48,17 @@ const JobApplication = ({ route }) => {
   const isFoucs = useIsFocused();
   const { navigate, goBack } = useNavigation();
   const [selectedItem, setSelectedItem] = useState();
-  
+
   const [error, setError] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredData1, setFilteredData1] = useState(store?.jApplication);
   const [update, setUpdate] = useState(true);
-  const [loader1,setLoader1] = useState(false);
+  const [loader1, setLoader1] = useState(false);
 
   const store = useContext(StoreContext);
   const handleSelect = status => {
     setSelectedItem(status);
- 
+
   };
   const [modalVisible, setModalVisible] = useState(false);
   const refRBSheet = useRef();
@@ -247,9 +247,9 @@ const JobApplication = ({ route }) => {
                   <JApplication
                     update={update}
                     setUpdate={setUpdate}
-                    api={()=>_jobApplication()}
+                    api={() => _jobApplication()}
                     onPressStatus={() => {
-                      if (item.status_id == 8) {navigate('Reschedule',{cID:item.candidate_user_id,jobID:item?.job_id})}
+                      if (item.status_id == 8) { navigate('Reschedule', { cID: item.candidate_user_id, jobID: item?.job_id }) }
                     }}
                     onPress={() => {
                       setModalVisible(true);
@@ -305,15 +305,15 @@ const JobApplication = ({ route }) => {
           style={styles.centeredView}>
           {store.jAppLoader ? <ActivityIndicator /> :
             <View style={styles.modalView}>
-              <JText fontColor={colors.white[0]} fontSize={RFPercentage(1.8)} style={{ paddingHorizontal: store?.jApplication[0]?.fit_score_information == null ? RFPercentage(10) : RFPercentage(0) }}>
-                {store?.jApplication[0]?.fit_score_information == null ? 'N/A' : store?.jApplication[0]?.fit_score_information}
+              <JText fontColor={colors.white[0]} fontSize={RFPercentage(1.8)} style={{ paddingHorizontal: store?.jApplication[0]?.fit_score_information == null || [] ? RFPercentage(10) : RFPercentage(0) }}>
+                {store?.jApplication[0]?.fit_score_information == null || [] ? 'N/A' : store?.jApplication[0]?.fit_score_information}
 
               </JText>
             </View>}
         </Pressable>
       </Modal>
 
-    
+
     </JScreen>
   );
 };
