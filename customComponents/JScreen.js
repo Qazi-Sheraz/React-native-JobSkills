@@ -11,7 +11,6 @@ import React, { useEffect, useState } from 'react';
 import colors from '../config/colors';
 import JText from './JText';
 import { RFPercentage } from 'react-native-responsive-fontsize';
-
 import JButton from './JButton';
 import JErrorText from './JErrorText';
 import AntDesign from 'react-native-vector-icons/AntDesign';

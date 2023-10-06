@@ -19,6 +19,7 @@ import { StoreContext } from '../../mobx/store';
 import { observer } from 'mobx-react';
 import JChevronIcon from '../../customComponents/JChevronIcon';
 import { _addnewJob } from '../../functions/Candidate/BottomTab';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const JobPreference = () => {
   const { navigate, goBack } = useNavigation();
@@ -128,9 +129,10 @@ const JobPreference = () => {
             setFieldValue,
           }) => (
             <>
-              <ScrollView
+              <KeyboardAwareScrollView
                 showsVerticalScrollIndicator={false}
-                contentContainerStyle={{ paddingBottom: RFPercentage(8) }}>
+                style={{paddingBottom:RFPercentage(8)}}
+              >
                 <JSelectInput
                   containerStyle={styles.container}
                   value={values.preference.name}
@@ -268,7 +270,7 @@ const JobPreference = () => {
                 {touched.city && errors.city && (
                   <JErrorText>{errors.city}</JErrorText>
                 )}
-              </ScrollView>
+              </KeyboardAwareScrollView>
               <View
                 style={{
                   height: RFPercentage(6),
@@ -280,8 +282,8 @@ const JobPreference = () => {
                   isValid={isValid}
                   onPress={() => handleSubmit()}
                   style={{
-                    position: 'absolute',
-                    bottom: RFPercentage(3),
+                    // position: 'absolute',
+                    // bottom: RFPercentage(3),
                     width: RFPercentage(20),
                   }}>
                   {store.lang.next}

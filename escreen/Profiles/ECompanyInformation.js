@@ -19,6 +19,7 @@ import { useContext } from 'react';
 import { StoreContext } from '../../mobx/store';
 import JErrorText from '../../customComponents/JErrorText';
 import { JToast } from '../../functions/Toast';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const ECompanyInformation = () => {
   const [loader, setLoader] = useState(true);
@@ -225,9 +226,9 @@ const ECompanyInformation = () => {
                 }
                 left={JChevronIcon}
               />
-              <ScrollView
+              <KeyboardAwareScrollView
                 showsVerticalScrollIndicator={false}
-                contentContainerStyle={{ paddingBottom: RFPercentage(8) }}
+               
                 style={{
                   marginHorizontal: RFPercentage(2),
                 }}>
@@ -403,7 +404,7 @@ const ECompanyInformation = () => {
                 {touched.employeDetail && errors.employeDetail && (
                   <JErrorText>{errors.employeDetail}</JErrorText>
                 )}
-              </ScrollView>
+              </KeyboardAwareScrollView>
             </>
           )}
         </Formik>)}

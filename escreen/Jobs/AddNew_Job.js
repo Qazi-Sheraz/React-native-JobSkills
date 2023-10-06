@@ -1,5 +1,6 @@
 import {
   ActivityIndicator,
+  KeyboardAvoidingView,
   ScrollView,
   StyleSheet,
   Text,
@@ -26,7 +27,8 @@ import url from '../../config/url';
 import { observer } from 'mobx-react';
 import JChevronIcon from '../../customComponents/JChevronIcon';
 import { _addnewJob } from '../../functions/Candidate/BottomTab';
-
+import JScrollView from '../../customComponents/JScrollView';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 const AddNew_Job = () => {
   const {navigate, goBack} = useNavigation();
   const store = useContext(StoreContext);
@@ -131,9 +133,10 @@ const AddNew_Job = () => {
             setFieldValue,
           }) => (
             <>
-              <ScrollView
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={{paddingBottom: RFPercentage(8)}}>
+        <KeyboardAwareScrollView
+          showsVerticalScrollIndicator={false}
+       >
+
                 <JSelectInput
                   containerStyle={styles.container}
                   value={values.jobCategory?.name}
@@ -264,17 +267,20 @@ const AddNew_Job = () => {
                 {touched.jobDescription && errors.jobDescription && (
                   <JErrorText>{errors.jobDescription}</JErrorText>
                 )}
-              </ScrollView>
+          
+              </KeyboardAwareScrollView>
+              <View>
               <JButton
                 isValid={isValid}
                 onPress={() => handleSubmit()}
                 style={{
-                  position: 'absolute',
-                  bottom: RFPercentage(3),
+                  // position: 'absolute',
+                  // bottom: RFPercentage(3),
                   width: RFPercentage(20),
                 }}>
                 {store.lang.next}
               </JButton>
+              </View>
             </>
           )}
         </Formik>

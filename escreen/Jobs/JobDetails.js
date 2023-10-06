@@ -418,7 +418,7 @@ const JobDetails = ({ route }) => {
               <JChevronIcon />
               {store.token?.user?.owner_type.includes('Candidate') &&
                 <JRow>
-                  {loader ? (
+                  {loader1 ? (
                     <ActivityIndicator
                       size={RFPercentage(3)}
                       style={{ marginRight: RFPercentage(2) }}
@@ -429,7 +429,7 @@ const JobDetails = ({ route }) => {
                       icon={'fa'}
                       style={{ marginHorizontal: RFPercentage(2) }}
                       onPress={() =>
-                        _saveToFavoriteList(store, setLoader, store.jobDetail?.id)
+                        _saveToFavoriteList(store, setLoader1, store.jobDetail?.id)
                       }
                       name={
                         store.favouriteList.some(e => e.job_id === store.jobDetail?.id)

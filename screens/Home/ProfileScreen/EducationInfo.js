@@ -23,6 +23,7 @@ import url from '../../../config/url';
 import { JToast } from '../../../functions/Toast';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import CLNotification from '../../../loaders/Candidate/Notification/CLNotification';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const EducationInfo = () => {
     const store = useContext(StoreContext);
@@ -134,7 +135,7 @@ const EducationInfo = () => {
                 />
             }>
             {apiLoader ? <CLNotification />
-                : <View style={{ height:'100%' }}>
+                : 
 
                     <Formik
                         initialValues={{
@@ -202,14 +203,14 @@ const EducationInfo = () => {
                             setFieldValue,
                         }) => (
                             <>
-                                <JScrollView
-                                enable={false}
-                                    contentContainerStyle={{ paddingBottom: RFPercentage(8)}}
+                                <KeyboardAwareScrollView
+                                showsVerticalScrollIndicator={false}
                                     style={{
                                         marginHorizontal: RFPercentage(2),
+                                        
                                     }}>
                                     <JSelectInput
-                                        containerStyle={styles.container}
+                                        containerStyle={[styles.container,{marginTop:RFPercentage(3)}]}
                                         value={values.level?.name}
                                         id={values.level?.id}
                                         data={
@@ -374,7 +375,7 @@ const EducationInfo = () => {
                                     {touched.year && errors.year && (
                                         <JErrorText>{errors.year}</JErrorText>
                                     )}
-                                </JScrollView>
+                                </KeyboardAwareScrollView>
                                 <View style={styles.bottomV}>
                                     <JButton
                                         disabled={loader1 ? true : false}
@@ -390,7 +391,7 @@ const EducationInfo = () => {
                         )}
                     </Formik>
 
-                </View>}
+                }
         </JScreen>
     )
 }
@@ -400,18 +401,10 @@ export default EducationInfo
 const styles = StyleSheet.create({
     container: { marginTop: RFPercentage(2) },
     bottomV: {
-        height: RFPercentage(8), 
+        height: RFPercentage(6), 
         width: '100%', 
         backgroundColor: '#ffff',
         padding: RFPercentage(1), 
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-
-        elevation: 5
+        
     },
 })

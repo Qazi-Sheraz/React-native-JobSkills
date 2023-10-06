@@ -24,6 +24,7 @@ import { _addnewJob } from '../../functions/Candidate/BottomTab';
 import moment from 'moment';
 import Feather from 'react-native-vector-icons/Feather';
 import { JToast } from '../../functions/Toast';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 const JobRequirement = () => {
 
   const { params, values } = useRoute()
@@ -72,7 +73,7 @@ const JobRequirement = () => {
     formdata.append('job_expiry_date', moment(values.expiry).format('DD-MM-YYYY'));
     formdata.append('hide_salary', isEnabled);
     formdata.append('is_freelance', isEnabled1);
-    // console.log(formdata)
+     console.log(formdata)
 
     fetch(`${url.baseUrl}/employer/jobs/store`, {
       method: 'POST',
@@ -104,7 +105,7 @@ const JobRequirement = () => {
           });
         }
       }).catch(error => {
-        console.log('error', error)
+        console.log('error/employer/jobs/store', error)
         JToast({
           type: 'danger',
           text1: store.lang.eror,
@@ -157,8 +158,8 @@ const JobRequirement = () => {
           jobLanguage: [],
           position: '',
           experience: '',
-          publishDate: '',
-          expiry: '',
+          publishDate:'',
+          expiry:  '',
           // publishDate: new Date().toDateString(),
           // expiry:moment(values.publishDate).add(1, 'days').toDate(),
         }}
@@ -174,16 +175,7 @@ const JobRequirement = () => {
 
           expiry: yup
             .date()
-            // .when('publishDate', (publishDate, schema) => {
-            //   if (publishDate) {
-            //     // Calculate one day ahead of publishDate
-            //     const nextDay = new Date(publishDate);
-            //     nextDay.setDate(nextDay.getDate() + 1);
-
-            //     return schema.min(nextDay, 'Expiry date must be at least one day after publish date');
-            //   }
-            //   return schema; // No validation if publishDate is not selected yet
-            // })
+            
             .required('Expiry date is required')
             .typeError('Expiry date must be a valid date'),
 
@@ -245,10 +237,11 @@ const JobRequirement = () => {
           setFieldValue,
         }) => (
           <>
-            <View style={{ height: '90%' }}>
-              <ScrollView
+            <View style={{ height: '95%' }}>
+              <KeyboardAwareScrollView
                 showsVerticalScrollIndicator={false}
-                contentContainerStyle={{ paddingBottom: RFPercentage(8) }}>
+
+              >
                 <JSelectInput
                   containerStyle={styles.container}
                   value={values.careerLevel?.name}
@@ -466,8 +459,9 @@ const JobRequirement = () => {
                     />
                   </JRow>
                 </View>
-              </ScrollView>
+              </KeyboardAwareScrollView>
             </View>
+
             <JButton
               disabled={loader ? true : false}
               isValid={isValid}
@@ -475,8 +469,8 @@ const JobRequirement = () => {
                 handleSubmit();
               }}
               style={{
-                position: 'absolute',
-                bottom: RFPercentage(3),
+                // position: 'absolute',
+                // bottom: RFPercentage(3),
                 width: RFPercentage(20),
 
               }}>

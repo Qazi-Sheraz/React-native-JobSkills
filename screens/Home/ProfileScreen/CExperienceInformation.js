@@ -25,6 +25,7 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 import url from '../../../config/url';
 import JChevronIcon from '../../../customComponents/JChevronIcon';
 import { JToast } from '../../../functions/Toast';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 function CExperienceInformation({refRBSheet, data}) {
   const store = useContext(StoreContext);
@@ -174,7 +175,9 @@ function CExperienceInformation({refRBSheet, data}) {
               }
             />
             {loader?<ActivityIndicator/>
-            :(<ScrollView
+            :(
+            <KeyboardAwareScrollView
+            showsVerticalScrollIndicator={false}
               contentContainerStyle={{paddingBottom: RFPercentage(8)}}
               style={{
                 marginHorizontal: RFPercentage(2),
@@ -311,7 +314,7 @@ function CExperienceInformation({refRBSheet, data}) {
               {touched.currency && errors.currency && (
                 <JErrorText>{errors.currency}</JErrorText>
               )}
-            </ScrollView>)}
+            </KeyboardAwareScrollView>)}
           </>
         )}
       </Formik>

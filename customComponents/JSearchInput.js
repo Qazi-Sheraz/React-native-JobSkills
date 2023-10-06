@@ -34,6 +34,8 @@ import { Observer, observer } from 'mobx-react';
           borderWidth: RFPercentage(0.1),
           borderColor: `${colors.purple[0]}50`,
           paddingHorizontal: RFPercentage(1),
+          
+          
         },
         containerStyle,
       ]}>
@@ -59,4 +61,3 @@ import { Observer, observer } from 'mobx-react';
   );
 }
 export default observer(JSearchInput);
-const styles = StyleSheet.create({});

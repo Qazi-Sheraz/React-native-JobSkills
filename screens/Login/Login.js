@@ -472,12 +472,12 @@ console.log('GoogleData========>', store.googleUserInfo)
             <FontAwesome
               onPress={() => {
                 if (item == 'google') {
-                  gooleLogin()
-                  // alert('google')
+                  // gooleLogin()
+                  alert('google')
                 }
                 else if (item == 'facebook') {
-                  googleSignOut();
-                  // alert('facebook')
+                  // googleSignOut();
+                  alert('facebook')
                 }
                 else if (item == 'linkedin') {
                   alert('linkedin')

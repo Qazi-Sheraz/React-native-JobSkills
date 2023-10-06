@@ -142,7 +142,7 @@ const JApplication = ({
     formdata.append('candidateID', item?.candidate_user_id);
     formdata.append('jobid', item?.job_id);
 
-    // console.log('formdata', formdata);
+    console.log('formdata', formdata);
 
     fetch(`${url.baseUrl}/meetings-submit`, {
       method: 'POST',
@@ -201,7 +201,7 @@ const JApplication = ({
     )
       .then(response => response.json())
       .then(result => {
-        // console.log(result)
+        console.log(result)
         setMeetings(result)
         setLink(result?.meeting_type[0])
       })
@@ -216,6 +216,10 @@ const JApplication = ({
   };
   // console.log('linksssssss', links)
 
+  const currentDate = new Date();
+
+// Add 30 minutes to the current date and time
+currentDate.setMinutes(currentDate.getMinutes() + 30);
 
   useEffect(() => {
     _interviewScheduled();
@@ -373,7 +377,6 @@ const JApplication = ({
           </View>
         </JRow>
       </Pressable>
-
       <Modal animationType="slide" visible={modalVisible}>
         <SafeAreaView style={{ marginBottom: RFPercentage(10) }}>
           <JGradientHeader
@@ -414,7 +417,7 @@ const JApplication = ({
                 interview_topic: meetings?.interview_topic
                   ? meetings?.interview_topic
                   : '',
-                interview_date_and_time: moment().add(30, 'minutes').toDate(),
+                interview_date_and_time: currentDate,
                 description: meetings?.description ? meetings?.description : '',
                 interview_type:
                   meetings?.meeting_type && meetings?.meeting_type?.length > 0
@@ -488,8 +491,8 @@ const JApplication = ({
                   <JSelectInput
                     mode="datetime"
                     isDate={true}
-                    date1={moment().add(30, 'minutes').toDate()}
-                    minimumDate={moment().add(30, 'minutes')}
+                    date1={currentDate}
+                    minimumDate={currentDate}
                     containerStyle={{ marginTop: RFPercentage(2) }}
                     value={moment(values.interview_date_and_time).format('YYYY/MM/DD HH:mm')}
                     setValue={e => {

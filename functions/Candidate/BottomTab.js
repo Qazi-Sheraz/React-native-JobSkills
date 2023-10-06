@@ -63,11 +63,11 @@ export const _getFavouriteJobData = store => {
     });
 };
 
-export const _saveToFavoriteList = (store, setLoader, id) => {
+export const _saveToFavoriteList = (store, setLoader1, id) => {
   var myHeaders = new Headers();
   myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
 
-  setLoader(true);
+  setLoader1(true);
   var formdata = new FormData();
   formdata.append('jobId', id);
   var requestOptions = {
@@ -98,7 +98,7 @@ export const _saveToFavoriteList = (store, setLoader, id) => {
         store.removeFavoriteList(id);
       }
 
-      setLoader(false);
+      setLoader1(false);
     })
     .catch(error => {
       // console.log(error);
@@ -107,7 +107,7 @@ export const _saveToFavoriteList = (store, setLoader, id) => {
         text1: store.lang.eror,
         text2: error.response && error.response.data,
       });
-      setLoader(false);
+      setLoader1(false);
     });
 };
 
