@@ -12,7 +12,10 @@ import JScreen from './customComponents/JScreen';
 import JGradientScreen from './customComponents/JGradientScreen';
 import colors from './config/colors';
 import { Linking } from 'react-native';
+import { LoginManager } from 'react-native-fbsdk-next';
 
+// Set login behavior (optional)
+// LoginManager.setLoginBehavior('native_only');
 export default function App() {
 
   // Ignore log notification by message:

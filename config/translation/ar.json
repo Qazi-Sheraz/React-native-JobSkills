@@ -457,6 +457,7 @@
     "the_URL_is_not_valid": "عنوان URL غير صالح",
     "jobseeker": "الباحث عن عمل",
     "image_sise": "يجب أن يكون حجم الصورة أقل من 2 ميجابايت",
-    "year_of_completion_of_degree": "سنة الحصول على الدرجة العلمية"
-
+    "year_of_completion_of_degree": "سنة الحصول على الدرجة العلمية",
+    "company_name_successfully_added": "تمت إضافة اسم الشركة بنجاح"
+    
 }
