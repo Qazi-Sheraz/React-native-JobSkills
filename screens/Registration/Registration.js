@@ -1,5 +1,5 @@
 import { StyleSheet, View, ScrollView } from 'react-native';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import JScreen from '../../customComponents/JScreen';
 import JCircularLogo from '../../customComponents/JCircularLogo';
 import JText from '../../customComponents/JText';
@@ -22,7 +22,16 @@ import { observer } from 'mobx-react';
 import JRow from '../../customComponents/JRow';
 import { JToast } from '../../functions/Toast';
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
-
+import LinkedInModal from '@smuxx/react-native-linkedin';
+import {
+  LoginManager,
+  LoginButton,
+  AccessToken,
+  GraphRequest,
+  GraphRequestManager,
+} from 'react-native-fbsdk-next';
+import url from '../../config/url';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Registration = ({ navigation, route }) => {
 
@@ -31,9 +40,31 @@ const Registration = ({ navigation, route }) => {
     // offlineAccess: true,
   })
   const [loader, setLoader] = useState(false);
+  const [socialLoader, setSocialLoader] = useState(false);
   const store = useContext(StoreContext);
-  console.log(route.params?.type)
+  const type = route?.params?.type;
+  console.log('type', type);
 
+  const _storeToken = (token, remember) => {
+    if (remember === true) {
+      // alert('remember')
+      AsyncStorage.setItem('@login', JSON.stringify(token))
+        .then(res => {
+          store.setToken(token);
+          console.log('res', token);
+        })
+        .catch(error => {
+          JToast({
+            type: 'danger',
+            text1: store.lang.eror,
+            text2: error,
+          });
+        });
+    } else {
+      // alert('not remember')
+      store.setToken(token);
+    }
+  };
   const _register = values => {
     setLoader(true);
     var myHeaders = new Headers();
@@ -99,13 +130,11 @@ const Registration = ({ navigation, route }) => {
       });
   };
   const _googleAccess = () => {
-
+    setSocialLoader(true)
     var requestOptions = {
       method: 'GET',
       redirect: 'follow'
     };
-    setLoader(true);
-
     fetch(`${url.baseUrl}/login/google/callback?access_token=${store.googleToken}&type=${type}`, requestOptions)
 
       .then(response => response.json())
@@ -113,17 +142,14 @@ const Registration = ({ navigation, route }) => {
         console.log('Result===>', result);
 
         if (result.token) {
-          _storeToken(result, true);
-          updateUserDeviceToken();
-          JToast({
-            type: 'success',
-            text1: store.lang.login_successfully,
-            text2: store.lang.welcome,
-          });
-
+          _storeToken(result, true),
+            JToast({
+              type: 'success',
+              text1: store.lang.login_successfully,
+              text2: store.lang.welcome,
+            });
+          setSocialLoader(false)
         }
-
-        setLoader(false);
       })
       .catch(error => {
         googleSignOut();
@@ -132,7 +158,41 @@ const Registration = ({ navigation, route }) => {
           text1: store.lang.eror,
           text2: store.lang.cannot_proceed_your_request,
         });
-        setLoader(false);
+        setSocialLoader(false)
+      });
+  };
+  console.log('linkdinToken', store.linkdinToken?.access_token)
+
+  const _linkdinAccess = () => {
+    setSocialLoader(true)
+    var requestOptions = {
+      method: 'GET',
+      redirect: 'follow'
+    };
+    fetch(`${url.baseUrl}/login/linkedin/callback?access_token=${store.linkdinToken?.access_token}&type=${type}`, requestOptions)
+
+      .then(response => response.json())
+      .then(result => {
+        console.log('Result__Linkdin===>', result);
+
+        if (result) {
+          _storeToken(result, true),
+            JToast({
+              type: 'success',
+              text1: store.lang.login_successfully,
+              text2: store.lang.welcome,
+            });
+          setSocialLoader(false)
+        }
+      })
+      .catch(error => {
+        logoutFromLinkedIn
+        JToast({
+          type: 'danger',
+          text1: store.lang.eror,
+          text2: store.lang.cannot_proceed_your_request,
+        });
+        setSocialLoader(false)
       });
   };
 
@@ -175,6 +235,60 @@ const Registration = ({ navigation, route }) => {
       // Now, the user can sign in with a different Google account next time.
     } catch (error) {
       console.error('Error signing out:', error);
+    }
+  };
+
+  const facebookLogin = async () => {
+    try {
+      const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
+      if (result.isCancelled) {
+        console.log('Login cancelled');
+      } else {
+        const data = await AccessToken.getCurrentAccessToken();
+        if (data) {
+          console.log('Logged in with Facebook!');
+          console.log('User ID:', data.userID);
+          console.log('Access Token:', data.accessToken);
+        }
+      }
+    } catch (error) {
+      console.error('Facebook login error:', error);
+    }
+  };
+
+  const linkedRef = useRef(null);
+
+  const handleLinkedInLogin = () => {
+    // Open the LinkedIn login modal
+    linkedRef.current.open();
+  };
+
+  const renderCustomButton = () => (
+    <FontAwesome
+      onPress={() => {
+        handleLinkedInLogin();
+      }}
+      name={'linkedin'}
+      size={RFPercentage(3.5)}
+      color={colors.purple[0]}
+    />
+  );
+
+  const logoutFromLinkedIn = async () => {
+    try {
+      // Revoke the LinkedIn access token using the library's method
+      // Note: The method to revoke the token may vary based on the library's API.
+      // Replace 'revokeAccessToken' with the actual method if provided.
+      await linkedRef.current.revokeAccessToken();
+
+      // Clear local session data, e.g., user credentials
+      // (You'll need to implement this part based on your app's structure)
+
+      // Update the UI to reflect the user's logout
+      // (Update your components or navigate to a logout screen)
+    } catch (error) {
+      // Handle any errors that may occur during the logout process
+      console.error('LinkedIn logout error:', error);
     }
   };
   console.log('GoogleData========>', store.googleUserInfo?.user?.email)
@@ -551,7 +665,7 @@ const Registration = ({ navigation, route }) => {
               )}
 
               <JButton
-                disabled={loader ? true : false}
+                disabled={loader ? true : socialLoader ? true : false}
                 isValid={isValid}
                 style={{ marginTop: RFPercentage(3) }}
                 onPress={() => handleSubmit()}
@@ -572,22 +686,24 @@ const Registration = ({ navigation, route }) => {
         <View
           style={{
             flexDirection: 'row',
-            marginTop: RFPercentage(1),
+            marginTop: RFPercentage(3),
             justifyContent: 'space-evenly',
             width: '80%',
           }}>
-          {['google', 'facebook', 'linkedin', 'twitter'].map((item, index) => (
+          {/* {['google', 'facebook', 'linkedin', 'twitter'].map((item, index) => (
             <FontAwesome
               onPress={() => {
                 if (item == 'google') {
                   gooleLogin()
+                  // alert('google')
                 }
                 else if (item == 'facebook') {
-                  // store.setGoogleUserInfo('')
-                  alert('facebook')
+                  facebookLogin()
+                  // alert('facebook')
                 }
                 else if (item == 'linkedin') {
-                  alert('linkedin')
+                  handleLinkedInLogin()
+                  // alert('linkedin')
                 }
                 else {
                   alert('twitter')
@@ -598,11 +714,45 @@ const Registration = ({ navigation, route }) => {
               size={RFPercentage(3.5)}
               color={colors.purple[0]}
             />
+          ))} */}
+          {['google', 'facebook'].map((item, index) => (
+            <FontAwesome
+              onPress={() => {
+                if (item == 'google') {
+                  gooleLogin()
+                  // alert('google')
+                }
+                else {
+                  facebookLogin()
+                  // alert('facebook')
+                }
+              }}
+              key={index}
+              name={item}
+              size={RFPercentage(3.5)}
+              color={colors.purple[0]}
+            />
           ))}
+          <LinkedInModal
+            ref={linkedRef}
+            permissions={['openid', 'profile', 'email']}
+            areaTouchText={0}
+            renderButton={renderCustomButton}
+            clientID="77cqmetnwrry8n"
+            clientSecret="N0UciK26PIVoDqa1"
+            redirectUri={"https://dev.jobskills.digital/login/linkedin-openid/callback"}
+            onSuccess={(token) => {
+              console.log(token)
+              store.setLinkdinToken(token)
+              _linkdinAccess()
+            }}
+          />
+
         </View>
       </View>
 
       <JFooter
+        disabled={socialLoader ? true : false}
         onPress={() =>
           navigation.navigate('CLogin', { type: route.params?.type })
         }

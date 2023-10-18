@@ -1,5 +1,5 @@
 import { StyleSheet, View, Platform, Modal, SafeAreaView } from 'react-native';
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useRef } from 'react';
 import JScreen from '../../customComponents/JScreen';
 import JCircularLogo from '../../customComponents/JCircularLogo';
 import JText from '../../customComponents/JText';
@@ -26,27 +26,26 @@ import DeviceInfo from 'react-native-device-info';
 import { JToast } from '../../functions/Toast';
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 import {
-  LoginManager,
-  LoginButton,
-  AccessToken,
-  GraphRequest,
-  GraphRequestManager,
+  LoginManager, AccessToken,
 } from 'react-native-fbsdk-next';
-import JIcon from '../../customComponents/JIcon';
-import JGradientHeader from '../../customComponents/JGradientHeader';
+import LinkedInModal from '@smuxx/react-native-linkedin';
+
 
 const Login = ({ navigation, route }) => {
-  GoogleSignin.configure({
 
+  GoogleSignin.configure({
     // webClientId: '505367788352-ad42uav54vqdr5ronovee2k66qtvpl5q.apps.googleusercontent.com',
     // offlineAccess: true,
-
   })
   const store = useContext(StoreContext);
   const [loader, setLoader] = useState(false);
+  const [socialLoader, setSocialLoader] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState(null);
   const [edit, setEdit] = useState();
+  const [loginItem, setLoginItem] = useState('');
+
   console.log('edit', edit)
+  console.log('loginItem', loginItem)
   const type = route?.params?.type;
   console.log('type', type);
 
@@ -289,7 +288,7 @@ const Login = ({ navigation, route }) => {
 
 
   const _googleAccess = () => {
-
+    setSocialLoader(true)
     var requestOptions = {
       method: 'GET',
       redirect: 'follow'
@@ -301,14 +300,15 @@ const Login = ({ navigation, route }) => {
         console.log('Result===>', result);
 
         if (result.token) {
-            _storeToken(result, true),
+          _storeToken(result, true),
             updateUserDeviceToken(),
             JToast({
               type: 'success',
               text1: store.lang.login_successfully,
               text2: store.lang.welcome,
             });
-            }
+          setSocialLoader(false)
+        }
       })
       .catch(error => {
         googleSignOut();
@@ -317,6 +317,41 @@ const Login = ({ navigation, route }) => {
           text1: store.lang.eror,
           text2: store.lang.cannot_proceed_your_request,
         });
+        setSocialLoader(false)
+      });
+  };
+  console.log('linkdinToken', store.linkdinToken?.access_token)
+  const _linkdinAccess = () => {
+    setSocialLoader(true)
+    var requestOptions = {
+      method: 'GET',
+      redirect: 'follow'
+    };
+    fetch(`${url.baseUrl}/login/linkedin/callback?access_token=${store.linkdinToken?.access_token}&type=${type}`, requestOptions)
+
+      .then(response => response.json())
+      .then(result => {
+        console.log('Result__Linkdin===>', result);
+
+        if (result) {
+          _storeToken(result, true),
+            updateUserDeviceToken(),
+            JToast({
+              type: 'success',
+              text1: store.lang.login_successfully,
+              text2: store.lang.welcome,
+            });
+          setSocialLoader(false)
+        }
+      })
+      .catch(error => {
+        logoutFromLinkedIn
+        JToast({
+          type: 'danger',
+          text1: store.lang.eror,
+          text2: store.lang.cannot_proceed_your_request,
+        });
+        setSocialLoader(false)
       });
   };
 
@@ -365,10 +400,12 @@ const Login = ({ navigation, route }) => {
   const facebookLogin = async () => {
     try {
       const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
+      console.log('result', result)
       if (result.isCancelled) {
         console.log('Login cancelled');
       } else {
         const data = await AccessToken.getCurrentAccessToken();
+        console.log('dataaaa------>', data)
         if (data) {
           console.log('Logged in with Facebook!');
           console.log('User ID:', data.userID);
@@ -379,8 +416,41 @@ const Login = ({ navigation, route }) => {
       console.error('Facebook login error:', error);
     }
   };
-  // console.log('GoogleData========>', store.googleUserInfo)
 
+  const linkedRef = useRef(null);
+
+  const handleLinkedInLogin = () => {
+    // Open the LinkedIn login modal
+    linkedRef.current.open();
+  };
+
+  const renderCustomButton = () => (
+    <FontAwesome
+      onPress={() => {
+        handleLinkedInLogin();
+      }}
+      name={'linkedin'}
+      size={RFPercentage(3.5)}
+      color={colors.purple[0]}
+    />
+  );
+  const logoutFromLinkedIn = async () => {
+    try {
+      // Revoke the LinkedIn access token using the library's method
+      // Note: The method to revoke the token may vary based on the library's API.
+      // Replace 'revokeAccessToken' with the actual method if provided.
+      await linkedRef.current.revokeAccessToken();
+
+      // Clear local session data, e.g., user credentials
+      // (You'll need to implement this part based on your app's structure)
+
+      // Update the UI to reflect the user's logout
+      // (Update your components or navigate to a logout screen)
+    } catch (error) {
+      // Handle any errors that may occur during the logout process
+      console.error('LinkedIn logout error:', error);
+    }
+  };
   return (
     <JScreen>
       <View style={{ flex: 0.3, justifyContent: 'center', alignItems: 'center' }}>
@@ -510,7 +580,7 @@ const Login = ({ navigation, route }) => {
             </JRow>
 
             <JButton
-              disabled={loader ? true : false}
+              disabled={loader ? true : socialLoader ? true : false}
               isValid={isValid}
               style={{ marginTop: RFPercentage(3) }}
               onPress={() => handleSubmit()}
@@ -527,8 +597,6 @@ const Login = ({ navigation, route }) => {
       </Formik>
       <View style={{ flex: 0.15, alignItems: 'center' }}>
         <JDivider children={store.lang.login_with} />
-
-
         <View
           style={{
             flexDirection: 'row',
@@ -536,7 +604,7 @@ const Login = ({ navigation, route }) => {
             justifyContent: 'space-evenly',
             width: '80%',
           }}>
-          {['google', 'facebook', 'linkedin', 'twitter'].map((item, index) => (
+          {/* {['google', 'facebook', 'linkedin', 'twitter'].map((item, index) => (
             <FontAwesome
               onPress={() => {
                 if (item == 'google') {
@@ -548,7 +616,8 @@ const Login = ({ navigation, route }) => {
                   // alert('facebook')
                 }
                 else if (item == 'linkedin') {
-                  alert('linkedin')
+                  handleLinkedInLogin()
+                  // alert('linkedin')
                 }
                 else {
                   alert('twitter')
@@ -559,15 +628,51 @@ const Login = ({ navigation, route }) => {
               size={RFPercentage(3.5)}
               color={colors.purple[0]}
             />
+          ))} */}
+          {['google', 'facebook'].map((item, index) => (
+            <FontAwesome
+              onPress={() => {
+                if (item == 'google') {
+                  gooleLogin()
+                  setLoginItem(item)
+                  // alert('google')
+                }
+                else {
+                  facebookLogin()
+                  setLoginItem(item)
+                  // alert('facebook')
+                }
+              }}
+              key={index}
+              name={item}
+              size={RFPercentage(3.5)}
+              color={colors.purple[0]}
+            />
           ))}
+          <LinkedInModal
+            ref={linkedRef}
+            permissions={['openid', 'profile', 'email']}
+            areaTouchText={0}
+            renderButton={renderCustomButton}
+            clientID="77cqmetnwrry8n"
+            clientSecret="N0UciK26PIVoDqa1"
+            redirectUri={"https://dev.jobskills.digital/login/linkedin-openid/callback"}
+            onSuccess={(token) => {
+              console.log(token)
+              store.setLinkdinToken(token)
+              _linkdinAccess()
+            }}
+          />
+
         </View>
       </View>
 
       <JFooter
+        disabled={socialLoader ? true : false}
         onPress={() => navigation.navigate('CRegister', { type: type })}
         children={store.lang.register_Btn}
       />
-      
+
     </JScreen>
 
   );

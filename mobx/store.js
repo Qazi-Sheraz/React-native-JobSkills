@@ -131,8 +131,12 @@ export const StoreProvider = props => {
     userInfo: {},
     setUserInfo: action(e => (store.userInfo = e)),
     setUserAvatar: action(e => (store.userInfo.avatar = e)),
-    
+
+    //linkdin
+    linkdinToken: {},
+    setLinkdinToken: action(e => (store.linkdinToken = e)),
     //google Login
+    
     googleToken: {},
     setGoogleToken: action(e => (store.googleToken = e)),
 

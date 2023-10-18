@@ -29,11 +29,13 @@ import JIcon from '../customComponents/JIcon';
 import FlashMessage from 'react-native-flash-message';
 import { useState } from 'react';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { useRef } from 'react';
 
 function CustomDrawerContent(props) {
   const store = useContext(StoreContext);
   const user = store.token?.user;
 const[loader, setLoader]=useState(false);
+const linkedRef = useRef(null);
   const _navigateToScreen = index => {
     // props.navigation.closeDrawer()
     index == 0
@@ -54,6 +56,7 @@ const[loader, setLoader]=useState(false);
                     text1: store.lang.logout_successfully,
                   });
                   googleSignOut();
+                  logoutFromLinkedIn
                   store.setToken({});
                   
                   // console.log('object')
@@ -128,6 +131,7 @@ const[loader, setLoader]=useState(false);
                     setLoader(true)
                     if (res !== null) {
                       googleSignOut();
+                      logoutFromLinkedIn
                       JToast({
                         type: 'success',
                         text1: store.lang.logout_successfully,
@@ -205,6 +209,23 @@ const[loader, setLoader]=useState(false);
         // Now, the user can sign in with a different Google account next time.
       } catch (error) {
         console.error('Error signing out:', error);
+      }
+    };
+    const logoutFromLinkedIn = async () => {
+      try {
+        // Revoke the LinkedIn access token using the library's method
+        // Note: The method to revoke the token may vary based on the library's API.
+        // Replace 'revokeAccessToken' with the actual method if provided.
+        await linkedRef.current.revokeAccessToken();
+  
+        // Clear local session data, e.g., user credentials
+        // (You'll need to implement this part based on your app's structure)
+  
+        // Update the UI to reflect the user's logout
+        // (Update your components or navigate to a logout screen)
+      } catch (error) {
+        // Handle any errors that may occur during the logout process
+        console.error('LinkedIn logout error:', error);
       }
     };
   return (

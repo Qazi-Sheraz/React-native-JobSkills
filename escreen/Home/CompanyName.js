@@ -15,6 +15,7 @@ import { useContext } from 'react';
 import { StoreContext } from '../../mobx/store';
 import { JToast } from '../../functions/Toast';
 import { _dashboard } from '../../functions/Candidate/BottomTab';
+import JErrorText from '../../customComponents/JErrorText';
 const CompanyName = () => {
     const store = useContext(StoreContext);
     const [loader1, setLoader1] = useState(false)
