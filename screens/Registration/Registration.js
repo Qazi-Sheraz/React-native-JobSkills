@@ -22,7 +22,14 @@ import { observer } from 'mobx-react';
 import JRow from '../../customComponents/JRow';
 import { JToast } from '../../functions/Toast';
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
+
+
 const Registration = ({ navigation, route }) => {
+
+  GoogleSignin.configure({
+    // webClientId: '505367788352-ad42uav54vqdr5ronovee2k66qtvpl5q.apps.googleusercontent.com',
+    // offlineAccess: true,
+  })
   const [loader, setLoader] = useState(false);
   const store = useContext(StoreContext);
   console.log(route.params?.type)
@@ -40,8 +47,8 @@ const Registration = ({ navigation, route }) => {
     formdata.append('last_name', values.last_name);
     formdata.append('password_confirmation', values.confirmPassword);
     formdata.append('privacyPolicy', values.policy ? '1' : '0');
-    route.params?.type !== 1 &&(
-    formdata.append('company_name', values.company_name))
+    route.params?.type !== 1 && (
+      formdata.append('company_name', values.company_name))
     console.log(formdata);
 
     var requestOptions = {
@@ -50,7 +57,7 @@ const Registration = ({ navigation, route }) => {
       body: formdata,
       redirect: 'follow',
     };
-    
+
     fetch('https://dev.jobskills.digital/api/users/register', requestOptions)
       .then(response => response.json())
       .then(result => {
@@ -85,44 +92,93 @@ const Registration = ({ navigation, route }) => {
         console.log('Error', error);
         JToast({
           type: 'danger',
-         text1: store.lang.eror,
+          text1: store.lang.eror,
           text2: error.response && error.response.data,
         });
         setLoader(false);
       });
   };
+  const _googleAccess = () => {
+
+    var requestOptions = {
+      method: 'GET',
+      redirect: 'follow'
+    };
+    setLoader(true);
+
+    fetch(`${url.baseUrl}/login/google/callback?access_token=${store.googleToken}&type=${type}`, requestOptions)
+
+      .then(response => response.json())
+      .then(result => {
+        console.log('Result===>', result);
+
+        if (result.token) {
+          _storeToken(result, true);
+          updateUserDeviceToken();
+          JToast({
+            type: 'success',
+            text1: store.lang.login_successfully,
+            text2: store.lang.welcome,
+          });
+
+        }
+
+        setLoader(false);
+      })
+      .catch(error => {
+        googleSignOut();
+        JToast({
+          type: 'danger',
+          text1: store.lang.eror,
+          text2: store.lang.cannot_proceed_your_request,
+        });
+        setLoader(false);
+      });
+  };
+
   const gooleLogin = async () => {
     try {
-        await GoogleSignin.hasPlayServices();
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
 
-        const userInfo = await GoogleSignin.signIn();
-        store.setGoogleUserInfo(userInfo);
-        const getToken = await GoogleSignin.getTokens()
-        store.setGoogleToken(getToken.accessToken);
-        console.log('getToken=====>',getToken.accessToken)
+      store.setGoogleUserInfo(userInfo);
+      const getToken = await GoogleSignin.getTokens()
+      store.setGoogleToken(getToken.accessToken);
+      _googleAccess();
+      console.log('getToken=====>', getToken.accessToken)
 
     } catch (error) {
-        if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-            console.log('user cancelled the login flow', error);
-            // user cancelled the login flow
-        } else if (error.code === statusCodes.IN_PROGRESS) {
-            // operation (e.g. sign in) is in progress already
-            console.log('operation (e.g. sign in) is in progress already', error);
-        } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-            console.log('play services not available or outdated', error);
-            // play services not available or outdated
-        } else {
-            console.log('some other error happened', error);
-            // some other error happened
-        }
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        console.log('user cancelled the login flow', error);
+        alert('user cancelled the login flow', error)
+        // user cancelled the login flow
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        // operation (e.g. sign in) is in progress already
+        console.log('operation (e.g. sign in) is in progress already', error);
+        alert('operation (e.g. sign in) is in progress already', error)
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        console.log('play services not available or outdated', error);
+        alert('play services not available or outdated', error)
+        // play services not available or outdated
+      } else {
+        console.log('some other error happened', error);
+        alert('some other error happened', error)
+        // some other error happened
+      }
     }
-};
-console.log('GoogleData========>', store.googleUserInfo?.user?.email)
-useEffect(() => {
-  GoogleSignin.configure();
-  // store.setGoogleUserInfo({})
-  // store.setGoogleToken({})
-}, [])
+  };
+
+  const googleSignOut = async () => {
+    try {
+      await GoogleSignin.revokeAccess(); // Revoke access to the app
+      await GoogleSignin.signOut(); // Sign out from the Google account
+      // Now, the user can sign in with a different Google account next time.
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
+  console.log('GoogleData========>', store.googleUserInfo?.user?.email)
+
   return (
     <JScreen>
       <View style={{ flex: 0.2, justifyContent: 'center', alignItems: 'center' }}>
@@ -136,120 +192,120 @@ useEffect(() => {
       </View>
       <Formik
         initialValues={
-          route.params?.type == 1?
-          {
-          email: '',
-          password: '',
-          first_name: '',
-          last_name: '',
-          // company_name: '',
-          confirmPassword: '',
-          hide: true,
-          chide: true,
-          policy: false,
-        }
-       : {
-          email: '',
-          password: '',
-          first_name: '',
-          last_name: '',
-          company_name: '',
-          confirmPassword: '',
-          hide: true,
-          chide: true,
-          policy: false,
-        }}
+          route.params?.type == 1 ?
+            {
+              email: '',
+              password: '',
+              first_name: '',
+              last_name: '',
+              // company_name: '',
+              confirmPassword: '',
+              hide: true,
+              chide: true,
+              policy: false,
+            }
+            : {
+              email: '',
+              password: '',
+              first_name: '',
+              last_name: '',
+              company_name: '',
+              confirmPassword: '',
+              hide: true,
+              chide: true,
+              policy: false,
+            }}
         onSubmit={values => {
           // console.log(values);
           _register(values);
         }}
         validationSchema={yup.object().shape(
-          route.params?.type == 1?
-          {
-          first_name: yup
-            .string()
-            .min(3, 'First Name ame Must be at least 3 characters')
-            .max(100, 'First Name must be at most 100 characters long')
-            .transform(value => value.trim())
-            .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'First Name must contain at least 1 alphabet character and can include English, Urdu, Arabic, and spaces')
-            .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the First Name')
-            .required('First Name is a required field'),
-          last_name: yup
-            .string()
-            .min(3, 'Last Name Must be at least 3 characters')
-            .max(100, 'Last Name must be at most 100 characters long')
-            .transform(value => value.trim())
-            .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'Last Name must contain at least 1 alphabet character and can include English, Urdu, Arabic, and spaces')
-            .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the Last Name')
-            .required('Last Name is a required field'),
-          
-          email: yup
-            .string()
-            .min(0, 'Email address cannot be empty')
-            .max(100, 'Email address must be at most 100 characters long')
-            .email('Must be a valid email')
-            .required('Email is a required field'),
-          password: yup
-            .string()
-            .min(8, 'Password Must be at least 8 characters')
-            .max(16, 'Password must be at most 15 characters')
-            .required('Password is a required field'),
-          confirmPassword: yup
-            .string()
-            .required('Confirm Password is a required field')
-            .oneOf([yup.ref('password'), null], 'Passwords must match'),
-          policy: yup
-            .boolean()
-            .required('Policy is a required field')
-            .test('is boolean', 'Must be true', value => value === true),
-        }
-         : {
-          first_name: yup
-            .string()
-            .min(3, 'First Name ame Must be at least 3 characters')
-            .max(100, 'First Name must be at most 100 characters long')
-            .transform(value => value.trim())
-            .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'First Name must contain at least 1 alphabet character and can include English, Urdu, Arabic, and spaces')
-            .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the First Name')
-            .required('First Name is a required field'),
-          last_name: yup
-            .string()
-            .min(3, 'Last Name Must be at least 3 characters')
-            .max(100, 'Last Name must be at most 100 characters long')
-            .transform(value => value.trim())
-            .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'Last Name must contain at least 1 alphabet character and can include English, Urdu, Arabic, and spaces')
-            .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the Last Name')
-            .required('Last Name is a required field'),
-          company_name: yup
-            .string()
-            .min(3, 'Company Name Must be at least 3 characters')
-            .max(100, 'Company Name must be at most 100 characters long')
-            .transform(value => value.trim())
-            .matches(
-              /^[A-Za-z\u0600-\u06FF\s]*[A-Za-z\u0600-\u06FF][A-Za-z\u0600-\u06FF\s\d\W]*$/,
-              'Company Name must only contain alphabetic characters'
-            )
-            .required('Company Name is a required field'),
-          email: yup
-            .string()
-            .min(0, 'Email address cannot be empty')
-            .max(100, 'Email address must be at most 100 characters long')
-            .email('Must be a valid email')
-            .required('Email is a required field'),
-          password: yup
-            .string()
-            .min(8, 'Password Must be at least 8 characters')
-            .max(16, 'Password must be at most 15 characters')
-            .required('Password is a required field'),
-          confirmPassword: yup
-            .string()
-            .required('Confirm Password is a required field')
-            .oneOf([yup.ref('password'), null], 'Passwords must match'),
-          policy: yup
-            .boolean()
-            .required('Policy is a required field')
-            .test('is boolean', 'Must be true', value => value === true),
-        }
+          route.params?.type == 1 ?
+            {
+              first_name: yup
+                .string()
+                .min(3, 'First Name ame Must be at least 3 characters')
+                .max(100, 'First Name must be at most 100 characters long')
+                .transform(value => value.trim())
+                .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'First Name must contain at least 1 alphabet character and can include English, Urdu, Arabic, and spaces')
+                .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the First Name')
+                .required('First Name is a required field'),
+              last_name: yup
+                .string()
+                .min(3, 'Last Name Must be at least 3 characters')
+                .max(100, 'Last Name must be at most 100 characters long')
+                .transform(value => value.trim())
+                .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'Last Name must contain at least 1 alphabet character and can include English, Urdu, Arabic, and spaces')
+                .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the Last Name')
+                .required('Last Name is a required field'),
+
+              email: yup
+                .string()
+                .min(0, 'Email address cannot be empty')
+                .max(100, 'Email address must be at most 100 characters long')
+                .email('Must be a valid email')
+                .required('Email is a required field'),
+              password: yup
+                .string()
+                .min(8, 'Password Must be at least 8 characters')
+                .max(16, 'Password must be at most 15 characters')
+                .required('Password is a required field'),
+              confirmPassword: yup
+                .string()
+                .required('Confirm Password is a required field')
+                .oneOf([yup.ref('password'), null], 'Passwords must match'),
+              policy: yup
+                .boolean()
+                .required('Policy is a required field')
+                .test('is boolean', 'Must be true', value => value === true),
+            }
+            : {
+              first_name: yup
+                .string()
+                .min(3, 'First Name ame Must be at least 3 characters')
+                .max(100, 'First Name must be at most 100 characters long')
+                .transform(value => value.trim())
+                .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'First Name must contain at least 1 alphabet character and can include English, Urdu, Arabic, and spaces')
+                .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the First Name')
+                .required('First Name is a required field'),
+              last_name: yup
+                .string()
+                .min(3, 'Last Name Must be at least 3 characters')
+                .max(100, 'Last Name must be at most 100 characters long')
+                .transform(value => value.trim())
+                .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'Last Name must contain at least 1 alphabet character and can include English, Urdu, Arabic, and spaces')
+                .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the Last Name')
+                .required('Last Name is a required field'),
+              company_name: yup
+                .string()
+                .min(3, 'Company Name Must be at least 3 characters')
+                .max(100, 'Company Name must be at most 100 characters long')
+                .transform(value => value.trim())
+                .matches(
+                  /^[A-Za-z\u0600-\u06FF\s]*[A-Za-z\u0600-\u06FF][A-Za-z\u0600-\u06FF\s\d\W]*$/,
+                  'Company Name must only contain alphabetic characters'
+                )
+                .required('Company Name is a required field'),
+              email: yup
+                .string()
+                .min(0, 'Email address cannot be empty')
+                .max(100, 'Email address must be at most 100 characters long')
+                .email('Must be a valid email')
+                .required('Email is a required field'),
+              password: yup
+                .string()
+                .min(8, 'Password Must be at least 8 characters')
+                .max(16, 'Password must be at most 15 characters')
+                .required('Password is a required field'),
+              confirmPassword: yup
+                .string()
+                .required('Confirm Password is a required field')
+                .oneOf([yup.ref('password'), null], 'Passwords must match'),
+              policy: yup
+                .boolean()
+                .required('Policy is a required field')
+                .test('is boolean', 'Must be true', value => value === true),
+            }
         )}>
         {({
           values,
@@ -363,34 +419,34 @@ useEffect(() => {
                 <JErrorText>{errors.email}</JErrorText>
               )}
               {route.params?.type !== 1 &&
-              <JInput
-                style={{ textAlign: store.lang.id === 0 ? 'left' : 'right' }}
-                value={values.company_name}
-                error={touched.company_name && errors.company_name && true}
-                heading={store.lang.company_name}
-                icon={
-                  <JIcon
-                    icon={'an'}
-                    name="home"
-                    style={{
-                      marginRight:
-                        store.lang.id == 0
-                          ? RFPercentage(1.3)
-                          : RFPercentage(0),
-                      marginLeft:
-                        store.lang.id == 0
-                          ? RFPercentage(0)
-                          : RFPercentage(1.3),
-                    }}
-                    size={RFPercentage(3)}
-                    color={colors.purple[0]}
-                  />
-                }
-                placeholder={store.lang.company_name}
-                onChangeText={handleChange('company_name')}
-                onBlur={() => setFieldTouched('company_name')}
-                containerStyle={{ marginTop: RFPercentage(3) }}
-              />}
+                <JInput
+                  style={{ textAlign: store.lang.id === 0 ? 'left' : 'right' }}
+                  value={values.company_name}
+                  error={touched.company_name && errors.company_name && true}
+                  heading={store.lang.company_name}
+                  icon={
+                    <JIcon
+                      icon={'an'}
+                      name="home"
+                      style={{
+                        marginRight:
+                          store.lang.id == 0
+                            ? RFPercentage(1.3)
+                            : RFPercentage(0),
+                        marginLeft:
+                          store.lang.id == 0
+                            ? RFPercentage(0)
+                            : RFPercentage(1.3),
+                      }}
+                      size={RFPercentage(3)}
+                      color={colors.purple[0]}
+                    />
+                  }
+                  placeholder={store.lang.company_name}
+                  onChangeText={handleChange('company_name')}
+                  onBlur={() => setFieldTouched('company_name')}
+                  containerStyle={{ marginTop: RFPercentage(3) }}
+                />}
               {touched.company_name && errors.company_name && (
                 <JErrorText>{errors.company_name}</JErrorText>
               )}
@@ -481,7 +537,7 @@ useEffect(() => {
                   onValueChange={value => setFieldValue('policy', value)}
                 />
 
-                <JText style={{ marginHorizontal: RFPercentage(2)}}>
+                <JText style={{ marginHorizontal: RFPercentage(2) }}>
                   {store.lang.you_agree_to_the_JobSkills}{'\n'}
                   <JText
                     fontWeight="bold"
@@ -495,7 +551,7 @@ useEffect(() => {
               )}
 
               <JButton
-              disabled={loader?true:false}
+                disabled={loader ? true : false}
                 isValid={isValid}
                 style={{ marginTop: RFPercentage(3) }}
                 onPress={() => handleSubmit()}
@@ -522,22 +578,21 @@ useEffect(() => {
           }}>
           {['google', 'facebook', 'linkedin', 'twitter'].map((item, index) => (
             <FontAwesome
-            onPress={() => {
-              if (item == 'google') {
-                // gooleLogin()
-                alert('google')
-              }
-              else if (item == 'facebook') {
-                // store.setGoogleUserInfo('')
-                alert('facebook')
-              }
-              else if (item == 'linkedin') {
-                alert('linkedin')
-              }
-              else {
-                alert('twitter')
-              }
-            }}
+              onPress={() => {
+                if (item == 'google') {
+                  gooleLogin()
+                }
+                else if (item == 'facebook') {
+                  // store.setGoogleUserInfo('')
+                  alert('facebook')
+                }
+                else if (item == 'linkedin') {
+                  alert('linkedin')
+                }
+                else {
+                  alert('twitter')
+                }
+              }}
               key={index}
               name={item}
               size={RFPercentage(3.5)}

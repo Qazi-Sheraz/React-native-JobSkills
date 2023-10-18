@@ -28,6 +28,7 @@ import { JToast } from '../functions/Toast';
 import JIcon from '../customComponents/JIcon';
 import FlashMessage from 'react-native-flash-message';
 import { useState } from 'react';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 function CustomDrawerContent(props) {
   const store = useContext(StoreContext);
@@ -52,7 +53,9 @@ const[loader, setLoader]=useState(false);
                     type: 'success',
                     text1: store.lang.logout_successfully,
                   });
+                  googleSignOut();
                   store.setToken({});
+                  
                   // console.log('object')
                   setLoader(false)
                 })
@@ -124,6 +127,7 @@ const[loader, setLoader]=useState(false);
                   .then(res => {
                     setLoader(true)
                     if (res !== null) {
+                      googleSignOut();
                       JToast({
                         type: 'success',
                         text1: store.lang.logout_successfully,
@@ -194,7 +198,15 @@ const[loader, setLoader]=useState(false);
         size={RFPercentage(3)}
       />
     );
-
+    const googleSignOut = async () => {
+      try {
+        await GoogleSignin.revokeAccess(); // Revoke access to the app
+        await GoogleSignin.signOut(); // Sign out from the Google account
+        // Now, the user can sign in with a different Google account next time.
+      } catch (error) {
+        console.error('Error signing out:', error);
+      }
+    };
   return (
 
     store.token?.user?.owner_type.includes('Candidate')

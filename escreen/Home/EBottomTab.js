@@ -1,8 +1,7 @@
-import {StyleSheet} from 'react-native';
-import React, {useContext, useEffect} from 'react';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
-import CustomCandidateBottomTab from '../../bottomTab/CustomCandidateBottomTab';
 import {StoreContext} from '../../mobx/store';
 import Home from './Home';
 import Meeting from './Meeting';
@@ -13,8 +12,11 @@ import { observer } from 'mobx-react';
 import { _addnewJob, _dashboard, } from '../../functions/Candidate/BottomTab';
 import url from '../../config/url';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import CompanyName from './CompanyName';
+
 
  function EBottomTab() {
+
   const Tab = createBottomTabNavigator();
   const store = useContext(StoreContext);
   const _getlangApi = ()=>{
@@ -46,6 +48,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
          console.log('Error storing language:', error);
        }
      };
+
+     
   useEffect(() => {
     _getlangApi();
     _dashboard(store);
@@ -57,7 +61,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
   }, []);
 
   return (
-    <Tab.Navigator
+    store.employeHome?.error ? <CompanyName/>:
+   <Tab.Navigator
       screenOptions={{
         headerShown: false,
       }}

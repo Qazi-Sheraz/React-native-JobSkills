@@ -1,4 +1,4 @@
-import { StyleSheet,  View, Platform } from 'react-native';
+import { StyleSheet, View, Platform, Modal, SafeAreaView } from 'react-native';
 import React, { useEffect, useState, useContext } from 'react';
 import JScreen from '../../customComponents/JScreen';
 import JCircularLogo from '../../customComponents/JCircularLogo';
@@ -25,24 +25,35 @@ import messaging from '@react-native-firebase/messaging';
 import DeviceInfo from 'react-native-device-info';
 import { JToast } from '../../functions/Toast';
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
+import {
+  LoginManager,
+  LoginButton,
+  AccessToken,
+  GraphRequest,
+  GraphRequestManager,
+} from 'react-native-fbsdk-next';
+import JIcon from '../../customComponents/JIcon';
+import JGradientHeader from '../../customComponents/JGradientHeader';
 
 const Login = ({ navigation, route }) => {
   GoogleSignin.configure({
-    
-    webClientId: '970988747590-38mp324576qepd86ldekiq9addnr2cb7.apps.googleusercontent.com',
-    // webClientId: '505367788352-ksm57f116p8vo9jgvmfrv44nbo38h7s9.apps.googleusercontent.com',
-    offlineAccess: false
-})
+
+    // webClientId: '505367788352-ad42uav54vqdr5ronovee2k66qtvpl5q.apps.googleusercontent.com',
+    // offlineAccess: true,
+
+  })
   const store = useContext(StoreContext);
   const [loader, setLoader] = useState(false);
-  const [googleData, setGoogleData] = useState(); 
   const [selectedLanguage, setSelectedLanguage] = useState(null);
-
-  
+  const [edit, setEdit] = useState();
+  console.log('edit', edit)
   const type = route?.params?.type;
-console.log('type',type);
+  console.log('type', type);
+
+
   const _storeToken = (token, remember) => {
     if (remember === true) {
+      // alert('remember')
       AsyncStorage.setItem('@login', JSON.stringify(token))
         .then(res => {
           store.setToken(token);
@@ -56,6 +67,7 @@ console.log('type',type);
           });
         });
     } else {
+      // alert('not remember')
       store.setToken(token);
     }
   };
@@ -85,8 +97,8 @@ console.log('type',type);
     };
 
     fetchDeviceName();
-    
-  
+
+
   }, []);
 
   // console.log('DeviceInfo', deviceName)
@@ -275,45 +287,99 @@ console.log('type',type);
     }
   };
 
-const gooleLogin = async () => {
-    try {
-        await GoogleSignin.hasPlayServices();
-        
-        // const { idToken } = await GoogleSignin.getTokens();
-        // console.log('Identity Token:--', idToken);
-        const userInfo = await GoogleSignin.signIn();
 
-        store.setGoogleUserInfo(userInfo);
-        const getToken = await GoogleSignin.getTokens()
-        store.setGoogleToken(getToken.accessToken);
-        console.log('getToken=====>',getToken.accessToken)
+  const _googleAccess = () => {
+
+    var requestOptions = {
+      method: 'GET',
+      redirect: 'follow'
+    };
+    fetch(`${url.baseUrl}/login/google/callback?access_token=${store.googleToken}&type=${type}`, requestOptions)
+
+      .then(response => response.json())
+      .then(result => {
+        console.log('Result===>', result);
+
+        if (result.token) {
+            _storeToken(result, true),
+            updateUserDeviceToken(),
+            JToast({
+              type: 'success',
+              text1: store.lang.login_successfully,
+              text2: store.lang.welcome,
+            });
+            }
+      })
+      .catch(error => {
+        googleSignOut();
+        JToast({
+          type: 'danger',
+          text1: store.lang.eror,
+          text2: store.lang.cannot_proceed_your_request,
+        });
+      });
+  };
+
+  const gooleLogin = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+
+      store.setGoogleUserInfo(userInfo);
+      const getToken = await GoogleSignin.getTokens()
+      store.setGoogleToken(getToken.accessToken);
+      _googleAccess();
+      console.log('getToken=====>', getToken.accessToken)
 
     } catch (error) {
-        if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-            console.log('user cancelled the login flow', error);
-            // user cancelled the login flow
-        } else if (error.code === statusCodes.IN_PROGRESS) {
-            // operation (e.g. sign in) is in progress already
-            console.log('operation (e.g. sign in) is in progress already', error);
-        } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-            console.log('play services not available or outdated', error);
-            // play services not available or outdated
-        } else {
-            console.log('some other error happened', error);
-            // some other error happened
-        }
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        console.log('user cancelled the login flow', error);
+        alert('user cancelled the login flow', error)
+        // user cancelled the login flow
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        // operation (e.g. sign in) is in progress already
+        console.log('operation (e.g. sign in) is in progress already', error);
+        alert('operation (e.g. sign in) is in progress already', error)
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        console.log('play services not available or outdated', error);
+        alert('play services not available or outdated', error)
+        // play services not available or outdated
+      } else {
+        console.log('some other error happened', error);
+        alert('some other error happened', error)
+        // some other error happened
+      }
     }
-};
-const googleSignOut = async () => {
-  try {
-    await GoogleSignin.revokeAccess(); // Revoke access to the app
-    await GoogleSignin.signOut(); // Sign out from the Google account
-    // Now, the user can sign in with a different Google account next time.
-  } catch (error) {
-    console.error('Error signing out:', error);
-  }
-};
-console.log('GoogleData========>', store.googleUserInfo)
+  };
+
+  const googleSignOut = async () => {
+    try {
+      await GoogleSignin.revokeAccess(); // Revoke access to the app
+      await GoogleSignin.signOut(); // Sign out from the Google account
+      // Now, the user can sign in with a different Google account next time.
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
+
+  const facebookLogin = async () => {
+    try {
+      const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
+      if (result.isCancelled) {
+        console.log('Login cancelled');
+      } else {
+        const data = await AccessToken.getCurrentAccessToken();
+        if (data) {
+          console.log('Logged in with Facebook!');
+          console.log('User ID:', data.userID);
+          console.log('Access Token:', data.accessToken);
+        }
+      }
+    } catch (error) {
+      console.error('Facebook login error:', error);
+    }
+  };
+  // console.log('GoogleData========>', store.googleUserInfo)
 
   return (
     <JScreen>
@@ -461,6 +527,8 @@ console.log('GoogleData========>', store.googleUserInfo)
       </Formik>
       <View style={{ flex: 0.15, alignItems: 'center' }}>
         <JDivider children={store.lang.login_with} />
+
+
         <View
           style={{
             flexDirection: 'row',
@@ -476,8 +544,8 @@ console.log('GoogleData========>', store.googleUserInfo)
                   alert('google')
                 }
                 else if (item == 'facebook') {
-                  // googleSignOut();
-                  alert('facebook')
+                  facebookLogin()
+                  // alert('facebook')
                 }
                 else if (item == 'linkedin') {
                   alert('linkedin')
@@ -499,7 +567,9 @@ console.log('GoogleData========>', store.googleUserInfo)
         onPress={() => navigation.navigate('CRegister', { type: type })}
         children={store.lang.register_Btn}
       />
+      
     </JScreen>
+
   );
 }
 export default observer(Login)

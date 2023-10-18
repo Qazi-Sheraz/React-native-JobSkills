@@ -12,20 +12,7 @@
           "package_name": "com.jobskills"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "970988747590-9d2r2frscvvv46qek2khulomihkpnqbs.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.jobskills",
-            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
-          }
-        },
-        {
-          "client_id": "970988747590-38mp324576qepd86ldekiq9addnr2cb7.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
           "current_key": "AIzaSyC6o64Yw51eFRhsibCKnQOsTR03gs7OINo"
@@ -35,7 +22,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "970988747590-38mp324576qepd86ldekiq9addnr2cb7.apps.googleusercontent.com",
+              "client_id": "970988747590-cfgdfnuvlbp68986nr7i5oefb948d3t0.apps.googleusercontent.com",
               "client_type": 3
             },
             {

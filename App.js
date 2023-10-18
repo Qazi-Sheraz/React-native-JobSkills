@@ -12,12 +12,10 @@ import JScreen from './customComponents/JScreen';
 import JGradientScreen from './customComponents/JGradientScreen';
 import colors from './config/colors';
 import { Linking } from 'react-native';
+import { LoginManager } from 'react-native-fbsdk-next';
 
-import { useState } from 'react';
-import { Pressable } from 'react-native';
-import DatePicker from 'react-native-date-picker'
-
-
+// Set login behavior (optional)
+// LoginManager.setLoginBehavior('native_only');
 export default function App() {
 
   // Ignore log notification by message:
