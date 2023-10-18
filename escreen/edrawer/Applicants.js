@@ -166,22 +166,22 @@ const Applicants = () => {
         }}
         validationSchema={yup.object().shape({
           resume: yup.object().shape({
-            uri: yup.string().required('PDF'),
+            uri: yup.string().required(store.lang.PDF),
           }),
-          firstName: yup.string().required().label('First Name'),
-          lastName: yup.string().required().label('Last Name'),
+          firstName: yup.string().required().label(store.lang.First_Name),
+          lastName: yup.string().required().label(store.lang.Last_Name),
           email: yup
             .string()
-            .min(0, 'Email address cannot be empty')
-            .max(100, 'Email address must be at most 100 characters long')
-            .email('Must be a valid email')
+            .min(0, store.lang.Email_address_cannot_be_empty)
+            .max(100, store.lang.Email_address_must_be_at_most_100_characters_long)
+            .email(store.lang.Must_be_a_valid_email)
             .required()
-            .label('Email'),
+            .label(store.lang.Email),
           phone: yup
             .string()
             .max(14)
             .required()
-            .label('Phone'),
+            .label(store.lang.Phone),
         })}>
         {({
           values,

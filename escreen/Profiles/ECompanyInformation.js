@@ -19,6 +19,7 @@ import { useContext } from 'react';
 import { StoreContext } from '../../mobx/store';
 import JErrorText from '../../customComponents/JErrorText';
 import { JToast } from '../../functions/Toast';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const ECompanyInformation = () => {
   const [loader, setLoader] = useState(true);
@@ -163,26 +164,26 @@ const ECompanyInformation = () => {
             ownerShipTypes: yup
               .object()
               .shape()
-              .required('OwnerShipTypes is required'),
+              .required(store.lang.OwnerShipTypes_is_required),
             industries: yup
               .object()
               .shape()
-              .required('Industries is required'),
+              .required(store.lang.Industries_is_required),
             companySize: yup
               .object()
               .shape()
-              .required('CompanySize is required'),
+              .required(store.lang.CompanySize_is_required),
             company_name: yup.string().required(),
-            location: yup.string().max(288).required('Location is required'),
+            location: yup.string().max(288).required(store.lang.Location_is_required),
             ceo_name: yup.string()
               .transform(value => value.trim())
               .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'Ceo Name must contain at least 1 alphabet character and can include English, Urdu, Arabic, and spaces')
               .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the Ceo Name')
-              .required(),
+              .required(store.lang.The_CEO_name_is_required),
             website: yup
               .string()
               .url('Invalid URL format')
-              .required('Website URL is required'),
+              .required(store.lang.Website_URL_is_required),
             // fax: yup.string().max(14).required(),
           })}
         >
@@ -225,9 +226,9 @@ const ECompanyInformation = () => {
                 }
                 left={JChevronIcon}
               />
-              <ScrollView
+              <KeyboardAwareScrollView
                 showsVerticalScrollIndicator={false}
-                contentContainerStyle={{ paddingBottom: RFPercentage(8) }}
+               
                 style={{
                   marginHorizontal: RFPercentage(2),
                 }}>
@@ -403,7 +404,7 @@ const ECompanyInformation = () => {
                 {touched.employeDetail && errors.employeDetail && (
                   <JErrorText>{errors.employeDetail}</JErrorText>
                 )}
-              </ScrollView>
+              </KeyboardAwareScrollView>
             </>
           )}
         </Formik>)}

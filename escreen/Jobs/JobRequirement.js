@@ -24,6 +24,7 @@ import { _addnewJob } from '../../functions/Candidate/BottomTab';
 import moment from 'moment';
 import Feather from 'react-native-vector-icons/Feather';
 import { JToast } from '../../functions/Toast';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 const JobRequirement = () => {
 
   const { params, values } = useRoute()
@@ -72,7 +73,7 @@ const JobRequirement = () => {
     formdata.append('job_expiry_date', moment(values.expiry).format('DD-MM-YYYY'));
     formdata.append('hide_salary', isEnabled);
     formdata.append('is_freelance', isEnabled1);
-    // console.log(formdata)
+     console.log(formdata)
 
     fetch(`${url.baseUrl}/employer/jobs/store`, {
       method: 'POST',
@@ -104,7 +105,7 @@ const JobRequirement = () => {
           });
         }
       }).catch(error => {
-        console.log('error', error)
+        console.log('error/employer/jobs/store', error)
         JToast({
           type: 'danger',
           text1: store.lang.eror,
@@ -157,8 +158,8 @@ const JobRequirement = () => {
           jobLanguage: [],
           position: '',
           experience: '',
-          publishDate: '',
-          expiry: '',
+          publishDate:'',
+          expiry:  '',
           // publishDate: new Date().toDateString(),
           // expiry:moment(values.publishDate).add(1, 'days').toDate(),
         }}
@@ -169,70 +170,61 @@ const JobRequirement = () => {
 
           publishDate: yup
             .date()
-            .required('Publish date is required')
-            .typeError('Publish date must be a valid date'),
+            .required(store.lang.Publish_date_is_required)
+            .typeError(store.lang.Publish_date_must_be_a_valid_date),
 
           expiry: yup
             .date()
-            // .when('publishDate', (publishDate, schema) => {
-            //   if (publishDate) {
-            //     // Calculate one day ahead of publishDate
-            //     const nextDay = new Date(publishDate);
-            //     nextDay.setDate(nextDay.getDate() + 1);
-
-            //     return schema.min(nextDay, 'Expiry date must be at least one day after publish date');
-            //   }
-            //   return schema; // No validation if publishDate is not selected yet
-            // })
-            .required('Expiry date is required')
-            .typeError('Expiry date must be a valid date'),
+            
+            .required(store.lang.Expiry_date_is_required)
+            .typeError(store.lang.Expiry_date_must_be_a_valid_date),
 
           position: yup
             .string()
-            .matches(/^[1-9]\d*$/, 'Position must be a integer digits greater than 0')
+            .matches(/^[1-9]\d*$/, store.lang.Position_must_be_a_integer_digits_greater_than_0)
             .nullable()
-            .required('Position is required'),
+            .required(store.lang.Position_is_required),
 
           experience: yup
             .string()
             // .max(4, 'Maximum 4 digits allowed')
             .nullable()
-            .required('Experience is required'),
+            .required(store.lang.Experience_is_required),
           careerLevel: yup
             .object()
             .shape()
             .nullable()
-            .required('Career Level is required'),
+            .required(store.lang.Career_Level_is_required),
           requiredDegreeLevel: yup
             .array()
             .of(
               yup.object().shape({
-                id: yup.string().required('DegreeLevel ID is required'),
-                name: yup.string().required('DegreeLevel name is required'),
+                id: yup.string().required(store.lang.DegreeLevel_ID_is_required),
+                name: yup.string().required(store.lang.DegreeLevel_name_is_required),
               }),
             )
-            .required('DegreeLevel is required')
-            .min(1, 'At least one DegreeLevel is required'),
+            .required(store.lang.DegreeLevel_is_required)
+            .min(1, store.lang.At_least_one_DegreeLevel_is_required),
           jobNationality: yup
             .array()
             .of(
               yup.object().shape({
-                id: yup.string().required('Job Nationality ID is required'),
-                name: yup.string().required('Job Nationality name is required'),
+                id: yup.string().required(store.lang.Job_Nationality_ID_is_required),
+                name: yup.string().required(store.lang.Job_Nationality_name_is_required),
               }),
             )
-            .required('job Nationality is required')
-            .min(1, 'At least one job Nationality is required'),
+            .required(store.lang.job_Nationality_is_required)
+            .min(1, store.lang.At_least_one_job_Nationality_is_required),
           jobLanguage: yup
             .array()
             .of(
               yup.object().shape({
-                id: yup.string().required('Job Language ID is required'),
-                name: yup.string().required('Job Language name is required'),
+                id: yup.string().required(store.lang.Job_Language_ID_is_required),
+                name: yup.string().required(store.lang.Job_Language_name_is_required),
               }),
             )
-            .required('job Language is required')
-            .min(1, 'At least one job Language is required'),
+            .required(store.lang.job_Language_is_required)
+            .min(1, store.lang.At_least_one_job_Language_is_required),
         })}>
         {({
           values,
@@ -245,10 +237,11 @@ const JobRequirement = () => {
           setFieldValue,
         }) => (
           <>
-            <View style={{ height: '90%' }}>
-              <ScrollView
+            <View style={{ height: '95%' }}>
+              <KeyboardAwareScrollView
                 showsVerticalScrollIndicator={false}
-                contentContainerStyle={{ paddingBottom: RFPercentage(8) }}>
+
+              >
                 <JSelectInput
                   containerStyle={styles.container}
                   value={values.careerLevel?.name}
@@ -466,8 +459,9 @@ const JobRequirement = () => {
                     />
                   </JRow>
                 </View>
-              </ScrollView>
+              </KeyboardAwareScrollView>
             </View>
+
             <JButton
               disabled={loader ? true : false}
               isValid={isValid}
@@ -475,8 +469,8 @@ const JobRequirement = () => {
                 handleSubmit();
               }}
               style={{
-                position: 'absolute',
-                bottom: RFPercentage(3),
+                // position: 'absolute',
+                // bottom: RFPercentage(3),
                 width: RFPercentage(20),
 
               }}>

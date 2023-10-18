@@ -23,6 +23,7 @@ import url from '../../../config/url';
 import { JToast } from '../../../functions/Toast';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import CLNotification from '../../../loaders/Candidate/Notification/CLNotification';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const EducationInfo = () => {
     const store = useContext(StoreContext);
@@ -134,7 +135,7 @@ const EducationInfo = () => {
                 />
             }>
             {apiLoader ? <CLNotification />
-                : <View style={{ height:'100%' }}>
+                : 
 
                     <Formik
                         initialValues={{
@@ -177,10 +178,10 @@ const EducationInfo = () => {
                         }}
                         validationSchema={yup.object().shape({
                             title: yup.string().max(100, 'Title must not exceed 100 characters').required().label('Title'),
-                            level: yup.object().shape().required('Level is required'),
-                            county: yup.object().shape().required('Country is required'),
-                            city: yup.object().shape().required('City is required'),
-                            state: yup.object().shape().required('State is required'),
+                            level: yup.object().nullable().shape().required('Level is required'),
+                            county: yup.object().nullable().shape().required('Country is required'),
+                            city: yup.object().nullable().shape().required('City is required'),
+                            state: yup.object().nullable().shape().required('State is required'),
                             institude: yup.string().max(250, 'institude must not exceed 250 characters').required().label('Institude'),
                             result: yup.number()
                             .typeError('GPA must be a valid number')
@@ -188,7 +189,7 @@ const EducationInfo = () => {
                             .max(4, 'GPA must be less than or equal to 4.0')
                             .required('GPA is required')
                             .label('GPA'),
-                            year: yup.object().shape().required('Year is required'),
+                            year: yup.object().nullable().shape().required('Year is required'),
                         }
                         )}>
                         {({
@@ -202,14 +203,14 @@ const EducationInfo = () => {
                             setFieldValue,
                         }) => (
                             <>
-                                <JScrollView
-                                enable={false}
-                                    contentContainerStyle={{ paddingBottom: RFPercentage(8)}}
+                                <KeyboardAwareScrollView
+                                showsVerticalScrollIndicator={false}
                                     style={{
                                         marginHorizontal: RFPercentage(2),
+                                        
                                     }}>
                                     <JSelectInput
-                                        containerStyle={styles.container}
+                                        containerStyle={[styles.container,{marginTop:RFPercentage(3)}]}
                                         value={values.level?.name}
                                         id={values.level?.id}
                                         data={
@@ -374,7 +375,7 @@ const EducationInfo = () => {
                                     {touched.year && errors.year && (
                                         <JErrorText>{errors.year}</JErrorText>
                                     )}
-                                </JScrollView>
+                                </KeyboardAwareScrollView>
                                 <View style={styles.bottomV}>
                                     <JButton
                                         disabled={loader1 ? true : false}
@@ -390,7 +391,7 @@ const EducationInfo = () => {
                         )}
                     </Formik>
 
-                </View>}
+                }
         </JScreen>
     )
 }
@@ -400,18 +401,10 @@ export default EducationInfo
 const styles = StyleSheet.create({
     container: { marginTop: RFPercentage(2) },
     bottomV: {
-        height: RFPercentage(8), 
+        height: RFPercentage(7), 
         width: '100%', 
         backgroundColor: '#ffff',
         padding: RFPercentage(1), 
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-
-        elevation: 5
+        
     },
 })

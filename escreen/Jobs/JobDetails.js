@@ -10,6 +10,7 @@ import {
   Linking,
   Pressable,
   Image,
+  StatusBar,
 } from 'react-native';
 import React, { useEffect, useContext, useRef, useCallback, useState } from 'react';
 import JScreen from '../../customComponents/JScreen';
@@ -418,7 +419,7 @@ const JobDetails = ({ route }) => {
               <JChevronIcon />
               {store.token?.user?.owner_type.includes('Candidate') &&
                 <JRow>
-                  {loader ? (
+                  {loader1 ? (
                     <ActivityIndicator
                       size={RFPercentage(3)}
                       style={{ marginRight: RFPercentage(2) }}
@@ -429,7 +430,7 @@ const JobDetails = ({ route }) => {
                       icon={'fa'}
                       style={{ marginHorizontal: RFPercentage(2) }}
                       onPress={() =>
-                        _saveToFavoriteList(store, setLoader, store.jobDetail?.id)
+                        _saveToFavoriteList(store, setLoader1, store.jobDetail?.id)
                       }
                       name={
                         store.favouriteList.some(e => e.job_id === store.jobDetail?.id)
@@ -772,7 +773,7 @@ const JobDetails = ({ route }) => {
               }}
               validationSchema={yup.object().shape({
                 resume: yup.object().shape({
-                  uri: yup.string().required('PDF'),
+                  uri: yup.string().required(store.lang.PDF),
                 }),
                 firstName: yup.string()
                   .transform(value => value.trim())
@@ -786,13 +787,13 @@ const JobDetails = ({ route }) => {
                   .required().label('Last Name'),
                 email: yup
                   .string()
-                  .min(0, 'Email address cannot be empty')
-                  .max(100, 'Email address must be at most 100 characters long')
-                  .email('Must be a valid email')
+                  .min(0, store.lang.Email_address_cannot_be_empty)
+                  .max(100, store.lang.Email_address_must_be_at_most_100_characters_long)
+                  .email(store.lang.Must_be_a_valid_email)
                   .required()
-                  .label('Email'),
+                  .label(store.lang.Email),
                 // phone: yup.string().max(14).required().label('Phone'),
-                phone: yup.string().max(15).matches(/^\+?[0-9]\d*$/, 'Phone Number must be a digit').required().label('Phone'),
+                phone: yup.string().min(10).max(15).matches(/^\+?[0-9]\d*$/, 'Phone Number must be a digit').required().label(store.lang.phone),
               })}>
 
               {({
@@ -805,7 +806,8 @@ const JobDetails = ({ route }) => {
                 setFieldTouched,
                 setFieldValue,
               }) => (
-                <View style={styles.centeredView}>
+                <JScreen style={styles.centeredView}>
+          
                   <ScrollView style={styles.modalView}>
                     <JGradientHeader
                       center={
@@ -876,6 +878,7 @@ const JobDetails = ({ route }) => {
                           </JText>
                         </JRow>
                         <PhoneInput
+                        textInputProps={{maxLength:15}}
                           ref={phoneInput}
                           defaultValue={values.phone}
                           defaultCode={'SA'}
@@ -984,7 +987,7 @@ const JobDetails = ({ route }) => {
                               <JButton
                                 onPress={() => _selectOneFile(setFieldValue)}
                                 style={{
-                                  width: '46%',
+                              
                                   backgroundColor: colors.white[0],
                                   borderColor: colors.black[1],
                                 }}
@@ -1003,7 +1006,7 @@ const JobDetails = ({ route }) => {
                           <JButton
                             onPress={() => _selectOneFile(setFieldValue)}
                             style={{
-                              width: '46%',
+                             
                               backgroundColor: colors.white[0],
                               borderColor: colors.black[1],
                             }}
@@ -1038,7 +1041,7 @@ const JobDetails = ({ route }) => {
                     style={{ height: '15%', width: '100%' }}
                     onPress={() => setModalVisible(!modalVisible)}
                   />
-                </View>
+                </JScreen>
               )}
             </Formik>
           </Modal>

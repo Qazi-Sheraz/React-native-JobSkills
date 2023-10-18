@@ -608,8 +608,8 @@ const Login = ({ navigation, route }) => {
             <FontAwesome
               onPress={() => {
                 if (item == 'google') {
-                  gooleLogin()
-                  // alert('google')
+                  // gooleLogin()
+                  alert('google')
                 }
                 else if (item == 'facebook') {
                   facebookLogin()

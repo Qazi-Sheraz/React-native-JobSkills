@@ -371,7 +371,14 @@ function EContactInformation({ refRBSheet, data, user }) {
             _contactInfo(values);
           }}
           validationSchema={yup.object().shape({
-
+            name: yup
+            .string()
+            .min(3, 'Name ame Must be at least 3 characters')
+            .max(100, 'Name must be at most 100 characters long')
+            .transform(value => value.trim())
+            .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'Name must contains only alphabets ')
+            // .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the First Name')
+            .required('Name is a required field'),
             countries: yup
               .object()
               .shape()
@@ -391,7 +398,7 @@ function EContactInformation({ refRBSheet, data, user }) {
               .email('Must be a valid email')
               .required(),
 
-            phone: yup.string().max(14).required().label('Phone'),
+            phone: yup.string().min(10).max(14).required().label('Phone'),
           })}>
           {({
             values,
@@ -415,7 +422,7 @@ function EContactInformation({ refRBSheet, data, user }) {
                 }
                 right={
                   <JText
-                    disabled={loader ? true : false}
+                    // disabled={loader ? true : false}
                     onPress={() => {
                       handleSubmit()
                     }}
@@ -477,6 +484,7 @@ function EContactInformation({ refRBSheet, data, user }) {
                     </JText>
                   </JRow>
                   <PhoneInput
+                   textInputProps={{maxLength:15}}
                     ref={phoneInput}
                     defaultValue={values.phone}
                     // defaultCode={code?.cca2?code?.cca2:"SA"}

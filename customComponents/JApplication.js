@@ -27,6 +27,7 @@ import { JToast } from '../functions/Toast';
 import JSelectInput from './JSelectInput';
 import { _jobApplication } from '../escreen/Jobs/JobApplication';
 import JErrorText from './JErrorText';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 // import url from '../../config/url';
 const JApplication = ({
 
@@ -142,7 +143,7 @@ const JApplication = ({
     formdata.append('candidateID', item?.candidate_user_id);
     formdata.append('jobid', item?.job_id);
 
-    // console.log('formdata', formdata);
+    console.log('formdata', formdata);
 
     fetch(`${url.baseUrl}/meetings-submit`, {
       method: 'POST',
@@ -201,7 +202,7 @@ const JApplication = ({
     )
       .then(response => response.json())
       .then(result => {
-        // console.log(result)
+        console.log(result)
         setMeetings(result)
         setLink(result?.meeting_type[0])
       })
@@ -216,6 +217,10 @@ const JApplication = ({
   };
   // console.log('linksssssss', links)
 
+  const currentDate = new Date();
+
+// Add 30 minutes to the current date and time
+currentDate.setMinutes(currentDate.getMinutes() + 30);
 
   useEffect(() => {
     _interviewScheduled();
@@ -373,7 +378,6 @@ const JApplication = ({
           </View>
         </JRow>
       </Pressable>
-
       <Modal animationType="slide" visible={modalVisible}>
         <SafeAreaView style={{ marginBottom: RFPercentage(10) }}>
           <JGradientHeader
@@ -414,7 +418,7 @@ const JApplication = ({
                 interview_topic: meetings?.interview_topic
                   ? meetings?.interview_topic
                   : '',
-                interview_date_and_time: moment().add(30, 'minutes').toDate(),
+                interview_date_and_time: currentDate,
                 description: meetings?.description ? meetings?.description : '',
                 interview_type:
                   meetings?.meeting_type && meetings?.meeting_type?.length > 0
@@ -445,12 +449,12 @@ const JApplication = ({
                 links === 'Office Base' ? {
 
                   office_location:
-                    yup.string().url('Invalid URL format')
-                      .required('URL is required').label('office_location'),
+                    yup.string().url(store.lang.Invalid_URL_format)
+                      .required(store.lang.URL_is_required).label(store.lang.office_location),
                 }
                   : {
-                    manual_link: yup.string().url('Invalid URL format')
-                      .required('URL is required').label('manual_link'),
+                    manual_link: yup.string().url(store.lang.Invalid_URL_format)
+                      .required(store.lang.URL_is_required).label(store.lang.manual_link),
                   })}
             >
               {({
@@ -463,12 +467,14 @@ const JApplication = ({
                 handleSubmit,
                 setFieldValue,
               }) => (
-                <ScrollView
+                <KeyboardAwareScrollView
                   showsVerticalScrollIndicator={false}
+                  
                   contentContainerStyle={{
                     paddingVertical: RFPercentage(1),
                     marginHorizontal: RFPercentage(2),
-                  }}>
+                  }}
+                  >
                   <JInput
                     style={{
                       textAlign: store.lang.id == 0 ? 'left' : 'right',
@@ -488,8 +494,8 @@ const JApplication = ({
                   <JSelectInput
                     mode="datetime"
                     isDate={true}
-                    date1={moment().add(30, 'minutes').toDate()}
-                    minimumDate={moment().add(30, 'minutes')}
+                    date1={currentDate}
+                    minimumDate={currentDate}
                     containerStyle={{ marginTop: RFPercentage(2) }}
                     value={moment(values.interview_date_and_time).format('YYYY/MM/DD HH:mm')}
                     setValue={e => {
@@ -690,7 +696,7 @@ const JApplication = ({
                       onCancel={() => setOpen(false)}
                     />
                   )} */}
-                </ScrollView>
+                </KeyboardAwareScrollView>
               )}
             </Formik>
           )}

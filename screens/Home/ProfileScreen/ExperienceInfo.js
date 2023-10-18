@@ -25,13 +25,21 @@ import JScrollView from '../../../customComponents/JScrollView';
 import url from '../../../config/url';
 import { JToast } from '../../../functions/Toast';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const ExperienceInfo = () => {
     const store = useContext(StoreContext);
     const navigation = useNavigation();
     const [loader1, setLoader1] = useState(false);
+  
     const { params } = useRoute();
+console.log("params",params)
+const start = new Date(params?.start);
 
+// Calculate one day ahead
+const oneDayAhead = new Date(start);
+oneDayAhead.setDate(start.getDate() + 1);
+const [endDate, setEndDate] = useState(params?.start?new Date(oneDayAhead):null);
     const _addExperince = values => {
         setLoader1(true);
         var myHeaders = new Headers();
@@ -80,7 +88,7 @@ const ExperienceInfo = () => {
                 }
             })
             .catch(error => {
-                console.log('error', error);
+                console.log('error-post', error);
                 setLoader1(false);
             });
     };
@@ -95,18 +103,23 @@ const ExperienceInfo = () => {
         }
     };
 
- 
+ console.log("end date====>",endDate)
     const currentDate = new Date();
     // Calculate the maximum start date (1 day before the current date)
     const maximumStartDate = new Date(currentDate);
-    maximumStartDate.setDate(currentDate.getDate() - 1);
+    maximumStartDate?.setDate(currentDate?.getDate() - 1);
+
+  
+    
+   
+    
     useEffect(() => {
 
     }, [maximumStartDate])
 
     return (
         <JScreen
-            headerShown={true}
+            // headerShown={true}
             header={
                 <JGradientHeader
                     center={
@@ -120,7 +133,7 @@ const ExperienceInfo = () => {
                     left={<JChevronIcon />}
                 />
             }>
-            <View style={{ height:'100%' }}>
+                
                 <Formik
                     initialValues={{
                         title: params?.title ? params?.title : '',
@@ -166,9 +179,9 @@ const ExperienceInfo = () => {
                         start: yup.string().required('Start Date is required').label('start'),
                         // end: yup.string().required('End Date is required').label('end'),
 
-                        county: yup.object().shape().required('Country is required'),
-                        city: yup.object().shape().required('City is required'),
-                        state: yup.object().shape().required('State is required'),
+                        county: yup.object().nullable().shape().required('Country is required'),
+                        city: yup.object().nullable().shape().required('City is required'),
+                        state: yup.object().nullable().shape().required('State is required'),
 
                         description: yup.string().max(500, 'Title must not exceed 500 characters').required().label('Description'),
                     })}>
@@ -181,19 +194,19 @@ const ExperienceInfo = () => {
                         isValid,
                         handleSubmit,
                         setFieldValue,
-                    }) => (<>
-                        <JScrollView
-                        enable={false}
-                            contentContainerStyle={{ paddingBottom: RFPercentage(8)}}
-                            style={{
-                                marginHorizontal: RFPercentage(2),
-                            }}>
+                    }) => (
+                    <>
+                      <KeyboardAwareScrollView
+                      showsVerticalScrollIndicator={false}
+                      style={{marginHorizontal:RFPercentage(2)}}>
+
                             <JInput
                                 style={{
                                     textAlign: store.lang.id == 0 ? 'left' : 'right',
+                                    
                                 }}
                                 isRequired={true}
-                                containerStyle={{ marginTop: RFPercentage(2) }}
+                                containerStyle={{ marginTop: RFPercentage(3) }}
                                 heading={`${store.lang.experience_title}:`}
                                 value={values.title}
                                 error={touched.title && errors.title && true}
@@ -298,7 +311,7 @@ const ExperienceInfo = () => {
                                 maximumDate={maximumStartDate && maximumStartDate}
                                 value={
                                     values.start &&
-                                    moment(values.start).format('MM/DD/YYYY')
+                                    moment(values?.start).format('MM/DD/YYYY')
                                 }
                                 setValue={e => {
                                     {
@@ -307,8 +320,9 @@ const ExperienceInfo = () => {
                                             : setFieldValue('start', maximumStartDate)
                                     }
                                     const nextDayDate = new Date(e);
-                                    nextDayDate.setDate(nextDayDate.getDate() + 1);
+                                    nextDayDate?.setDate(nextDayDate?.getDate() + 1);
                                     setFieldValue('end', nextDayDate)
+                                    setEndDate(nextDayDate)
                                 }}
                                 header={store.lang.start_date}
                                 heading={`${store.lang.start_date}:`}
@@ -325,13 +339,15 @@ const ExperienceInfo = () => {
                                 <JErrorText>{errors.start}</JErrorText>
                             )}
 
+
                             {values.working == false && (
                                 <>
                                     <JSelectInput
                                         disabled={values.start !== '' ? false : true}
-                                        date1={values.end ? new Date(values.end) : new Date()}
-                                        minimumDate={values.start && moment(values.start, 'MM/DD/YYYY').clone().add(1, 'day')}
-                                        containerStyle={{ marginTop: RFPercentage(2) }}
+                                        date1={values.end?new Date(values.end):new Date()}
+                                        // minimumDate={values?.start && moment(values?.start, 'MM/DD/YYYY').clone().add(1, 'day')}
+                                         minimumDate={new Date(endDate)}
+                                         containerStyle={{ marginTop: RFPercentage(2) }}
                                         isDate={true}
                                         value={values.end && moment(values.end).format('MM/DD/YYYY')}
                                         setValue={e => {
@@ -392,7 +408,7 @@ const ExperienceInfo = () => {
 
                                 />
                             </JRow>
-                        </JScrollView>
+                        </KeyboardAwareScrollView>
 
                         <View style={styles.bottomV}>
                             <JButton
@@ -409,7 +425,6 @@ const ExperienceInfo = () => {
                     </>
                     )}
                 </Formik>
-            </View>
         </JScreen>
     )
 }
@@ -419,18 +434,10 @@ export default ExperienceInfo
 const styles = StyleSheet.create({
     container: { marginTop: RFPercentage(2) },
     bottomV: {
-        height: RFPercentage(8),
         width: '100%',
+        height:RFPercentage(7),
         padding: RFPercentage(1),
         backgroundColor: '#ffff',
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-
-        elevation: 5
+       
     },
 })

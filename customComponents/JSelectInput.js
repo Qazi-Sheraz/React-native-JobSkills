@@ -370,7 +370,7 @@ function JSelectInput({
         setLoader(false);
       })
       .catch(error => {
-        // console.log('error', error);
+         console.log('error-1', error);
         setLoader(false);
       });
   };
@@ -690,8 +690,10 @@ function JSelectInput({
         mode={mode}
         open={open}
         date={date}
+        
 
         onConfirm={(date) => {
+          // console.log('dateeeee',date)
           setValue(date)
           setOpen(false);
         }}

@@ -15,6 +15,7 @@ export default function JShadowView({
       onPress={onPress}
       style={[
         {
+          justifyContent:"center",
           flexDirection: row,
           backgroundColor: colors.white[0],
           shadowColor: shadowColor,
@@ -33,7 +34,7 @@ export default function JShadowView({
   ) : (
     <View
       style={[
-        {
+        {justifyContent:'center',
           flexDirection: row,
           backgroundColor: colors.white[0],
           shadowColor: shadowColor,

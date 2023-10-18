@@ -564,9 +564,10 @@ export default observer(ProfileJobApplication);
 const styles = StyleSheet.create({
   maincontainer: { flex: 1, backgroundColor: colors.tileColor[0] },
   main: {
-    height: '90%',
+    height: '85%',
     width: '100%',
     alignItems: 'center',
+  
   },
   img: {
     height: RFPercentage(13),
