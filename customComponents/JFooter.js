@@ -4,9 +4,10 @@ import JText from './JText';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import colors from '../config/colors';
 
-export default function JFooter({onPress, children}) {
+export default function JFooter({onPress, children,disabled=false}) {
   return (
     <TouchableOpacity
+    disabled={disabled}
       onPress={onPress}
       style={{
         flex: 0.1,

@@ -15,7 +15,6 @@ export default function JSplashScreen({
   detail,
   onNextPress,
   onPreviousPress,
-
   slide,
   img,
 }) {
