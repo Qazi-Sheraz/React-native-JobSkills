@@ -28,7 +28,7 @@ target 'jobSkills' do
 
   pod 'react-native-webview', :path => '../node_modules/react-native-webview'
 
-  pod 'react-native-fbsdk-next', :path => '../node_modules/react-native-fbsdk-next'
+  # pod 'react-native-fbsdk-next', :path => '../node_modules/react-native-fbsdk-next'
   target 'jobSkillsTests' do
     inherit! :complete
     # Pods for testing
