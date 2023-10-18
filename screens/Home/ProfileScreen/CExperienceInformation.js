@@ -72,6 +72,30 @@ function CExperienceInformation({refRBSheet, data}) {
           expected: `${profile.expected_salary?profile.expected_salary:''}`,
           currency: {name:params?.salary_currency,id:params?.salary_currency_id},
         }}
+        validationSchema={yup.object().shape({
+          experience: yup.object()
+            .shape()
+            .nullable()
+            .required('Experience is required'),
+          career: yup.object()
+            .shape()
+            .nullable()
+            .required('Career Level is required'),
+          industry: yup.object()
+            .shape()
+            .nullable()
+            .required('Industry is required'),
+          current: yup.string().required().label('current'),
+          area: yup.object()
+            .shape()
+            .nullable()
+            .required('Area is required'),
+          expected: yup.string().required().label('Expected'),
+          currency: yup.object()
+            .shape()
+            .nullable()
+            .required('Currency is required'),
+        })}
         onSubmit={values => {
           // console.log(values);
 
@@ -123,16 +147,7 @@ function CExperienceInformation({refRBSheet, data}) {
 
           // _postData(values);
         }}
-        // validationSchema={yup.object().shape({
-        //   title: yup.string().required().label('Title'),
-        //   company: yup.string().required().label('Company'),
-        //   county: yup.string().required().label('Country'),
-        //   city: yup.string().required().label('City'),
-        //   state: yup.string().required().label('State'),
-        //   start: yup.string().required().label('Start'),
-        //   end: yup.string().required().label('End'),
-        //   description: yup.string().required().label('Description'),
-        // })}
+       
       >
         {({
           values,

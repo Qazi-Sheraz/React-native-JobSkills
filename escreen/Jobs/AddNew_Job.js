@@ -74,53 +74,53 @@ const AddNew_Job = () => {
           validationSchema={yup.object().shape({
             jobTilte: yup
               .string()
-              .max(25, 'Title must be at most 25 characters long')
-              .required('Job Title is required')
-              .label('Job Title'),
+              .max(25, store.lang.Title_must_be_at_most_25_characters_long)
+              .required(store.lang.Job_Title_is_required)
+              .label(store.lang.Job_Title),
             jobCategory: yup
               .object()
               .shape()
               .nullable()
-              .required('Job Category is required'),
+              .required(store.lang.Job_Category_is_required),
             assessment: yup
               .array()
               .nullable()
               .of(
                 yup.object().shape({
-                  id: yup.string().required('Assessment ID is required'),
-                  name: yup.string().required('Assessment name is required'),
+                  id: yup.string().required(store.lang.Assessment_ID_is_required),
+                  name: yup.string().required(store.lang.Assessment_name_is_required),
                 }),
               )
-              .required('Required Assessment is required')
-              .min(1, 'At least one Assessment is required'),
+              .required(store.lang.Required_Assessment_is_required)
+              .min(1, store.lang.At_least_one_Assessment_is_required),
             jobShift: yup
               .object()
               .shape()
               .nullable()
-              .required('Job Shift is required'),
+              .required(store.lang.Job_Shift_is_required),
             jobSkill: yup
               .array()
               .nullable()
               .of(
                 yup.object().shape({
-                  id: yup.string().required('Skill ID is required'),
-                  name: yup.string().required('Skill name is required'),
+                  id: yup.string().required(store.lang.Skill_ID_is_required),
+                  name: yup.string().required(store.lang.Skill_name_is_required),
                 }),
               )
-              .required('Job Skills are required')
-              .min(1, 'At least one Skill is required'),
+              .required(store.lang.Job_Skills_are_required)
+              .min(1, store.lang.At_least_one_Skill_is_required),
             jobTag: yup
               .array()
               .nullable()
               .of(
                 yup.object().shape({
-                  id: yup.string().required('Tag ID is required'),
-                  name: yup.string().required('Tag name is required'),
+                  id: yup.string().required(store.lang.Tag_ID_is_required),
+                  name: yup.string().required(store.lang.Tag_name_is_required),
                 }),
               )
-              .required('Job Tags are required')
-              .min(1, 'At least one Tag is required'),
-            jobDescription: yup.string().required('Job Description is required').label('Description'),
+              .required(store.lang.Job_Tags_are_required)
+              .min(1, store.lang.At_least_one_Tag_is_required),
+            jobDescription: yup.string().required(store.lang.Job_Description_is_required).label('Description'),
           })}>
           {({
             values,
@@ -168,7 +168,7 @@ const AddNew_Job = () => {
                   onBlur={() => setFieldTouched('jobTilte')}
                 />
                 {touched.jobTilte && errors.jobTilte && (
-                  <JErrorText>{errors.jobTilte}</JErrorText>
+                  <JErrorText style={{ }}>{errors.jobTilte}</JErrorText>
                 )}
 
                 <JSelectInput

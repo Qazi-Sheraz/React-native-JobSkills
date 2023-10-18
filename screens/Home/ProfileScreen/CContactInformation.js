@@ -358,6 +358,7 @@ function CContactInformation({refRBSheet, user}) {
                 </JText>
               </JRow>
               <PhoneInput
+              textInputProps={{maxLength:15}}
                   ref={phoneInput}
                   defaultValue={values.phone}
                   // defaultCode={code?.cca2?code?.cca2:"SA"}
@@ -366,6 +367,7 @@ function CContactInformation({refRBSheet, user}) {
                   containerStyle={{
                     width: '100%',
                     borderBottomWidth: RFPercentage(0.1),
+                    
                   }}
                   textContainerStyle={{
                     paddingVertical: 5,
@@ -375,7 +377,9 @@ function CContactInformation({refRBSheet, user}) {
                     color: colors.black[0],
                     fontSize: RFPercentage(2.1),
                     marginTop: RFPercentage(0.1),
+                    
                   }}
+                
                   onChangeFormattedText={(text,c) => {
                     setFieldValue('phone', text);
                     setFieldValue('regional_code', c);

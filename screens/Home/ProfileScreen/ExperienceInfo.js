@@ -179,9 +179,9 @@ const [endDate, setEndDate] = useState(params?.start?new Date(oneDayAhead):null)
                         start: yup.string().required('Start Date is required').label('start'),
                         // end: yup.string().required('End Date is required').label('end'),
 
-                        county: yup.object().shape().required('Country is required'),
-                        city: yup.object().shape().required('City is required'),
-                        state: yup.object().shape().required('State is required'),
+                        county: yup.object().nullable().shape().required('Country is required'),
+                        city: yup.object().nullable().shape().required('City is required'),
+                        state: yup.object().nullable().shape().required('State is required'),
 
                         description: yup.string().max(500, 'Title must not exceed 500 characters').required().label('Description'),
                     })}>
@@ -435,7 +435,7 @@ const styles = StyleSheet.create({
     container: { marginTop: RFPercentage(2) },
     bottomV: {
         width: '100%',
-        height:RFPercentage(6),
+        height:RFPercentage(7),
         padding: RFPercentage(1),
         backgroundColor: '#ffff',
        

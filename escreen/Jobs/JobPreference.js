@@ -76,13 +76,13 @@ const JobPreference = () => {
           validationSchema={yup.object().shape({
             salaryFrom: yup
               .string()
-              .max(8, 'Maximum 8 digits allowed')
-              .required('salaryFrom is required'),
+              .max(8, store.lang.Maximum_8_digits_allowed)
+              .required(store.lang.salaryFrom_is_required),
             salaryTo: yup
               .string()
-              .max(10, 'Maximum 10 digits allowed')
-              .required('salaryTo is required')
-              .test('is-greater-than-salaryFrom', 'Salary To must be greater than salary From', function (value) {
+              .max(10, store.lang.Maximum_10_digits_allowed)
+              .required(store.lang.salaryTo_is_required)
+              .test('is-greater-than-salaryFrom', store.lang.Salary_To_must_be_greater_than_salary_From, function (value) {
                 const salaryFrom = this.parent.salaryFrom; // Accessing the value of salaryFrom from the parent object
                 if (value && salaryFrom) {
                   return parseFloat(value) > parseFloat(salaryFrom); // Compare the numeric values
@@ -90,29 +90,29 @@ const JobPreference = () => {
                 return true; // If either field is empty, don't perform the comparison
               }),
             preference: yup
-              .object()
-              .required('Gender is required'),
+              .object().nullable()
+              .required(store.lang.Gender_is_required),
 
             currencies: yup
-              .object()
+              .object().nullable()
               .shape()
-              .required('Salary Currency is required'),
+              .required(store.lang.Salary_Currency_is_required),
             salaryPeriods: yup
-              .object()
+              .object().nullable() 
               .shape()
-              .required('Salary Period is required'),
+              .required(store.lang.Salary_Period_is_required),
             countries: yup
-              .object()
+              .object().nullable()
               .shape()
-              .required('Country is required'),
+              .required(store.lang.Country_is_required),
             city: yup
-              .object()
+              .object().nullable()
               .shape()
-              .required('City is required'),
+              .required(store.lang.City_is_required),
             state: yup
-              .object()
+              .object().nullable()
               .shape()
-              .required('State is required'),
+              .required(store.lang.State_is_required),
 
 
             // jobDescription: yup.string().required('Description is required').label('Description'),

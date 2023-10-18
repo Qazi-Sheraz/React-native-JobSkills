@@ -170,61 +170,61 @@ const JobRequirement = () => {
 
           publishDate: yup
             .date()
-            .required('Publish date is required')
-            .typeError('Publish date must be a valid date'),
+            .required(store.lang.Publish_date_is_required)
+            .typeError(store.lang.Publish_date_must_be_a_valid_date),
 
           expiry: yup
             .date()
             
-            .required('Expiry date is required')
-            .typeError('Expiry date must be a valid date'),
+            .required(store.lang.Expiry_date_is_required)
+            .typeError(store.lang.Expiry_date_must_be_a_valid_date),
 
           position: yup
             .string()
-            .matches(/^[1-9]\d*$/, 'Position must be a integer digits greater than 0')
+            .matches(/^[1-9]\d*$/, store.lang.Position_must_be_a_integer_digits_greater_than_0)
             .nullable()
-            .required('Position is required'),
+            .required(store.lang.Position_is_required),
 
           experience: yup
             .string()
             // .max(4, 'Maximum 4 digits allowed')
             .nullable()
-            .required('Experience is required'),
+            .required(store.lang.Experience_is_required),
           careerLevel: yup
             .object()
             .shape()
             .nullable()
-            .required('Career Level is required'),
+            .required(store.lang.Career_Level_is_required),
           requiredDegreeLevel: yup
             .array()
             .of(
               yup.object().shape({
-                id: yup.string().required('DegreeLevel ID is required'),
-                name: yup.string().required('DegreeLevel name is required'),
+                id: yup.string().required(store.lang.DegreeLevel_ID_is_required),
+                name: yup.string().required(store.lang.DegreeLevel_name_is_required),
               }),
             )
-            .required('DegreeLevel is required')
-            .min(1, 'At least one DegreeLevel is required'),
+            .required(store.lang.DegreeLevel_is_required)
+            .min(1, store.lang.At_least_one_DegreeLevel_is_required),
           jobNationality: yup
             .array()
             .of(
               yup.object().shape({
-                id: yup.string().required('Job Nationality ID is required'),
-                name: yup.string().required('Job Nationality name is required'),
+                id: yup.string().required(store.lang.Job_Nationality_ID_is_required),
+                name: yup.string().required(store.lang.Job_Nationality_name_is_required),
               }),
             )
-            .required('job Nationality is required')
-            .min(1, 'At least one job Nationality is required'),
+            .required(store.lang.job_Nationality_is_required)
+            .min(1, store.lang.At_least_one_job_Nationality_is_required),
           jobLanguage: yup
             .array()
             .of(
               yup.object().shape({
-                id: yup.string().required('Job Language ID is required'),
-                name: yup.string().required('Job Language name is required'),
+                id: yup.string().required(store.lang.Job_Language_ID_is_required),
+                name: yup.string().required(store.lang.Job_Language_name_is_required),
               }),
             )
-            .required('job Language is required')
-            .min(1, 'At least one job Language is required'),
+            .required(store.lang.job_Language_is_required)
+            .min(1, store.lang.At_least_one_job_Language_is_required),
         })}>
         {({
           values,

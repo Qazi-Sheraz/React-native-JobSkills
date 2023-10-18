@@ -27,6 +27,7 @@ import { JToast } from '../functions/Toast';
 import JSelectInput from './JSelectInput';
 import { _jobApplication } from '../escreen/Jobs/JobApplication';
 import JErrorText from './JErrorText';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 // import url from '../../config/url';
 const JApplication = ({
 
@@ -448,12 +449,12 @@ currentDate.setMinutes(currentDate.getMinutes() + 30);
                 links === 'Office Base' ? {
 
                   office_location:
-                    yup.string().url('Invalid URL format')
-                      .required('URL is required').label('office_location'),
+                    yup.string().url(store.lang.Invalid_URL_format)
+                      .required(store.lang.URL_is_required).label(store.lang.office_location),
                 }
                   : {
-                    manual_link: yup.string().url('Invalid URL format')
-                      .required('URL is required').label('manual_link'),
+                    manual_link: yup.string().url(store.lang.Invalid_URL_format)
+                      .required(store.lang.URL_is_required).label(store.lang.manual_link),
                   })}
             >
               {({
@@ -466,12 +467,14 @@ currentDate.setMinutes(currentDate.getMinutes() + 30);
                 handleSubmit,
                 setFieldValue,
               }) => (
-                <ScrollView
+                <KeyboardAwareScrollView
                   showsVerticalScrollIndicator={false}
+                  
                   contentContainerStyle={{
                     paddingVertical: RFPercentage(1),
                     marginHorizontal: RFPercentage(2),
-                  }}>
+                  }}
+                  >
                   <JInput
                     style={{
                       textAlign: store.lang.id == 0 ? 'left' : 'right',
@@ -693,7 +696,7 @@ currentDate.setMinutes(currentDate.getMinutes() + 30);
                       onCancel={() => setOpen(false)}
                     />
                   )} */}
-                </ScrollView>
+                </KeyboardAwareScrollView>
               )}
             </Formik>
           )}

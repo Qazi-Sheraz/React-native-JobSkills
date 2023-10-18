@@ -456,8 +456,15 @@
     "the_URL_is_not_valid": "URL درست نہیں ہے",
     "jobseeker": "نوکری کا خواہشمند",
     "image_sise": "تصویر کا سائز 2MB سے کم ہونا چاہیے",
-    "year_of_completion_of_degree": "ڈگری کی تکمیل کا سال"
-    
+    "year_of_completion_of_degree": "ڈگری کی تکمیل کا سال",
+    "OwnerShipTypes_is_required":"ملکیت کی قسمیں درکار ہیں۔",
+    "Industries_is_required":"صنعتوں کی ضرورت ہے۔",
+    "CompanySize_is_required":"کمپنی کا سائز درکار ہے۔",
+    "Location_is_required":"مقام درکار ہے۔",
+    "Website_URL_is_required":"ویب سائٹ کا URL درکار ہے۔",
+    "The_CEO_name_is_required":"سی ای او کا نام درکار ہے۔",
+    "URL_is_required":"URL درکار ہے۔",
+    "Job_Title_is_required":"نوکری کا عنوان درکار ہے۔"
    
     
    

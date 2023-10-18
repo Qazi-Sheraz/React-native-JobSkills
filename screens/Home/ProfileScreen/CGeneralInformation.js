@@ -123,25 +123,25 @@ const{params}=useRoute();
         validationSchema={yup.object().shape({
             
           country: yup
-          .object()
+          .object().nullable()
           .shape()
           .required('Country is required'),
           city: yup
-          .object()
+          .object().nullable()
           .shape()
           .required('City is required'),
           state: yup
-          .object()
+          .object().nullable()
           .shape()
           .required('State is required'),
           language: yup
-          .object()
+          .object().nullable()
           .shape()
-          .required('State is required'),
+          .required('Language is required'),
           status: yup
-          .object()
+          .object().nullable()
           .shape()
-          .required('State is required'),
+          .required('Status is required'),
           
         })}
      
@@ -239,7 +239,7 @@ const{params}=useRoute();
 
               <JSelectInput
                 containerStyle={{marginTop: RFPercentage(2)}}
-                value={values.dob && moment(values.dob).format('DD MM YYYY')}
+                value={values.dob && moment(values.dob).format('DD-MM-YYYY')}
                 maximumDate={new Date()}
                 isDate
                 heading={`${store.lang.date_of_birth}:`}

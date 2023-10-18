@@ -252,10 +252,10 @@ const JApplyJob = ({ token, jobId, id, setStatus, status }) => {
           }}
           validationSchema={yup.object().shape({
             resume: yup.object().shape({
-              id: yup.string().required().label('PDF'),
+              id: yup.string().required().label(store.lang.PDF),
             }),
-            expected: yup.number().typeError('Expected must be a valid number').required().label('Expected'),
-            note: yup.string().required().label('Note'),
+            expected: yup.number().typeError(store.lang.Expected_must_be_a_valid_number).required().label(store.lang.Expected),
+            note: yup.string().required().label(store.lang.Note),
           })}>
           {({
             values,

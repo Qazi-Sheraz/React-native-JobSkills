@@ -15,8 +15,11 @@ import * as yup from 'yup';
 import {Formik} from 'formik';
 import JErrorText from './JErrorText';
 import colors from '../config/colors';
+import { StoreContext } from '../mobx/store';
+import { useContext } from 'react';
 export default function JLoginRegisterView() {
   const social = ['google', 'facebook', 'linkedin', 'twitter'];
+  const store = useContext(StoreContext);
   return (
     <JScreen>
       <View style={{flex: 0.3, justifyContent: 'center', alignItems: 'center'}}>
@@ -38,14 +41,14 @@ export default function JLoginRegisterView() {
         validationSchema={yup.object().shape({
           email: yup
             .string()
-            .max(100, 'Email address must be at most 100 characters long')
-            .email('Must be a valid email')
-            .required('Email is a required field'),
+            .max(100, store.lang.Email_address_must_be_at_most_100_characters_long)
+            .email(store.lang.Must_be_a_valid_email)
+            .required(store.lang.Email_is_a_required_field),
           password: yup
             .string()
-            .min(6, 'Password Must be at least 6 characters')
-            .max(10, 'Password must be at most 10 characters')
-            .required('Password is a required field'),
+            .min(6, store.lang.Password_Must_be_at_least_6_characters)
+            .max(10, store.lang.Password_must_be_at_most_10_characters)
+            .required(store.lang.Password_is_a_required_field),
         })}>
         {({
           values,
