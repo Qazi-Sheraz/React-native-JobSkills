@@ -1,6 +1,6 @@
-import {StyleSheet, View} from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import React from 'react';
-import {RFPercentage} from 'react-native-responsive-fontsize';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 import colors from '../config/colors';
 import JText from './JText';
 
@@ -9,7 +9,7 @@ export default function JSkip({
   onPress,
   containerStyle,
   fontColor = colors.white[0],
-  fontSize = RFPercentage(2),
+  fontSize = RFPercentage(2.1),
   fontWeight = 'bold',
 }) {
   return (
@@ -28,8 +28,7 @@ export default function JSkip({
 
 const styles = StyleSheet.create({
   skip: {
-    flex: 0.2,
     alignItems: 'flex-end',
-    padding: RFPercentage(2),
+    paddingHorizontal: RFPercentage(1),
   },
 });

@@ -1,8 +1,8 @@
-import {StyleSheet, Image, View, TextInput, Keyboard} from 'react-native';
-import React, {useRef, useState} from 'react';
+import { StyleSheet, Image, View, TextInput, Keyboard } from 'react-native';
+import React, { useRef, useState } from 'react';
 import JScreen from '../../customComponents/JScreen';
 import JText from '../../customComponents/JText';
-import {RFPercentage} from 'react-native-responsive-fontsize';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 import colors from '../../config/colors';
 import JButton from '../../customComponents/JButton';
 import { useContext } from 'react';
@@ -13,9 +13,9 @@ import { StoreContext } from '../../mobx/store';
 import { useRoute } from '@react-navigation/native';
 import { JToast } from '../../functions/Toast';
 
-export default function VerifiedPhone({ navigation}) {
+export default function VerifiedPhone({ navigation }) {
   const store = useContext(StoreContext);
-  const{params}=useRoute();
+  const { params } = useRoute();
   // console.log('params',params)
   const [value, setValue] = useState({
     d1: '',
@@ -27,58 +27,59 @@ export default function VerifiedPhone({ navigation}) {
   const d2 = useRef();
   const d3 = useRef();
   const d4 = useRef();
-  const _verify =(value)=>{
+  const _verify = (value) => {
     var myHeaders = new Headers();
-myHeaders.append("Authorization",  `Bearer ${store.token?.token}`);
+    myHeaders.append("Authorization", `Bearer ${store.token?.token}`);
 
-var formdata = new FormData();
-formdata.append("phone", params?.phone);
-formdata.append("region_code",params?.region_code);
-formdata.append("code",`${value.d1}${value.d2}${value.d3}${value.d4}`
- );
- console.log(formdata)
+    var formdata = new FormData();
+    formdata.append("phone", params?.phone);
+    formdata.append("region_code", params?.region_code);
+    formdata.append("code", `${value.d1}${value.d2}${value.d3}${value.d4}`
+    );
+    console.log(formdata)
 
-var requestOptions = {
-  method: 'POST',
-  headers: myHeaders,
-  body: formdata,
-  redirect: 'follow'
-};
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: formdata,
+      redirect: 'follow'
+    };
 
-fetch(`${url.baseUrl}/phone-code-verification`, requestOptions)
-  .then(response => response.json())
-  .then(result =>{ 
-    // console.log(result)
-  if(result.success == true){
-    JToast({
-      type: 'success',
-      text1: store.lang.success,
-      text2: result.message,
-    
-    });
-    navigation.goBack();
+    fetch(`${url.baseUrl}/phone-code-verification`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        // console.log(result)
+        if (result.success == true) {
+          JToast({
+            type: 'success',
+            text1: store.lang.success,
+            text2: result.message,
+
+          });
+          navigation.goBack();
+        }
+        else {
+          JToast({
+            type: 'danger',
+            text1: store.lang.eror,
+            text2: result.message,
+          });
+        }
+      }
+      )
+      .catch(error =>
+        JToast({
+          type: 'danger',
+          text1: store.lang.eror,
+          text2: store.lang.an_error_occurred_please_try_again_later,
+        }))
   }
-  else{
-    JToast({
-    type: 'danger',
-    text1: store.lang.eror,
-    text2: result.message,
-  });}
-  }
-  )
-  .catch(error =>
-    JToast({
-    type: 'danger',
-    text1: store.lang.eror,
-    text2: store.lang.an_error_occurred_please_try_again_later,
-  }))
-  }
-  const _otp =()=>{
+  const _otp = () => {
     var myHeaders = new Headers();
     myHeaders.append("Accept", "application/json");
     var formdata = new FormData();
     formdata.append("phone", params?.phone);
-    formdata.append("region_code",params?.region_code);
+    formdata.append("region_code", params?.region_code);
     // console.log(formdata)
     var requestOptions = {
       method: 'POST',
@@ -95,21 +96,22 @@ fetch(`${url.baseUrl}/phone-code-verification`, requestOptions)
           text1: store.lang.sent_to_your_phone_number,
           text2: store.lang.check_your_phone,
         });
-        
-        
+
+
 
       })
       .catch(error => {
         // console.log('error', error)
         JToast({
-        type: 'danger',
-        text1: store.lang.eror,
-        text2: store.lang.an_error_occurred_please_try_again_later,
-      });});
-    };
+          type: 'danger',
+          text1: store.lang.eror,
+          text2: store.lang.an_error_occurred_please_try_again_later,
+        });
+      });
+  };
   return (
     <JScreen>
-      <View style={{flex: 0.5, justifyContent: 'center', alignItems: 'center'}}>
+      <View style={{ flex: 0.5, justifyContent: 'center', alignItems: 'center' }}>
         <Image
           style={{
             alignSelf: 'center',
@@ -124,13 +126,13 @@ fetch(`${url.baseUrl}/phone-code-verification`, requestOptions)
           fontSize={RFPercentage(2.8)}
           fontWeight={'bold'}
           children={store.lang.confirmed_number}
-          style={{marginTop: RFPercentage(2)}}
+          style={{ marginTop: RFPercentage(2) }}
         />
         <JText
           fontWeight={'500'}
           fontAlign="center"
           children={`${store.lang.enter_number} ${params?.region_code}${params?.phone}`}
-          style={{marginTop: RFPercentage(0.5), width: '70%'}}
+          style={{ marginTop: RFPercentage(0.5), width: '70%' }}
         />
       </View>
 
@@ -140,16 +142,17 @@ fetch(`${url.baseUrl}/phone-code-verification`, requestOptions)
           marginHorizontal: RFPercentage(3),
           alignItems: 'center',
         }}>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{ flexDirection: 'row' }}>
           <View style={styles.inputContainer}>
             <TextInput
+
               autoFocus
               style={styles.input}
               keyboardType="numeric"
               ref={d1}
               value={value.d1}
               onChangeText={e => {
-                setValue({...value, d1: e});
+                setValue({ ...value, d1: e });
                 if (e) {
                   d2.current.focus();
                 }
@@ -160,9 +163,9 @@ fetch(`${url.baseUrl}/phone-code-verification`, requestOptions)
           </View>
           <View style={styles.inputContainer}>
             <TextInput
-              onKeyPress={({nativeEvent}) => {
+              onKeyPress={({ nativeEvent }) => {
                 if (nativeEvent.key === 'Backspace') {
-                  setValue({...value, d2: ''});
+                  setValue({ ...value, d2: '' });
                   d1.current.focus();
                 }
               }}
@@ -171,7 +174,7 @@ fetch(`${url.baseUrl}/phone-code-verification`, requestOptions)
               value={value.d2}
               ref={d2}
               onChangeText={e => {
-                setValue({...value, d2: e});
+                setValue({ ...value, d2: e });
                 if (e) {
                   d3.current.focus();
                 }
@@ -182,9 +185,9 @@ fetch(`${url.baseUrl}/phone-code-verification`, requestOptions)
           </View>
           <View style={styles.inputContainer}>
             <TextInput
-              onKeyPress={({nativeEvent}) => {
+              onKeyPress={({ nativeEvent }) => {
                 if (nativeEvent.key === 'Backspace') {
-                  setValue({...value, d3: ''});
+                  setValue({ ...value, d3: '' });
                   d2.current.focus();
                 }
               }}
@@ -193,7 +196,7 @@ fetch(`${url.baseUrl}/phone-code-verification`, requestOptions)
               value={value.d3}
               style={styles.input}
               onChangeText={e => {
-                setValue({...value, d3: e});
+                setValue({ ...value, d3: e });
                 if (e) {
                   d4.current.focus();
                 }
@@ -204,9 +207,9 @@ fetch(`${url.baseUrl}/phone-code-verification`, requestOptions)
           </View>
           <View style={styles.inputContainer}>
             <TextInput
-              onKeyPress={({nativeEvent}) => {
+              onKeyPress={({ nativeEvent }) => {
                 if (nativeEvent.key === 'Backspace') {
-                  setValue({...value, d4: ''});
+                  setValue({ ...value, d4: '' });
                   d3.current.focus();
                 }
               }}
@@ -215,7 +218,7 @@ fetch(`${url.baseUrl}/phone-code-verification`, requestOptions)
               ref={d4}
               value={value.d4}
               onChangeText={e => {
-                setValue({...value, d4: e});
+                setValue({ ...value, d4: e });
                 if (e.length > 0) {
                   Keyboard.dismiss();
                 }
@@ -227,7 +230,7 @@ fetch(`${url.baseUrl}/phone-code-verification`, requestOptions)
         </View>
 
         <JButton
-        onPress={()=>_verify(value)}
+          onPress={() => _verify(value)}
           isValid={
             value.d1.concat(value.d2).concat(value.d3).concat(value.d4)
               .length === 4
@@ -239,7 +242,7 @@ fetch(`${url.baseUrl}/phone-code-verification`, requestOptions)
             height: RFPercentage(6),
             paddingHorizontal: RFPercentage(8),
           }}
-         
+
           children={store.lang.continue}
         />
         <View
@@ -248,11 +251,11 @@ fetch(`${url.baseUrl}/phone-code-verification`, requestOptions)
             flexDirection: 'row',
             alignItems: 'center',
           }}>
-          <JText style={{marginRight: RFPercentage(0.8)}}>{store.lang.resend_Code}</JText>
+          <JText style={{ marginRight: RFPercentage(0.8) }}>{store.lang.resend_Code}</JText>
           <JReload
             onPress={() => {
               _otp()
-            
+
             }}
           />
         </View>
@@ -272,7 +275,6 @@ const styles = StyleSheet.create({
   },
   input: {
     width: RFPercentage(4),
-    height: RFPercentage(5),
     borderBottomWidth: RFPercentage(0.2),
     fontSize: RFPercentage(2.5),
 

@@ -9,6 +9,7 @@ import LngTranslation from '../../screens/LngTranslation/LngTranslation';
 import { observer } from 'mobx-react';
 import messaging from '@react-native-firebase/messaging';
 import DeviceInfo from 'react-native-device-info';
+import BoundingScreenStart from '../../screens/SplashScreen/Candidate/BoundingScreenStart';
 const Stack = createStackNavigator();
 
 const LangStack = () => {
@@ -115,6 +116,7 @@ const LangStack = () => {
           }}
           initialRouteName={'LngTranslation'}>
           <Stack.Screen name="LngTranslation" component={LngTranslation} />
+          <Stack.Screen name="BoundingScreenStart" component={BoundingScreenStart} />
         </Stack.Navigator>
       </React.Fragment>
     )

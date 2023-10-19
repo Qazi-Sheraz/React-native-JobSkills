@@ -180,8 +180,15 @@ export const StoreProvider = props => {
     setLang: action(
       e => (store.lang = e == 'en' ? en : e == 'ur' ? ud : e == 'ar' && ar),
     ),
+
+   //language Screen Stack
     langType: false,
     setLangType: action(e => (store.langType = e)),
+
+    //Bounding Screen
+    splashShown: false,
+    setSplashShown: action(e => (store.splashShown = e)),
+
     // Search Find Job
     recentSearch: [],
     setRecentSearch: action(e => (store.recentSearch = e)),

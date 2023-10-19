@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef, useContext } from 'react';
 import { StyleSheet, View, TouchableOpacity, Image } from 'react-native';
 import {
   DrawerContentScrollView,
@@ -19,7 +19,6 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import pkg from '../package.json';
-import { useContext } from 'react';
 import { StoreContext } from '../mobx/store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { observer, Observer } from 'mobx-react';
@@ -27,15 +26,13 @@ import JRow from '../customComponents/JRow';
 import { JToast } from '../functions/Toast';
 import JIcon from '../customComponents/JIcon';
 import FlashMessage from 'react-native-flash-message';
-import { useState } from 'react';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { useRef } from 'react';
 
 function CustomDrawerContent(props) {
   const store = useContext(StoreContext);
   const user = store.token?.user;
-const[loader, setLoader]=useState(false);
-const linkedRef = useRef(null);
+  const [loader, setLoader] = useState(false);
+  // const linkedRef = useRef(null);
   const _navigateToScreen = index => {
     // props.navigation.closeDrawer()
     index == 0
@@ -56,9 +53,8 @@ const linkedRef = useRef(null);
                     text1: store.lang.logout_successfully,
                   });
                   googleSignOut();
-                  logoutFromLinkedIn
                   store.setToken({});
-                  
+
                   // console.log('object')
                   setLoader(false)
                 })
@@ -131,7 +127,6 @@ const linkedRef = useRef(null);
                     setLoader(true)
                     if (res !== null) {
                       googleSignOut();
-                      logoutFromLinkedIn
                       JToast({
                         type: 'success',
                         text1: store.lang.logout_successfully,
@@ -202,32 +197,33 @@ const linkedRef = useRef(null);
         size={RFPercentage(3)}
       />
     );
-    const googleSignOut = async () => {
-      try {
-        await GoogleSignin.revokeAccess(); // Revoke access to the app
-        await GoogleSignin.signOut(); // Sign out from the Google account
-        // Now, the user can sign in with a different Google account next time.
-      } catch (error) {
-        console.error('Error signing out:', error);
-      }
-    };
-    const logoutFromLinkedIn = async () => {
-      try {
-        // Revoke the LinkedIn access token using the library's method
-        // Note: The method to revoke the token may vary based on the library's API.
-        // Replace 'revokeAccessToken' with the actual method if provided.
-        await linkedRef.current.revokeAccessToken();
-  
-        // Clear local session data, e.g., user credentials
-        // (You'll need to implement this part based on your app's structure)
-  
-        // Update the UI to reflect the user's logout
-        // (Update your components or navigate to a logout screen)
-      } catch (error) {
-        // Handle any errors that may occur during the logout process
-        console.error('LinkedIn logout error:', error);
-      }
-    };
+  const googleSignOut = async () => {
+    try {
+      await GoogleSignin.revokeAccess(); // Revoke access to the app
+      await GoogleSignin.signOut(); // Sign out from the Google account
+      // Now, the user can sign in with a different Google account next time.
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
+  // const logoutFromLinkedIn = async () => {
+  //   try {
+  //     // Revoke the LinkedIn access token using the library's method
+  //     // Note: The method to revoke the token may vary based on the library's API.
+  //     // Replace 'revokeAccessToken' with the actual method if provided.
+  //     await linkedRef.current.revokeAccessToken();
+  //     await linkedRef.current.logoutAsync();
+
+  //     // Clear local session data, e.g., user credentials
+  //     // (You'll need to implement this part based on your app's structure)
+
+  //     // Update the UI to reflect the user's logout
+  //     // (Update your components or navigate to a logout screen)
+  //   } catch (error) {
+  //     // Handle any errors that may occur during the logout process
+  //     console.error('LinkedIn logout error:', error);
+  //   }
+  // };
   return (
 
     store.token?.user?.owner_type.includes('Candidate')
@@ -278,7 +274,7 @@ const linkedRef = useRef(null);
 
             {getDrawerItems().map((item, index) => (
               <JRow
-              disabled={loader? true:false}
+                disabled={loader ? true : false}
                 onPress={() => _navigateToScreen(index)}
                 style={{
                   marginVertical: RFPercentage(1.7),
@@ -356,7 +352,7 @@ const linkedRef = useRef(null);
 
             {getDrawerItems().map((item, index) => (
               <JRow
-                disabled={loader? true:false}
+                disabled={loader ? true : false}
                 onPress={() => _EnavigateToScreen(index)}
                 style={{
                   marginVertical: RFPercentage(1.7),

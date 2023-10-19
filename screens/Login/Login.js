@@ -84,6 +84,7 @@ const Login = ({ navigation, route }) => {
     );
   };
   useEffect(() => {
+
     getStoredLanguage();
     const fetchDeviceName = async () => {
 
@@ -345,7 +346,7 @@ const Login = ({ navigation, route }) => {
         }
       })
       .catch(error => {
-        logoutFromLinkedIn
+        // logoutFromLinkedIn
         JToast({
           type: 'danger',
           text1: store.lang.eror,
@@ -426,6 +427,7 @@ const Login = ({ navigation, route }) => {
 
   const renderCustomButton = () => (
     <FontAwesome
+      disabled={loader ? true : socialLoader ? true : false}
       onPress={() => {
         handleLinkedInLogin();
       }}
@@ -434,23 +436,23 @@ const Login = ({ navigation, route }) => {
       color={colors.purple[0]}
     />
   );
-  const logoutFromLinkedIn = async () => {
-    try {
-      // Revoke the LinkedIn access token using the library's method
-      // Note: The method to revoke the token may vary based on the library's API.
-      // Replace 'revokeAccessToken' with the actual method if provided.
-      await linkedRef.current.revokeAccessToken();
+  // const logoutFromLinkedIn = async () => {
+  //   try {
+  //     // Revoke the LinkedIn access token using the library's method
+  //     // Note: The method to revoke the token may vary based on the library's API.
+  //     // Replace 'revokeAccessToken' with the actual method if provided.
+  //     await linkedRef.current.revokeAccessToken();
 
-      // Clear local session data, e.g., user credentials
-      // (You'll need to implement this part based on your app's structure)
+  //     // Clear local session data, e.g., user credentials
+  //     // (You'll need to implement this part based on your app's structure)
 
-      // Update the UI to reflect the user's logout
-      // (Update your components or navigate to a logout screen)
-    } catch (error) {
-      // Handle any errors that may occur during the logout process
-      console.error('LinkedIn logout error:', error);
-    }
-  };
+  //     // Update the UI to reflect the user's logout
+  //     // (Update your components or navigate to a logout screen)
+  //   } catch (error) {
+  //     // Handle any errors that may occur during the logout process
+  //     console.error('LinkedIn logout error:', error);
+  //   }
+  // };
   return (
     <JScreen>
       <View style={{ flex: 0.3, justifyContent: 'center', alignItems: 'center' }}>
@@ -631,16 +633,13 @@ const Login = ({ navigation, route }) => {
           ))} */}
           {['google', 'facebook'].map((item, index) => (
             <FontAwesome
+              disabled={loader ? true : socialLoader ? true : false}
               onPress={() => {
                 if (item == 'google') {
                   gooleLogin()
-                  setLoginItem(item)
-                  // alert('google')
                 }
                 else {
                   facebookLogin()
-                  setLoginItem(item)
-                  // alert('facebook')
                 }
               }}
               key={index}

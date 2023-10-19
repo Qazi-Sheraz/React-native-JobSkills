@@ -1,11 +1,8 @@
 rootProject.name = 'jobSkills'
-<<<<<<< HEAD
 include ':react-native-webview'
 project(':react-native-webview').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-webview/android')
-=======
 include ':react-native-date-picker'
 project(':react-native-date-picker').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-date-picker/android')
->>>>>>> 012a59edbb88a9ce3ed3c9777c1176a41956472f
 include ':react-native-device-info'
 project(':react-native-device-info').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-device-info/android')
 include ':react-native-restart'
