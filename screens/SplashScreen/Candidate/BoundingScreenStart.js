@@ -39,7 +39,7 @@ const BoundingScreenStart = () => {
         <JGradientScreen style={{ paddingHorizontal: RFPercentage(2), }}>
 
             <View style={styles.logo}>
-                <JRow style={{ width: '100%', marginTop: RFPercentage(-5), }}><JChevronIcon /></JRow>
+                <JRow style={{ width: '100%', marginTop: RFPercentage(-7), }}><JChevronIcon /></JRow>
                 <Image
                     source={require('../../../assets/images/logo/logo.png')}
                     style={{

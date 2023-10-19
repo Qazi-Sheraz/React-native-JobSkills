@@ -53,9 +53,9 @@ const SelectionSheet = ({ navigation }) => {
     }
   };
 
-  useEffect(() => {
-    AsyncStorage.removeItem('employerSplash')
-  }, [])
+  // useEffect(() => {
+  //   AsyncStorage.removeItem('employerSplash')
+  // }, [])
 
   return (
     <Animatable.View style={styles.sheetContainer} animation="slideInUp">

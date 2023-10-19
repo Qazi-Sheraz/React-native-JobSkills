@@ -42,10 +42,8 @@ const Login = ({ navigation, route }) => {
   const [socialLoader, setSocialLoader] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState(null);
   const [edit, setEdit] = useState();
-  const [loginItem, setLoginItem] = useState('');
 
   console.log('edit', edit)
-  console.log('loginItem', loginItem)
   const type = route?.params?.type;
   console.log('type', type);
 
