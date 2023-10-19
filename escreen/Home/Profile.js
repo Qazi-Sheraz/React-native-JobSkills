@@ -254,30 +254,36 @@ const Profile = () => {
                         : 'N/A'
                     }
                   />
-                  <JText
-                    onPress={() => {
-                      profile?.company[0]?.contact_information?.is_phone_verified == 0
-                        ? (navigation.navigate('VerifiedPhone', {
-                          phone: profile?.company[0]?.contact_information?.phone_number && profile?.company[0]?.contact_information?.phone_number,
-                          region_code: profile?.company[0]?.contact_information?.regional_code && profile?.company[0]?.contact_information?.regional_code
-                        }),
-                          _otp())
-                        : JToast({
-                          type: 'success',
-                          text1: store.lang.already_confirmed,
-                        });
-                    }}
-                    fontColor={
-                      profile?.company[0]?.contact_information
+                  {profile?.company[0]?.contact_information?.phone_number && profile?.company[0]?.contact_information?.regional_code
+                    && <JText
+                      disabled={
+                        profile?.company[0]?.contact_information?.phone_number
+                          && profile?.company[0]?.contact_information?.regional_code
+                          ? false : true
+                      }
+                      onPress={() => {
+                        profile?.company[0]?.contact_information?.is_phone_verified == 0
+                          ? (navigation.navigate('VerifiedPhone', {
+                            phone: profile?.company[0]?.contact_information?.phone_number && profile?.company[0]?.contact_information?.phone_number,
+                            region_code: profile?.company[0]?.contact_information?.regional_code && profile?.company[0]?.contact_information?.regional_code
+                          }),
+                            _otp())
+                          : JToast({
+                            type: 'success',
+                            text1: store.lang.already_confirmed,
+                          });
+                      }}
+                      fontColor={
+                        profile?.company[0]?.contact_information
+                          ?.is_phone_verified == 1
+                          ? colors.shortlisted[0]
+                          : colors.redish[0]
+                      }>
+                      {profile?.company[0]?.contact_information
                         ?.is_phone_verified == 1
-                        ? colors.shortlisted[0]
-                        : colors.redish[0]
-                    }>
-                    {profile?.company[0]?.contact_information
-                      ?.is_phone_verified == 1
-                      ? store.lang.confirmed
-                      : store.lang.confirm_your_num}
-                  </JText>
+                        ? store.lang.confirmed
+                        : store.lang.confirm_your_num}
+                    </JText>}
                 </BorderView>
                 // )
               }

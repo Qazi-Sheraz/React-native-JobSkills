@@ -266,18 +266,18 @@ export default function VerifiedPhone({ navigation }) {
 
 const styles = StyleSheet.create({
   inputContainer: {
-    height: RFPercentage(6),
-    width: RFPercentage(6),
+    // height: RFPercentage(6),
+    // width: RFPercentage(6),
     backgroundColor: colors.footer[0],
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: RFPercentage(2),
   },
   input: {
-    width: RFPercentage(4),
+    width: RFPercentage(6),
     borderBottomWidth: RFPercentage(0.2),
     fontSize: RFPercentage(2.5),
-
+    color:colors.black[0],
     textAlign: 'center',
   },
 });
