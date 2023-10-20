@@ -475,14 +475,14 @@ const Login = ({ navigation, route }) => {
         validationSchema={yup.object().shape({
           email: yup
             .string()
-            .min(0, 'Email address cannot be empty')
-            .max(100, 'Email address must be at most 100 characters long')
-            .required('Email is a required field'),
+            .min(0, store.lang.Email_address_cannot_be_empty)
+            .max(100,store.lang.Email_address_must_be_at_most_100_characters_long )
+            .required(store.lang.Email_is_a_required_field),
           password: yup
             .string()
-            .min(6, 'Password Must be at least 6 characters')
-            .max(16, 'Password must be at most 15 characters')
-            .required('Password is a required field'),
+            .min(6, store.lang.Password_Must_be_at_least_6_characters)
+            .max(16,store.lang.Password_must_be_at_most_15_characters )
+            .required(store.lang.Password_is_a_required_field),
         })}>
         {({
           values,

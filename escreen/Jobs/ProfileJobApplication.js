@@ -501,7 +501,7 @@ const ProfileJobApplication = ({ route }) => {
               _reportSubmit(values);
             }}
             validationSchema={yup.object().shape({
-              note: yup.string().required('Note is required').label('Note'),
+              note: yup.string().required(store.lang.Note_is_required).label(store.lang.Note),
             })}>
             {({
               values,

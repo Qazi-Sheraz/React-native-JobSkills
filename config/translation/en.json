@@ -536,7 +536,71 @@
      "Expected_must_be_a_valid_number":"Expected must be a valid number",
      "Expected":"Expected",
      "Note":"Note",
-     "Invalid_URL_format":"Invalid URL format"
+     "Invalid_URL_format":"Invalid URL format",
+     "First_Name_must_contain_alphabet_character":"First Name must contain  alphabet character",
+     "Symbols_are_not_allowed_in_the_First_Name":"Symbols are not allowed in the First Name",
+     "Last_Name_must_contain_alphabet_character":"Last Name must contain alphabet character",
+     "Symbols_are_not_allowed_in_the_Last_Name":"Symbols are not allowed in the Last Name",
+     "Phone_Number_must_be_a_digit":"Phone Number must be a digit",
+     "is-greater-than-salaryFrom":"is greater than salaryFrom",
+     "Note_is_required":"Note is required",
+     "Name_Must_be_at_least_3_characters":"Name Must be at least 3 characters",
+     "Name_must_be_at_most_100_characters_long":"Name must be at most 100 characters long",
+     "Name_is_a_required_field":"Name is a required field",
+     "Area_is_required":"Area is required",
+     "Language_is_required":"Language is required",
+     "Status_is_required":"Status is required",
+     "Password_must_be_at_most_15_characters":"Password must be at most 15 characters",
+     "Symbols_are_not_allowed_in_the_Ceo_Name" :"Symbols are not allowed in the Ceo Name",
+     "Ceo_Name_must_contain_at_least_1_alphabet_character_and_can_include_English_Urdu_Arabic_and_spaces":"Ceo Name must contain at least 1 alphabet character and can include English, Urdu, Arabic, and spaces",
+     "Name_must_contain_at_least_1_alphabet_character_and_can_include_English_Urdu_Arabic_and_spaces":"Ceo Name must contain at least 1 alphabet character and can include English, Urdu, Arabic, and spaces",
+     "Name_must_contains_only_alphabets":"Name must contains only alphabets",
+     "Password_Must_be_at_least_8_characters":"Password Must be at least 8 characters",
+     "Confirm_Password_is_a_required_field":"Confirm Password is a required field",
+     "Password_must_match":"Password must match",
+     "Password":"Password",
+     "Current":"Current",
+     "Symbols_are_not_allowed_in_the_Name":"Symbols are not allowed in the Name",
+     "Year_is_required":"Year is required",
+     "GPA":"GPA",
+     "GPA_is_required":"GPA is required",
+     "GPA_must_be_less_than_or_equal_to_4.0":"GPA must be less than or equal to 4.0",
+     "GPA_must_be_greater_than_or_equal_to_0":"GPA must be greater than or equal to 0.0",
+     "GPA_must_be_a_valid_number":"GPA must be a valid number",
+     "Title_must_not_exceed_100_characters":"Title must not exceed 100 characters",
+     "Title":"Title",
+     "Level_is_required":"Level is required",
+     "institude_must_not_exceed_250_characters":"institude must not exceed 250 characters",
+     "First_Name_Must_be_at_least_3_characters":"First Name Must be at least 3 characters",
+     "First_Name_must_contain_at_least_1_alphabet_character_and_can_include_English_Urdu_Arabic_and_spaces":"First Name must contain at least 1 alphabet character and can include English, Urdu, Arabic, and spaces",
+     "First_Name_is_a_required_field":"First Name is a required field",
+     "Last_Name_Must_be_at_least_3_characters":"Last Name Must be at least 3 characters",
+     "Last_Name_must_contain_at_least_1_alphabet_character_and_can_include_English_Urdu_Arabic_and_spaces":"Last Name must contain at least 1 alphabet character and can include English, Urdu, Arabic, and spaces",
+     "Last_Name_is_a_required_field":"Last Name is a required field",
+     "Password_must_be_at_most_16_characters":"Password must be at most 16 characters",
+     "Policy_is_a_required_field":"Policy is a required field",
+     "First_Name_must_be_at_most_100_characters_long":"First Name must be at most 100 characters long",
+  "Last_ Name_must_be_at_most_100_characters_long":"Last Name must be at most 100 characters long",
+  "Company_Name_Must_be_at_least_3_characters":"Company Name Must be at least 3 characters",
+  "Company_Name_must_be_at_most_100_characters_long":"Company Name must be at most 100 characters long",
+  "Company_Name_must_only_contain_alphabetic_characters":"Company Name must only contain alphabetic characters",
+  "Company_Name_is_a_required_field":"Company Name is a required field",
+  "Password_Must_be_at_east_8_characters":"Password Must be at least 8 characters",
+  "Passwords_must_match":"Passwords must match",
+  "Company":"Company",
+  "Title_must_not_exceed_500_characters":"Title must not exceed 500 characters",
+  "Start_Date_is_required":"Start Date is required",
+  "Phone_must_be_atleast_10_characters":"Phone must be atleast 10 characters",
+  "Phone_must_be_at_most_14_characters":"Phone must be at most 14 characters"
+ 
+ 
+
+    
+     
+    
+     
+   
+     
     
     
    

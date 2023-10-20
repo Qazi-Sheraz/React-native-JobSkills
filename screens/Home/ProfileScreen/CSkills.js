@@ -41,12 +41,12 @@ function CSkills({data}) {
               .array()
               .of(
                 yup.object().shape({
-                  id: yup.string().required('skill ID is required'),
-                  name: yup.string().required('skill name is required'),
+                  id: yup.string().required(store.lang.Skill_ID_is_required),
+                  name: yup.string().required(store.lang.Skill_name_is_required),
                 }),
               )
-              .required('skill is required')
-              .min(1, 'At least one skill is required'),
+              .required(store.lang.Job_Skills_are_required)
+              .min(1, store.lang.At_least_one_Skill_is_required),
  
       })}
       onSubmit={values => {

@@ -76,25 +76,25 @@ function CExperienceInformation({refRBSheet, data}) {
           experience: yup.object()
             .shape()
             .nullable()
-            .required('Experience is required'),
+            .required(store.lang.Experience_is_required),
           career: yup.object()
             .shape()
             .nullable()
-            .required('Career Level is required'),
+            .required(store.lang.Career_Level_is_required),
           industry: yup.object()
             .shape()
             .nullable()
-            .required('Industry is required'),
-          current: yup.string().required().label('current'),
+            .required(store.lang.Industries_is_required),
+          current: yup.string().required().label(store.lang.Current),
           area: yup.object()
             .shape()
             .nullable()
-            .required('Area is required'),
-          expected: yup.string().required().label('Expected'),
+            .required(store.lang.Area_is_required),
+          expected: yup.string().required().label(store.lang.Expected),
           currency: yup.object()
             .shape()
             .nullable()
-            .required('Currency is required'),
+            .required(store.lang.Country_is_required),
         })}
         onSubmit={values => {
           // console.log(values);

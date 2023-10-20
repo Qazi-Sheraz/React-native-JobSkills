@@ -777,23 +777,23 @@ const JobDetails = ({ route }) => {
                 }),
                 firstName: yup.string()
                   .transform(value => value.trim())
-                  .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'First Name must contain  alphabet character')
-                  .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the First Name')
-                  .required().label('First Name'),
+                  .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, store.lang.First_Name_must_contain_alphabet_character)
+                  .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, store.lang.Symbols_are_not_allowed_in_the_First_Name)
+                  .required(store.lang.First_Name_is_a_required_field).label(store.lang.first_name),
                 lastName: yup.string()
                   .transform(value => value.trim())
-                  .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'Last Name must contain alphabet character')
-                  .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the Last Name')
-                  .required().label('Last Name'),
+                  .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, store.lang.Last_Name_must_contain_alphabet_character)
+                  .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, store.lang.Symbols_are_not_allowed_in_the_Last_Name)
+                  .required(store.lang.Last_Name_is_a_required_field).label(store.lang.last_name),
                 email: yup
                   .string()
                   .min(0, store.lang.Email_address_cannot_be_empty)
                   .max(100, store.lang.Email_address_must_be_at_most_100_characters_long)
                   .email(store.lang.Must_be_a_valid_email)
-                  .required()
+                  .required(store.lang.Email_is_a_required_field)
                   .label(store.lang.Email),
                 // phone: yup.string().max(14).required().label('Phone'),
-                phone: yup.string().min(10).max(15).matches(/^\+?[0-9]\d*$/, 'Phone Number must be a digit').required().label(store.lang.phone),
+                phone: yup.string().min(10).max(15).matches(/^\+?[0-9]\d*$/, store.lang.Phone_Number_must_be_a_digit).required().label(store.lang.phone),
               })}>
 
               {({

@@ -177,19 +177,19 @@ const EducationInfo = () => {
                             _addEducation(values);
                         }}
                         validationSchema={yup.object().shape({
-                            title: yup.string().max(100, 'Title must not exceed 100 characters').required().label('Title'),
-                            level: yup.object().nullable().shape().required('Level is required'),
-                            county: yup.object().nullable().shape().required('Country is required'),
-                            city: yup.object().nullable().shape().required('City is required'),
-                            state: yup.object().nullable().shape().required('State is required'),
-                            institude: yup.string().max(250, 'institude must not exceed 250 characters').required().label('Institude'),
+                            title: yup.string().max(100, store.lang.Title_must_not_exceed_100_characters).required().label(store.lang.Title),
+                            level: yup.object().nullable().shape().required(store.lang.Level_is_required),
+                            county: yup.object().nullable().shape().required(store.lang.Country_is_required),
+                            city: yup.object().nullable().shape().required(store.lang.City_is_required),
+                            state: yup.object().nullable().shape().required(store.lang.State_is_required),
+                            institude: yup.string().max(250, store.lang.institude_must_not_exceed_250_characters).required().label(store.lang.institute),
                             result: yup.number()
-                            .typeError('GPA must be a valid number')
-                            .min(0, 'GPA must be greater than or equal to 0.0')
-                            .max(4, 'GPA must be less than or equal to 4.0')
-                            .required('GPA is required')
-                            .label('GPA'),
-                            year: yup.object().nullable().shape().required('Year is required'),
+                            .typeError(store.lang.GPA_must_be_a_valid_number)
+                            .min(0, store.lang.GPA_must_be_greater_than_or_equal_to_0)
+                            .max(4, store.lang.GPA_must_be_less_than_or_equal_to_4)
+                            .required(store.lang.GPA_is_required)
+                            .label(store.lang.GPA),
+                            year: yup.object().nullable().shape().required(store.lang.Year_is_required),
                         }
                         )}>
                         {({

@@ -168,14 +168,14 @@ const Applicants = () => {
           resume: yup.object().shape({
             uri: yup.string().required(store.lang.PDF),
           }),
-          firstName: yup.string().required().label(store.lang.First_Name),
-          lastName: yup.string().required().label(store.lang.Last_Name),
+          firstName: yup.string().required(store.lang.First_Name_is_a_required_field).label(store.lang.First_Name),
+          lastName: yup.string().required(store.lang.Last_Name_is_a_required_field).label(store.lang.Last_Name),
           email: yup
             .string()
             .min(0, store.lang.Email_address_cannot_be_empty)
             .max(100, store.lang.Email_address_must_be_at_most_100_characters_long)
             .email(store.lang.Must_be_a_valid_email)
-            .required()
+            .required(store.lang.Email_is_a_required_field)
             .label(store.lang.Email),
           phone: yup
             .string()

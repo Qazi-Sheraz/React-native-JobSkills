@@ -373,32 +373,32 @@ function EContactInformation({ refRBSheet, data, user }) {
           validationSchema={yup.object().shape({
             name: yup
             .string()
-            .min(3, 'Name ame Must be at least 3 characters')
-            .max(100, 'Name must be at most 100 characters long')
+            .min(3, store.lang.Name_Must_be_at_least_3_characters)
+            .max(100,store.lang.Name_must_be_at_most_100_characters_long)
             .transform(value => value.trim())
-            .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'Name must contains only alphabets ')
+            .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, store.lang.Name_must_contains_only_alphabets)
             // .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the First Name')
-            .required('Name is a required field'),
+            .required(store.lang.Name_is_a_required_field),
             countries: yup
               .object()
               .shape()
-              .required('Country is required'),
+              .required(store.lang.Country_is_required),
             city: yup
               .object()
               .shape()
-              .required('City is required'),
+              .required(store.lang.City_is_required),
             state: yup
               .object()
               .shape()
-              .required('State is required'),
+              .required(store.lang.State_is_required),
             email: yup
               .string()
-              .min(0, 'Email address cannot be empty')
-              .max(100, 'Email address must be at most 100 characters long')
-              .email('Must be a valid email')
-              .required(),
+              .min(0, store.lang.Email_is_a_required_field)
+              .max(100, store.lang.Email_address_must_be_at_most_100_characters_long)
+              .email(store.lang.Must_be_a_valid_email)
+              .required(store.lang.Email_is_a_required_field),
 
-            phone: yup.string().min(10).max(14).required().label('Phone'),
+            phone: yup.string().min(10,store.lang.Phone_must_be_atleast_10_characters).max(14,store.lang.Phone_must_be_at_most_14_characters).required(store.lang.Phone_must_be_atleast_10_characters).label(store.lang.Phone),
           })}>
           {({
             values,

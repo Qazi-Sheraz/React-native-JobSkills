@@ -40,11 +40,12 @@ export default function ResetPassword() {
           // console.log(values);
         }}
         validationSchema={yup.object().shape({
-          email: yup
+        
+            email: yup
             .string()
-            .max(100, 'Email address must be at most 100 characters long')
-            .email('Must be a valid email')
-            .required('Email is a required field'),
+            .max(100, store.lang.Email_address_must_be_at_most_100_characters_long)
+            .email(store.lang.Must_be_a_valid_email)
+            .required(store.lang.Email_is_a_required_field),
         })}>
         {({
           values,

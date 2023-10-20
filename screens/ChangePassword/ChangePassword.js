@@ -112,15 +112,15 @@ const ChangePassword = () => {
           _resetPassword(values);
         }}
         validationSchema={yup.object().shape({
-          password_current: yup.string().required().label('Current Password'),
+          password_current: yup.string().required().label(store.lang.current_password),
           password: yup
             .string()
-            .min(8, 'Password Must be at least 8 characters')
-            .required('Password is a required field'),
+            .min(8, store.lang.Password_Must_be_at_least_8_characters)
+            .required(store.lang.Password_is_a_required_field),
           password_confirmation: yup
             .string()
-            .required('Confirm Password is a required field')
-            .oneOf([yup.ref('password'), null], 'Passwords must match'),
+            .required(store.lang.Confirm_Password_is_a_required_field)
+            .oneOf([yup.ref(store.lang.password), null], store.lang.Password_must_match),
         })}>
         {({
           values,
