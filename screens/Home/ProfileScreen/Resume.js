@@ -293,11 +293,11 @@ const Resume = ({ navigation }) => {
           }}
           validationSchema={yup.object().shape({
             resume: yup.object().shape({
-              uri: yup.string().required('PDF'),
+              uri: yup.string().required(store.lang.PDF),
             }),
             name: yup.string()
-              .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'Name must contain at least 1 alphabet character and can include English, Urdu, Arabic, and spaces')
-              .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the Name')
+              .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, store.lang.Name_must_contain_at_least_1_alphabet_character_and_can_include_English_Urdu_Arabic_and_spaces)
+              .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, store.lang.Symbols_are_not_allowed_in_the_Name)
               .required().label('Name'),
           })}>
           {({

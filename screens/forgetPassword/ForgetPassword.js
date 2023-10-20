@@ -113,9 +113,9 @@ const ForgetPassword = () => {
           validationSchema={yup.object().shape({
             email: yup
               .string()
-              .min(0, 'Email address cannot be empty')
-              .max(100, 'Email address must be at most 100 characters long')
-              .required('Email is a required field'),
+              .min(0,store.lang.Email_address_cannot_be_empty)
+              .max(100, store.lang.Email_address_must_be_at_most_100_characters_long)
+              .required(store.lang.Email_is_a_required_field),
           })}
       >
         {({

@@ -125,23 +125,23 @@ const{params}=useRoute();
           country: yup
           .object().nullable()
           .shape()
-          .required('Country is required'),
+          .required(store.lang.Country_is_required),
           city: yup
           .object().nullable()
           .shape()
-          .required('City is required'),
+          .required(store.lang.City_is_required),
           state: yup
           .object().nullable()
           .shape()
-          .required('State is required'),
+          .required(store.lang.State_is_required),
           language: yup
           .object().nullable()
           .shape()
-          .required('Language is required'),
+          .required(store.lang.Language_is_required),
           status: yup
           .object().nullable()
           .shape()
-          .required('Status is required'),
+          .required(store.lang.Status_is_required),
           
         })}
      

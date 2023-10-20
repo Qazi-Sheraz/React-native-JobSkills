@@ -286,8 +286,8 @@ function CContactInformation({refRBSheet, user}) {
         _postData(values);
       }}
       validationSchema={yup.object().shape({
-        email: yup.string().max(100, 'Email address must be at most 100 characters long').email('Must be a valid email'),
-        phone: yup.string().max(15).matches(/^\+?[0-9]\d*$/, 'Phone Number must be a digit').required().label('Phone'),
+        email: yup.string().max(100, store.lang.Email_address_must_be_at_most_100_characters_long).email(store.lang.Must_be_a_valid_email),
+        phone: yup.string().max(15).matches(/^\+?[0-9]\d*$/, store.lang.Phone_Number_must_be_a_digit).required().label(store.lang.Phone),
         // regional_code: yup.string().min(2).required().label('code'),
       })}>
       {({

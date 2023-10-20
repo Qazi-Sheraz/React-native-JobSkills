@@ -174,16 +174,16 @@ const [endDate, setEndDate] = useState(params?.start?new Date(oneDayAhead):null)
                         _addExperince(values)
                     }}
                     validationSchema={yup.object().shape({
-                        title: yup.string().max(100, 'Title must not exceed 100 characters').required().label('Title'),
-                        company: yup.string().required().label('Company'),
-                        start: yup.string().required('Start Date is required').label('start'),
+                        title: yup.string().max(100,store.lang.Title_must_not_exceed_100_characters).required().label(store.lang.Title),
+                        company: yup.string().required().label(store.lang.Company),
+                        start: yup.string().required(store.lang.Start_Date_is_required).label(store.lang.start),
                         // end: yup.string().required('End Date is required').label('end'),
 
-                        county: yup.object().nullable().shape().required('Country is required'),
-                        city: yup.object().nullable().shape().required('City is required'),
-                        state: yup.object().nullable().shape().required('State is required'),
+                        county: yup.object().nullable().shape().required(store.lang.Country_is_required),
+                        city: yup.object().nullable().shape().required(store.lang.City_is_required),
+                        state: yup.object().nullable().shape().required(store.lang.State_is_required),
 
-                        description: yup.string().max(500, 'Title must not exceed 500 characters').required().label('Description'),
+                        description: yup.string().max(500, store.lang.Title_must_not_exceed_500_characters).required().label(store.lang.descriptions),
                     })}>
                     {({
                         values,

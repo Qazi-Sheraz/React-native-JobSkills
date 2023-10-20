@@ -173,16 +173,16 @@ const ECompanyInformation = () => {
               .object()
               .shape()
               .required(store.lang.CompanySize_is_required),
-            company_name: yup.string().required(),
+            company_name: yup.string().required(store.lang.Company_Name_is_a_required_field),
             location: yup.string().max(288).required(store.lang.Location_is_required),
             ceo_name: yup.string()
               .transform(value => value.trim())
-              .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'Ceo Name must contain at least 1 alphabet character and can include English, Urdu, Arabic, and spaces')
-              .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the Ceo Name')
+              .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, store.lang.Ceo_Name_must_contain_at_least_1_alphabet_character_and_can_include_English_Urdu_Arabic_and_spaces)
+              .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, store.lang.Symbols_are_not_allowed_in_the_Ceo_Name)
               .required(store.lang.The_CEO_name_is_required),
             website: yup
               .string()
-              .url('Invalid URL format')
+              .url(store.lang.Invalid_URL_format)
               .required(store.lang.Website_URL_is_required),
             // fax: yup.string().max(14).required(),
           })}

@@ -474,7 +474,7 @@ const companyName = params?.c_name?encodeURIComponent(params?.c_name || ""):enco
               _reportCompany(values);
               setLoader1(false);
             }}
-            validationSchema={yup.object().shape({ note: yup.string().required('Note is required').label('Note'), }
+            validationSchema={yup.object().shape({ note: yup.string().required(store.lang.Note_is_required).label(store.lang.Note), }
             )}>
             {({
               values,

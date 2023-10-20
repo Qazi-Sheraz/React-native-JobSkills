@@ -168,86 +168,87 @@ useEffect(() => {
           {
           first_name: yup
             .string()
-            .min(3, 'First Name ame Must be at least 3 characters')
-            .max(100, 'First Name must be at most 100 characters long')
+            .min(3, store.lang.First_Name_Must_be_at_least_3_characters)
+            .max(100, store.lang.Name_must_be_at_most_100_characters_long)
             .transform(value => value.trim())
-            .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'First Name must contain at least 1 alphabet character and can include English, Urdu, Arabic, and spaces')
-            .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the First Name')
-            .required('First Name is a required field'),
+            .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, store.lang.First_Name_must_contain_at_least_1_alphabet_character_and_can_include_English_Urdu_Arabic_and_spaces)
+            .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, store.lang.Symbols_are_not_allowed_in_the_First_Name)
+            .required(store.lang.First_Name_is_a_required_field),
           last_name: yup
             .string()
-            .min(3, 'Last Name Must be at least 3 characters')
-            .max(100, 'Last Name must be at most 100 characters long')
+            .min(3, store.lang.Last_Name_Must_be_at_least_3_characters)
+            .max(100, store.lang.Name_must_be_at_most_100_characters_long)
             .transform(value => value.trim())
-            .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'Last Name must contain at least 1 alphabet character and can include English, Urdu, Arabic, and spaces')
-            .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the Last Name')
-            .required('Last Name is a required field'),
+            .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, store.lang.Last_Name_must_contain_at_least_1_alphabet_character_and_can_include_English_Urdu_Arabic_and_spaces)
+            .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, store.lang.Symbols_are_not_allowed_in_the_Last_Name)
+            .required(store.lang.Last_Name_is_a_required_field),
           
           email: yup
             .string()
-            .min(0, 'Email address cannot be empty')
-            .max(100, 'Email address must be at most 100 characters long')
-            .email('Must be a valid email')
-            .required('Email is a required field'),
+            .min(0, store.lang.Email_address_cannot_be_empty)
+            .max(100, store.lang.Email_address_must_be_at_most_100_characters_long)
+            .email(store.lang.Must_be_a_valid_email)
+            .required(store.lang.Email_is_a_required_field),
           password: yup
             .string()
-            .min(8, 'Password Must be at least 8 characters')
-            .max(16, 'Password must be at most 15 characters')
-            .required('Password is a required field'),
+            .min(8, store.lang.Password_Must_be_at_least_8_characters)
+            .max(16, store.lang.Password_must_be_at_most_16_characters)
+            .required(store.lang.Password_is_a_required_field),
           confirmPassword: yup
             .string()
-            .required('Confirm Password is a required field')
-            .oneOf([yup.ref('password'), null], 'Passwords must match'),
+            .required(store.lang.Confirm_Password_is_a_required_field)
+            .oneOf([yup.ref(store.lang.Password), null], store.lang.Password_must_match),
           policy: yup
             .boolean()
-            .required('Policy is a required field')
+            .required(store.lang.Policy_is_a_required_field)
             .test('is boolean', 'Must be true', value => value === true),
         }
          : {
           first_name: yup
             .string()
-            .min(3, 'First Name ame Must be at least 3 characters')
-            .max(100, 'First Name must be at most 100 characters long')
+            .min(3,store.lang.First_Name_Must_be_at_least_3_characters)
+            .max(100, store.lang.First_Name_must_be_at_most_100_characters_long)
             .transform(value => value.trim())
-            .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'First Name must contain at least 1 alphabet character and can include English, Urdu, Arabic, and spaces')
-            .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the First Name')
-            .required('First Name is a required field'),
+            .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, store.lang.First_Name_must_contain_at_least_1_alphabet_character_and_can_include_English_Urdu_Arabic_and_spaces)
+            .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, store.lang.Symbols_are_not_allowed_in_the_First_Name)
+            .required(store.lang.First_Name_is_a_required_field),
           last_name: yup
             .string()
-            .min(3, 'Last Name Must be at least 3 characters')
-            .max(100, 'Last Name must be at most 100 characters long')
+            .min(3, store.lang.Last_Name_Must_be_at_least_3_characters)
+            .max(100, store.lang.Name_must_be_at_most_100_characters_long)
             .transform(value => value.trim())
-            .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'Last Name must contain at least 1 alphabet character and can include English, Urdu, Arabic, and spaces')
-            .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the Last Name')
-            .required('Last Name is a required field'),
+            .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, store.lang.Last_Name_must_contain_at_least_1_alphabet_character_and_can_include_English_Urdu_Arabic_and_spaces)
+            .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, store.lang.Symbols_are_not_allowed_in_the_Last_Name)
+            .required(store.lang.Last_Name_is_a_required_field),
           company_name: yup
             .string()
-            .min(3, 'Company Name Must be at least 3 characters')
-            .max(100, 'Company Name must be at most 100 characters long')
+            .min(3, store.lang.Company_Name_Must_be_at_least_3_characters)
+            .max(100, store.lang.Company_Name_must_be_at_most_100_characters_long)
             .transform(value => value.trim())
             .matches(
               /^[A-Za-z\u0600-\u06FF\s]*[A-Za-z\u0600-\u06FF][A-Za-z\u0600-\u06FF\s\d\W]*$/,
-              'Company Name must only contain alphabetic characters'
+              store.lang.Company_Name_must_only_contain_alphabetic_characters
             )
-            .required('Company Name is a required field'),
-          email: yup
+            .required(store.lang.Company_Name_is_a_required_field),
+        
+            email: yup
             .string()
-            .min(0, 'Email address cannot be empty')
-            .max(100, 'Email address must be at most 100 characters long')
-            .email('Must be a valid email')
-            .required('Email is a required field'),
+            .min(0, store.lang.Email_address_cannot_be_empty)
+            .max(100, store.lang.Email_address_must_be_at_most_100_characters_long)
+            .email(store.lang.Must_be_a_valid_email)
+            .required(store.lang.Email_is_a_required_field),
           password: yup
             .string()
-            .min(8, 'Password Must be at least 8 characters')
-            .max(16, 'Password must be at most 15 characters')
-            .required('Password is a required field'),
+            .min(8, store.lang.Password_Must_be_at_east_8_characters)
+            .max(16, store.lang.Password_must_be_at_most_15_characters)
+            .required(store.lang.Password_is_a_required_field),
           confirmPassword: yup
             .string()
-            .required('Confirm Password is a required field')
-            .oneOf([yup.ref('password'), null], 'Passwords must match'),
+            .required(store.lang.Confirm_Password_is_a_required_field)
+            .oneOf([yup.ref(store.lang.password), null], store.lang.Passwords_must_match),
           policy: yup
             .boolean()
-            .required('Policy is a required field')
+            .required(store.lang.Policy_is_a_required_field)
             .test('is boolean', 'Must be true', value => value === true),
         }
         )}>
