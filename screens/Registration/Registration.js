@@ -334,94 +334,6 @@ const Registration = ({ navigation, route }) => {
           _register(values);
         }}
         validationSchema={yup.object().shape(
-<<<<<<< HEAD
-          route.params?.type == 1 ?
-            {
-              first_name: yup
-                .string()
-                .min(3, 'First Name ame Must be at least 3 characters')
-                .max(100, 'First Name must be at most 100 characters long')
-                .transform(value => value.trim())
-                .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'First Name must contain at least 1 alphabet character and can include English, Urdu, Arabic, and spaces')
-                .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the First Name')
-                .required('First Name is a required field'),
-              last_name: yup
-                .string()
-                .min(3, 'Last Name Must be at least 3 characters')
-                .max(100, 'Last Name must be at most 100 characters long')
-                .transform(value => value.trim())
-                .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'Last Name must contain at least 1 alphabet character and can include English, Urdu, Arabic, and spaces')
-                .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the Last Name')
-                .required('Last Name is a required field'),
-
-              email: yup
-                .string()
-                .min(0, 'Email address cannot be empty')
-                .max(100, 'Email address must be at most 100 characters long')
-                .email('Must be a valid email')
-                .required('Email is a required field'),
-              password: yup
-                .string()
-                .min(8, 'Password Must be at least 8 characters')
-                .max(16, 'Password must be at most 15 characters')
-                .required('Password is a required field'),
-              confirmPassword: yup
-                .string()
-                .required('Confirm Password is a required field')
-                .oneOf([yup.ref('password'), null], 'Passwords must match'),
-              policy: yup
-                .boolean()
-                .required('Policy is a required field')
-                .test('is boolean', 'Must be true', value => value === true),
-            }
-            : {
-              first_name: yup
-                .string()
-                .min(3, 'First Name ame Must be at least 3 characters')
-                .max(100, 'First Name must be at most 100 characters long')
-                .transform(value => value.trim())
-                .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'First Name must contain at least 1 alphabet character and can include English, Urdu, Arabic, and spaces')
-                .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the First Name')
-                .required('First Name is a required field'),
-              last_name: yup
-                .string()
-                .min(3, 'Last Name Must be at least 3 characters')
-                .max(100, 'Last Name must be at most 100 characters long')
-                .transform(value => value.trim())
-                .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'Last Name must contain at least 1 alphabet character and can include English, Urdu, Arabic, and spaces')
-                .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the Last Name')
-                .required('Last Name is a required field'),
-              company_name: yup
-                .string()
-                .min(3, 'Company Name Must be at least 3 characters')
-                .max(100, 'Company Name must be at most 100 characters long')
-                .transform(value => value.trim())
-                .matches(
-                  /^[A-Za-z\u0600-\u06FF\s]*[A-Za-z\u0600-\u06FF][A-Za-z\u0600-\u06FF\s\d\W]*$/,
-                  'Company Name must only contain alphabetic characters'
-                )
-                .required('Company Name is a required field'),
-              email: yup
-                .string()
-                .min(0, 'Email address cannot be empty')
-                .max(100, 'Email address must be at most 100 characters long')
-                .email('Must be a valid email')
-                .required('Email is a required field'),
-              password: yup
-                .string()
-                .min(8, 'Password Must be at least 8 characters')
-                .max(16, 'Password must be at most 15 characters')
-                .required('Password is a required field'),
-              confirmPassword: yup
-                .string()
-                .required('Confirm Password is a required field')
-                .oneOf([yup.ref('password'), null], 'Passwords must match'),
-              policy: yup
-                .boolean()
-                .required('Policy is a required field')
-                .test('is boolean', 'Must be true', value => value === true),
-            }
-=======
           route.params?.type == 1?
           {
           first_name: yup
@@ -509,7 +421,6 @@ const Registration = ({ navigation, route }) => {
             .required(store.lang.Policy_is_a_required_field)
             .test('is boolean', 'Must be true', value => value === true),
         }
->>>>>>> 3Oct
         )}>
         {({
           values,

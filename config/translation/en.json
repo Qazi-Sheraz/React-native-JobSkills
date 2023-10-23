@@ -283,6 +283,7 @@
     "language": "Job Language",
     "martial_status": "Martial Status",
     "next": "Next",
+    "Skip":"skip",
     "done": "Done",
     "previous": "Previous",
     "country": "Country",
@@ -591,9 +592,30 @@
   "Title_must_not_exceed_500_characters":"Title must not exceed 500 characters",
   "Start_Date_is_required":"Start Date is required",
   "Phone_must_be_atleast_10_characters":"Phone must be atleast 10 characters",
-  "Phone_must_be_at_most_14_characters":"Phone must be at most 14 characters"
- 
- 
+  "Phone_must_be_at_most_14_characters":"Phone must be at most 14 characters",
+  "JobSkills_The_Right_Employee_in_The_Right_Position":"JobSkills \n The Right Employee in The Right Position",
+  "we_are_launching_soon_This_project_is_owned_byFajer_Technology":"we are launching soon...! \n This project is owned by \nFajer Technology",
+  "Looking_for_job_or_to_hire_great_candidates_efficiently":"Looking for job or to hire great candidates efficiently? JobSkills Solutions gives access to most advanced features! Respond to candidates as soon as they apply for jobs or respond to letters. Easily contact the right people for open roles. Conduct assessments, contact, recruit, and prepare candidates on the go.",
+  "Get_Started":"Get Started",
+  "Adding_New_Candidates":"Adding New Candidates",
+  "Resume_Parsing":"Resume Parsing",
+  "Predefined_Assessments":"Predefined Assessments",
+  "Candidate_Application_Tracking":"Candidate Application Tracking",
+  "Job_Posting_with_Assessments":"Job Posting with Assessments",
+  "Automated_Interview_Scheduling":"Automated Interview Scheduling",
+  "Normally_candidates_provide_their_resumes":"Normally, candidates provide their resumes when they apply to one of your jobs. You can upload resumes to add new candidates list for a job.",
+  "Resume_CV_parsing_software_feature":"Resume/CV parsing software feature is designed to automate analyzing, and sorting resumes.",
+  "Employers_have_the_option_to_onfigure_predefined_assessments":"Employers have the option to configure predefined assessments. Predefined assessments provide Candidate Experience Insight.",
+ "How_it_works_that_if_an_applicant":"How it works that if an applicant answers any of questions unsatisfactorily, the resume will be auto rejected by this feature.",
+ "Performance_Assessment_in_Strength_and_Conditioning":"Performance Assessment in Strength and Conditioning is the first step to clearly and coherently suggest candidate’s performance.",
+ "Deliver_the_Best_Candidate_Experience_by_Scheduling_your_Interviews_with_JobSkills":"Deliver the Best Candidate Experience by Scheduling your Interviews with JobSkills.",
+ "Automated_personalised_communication":"Automated personalised communication",
+ "The_ability_to_build_detailed_candidate_profiles":"The ability to build detailed candidate profiles",
+ "Automation_makes_life_easier":"Automation makes life easier. This feature helps keep the candidate informed of where their application is heading.",
+ "JobSkills_Engine_will_capture_all_relevant":"JobSkills Engine will capture all relevant information about a candidate when they apply.",
+ "Deliver_the_Best_Candidate_Experience_by_Scheduling_your_Interviews_with_JobSkills.":"Deliver the Best Candidate Experience by Scheduling your Interviews with JobSkills."
+
+
 
     
      

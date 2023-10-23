@@ -49,12 +49,12 @@ const BoundingScreenStart = () => {
                         resizeMode: 'contain',
                     }}
                 />
-                <JText style={styles.headers}>{`JobSkills \n The Right Employee in The Right Position`}</JText>
-                <JText style={styles.text}>{`we are launching soon...! \n This project is owned by \nFajer Technology`}</JText>
-                <JText style={styles.text1}>{`Looking for job or to hire great candidates efficiently? JobSkills Solutions gives access to most advanced features! Respond to candidates as soon as they apply for jobs or respond to letters. Easily contact the right people for open roles. Conduct assessments, contact, recruit, and prepare candidates on the go.`}</JText>
+                <JText style={styles.headers}>{store.lang.JobSkills_The_Right_Employee_in_The_Right_Position}</JText>
+                <JText style={styles.text}>{store.lang.we_are_launching_soon_This_project_is_owned_byFajer_Technology}</JText>
+                <JText style={styles.text1}>{store.lang.Looking_for_job_or_to_hire_great_candidates_efficiently}</JText>
             </View>
             <JButton style={{ marginVertical: RFPercentage(2), }}
-                onPress={() => { handleSave() }}>Get Started</JButton>
+                onPress={() => { handleSave() }}>{store.lang.Get_Started}</JButton>
 
         </JGradientScreen>
     )

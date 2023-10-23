@@ -3,7 +3,7 @@ import {
   Image,
   StyleSheet
 } from 'react-native';
-import React from 'react';
+import React, { useContext } from 'react';
 import JRow from './JRow';
 import JText from './JText';
 import JDots from './JDots';
@@ -14,6 +14,7 @@ import JCircularLogo from './JCircularLogo';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP } from 'react-native-responsive-screen';
 import JChevronIcon from './JChevronIcon';
+import { StoreContext } from '../mobx/store';
 
 
 export default function JSplashScreen({
@@ -28,12 +29,14 @@ export default function JSplashScreen({
   containerStyle,
   onPreviousPress,
 }) {
+
+  const store=useContext(StoreContext)
   return (
     <JScreen style={containerStyle}>
       <JRow style={styles.header}>
         <JChevronIcon color={colors.black[0]} />
         <JSkip
-          children="Skip"
+          children={store.lang.Skip}
           onPress={onSkipPress}
           fontColor={colors.black[0]}
         />
@@ -87,7 +90,7 @@ export default function JSplashScreen({
           <JSkip
             fontColor={colors.black[0]}
             onPress={onPreviousPress}
-            children="Previous"
+            children={store.lang.previous}
           />
         ) : (
           <View />
@@ -95,7 +98,7 @@ export default function JSplashScreen({
         <JSkip
           fontColor={colors.black[0]}
           onPress={onNextPress}
-          children="Next"
+          children={store.lang.next}
         />
       </JRow>
     </JScreen>

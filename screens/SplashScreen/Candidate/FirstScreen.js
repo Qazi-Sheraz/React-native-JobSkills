@@ -29,16 +29,16 @@ export default function FirstScreen() {
     <JSplashScreen
       containerStyle={{ marginHorizontal: RFPercentage(2), }}
       heading={
-        splashSlid == 1 ? 'Automated personalised communication'
-          : splashSlid == 2 ? 'The ability to build detailed candidate profiles'
-            : splashSlid == 3 ? 'Automated Interview Scheduling'
-              : 'Resume Parsing'
+        splashSlid == 1 ?store.lang.Automated_personalised_communication 
+          : splashSlid == 2 ?store.lang.The_ability_to_build_detailed_candidate_profiles  
+            : splashSlid == 3 ?store.lang.Automated_Interview_Scheduling 
+              :store.lang.Resume_Parsing 
       }
       detail={
-        splashSlid == 1 ? 'Automation makes life easier. This feature helps keep the candidate informed of where their application is heading.'
-          : splashSlid == 2 ? 'JobSkills Engine will capture all relevant information about a candidate when they apply.'
-            : splashSlid == 3 ? 'Deliver the Best Candidate Experience by Scheduling your Interviews with JobSkills.'
-              : 'Resume/CV parsing software feature is designed to automate collecting, analysing, and sorting resumes.'
+        splashSlid == 1 ?store.lang.Automation_makes_life_easier 
+          : splashSlid == 2 ?store.lang.JobSkills_Engine_will_capture_all_relevant 
+            : splashSlid == 3 ?store.lang.Deliver_the_Best_Candidate_Experience_by_Scheduling_your_Interviews_with_JobSkills 
+              :store.lang.Resume_CV_parsing_software_feature 
       }
 
       count={4}
