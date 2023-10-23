@@ -366,6 +366,7 @@ const Login = ({ navigation, route }) => {
       console.log('getToken=====>', getToken.accessToken)
 
     } catch (error) {
+      console.log(error)
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         console.log('user cancelled the login flow', error);
         alert('user cancelled the login flow', error)
@@ -637,7 +638,8 @@ const Login = ({ navigation, route }) => {
                   gooleLogin()
                 }
                 else {
-                  facebookLogin()
+                  console.log("else")
+                  // facebookLogin()
                 }
               }}
               key={index}
