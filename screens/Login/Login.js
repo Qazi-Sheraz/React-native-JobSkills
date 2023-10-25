@@ -565,6 +565,12 @@ const Login = ({ navigation, route }) => {
               }}>
               <JRow>
                 <CheckBox
+               
+                 tintColor= {"gray"}
+                 onCheckColor= {colors.purple[0]}
+                 onFillColor= {colors.white[0]}
+                 onTintColor= {colors.purple[0]}
+               
                   tintColors={{ true: colors.purple[0], false: 'black' }}
                   boxType="square"
                   value={values.remember}
@@ -639,7 +645,7 @@ const Login = ({ navigation, route }) => {
                 }
                 else {
                   console.log("else")
-                  // facebookLogin()
+                  facebookLogin()
                 }
               }}
               key={index}

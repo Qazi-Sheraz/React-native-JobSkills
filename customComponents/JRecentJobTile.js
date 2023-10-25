@@ -165,7 +165,8 @@ const jobTitle = encodeURIComponent(item?.job_title || "");
                 // width: '28%',
                 justifyContent: 'center',
                 alignItems: 'center',
-                paddingHorizontal: RFPercentage(0.5),
+                paddingRight: store.lang.id==0?RFPercentage(1):RFPercentage(0),
+                paddingLeft: store.lang.id==0?RFPercentage(0):RFPercentage(1),
                 // backgroundColor:'green',
               }}>
               <TouchableOpacity
@@ -195,7 +196,9 @@ const jobTitle = encodeURIComponent(item?.job_title || "");
           <View
             style={{
               width: image ? '72%' : '100%',
-              paddingVertical: RFPercentage(1),
+              
+
+
               // justifyContent: 'center',
             }}>
               <JRow>
@@ -203,28 +206,31 @@ const jobTitle = encodeURIComponent(item?.job_title || "");
               {item?.job_title?.length > 60 ? item?.job_title?.slice(0, 60) + " . . . .":item?.job_title}
             </JText>
             </JRow>
+            
             <JRow
               style={{
-                marginTop: RFPercentage(0.5),
+                marginTop: RFPercentage(0.4),
+                alignItems:'center',
+                
               }}>
-              <JText fontColor={colors.danger[0]}>{store.lang.expire_on}</JText>
-              <JText>
-                {/* 12 MAR 2023 */}
+              <JText fontColor={colors.danger[0]}>{`${store.lang.expire_on} `}</JText>
+              <JText style={{marginTop:store.lang.id==0?RFPercentage(0.2): RFPercentage(0.4)}}>
                 {moment(item?.job_expiry_date, 'DD-MM-YYYY').format('DD-MM-YYYY')}
               </JText>
             </JRow>
             <JRow
               style={{
                 justifyContent: 'space-between',
-                marginTop: RFPercentage(0.5),
+                marginTop: RFPercentage(0.4),
+
               }}>
               <JRow
                 disabled={false}
                 onPress={() =>
                   navigation.navigate('JobApplication', {id: item?.id})
                 }>
-                <JIcon icon={'fa5'} name="user-circle" size={RFPercentage(2.1)} color={colors.drafted[0]}style={{marginHorizontal:RFPercentage(0.2) }}/>
-                <JText>
+                <JIcon icon={'fa5'} name="user-circle" size={RFPercentage(2.1)} color={colors.drafted[0]}/>
+                <JText style={{marginHorizontal:RFPercentage(0.5) }}>
                   {item?.applicant?item?.applicant:'0'} {store.lang.applicant}
                 </JText>
                

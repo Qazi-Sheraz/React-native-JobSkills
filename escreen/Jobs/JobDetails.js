@@ -756,7 +756,7 @@ const JobDetails = ({ route }) => {
           onPressNo={modalVisible2}
           msg={'Canceled from single doc picker'}
           btn={false} /> */}
-          <Modal animationType="fade" transparent={true} visible={modalVisible}>
+          <Modal style={{}} animationType="fade" transparent={true} visible={modalVisible}>
 
             <Formik
               initialValues={{
