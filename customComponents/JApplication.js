@@ -202,7 +202,7 @@ const JApplication = ({
     )
       .then(response => response.json())
       .then(result => {
-        console.log(result)
+        // console.log(result)
         setMeetings(result)
         setLink(result?.meeting_type[0])
       })

@@ -1,20 +1,19 @@
 import {
-  StyleSheet,
-  FlatList,
   View,
-  ScrollView,
-  Pressable,
   Modal,
+  FlatList,
+  Pressable,
+  StyleSheet,
   ActivityIndicator,
 } from 'react-native';
 import React, { useContext, useEffect, useRef, useState } from 'react';
+import colors from '../../config/colors';
+import JRow from '../../customComponents/JRow';
+import JText from '../../customComponents/JText';
 import JScreen from '../../customComponents/JScreen';
 import JGradientHeader from '../../customComponents/JGradientHeader';
-import JText from '../../customComponents/JText';
-import colors from '../../config/colors';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import JSearchInput from '../../customComponents/JSearchInput';
-import JRow from '../../customComponents/JRow';
 import JApplication from '../../customComponents/JApplication';
 import Sort from '../../assets/svg/Icon/Sort.svg';
 import Arrow_Up from '../../assets/svg/Icon/Arrow_Up.svg';
@@ -26,23 +25,13 @@ import {
   MenuTrigger,
 } from 'react-native-popup-menu';
 import { StoreContext } from '../../mobx/store';
-import RBSheet from 'react-native-raw-bottom-sheet';
-import { heightPercentageToDP } from 'react-native-responsive-screen';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import JChevronIcon from '../../customComponents/JChevronIcon';
 import { observer } from 'mobx-react';
 import url from '../../config/url';
-import JNotfoundData from '../../customComponents/JNotfoundData';
 import JApiError from '../../customComponents/JApiError';
 import { _jobApplication } from '../../functions/Candidate/BottomTab';
 import JEmpty from '../../customComponents/JEmpty';
-import DatePicker from 'react-native-date-picker';
-import { Formik } from 'formik';
-import * as yup from 'yup';
-import JButton from '../../customComponents/JButton';
-import JIcon from '../../customComponents/JIcon';
-import moment from 'moment';
-import { JToast } from '../../functions/Toast';
 const JobApplication = ({ route }) => {
 
   const isFoucs = useIsFocused();
@@ -64,34 +53,34 @@ const JobApplication = ({ route }) => {
   const refRBSheet = useRef();
 
 
-  const data = [
-    { status: 'All' },
-    { id: 0, status: store.lang.drafted },
-    { id: 1, status: store.lang.applied },
-    { id: 2, status: store.lang.rejected },
-    { id: 3, status: store.lang.selected },
-    { id: 4, status: store.lang.shortlisted },
-    { id: 5, status: store.lang.invitation_Sent },
-    { id: 6, status: store.lang.interview_scheduled },
-    { id: 7, status: store.lang.interview_accepted },
-    { id: 8, status: store.lang.interview_rescheduled },
-    { id: 9, status: store.lang.interview_completed },
-  ];
+  // const data = [
+  //   { status: 'All' },
+  //   { id: 0, status: store.lang.drafted },
+  //   { id: 1, status: store.lang.applied },
+  //   { id: 2, status: store.lang.rejected },
+  //   { id: 3, status: store.lang.selected },
+  //   { id: 4, status: store.lang.shortlisted },
+  //   { id: 5, status: store.lang.invitation_Sent },
+  //   { id: 6, status: store.lang.interview_scheduled },
+  //   { id: 7, status: store.lang.interview_accepted },
+  //   { id: 8, status: store.lang.interview_rescheduled },
+  //   { id: 9, status: store.lang.interview_completed },
+  // ];
 
-  const filterData = status => {
+  // const filterData = status => {
 
-    store.setJApplication(store?.jApplication.filter(e => e.status == status));
+  //   store.setJApplication(store?.jApplication.filter(e => e.status == status));
 
-    refRBSheet.current.close();
-  };
+  //   refRBSheet.current.close();
+  // };
 
-  const sortByNameAscending = () => {
-    store.setJApplication(
-      [...store?.jApplication].sort((a, b) =>
-        a.candidate_name.localeCompare(b.candidate_name),
-      ),
-    );
-  };
+  // const sortByNameAscending = () => {
+  //   store.setJApplication(
+  //     [...store?.jApplication].sort((a, b) =>
+  //       a.candidate_name.localeCompare(b.candidate_name),
+  //     ),
+  //   );
+  // };
   const sortByFitScoreAscending = () => {
     store.setJApplication(
       [...store?.jApplication].sort((a, b) => a.fit_score - b.fit_score)
@@ -102,13 +91,13 @@ const JobApplication = ({ route }) => {
       [...store?.jApplication].sort((a, b) => b.fit_score - a.fit_score)
     );
   };
-  const sortByNameDescending = () => {
-    store.setJApplication(
-      [...store?.jApplication].sort((a, b) =>
-        b.candidate_name.localeCompare(a.candidate_name),
-      ),
-    );
-  };
+  // const sortByNameDescending = () => {
+  //   store.setJApplication(
+  //     [...store?.jApplication].sort((a, b) =>
+  //       b.candidate_name.localeCompare(a.candidate_name),
+  //     ),
+  //   );
+  // };
 
   const sortByRecentApplyDateDescending = () => {
     store.setJApplication(

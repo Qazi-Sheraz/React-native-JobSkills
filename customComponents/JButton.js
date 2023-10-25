@@ -9,15 +9,15 @@ import {
 } from 'react-native-responsive-screen';
 
 export default function JButton({
-  children,
+  ref,
   style,
-  backgroundColor,
-  borderWidth,
-  borderColor,
-  fontStyle,
   onPress,
   isValid,
-  ref,
+  children,
+  fontStyle,
+  borderWidth,
+  borderColor,
+  backgroundColor,
   disabled = false
 }) {
   return isValid !== undefined && isValid === false ? (

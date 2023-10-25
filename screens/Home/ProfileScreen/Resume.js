@@ -1,56 +1,57 @@
 import {
-  StyleSheet,
-  ScrollView,
-  Dimensions,
   View,
-  StatusBar,
-  TouchableOpacity,
   Modal,
-  ActivityIndicator,
-  SafeAreaView,
   Switch,
   FlatList,
-  Alert,
+  StatusBar,
+  StyleSheet,
+  Dimensions,
+  ScrollView,
+  SafeAreaView,
+  ActivityIndicator,
 } from 'react-native';
-import React from 'react';
-import JScreen from '../../../customComponents/JScreen';
-import JGradientHeader from '../../../customComponents/JGradientHeader';
-import JText from '../../../customComponents/JText';
-import { RFPercentage } from 'react-native-responsive-fontsize';
-import Feather from 'react-native-vector-icons/Feather';
-import colors from '../../../config/colors';
-import Pdf from 'react-native-pdf';
-import Entypo from 'react-native-vector-icons/Entypo';
-import { useState } from 'react';
-import JRow from '../../../customComponents/JRow';
-// import FontAwesome from 'react-native-vector-icons/FontAwesome';
-// import AntDesign from 'react-native-vector-icons/AntDesign';
-import DocumentPicker from 'react-native-document-picker';
-import { useContext } from 'react';
-import { StoreContext } from '../../../mobx/store';
-import { useEffect } from 'react';
-import { Formik } from 'formik';
+import React,
+{
+  useState,
+  useEffect,
+  useContext,
+} from 'react';
 import * as yup from 'yup';
-import JButton from '../../../customComponents/JButton';
-import JInput from '../../../customComponents/JInput';
-import JResumeView from '../../../customComponents/JResumeView';
+import { Formik } from 'formik';
+import RNFS from 'react-native-fs'
+import Pdf from 'react-native-pdf';
 import url from '../../../config/url';
-import JChevronIcon from '../../../customComponents/JChevronIcon';
-import JEmpty from '../../../customComponents/JEmpty';
+import { observer } from 'mobx-react';
+import colors from '../../../config/colors';
+import JRow from '../../../customComponents/JRow';
 import { JToast } from '../../../functions/Toast';
+import { StoreContext } from '../../../mobx/store';
+import JText from '../../../customComponents/JText';
+import JInput from '../../../customComponents/JInput';
+import JEmpty from '../../../customComponents/JEmpty';
+import Entypo from 'react-native-vector-icons/Entypo';
+import PdfFile from '../../../assets/svg/PdfFile.svg';
+import JScreen from '../../../customComponents/JScreen';
+import JButton from '../../../customComponents/JButton';
+import DocumentPicker from 'react-native-document-picker';
+import JResumeView from '../../../customComponents/JResumeView';
+import { RFPercentage } from 'react-native-responsive-fontsize';
+import JChevronIcon from '../../../customComponents/JChevronIcon';
+import JGradientHeader from '../../../customComponents/JGradientHeader';
 
 const Resume = ({ navigation }) => {
   const store = useContext(StoreContext);
+  const [resumes, setResumes] = useState([]);
   const [loader, setLoader] = useState(true);
   const [apiLoader, setApiLoader] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const [resumes, setResumes] = useState([]);
 
-  const _selectOneFile = async setFieldValue => {
+  const _selectOneFile = async (setFieldValue) => {
     //Opening Document Picker for selection of one file
     try {
       const res = await DocumentPicker.pick({
         type: [DocumentPicker.types.pdf],
+
         //There can me more options as well
         // DocumentPicker.types.allFiles
         // DocumentPicker.types.images
@@ -58,14 +59,15 @@ const Resume = ({ navigation }) => {
         // DocumentPicker.types.audio
         // DocumentPicker.types.pdf
       });
-      //Printing the log realted to the file
-
-      // console.log('URI : ' + res[0].uri);
-      // console.log('Type : ' + res[0].type);
-      // console.log('File Name : ' + res[0].name);
-      // console.log('File Size : ' + res[0].size);
+      // console.log('ressss', res[0])
+      console.log('URI : ' + res[0]?.uri);
+      // console.log('Type : ' + res[0]?.type);
+      console.log('File Name : ' + res[0]?.name);
+      // console.log('File Size : ' + res[0]?.size);
       //Setting the state to show single file attributes
+
       setFieldValue('resume', res[0]);
+
     } catch (err) {
       //Handling any exception (If any)
       if (DocumentPicker.isCancel(err)) {
@@ -82,7 +84,7 @@ const Resume = ({ navigation }) => {
       }
     }
   };
-
+  // console.log(pdf)
   const _deleteCV = id => {
     // Alert.alert('Delete CV', 'Are you sure to delete?', [
     //   {
@@ -94,24 +96,24 @@ const Resume = ({ navigation }) => {
     // ]);
 
     // const _delete = () => {
-      var myHeaders = new Headers();
-      myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
+    var myHeaders = new Headers();
+    myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
 
-      var requestOptions = {
-        method: 'DELETE',
-        headers: myHeaders,
-        redirect: 'follow',
-      };
-      fetch(`${url.baseUrl}/delete-resumes/${id}`, requestOptions)
-        .then(response => response.json())
-        .then(result => {
-          // console.log(result);
-          setResumes(resumes.filter(e => e.id !== id));
-          setLoader(true)
-          _getResume()
-          setLoader(false)
-        })
-      // .catch(error => console.log('error', error));
+    var requestOptions = {
+      method: 'DELETE',
+      headers: myHeaders,
+      redirect: 'follow',
+    };
+    fetch(`${url.baseUrl}/delete-resumes/${id}`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        // console.log(result);
+        setResumes(resumes.filter(e => e.id !== id));
+        setLoader(true)
+        _getResume()
+        setLoader(false)
+      })
+    // .catch(error => console.log('error', error));
     // };
   };
   const _getResume = () => {
@@ -143,19 +145,29 @@ const Resume = ({ navigation }) => {
       });
   };
 
+  const readResume = async (uri) => {
+    try {
+      const base64String = await RNFS.readFile(uri, 'base64');
+      console.log(base64String);
+      return base64String;
+    } catch (error) {
+      console.error('Error reading PDF:', error);
+      return null; // Handle the error as needed
+    }
+  };
+
   useEffect(() => {
     _getResume();
   }, []);
   return (
     <JScreen
-      // style={{marginHorizontal: RFPercentage(2),}}
       headerShown={true}
       header={
         <JGradientHeader
           center={
             <JText
-              fontColor={colors.white[0]}
               fontWeight="bold"
+              fontColor={colors.white[0]}
               fontSize={RFPercentage(2.5)}>
               {store.lang.resume}
             </JText>
@@ -168,10 +180,10 @@ const Resume = ({ navigation }) => {
               <ActivityIndicator color={colors.white[0]} />
             ) : (
               <Entypo
-                onPress={() => setModalVisible(true)}
                 name="upload"
                 size={RFPercentage(3.5)}
                 color={colors.white[0]}
+                onPress={() => setModalVisible(true)}
               />
             )
           }
@@ -208,7 +220,6 @@ const Resume = ({ navigation }) => {
           //   </View>
           // }
           data={resumes?.reverse()}
-          keyExtractor={(item, index) => index}
           renderItem={({ item, index }) => (
             <JResumeView
               item={item}
@@ -216,6 +227,7 @@ const Resume = ({ navigation }) => {
               _deleteCV={_deleteCV}
             />
           )}
+          keyExtractor={(item, index) => index}
         />
       )}
 
@@ -355,14 +367,15 @@ const Resume = ({ navigation }) => {
 
                   {values.resume?.uri ? (
                     values.resume?.size <= 1000000 ? (
-                      <View style={{ alignSelf: 'center' }}>
-                        <Pdf
+                      <View style={{ alignSelf: 'center', width: '70%', }}>
+                        {/* <Pdf
                           trustAllCerts={false}
                           source={{ uri: values.resume?.uri }}
                           onLoadComplete={(numberOfPages, filePath) => {
                             // console.log(
                             //   `Number of pages: ${numberOfPages}`,
                             // );
+                            alert('uploaded')
                           }}
                           onPageChanged={(page, numberOfPages) => {
                             // console.log(`Current page: ${page}`);
@@ -378,7 +391,20 @@ const Resume = ({ navigation }) => {
                             width: Dimensions.get('window').width / 3,
                             height: Dimensions.get('window').height / 3,
                           }}
-                        />
+                        /> */}
+                        <View style={{
+                          alignSelf: 'center',
+                          width: Dimensions.get('window').width / 3,
+                          height: Dimensions.get('window').height / 5,
+                          // backgroundColor:'red'
+                        }}>
+                          <PdfFile />
+
+                        </View>
+                        <JText style={{ textAlign: 'center', fontWeight: '600' }}>{values.resume?.name}</JText>
+
+
+
                         <Entypo
                           onPress={() => _selectOneFile(setFieldValue)}
                           name="circle-with-cross"
@@ -394,7 +420,7 @@ const Resume = ({ navigation }) => {
                       </View>
                     ) : (
                       <>
-                        <JText style={{ marginVertical: RFPercentage(1) ,color:'red' }}>
+                        <JText style={{ marginVertical: RFPercentage(1), color: 'red' }}>
                           {store.lang.file_size_exceeds_MB_limit}
                         </JText>
                         <JRow
@@ -446,7 +472,7 @@ const Resume = ({ navigation }) => {
                   />
                   <JRow
                     style={{
-                      justifyContent: 'space-between',
+                      // justifyContent: 'space-between',
                       marginVertical: RFPercentage(2),
                     }}>
                     <JText fontWeight={'500'} fontSize={RFPercentage(2.5)}>
@@ -469,12 +495,12 @@ const Resume = ({ navigation }) => {
                       borderColor: colors.primary[1],
                     }}>
                     <JButton
-                    disabled={apiLoader?true:false}
+                      disabled={apiLoader ? true : false}
                       isValid={isValid}
                       onPress={() => {
-                       if( values.resume?.size <= 1000000){
-                        handleSubmit();
-                      }
+                        if (values.resume?.size <= 1000000) {
+                          handleSubmit();
+                        }
                       }}
                       style={{
                         width: '46%',
@@ -492,19 +518,17 @@ const Resume = ({ navigation }) => {
   );
 };
 
-export default Resume;
+export default observer(Resume);
 
 const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
-
     alignItems: 'center',
-
     backgroundColor: '#00000080',
   },
   modalView: {
     backgroundColor: colors.white[0],
-    marginTop: StatusBar.currentHeight,
+    // marginTop: StatusBar?.currentHeight,
 
     width: '100%',
     shadowColor: '#000',

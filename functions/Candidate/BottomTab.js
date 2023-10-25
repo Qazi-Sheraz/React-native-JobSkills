@@ -1,5 +1,5 @@
+import { JToast } from '../Toast';
 import url from '../../config/url';
-import {JToast} from '../Toast';
 
 export const _getHomeData = store => {
   var myHeaders = new Headers();
@@ -158,7 +158,7 @@ export const _getAllJobData = store => {
     .then(res => res.json())
     .then(res => {
       store.setJobApiLoader(true);
-  //  console.log('ressssss',res),
+      //  console.log('ressssss',res),
       store.setJobData(res);
       store.setJobApiLoader(false);
     })
@@ -241,13 +241,13 @@ export const _dashboard = (store) => {
   myHeaders.append(
 
     'Authorization',
-    `Bearer ${store.token?.token}`,{
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
+    `Bearer ${store.token?.token}`, {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
 
-    }
+  }
   );
-  
+
   fetch(`${url.baseUrl}/dashboardEmployer`, {
     method: 'GET',
     headers: myHeaders,
@@ -291,7 +291,7 @@ export const _addnewJob = (store) => {
     .then(result => {
       store.setCreateApiError(false);
       store.setJobCreate(result);
-      
+
       // console.log(result.arabic_data)
       // store.setCreateApiLoader(false);
     })
@@ -307,7 +307,7 @@ export const _addnewJob = (store) => {
     })
     .finally(() => {
       store.setCreateApiLoader(false);
-      
+
     });
 };
 
@@ -341,4 +341,4 @@ export const _country = (store) => {
 
 
 
-  
+
