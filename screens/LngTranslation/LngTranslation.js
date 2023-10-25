@@ -1,17 +1,28 @@
-import { StyleSheet, Image, View } from 'react-native';
-import React, { useState, useEffect, useContext } from 'react';
-import JGradientScreen from '../../customComponents/JGradientScreen';
-import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen';
-import colors from '../../config/colors';
-import JText from '../../customComponents/JText';
-import { RFPercentage } from 'react-native-responsive-fontsize';
-import { StoreContext } from '../../mobx/store';
-import JRow from '../../customComponents/JRow';
-import JButton from '../../customComponents/JButton';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
+import {
+  View,
+  Image,
+  StyleSheet,
+} from 'react-native';
+import React, {
+  useState,
+  useEffect,
+  useContext
+} from 'react';
 import { observer } from 'mobx-react';
+import colors from '../../config/colors';
+import JRow from '../../customComponents/JRow';
+import { StoreContext } from '../../mobx/store';
+import JText from '../../customComponents/JText';
+import JButton from '../../customComponents/JButton';
 import * as Animatable from 'react-native-animatable';
+import { useNavigation } from '@react-navigation/native';
+import {
+  heightPercentageToDP,
+  widthPercentageToDP
+} from 'react-native-responsive-screen';
+import { RFPercentage } from 'react-native-responsive-fontsize';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import JGradientScreen from '../../customComponents/JGradientScreen';
 
 const LngTranslation = () => {
   const store = useContext(StoreContext);
@@ -28,24 +39,38 @@ const LngTranslation = () => {
       await AsyncStorage.setItem('selectedLanguage', lang);
       // await AsyncStorage.setItem('splash', 'true');
       store.setLang(lang);
-      navigation.navigate('BoundingScreenStart')
+      // navigation.navigate('BoundingScreenStart')
+      getpermission()
       // store.setLangType('true');
-
-      setTimeout(() => {
-        store.setIsRefreshing(!store.isRefreshing);
-        // console.log(store.isRefreshing);
-        // setStat(!stat)
-      }, 2000);
 
       // console.log(lang)
     } catch (error) {
       // console.log('Error storing language:', error);
     }
   };
+  const getpermission = async () => {
+    try {
+      const permissionValue = await AsyncStorage.getItem('permission');
+
+      if (permissionValue === 'true') {
+        // 'employerSplash' is true, take some action
+        // For example, you can navigate to 'CLogin' here
+        navigation.navigate('BoundingScreenStart')
+      } else {
+        // 'employerSplash' is false or not set, take another action
+        // For example, you can navigate to 'FirstScreen' here
+        navigation.navigate('PermissionScreen')
+      }
+    } catch (error) {
+      console.error('Error retrieving Permission value from AsyncStorage: ', error);
+      // You may choose to handle the error here or return a default value.
+      return null; // Return a default value or handle the error as needed
+    }
+  };
 
   useEffect(() => {
-
-  }, [store.isRefreshing])
+    // AsyncStorage.removeItem('permission');
+  }, [])
   return (
 
     <JGradientScreen style={{ justifyContent: 'space-between' }}>
@@ -60,6 +85,7 @@ const LngTranslation = () => {
             resizeMode: 'contain',
           }}
         />
+
       </View>
       <Animatable.View style={styles.sheetContainer} animation="slideInUp">
         <View
@@ -106,18 +132,18 @@ export default observer(LngTranslation);
 const styles = StyleSheet.create({
   logo: {
     height: RFPercentage(100),
+    alignItems: 'center',
     justifyContent: 'center',
     marginTop: RFPercentage(-20),
-    alignItems: 'center',
   },
   view: {
-    backgroundColor: '#fff',
-    position: 'absolute',
     bottom: 0,
     width: '100%',
+    position: 'absolute',
+    alignItems: 'center',
+    backgroundColor: '#fff',
     height: RFPercentage(35),
     padding: RFPercentage(2),
-    alignItems: 'center',
     justifyContent: 'space-evenly',
     borderTopLeftRadius: RFPercentage(3),
     borderTopRightRadius: RFPercentage(3),
@@ -125,7 +151,7 @@ const styles = StyleSheet.create({
   btn: { paddingHorizontal: RFPercentage(4) },
   sheetContainer: {
     flex: 1,
-    justifyContent: 'flex-end',
     alignItems: 'center',
+    justifyContent: 'flex-end',
   },
 });

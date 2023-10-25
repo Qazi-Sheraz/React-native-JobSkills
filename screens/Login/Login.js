@@ -26,7 +26,7 @@ import DeviceInfo from 'react-native-device-info';
 import { JToast } from '../../functions/Toast';
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 import {
-  LoginManager, AccessToken,
+  LoginManager, AccessToken, GraphRequest, GraphRequestManager,
 } from 'react-native-fbsdk-next';
 import LinkedInModal from '@smuxx/react-native-linkedin';
 
@@ -396,23 +396,60 @@ const Login = ({ navigation, route }) => {
     }
   };
 
-  const facebookLogin = async () => {
-    try {
-      const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
-      console.log('result', result)
-      if (result.isCancelled) {
-        console.log('Login cancelled');
-      } else {
-        const data = await AccessToken.getCurrentAccessToken();
-        console.log('dataaaa------>', data)
-        if (data) {
-          console.log('Logged in with Facebook!');
-          console.log('User ID:', data.userID);
-          console.log('Access Token:', data.accessToken);
+  // const facebookLogin = async () => {
+  //   try {
+  //     const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
+  //     console.log('result', result)
+  //     if (result.isCancelled) {
+  //       console.log('Login cancelled');
+  //     } else {
+  //       const data = await AccessToken.getCurrentAccessToken();
+  //       console.log('dataaaa------>', data)
+  //       if (data) {
+  //         console.log('Logged in with Facebook!');
+  //         console.log('User ID:', data.userID);
+  //         console.log('Access Token:', data.accessToken);
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error('Facebook login error:', error);
+  //   }
+  // };
+
+  const facebookLogin = () => {
+    LoginManager.logInWithPermissions(['public_profile', 'email']).then(
+      // LoginManager.setLoginBehavior('web_only'),
+      function (result, error) {
+        if (error) {
+          alert('login has error: ' + result.error);
+        } else if (result.isCancelled) {
+          alert('login is cancelled.');
+        } else {
+          AccessToken.getCurrentAccessToken().then(data => {
+            const infoRequest = new GraphRequest(
+              '/me?fields=name,picture',
+              null,
+              _responseInfoCallback,
+            );
+            // Start the graph request.
+            new GraphRequestManager().addRequest(infoRequest).start();
+            console.log('result', data);
+          });
         }
-      }
-    } catch (error) {
-      console.error('Facebook login error:', error);
+      },
+      function (error) {
+        console.log('Login fail with error: ' + error);
+      },
+    );
+  };
+
+  const _responseInfoCallback = (error, result) => {
+    if (error) {
+      alert('Error fetching data: ' + error.toString());
+    } else {
+      alert('Result Name: ' + result.name);
+      console.log('result===================', result.name);
+      setEdit(result);
     }
   };
 

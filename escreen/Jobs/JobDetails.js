@@ -1,53 +1,59 @@
 import {
-  Modal,
-  SafeAreaView,
-  Dimensions,
-  StyleSheet,
   View,
-  ScrollView,
-  ActivityIndicator,
-  FlatList,
-  Linking,
-  Pressable,
+  Modal,
   Image,
-  StatusBar,
+  Share,
+  Linking,
+  FlatList,
+  Pressable,
+  StyleSheet,
+  ScrollView,
+  Dimensions,
+  SafeAreaView,
+  ActivityIndicator,
 } from 'react-native';
-import React, { useEffect, useContext, useRef, useCallback, useState } from 'react';
-import JScreen from '../../customComponents/JScreen';
-import moment from 'moment';
-import JGradientHeader from '../../customComponents/JGradientHeader';
-import JText from '../../customComponents/JText';
-import colors from '../../config/colors';
-import { RFPercentage } from 'react-native-responsive-fontsize';
-import { StoreContext } from '../../mobx/store';
-import { heightPercentageToDP } from 'react-native-responsive-screen';
-import JRow from '../../customComponents/JRow';
-import DEVOTEAM from '../../assets/svg/Icon/DEVOTEAM.svg';
-import Placeholder from '../../assets/svg/Icon/Placeholder.svg';
-import Calendar from '../../assets/svg/Icon/Calendar.svg';
-import JScrollView from '../../customComponents/JScrollView';
-import Entypo from 'react-native-vector-icons/Entypo';
-import JButton from '../../customComponents/JButton';
-import JInput from '../../customComponents/JInput';
-import Pdf from 'react-native-pdf';
-import { Formik } from 'formik';
+import
+React,
+{
+  useEffect,
+  useContext,
+  useRef,
+  useCallback,
+  useState
+} from 'react';
 import * as yup from 'yup';
-import DocumentPicker from 'react-native-document-picker';
+import moment from 'moment';
+import { Formik } from 'formik';
+import url from '../../config/url';
+import Pdf from 'react-native-pdf';
+import { observer } from 'mobx-react';
+import colors from '../../config/colors';
+import JRow from '../../customComponents/JRow';
+import { JToast } from '../../functions/Toast';
+import { StoreContext } from '../../mobx/store';
+import JIcon from '../../customComponents/JIcon';
+import JText from '../../customComponents/JText';
+import JInput from '../../customComponents/JInput';
+import PdfFile from '../../assets/svg/PdfFile.svg';
+import RBSheet from 'react-native-raw-bottom-sheet';
+import JScreen from '../../customComponents/JScreen';
+import JButton from '../../customComponents/JButton';
+import Entypo from 'react-native-vector-icons/Entypo';
+import JApplyJob from '../../customComponents/JApplyJob';
 import { useNavigation } from '@react-navigation/native';
 import PhoneInput from 'react-native-phone-number-input';
-import JChevronIcon from '../../customComponents/JChevronIcon';
-import { observer } from 'mobx-react';
+import Calendar from '../../assets/svg/Icon/Calendar.svg';
+import DocumentPicker from 'react-native-document-picker';
 import JErrorText from '../../customComponents/JErrorText';
-import url from '../../config/url';
-import JIcon from '../../customComponents/JIcon';
-import { Menu, MenuOption, MenuOptions, MenuTrigger } from 'react-native-popup-menu';
+import JScrollView from '../../customComponents/JScrollView';
+import JChevronIcon from '../../customComponents/JChevronIcon';
+import Placeholder from '../../assets/svg/Icon/Placeholder.svg';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 import JGradientView from '../../customComponents/JGradientView';
+import JGradientHeader from '../../customComponents/JGradientHeader';
 import { _saveToFavoriteList } from '../../functions/Candidate/BottomTab';
-import RBSheet from 'react-native-raw-bottom-sheet';
-import JApplyJob from '../../customComponents/JApplyJob';
-import { JToast } from '../../functions/Toast';
-import { Share } from 'react-native';
 import CLSelectedJob from '../../loaders/Candidate/SelectedJob/CLSelectedJob';
+import { Menu, MenuOption, MenuOptions, MenuTrigger } from 'react-native-popup-menu';
 
 
 const JobDetails = ({ route }) => {
@@ -732,13 +738,13 @@ const JobDetails = ({ route }) => {
                         {store.lang.already_applied}
                       </JText>
                     </JRow>
-                  ) :  <JApplyJob
-                  status={status}
-                  setStatus={setStatus}
-                  id={store.jobDetail?.id}
-                  token={store.token?.token}
-                  jobId={store.jobDetail?.job_id}
-                />}
+                  ) : <JApplyJob
+                    status={status}
+                    setStatus={setStatus}
+                    id={store.jobDetail?.id}
+                    token={store.token?.token}
+                    jobId={store.jobDetail?.job_id}
+                  />}
 
                 </>}
             </View>
@@ -749,7 +755,7 @@ const JobDetails = ({ route }) => {
               token={store.token?.token}
               jobId={store.jobDetail?.job_id}
             /> */}
-            </>
+          </>
 
           {/* <JModal 
           modalVisible={modalVisible2}
@@ -757,187 +763,210 @@ const JobDetails = ({ route }) => {
           msg={'Canceled from single doc picker'}
           btn={false} /> */}
           <Modal animationType="fade" transparent={true} visible={modalVisible}>
+            <JScreen style={styles.centeredView}
+              header={
+                <JGradientHeader
+                  center={
+                    <JText
+                      fontColor={colors.white[0]}
+                      fontWeight="bold"
+                      fontSize={RFPercentage(2.5)}>
+                      {store.lang.add_jobseeker}
+                    </JText>
+                  }
+                />
 
-            <Formik
-              initialValues={{
-                firstName: '',
-                lastName: '',
-                email: '',
-                phone: '',
-                regional_code: '',
-                is_default: false,
-              }}
+              }
+              left={
+                <Entypo
+                  onPress={() => setModalVisible(false)}
+                  name="circle-with-cross"
+                  size={RFPercentage(3.5)}
+                  color={colors.white[0]}
 
-              onSubmit={values => {
-                _addCandidate(values);
-              }}
-              validationSchema={yup.object().shape({
-                resume: yup.object().shape({
-                  uri: yup.string().required(store.lang.PDF),
-                }),
-                firstName: yup.string()
-                  .transform(value => value.trim())
-                  .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'First Name must contain  alphabet character')
-                  .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the First Name')
-                  .required().label('First Name'),
-                lastName: yup.string()
-                  .transform(value => value.trim())
-                  .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'Last Name must contain alphabet character')
-                  .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the Last Name')
-                  .required().label('Last Name'),
-                email: yup
-                  .string()
-                  .min(0, store.lang.Email_address_cannot_be_empty)
-                  .max(100, store.lang.Email_address_must_be_at_most_100_characters_long)
-                  .email(store.lang.Must_be_a_valid_email)
-                  .required()
-                  .label(store.lang.Email),
-                // phone: yup.string().max(14).required().label('Phone'),
-                phone: yup.string().min(10).max(15).matches(/^\+?[0-9]\d*$/, 'Phone Number must be a digit').required().label(store.lang.phone),
-              })}>
+                />
+              }
+            >
+              <Formik
+                initialValues={{
+                  resume: '',
+                  firstName: '',
+                  lastName: '',
+                  email: '',
+                  phone: '',
+                  regional_code: '',
+                  is_default: false,
+                }}
 
-              {({
-                values,
-                errors,
-                isValid,
-                touched,
-                handleSubmit,
-                handleChange,
-                setFieldTouched,
-                setFieldValue,
-              }) => (
-                <JScreen style={styles.centeredView}>
-          
-                  <ScrollView style={styles.modalView}>
-                    <JGradientHeader
-                      center={
-                        <JText
-                          fontColor={colors.white[0]}
-                          fontWeight="bold"
-                          fontSize={RFPercentage(2.5)}>
-                          {store.lang.add_jobseeker}
-                        </JText>
-                      }
+                onSubmit={values => {
+                  _addCandidate(values);
+                }}
+                validationSchema={yup.object().shape({
+                  resume: yup.object().shape({
+                    uri: yup.string().required(store.lang.PDF),
+                  }),
+                  firstName: yup.string()
+                    .transform(value => value.trim())
+                    .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'First Name must contain  alphabet character')
+                    .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the First Name')
+                    .required().label('First Name'),
+                  lastName: yup.string()
+                    .transform(value => value.trim())
+                    .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'Last Name must contain alphabet character')
+                    .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the Last Name')
+                    .required().label('Last Name'),
+                  email: yup
+                    .string()
+                    .min(0, store.lang.Email_address_cannot_be_empty)
+                    .max(100, store.lang.Email_address_must_be_at_most_100_characters_long)
+                    .email(store.lang.Must_be_a_valid_email)
+                    .required()
+                    .label(store.lang.Email),
+                  // phone: yup.string().max(14).required().label('Phone'),
+                  phone: yup.string().min(10).max(15).matches(/^\+?[0-9]\d*$/, 'Phone Number must be a digit').required().label(store.lang.phone),
+                })}>
+
+                {({
+                  values,
+                  errors,
+                  isValid,
+                  touched,
+                  handleSubmit,
+                  handleChange,
+                  setFieldTouched,
+                  setFieldValue,
+                }) => (
+
+                  <JScrollView style={[styles.modalView, { borderBottomLeftRadius: RFPercentage(3), borderBottomRightRadius: RFPercentage(3), borderRadius: 0 }]}>
+                    <JInput
+                      style={{
+                        textAlign: store.lang.id == 0 ? 'left' : 'right',
+                      }}
+                      containerStyle={{ marginTop: RFPercentage(1) }}
+                      isRequired
+                      maxLength={100}
+                      heading={store.lang.first_name}
+                      value={values.firstName}
+                      error={touched.firstName && errors.firstName && true}
+                      onChangeText={handleChange('firstName')}
+                      onBlur={() => setFieldTouched('firstName')}
                     />
-                    <View style={{ padding: RFPercentage(2) }}>
-                      <JInput
+                    {touched.firstName && errors.firstName && (
+                      <JErrorText>{errors.firstName}</JErrorText>
+                    )}
+                    <JInput
+                      style={{
+                        textAlign: store.lang.id == 0 ? 'left' : 'right',
+                      }}
+                      containerStyle={{ marginTop: RFPercentage(1) }}
+                      isRequired
+                      maxLength={100}
+                      heading={store.lang.last_name}
+                      value={values.lastName}
+                      error={touched.lastName && errors.lastName && true}
+                      onChangeText={handleChange('lastName')}
+                      onBlur={() => setFieldTouched('lastName')}
+                    />
+                    {touched.lastName && errors.lastName && (
+                      <JErrorText>{errors.lastName}</JErrorText>
+                    )}
+                    <JInput
+                      style={{
+                        textAlign: store.lang.id == 0 ? 'left' : 'right',
+                      }}
+                      containerStyle={{ marginTop: RFPercentage(1) }}
+                      isRequired
+                      maxLength={100}
+                      heading={store.lang.email}
+                      value={values.email}
+                      error={touched.email && errors.email && true}
+                      onChangeText={handleChange('email')}
+                      onBlur={() => setFieldTouched('email')}
+                    />
+                    {touched.email && errors.email && (
+                      <JErrorText>{errors.email}</JErrorText>
+                    )}
+                    <View style={{ marginBottom: RFPercentage(2) }}>
+                      <JRow
                         style={{
-                          textAlign: store.lang.id == 0 ? 'left' : 'right',
-                        }}
-                        containerStyle={{ marginTop: RFPercentage(1) }}
-                        isRequired
-                        maxLength={100}
-                        heading={store.lang.first_name}
-                        value={values.firstName}
-                        error={touched.firstName && errors.firstName && true}
-                        onChangeText={handleChange('firstName')}
-                        onBlur={() => setFieldTouched('firstName')}
-                      />
-                      {touched.firstName && errors.firstName && (
-                        <JErrorText>{errors.firstName}</JErrorText>
-                      )}
-                      <JInput
-                        style={{
-                          textAlign: store.lang.id == 0 ? 'left' : 'right',
-                        }}
-                        containerStyle={{ marginTop: RFPercentage(1) }}
-                        isRequired
-                        maxLength={100}
-                        heading={store.lang.last_name}
-                        value={values.lastName}
-                        error={touched.lastName && errors.lastName && true}
-                        onChangeText={handleChange('lastName')}
-                        onBlur={() => setFieldTouched('lastName')}
-                      />
-                      {touched.lastName && errors.lastName && (
-                        <JErrorText>{errors.lastName}</JErrorText>
-                      )}
-                      <JInput
-                        style={{
-                          textAlign: store.lang.id == 0 ? 'left' : 'right',
-                        }}
-                        containerStyle={{ marginTop: RFPercentage(1) }}
-                        isRequired
-                        maxLength={100}
-                        heading={store.lang.email}
-                        value={values.email}
-                        error={touched.email && errors.email && true}
-                        onChangeText={handleChange('email')}
-                        onBlur={() => setFieldTouched('email')}
-                      />
-                      {touched.email && errors.email && (
-                        <JErrorText>{errors.email}</JErrorText>
-                      )}
-                      <View style={{ marginBottom: RFPercentage(2) }}>
-                        <JRow
-                          style={{
-                            marginTop: RFPercentage(1),
-                          }}>
-                          <JText fontWeight="500" fontSize={RFPercentage(2.5)}>
-                            {store.lang.phone_number}
-                          </JText>
-                        </JRow>
-                        <PhoneInput
-                        textInputProps={{maxLength:15}}
-                          ref={phoneInput}
-                          defaultValue={values.phone}
-                          defaultCode={'SA'}
-                          placeholder={store.lang.phone_number}
-                          containerStyle={{
-                            width: '100%',
-                            borderBottomWidth: RFPercentage(0.1),
-                          }}
-                          textInputStyle={{
-                            color: colors.black[0],
-                            fontSize: RFPercentage(2.1),
-                            marginTop: RFPercentage(0.1),
-                          }}
-                          textContainerStyle={{
-                            paddingVertical: 5,
-                            backgroundColor: 'transparent',
-                          }}
-                          onChangeFormattedText={(text, c) => {
-                            setFieldValue('phone', text);
-                            setFieldValue('regional_code', c);
-                          }}
-                          onChangeCountry={(e) => {
-                            setCode(e.callingCode[0])
-                            // setFieldValue('regional_code', e.callingCode[0]);
-                          }}
-                          onChangeText={(e) => {
-                            // setFieldValue('phone', e);
-                            setPhone(e)
-                          }}
-                        />
-
-                      </View>
-                      {touched.phone && errors.phone && (
-                        <JErrorText>{errors.phone}</JErrorText>
-                      )}
-                      <JRow>
-                        <JText fontSize={RFPercentage(2.5)}>
-                          {store.lang.resume}
-                        </JText>
-                        <JText
-                          fontColor={colors.danger[0]}
-                          fontSize={RFPercentage(2.5)}>
-                          *
-                        </JText>
-                      </JRow>
-
-                      <JText
-                        fontSize={RFPercentage(2)}
-                        fontColor={colors.placeHolderColor[0]}
-                        style={{
-                          marginBottom: RFPercentage(2),
                           marginTop: RFPercentage(1),
                         }}>
-                        {store.lang.sure_updated_resume}
+                        <JText fontWeight="500" fontSize={RFPercentage(2.5)}>
+                          {store.lang.phone_number}
+                        </JText>
+                      </JRow>
+                      <PhoneInput
+                        textInputProps={{ maxLength: 15 }}
+                        ref={phoneInput}
+                        defaultValue={values.phone}
+                        defaultCode={'SA'}
+                        placeholder={store.lang.phone_number}
+                        containerStyle={{
+                          width: '100%',
+                          borderBottomWidth: RFPercentage(0.1),
+                        }}
+                        textInputStyle={{
+                          color: colors.black[0],
+                          fontSize: RFPercentage(2.1),
+                          marginTop: RFPercentage(0.1),
+                        }}
+                        textContainerStyle={{
+                          paddingVertical: 5,
+                          backgroundColor: 'transparent',
+                        }}
+                        onChangeFormattedText={(text, c) => {
+                          setFieldValue('phone', text);
+                          setFieldValue('regional_code', c);
+                        }}
+                        onChangeCountry={(e) => {
+                          setCode(e.callingCode[0])
+                          // setFieldValue('regional_code', e.callingCode[0]);
+                        }}
+                        onChangeText={(e) => {
+                          // setFieldValue('phone', e);
+                          setPhone(e)
+                        }}
+                      />
+
+                    </View>
+                    {touched.phone && errors.phone && (
+                      <JErrorText>{errors.phone}</JErrorText>
+                    )}
+                    <JRow>
+                      <JText fontSize={RFPercentage(2.5)}>
+                        {store.lang.resume}
                       </JText>
-                      {values.resume?.uri ? (
-                        values.resume?.size <= 1000000 ? (
-                          <View style={{ alignSelf: 'center' }}>
-                            <Pdf
+                      <JText
+                        fontColor={colors.danger[0]}
+                        fontSize={RFPercentage(2.5)}>
+                        *
+                      </JText>
+                    </JRow>
+
+                    <JText
+                      fontSize={RFPercentage(2)}
+                      fontColor={colors.placeHolderColor[0]}
+                      style={{
+                        marginBottom: RFPercentage(2),
+                        marginTop: RFPercentage(1),
+                      }}>
+                      {store.lang.sure_updated_resume}
+                    </JText>
+                    {values.resume?.uri ? (
+                      values.resume?.size <= 1000000 ? (
+                        <View style={{ alignSelf: 'center', width: '70%', }}>
+                          <View style={{
+                            alignSelf: 'center',
+                            width: Dimensions.get('window').width / 4,
+                            height: Dimensions.get('window').height / 6,
+                            // backgroundColor:'red'
+                          }}>
+                            <PdfFile />
+
+                          </View>
+
+                          <JText style={{ textAlign: 'center', fontWeight: '600' }}>{values.resume?.name}</JText>
+                          {/* <Pdf
                               trustAllCerts={false}
                               source={{ uri: values.resume?.uri }}
                               onLoadComplete={(numberOfPages, filePath) => {
@@ -959,91 +988,92 @@ const JobDetails = ({ route }) => {
                                 width: Dimensions.get('window').width / 3,
                                 height: Dimensions.get('window').height / 3,
                               }}
-                            />
-                            <Entypo
-                              onPress={() => _selectOneFile(setFieldValue)}
-                              name="circle-with-cross"
-                              size={RFPercentage(3.5)}
-                              color={colors.danger[0]}
-                              style={{
-                                position: 'absolute',
-                                zIndex: 1,
-                                right: RFPercentage(-2),
-                                top: RFPercentage(-1),
-                              }}
-                            />
-                          </View>
-                        ) : (
-                          <>
-                            <JText style={{ marginVertical: RFPercentage(1), color: 'red' }}>
-                              {store.lang.file_size_exceeds_MB_limit}
-                            </JText>
-                            <JRow
-                              style={{
-                                justifyContent: 'center',
-                                marginHorizontal: RFPercentage(3),
-                                borderColor: colors.primary[1],
-                              }}>
-                              <JButton
-                                onPress={() => _selectOneFile(setFieldValue)}
-                                style={{
-                              
-                                  backgroundColor: colors.white[0],
-                                  borderColor: colors.black[1],
-                                }}
-                                children={store.lang.upload_resume}
-                              />
-                            </JRow>
-                          </>
-                        )
-                      ) : (
-                        <JRow
-                          style={{
-                            justifyContent: 'center',
-                            marginHorizontal: RFPercentage(3),
-                            borderColor: colors.primary[1],
-                          }}>
-                          <JButton
-                            onPress={() => _selectOneFile(setFieldValue)}
-                            style={{
-                             
-                              backgroundColor: colors.white[0],
-                              borderColor: colors.black[1],
-                            }}
-                            children={store.lang.upload_resume}
-                          />
-                        </JRow>
-                      )}
+                            /> */}
 
+                          <Entypo
+                            onPress={() => _selectOneFile(setFieldValue)}
+                            name="circle-with-cross"
+                            size={RFPercentage(3.5)}
+                            color={colors.danger[0]}
+                            style={{
+                              position: 'absolute',
+                              zIndex: 1,
+                              right: RFPercentage(-2),
+                              top: RFPercentage(-1),
+                            }}
+                          />
+                        </View>
+                      ) : (
+                        <>
+                          <JText style={{ marginVertical: RFPercentage(1), color: 'red' }}>
+                            {store.lang.file_size_exceeds_MB_limit}
+                          </JText>
+                          <JRow
+                            style={{
+                              justifyContent: 'center',
+                              marginHorizontal: RFPercentage(3),
+                              borderColor: colors.primary[1],
+                            }}>
+                            <JButton
+                              onPress={() => _selectOneFile(setFieldValue)}
+                              style={{
+
+                                backgroundColor: colors.white[0],
+                                borderColor: colors.black[1],
+                              }}
+                              children={store.lang.upload_resume}
+                            />
+                          </JRow>
+                        </>
+                      )
+                    ) : (
                       <JRow
                         style={{
-                          marginTop: RFPercentage(5),
                           justifyContent: 'center',
+                          marginHorizontal: RFPercentage(3),
                           borderColor: colors.primary[1],
                         }}>
                         <JButton
-                          isValid={isValid}
-                          disabled={loader1 ? true : false}
-                          onPress={() => {
-                            if (values.resume?.size <= 1000000) {
-                              handleSubmit();
-                            }
-                          }}
+                          onPress={() => _selectOneFile(setFieldValue)}
                           style={{
-                            width: '46%',
+
+                            backgroundColor: colors.white[0],
+                            borderColor: colors.black[1],
                           }}
-                          children={loader1 ? store.lang.loading : store.lang.add}
+                          children={store.lang.upload_resume}
                         />
                       </JRow>
-                    </View>
-                  </ScrollView>
-                  <Pressable
-                    style={{ height: '15%', width: '100%' }}
-                    onPress={() => setModalVisible(!modalVisible)}
-                  />
-                </JScreen>
-              )}
-            </Formik>
+                    )}
+
+                    <JRow
+                      style={{
+                        marginTop: RFPercentage(5),
+                        justifyContent: 'center',
+                        borderColor: colors.primary[1],
+                      }}>
+                      <JButton
+                        isValid={isValid}
+                        disabled={loader1 ? true : false}
+                        onPress={() => {
+                          if (values.resume?.size <= 1000000) {
+                            handleSubmit();
+                          }
+                        }}
+                        style={{
+                          width: '46%',
+                          marginBottom: values.resume?.uri ? RFPercentage(5) : RFPercentage(0),
+                        }}
+                        children={loader1 ? store.lang.loading : store.lang.add}
+                      />
+                    </JRow>
+                  </JScrollView>
+                )}
+              </Formik>
+              <Pressable
+                style={{ width: '100%', height: '15%' }}
+                onPress={() => setModalVisible(!modalVisible)}
+              />
+            </JScreen>
           </Modal>
           <Modal animationType="slide" transparent={true} visible={modalVisible1}>
             <SafeAreaView style={styles.centeredView}>
@@ -1286,8 +1316,8 @@ const styles = StyleSheet.create({
   modalView: {
     backgroundColor: colors.white[0],
     borderRadius: RFPercentage(3),
-    // paddingBottom: RFPercentage(2),
-    width: '100%',
+    paddingHorizontal: RFPercentage(2),
+    // width: '100%',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

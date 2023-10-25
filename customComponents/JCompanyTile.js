@@ -5,42 +5,43 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import {
   heightPercentageToDP,
   widthPercentageToDP,
 } from 'react-native-responsive-screen';
 import colors from '../config/colors';
-import {RFPercentage} from 'react-native-responsive-fontsize';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 import JText from './JText';
-import {useState} from 'react';
-import {StoreContext} from '../mobx/store';
-import {_saveToFavoriteList} from '../functions/Candidate/BottomTab.js';
-import {observer} from 'mobx-react';
+import { useState } from 'react';
+import { StoreContext } from '../mobx/store';
+import { _saveToFavoriteList } from '../functions/Candidate/BottomTab.js';
+import { observer } from 'mobx-react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {_saveToFollowing} from '../functions/Candidate/DFollowing';
+import { _saveToFollowing } from '../functions/Candidate/DFollowing';
 import JRow from './JRow';
 import JChevronIcon from './JChevronIcon';
 function JCompanyTile({
-  isempty = false,
   img,
   title,
-  location,
   onPress,
-  containerStyle,
+  OpenJob,
+  location,
   companyId,
+  containerStyle,
+  isempty = false,
   followingList = [],
 }) {
   const [loader, setLoader] = useState();
   const store = useContext(StoreContext);
   return isempty === true ? (
-  <JChevronIcon/>
+    <JChevronIcon />
   ) : (
     <JRow
       style={[
         {
           height: heightPercentageToDP(14),
-        
+
           backgroundColor: colors.tileColor[0],
         },
         containerStyle,
@@ -67,7 +68,7 @@ function JCompanyTile({
               width: RFPercentage(10),
             }}
             resizeMode="contain"
-            source={{uri: img}}
+            source={{ uri: img }}
           />
         </TouchableOpacity>
       </View>
@@ -81,9 +82,9 @@ function JCompanyTile({
         <JRow
           style={{
             justifyContent: 'space-between',
-           
+
           }}>
-          <JText style={{width:'85%'}}>{title?.length > 50 ? title?.slice(0, 50) + " . . . ." :title}</JText>
+          <JText style={{ width: '85%' }}>{title?.length > 50 ? title?.slice(0, 50) + " . . . ." : title}</JText>
 
           {loader ? (
             <ActivityIndicator
@@ -114,11 +115,11 @@ function JCompanyTile({
             />
           )}
         </JRow>
-        <JText style={{marginVertical: RFPercentage(0.5),}}>{location}</JText>
+        <JText style={{ marginVertical: RFPercentage(0.5), }}>{location}</JText>
 
         <JText
           style={{
-            alignSelf: store.lang.id==0?'flex-end':'flex-start',
+            alignSelf: store.lang.id == 0 ? 'flex-end' : 'flex-start',
             marginVertical: RFPercentage(0),
             marginRight: RFPercentage(1),
             padding: RFPercentage(0.5),
@@ -126,7 +127,7 @@ function JCompanyTile({
             backgroundColor: colors.openJob[0],
             textAlign: 'center',
           }}>
-          Open Job
+          {OpenJob}
         </JText>
       </View>
     </JRow>

@@ -47,8 +47,8 @@ function JSelectInput({
   id,
   mode = 'date',
   data,
-  date1='',
-  date= date1 ? date1 : new Date(),
+  date1 = '',
+  date = date1 ? date1 : new Date(),
   setDate,
   Licon,
 
@@ -86,7 +86,7 @@ function JSelectInput({
   const [ownership, setOwnership] = useState([]);
   const [companySize, setCompanySize] = useState([]);
   const [selectedItems, setSelectedItems] = useState(id);
- 
+
   // console.log('date1111>>',date1)
   const handleSelectItem = item => {
     if (selectedItems?.find((e) => e.id === item.id)) {
@@ -370,7 +370,7 @@ function JSelectInput({
         setLoader(false);
       })
       .catch(error => {
-         console.log('error-1', error);
+        console.log('error-1', error);
         setLoader(false);
       });
   };
@@ -395,9 +395,9 @@ function JSelectInput({
       });
   };
 
-   useEffect(() => {
-   
-   }, [date1])
+  useEffect(() => {
+
+  }, [date1])
 
   return (
     <>
@@ -426,7 +426,9 @@ function JSelectInput({
           }}>
           {icon}
           <JRow>
-            <JText fontWeight={headingWeight} fontSize={RFPercentage(2.5)} fontColor={disabled == true ? colors.inputBorder[0] : colors.black[0]}>
+            <JText fontWeight={headingWeight}
+              fontSize={RFPercentage(2.5)}
+              fontColor={disabled == true ? colors.inputBorder[0] : colors.black[0]}>
               {heading}
             </JText>
             {isRequired && (
@@ -439,8 +441,8 @@ function JSelectInput({
               </JText>
             )}
           </JRow>
-          {!disabled&&
-          rightIcon}
+          {!disabled &&
+            rightIcon}
         </JRow>
         <JRow
           style={{
@@ -456,7 +458,7 @@ function JSelectInput({
               width: forPassword ? '90%' : '100%',
               color: colors.black[0],
             }}>
-            <JRow> 
+            <JRow>
               {Licon}
               <JText>{value}</JText></JRow>
 
@@ -617,6 +619,7 @@ function JSelectInput({
                                                                     e.name.toLowerCase().includes(query.toLowerCase()),)
 
                 }
+
                 ListHeaderComponent={
                   header !== store.lang.experience && (
                     <JShadowView
@@ -634,7 +637,6 @@ function JSelectInput({
                       }}
                       isPressable={false}>
                       <TextInput
-
                         onChangeText={e => setQuery(e)}
                         placeholderTextColor={colors.placeHolderColor[0]}
                         placeholder={store.lang.search}
@@ -659,17 +661,23 @@ function JSelectInput({
                     }}
 
                     style={{
-
+                      backgroundColor: isMultiple === true && selectedItems?.find((e) => e.id == item.id) ? '#b0e2f7' : '#fff',
                       paddingVertical: RFPercentage(2),
-                      marginHorizontal: RFPercentage(2),
+                      paddingHorizontal: RFPercentage(2.5),
                       marginBottom: RFPercentage(1),
                       borderBottomColor: colors.border[0],
                       borderBottomWidth: RFPercentage(0.1),
                     }}>
-                    <JRow >
+                    <JRow style={{ justifyContent: 'space-between' }}>
                       {header === store.lang.state || header === store.lang.city
-                        ? <JText fontSize={RFPercentage(1.8)}>{store.lang.id == 0 ? item?.name : item?.arabic_title}</JText>
-                        : <JText fontSize={RFPercentage(1.8)}>{item?.name}</JText>}
+                        ? <JText
+                          fontSize={RFPercentage(1.8)}
+                          fontColor={'#000'}
+                        >{store.lang.id == 0 ? item?.name : item?.arabic_title}</JText>
+                        : <JText
+                          fontSize={RFPercentage(1.8)}
+                          fontColor={'#000'}
+                        >{item?.name}</JText>}
 
                       {isMultiple === true && selectedItems?.find((e) => e.id == item.id) && (
                         <JIcon icon="fe" name="check" size={RFPercentage(2)} color={colors.black[0]} />
@@ -690,7 +698,7 @@ function JSelectInput({
         mode={mode}
         open={open}
         date={date}
-        
+
 
         onConfirm={(date) => {
           // console.log('dateeeee',date)

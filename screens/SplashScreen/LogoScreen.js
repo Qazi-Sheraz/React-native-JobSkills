@@ -1,5 +1,5 @@
-import {StyleSheet, Image,StatusBar, Platform} from 'react-native';
-import React ,{ useEffect,useState,useContext } from 'react';
+import { StyleSheet, Image, StatusBar, Platform } from 'react-native';
+import React, { useEffect, useState, useContext } from 'react';
 import DeviceInfo from 'react-native-device-info';
 import {
   heightPercentageToDP,
@@ -13,7 +13,7 @@ import JText from '../../customComponents/JText';
 import url from '../../config/url';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function SplashScreen() {
-  const store =useContext(StoreContext)
+  const store = useContext(StoreContext)
   const requestUserPermission = async () => {
     /**
      * On iOS, messaging permission must be requested by
@@ -30,7 +30,7 @@ export default function SplashScreen() {
   const [deviceName, setDeviceName] = useState('');
   // console.log(deviceName)
 
-  const _getlangApi =()=>{
+  const _getlangApi = () => {
     var myHeaders = new Headers();
     myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
 
@@ -49,16 +49,16 @@ export default function SplashScreen() {
   };
   const handleSave = async lang => {
     // Switch to the selected language
-   
-       try {
-         await AsyncStorage.setItem('selectedLanguage', lang);
-         store.setLang(lang);
-        
-         console.log('lang',lang)
-       } catch (error) {
-         console.log('Error storing language:', error);
-       }
-     };
+
+    try {
+      await AsyncStorage.setItem('selectedLanguage', lang);
+      store.setLang(lang);
+
+      console.log('lang', lang)
+    } catch (error) {
+      console.log('Error storing language:', error);
+    }
+  };
   useEffect(() => {
     store.token?.token && _getlangApi()
     const fetchDeviceName = async () => {
@@ -78,45 +78,45 @@ export default function SplashScreen() {
 
   useEffect(() => {
 
-    if (requestUserPermission()) {
-      /**
-       * Returns an FCM token for this device
-       */
-      messaging()
-        .getToken()
-        .then(fcmToken => {
-          console.log('FCM Token -> ', fcmToken);
-          var formdata = new FormData();
-          formdata.append("user_id", store.userInfo?.id);
-          formdata.append("token", fcmToken);
-          formdata.append("name", store.deviceName);
-          formdata.append("os", Platform.OS);
-          formdata.append("version", Platform.Version);
-          var requestOptions = {
-            method: 'POST',
-            body: formdata,
-            redirect: 'follow'
-          };
-          fetch("https://dev.jobskills.digital/api/device-token-update", requestOptions)
-            .then(response => response.json())
-            .then(result => console.log('result', result))
-            .catch(error => console.log('error', error));
+    // if (requestUserPermission()) {
+    //   /**
+    //    * Returns an FCM token for this device
+    //    */
+    //   messaging()
+    //     .getToken()
+    //     .then(fcmToken => {
+    //       console.log('FCM Token -> ', fcmToken);
+    //       var formdata = new FormData();
+    //       formdata.append("user_id", store.userInfo?.id);
+    //       formdata.append("token", fcmToken);
+    //       formdata.append("name", store.deviceName);
+    //       formdata.append("os", Platform.OS);
+    //       formdata.append("version", Platform.Version);
+    //       var requestOptions = {
+    //         method: 'POST',
+    //         body: formdata,
+    //         redirect: 'follow'
+    //       };
+    //       fetch("https://dev.jobskills.digital/api/device-token-update", requestOptions)
+    //         .then(response => response.json())
+    //         .then(result => console.log('result', result))
+    //         .catch(error => console.log('error', error));
 
-        });
+    //     });
 
-      messaging()
-        .onTokenRefresh((newToken) => {
-          console.log('Updated FCM Token -> ', newToken);
+    //   messaging()
+    //     .onTokenRefresh((newToken) => {
+    //       console.log('Updated FCM Token -> ', newToken);
 
 
-        })
+    //     })
 
-    } 
- 
+    // } 
+
   }, []);
   return (
     <JGradientScreen style={styles.container}>
-      
+
       {/* <StatusBar backgroundColor={'transparent'} translucent/> */}
       <Image
         source={require('../../assets/images/logo/logo.png')}
@@ -132,5 +132,5 @@ export default function SplashScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {justifyContent: 'center', alignItems: 'center'},
+  container: { justifyContent: 'center', alignItems: 'center' },
 });
