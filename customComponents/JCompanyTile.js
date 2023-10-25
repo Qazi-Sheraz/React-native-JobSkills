@@ -1,26 +1,27 @@
 import {
-  StyleSheet,
-  Image,
   View,
+  Image,
+  StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import React, { useContext } from 'react';
+import React, {
+  useContext,
+  useState
+} from 'react';
 import {
   heightPercentageToDP,
-  widthPercentageToDP,
 } from 'react-native-responsive-screen';
-import colors from '../config/colors';
-import { RFPercentage } from 'react-native-responsive-fontsize';
-import JText from './JText';
-import { useState } from 'react';
-import { StoreContext } from '../mobx/store';
-import { _saveToFavoriteList } from '../functions/Candidate/BottomTab.js';
-import { observer } from 'mobx-react';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { _saveToFollowing } from '../functions/Candidate/DFollowing';
 import JRow from './JRow';
+import JText from './JText';
+import colors from '../config/colors';
+import { observer } from 'mobx-react';
 import JChevronIcon from './JChevronIcon';
+import { StoreContext } from '../mobx/store';
+import { RFPercentage } from 'react-native-responsive-fontsize';
+import { _saveToFollowing } from '../functions/Candidate/DFollowing';
+import { _saveToFavoriteList } from '../functions/Candidate/BottomTab.js';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 function JCompanyTile({
   img,
   title,
