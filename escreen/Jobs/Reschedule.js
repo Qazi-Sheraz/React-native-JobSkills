@@ -48,7 +48,7 @@ const Reschedule = () => {
         fetch(`${url.baseUrl}/scheduleDetail/${params?.cID}/${params?.jobID}`, requestOptions)
             .then(response => response.json())
             .then(result => {
-                // console.log('result',result)
+                console.log('result',result)
                 setDetails(result[0]);
             })
             .catch(error => {
