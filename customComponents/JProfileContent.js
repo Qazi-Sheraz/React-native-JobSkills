@@ -23,6 +23,7 @@ export default function JProfileContent({ src, name, email, jd }) {
   const [loader, setLoader] = useState(false);
 
   const _uploadImage = res => {
+ 
     var myHeaders = new Headers();
     myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
     var formdata = new FormData();
@@ -33,7 +34,7 @@ export default function JProfileContent({ src, name, email, jd }) {
       name: res[0].name,
       type: res[0].type,
     });
-    console.log(formdata)
+    console.log("FDFDFDFDFDF",formdata)
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
@@ -47,7 +48,7 @@ export default function JProfileContent({ src, name, email, jd }) {
     )
       .then(response => response.json())
       .then(result => {
-        console.log(res[0])
+        console.log("result",result)
         setSingleFile(res[0]);
         _getProfile(store);
         store.setUserAvatar(res[0]?.uri);
@@ -108,11 +109,12 @@ export default function JProfileContent({ src, name, email, jd }) {
           type: 'danger',
           text1: 'Unknown Error: ' + JSON.stringify(err),
         });
-        alert('Unknown Error: ' + JSON.stringify(err));
-        throw err;
-      }
-    }
-  };
+  }
+}}
+
+  
+ 
+ 
 
   return (
     <React.Fragment>
@@ -176,4 +178,4 @@ export default function JProfileContent({ src, name, email, jd }) {
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({})

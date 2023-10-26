@@ -594,6 +594,7 @@ currentDate.setMinutes(currentDate.getMinutes() + 30);
                           borderRadius: RFPercentage(1),
                           paddingVertical: RFPercentage(1),
                         }}>
+                          {console.log(meetings?.meeting_type)}
                         {meetings?.meeting_type.map((item, index) => (
                           <Pressable
                             key={index}
@@ -610,7 +611,7 @@ currentDate.setMinutes(currentDate.getMinutes() + 30);
 
                             }}>
                             <JText fontSize={RFPercentage(2)}>
-                              {item === 'Office Base'
+                              {item === 'message.office.office_base'
                                 ? store.lang.office_base
                                 : store.lang.manual_link}
                             </JText>
@@ -620,7 +621,7 @@ currentDate.setMinutes(currentDate.getMinutes() + 30);
                     )}
                   </View>
 
-                  {values.interview_type === 'Office Base' ? (
+                  {values.interview_type === 'message.office.office_base' ? (
 
                     <JInput
                       style={{
@@ -641,7 +642,7 @@ currentDate.setMinutes(currentDate.getMinutes() + 30);
                     />
 
                   ) : (
-                    values.interview_type === 'Manual Link' && (
+                    values.interview_type === 'message.meeting.manual_link' && (
                       <JInput
                         style={{
                           textAlign: store.lang.id == 0 ? 'left' : 'right',

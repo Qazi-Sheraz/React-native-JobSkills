@@ -82,7 +82,7 @@ const JobPreference = () => {
               .string()
               .max(10, store.lang.Maximum_10_digits_allowed)
               .required(store.lang.salaryTo_is_required)
-              .test(store.lang.is-greater-than-salaryFrom, store.lang.Salary_To_must_be_greater_than_salary_From, function (value) {
+              .test(store.lang.is_greater_than_salaryFrom, store.lang.Salary_To_must_be_greater_than_salary_From, function (value) {
                 const salaryFrom = this.parent.salaryFrom; // Accessing the value of salaryFrom from the parent object
                 if (value && salaryFrom) {
                   return parseFloat(value) > parseFloat(salaryFrom); // Compare the numeric values

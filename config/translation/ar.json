@@ -535,7 +535,7 @@
  "Last_Name_must_contain_alphabet_character":"يجب أن يحتوي الاسم الأخير على حرف أبجدي",
  "Symbols_are_not_allowed_in_the_Last_Name":"غير مسموح بالرموز في الاسم الأخير",
  "Phone_Number_must_be_a_digit":"رقم الهاتف يجب أن يكون رقما",
- "is-greater-than-salaryFrom":"أكبر من الراتبمن",
+ "is_greater_than_salaryFrom":"أكبر من الراتبمن",
  "Note_is_required":"الملاحظة مطلوبة",
  "Name_Must_be_at_least_3_characters":"الاسم يجب أن لا يقل عن 3 أحرف",
  "Name_must_be_at_most_100_characters_long":"يجب أن لا يزيد طول الاسم عن 100 حرف",
@@ -584,7 +584,7 @@
 "Title_must_not_exceed_500_characters":"يجب ألا يتجاوز العنوان 500 حرف",
 "Start_Date_is_required":"تاريخ البدء مطلوب",
 "Phone_must_be_atleast_10_characters":"يجب أن يتكون الهاتف من 10 أحرف على الأقل",
-"Phone_must_be_at_most_14_characters":"يجب أن يتكون الهاتف من 15 حرفًا على الأكثر",
+"Phone_must_be_at_most_14_characters":"يجب أن يتكون الهاتف من 14 حرفًا على الأكثر",
 "JobSkills_The_Right_Employee_in_The_Right_Position":"مهارات العمل \n الموظف المناسب في المكان المناسب",
 "we_are_launching_soon_This_project_is_owned_byFajer_Technology":"سننطلق قريباً...! \n هذا المشروع مملوك ل \nتقنية الفجر",
 "Looking_for_job_or_to_hire_great_candidates_efficiently":"هل تبحث عن وظيفة أو لتوظيف مرشحين رائعين بكفاءة؟ توفر حلول JobSkills إمكانية الوصول إلى معظم الميزات المتقدمة! الرد على المرشحين بمجرد التقدم للوظائف أو الرد على الرسائل. اتصل بسهولة بالأشخاص المناسبين للأدوار المفتوحة. إجراء التقييمات والاتصال وتوظيف وإعداد المرشحين أثناء التنقل.",
@@ -605,8 +605,13 @@
 "The_ability_to_build_detailed_candidate_profiles":"القدرة على بناء ملفات تعريف مفصلة للمرشحين",
 "Automation_makes_life_easier":"الأتمتة تجعل الحياة أسهل. تساعد هذه الميزة في إبقاء المرشح على علم بالمكان الذي يتجه إليه طلبه.",
 "JobSkills_Engine_will_capture_all_relevant":"سيقوم JobSkills Engine بالتقاط جميع المعلومات ذات الصلة بالمرشح عند تقديم الطلب.",
-"Skip":"يتخطى"
-
+"Skip":"يتخطى",
+"Phone_Name_is_a_required_field":"اسم الهاتف هو حقل مطلوب",
+"Enable_push_Notifications":"تمكين دفع الإشعارات",
+"Enable_push_notifications_to_receive_updates_from_JobSkills":"قم بتمكين الإشعارات الفورية لتلقي التحديثات من JobSkills",
+"Storage_Access":"الوصول إلى التخزين",
+"We_need_access_to_your_storage_so_you_can_upload_resumes_and_set_profile_pictures":"نحتاج إلى الوصول إلى مساحة التخزين الخاصة بك حتى تتمكن من تحميل السير الذاتية وتعيين صور الملف الشخصي",
+"Allow":"يسمح"
 
 
 

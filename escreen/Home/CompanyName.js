@@ -83,13 +83,13 @@ const CompanyName = () => {
                     companyname: yup
                         .string()
                         // .min(3, 'Company Name Must be at least 3 characters')
-                        .max(100, 'Company Name must be at most 100 characters long')
+                        .max(100, store.lang.Company_Name_must_be_at_most_100_characters_long)
                         .transform(value => value.trim())
                         .matches(
                             /^[A-Za-z\u0600-\u06FF\s]*[A-Za-z\u0600-\u06FF][A-Za-z\u0600-\u06FF\s\d\W]*$/,
-                            'Company Name must only contain alphabetic characters'
+                           store.lang.Company_Name_must_only_contain_alphabetic_characters
                         )
-                        .required('Company Name is a required field'),
+                        .required(store.lang.Company_Name_is_a_required_field),
                 }
 
                 )}>

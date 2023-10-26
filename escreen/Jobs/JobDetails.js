@@ -142,7 +142,7 @@ const JobDetails = ({ route }) => {
     formdata.append('title', values.resume?.name);
     formdata.append('type', '1');
 
-    // console.log('formdata', formdata)
+     console.log('formdata', formdata)
     fetch(
       `${url.baseUrl}/employer/add-candidate`,
 
@@ -774,47 +774,13 @@ const JobDetails = ({ route }) => {
                       {store.lang.add_jobseeker}
                     </JText>
                   }
+                  left={<JChevronIcon onPress={()=>{
+                    setModalVisible(false)
+                  }}/>}
                 />
 
               }
-              left={
-                <Entypo
-                  onPress={() => setModalVisible(false)}
-                  name="circle-with-cross"
-                  size={RFPercentage(3.5)}
-                  color={colors.white[0]}
-
-<<<<<<< HEAD
-              onSubmit={values => {
-                _addCandidate(values);
-              }}
-              validationSchema={yup.object().shape({
-                resume: yup.object().shape({
-                  uri: yup.string().required(store.lang.PDF),
-                }),
-                firstName: yup.string()
-                  .transform(value => value.trim())
-                  .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, store.lang.First_Name_must_contain_alphabet_character)
-                  .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, store.lang.Symbols_are_not_allowed_in_the_First_Name)
-                  .required(store.lang.First_Name_is_a_required_field).label(store.lang.first_name),
-                lastName: yup.string()
-                  .transform(value => value.trim())
-                  .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, store.lang.Last_Name_must_contain_alphabet_character)
-                  .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, store.lang.Symbols_are_not_allowed_in_the_Last_Name)
-                  .required(store.lang.Last_Name_is_a_required_field).label(store.lang.last_name),
-                email: yup
-                  .string()
-                  .min(0, store.lang.Email_address_cannot_be_empty)
-                  .max(100, store.lang.Email_address_must_be_at_most_100_characters_long)
-                  .email(store.lang.Must_be_a_valid_email)
-                  .required(store.lang.Email_is_a_required_field)
-                  .label(store.lang.Email),
-                // phone: yup.string().max(14).required().label('Phone'),
-                phone: yup.string().min(10).max(15).matches(/^\+?[0-9]\d*$/, store.lang.Phone_Number_must_be_a_digit).required().label(store.lang.phone),
-              })}>
-=======
-                />
-              }
+              
             >
               <Formik
                 initialValues={{
@@ -826,10 +792,10 @@ const JobDetails = ({ route }) => {
                   regional_code: '',
                   is_default: false,
                 }}
->>>>>>> 9156fa16a2111475972e06dae02961ad36edff8f
 
                 onSubmit={values => {
                   _addCandidate(values);
+                  setLoader1(false)
                 }}
                 validationSchema={yup.object().shape({
                   resume: yup.object().shape({
@@ -837,23 +803,24 @@ const JobDetails = ({ route }) => {
                   }),
                   firstName: yup.string()
                     .transform(value => value.trim())
-                    .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'First Name must contain  alphabet character')
-                    .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the First Name')
-                    .required().label('First Name'),
+                    .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, store.lang.First_Name_must_contain_alphabet_character)
+                    .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, store.lang.Symbols_are_not_allowed_in_the_First_Name)
+                    .required(store.lang.First_Name_is_a_required_field).label(store.lang.first_name),
                   lastName: yup.string()
                     .transform(value => value.trim())
-                    .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, 'Last Name must contain alphabet character')
-                    .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, 'Symbols are not allowed in the Last Name')
-                    .required().label('Last Name'),
+                    .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, store.lang.Last_Name_must_contain_alphabet_character)
+                    .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, store.lang.Symbols_are_not_allowed_in_the_Last_Name)
+                    .required(store.lang.Last_Name_is_a_required_field).label(store.lang.last_name),
                   email: yup
                     .string()
                     .min(0, store.lang.Email_address_cannot_be_empty)
                     .max(100, store.lang.Email_address_must_be_at_most_100_characters_long)
                     .email(store.lang.Must_be_a_valid_email)
-                    .required()
+                    .required(store.lang.Email_is_a_required_field)
                     .label(store.lang.Email),
                   // phone: yup.string().max(14).required().label('Phone'),
-                  phone: yup.string().min(10).max(15).matches(/^\+?[0-9]\d*$/, 'Phone Number must be a digit').required().label(store.lang.phone),
+            
+                  phone: yup.string().matches(/^\+?[0-9]\d*$/, store.lang.Phone_Number_must_be_a_digit).min(8,store.lang.Phone_must_be_atleast_10_characters).max(14,store.lang.Phone_must_be_at_most_14_characters).required(store.lang.Phone_Name_is_a_required_field).label(store.lang.Phone),
                 })}>
 
                 {({
@@ -866,13 +833,13 @@ const JobDetails = ({ route }) => {
                   setFieldTouched,
                   setFieldValue,
                 }) => (
-
-                  <JScrollView style={[styles.modalView, { borderBottomLeftRadius: RFPercentage(3), borderBottomRightRadius: RFPercentage(3), borderRadius: 0 }]}>
+                  <>
+                  <JScrollView style={[styles.modalView, {  borderRadius: 0 }]}>
                     <JInput
                       style={{
                         textAlign: store.lang.id == 0 ? 'left' : 'right',
                       }}
-                      containerStyle={{ marginTop: RFPercentage(1) }}
+                      containerStyle={{ marginTop: RFPercentage(2) }}
                       isRequired
                       maxLength={100}
                       heading={store.lang.first_name}
@@ -888,7 +855,7 @@ const JobDetails = ({ route }) => {
                       style={{
                         textAlign: store.lang.id == 0 ? 'left' : 'right',
                       }}
-                      containerStyle={{ marginTop: RFPercentage(1) }}
+                      containerStyle={{ marginTop: RFPercentage(2) }}
                       isRequired
                       maxLength={100}
                       heading={store.lang.last_name}
@@ -904,7 +871,7 @@ const JobDetails = ({ route }) => {
                       style={{
                         textAlign: store.lang.id == 0 ? 'left' : 'right',
                       }}
-                      containerStyle={{ marginTop: RFPercentage(1) }}
+                      containerStyle={{ marginTop: RFPercentage(2) }}
                       isRequired
                       maxLength={100}
                       heading={store.lang.email}
@@ -926,7 +893,7 @@ const JobDetails = ({ route }) => {
                         </JText>
                       </JRow>
                       <PhoneInput
-                        textInputProps={{ maxLength: 15 }}
+                        textInputProps={{ maxLength: 10 }}
                         ref={phoneInput}
                         defaultValue={values.phone}
                         defaultCode={'SA'}
@@ -962,7 +929,7 @@ const JobDetails = ({ route }) => {
                     {touched.phone && errors.phone && (
                       <JErrorText>{errors.phone}</JErrorText>
                     )}
-                    <JRow>
+                    <JRow style={{marginTop:RFPercentage(1)}}>
                       <JText fontSize={RFPercentage(2.5)}>
                         {store.lang.resume}
                       </JText>
@@ -978,7 +945,7 @@ const JobDetails = ({ route }) => {
                       fontColor={colors.placeHolderColor[0]}
                       style={{
                         marginBottom: RFPercentage(2),
-                        marginTop: RFPercentage(1),
+                        marginTop: RFPercentage(2),
                       }}>
                       {store.lang.sure_updated_resume}
                     </JText>
@@ -1075,34 +1042,35 @@ const JobDetails = ({ route }) => {
                       </JRow>
                     )}
 
-                    <JRow
-                      style={{
-                        marginTop: RFPercentage(5),
-                        justifyContent: 'center',
-                        borderColor: colors.primary[1],
-                      }}>
-                      <JButton
-                        isValid={isValid}
-                        disabled={loader1 ? true : false}
-                        onPress={() => {
-                          if (values.resume?.size <= 1000000) {
-                            handleSubmit();
-                          }
-                        }}
-                        style={{
-                          width: '46%',
-                          marginBottom: values.resume?.uri ? RFPercentage(5) : RFPercentage(0),
-                        }}
-                        children={loader1 ? store.lang.loading : store.lang.add}
-                      />
-                    </JRow>
+               
                   </JScrollView>
+                       <JRow
+                       style={{
+                         marginTop: RFPercentage(5),
+                         justifyContent: 'center',
+                         borderColor: colors.primary[1],
+                         // position:'absolute',
+                         // bottom:0
+                       }}>
+                       <JButton
+                         isValid={isValid}
+                         disabled={loader1 ? true : false}
+                         onPress={() => {
+                           if (values.resume?.size <= 1000000 || isValid) {
+                             handleSubmit();
+                           }
+                         }}
+                         style={{
+                           width: '46%',
+                           marginBottom: values.resume?.uri ? RFPercentage(5) : RFPercentage(0),
+                         }}
+                         children={loader1 ? store.lang.loading : store.lang.add}
+                       />
+                     </JRow>
+                   </>
                 )}
               </Formik>
-              <Pressable
-                style={{ width: '100%', height: '15%' }}
-                onPress={() => setModalVisible(!modalVisible)}
-              />
+          
             </JScreen>
           </Modal>
           <Modal animationType="slide" transparent={true} visible={modalVisible1}>
@@ -1360,12 +1328,11 @@ const styles = StyleSheet.create({
 
   },
   centeredView: {
-    flex: 1, backgroundColor: '#00000090',
+    flex: 1, 
   },
   modalView1: {
     padding: RFPercentage(2),
     justifyContent: 'space-between',
-    backgroundColor: colors.white[0],
     borderBottomLeftRadius: RFPercentage(2),
     borderBottomRightRadius: RFPercentage(2),
     width: '100%',

@@ -24,18 +24,18 @@ const PermissionScreen = () => {
     const [notification, setNotification] = useState(false)
     const [loader, setLoader] = useState(false)
 
-    const checkApplicationPermission = async () => {
-        if (Platform.OS === 'android') {
-            try {
-                await PermissionsAndroid.request(
-                    PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
-                );
-            } catch (error) {
-                console.log('errorrrrrr======', error)
-                setLoader(false)
-            }
-        }
-    };
+    // const checkApplicationPermission = async () => {
+    //     if (Platform.OS === 'android') {
+    //         try {
+    //             await PermissionsAndroid.request(
+    //                 PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+    //             );
+    //         } catch (error) {
+    //             console.log('errorrrrrr======', error)
+    //             setLoader(false)
+    //         }
+    //     }
+    // };
 
     const requestNotificationPermission = async () => {
 
@@ -60,7 +60,7 @@ const PermissionScreen = () => {
     };
 
     const requestStoragePermission = async () => {
-        setLoader(true)
+        // setLoader(true)
         try {
             const storagePermission = await PermissionsAndroid.request(
                 PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
@@ -73,7 +73,7 @@ const PermissionScreen = () => {
             } else {
                 console.log('Storage permission denied.');
                 handleSave();
-                // setLoader(false)
+                setLoader(false)
             }
         } catch (error) {
             console.error('Error requesting storage permission:', error);
@@ -145,14 +145,14 @@ const PermissionScreen = () => {
             {!notification ?
                 <View style={styles.innerView}>
                     <Notification height={RFPercentage(20)} width={RFPercentage(20)} marginBottom={RFPercentage(10)} />
-                    <JText style={styles.txtHeader}>Enable push Notifications</JText>
-                    <JText style={styles.txt}>Enable push notifications to receive updates from JobSkills</JText>
+                    <JText style={styles.txtHeader}>{store.lang.Enable_push_Notifications}</JText>
+                    <JText style={styles.txt}>{store.lang.Enable_push_notifications_to_receive_updates_from_JobSkills}</JText>
                 </View>
                 :
                 <View style={styles.innerView}>
                     <Storage height={RFPercentage(20)} width={RFPercentage(20)} marginBottom={RFPercentage(10)} />
-                    <JText style={styles.txtHeader}>Storage Access</JText>
-                    <JText style={styles.txt}>We need access to your storage so you can upload resumes and set profile pictures</JText>
+                    <JText style={styles.txtHeader}>{store.lang.Storage_Access}</JText>
+                    <JText style={styles.txt}>{store.lang.We_need_access_to_your_storage_so_you_can_upload_resumes_and_set_profile_pictures}</JText>
                 </View>
             }
 
@@ -161,13 +161,13 @@ const PermissionScreen = () => {
                 disabled={loader ? true : false}
                 onPress={() => {
                     if (!notification) {
-                        checkApplicationPermission();
+                        // checkApplicationPermission();
                         requestNotificationPermission();
                     } else {
                         requestStoragePermission();
                     }
                 }}>
-                {loader ? store.lang.loading : 'Allow'}
+                {loader ? store.lang.loading : store.lang.Allow}
             </JButton>
         </JGradientScreen>
     )

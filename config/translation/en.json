@@ -543,7 +543,7 @@
      "Last_Name_must_contain_alphabet_character":"Last Name must contain alphabet character",
      "Symbols_are_not_allowed_in_the_Last_Name":"Symbols are not allowed in the Last Name",
      "Phone_Number_must_be_a_digit":"Phone Number must be a digit",
-     "is-greater-than-salaryFrom":"is greater than salaryFrom",
+     "is_greater_than_salaryFrom":"is greater than salaryFrom",
      "Note_is_required":"Note is required",
      "Name_Must_be_at_least_3_characters":"Name Must be at least 3 characters",
      "Name_must_be_at_most_100_characters_long":"Name must be at most 100 characters long",
@@ -613,9 +613,13 @@
  "The_ability_to_build_detailed_candidate_profiles":"The ability to build detailed candidate profiles",
  "Automation_makes_life_easier":"Automation makes life easier. This feature helps keep the candidate informed of where their application is heading.",
  "JobSkills_Engine_will_capture_all_relevant":"JobSkills Engine will capture all relevant information about a candidate when they apply.",
- "Deliver_the_Best_Candidate_Experience_by_Scheduling_your_Interviews_with_JobSkills.":"Deliver the Best Candidate Experience by Scheduling your Interviews with JobSkills."
-
-
+ "Deliver_the_Best_Candidate_Experience_by_Scheduling_your_Interviews_with_JobSkills.":"Deliver the Best Candidate Experience by Scheduling your Interviews with JobSkills.",
+ "Phone_Name_is_a_required_field":"Phone name is a required field",
+"Enable_push_Notifications":"Enable push Notifications",
+"Enable_push_notifications_to_receive_updates_from_JobSkills":"Enable push notifications to receive updates from JobSkills",
+"Storage_Access":"Storage Access",
+"We_need_access_to_your_storage_so_you_can_upload_resumes_and_set_profile_pictures":"We need access to your storage so you can upload resumes and set profile pictures",
+"Allow":"Allow"
 
     
      

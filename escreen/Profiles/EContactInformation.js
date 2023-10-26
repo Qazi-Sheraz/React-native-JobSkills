@@ -398,7 +398,7 @@ function EContactInformation({ refRBSheet, data, user }) {
               .email(store.lang.Must_be_a_valid_email)
               .required(store.lang.Email_is_a_required_field),
 
-            phone: yup.string().min(10,store.lang.Phone_must_be_atleast_10_characters).max(14,store.lang.Phone_must_be_at_most_14_characters).required(store.lang.Phone_must_be_atleast_10_characters).label(store.lang.Phone),
+              phone: yup.string().matches(/^\+?[0-9]\d*$/, store.lang.Phone_Number_must_be_a_digit).min(10,store.lang.Phone_must_be_atleast_10_characters).max(10,store.lang.Phone_must_be_at_most_14_characters).required(store.lang.Phone_Name_is_a_required_field).label(store.lang.Phone),
           })}>
           {({
             values,
