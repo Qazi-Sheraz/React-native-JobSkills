@@ -6,116 +6,53 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from 'react-native';
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import colors from '../../config/colors';
-import JRow from '../../customComponents/JRow';
-import JText from '../../customComponents/JText';
-import JScreen from '../../customComponents/JScreen';
-import JGradientHeader from '../../customComponents/JGradientHeader';
-import { RFPercentage } from 'react-native-responsive-fontsize';
-import JSearchInput from '../../customComponents/JSearchInput';
-import JApplication from '../../customComponents/JApplication';
-import Sort from '../../assets/svg/Icon/Sort.svg';
-import Arrow_Up from '../../assets/svg/Icon/Arrow_Up.svg';
-import Arrow_Down from '../../assets/svg/Icon/Arrow_Down.svg';
+import React, {
+  useState,
+  useEffect,
+  useContext,
+} from 'react';
 import {
   Menu,
   MenuOption,
   MenuOptions,
   MenuTrigger,
 } from 'react-native-popup-menu';
-import { StoreContext } from '../../mobx/store';
-import { useIsFocused, useNavigation } from '@react-navigation/native';
-import JChevronIcon from '../../customComponents/JChevronIcon';
-import { observer } from 'mobx-react';
+import {
+  useNavigation
+} from '@react-navigation/native';
 import url from '../../config/url';
-import JApiError from '../../customComponents/JApiError';
-import { _jobApplication } from '../../functions/Candidate/BottomTab';
+import { observer } from 'mobx-react';
+import colors from '../../config/colors';
+import JRow from '../../customComponents/JRow';
+import { StoreContext } from '../../mobx/store';
+import JText from '../../customComponents/JText';
+import Sort from '../../assets/svg/Icon/Sort.svg';
 import JEmpty from '../../customComponents/JEmpty';
-const JobApplication = ({ route }) => {
+import JScreen from '../../customComponents/JScreen';
+import JApiError from '../../customComponents/JApiError';
+import Arrow_Up from '../../assets/svg/Icon/Arrow_Up.svg';
+import Arrow_Down from '../../assets/svg/Icon/Arrow_Down.svg';
+import JSearchInput from '../../customComponents/JSearchInput';
+import JChevronIcon from '../../customComponents/JChevronIcon';
+import JApplication from '../../customComponents/JApplication';
+import { RFPercentage } from 'react-native-responsive-fontsize';
+import JGradientHeader from '../../customComponents/JGradientHeader';
+import { _jobApplication } from '../../functions/Candidate/BottomTab';
 
-  const isFoucs = useIsFocused();
-  const { navigate, goBack } = useNavigation();
-  const [selectedItem, setSelectedItem] = useState();
+
+const JobApplication = ({ route }) => {
+  const { navigate } = useNavigation();
+  const store = useContext(StoreContext);
 
   const [error, setError] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filteredData1, setFilteredData1] = useState(store?.jApplication);
   const [update, setUpdate] = useState(true);
   const [loader1, setLoader1] = useState(false);
-
-  const store = useContext(StoreContext);
-  const handleSelect = status => {
-    setSelectedItem(status);
-
-  };
+  const [selectedItem, setSelectedItem] = useState();
+  const [searchQuery, setSearchQuery] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
-  const refRBSheet = useRef();
+  const [filteredData1, setFilteredData1] = useState(store?.jApplication);
 
 
-  // const data = [
-  //   { status: 'All' },
-  //   { id: 0, status: store.lang.drafted },
-  //   { id: 1, status: store.lang.applied },
-  //   { id: 2, status: store.lang.rejected },
-  //   { id: 3, status: store.lang.selected },
-  //   { id: 4, status: store.lang.shortlisted },
-  //   { id: 5, status: store.lang.invitation_Sent },
-  //   { id: 6, status: store.lang.interview_scheduled },
-  //   { id: 7, status: store.lang.interview_accepted },
-  //   { id: 8, status: store.lang.interview_rescheduled },
-  //   { id: 9, status: store.lang.interview_completed },
-  // ];
-
-  // const filterData = status => {
-
-  //   store.setJApplication(store?.jApplication.filter(e => e.status == status));
-
-  //   refRBSheet.current.close();
-  // };
-
-  // const sortByNameAscending = () => {
-  //   store.setJApplication(
-  //     [...store?.jApplication].sort((a, b) =>
-  //       a.candidate_name.localeCompare(b.candidate_name),
-  //     ),
-  //   );
-  // };
-  const sortByFitScoreAscending = () => {
-    store.setJApplication(
-      [...store?.jApplication].sort((a, b) => a.fit_score - b.fit_score)
-    );
-  };
-  const sortByFitScoreDescending = () => {
-    store.setJApplication(
-      [...store?.jApplication].sort((a, b) => b.fit_score - a.fit_score)
-    );
-  };
-  // const sortByNameDescending = () => {
-  //   store.setJApplication(
-  //     [...store?.jApplication].sort((a, b) =>
-  //       b.candidate_name.localeCompare(a.candidate_name),
-  //     ),
-  //   );
-  // };
-
-  const sortByRecentApplyDateDescending = () => {
-    store.setJApplication(
-      [...store?.jApplication].sort(
-        (a, b) => new Date(b.apply_date) - new Date(a.apply_date),
-      ),
-    );
-  };
-
-
-  const handleSearch = (text) => {
-    setSearchQuery(text);
-    const filtered = store?.jApplication.filter((item) => {
-      return item.candidate_name.toLowerCase().includes(text.toLowerCase());
-    });
-    setFilteredData1(filtered);
-  };
-  // console.log('jApplication',store.jApplication)
   const _jobApplication = () => {
 
     var myHeaders = new Headers();
@@ -144,6 +81,35 @@ const JobApplication = ({ route }) => {
       .finally(() => {
         store.setJAppLoader(false);
       });
+  };
+
+  const sortByFitScoreAscending = () => {
+    store.setJApplication(
+      [...store?.jApplication].sort((a, b) => a.fit_score - b.fit_score)
+    );
+  };
+
+  const sortByFitScoreDescending = () => {
+    store.setJApplication(
+      [...store?.jApplication].sort((a, b) => b.fit_score - a.fit_score)
+    );
+  };
+
+  const sortByRecentApplyDateDescending = () => {
+    store.setJApplication(
+      [...store?.jApplication].sort(
+        (a, b) => new Date(b.apply_date) - new Date(a.apply_date),
+      ),
+    );
+  };
+
+
+  const handleSearch = (text) => {
+    setSearchQuery(text);
+    const filtered = store?.jApplication.filter((item) => {
+      return item.candidate_name.toLowerCase().includes(text.toLowerCase());
+    });
+    setFilteredData1(filtered);
   };
 
 
@@ -243,7 +209,7 @@ const JobApplication = ({ route }) => {
                     onPress={() => {
                       setModalVisible(true);
                     }}
-                    onSelect={handleSelect}
+                    // onSelect={handleSelect}
                     item={item}
                   // date={moment(item.apply_date, 'DD-MM-YYYY').format('DD MMM,YYYY')}
                   />

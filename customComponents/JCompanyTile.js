@@ -124,9 +124,9 @@ function JCompanyTile({
             marginVertical: RFPercentage(0),
             marginRight: RFPercentage(1),
             padding: RFPercentage(0.5),
-
             backgroundColor: colors.openJob[0],
             textAlign: 'center',
+            fontWeight: '600'
           }}>
           {OpenJob}
         </JText>

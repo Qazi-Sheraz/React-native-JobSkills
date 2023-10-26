@@ -38,7 +38,7 @@ const JApplication = ({
   setUpdate,
   api,
 }) => {
-  const { params } = useRoute();
+  const [details, setDetails] = useState();
   const [error, setError] = useState(false);
   const [loader, setLoader] = useState(true);
   const [loader1, setLoader1] = useState(false);
@@ -82,7 +82,7 @@ const JApplication = ({
                       && _applicantsStatus(9);
     // console.log(status1)
   };
-  // console.log('itemmmmmm',item.id)
+  // console.log('itemmmmmm', details)
   const _applicantsStatus = (id, selectedStatus) => {
     var myHeaders = new Headers();
     myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
@@ -136,7 +136,7 @@ const JApplication = ({
     formdata.append('agenda', values.description);
     formdata.append(
       'interviewType',
-      values.interview_type === 'Office Base' ? 0 : 'Zoom' ? 1 : 2,
+      values.interview_type === 'message.office.office_base' ? 0 : 'message.meeting.manual_link' ? 1 : 2,
     );
     formdata.append('office_location', values?.office_location);
     formdata.append('zoom_link', values?.manual_link);
@@ -153,6 +153,7 @@ const JApplication = ({
     })
       .then(response => response.json())
       .then(result => {
+        console.log(result);
         if (result.success == true) {
           setStat(5)
           setUpdate(!update)
@@ -185,7 +186,27 @@ const JApplication = ({
         });
       });
   };
+  const _getScheduleDetails = () => {
+    var myHeaders = new Headers();
+    myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
 
+    var requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+    };
+    fetch(`${url.baseUrl}/scheduleDetail/${item.candidate_user_id}/${item?.job_id}`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        // console.log('result', result[0]?.start_time)
+        setDetails(result[0]?.start_time);
+      })
+      .catch(error => {
+        console.log('error', error);
+      })
+      .finally(() => {
+        //FINAL
+      });
+  };
 
 
   const _interviewScheduled = () => {
@@ -219,10 +240,23 @@ const JApplication = ({
 
   const currentDate = new Date();
 
-// Add 30 minutes to the current date and time
-currentDate.setMinutes(currentDate.getMinutes() + 30);
+  // Add 30 minutes to the current date and time
+  currentDate.setMinutes(currentDate.getMinutes() + 30);
+
+  // Parse the "start_time" string into a Date object
+
+  const detail = moment(details, 'YYYY/MM/DD HH:mm');
+  // console.log('detail', detail.format('YYYY/MM/DD HH:mm'));
+
+  // Get the current date and time using moment
+  const currentTime = moment();
+  // console.log('currentTime', currentTime.format('YYYY/MM/DD HH:mm'));
+
+
+
 
   useEffect(() => {
+    _getScheduleDetails();
     _interviewScheduled();
     // setStat(parseInt(item.status_id));
   }, [item.status_id]);
@@ -256,65 +290,67 @@ currentDate.setMinutes(currentDate.getMinutes() + 30);
 
           {stat === 8 ||
             stat === 3 ||
-            stat === 2 ? null : (
-            <Menu>
-              <MenuTrigger
-                disabled={loader1 ? true : false}
-                style={{
-                  width: RFPercentage(3),
-                  height: RFPercentage(4),
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                <JIcon icon={'sm'} name={'options-vertical'} size={20} />
-              </MenuTrigger>
+            stat === 2 ||
+            (stat === 5 && !currentTime.isAfter(detail))
+            ? null : (
+              <Menu>
+                <MenuTrigger
+                  disabled={loader1 ? true : false}
+                  style={{
+                    width: RFPercentage(3),
+                    height: RFPercentage(4),
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <JIcon icon={'sm'} name={'options-vertical'} size={20} />
+                </MenuTrigger>
 
-              <MenuOptions>
-                {/* <MenuOption
+                <MenuOptions>
+                  {/* <MenuOption
                   onSelect={() => handleStatusSelect(store.lang.drafted)}>
                   <JText style={styles.menutxt}>{store.lang.drafted}</JText>
                 </MenuOption> */}
-                {/* {stat !== 1 &&
+                  {/* {stat !== 1 &&
                   <MenuOption
                     onSelect={() => handleStatusSelect(1, store.lang.applied)}>
                     <JText style={styles.menutxt}>{store.lang.applied}</JText>
                   </MenuOption>} */}
 
-                <MenuOption
-                  onSelect={() => handleStatusSelect(2, store.lang.rejected)}>
-                  <JText style={styles.menutxt}>{store.lang.rejected}</JText>
-                </MenuOption>
-                <MenuOption
-                  onSelect={() => handleStatusSelect(3, store.lang.selected)}>
-                  <JText style={styles.menutxt}>{store.lang.selected}</JText>
-                </MenuOption>
-                {stat !== 4 &&
                   <MenuOption
-                    onSelect={() => handleStatusSelect(4, store.lang.shortlisted)}>
-                    <JText style={styles.menutxt}>{store.lang.shortlisted}</JText>
-                  </MenuOption>}
-                {/* <MenuOption
+                    onSelect={() => handleStatusSelect(2, store.lang.rejected)}>
+                    <JText style={styles.menutxt}>{store.lang.rejected}</JText>
+                  </MenuOption>
+                  <MenuOption
+                    onSelect={() => handleStatusSelect(3, store.lang.selected)}>
+                    <JText style={styles.menutxt}>{store.lang.selected}</JText>
+                  </MenuOption>
+                  {stat !== 4 &&
+                    <MenuOption
+                      onSelect={() => handleStatusSelect(4, store.lang.shortlisted)}>
+                      <JText style={styles.menutxt}>{store.lang.shortlisted}</JText>
+                    </MenuOption>}
+                  {/* <MenuOption
                 onSelect={() => handleStatusSelect(store.lang.invitation_Sent)}>
                 <JText style={styles.menutxt}>
                   {store.lang.invitation_Sent}
                 </JText>
               </MenuOption> */}
-                {stat !== 6 &&
-                  <MenuOption
-                    onSelect={() => {
-                      setModalVisible(true),
-                      {
-                        candidate_user_id: item.candidate_user_id,
-                        job_id: item.job_id,
-                        id: item.id,
-                      };
-                    }}>
-                    <JText style={styles.menutxt}>
-                      {store.lang.interview_scheduled}
-                    </JText>
-                  </MenuOption>}
+                  {stat !== 6 &&
+                    <MenuOption
+                      onSelect={() => {
+                        setModalVisible(true),
+                        {
+                          candidate_user_id: item.candidate_user_id,
+                          job_id: item.job_id,
+                          id: item.id,
+                        };
+                      }}>
+                      <JText style={styles.menutxt}>
+                        {store.lang.interview_scheduled}
+                      </JText>
+                    </MenuOption>}
 
-                {/* <MenuOption
+                  {/* <MenuOption
                   onSelect={() =>
                     handleStatusSelect(7, store.lang.interview_accepted)
                   }>
@@ -338,9 +374,9 @@ currentDate.setMinutes(currentDate.getMinutes() + 30);
                     {store.lang.interview_completed}
                   </JText>
                 </MenuOption>} */}
-              </MenuOptions>
-            </Menu>
-          )}
+                </MenuOptions>
+              </Menu>
+            )}
         </JRow>
         <JRow
           style={{
@@ -372,7 +408,7 @@ currentDate.setMinutes(currentDate.getMinutes() + 30);
               justifyContent: 'flex-end',
             }}>
             <JStatusChecker
-              onPressStatus={onPressStatus}
+              onPressStatus={() => { (stat === 5 && !currentTime.isAfter(detail)) ? setModalVisible(true) : onPressStatus }}
               status={stat}
             />
           </View>
@@ -390,7 +426,7 @@ currentDate.setMinutes(currentDate.getMinutes() + 30);
               </JText>
             }
           />
-          {stat == 5 ? (
+          {(stat === 5 && !currentTime.isAfter(detail)) ? (
             <SafeAreaView
               style={{ justifyContent: 'space-between', height: '90%' }}>
               <View style={{ marginHorizontal: RFPercentage(2) }}>
@@ -398,14 +434,14 @@ currentDate.setMinutes(currentDate.getMinutes() + 30);
                   {store.lang.interview_date} :
                 </JText>
                 <JText style={styles.date}>
-                  {moment(values.interview_date_and_time).format('YYYY/MM/DD')}
+                  {moment(details).format('YYYY/MM/DD')}
                 </JText>
 
                 <JText style={styles.headers}>
                   {store.lang.interview_time} :
                 </JText>
                 <JText style={styles.date}>
-                  {moment(values.interview_date_and_time).format('HH:mm A')}
+                  {moment(details).format('HH:mm A')}
                 </JText>
               </View>
               <JButton onPress={() => setModalVisible(false)}>
@@ -446,7 +482,7 @@ currentDate.setMinutes(currentDate.getMinutes() + 30);
                 //   .string()
                 //   .required()
                 //   .label('interview_topic'),
-                links === 'Office Base' ? {
+                links === 'message.office.office_base' ? {
 
                   office_location:
                     yup.string().url(store.lang.Invalid_URL_format)
@@ -469,12 +505,12 @@ currentDate.setMinutes(currentDate.getMinutes() + 30);
               }) => (
                 <KeyboardAwareScrollView
                   showsVerticalScrollIndicator={false}
-                  
+
                   contentContainerStyle={{
                     paddingVertical: RFPercentage(1),
                     marginHorizontal: RFPercentage(2),
                   }}
-                  >
+                >
                   <JInput
                     style={{
                       textAlign: store.lang.id == 0 ? 'left' : 'right',
@@ -542,13 +578,13 @@ currentDate.setMinutes(currentDate.getMinutes() + 30);
                       //   ),)
                     }
                     error={touched.description && errors.description && true}
-                    onChangeText={(text)=>{
-                     
-                    setFieldValue('description', text);
-                  }}
+                    onChangeText={(text) => {
+
+                      setFieldValue('description', text);
+                    }}
                     onBlur={() => setFieldTouched('description')}
                   />
-                 
+
                   <View
                     style={{
                       justifyContent: 'space-between',
@@ -572,7 +608,7 @@ currentDate.setMinutes(currentDate.getMinutes() + 30);
                         fontSize={RFPercentage(2)}
                         style={{ paddingHorizontal: RFPercentage(1) }}>
                         {/* {menu ? menu : meetings?.meeting_type[0]} */}
-                        {values.interview_type === 'Office Base'
+                        {values.interview_type === 'message.office.office_base'
                           ? store.lang.office_base
                           : store.lang.manual_link}
                       </JText>
