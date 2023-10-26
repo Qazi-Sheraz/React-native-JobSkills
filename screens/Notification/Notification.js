@@ -20,7 +20,7 @@ function Notification({ navigation, route }) {
   const [loader, setLoader] = useState(true);
   const params = route.params || {};
   const { id } = params;
-  // console.log(id)
+  console.log(id)
 
 
   const _notify = () => {
