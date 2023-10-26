@@ -28,62 +28,61 @@ import JChevronIcon from './JChevronIcon';
 import JIcon from './JIcon';
 
 function JSelectInput({
-  containerStyle,
-  heading,
+  id,
+  data,
   icon,
+  error,
+  Licon,
+  value,
+  header,
+  heading,
+  setValue,
+  rightIcon,
+  date1 = '',
   maximumDate,
   minimumDate,
-  headingWeight = '500',
-  value,
-  forPassword = false,
-  error,
+  containerStyle,
+  mode = 'date',
+  isDate = false,
+  disabled = false,
   isMultiple = false,
   isRequired = false,
-  rightIcon,
-  header,
-  isDate = false,
-  isDate1 = false,
-  setValue,
-  id,
-  mode = 'date',
-  data,
-  date1 = '',
+  forPassword = false,
+  headingWeight = '500',
   date = date1 ? date1 : new Date(),
-  setDate,
-  Licon,
 
-  disabled = false,
 }) {
   const store = useContext(StoreContext);
   const refRBSheet = useRef();
-  const [open, setOpen] = useState(false);
   // const [date, setDate] = useState(isDate1||date1 ? date1 : new Date());
-  const [county, setCountry] = useState({});
-  const [city, setCity] = useState([]);
-  const [state, setState] = useState([]);
-  const [loader, setLoader] = useState(true);
+  const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
-  const [years, setYears] = useState([]);
-  const [genders, setGenders] = useState([]);
-  const [languages, setLanguages] = useState([]);
-  const [martial, setMartial] = useState([]);
-  const [experience, setExperience] = useState([]);
-  const [careerLevel, setCareerLevel] = useState([]);
-  const [industry, setIndustry] = useState([]);
+  const [county, setCountry] = useState({});
+  const [loader, setLoader] = useState(true);
+
+  const [city, setCity] = useState([]);
   const [area, setArea] = useState([]);
-  const [currencies, setCurrencies] = useState([]);
-  const [jobType, setJobType] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [skills, setSkills] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [state, setState] = useState([]);
+  const [years, setYears] = useState([]);
   const [title, setTitle] = useState([]);
   const [shift, setShift] = useState([]);
-  const [tags, setTags] = useState([]);
-  const [Assessments, setAssessments] = useState([]);
+  const [skills, setSkills] = useState([]);
+  const [jobType, setJobType] = useState([]);
   const [periods, setPeriods] = useState([]);
+  const [genders, setGenders] = useState([]);
+  const [martial, setMartial] = useState([]);
+  const [industry, setIndustry] = useState([]);
+  const [ownership, setOwnership] = useState([]);
+  const [languages, setLanguages] = useState([]);
+  const [experience, setExperience] = useState([]);
+  const [currencies, setCurrencies] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [preference, setPreference] = useState([]);
+  const [careerLevel, setCareerLevel] = useState([]);
+  const [Assessments, setAssessments] = useState([]);
   const [degreeLevel, setDegreeLevel] = useState([]);
   const [nationality, setNationality] = useState([]);
-  const [ownership, setOwnership] = useState([]);
   const [companySize, setCompanySize] = useState([]);
   const [selectedItems, setSelectedItems] = useState(id);
 
@@ -397,7 +396,7 @@ function JSelectInput({
 
   useEffect(() => {
 
-  }, [date1])
+  }, [date1, date])
 
   return (
     <>
@@ -698,10 +697,7 @@ function JSelectInput({
         mode={mode}
         open={open}
         date={date}
-
-
         onConfirm={(date) => {
-          // console.log('dateeeee',date)
           setValue(date)
           setOpen(false);
         }}

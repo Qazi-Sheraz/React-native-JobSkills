@@ -1,48 +1,47 @@
-import {Linking, Pressable, StyleSheet, View} from 'react-native';
+import {
+  View,
+  Linking,
+  Pressable,
+  StyleSheet,
+} from 'react-native';
 import React, {
+  useEffect,
   useContext,
   useCallback,
-  useState,
-  useRef,
-  useEffect,
 } from 'react';
-import JScreen from '../../customComponents/JScreen';
-import JText from '../../customComponents/JText';
-import JGradientHeader from '../../customComponents/JGradientHeader';
-import {heightPercentageToDP} from 'react-native-responsive-screen';
-import {RFPercentage} from 'react-native-responsive-fontsize';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import colors from '../../config/colors';
-import JProfileContent from '../../customComponents/JProfileContent';
-import JProfileSections from '../../customComponents/JProfileSections';
-import JScrollView from '../../customComponents/JScrollView';
-import {observer} from 'mobx-react';
-import {StoreContext} from '../../mobx/store';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import Toast from 'react-native-toast-message';
-import Feather from 'react-native-vector-icons/Feather';
-import JProfileInfo from '../../customComponents/JProfileInfo';
-import JRow from '../../customComponents/JRow';
 import moment from 'moment';
-import FontAwesome5Brands from 'react-native-vector-icons/FontAwesome5';
-import {_getProfile} from '../../functions/Candidate/MyProfile';
-import JChevronIcon from '../../customComponents/JChevronIcon';
-import { ActivityIndicator } from 'react-native';
+import { observer } from 'mobx-react';
+import colors from '../../config/colors';
 import { JToast } from '../../functions/Toast';
+import JRow from '../../customComponents/JRow';
+import { StoreContext } from '../../mobx/store';
+import JText from '../../customComponents/JText';
+import JScreen from '../../customComponents/JScreen';
+import JScrollView from '../../customComponents/JScrollView';
+import JChevronIcon from '../../customComponents/JChevronIcon';
+import JProfileInfo from '../../customComponents/JProfileInfo';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 import CLProfile from '../../loaders/Candidate/Profile/CLProfile';
+import { _getProfile } from '../../functions/Candidate/MyProfile';
+import JGradientHeader from '../../customComponents/JGradientHeader';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import JProfileContent from '../../customComponents/JProfileContent';
+import { heightPercentageToDP } from 'react-native-responsive-screen';
+import JProfileSections from '../../customComponents/JProfileSections';
+import FontAwesome5Brands from 'react-native-vector-icons/FontAwesome5';
 
-function Profile({navigation}) {
+function Profile({ navigation }) {
 
   const store = useContext(StoreContext);
 
 
-  const BorderView = ({children}) => {
+  const BorderView = ({ children }) => {
     return (
       <View
         style={{
+          padding: RFPercentage(1),
           borderColor: colors.border[0],
           borderWidth: RFPercentage(0.2),
-          padding: RFPercentage(1),
           marginVertical: RFPercentage(1),
         }}>
         {children}
@@ -73,10 +72,10 @@ function Profile({navigation}) {
 
   useEffect(() => {
     _getProfile(store)
-    return () => {};
+    return () => { };
   }, []);
 
- 
+
   const onRefresh = useCallback(() => {
     store.setMyProfileApiLoader(true)
     setTimeout(() => {
@@ -87,16 +86,16 @@ function Profile({navigation}) {
   return (
     store.myProfileApiLoader ? (
       // <ActivityIndicator />
-      <CLProfile/>
+      <CLProfile />
     ) : (
-    <JScreen
-      header={
-        <JGradientHeader
-          justifyContent="flex-start"
-          height={heightPercentageToDP(22)}
-          alignItems={'flex-start'}
-          paddingTop={RFPercentage(2)}
-          left={<JChevronIcon />}
+      <JScreen
+        header={
+          <JGradientHeader
+            justifyContent="flex-start"
+            height={heightPercentageToDP(22)}
+            alignItems={'flex-start'}
+            paddingTop={RFPercentage(2)}
+            left={<JChevronIcon />}
           // right={
           //   <AntDesign
           //     name="poweroff"
@@ -105,19 +104,19 @@ function Profile({navigation}) {
           //     size={RFPercentage(3)}
           //   />
           // }
-        />
-      }>
-      
+          />
+        }>
+
         <>
           <JProfileContent
             name={
               store.myProfileApiLoader === false &&
               store.myProfile?.user[0]?.general_information?.first_name +
-                '' +
-                (store.myProfile?.user[0]?.general_information?.last_name !==
+              '' +
+              (store.myProfile?.user[0]?.general_information?.last_name !==
                 null
-                  ? store.myProfile?.user[0]?.general_information?.last_name
-                  : '')
+                ? store.myProfile?.user[0]?.general_information?.last_name
+                : '')
             }
             // email={store.token.user.email}
             src={
@@ -162,7 +161,7 @@ function Profile({navigation}) {
                           ?.email_address == null
                           ? 'N/A'
                           : store.myProfile?.user[0]?.contact_information
-                              ?.email_address
+                            ?.email_address
                       }
                     />
                     {/* {console.log(store.myProfile?.user[0]?.contact_information?.region_code)} */}
@@ -171,12 +170,12 @@ function Profile({navigation}) {
                       text={
                         store.myProfile?.user[0]?.contact_information
                           ?.mobile_number !== null &&
-                        store.myProfile?.user[0]?.contact_information
-                          ?.region_code !== null
+                          store.myProfile?.user[0]?.contact_information
+                            ?.region_code !== null
                           ? store.myProfile?.user[0]?.contact_information
-                              ?.region_code +
-                            store.myProfile?.user[0]?.contact_information
-                              ?.mobile_number
+                            ?.region_code +
+                          store.myProfile?.user[0]?.contact_information
+                            ?.mobile_number
                           : 'N/A'
                       }
                     />
@@ -197,26 +196,26 @@ function Profile({navigation}) {
                     store.myProfile?.user[0]?.general_information
                       ?.marital_status.id !== null && store.lang.id == 0
                       ? store.myProfile?.dataEnglish?.maritalStatus[
-                          store.myProfile?.user[0]?.general_information
-                            ?.marital_status.id
-                        ]
+                      store.myProfile?.user[0]?.general_information
+                        ?.marital_status.id
+                      ]
                       : store.myProfile?.dataArabic?.maritalStatus[
-                          store.myProfile?.user[0]?.general_information
-                            ?.marital_status.id
-                        ],
+                      store.myProfile?.user[0]?.general_information
+                        ?.marital_status.id
+                      ],
                   marital_id:
                     store.myProfile?.user[0]?.general_information
                       ?.marital_status.id,
-                  country_name:store.lang.id == 0
-                  ? store.myProfile?.dataEnglish?.countries[
-                      store.myProfile?.user[0]
-                        ?.general_information?.country_name.id
+                  country_name: store.lang.id == 0
+                    ? store.myProfile?.dataEnglish?.countries[
+                    store.myProfile?.user[0]
+                      ?.general_information?.country_name.id
                     ]
-                  : store.myProfile?.dataArabic?.countries[
-                      store.myProfile?.user[0]
-                        ?.general_information?.country_name.id
+                    : store.myProfile?.dataArabic?.countries[
+                    store.myProfile?.user[0]
+                      ?.general_information?.country_name.id
                     ],
-                  country_id:store.myProfile?.user[0]?.general_information?.country_name.id,
+                  country_id: store.myProfile?.user[0]?.general_information?.country_name.id,
                   // immediate_available:store.myProfile?.user[0]?.general_information?.immediate_available,
                 });
               }}
@@ -232,7 +231,7 @@ function Profile({navigation}) {
                         store.myProfile?.user[0]?.general_information
                           ?.father_name == null
                           ? 'N/A'
-                          : store.myProfile?.user[0]?.general_information?.father_name?.length > 50 ? store.myProfile?.user[0]?.general_information?.father_name?.substring(0, 50) + " . . . .":store.myProfile?.user[0]?.general_information?.father_name 
+                          : store.myProfile?.user[0]?.general_information?.father_name?.length > 50 ? store.myProfile?.user[0]?.general_information?.father_name?.substring(0, 50) + " . . . ." : store.myProfile?.user[0]?.general_information?.father_name
                       }
                     />
                     <JProfileInfo
@@ -243,21 +242,21 @@ function Profile({navigation}) {
                           ?.date_of_birth == null
                           ? 'N/A'
                           : moment(
-                              store.myProfile?.user[0]?.general_information
-                                ?.date_of_birth,
-                            ).format('MMM,DD YYYY'))
+                            store.myProfile?.user[0]?.general_information
+                              ?.date_of_birth,
+                          ).format('MMM,DD YYYY'))
                       }
                     />
                     <JProfileInfo
                       title={`${store.lang.gender}:`}
                       text={
                         store.myProfile?.user[0]?.general_information?.gender ==
-                        null
+                          null
                           ? 'N/A'
                           : store.myProfile?.user[0]?.general_information
-                              ?.gender == '1'
-                          ? store.lang.female
-                          : store.lang.male
+                            ?.gender == '1'
+                            ? store.lang.female
+                            : store.lang.male
                       }
                     />
 
@@ -268,13 +267,13 @@ function Profile({navigation}) {
                           ?.marital_status.id == null
                           ? 'N/A'
                           : store.lang.id == 0
-                          ? store.myProfile?.dataEnglish?.maritalStatus[
-                              store.myProfile?.user[0]?.general_information
-                                ?.marital_status.id
+                            ? store.myProfile?.dataEnglish?.maritalStatus[
+                            store.myProfile?.user[0]?.general_information
+                              ?.marital_status.id
                             ]
-                          : store.myProfile?.dataArabic?.maritalStatus[
-                              store.myProfile?.user[0]?.general_information
-                                ?.marital_status.id
+                            : store.myProfile?.dataArabic?.maritalStatus[
+                            store.myProfile?.user[0]?.general_information
+                              ?.marital_status.id
                             ]
                       }
                     />
@@ -284,23 +283,20 @@ function Profile({navigation}) {
                       text={
                         store.myProfile?.user[0]?.general_information
                           ?.country_name.id !== null
-                          ? `${
-                              store.myProfile?.user[0]?.general_information
-                                ?.city_name?.name
-                            } | ${
-                              store.myProfile?.user[0]?.general_information
-                                ?.state_name?.name
-                            } | ${
-                              store.lang.id == 0
-                                ? store.myProfile?.dataEnglish?.countries[
-                                    store.myProfile?.user[0]
-                                      ?.general_information?.country_name.id
-                                  ]
-                                : store.myProfile?.dataArabic?.countries[
-                                    store.myProfile?.user[0]
-                                      ?.general_information?.country_name.id
-                                  ]
-                            }`
+                          ? `${store.myProfile?.user[0]?.general_information
+                            ?.city_name?.name
+                          } | ${store.myProfile?.user[0]?.general_information
+                            ?.state_name?.name
+                          } | ${store.lang.id == 0
+                            ? store.myProfile?.dataEnglish?.countries[
+                            store.myProfile?.user[0]
+                              ?.general_information?.country_name.id
+                            ]
+                            : store.myProfile?.dataArabic?.countries[
+                            store.myProfile?.user[0]
+                              ?.general_information?.country_name.id
+                            ]
+                          }`
                           : 'N/A'
                       }
                     />
@@ -323,9 +319,9 @@ function Profile({navigation}) {
                           ?.immediate_available == null
                           ? 'N/A'
                           : store.myProfile?.user[0]?.general_information
-                              ?.immediate_available == '1'
-                          ? store.lang.yes
-                          : store.lang.no
+                            ?.immediate_available == '1'
+                            ? store.lang.yes
+                            : store.lang.no
                       }
                     />
                   </BorderView>
@@ -341,13 +337,13 @@ function Profile({navigation}) {
                     store.myProfile?.user[0]?.experience_information
                       ?.career_level.id !== null && store.lang.id == 0
                       ? store.myProfile?.dataEnglish?.careerLevel[
-                          store.myProfile?.user[0]?.experience_information
-                            ?.career_level.id
-                        ]
+                      store.myProfile?.user[0]?.experience_information
+                        ?.career_level.id
+                      ]
                       : store.myProfile?.dataArabic?.careerLevel[
-                          store.myProfile?.user[0]?.experience_information
-                            ?.career_level.id
-                        ],
+                      store.myProfile?.user[0]?.experience_information
+                        ?.career_level.id
+                      ],
                   career_id:
                     store.myProfile?.user[0]?.experience_information
                       ?.career_level.id,
@@ -355,13 +351,13 @@ function Profile({navigation}) {
                     store.myProfile?.user[0]?.experience_information?.industry
                       ?.id !== null && store.lang.id == 0
                       ? store.myProfile?.dataEnglish?.industry[
-                          store.myProfile?.user[0]?.experience_information
-                            ?.industry?.id
-                        ]
+                      store.myProfile?.user[0]?.experience_information
+                        ?.industry?.id
+                      ]
                       : store.myProfile?.dataArabic?.industry[
-                          store.myProfile?.user[0]?.experience_information
-                            ?.industry?.id
-                        ],
+                      store.myProfile?.user[0]?.experience_information
+                        ?.industry?.id
+                      ],
                   industry_id:
                     store.myProfile?.user[0]?.experience_information?.industry
                       ?.id,
@@ -369,13 +365,13 @@ function Profile({navigation}) {
                     store.myProfile?.user[0]?.experience_information
                       ?.functional_area.id !== null && store.lang.id == 0
                       ? store.myProfile?.dataEnglish?.functionalArea[
-                          store.myProfile?.user[0]?.experience_information
-                            ?.functional_area.id
-                        ]
+                      store.myProfile?.user[0]?.experience_information
+                        ?.functional_area.id
+                      ]
                       : store.myProfile?.dataArabic?.functionalArea[
-                          store.myProfile?.user[0]?.experience_information
-                            ?.functional_area.id
-                        ],
+                      store.myProfile?.user[0]?.experience_information
+                        ?.functional_area.id
+                      ],
                   functional_area_id:
                     store.myProfile?.user[0]?.experience_information
                       ?.functional_area.id,
@@ -383,13 +379,13 @@ function Profile({navigation}) {
                     store.myProfile?.user[0]?.experience_information
                       ?.salary_currency.id !== null && store.lang.id == 0
                       ? store.myProfile?.dataEnglish?.currency[
-                          store.myProfile?.user[0]?.experience_information
-                            ?.salary_currency.id
-                        ]
+                      store.myProfile?.user[0]?.experience_information
+                        ?.salary_currency.id
+                      ]
                       : store.myProfile?.dataArabic?.currency[
-                          store.myProfile?.user[0]?.experience_information
-                            ?.salary_currency.id
-                        ],
+                      store.myProfile?.user[0]?.experience_information
+                        ?.salary_currency.id
+                      ],
                   salary_currency_id:
                     store.myProfile?.user[0]?.experience_information
                       ?.salary_currency.id,
@@ -406,7 +402,7 @@ function Profile({navigation}) {
                           ?.experience == null
                           ? 'N/A'
                           : store.myProfile?.user[0]?.experience_information
-                              ?.experience + store.lang.year
+                            ?.experience + store.lang.year
                       }
                     />
 
@@ -417,13 +413,13 @@ function Profile({navigation}) {
                           ?.career_level.id == null
                           ? 'N/A'
                           : store.lang.id == 0
-                          ? store.myProfile?.dataEnglish?.careerLevel[
-                              store.myProfile?.user[0]?.experience_information
-                                ?.career_level.id
+                            ? store.myProfile?.dataEnglish?.careerLevel[
+                            store.myProfile?.user[0]?.experience_information
+                              ?.career_level.id
                             ]
-                          : store.myProfile?.dataArabic?.careerLevel[
-                              store.myProfile?.user[0]?.experience_information
-                                ?.career_level.id
+                            : store.myProfile?.dataArabic?.careerLevel[
+                            store.myProfile?.user[0]?.experience_information
+                              ?.career_level.id
                             ]
                       }
                     />
@@ -435,13 +431,13 @@ function Profile({navigation}) {
                           ?.industry?.id == null
                           ? 'N/A'
                           : store.lang.id == 0
-                          ? store.myProfile?.dataEnglish?.industry[
-                              store.myProfile?.user[0]?.experience_information
-                                ?.industry?.id
+                            ? store.myProfile?.dataEnglish?.industry[
+                            store.myProfile?.user[0]?.experience_information
+                              ?.industry?.id
                             ]
-                          : store.myProfile?.dataArabic?.industry[
-                              store.myProfile?.user[0]?.experience_information
-                                ?.industry?.id
+                            : store.myProfile?.dataArabic?.industry[
+                            store.myProfile?.user[0]?.experience_information
+                              ?.industry?.id
                             ]
                       }
                     />
@@ -453,13 +449,13 @@ function Profile({navigation}) {
                           ?.functional_area.id == null
                           ? 'N/A'
                           : store.lang.id == 0
-                          ? store.myProfile?.dataEnglish?.functionalArea[
-                              store.myProfile?.user[0]?.experience_information
-                                ?.functional_area.id
+                            ? store.myProfile?.dataEnglish?.functionalArea[
+                            store.myProfile?.user[0]?.experience_information
+                              ?.functional_area.id
                             ]
-                          : store.myProfile?.dataArabic?.functionalArea[
-                              store.myProfile?.user[0]?.experience_information
-                                ?.functional_area.id
+                            : store.myProfile?.dataArabic?.functionalArea[
+                            store.myProfile?.user[0]?.experience_information
+                              ?.functional_area.id
                             ]
                       }
                     />
@@ -471,15 +467,15 @@ function Profile({navigation}) {
                           ?.current_salary == null
                           ? 'N/A'
                           : store.lang.id == 0
-                          ? `${store.myProfile?.user[0]?.experience_information?.current_salary}-` +
+                            ? `${store.myProfile?.user[0]?.experience_information?.current_salary}-` +
                             store.myProfile?.dataEnglish?.currency[
-                              store.myProfile?.user[0]?.experience_information
-                                ?.salary_currency.id
+                            store.myProfile?.user[0]?.experience_information
+                              ?.salary_currency.id
                             ]
-                          : `${store.myProfile?.user[0]?.experience_information?.current_salary}-` +
+                            : `${store.myProfile?.user[0]?.experience_information?.current_salary}-` +
                             store.myProfile?.dataArabic?.currency[
-                              store.myProfile?.user[0]?.experience_information
-                                ?.salary_currency.id
+                            store.myProfile?.user[0]?.experience_information
+                              ?.salary_currency.id
                             ]
                       }
                     />
@@ -491,15 +487,15 @@ function Profile({navigation}) {
                           ?.expected_salary == null
                           ? 'N/A'
                           : store.lang.id == 0
-                          ? `${store.myProfile?.user[0]?.experience_information?.expected_salary}-` +
+                            ? `${store.myProfile?.user[0]?.experience_information?.expected_salary}-` +
                             store.myProfile?.dataEnglish?.currency[
-                              store.myProfile?.user[0]?.experience_information
-                                ?.salary_currency.id
+                            store.myProfile?.user[0]?.experience_information
+                              ?.salary_currency.id
                             ]
-                          : `${store.myProfile?.user[0]?.experience_information?.expected_salary}-` +
+                            : `${store.myProfile?.user[0]?.experience_information?.expected_salary}-` +
                             store.myProfile?.dataArabic?.currency[
-                              store.myProfile?.user[0]?.experience_information
-                                ?.salary_currency.id
+                            store.myProfile?.user[0]?.experience_information
+                              ?.salary_currency.id
                             ]
                       }
                     />
@@ -513,7 +509,7 @@ function Profile({navigation}) {
             <JProfileSections
               loader={store.myProfileApiLoader}
               IconPress2={() => {
-                navigation.navigate('CEditProfile', {selected: 3});
+                navigation.navigate('CEditProfile', { selected: 3 });
               }}
               heading={store.lang.skills}
               icon="add"
@@ -573,8 +569,8 @@ function Profile({navigation}) {
               }}
               isEmpty={
                 store.myProfile?.user[0]?.social_links?.facebook_url == null &&
-                store.myProfile?.user[0]?.social_links?.twitter_url == null &&
-                store.myProfile?.user[0]?.social_links?.linkedin_url == null
+                  store.myProfile?.user[0]?.social_links?.twitter_url == null &&
+                  store.myProfile?.user[0]?.social_links?.linkedin_url == null
                   ? true
                   : false
               }
@@ -602,13 +598,13 @@ function Profile({navigation}) {
                                   console.error('Error opening URL:', error),
                                 );
                               }}
-                              style={{marginBottom: RFPercentage(2)}}>
+                              style={{ marginBottom: RFPercentage(2) }}>
                               <JRow>
                                 <FontAwesome5Brands
                                   size={RFPercentage(3)}
                                   name="facebook-f"
                                   color={colors.purple[0]}
-                                  style={{marginHorizontal: RFPercentage(1)}}
+                                  style={{ marginHorizontal: RFPercentage(1) }}
                                 />
 
                                 <JText
@@ -620,11 +616,11 @@ function Profile({navigation}) {
                               <JText
                                 fontWeight="600"
                                 fontColor={'grey'}
-                                style={{textDecorationLine: 'underline'}}
+                                style={{ textDecorationLine: 'underline' }}
                                 fontSize={RFPercentage(2)}>
                                 {item.social_links?.facebook_url === null ||
-                                item.social_links?.facebook_url === undefined ||
-                                item.social_links?.facebook_url == 'null'
+                                  item.social_links?.facebook_url === undefined ||
+                                  item.social_links?.facebook_url == 'null'
                                   ? 'N/A'
                                   : item.social_links?.facebook_url}
                               </JText>
@@ -641,13 +637,13 @@ function Profile({navigation}) {
                                   console.error('Error opening URL:', error),
                                 );
                               }}
-                              style={{marginBottom: RFPercentage(2)}}>
+                              style={{ marginBottom: RFPercentage(2) }}>
                               <JRow>
                                 <FontAwesome5Brands
                                   size={RFPercentage(3)}
                                   name="twitter"
                                   color={colors.purple[0]}
-                                  style={{marginHorizontal: RFPercentage(1)}}
+                                  style={{ marginHorizontal: RFPercentage(1) }}
                                 />
 
                                 <JText
@@ -659,11 +655,11 @@ function Profile({navigation}) {
                               <JText
                                 fontWeight="600"
                                 fontColor={'grey'}
-                                style={{textDecorationLine: 'underline'}}
+                                style={{ textDecorationLine: 'underline' }}
                                 fontSize={RFPercentage(2)}>
                                 {item.social_links.twitter_url === null ||
-                                item.social_links?.twitter_url === undefined ||
-                                item.social_links?.twitter_url == 'null'
+                                  item.social_links?.twitter_url === undefined ||
+                                  item.social_links?.twitter_url == 'null'
                                   ? 'N/A'
                                   : item.social_links.twitter_url}
                               </JText>
@@ -680,13 +676,13 @@ function Profile({navigation}) {
                                   console.error('Error opening URL:', error),
                                 );
                               }}
-                              style={{marginBottom: RFPercentage(2)}}>
+                              style={{ marginBottom: RFPercentage(2) }}>
                               <JRow>
                                 <FontAwesome5Brands
                                   size={RFPercentage(3)}
                                   name="linkedin-in"
                                   color={colors.purple[0]}
-                                  style={{marginHorizontal: RFPercentage(1)}}
+                                  style={{ marginHorizontal: RFPercentage(1) }}
                                 />
 
                                 <JText
@@ -698,11 +694,11 @@ function Profile({navigation}) {
                               <JText
                                 fontWeight="600"
                                 fontColor={'grey'}
-                                style={{textDecorationLine: 'underline'}}
+                                style={{ textDecorationLine: 'underline' }}
                                 fontSize={RFPercentage(2)}>
                                 {item.social_links?.linkedin_url === null ||
-                                item.social_links?.linkedin_url === undefined ||
-                                item.social_links?.linkedin_url == 'null'
+                                  item.social_links?.linkedin_url === undefined ||
+                                  item.social_links?.linkedin_url == 'null'
                                   ? 'N/A'
                                   : item.social_links?.linkedin_url}
                               </JText>
@@ -791,8 +787,8 @@ function Profile({navigation}) {
             /> */}
           </JScrollView>
         </>
-      
-    </JScreen>)
+
+      </JScreen>)
   );
 }
 export default observer(Profile);

@@ -98,7 +98,7 @@ const JobPreference = () => {
               .shape()
               .required(store.lang.Salary_Currency_is_required),
             salaryPeriods: yup
-              .object().nullable() 
+              .object().nullable()
               .shape()
               .required(store.lang.Salary_Period_is_required),
             countries: yup
@@ -131,7 +131,7 @@ const JobPreference = () => {
             <>
               <KeyboardAwareScrollView
                 showsVerticalScrollIndicator={false}
-                style={{paddingBottom:RFPercentage(8)}}
+                style={{ paddingBottom: RFPercentage(8) }}
               >
                 <JSelectInput
                   containerStyle={styles.container}
@@ -157,6 +157,7 @@ const JobPreference = () => {
                     textAlign: store.lang.id == 0 ? 'left' : 'right',
                   }}
                   isRequired
+                  maxLength={8}
                   containerStyle={styles.container}
                   heading={`${store.lang.salary_from}:`}
                   value={values.salaryFrom}
@@ -174,6 +175,7 @@ const JobPreference = () => {
                     textAlign: store.lang.id == 0 ? 'left' : 'right',
                   }}
                   isRequired
+                  maxLength={10}
                   containerStyle={styles.container}
                   heading={`${store.lang.salary_to}:`}
                   value={values.salaryTo}
@@ -243,8 +245,7 @@ const JobPreference = () => {
                   containerStyle={styles.container}
                   value={store.lang.id == 0 ? values.state?.name : values.state?.arabic_title}
                   id={values.countries?.id}
-                  setValue={e => 
-                  {setFieldValue('state', e);setFieldValue('city', null);}}
+                  setValue={e => { setFieldValue('state', e); setFieldValue('city', null); }}
                   header={store.lang.state}
                   heading={`${store.lang.state}:`}
                   error={touched.state && errors.state && true}
