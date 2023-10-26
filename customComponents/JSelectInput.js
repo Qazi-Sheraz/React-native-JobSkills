@@ -349,6 +349,7 @@ function JSelectInput({
       });
     });
     setCountry(country);
+    
     setLoader(false);
   };
 
