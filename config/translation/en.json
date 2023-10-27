@@ -619,8 +619,9 @@
 "Enable_push_notifications_to_receive_updates_from_JobSkills":"Enable push notifications to receive updates from JobSkills",
 "Storage_Access":"Storage Access",
 "We_need_access_to_your_storage_so_you_can_upload_resumes_and_set_profile_pictures":"We need access to your storage so you can upload resumes and set profile pictures",
-"Allow":"Allow"
-
+"Allow":"Allow",
+"years":"years",
+"Name_cannot_start_with_a_space":"Name cannot start with a space"
     
      
     

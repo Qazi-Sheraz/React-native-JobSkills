@@ -287,7 +287,8 @@ function CContactInformation({refRBSheet, user}) {
       }}
       validationSchema={yup.object().shape({
         email: yup.string().max(100, store.lang.Email_address_must_be_at_most_100_characters_long).email(store.lang.Must_be_a_valid_email),
-        phone: yup.string().max(15).matches(/^\+?[0-9]\d*$/, store.lang.Phone_Number_must_be_a_digit).required().label(store.lang.Phone),
+        phone: yup.string().matches(/^\+?[0-9]\d*$/, store.lang.Phone_Number_must_be_a_digit).min(10,store.lang.Phone_must_be_atleast_10_characters).max(14,store.lang.Phone_must_be_at_most_14_characters).required(store.lang.Phone_Name_is_a_required_field).label(store.lang.Phone),
+
         // regional_code: yup.string().min(2).required().label('code'),
       })}>
       {({
@@ -358,7 +359,7 @@ function CContactInformation({refRBSheet, user}) {
                 </JText>
               </JRow>
               <PhoneInput
-              textInputProps={{maxLength:15}}
+              textInputProps={{maxLength:10}}
                   ref={phoneInput}
                   defaultValue={values.phone}
                   // defaultCode={code?.cca2?code?.cca2:"SA"}

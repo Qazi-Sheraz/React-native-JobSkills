@@ -611,7 +611,9 @@
 "Enable_push_notifications_to_receive_updates_from_JobSkills":"قم بتمكين الإشعارات الفورية لتلقي التحديثات من JobSkills",
 "Storage_Access":"الوصول إلى التخزين",
 "We_need_access_to_your_storage_so_you_can_upload_resumes_and_set_profile_pictures":"نحتاج إلى الوصول إلى مساحة التخزين الخاصة بك حتى تتمكن من تحميل السير الذاتية وتعيين صور الملف الشخصي",
-"Allow":"يسمح"
+"Allow":"يسمح",
+"years":"سنين",
+"Name_cannot_start_with_a_space":"لا يمكن أن يبدأ الاسم بمسافة"
 
 
 

@@ -406,7 +406,8 @@ function Profile({navigation}) {
                           ?.experience == null
                           ? 'N/A'
                           : store.myProfile?.user[0]?.experience_information
-                              ?.experience + store.lang.year
+                              ?.experience +  ` ${  store.myProfile?.user[0]?.experience_information
+                                ?.experience==1?store.lang.year:store.lang.years}`
                       }
                     />
 

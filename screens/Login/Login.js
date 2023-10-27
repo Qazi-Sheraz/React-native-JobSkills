@@ -37,6 +37,7 @@ const Login = ({ navigation, route }) => {
     // webClientId: '505367788352-ad42uav54vqdr5ronovee2k66qtvpl5q.apps.googleusercontent.com',
     // offlineAccess: true,
   })
+  
   const store = useContext(StoreContext);
   const [loader, setLoader] = useState(false);
   const [socialLoader, setSocialLoader] = useState(false);
@@ -285,6 +286,38 @@ const Login = ({ navigation, route }) => {
     }
   };
 
+const gooleLogin = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+
+      store.setGoogleUserInfo(userInfo);
+      const getToken = await GoogleSignin.getTokens()
+      store.setGoogleToken(getToken.accessToken);
+      _googleAccess();
+      console.log('getToken=====>', getToken.accessToken)
+
+    } catch (error) {
+      console.log(error)
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        console.log('user cancelled the login flow', error);
+        alert('user cancelled the login flow', error)
+        // user cancelled the login flow
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        // operation (e.g. sign in) is in progress already
+        console.log('operation (e.g. sign in) is in progress already', error);
+        alert('operation (e.g. sign in) is in progress already', error)
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        console.log('play services not available or outdated', error);
+        alert('play services not available or outdated', error)
+        // play services not available or outdated
+      } else {
+        console.log('some other error happened', error);
+        alert('some other error happened', error)
+        // some other error happened
+      }
+    }
+  };
 
   const _googleAccess = () => {
     setSocialLoader(true)
@@ -354,38 +387,7 @@ const Login = ({ navigation, route }) => {
       });
   };
 
-  const gooleLogin = async () => {
-    try {
-      await GoogleSignin.hasPlayServices();
-      const userInfo = await GoogleSignin.signIn();
-
-      store.setGoogleUserInfo(userInfo);
-      const getToken = await GoogleSignin.getTokens()
-      store.setGoogleToken(getToken.accessToken);
-      _googleAccess();
-      console.log('getToken=====>', getToken.accessToken)
-
-    } catch (error) {
-      console.log(error)
-      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        console.log('user cancelled the login flow', error);
-        alert('user cancelled the login flow', error)
-        // user cancelled the login flow
-      } else if (error.code === statusCodes.IN_PROGRESS) {
-        // operation (e.g. sign in) is in progress already
-        console.log('operation (e.g. sign in) is in progress already', error);
-        alert('operation (e.g. sign in) is in progress already', error)
-      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        console.log('play services not available or outdated', error);
-        alert('play services not available or outdated', error)
-        // play services not available or outdated
-      } else {
-        console.log('some other error happened', error);
-        alert('some other error happened', error)
-        // some other error happened
-      }
-    }
-  };
+  
 
   const googleSignOut = async () => {
     try {

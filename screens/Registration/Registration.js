@@ -367,7 +367,7 @@ const Registration = ({ navigation, route }) => {
           confirmPassword: yup
             .string()
             .required(store.lang.Confirm_Password_is_a_required_field)
-            .oneOf([yup.ref(store.lang.Password), null], store.lang.Password_must_match),
+            .oneOf([yup.ref('password'), null], store.lang.Password_must_match),
           policy: yup
             .boolean()
             .required(store.lang.Policy_is_a_required_field)
@@ -415,7 +415,7 @@ const Registration = ({ navigation, route }) => {
           confirmPassword: yup
             .string()
             .required(store.lang.Confirm_Password_is_a_required_field)
-            .oneOf([yup.ref(store.lang.password), null], store.lang.Passwords_must_match),
+            .oneOf([yup.ref('password'), null], store.lang.Passwords_must_match),
           policy: yup
             .boolean()
             .required(store.lang.Policy_is_a_required_field)
@@ -646,6 +646,11 @@ const Registration = ({ navigation, route }) => {
                   paddingLeft: RFPercentage(1),
                 }}>
                 <CheckBox
+                 tintColor= {"gray"}
+                 onCheckColor= {colors.purple[0]}
+                 onFillColor= {colors.white[0]}
+                 onTintColor= {colors.purple[0]}
+               
                   tintColors={{ true: colors.purple[0], false: 'black' }}
                   boxType="square"
                   value={values.policy}

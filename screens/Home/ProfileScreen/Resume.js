@@ -38,6 +38,7 @@ import JResumeView from '../../../customComponents/JResumeView';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import JChevronIcon from '../../../customComponents/JChevronIcon';
 import JGradientHeader from '../../../customComponents/JGradientHeader';
+import JErrorText from '../../../customComponents/JErrorText';
 
 const Resume = ({ navigation }) => {
   const store = useContext(StoreContext);
@@ -307,10 +308,23 @@ const Resume = ({ navigation }) => {
             resume: yup.object().shape({
               uri: yup.string().required(store.lang.PDF),
             }),
-            name: yup.string()
-              .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, store.lang.Name_must_contain_at_least_1_alphabet_character_and_can_include_English_Urdu_Arabic_and_spaces)
-              .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, store.lang.Symbols_are_not_allowed_in_the_Name)
-              .required().label('Name'),
+            // name: yup.string()
+            //   .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, store.lang.Name_must_contain_at_least_1_alphabet_character_and_can_include_English_Urdu_Arabic_and_spaces)
+            //   .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, store.lang.Symbols_are_not_allowed_in_the_Name)
+            //   .required().label('Name'),
+            name: yup
+            .string()
+            .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, store.lang.Name_must_contain_at_least_1_alphabet_character_and_can_include_English_Urdu_Arabic_and_spaces)
+            .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, store.lang.Symbols_are_not_allowed_in_the_Name)
+            .test('no-leading-space', store.lang.Name_cannot_start_with_a_space, (value) => {
+              if (value && value.startsWith(' ')) {
+                return false; // Return false to indicate a validation error
+              }
+              return true; // Return true if the validation passes
+            })
+            .required(store.lang.Name_is_a_required_field)
+           
+        
           })}>
           {({
             values,
@@ -461,6 +475,7 @@ const Resume = ({ navigation }) => {
                   )}
 
                   <JInput
+                  style={{textAlign:store.lang==1?"left":"right"}}
                     containerStyle={{ marginTop: RFPercentage(1) }}
                     isRequired
                     heading={store.lang.name}
@@ -470,6 +485,7 @@ const Resume = ({ navigation }) => {
                     onChangeText={handleChange('name')}
                     onBlur={() => setFieldTouched('name')}
                   />
+                  <JErrorText>{errors.name}</JErrorText>
                   <JRow
                     style={{
                       // justifyContent: 'space-between',
