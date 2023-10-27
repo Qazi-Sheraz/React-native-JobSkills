@@ -89,10 +89,10 @@ const{params}=useRoute();
           father: profile.father_name==null?'':profile.father_name,
           dob: profile.date_of_birth==null?'':profile.date_of_birth,
           gender: profile.gender==null?'':profile.gender == '0' ? {name: store.lang.male} : {name: store.lang.female},
-          country:{
+          country:params?.country_id?{
             name:params?.country_name?params?.country_name:'',
             id: params?.country_id,
-          },
+          }:'',
           state: profile.state_name
           ?{
             name: profile.state_name?.name,
@@ -120,6 +120,7 @@ const{params}=useRoute();
           // console.log(values);
           _postData(values);
         }}
+        
         validationSchema={yup.object().shape({
             
           country: yup
@@ -302,6 +303,7 @@ const{params}=useRoute();
               )}
 
               <JSelectInput
+              disabled={values.country?false:true}
                 containerStyle={{marginTop: RFPercentage(2)}}
                 value={values.state?.name}
                 id={values.country?.id}
@@ -322,6 +324,7 @@ const{params}=useRoute();
               )}
 
               <JSelectInput
+              disabled={values.state?false:true}
                 containerStyle={{marginTop: RFPercentage(2)}}
                 value={values.city?.name}
                 setValue={e => setFieldValue('city', e)}

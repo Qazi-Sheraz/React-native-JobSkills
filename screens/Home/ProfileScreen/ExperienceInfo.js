@@ -33,6 +33,7 @@ const ExperienceInfo = () => {
 
     const store = useContext(StoreContext);
     const { params } = useRoute();
+    console.log('params',params)
     const navigation = useNavigation();
     const start = new Date(params?.start);
     const [loader1, setLoader1] = useState(false);
@@ -140,23 +141,21 @@ const ExperienceInfo = () => {
                 initialValues={{
                     title: params?.title ? params?.title : '',
                     company: params?.company ? params?.company : '',
-                    county: {
-                        id:
-                            store.experienceList[0]?.country?.id ? store.experienceList[0]?.country?.id : '',
+                    county: params?.country_id?{
+                        id:params?.country_id ? params?.country_id : '',
                         name: params?.country,
-                    },
-                    city: {
+                    }:'',
+                    city: params?.city_id?{
                         id:
-                            store.experienceList[0]?.city?.id ? store.experienceList[0]?.city?.id
-                                : '',
+                        params?.city_id ? params?.city_id: '',
                         name: params?.city,
-                    },
+                    }:'',
 
-                    state: {
+                    state: params?.state_id?{
                         id:
-                            store.experienceList[0]?.state?.id ? store.experienceList[0]?.state?.id : '',
+                        params?.state_id ? params?.state_id : '',
                         name: params?.state,
-                    },
+                    }:'',
                     start:
                         params?.start
                             ? moment(params?.start).format('MM/DD/YYYY')
@@ -237,6 +236,7 @@ const ExperienceInfo = () => {
                             )}
 
                             <JSelectInput
+                            
                                 containerStyle={{ marginTop: RFPercentage(2) }}
                                 data={
                                     store.lang.id == 0
@@ -265,6 +265,7 @@ const ExperienceInfo = () => {
                             )}
 
                             <JSelectInput
+                            disabled={values.county?false:true}
                                 containerStyle={{ marginTop: RFPercentage(2) }}
                                 value={values.state?.name}
                                 id={values.county?.id}
@@ -288,6 +289,7 @@ const ExperienceInfo = () => {
                             )}
 
                             <JSelectInput
+                            disabled={values.state?false:true}
                                 containerStyle={{ marginTop: RFPercentage(2) }}
                                 value={values.city?.name}
                                 setValue={e => setFieldValue('city', e)}
