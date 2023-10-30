@@ -1,25 +1,19 @@
-import {
-  ActivityIndicator,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import React, { useContext } from 'react';
+import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
+import React, {useContext} from 'react';
 import JRow from '../../../../customComponents/JRow';
-import { RFPercentage } from 'react-native-responsive-fontsize';
+import {RFPercentage} from 'react-native-responsive-fontsize';
 import JText from '../../../../customComponents/JText';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import colors from '../../../../config/colors';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import { Observer } from 'mobx-react';
-import { StoreContext } from '../../../../mobx/store';
-import { useNavigation } from '@react-navigation/native';
+import {Observer} from 'mobx-react';
+import {StoreContext} from '../../../../mobx/store';
+import {useNavigation} from '@react-navigation/native';
 
-export default function Education({
-  _deleteEducation,
-}) {
+export default function Education({_deleteEducation}) {
   const store = useContext(StoreContext);
-  const navigation = useNavigation()
+  const navigation = useNavigation();
   return (
     <Observer>
       {() => (
@@ -42,7 +36,7 @@ export default function Education({
             <JText fontSize={RFPercentage(2)}>{store.lang.education}</JText>
             <AntDesign
               onPress={() => {
-                navigation.navigate('EducationInfo')
+                navigation.navigate('EducationInfo');
               }}
               color={colors.black[0]}
               name="pluscircleo"
@@ -69,22 +63,27 @@ export default function Education({
                 style={{
                   borderColor: colors.border[0],
                   borderWidth: RFPercentage(0.2),
-
                   marginVertical: RFPercentage(1),
                   padding: RFPercentage(2),
-                }}>{item.degree_level &&
-                  <JText fontWeight='bold'>{store.lang.id == 0 ? item.degree_level?.name : item.degree_level?.arabic_title}</JText>}
-                <JRow style={{ justifyContent: 'space-between', }}>
+                }}>
+                <JRow style={{justifyContent: 'space-between'}}>
+                  {item.degree_level && (
+                    <JText fontWeight="bold" style={{width: '90%'}}>
+                      {store.lang.id == 0
+                        ? item.degree_level?.name
+                        : item.degree_level?.arabic_title}
+                    </JText>
+                  )}
 
-                  <JText style={{ width: '90%' }} fontWeight='bold'>
-                    {item.degree_title?.length > 35 ? item?.degree_title?.slice(0, 35) + " . . . " : item?.degree_title}
-                  </JText>
                   <TouchableOpacity
                     onPress={() => {
                       navigation.navigate('EducationInfo', {
                         type: 1,
                         educationId: item.id,
-                        degree_level: store.lang.id == 0 ? item?.degree_level?.name : item?.degree_level?.arabic_title,
+                        degree_level:
+                          store.lang.id == 0
+                            ? item?.degree_level?.name
+                            : item?.degree_level?.arabic_title,
                         degree_level_id: item?.degree_level_id,
                         title: item?.degree_title,
                         institute: item?.institute,
@@ -97,14 +96,16 @@ export default function Education({
                             ? item?.country?.name
                             : item?.country?.arabic_title,
                         state_id: item?.state_id,
-                        state: store.lang.id == 0
-                          ? item?.state?.name
-                          : item?.state?.arabic_title,
+                        state:
+                          store.lang.id == 0
+                            ? item?.state?.name
+                            : item?.state?.arabic_title,
                         city_id: item?.city_id,
-                        city: store.lang.id == 0
-                          ? item?.city?.name
-                          : item?.city?.arabic_title,
-                      })
+                        city:
+                          store.lang.id == 0
+                            ? item?.city?.name
+                            : item?.city?.arabic_title,
+                      });
                     }}
                     style={{
                       justifyContent: 'center',
@@ -119,19 +120,26 @@ export default function Education({
                     />
                   </TouchableOpacity>
                 </JRow>
-                <JText style={{ marginTop: RFPercentage(0.5) }}>
-                  {item?.institute?.length > 70 ? item?.institute?.slice(0, 70) + " . . . " : item?.institute}
+                <JText style={{width: '90%'}} fontWeight="bold">
+                  {item.degree_title?.length > 35
+                    ? item?.degree_title?.slice(0, 35) + ' . . . '
+                    : item?.degree_title}
                 </JText>
-                <JText style={{ marginTop: RFPercentage(0.5) }}>
+                <JText style={{marginTop: RFPercentage(0.5)}}>
+                  {item?.institute?.length > 70
+                    ? item?.institute?.slice(0, 70) + ' . . . '
+                    : item?.institute}
+                </JText>
+                <JText style={{marginTop: RFPercentage(0.5)}}>
                   {item?.year} |{' '}
-                  {store.lang.id == 0 ? store?.myProfile?.dataEnglish?.countries[item?.country_id] : store?.myProfile?.dataArabic?.countries[item?.country_id]}
-
-
+                  {store.lang.id == 0
+                    ? store?.myProfile?.dataEnglish?.countries[item?.country_id]
+                    : store?.myProfile?.dataArabic?.countries[item?.country_id]}
                 </JText>
 
                 <TouchableOpacity
                   onPress={() => {
-                    _deleteEducation(item.id)
+                    _deleteEducation(item.id);
                   }}
                   style={{
                     justifyContent: 'center',
@@ -158,7 +166,9 @@ export default function Education({
                 justifyContent: 'center',
                 alignItems: 'center',
               }}>
-              <JText fontSize={RFPercentage(2)}>{store.lang.education_not_available}</JText>
+              <JText fontSize={RFPercentage(2)}>
+                {store.lang.education_not_available}
+              </JText>
             </View>
           )}
         </>
@@ -166,4 +176,3 @@ export default function Education({
     </Observer>
   );
 }
-

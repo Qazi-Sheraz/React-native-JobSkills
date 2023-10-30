@@ -558,7 +558,7 @@ const JobDetails = ({ route }) => {
                   </JText>
                 </JRow>
                 <JText style={styles.txt}>
-                  {jobCount?.jobCount} {store.lang.open_jobs}
+                  {jobCount?.jobCount} {jobCount?.jobCount==1? store.lang.open_job :store.lang.open_jobs}
                 </JText>
               </JRow>
             </View>

@@ -162,7 +162,7 @@ function Home({ navigation }) {
             {data?.featuredCompanies?.length > 0 ? (
               <JCompanyTile
                 type={'company'}
-                OpenJob={`${data?.jobCount} Open Job`}
+                OpenJob={`${data?.jobCount} ${data?.jobCount==1? store.lang.open_job :store.lang.open_jobs} `}
                 followingList={store.followingList}
                 companyId={data?.featuredCompanies[0]?.id}
                 onPress={() =>

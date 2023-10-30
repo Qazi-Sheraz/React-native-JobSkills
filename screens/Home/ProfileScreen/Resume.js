@@ -475,7 +475,7 @@ const Resume = ({ navigation }) => {
                   )}
 
                   <JInput
-                  style={{textAlign:store.lang==1?"left":"right"}}
+                  style={{textAlign:store.lang.id==0?"left":"right"}}
                     containerStyle={{ marginTop: RFPercentage(1) }}
                     isRequired
                     heading={store.lang.name}

@@ -20,7 +20,7 @@ function Notification({ navigation, route }) {
   const [loader, setLoader] = useState(true);
   const params = route.params || {};
   const { id } = params;
-  // console.log(id)
+  console.log(id)
 
 
   const _notify = () => {
@@ -56,12 +56,11 @@ function Notification({ navigation, route }) {
   useEffect(() => {
     _notify();
   }, [loader]);
-  // console.log(data[0]?.title)
+  
   return (
     <JScreen
 
       onTryAgainPress={() => _notify()}
-      // style={{marginHorizontal: RFPercentage(2),}}
       header={
         <JGradientHeader
           left={

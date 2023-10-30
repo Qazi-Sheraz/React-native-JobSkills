@@ -155,7 +155,7 @@ const JobApplication = ({ route }) => {
                   length={1}
                   onChangeText={handleSearch}
                   value={searchQuery}
-                  onPressIcon={() => alert('Icon Pressed')}
+                  // onPressIcon={() => alert('Icon Pressed')}
                 />
                 <Menu>
                   <MenuTrigger
@@ -260,9 +260,11 @@ const JobApplication = ({ route }) => {
           style={styles.centeredView}>
           {store.jAppLoader ? <ActivityIndicator /> :
             <View style={styles.modalView}>
-              <JText fontColor={colors.white[0]} fontSize={RFPercentage(1.8)} style={{ paddingHorizontal: store?.jApplication[0]?.fit_score_information == null || [] ? RFPercentage(10) : RFPercentage(0) }}>
-                {store?.jApplication[0]?.fit_score_information == null || [] ? 'N/A' : store?.jApplication[0]?.fit_score_information}
-
+              <JText style={styles.infotxt} 
+              // style={{ paddingHorizontal: store?.jApplication[0]?.fit_score_information == null || [] ? RFPercentage(10) : RFPercentage(0) }}
+              >
+                 Missing attributes from the candidate profile
+                {/* {store?.jApplication[0]?.fit_score_information == null || [] ? 'N/A' : store?.jApplication[0]?.fit_score_information} */}
               </JText>
             </View>}
         </Pressable>
@@ -323,4 +325,11 @@ const styles = StyleSheet.create({
   },
   headers: { fontWeight: 'bold', fontSize: RFPercentage(3), marginVertical: RFPercentage(2), },
   date: { fontSize: RFPercentage(2.5), marginHorizontal: RFPercentage(2), },
+  infotxt: { 
+    fontSize: RFPercentage(1.9),
+     marginHorizontal: RFPercentage(2),
+     color:colors.white[0],
+     textAlign:'center',
+     
+     },
 });

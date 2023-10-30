@@ -150,19 +150,19 @@ const EducationInfo = () => {
                                         ? params?.degree_level
                                         : '',
                             },
-                            county: {
+                            county: params?.country_id?{
                                 id: params?.country_id,
                                 name: params?.country,
-                            },
-                            city: {
+                            }:'',
+                            city: params?.city_id?{
                                 id: params?.city_id,
                                 name: params?.city,
-                            },
+                            }:'',
 
-                            state: {
+                            state: params?.state_id?{
                                 id: params?.state_id,
                                 name: params?.state,
-                            },
+                            }:'',
                             institude:
                                 params?.institute !== null
                                     ? params?.institute
@@ -280,6 +280,7 @@ const EducationInfo = () => {
                                     )}
 
                                     <JSelectInput
+                                    disabled={values.county?false:true}
                                         containerStyle={styles.container}
                                         value={values.state?.name}
                                         id={values.county?.id}
@@ -303,6 +304,7 @@ const EducationInfo = () => {
                                     )}
 
                                     <JSelectInput
+                                    disabled={values.state?false:true}
                                         containerStyle={styles.container}
                                         value={values.city?.name
                                         }
