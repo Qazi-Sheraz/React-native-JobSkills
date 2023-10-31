@@ -1,10 +1,10 @@
 import React from 'react';
 // import { useLocalStore, useObserver } from "mobx-react";
-import { useLocalObservable } from 'mobx-react-lite';
-import { action } from 'mobx';
-import ar from '../config/translation/ar.json'
-import en from '../config/translation/en.json'
-import ud from '../config/translation/ud.json'
+import {useLocalObservable} from 'mobx-react-lite';
+import {action} from 'mobx';
+import ar from '../config/translation/ar.json';
+import en from '../config/translation/en.json';
+import ud from '../config/translation/ud.json';
 export const StoreContext = React.createContext();
 
 export const StoreProvider = props => {
@@ -49,9 +49,9 @@ export const StoreProvider = props => {
     favouriteList: [],
     removeFavoriteList: action(
       id =>
-      (store.favouriteList = store.favouriteList.filter(
-        e => e.job_id !== id,
-      )),
+        (store.favouriteList = store.favouriteList.filter(
+          e => e.job_id !== id,
+        )),
     ),
     setFavouriteList: action(e => (store.favouriteList = e)),
     pushFavouriteList: action(e => {
@@ -127,6 +127,7 @@ export const StoreProvider = props => {
     //token
     token: {},
     setToken: action(e => (store.token = e)),
+    setUserFirstName: action(e => (store.token.user = e)),
     //userInfo
     userInfo: {},
     setUserInfo: action(e => (store.userInfo = e)),
@@ -136,7 +137,7 @@ export const StoreProvider = props => {
     linkdinToken: {},
     setLinkdinToken: action(e => (store.linkdinToken = e)),
     //google Login
-    
+
     googleToken: {},
     setGoogleToken: action(e => (store.googleToken = e)),
 
@@ -181,7 +182,7 @@ export const StoreProvider = props => {
       e => (store.lang = e == 'en' ? en : e == 'ur' ? ud : e == 'ar' && ar),
     ),
 
-   //language Screen Stack
+    //language Screen Stack
     langType: false,
     setLangType: action(e => (store.langType = e)),
 
@@ -213,27 +214,25 @@ export const StoreProvider = props => {
     update: true,
     setUpdate: action(e => (store.update = e)),
 
-
     // reschedule Status
     rescheduled: [],
     setRescheduled: action(e => (store.rescheduled = e)),
-    pushRescheduled: action(e => (store.rescheduled.push(e))),
-    findItem: action((id, time) => store.rescheduled.find(e => e.id === id && e.time === time),
+    pushRescheduled: action(e => store.rescheduled.push(e)),
+    findItem: action((id, time) =>
+      store.rescheduled.find(e => e.id === id && e.time === time),
     ),
 
     // Get Employe Job
     jobEmployerData: [],
     setJobEmployerData: action(e => (store.jobEmployerData = e)),
     AddJobEmployerData: action(
-      e => (store.jobEmployerData = [e,...store.jobEmployerData]),
+      e => (store.jobEmployerData = [e, ...store.jobEmployerData]),
     ),
     status: [],
     setStatus: action(e => (store.status = e)),
     statusLoder: true,
     setStatusLoder: action(e => (store.statusLoder = e)),
-    AddStatus: action(
-      e => (store.status = [e, ...store.status]),
-    ),
+    AddStatus: action(e => (store.status = [e, ...store.status])),
 
     // Get Employe Job Details
     jobDetail: [],
@@ -247,7 +246,10 @@ export const StoreProvider = props => {
     jAppError: false,
     setJAppError: action(e => (store.jAppError = e)),
     AddJApplication: action(e => {
-      store.jApplication.job_application[0] = [e, store.jApplication?.job_application[0]];
+      store.jApplication.job_application[0] = [
+        e,
+        store.jApplication?.job_application[0],
+      ];
     }),
     // Get Employe Home
     employeHome: {},
@@ -270,8 +272,6 @@ export const StoreProvider = props => {
 
     deviceName: '',
     setDeviceName: action(e => (store.deviceName = e)),
-
-   
   }));
   return (
     <StoreContext.Provider value={store}>

@@ -4,27 +4,22 @@ import {
   FlatList,
   Pressable,
   StyleSheet,
+  RefreshControl,
   ActivityIndicator,
 } from 'react-native';
-import React, {
-  useState,
-  useEffect,
-  useContext,
-} from 'react';
+import React, {useState, useEffect, useContext, useCallback} from 'react';
 import {
   Menu,
   MenuOption,
   MenuOptions,
   MenuTrigger,
 } from 'react-native-popup-menu';
-import {
-  useNavigation
-} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import url from '../../config/url';
-import { observer } from 'mobx-react';
+import {observer} from 'mobx-react';
 import colors from '../../config/colors';
 import JRow from '../../customComponents/JRow';
-import { StoreContext } from '../../mobx/store';
+import {StoreContext} from '../../mobx/store';
 import JText from '../../customComponents/JText';
 import Sort from '../../assets/svg/Icon/Sort.svg';
 import JEmpty from '../../customComponents/JEmpty';
@@ -35,30 +30,24 @@ import Arrow_Down from '../../assets/svg/Icon/Arrow_Down.svg';
 import JSearchInput from '../../customComponents/JSearchInput';
 import JChevronIcon from '../../customComponents/JChevronIcon';
 import JApplication from '../../customComponents/JApplication';
-import { RFPercentage } from 'react-native-responsive-fontsize';
+import {RFPercentage} from 'react-native-responsive-fontsize';
 import JGradientHeader from '../../customComponents/JGradientHeader';
-import { _jobApplication } from '../../functions/Candidate/BottomTab';
 
-
-const JobApplication = ({ route }) => {
-  const { navigate } = useNavigation();
+const JobApplication = ({route}) => {
+  const {navigate} = useNavigation();
   const store = useContext(StoreContext);
 
   const [error, setError] = useState(false);
   const [update, setUpdate] = useState(true);
-  const [loader1, setLoader1] = useState(false);
+  const [isRefreshing, setRefreshing] = useState(false);
   const [selectedItem, setSelectedItem] = useState();
   const [searchQuery, setSearchQuery] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [filteredData1, setFilteredData1] = useState(store?.jApplication);
 
-
   const _jobApplication = () => {
-
     var myHeaders = new Headers();
-    myHeaders.append(
-      'Authorization', `Bearer ${store.token?.token}`,
-    );
+    myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
     fetch(
       `${url.baseUrl}/employer/jobs/${route?.params?.id}/applications`,
 
@@ -71,8 +60,7 @@ const JobApplication = ({ route }) => {
       .then(response => response.json())
       .then(result => {
         // console.log(result?.job_application[0].candidate_user_id)
-        store.setJApplication(result?.job_application)
-
+        store.setJApplication(result?.job_application);
       })
       .catch(error => {
         console.log('application===error', error);
@@ -85,13 +73,13 @@ const JobApplication = ({ route }) => {
 
   const sortByFitScoreAscending = () => {
     store.setJApplication(
-      [...store?.jApplication].sort((a, b) => a.fit_score - b.fit_score)
+      [...store?.jApplication].sort((a, b) => a.fit_score - b.fit_score),
     );
   };
 
   const sortByFitScoreDescending = () => {
     store.setJApplication(
-      [...store?.jApplication].sort((a, b) => b.fit_score - a.fit_score)
+      [...store?.jApplication].sort((a, b) => b.fit_score - a.fit_score),
     );
   };
 
@@ -103,20 +91,26 @@ const JobApplication = ({ route }) => {
     );
   };
 
-
-  const handleSearch = (text) => {
+  const handleSearch = text => {
     setSearchQuery(text);
-    const filtered = store?.jApplication.filter((item) => {
+    const filtered = store?.jApplication.filter(item => {
       return item.candidate_name.toLowerCase().includes(text.toLowerCase());
     });
     setFilteredData1(filtered);
   };
 
-
+  const onRefresh = useCallback(() => {
+    setRefreshing(true); // Set refreshing state to true
+    _jobApplication(); // Fetch new data
+    setSearchQuery(''); // Reset search query
+    setTimeout(() => {
+      setRefreshing(false); // Set refreshing state back to false when done
+    }, 1000);
+  }, []);
 
   useEffect(() => {
-    store.setJAppLoader(true)
-    _jobApplication()
+    store.setJAppLoader(true);
+    _jobApplication();
   }, [update]);
 
   return (
@@ -135,91 +129,97 @@ const JobApplication = ({ route }) => {
 
       {store.jAppLoader ? (
         <ActivityIndicator />
-      ) :
-        error == true ?
-          <JApiError
-            onTryAgainPress={() => {
-              _jobApplication();
-              store.setJAppError(false)
-            }}
-          /> :
-          store?.jApplication?.length > 0 ? (
-            <>
-              <JRow
-                style={{
-                  paddingHorizontal: RFPercentage(2),
-                  justifyContent: 'space-between',
-                }}>
-                <JSearchInput
-                  inputStyle={{ width: '75%', alignSelf: 'center' }}
-                  length={1}
-                  onChangeText={handleSearch}
-                  value={searchQuery}
-                  // onPressIcon={() => alert('Icon Pressed')}
-                />
-                <Menu>
-                  <MenuTrigger
-                    style={{ alignItems: 'center', justifyContent: 'center' }}>
-                    <Sort height={RFPercentage(7)} width={RFPercentage(8)} />
-                  </MenuTrigger>
-                  <MenuOptions>
-                    <JText style={styles.menuhead}>{store.lang.sort_by}</JText>
-                    <MenuOption onSelect={sortByFitScoreDescending}>
-                      <JRow>
-                        <JText style={styles.menutxt}>
-                          {store.lang.candidate_fit_score}
-                        </JText>
-                        <Arrow_Up />
-                      </JRow>
-                    </MenuOption>
-                    <MenuOption onSelect={sortByFitScoreAscending}>
-                      <JRow>
-                        <JText style={styles.menutxt}>
-                          {store.lang.candidate_fit_score}
-                        </JText>
-                        <Arrow_Down />
-                      </JRow>
-                    </MenuOption>
-                    <MenuOption onSelect={sortByRecentApplyDateDescending}>
-                      <JText style={styles.menutxt}>
-                        {store.lang.recent_apply_date}
-                      </JText>
-                    </MenuOption>
-                    {/* <MenuOption onSelect={() => refRBSheet.current.open()}>
+      ) : error == true ? (
+        <JApiError
+          onTryAgainPress={() => {
+            _jobApplication();
+            store.setJAppError(false);
+          }}
+        />
+      ) : store?.jApplication?.length > 0 ? (
+        <>
+          <JRow
+            style={{
+              paddingHorizontal: RFPercentage(2),
+              justifyContent: 'space-between',
+            }}>
+            <JSearchInput
+              inputStyle={{width: '75%', alignSelf: 'center'}}
+              length={1}
+              onChangeText={handleSearch}
+              value={searchQuery}
+              // onPressIcon={() => alert('Icon Pressed')}
+            />
+            <Menu>
+              <MenuTrigger
+                style={{alignItems: 'center', justifyContent: 'center'}}>
+                <Sort height={RFPercentage(7)} width={RFPercentage(8)} />
+              </MenuTrigger>
+              <MenuOptions>
+                <JText style={styles.menuhead}>{store.lang.sort_by}</JText>
+                <MenuOption onSelect={sortByFitScoreDescending}>
+                  <JRow>
+                    <JText style={styles.menutxt}>
+                      {store.lang.candidate_fit_score}
+                    </JText>
+                    <Arrow_Up />
+                  </JRow>
+                </MenuOption>
+                <MenuOption onSelect={sortByFitScoreAscending}>
+                  <JRow>
+                    <JText style={styles.menutxt}>
+                      {store.lang.candidate_fit_score}
+                    </JText>
+                    <Arrow_Down />
+                  </JRow>
+                </MenuOption>
+                <MenuOption onSelect={sortByRecentApplyDateDescending}>
+                  <JText style={styles.menutxt}>
+                    {store.lang.recent_apply_date}
+                  </JText>
+                </MenuOption>
+                {/* <MenuOption onSelect={() => refRBSheet.current.open()}>
                   <JText style={styles.menutxt}>
                     {store.lang.status_of_application}
                   </JText>
                 </MenuOption> */}
-                  </MenuOptions>
-                </Menu>
-              </JRow>
+              </MenuOptions>
+            </Menu>
+          </JRow>
 
-              <FlatList
-                style={{ flex: 1, paddingHorizontal: RFPercentage(2) }}
-                data={searchQuery?.length > 0 ? filteredData1 : store?.jApplication}
-                renderItem={({ item, index }) => (
-
-                  <JApplication
-                    update={update}
-                    setUpdate={setUpdate}
-                    api={() => _jobApplication()}
-                    onPressStatus={() => {
-                      if (item.status_id == 8) { navigate('Reschedule', { cID: item.candidate_user_id, jobID: item?.job_id }) }
-                    }}
-                    onPress={() => {
-                      setModalVisible(true);
-                    }}
-                    // onSelect={handleSelect}
-                    item={item}
-                  // date={moment(item.apply_date, 'DD-MM-YYYY').format('DD MMM,YYYY')}
-                  />
-                )}
-                keyExtractor={(item) => item.id}
+          <FlatList
+            style={{flex: 1, paddingHorizontal: RFPercentage(2)}}
+            data={searchQuery?.length > 0 ? filteredData1 : store?.jApplication}
+            refreshControl={
+              <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+            }
+            renderItem={({item, index}) => (
+              <JApplication
+                update={update}
+                setUpdate={setUpdate}
+                api={() => _jobApplication()}
+                onPressStatus={() => {
+                  if (item.status_id == 8) {
+                    navigate('Reschedule', {
+                      cID: item.candidate_user_id,
+                      jobID: item?.job_id,
+                    });
+                  }
+                }}
+                onPress={() => {
+                  setModalVisible(true);
+                }}
+                // onSelect={handleSelect}
+                item={item}
+                // date={moment(item.apply_date, 'DD-MM-YYYY').format('DD MMM,YYYY')}
               />
-            </>
-          ) : (
-            <JEmpty />
-          )}
+            )}
+            keyExtractor={item => item.id}
+          />
+        </>
+      ) : (
+        <JEmpty />
+      )}
       {/* <RBSheet
         ref={refRBSheet}
         // closeOnDragDown={false}
@@ -258,19 +258,21 @@ const JobApplication = ({ route }) => {
         <Pressable
           onPress={() => setModalVisible(!modalVisible)}
           style={styles.centeredView}>
-          {store.jAppLoader ? <ActivityIndicator /> :
+          {store.jAppLoader ? (
+            <ActivityIndicator />
+          ) : (
             <View style={styles.modalView}>
-              <JText style={styles.infotxt} 
-              // style={{ paddingHorizontal: store?.jApplication[0]?.fit_score_information == null || [] ? RFPercentage(10) : RFPercentage(0) }}
+              <JText
+                style={styles.infotxt}
+                // style={{ paddingHorizontal: store?.jApplication[0]?.fit_score_information == null || [] ? RFPercentage(10) : RFPercentage(0) }}
               >
-                 Missing attributes from the candidate profile
+                Missing attributes from the candidate profile
                 {/* {store?.jApplication[0]?.fit_score_information == null || [] ? 'N/A' : store?.jApplication[0]?.fit_score_information} */}
               </JText>
-            </View>}
+            </View>
+          )}
         </Pressable>
       </Modal>
-
-
     </JScreen>
   );
 };
@@ -278,7 +280,7 @@ const JobApplication = ({ route }) => {
 export default observer(JobApplication);
 
 const styles = StyleSheet.create({
-  menu: { marginTop: RFPercentage(5) },
+  menu: {marginTop: RFPercentage(5)},
   menuhead: {
     fontSize: RFPercentage(2),
     fontWeight: 'bold',
@@ -290,7 +292,7 @@ const styles = StyleSheet.create({
     marginVertical: RFPercentage(0.5),
     paddingHorizontal: RFPercentage(1),
   },
-  RBView: { paddingHorizontal: RFPercentage(2.5), paddingTop: RFPercentage(2) },
+  RBView: {paddingHorizontal: RFPercentage(2.5), paddingTop: RFPercentage(2)},
   RBHeader: {
     fontSize: RFPercentage(2.8),
     fontWeight: 'bold',
@@ -323,13 +325,16 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-  headers: { fontWeight: 'bold', fontSize: RFPercentage(3), marginVertical: RFPercentage(2), },
-  date: { fontSize: RFPercentage(2.5), marginHorizontal: RFPercentage(2), },
-  infotxt: { 
+  headers: {
+    fontWeight: 'bold',
+    fontSize: RFPercentage(3),
+    marginVertical: RFPercentage(2),
+  },
+  date: {fontSize: RFPercentage(2.5), marginHorizontal: RFPercentage(2)},
+  infotxt: {
     fontSize: RFPercentage(1.9),
-     marginHorizontal: RFPercentage(2),
-     color:colors.white[0],
-     textAlign:'center',
-     
-     },
+    marginHorizontal: RFPercentage(2),
+    color: colors.white[0],
+    textAlign: 'center',
+  },
 });
