@@ -6,24 +6,23 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import React from 'react';
-import { RFPercentage } from 'react-native-responsive-fontsize';
+import {RFPercentage} from 'react-native-responsive-fontsize';
 import colors from '../config/colors';
 import JText from './JText';
 
 import Feather from 'react-native-vector-icons/Feather';
 import DocumentPicker from 'react-native-document-picker';
-import { useState } from 'react';
-import { StoreContext } from '../mobx/store';
-import { useContext } from 'react';
-import { _getProfile } from '../functions/Candidate/MyProfile';
-import { JToast } from '../functions/Toast';
-export default function JProfileContent({ src, name, email, jd }) {
+import {useState} from 'react';
+import {StoreContext} from '../mobx/store';
+import {useContext} from 'react';
+import {_getProfile} from '../functions/Candidate/MyProfile';
+import {JToast} from '../functions/Toast';
+export default function JProfileContent({src, name, email, jd}) {
   const store = useContext(StoreContext);
   const [singleFile, setSingleFile] = useState('');
   const [loader, setLoader] = useState(false);
 
   const _uploadImage = res => {
- 
     var myHeaders = new Headers();
     myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
     var formdata = new FormData();
@@ -34,7 +33,7 @@ export default function JProfileContent({ src, name, email, jd }) {
       name: res[0].name,
       type: res[0].type,
     });
-    console.log("FDFDFDFDFDF",formdata)
+    console.log('FDFDFDFDFDF', formdata);
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
@@ -48,7 +47,7 @@ export default function JProfileContent({ src, name, email, jd }) {
     )
       .then(response => response.json())
       .then(result => {
-        console.log("result",result)
+        console.log('result', result);
         setSingleFile(res[0]);
         _getProfile(store);
         store.setUserAvatar(res[0]?.uri);
@@ -59,7 +58,7 @@ export default function JProfileContent({ src, name, email, jd }) {
         setLoader(false);
       })
       .catch(error => {
-        console.log('error', error)
+        console.log('error', error);
 
         setLoader(false);
       });
@@ -86,8 +85,7 @@ export default function JProfileContent({ src, name, email, jd }) {
 
       if (res[0].size <= 2097152) {
         _uploadImage(res);
-      }
-      else {
+      } else {
         JToast({
           type: 'danger',
           text1: store.lang.image_sise,
@@ -109,17 +107,14 @@ export default function JProfileContent({ src, name, email, jd }) {
           type: 'danger',
           text1: 'Unknown Error: ' + JSON.stringify(err),
         });
-  }
-}}
-
-  
- 
- 
+      }
+    }
+  };
 
   return (
     <React.Fragment>
       <ImageBackground
-        source={{ uri: singleFile ? singleFile.uri : src }}
+        source={{uri: singleFile ? singleFile.uri : src}}
         style={{
           height: RFPercentage(20),
           width: RFPercentage(20),
@@ -168,8 +163,9 @@ export default function JProfileContent({ src, name, email, jd }) {
           justifyContent: 'center',
           alignItems: 'center',
           marginTop: RFPercentage(1),
+          marginHorizontal: RFPercentage(2),
         }}>
-        <JText style={{ fontSize: RFPercentage(3), fontWeight: 'bold', color: colors.purple[0] }}>{name}</JText>
+        <JText style={styles.names}>{name}</JText>
 
         {email && <JText style={styles.text}>{email}</JText>}
         {jd && <JText style={styles.text}>{jd}</JText>}
@@ -178,4 +174,16 @@ export default function JProfileContent({ src, name, email, jd }) {
   );
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  names: {
+    fontSize: RFPercentage(3),
+    fontWeight: 'bold',
+    color: colors.purple[0],
+    textAlign: 'center',
+  },
+  text: {
+    fontSize: RFPercentage(2.2),
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+});

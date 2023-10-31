@@ -1,5 +1,5 @@
-import React, { useState, useRef, useContext } from 'react';
-import { StyleSheet, View, TouchableOpacity, Image } from 'react-native';
+import React, {useState, useRef, useContext} from 'react';
+import {StyleSheet, View, TouchableOpacity, Image} from 'react-native';
 import {
   DrawerContentScrollView,
   DrawerItemList,
@@ -11,22 +11,22 @@ import {
 } from 'react-native-responsive-screen';
 import JText from '../customComponents/JText';
 import colors from '../config/colors';
-import { RFPercentage } from 'react-native-responsive-fontsize';
-import { getDrawerItems } from '../data/drawer';
+import {RFPercentage} from 'react-native-responsive-fontsize';
+import {getDrawerItems} from '../data/drawer';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import pkg from '../package.json';
-import { StoreContext } from '../mobx/store';
+import {StoreContext} from '../mobx/store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { observer, Observer } from 'mobx-react';
+import {observer, Observer} from 'mobx-react';
 import JRow from '../customComponents/JRow';
-import { JToast } from '../functions/Toast';
+import {JToast} from '../functions/Toast';
 import JIcon from '../customComponents/JIcon';
 import FlashMessage from 'react-native-flash-message';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 function CustomDrawerContent(props) {
   const store = useContext(StoreContext);
@@ -38,34 +38,34 @@ function CustomDrawerContent(props) {
     index == 0
       ? props.navigation.navigate('EAccountSetting')
       : index == 1
-        ? props.navigation.navigate('CAllJobs')
-        : index == 2
-          ? props.navigation.navigate('DJobAlert')
-          : index == 3
-            ? props.navigation.navigate('DFollowings')
-            : index == 4
-              ? props.navigation.navigate('DHelpCenter')
-              : AsyncStorage.removeItem('@login')
-                .then(res => {
-                  setLoader(true)
-                  JToast({
-                    type: 'success',
-                    text1: store.lang.logout_successfully,
-                  });
-                  googleSignOut();
-                  store.setToken({});
+      ? props.navigation.navigate('CAllJobs')
+      : index == 2
+      ? props.navigation.navigate('DJobAlert')
+      : index == 3
+      ? props.navigation.navigate('DFollowings')
+      : index == 4
+      ? props.navigation.navigate('DHelpCenter')
+      : AsyncStorage.removeItem('@login')
+          .then(res => {
+            setLoader(true);
+            JToast({
+              type: 'success',
+              text1: store.lang.logout_successfully,
+            });
+            googleSignOut();
+            store.setToken({});
 
-                  // console.log('object')
-                  setLoader(false)
-                })
-                .catch(error => {
-                  JToast({
-                    type: 'danger',
-                    text1: store.lang.eror,
-                    text2: 'Error while removing token',
-                  });
-                  setLoader(false)
-                });
+            // console.log('object')
+            setLoader(false);
+          })
+          .catch(error => {
+            JToast({
+              type: 'danger',
+              text1: store.lang.eror,
+              text2: 'Error while removing token',
+            });
+            setLoader(false);
+          });
   };
 
   const _navigationIcons = index =>
@@ -89,61 +89,60 @@ function CustomDrawerContent(props) {
       />
     ) : index == 3 ? (
       <Feather color={colors.black[0]} name="users" size={RFPercentage(3.5)} />
-    )
-      : index == 4 ?
-        (<Feather
-          color={colors.black[0]}
-          name="help-circle"
-          size={RFPercentage(3.5)}
-        />)
-        : index == 5 ? (
-          <MaterialIcons
-            color={colors.black[0]}
-            name="logout"
-            size={RFPercentage(3.5)}
-          />
-        ) : (
-          <Feather
-            color={colors.black[0]}
-            name="help-circle"
-            size={RFPercentage(3.5)}
-          />
-        );
+    ) : index == 4 ? (
+      <Feather
+        color={colors.black[0]}
+        name="help-circle"
+        size={RFPercentage(3.5)}
+      />
+    ) : index == 5 ? (
+      <MaterialIcons
+        color={colors.black[0]}
+        name="logout"
+        size={RFPercentage(3.5)}
+      />
+    ) : (
+      <Feather
+        color={colors.black[0]}
+        name="help-circle"
+        size={RFPercentage(3.5)}
+      />
+    );
   const _EnavigateToScreen = index => {
     // props.navigation.closeDrawer()
     index == 0
       ? props.navigation.navigate('EAccountSetting')
       : index == 1
-        ? props.navigation.navigate('Followers')
-        : index == 2
-          ? props.navigation.navigate('Employes')
-          : index == 3
-            ? props.navigation.navigate('Assessments')
-            : index == 4
-              ? props.navigation.navigate('DHelpCenter')
-              : index == 5
-                ? AsyncStorage.removeItem('@login')
-                  .then(res => {
-                    setLoader(true)
-                    if (res !== null) {
-                      googleSignOut();
-                      JToast({
-                        type: 'success',
-                        text1: store.lang.logout_successfully,
-                      });
-                      store.setToken({});
-                      setLoader(false)
-                    }
-                  })
-                  .catch(error => {
-                    JToast({
-                      type: 'danger',
-                      text1: store.lang.eror,
-                      text2: 'Error while removing token',
-                    });
-                    setLoader(false)
-                  })
-                : null;
+      ? props.navigation.navigate('Followers')
+      : index == 2
+      ? props.navigation.navigate('Employes')
+      : index == 3
+      ? props.navigation.navigate('Assessments')
+      : index == 4
+      ? props.navigation.navigate('DHelpCenter')
+      : index == 5
+      ? AsyncStorage.removeItem('@login')
+          .then(res => {
+            setLoader(true);
+            if (res !== null) {
+              googleSignOut();
+              JToast({
+                type: 'success',
+                text1: store.lang.logout_successfully,
+              });
+              store.setToken({});
+              setLoader(false);
+            }
+          })
+          .catch(error => {
+            JToast({
+              type: 'danger',
+              text1: store.lang.eror,
+              text2: 'Error while removing token',
+            });
+            setLoader(false);
+          })
+      : null;
   };
 
   const _EnavigationIcons = index =>
@@ -224,165 +223,162 @@ function CustomDrawerContent(props) {
   //     console.error('LinkedIn logout error:', error);
   //   }
   // };
-  return (
+  return store.token?.user?.owner_type.includes('Candidate') ? (
+    <DrawerContentScrollView {...props}>
+      {/* <DrawerItemList {...props} /> */}
+      <View style={{height: heightPercentageToDP(100)}}>
+        <View
+          style={{
+            paddingVertical: RFPercentage(2),
 
-    store.token?.user?.owner_type.includes('Candidate')
-      ? <DrawerContentScrollView {...props}>
-        {/* <DrawerItemList {...props} /> */}
-        <View style={{ height: heightPercentageToDP(100) }}>
+            alignItems: 'center',
+            borderBottomColor: colors.inputBorder[0],
+            borderBottomWidth: RFPercentage(0.1),
+          }}>
           <View
             style={{
-              paddingVertical: RFPercentage(2),
-
+              height: RFPercentage(8),
+              width: RFPercentage(8),
+              backgroundColor: colors.black[0],
+              borderRadius: RFPercentage(8),
+              justifyContent: 'center',
               alignItems: 'center',
-              borderBottomColor: colors.inputBorder[0],
-              borderBottomWidth: RFPercentage(0.1),
+              marginBottom: RFPercentage(1),
             }}>
-            <View
+            <Image
               style={{
                 height: RFPercentage(8),
                 width: RFPercentage(8),
-                backgroundColor: colors.black[0],
                 borderRadius: RFPercentage(8),
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginBottom: RFPercentage(1),
-              }}>
-              <Image
-                style={{
-                  height: RFPercentage(8),
-                  width: RFPercentage(8),
-                  borderRadius: RFPercentage(8),
-                }}
-                resizeMode="contain"
-                source={{
-                  uri: user?.avatar,
-                }}
-              />
-            </View>
-            <JText style={styles.text} fontSize={RFPercentage(2.4)}>
-              {user?.full_name}
-            </JText>
-            <JText style={styles.text}>{user?.email}</JText>
-            {/* <JText style={styles.text}>Ui/Ux Designer</JText> */}
+              }}
+              resizeMode="contain"
+              source={{
+                uri: user?.avatar,
+              }}
+            />
           </View>
-          <View
-            style={{
-              paddingHorizontal: RFPercentage(2),
-              marginTop: RFPercentage(3),
-            }}>
-
-            {getDrawerItems().map((item, index) => (
-              <JRow
-                disabled={loader ? true : false}
-                onPress={() => _navigateToScreen(index)}
-                style={{
-                  marginVertical: RFPercentage(1.7),
-                }}
-                key={index}>
-                {_navigationIcons(index)}
-                <JText
-                  fontWeight="bold"
-                  fontSize={RFPercentage(2)}
-                  style={{ marginHorizontal: RFPercentage(1) }}>
-                  {item}
-                </JText>
-              </JRow>
-            ))}
-          </View>
-          <JText
-            fontWeight="bold"
-            fontSize={RFPercentage(2)}
-            fontColor={colors.placeHolderColor[0]}
-            style={{
-              textAlign: 'center',
-              position: 'absolute',
-              bottom: RFPercentage(5),
-              alignSelf: 'center',
-            }}>
-            Version: {pkg.version}
+          <JText style={styles.text} fontSize={RFPercentage(2.4)}>
+            {user?.full_name}
           </JText>
-        </View>
-      </DrawerContentScrollView>
-      : <DrawerContentScrollView {...props} showsVerticalScrollIndicator={false}>
 
-        {/* <DrawerItemList {...props} /> */}
-        {/* <DrawerItem label="Help" onPress={() => alert('Link to help')} /> */}
-        <View style={{ height: heightPercentageToDP(100) }}>
+          <JText style={styles.text}>{user?.email}</JText>
+          {/* <JText style={styles.text}>Ui/Ux Designer</JText> */}
+        </View>
+        <View
+          style={{
+            paddingHorizontal: RFPercentage(2),
+            marginTop: RFPercentage(3),
+          }}>
+          {getDrawerItems().map((item, index) => (
+            <JRow
+              disabled={loader ? true : false}
+              onPress={() => _navigateToScreen(index)}
+              style={{
+                marginVertical: RFPercentage(1.7),
+              }}
+              key={index}>
+              {_navigationIcons(index)}
+              <JText
+                fontWeight="bold"
+                fontSize={RFPercentage(2)}
+                style={{marginHorizontal: RFPercentage(1)}}>
+                {item}
+              </JText>
+            </JRow>
+          ))}
+        </View>
+        <JText
+          fontWeight="bold"
+          fontSize={RFPercentage(2)}
+          fontColor={colors.placeHolderColor[0]}
+          style={{
+            textAlign: 'center',
+            position: 'absolute',
+            bottom: RFPercentage(5),
+            alignSelf: 'center',
+          }}>
+          Version: {pkg.version}
+        </JText>
+      </View>
+    </DrawerContentScrollView>
+  ) : (
+    <DrawerContentScrollView {...props} showsVerticalScrollIndicator={false}>
+      {/* <DrawerItemList {...props} /> */}
+      {/* <DrawerItem label="Help" onPress={() => alert('Link to help')} /> */}
+      <View style={{height: heightPercentageToDP(100)}}>
+        <View
+          style={{
+            paddingVertical: RFPercentage(2),
+            alignItems: 'center',
+            borderBottomColor: colors.inputBorder[0],
+            borderBottomWidth: RFPercentage(0.1),
+          }}>
           <View
             style={{
-              paddingVertical: RFPercentage(2),
+              height: RFPercentage(8),
+              width: RFPercentage(8),
+              backgroundColor: colors.black[0],
+              borderRadius: RFPercentage(8),
+              justifyContent: 'center',
               alignItems: 'center',
-              borderBottomColor: colors.inputBorder[0],
-              borderBottomWidth: RFPercentage(0.1),
+              marginBottom: RFPercentage(1),
             }}>
-            <View
+            <Image
               style={{
                 height: RFPercentage(8),
                 width: RFPercentage(8),
-                backgroundColor: colors.black[0],
                 borderRadius: RFPercentage(8),
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginBottom: RFPercentage(1),
-              }}>
-              <Image
-                style={{
-                  height: RFPercentage(8),
-                  width: RFPercentage(8),
-                  borderRadius: RFPercentage(8),
-                }}
-                resizeMode="contain"
-                source={{
-                  uri: user?.avatar,
-                }}
-              />
-            </View>
-            <JText style={styles.text} fontSize={RFPercentage(2.4)}>
-              {user?.full_name}
-            </JText>
-            <JText style={styles.text}>{user?.email}</JText>
-            {/* <JText style={styles.text}>Ui/Ux Designer</JText> */}
+              }}
+              resizeMode="contain"
+              source={{
+                uri: user?.avatar,
+              }}
+            />
           </View>
-          <View
-            style={{
-              paddingHorizontal: RFPercentage(2),
-              marginTop: RFPercentage(3),
-            }}>
-
-            {getDrawerItems().map((item, index) => (
-              <JRow
-                disabled={loader ? true : false}
-                onPress={() => _EnavigateToScreen(index)}
-                style={{
-                  marginVertical: RFPercentage(1.7),
-                }}
-                key={index}>
-                {_EnavigationIcons(index)}
-                <JText
-                  fontWeight="bold"
-                  fontSize={RFPercentage(2)}
-                  style={{ marginHorizontal: RFPercentage(2) }}>
-                  {item}
-                </JText>
-              </JRow>
-            ))}
-          </View>
-
-          <JText
-            fontWeight="bold"
-            fontSize={RFPercentage(2)}
-            fontColor={colors.placeHolderColor[0]}
-            style={{
-              textAlign: 'center',
-              position: 'absolute',
-              bottom: RFPercentage(5),
-              alignSelf: 'center',
-            }}>
-            Version: {pkg.version}
+          <JText style={styles.text} fontSize={RFPercentage(2.4)}>
+            {user?.full_name}
           </JText>
+          <JText style={styles.text}>{user?.email}</JText>
+          {/* <JText style={styles.text}>Ui/Ux Designer</JText> */}
         </View>
-      </DrawerContentScrollView>
+        <View
+          style={{
+            paddingHorizontal: RFPercentage(2),
+            marginTop: RFPercentage(3),
+          }}>
+          {getDrawerItems().map((item, index) => (
+            <JRow
+              disabled={loader ? true : false}
+              onPress={() => _EnavigateToScreen(index)}
+              style={{
+                marginVertical: RFPercentage(1.7),
+              }}
+              key={index}>
+              {_EnavigationIcons(index)}
+              <JText
+                fontWeight="bold"
+                fontSize={RFPercentage(2)}
+                style={{marginHorizontal: RFPercentage(2)}}>
+                {item}
+              </JText>
+            </JRow>
+          ))}
+        </View>
+
+        <JText
+          fontWeight="bold"
+          fontSize={RFPercentage(2)}
+          fontColor={colors.placeHolderColor[0]}
+          style={{
+            textAlign: 'center',
+            position: 'absolute',
+            bottom: RFPercentage(5),
+            alignSelf: 'center',
+          }}>
+          Version: {pkg.version}
+        </JText>
+      </View>
+    </DrawerContentScrollView>
   );
 }
 export default observer(CustomDrawerContent);
@@ -393,9 +389,9 @@ const styles = StyleSheet.create({
   },
 });
 
-
-// Candidate 
-{/* <DrawerItem
+// Candidate
+{
+  /* <DrawerItem
 
 icon={() => <JIcon icon="io" color={colors.black[0]} name="settings-outline" size={RFPercentage(3)} />}
 labelStyle={{ fontSize: RFPercentage(2.2), fontWeight: 'bold', color: 'black' }}
@@ -443,10 +439,12 @@ onPress={() => {
         text2: 'Error while removing token',
       });
     })
-}} /> */}
+}} /> */
+}
 
 // Employe
-{/* <DrawerItem
+{
+  /* <DrawerItem
               icon={() => <JIcon icon="io" color={colors.black[0]} name="settings-outline" size={RFPercentage(3)} />}
               labelStyle={{ fontSize: RFPercentage(2.2), fontWeight: 'bold', color: 'black',backgroundColor:'red' }}
               label={`${store.lang.account_settings}`}
@@ -493,4 +491,5 @@ onPress={() => {
                       text2: 'Error while removing token',
                     });
                   })
-  }} /> */}
+  }} /> */
+}

@@ -86,6 +86,7 @@ const FeatureCompany = ({navigation}) => {
                     id: item.unique_id,
                   })
                 }
+                // follower={true}
                 containerStyle={{marginBottom: RFPercentage(2)}}
                 companyId={item.id}
                 followingList={store.followingList}

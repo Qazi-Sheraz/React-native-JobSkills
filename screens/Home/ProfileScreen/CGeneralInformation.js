@@ -30,7 +30,7 @@ function CGeneralInformation({refRBSheet, data, user}) {
   const store = useContext(StoreContext);
   const [loader, setLoader] = useState(false);
   const navigation = useNavigation();
-const{params}=useRoute();
+  const {params} = useRoute();
   const _postData = values => {
     var myHeaders = new Headers();
     myHeaders.append('Authorization', `Bearer ${store.token.token}`);
@@ -39,14 +39,17 @@ const{params}=useRoute();
     formdata.append('last_name', values.last_name);
     formdata.append('father_name', values.father);
     formdata.append('dob', moment(values.dob).format('YYYY-MM-DD'));
-    formdata.append('gender', values.gender.name == store.lang.male ? '0' : '1');
+    formdata.append(
+      'gender',
+      values.gender.name == store.lang.male ? '0' : '1',
+    );
     formdata.append('country_id', values.country.id);
     formdata.append('state_id', values.state.id);
     formdata.append('city_id', values.city.id);
     formdata.append('candidateLanguage', values.language.id);
     formdata.append('marital_status_id', values.status.id);
     formdata.append('immediate_available', values.availability ? '1' : '0');
-// console.log(formdata)
+    console.log(formdata);
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
@@ -58,7 +61,7 @@ const{params}=useRoute();
     fetch('https://dev.jobskills.digital/api/update-profile', requestOptions)
       .then(response => response.json())
       .then(result => {
-        // console.log(result);
+        console.log(result);
         if (result.success === false) {
           alert('Error while saving data');
         } else {
@@ -66,9 +69,9 @@ const{params}=useRoute();
           JToast({
             type: 'success',
             text1: store.lang.success,
-            text2: result,
+            // text2: result,
           });
-          navigation.navigate('Aboutme')
+          navigation.navigate('Aboutme');
         }
         setLoader(false);
       })
@@ -79,74 +82,81 @@ const{params}=useRoute();
   };
 
   const profile = store.myProfile.user[0].general_information;
-// console.log(profile?.marital_status.id)
+  // console.log(profile?.marital_status.id)
   return (
     <JScreen headerShown={false}>
       <Formik
         initialValues={{
-          first_name: profile.first_name==null?'':profile.first_name,
-          last_name: profile.last_name==null?'':profile.last_name,
-          father: profile.father_name==null?'':profile.father_name,
-          dob: profile.date_of_birth==null?'':profile.date_of_birth,
-          gender: profile.gender==null?'':profile.gender == '0' ? {name: store.lang.male} : {name: store.lang.female},
-          country:params?.country_id?{
-            name:params?.country_name?params?.country_name:'',
-            id: params?.country_id,
-          }:'',
+          first_name: profile.first_name == null ? '' : profile.first_name,
+          last_name: profile.last_name == null ? '' : profile.last_name,
+          father: profile.father_name == null ? '' : profile.father_name,
+          dob: profile.date_of_birth == null ? '' : profile.date_of_birth,
+          gender:
+            profile.gender == null
+              ? ''
+              : profile.gender == '0'
+              ? {name: store.lang.male}
+              : {name: store.lang.female},
+          country: params?.country_id
+            ? {
+                name: params?.country_name ? params?.country_name : '',
+                id: params?.country_id,
+              }
+            : '',
           state: profile.state_name
-          ?{
-            name: profile.state_name?.name,
-            id: profile.state_name?.id,
-          }
-          
-          :'',
+            ? {
+                name: profile.state_name?.name,
+                id: profile.state_name?.id,
+              }
+            : '',
           city: profile.city_name
-          ?
-          {
-            name: profile.city_name?.name,
-            id: profile.city_name?.id,
-          }
-          : '',
+            ? {
+                name: profile.city_name?.name,
+                id: profile.city_name?.id,
+              }
+            : '',
           language: profile.language
-          ?{
-            name: profile.language[0]?.language,
-            id: profile.language[0]?.id,
-          }
-          : '',
-          status:params?.marital_status?{id:profile?.marital_status.id,name:params?.marital_status}:'',
+            ? {
+                name: profile.language[0]?.language,
+                id: profile.language[0]?.id,
+              }
+            : '',
+          status: params?.marital_status
+            ? {id: profile?.marital_status.id, name: params?.marital_status}
+            : '',
           availability: profile.immediate_available ? true : false,
         }}
         onSubmit={values => {
           // console.log(values);
           _postData(values);
         }}
-        
         validationSchema={yup.object().shape({
-            
           country: yup
-          .object().nullable()
-          .shape()
-          .required(store.lang.Country_is_required),
+            .object()
+            .nullable()
+            .shape()
+            .required(store.lang.Country_is_required),
           city: yup
-          .object().nullable()
-          .shape()
-          .required(store.lang.City_is_required),
+            .object()
+            .nullable()
+            .shape()
+            .required(store.lang.City_is_required),
           state: yup
-          .object().nullable()
-          .shape()
-          .required(store.lang.State_is_required),
+            .object()
+            .nullable()
+            .shape()
+            .required(store.lang.State_is_required),
           language: yup
-          .object().nullable()
-          .shape()
-          .required(store.lang.Language_is_required),
+            .object()
+            .nullable()
+            .shape()
+            .required(store.lang.Language_is_required),
           status: yup
-          .object().nullable()
-          .shape()
-          .required(store.lang.Status_is_required),
-          
-        })}
-     
-      >
+            .object()
+            .nullable()
+            .shape()
+            .required(store.lang.Status_is_required),
+        })}>
         {({
           values,
           handleChange,
@@ -185,8 +195,8 @@ const{params}=useRoute();
               }
               left={<JChevronIcon />}
             />
-            <ScrollView 
-            showsVerticalScrollIndicator={false}
+            <ScrollView
+              showsVerticalScrollIndicator={false}
               contentContainerStyle={{paddingBottom: RFPercentage(8)}}
               style={{
                 marginHorizontal: RFPercentage(2),
@@ -255,13 +265,17 @@ const{params}=useRoute();
                 }
               />
               {touched.dob && errors.dob && (
-                <JErrorText>{errors.dob}</JErrorText> 
+                <JErrorText>{errors.dob}</JErrorText>
               )}
 
               <JSelectInput
                 containerStyle={{marginTop: RFPercentage(2)}}
                 value={values.gender?.name}
-                data={store.lang.id==0?store.myProfile?.dataEnglish?.Gender:store.myProfile?.dataArabic?.Gender}
+                data={
+                  store.lang.id == 0
+                    ? store.myProfile?.dataEnglish?.Gender
+                    : store.myProfile?.dataArabic?.Gender
+                }
                 header={store.lang.gender}
                 heading={`${store.lang.gender}:`}
                 setValue={e => setFieldValue('gender', e)}
@@ -281,7 +295,11 @@ const{params}=useRoute();
               <JSelectInput
                 containerStyle={{marginTop: RFPercentage(2)}}
                 value={values.country?.name}
-                data={store.lang.id==0?store.myProfile.dataEnglish.countries:store.myProfile.dataArabic.countries}
+                data={
+                  store.lang.id == 0
+                    ? store.myProfile.dataEnglish.countries
+                    : store.myProfile.dataArabic.countries
+                }
                 header={store.lang.country}
                 heading={`${store.lang.country}:`}
                 setValue={e => {
@@ -303,11 +321,14 @@ const{params}=useRoute();
               )}
 
               <JSelectInput
-              disabled={values.country?false:true}
+                disabled={values.country ? false : true}
                 containerStyle={{marginTop: RFPercentage(2)}}
                 value={values.state?.name}
                 id={values.country?.id}
-                setValue={e => {setFieldValue('state', e);setFieldValue('city', null);}}
+                setValue={e => {
+                  setFieldValue('state', e);
+                  setFieldValue('city', null);
+                }}
                 header={store.lang.state}
                 heading={`${store.lang.state}:`}
                 error={touched.state && errors.state && true}
@@ -324,7 +345,7 @@ const{params}=useRoute();
               )}
 
               <JSelectInput
-              disabled={values.state?false:true}
+                disabled={values.state ? false : true}
                 containerStyle={{marginTop: RFPercentage(2)}}
                 value={values.city?.name}
                 setValue={e => setFieldValue('city', e)}
@@ -348,7 +369,11 @@ const{params}=useRoute();
                 containerStyle={{marginTop: RFPercentage(2)}}
                 value={values.language?.name}
                 setValue={e => setFieldValue('language', e)}
-                data={store.lang.id==0?store.myProfile.dataEnglish.language:store.myProfile.dataArabic.language}
+                data={
+                  store.lang.id == 0
+                    ? store.myProfile.dataEnglish.language
+                    : store.myProfile.dataArabic.language
+                }
                 header={store.lang.language}
                 heading={`${store.lang.language}:`}
                 error={touched.language && errors.language && true}
@@ -369,9 +394,12 @@ const{params}=useRoute();
                 value={values.status?.name}
                 setValue={e => setFieldValue('status', e)}
                 header={store.lang.marital_status}
-                    heading={`${store.lang.marital_status}:`}
-                data={store.lang.id==0?store.myProfile.dataEnglish.maritalStatus:store.myProfile.dataArabic.maritalStatus}
-                
+                heading={`${store.lang.marital_status}:`}
+                data={
+                  store.lang.id == 0
+                    ? store.myProfile.dataEnglish.maritalStatus
+                    : store.myProfile.dataArabic.maritalStatus
+                }
                 error={touched.status && errors.status && true}
                 rightIcon={
                   <Feather

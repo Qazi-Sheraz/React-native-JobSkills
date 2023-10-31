@@ -314,7 +314,7 @@ const Resume = ({ navigation }) => {
             //   .required().label('Name'),
             name: yup
             .string()
-            .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, store.lang.Name_must_contain_at_least_1_alphabet_character_and_can_include_English_Urdu_Arabic_and_spaces)
+            .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, store.lang.Name_must_contains_only_alphabets)
             .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, store.lang.Symbols_are_not_allowed_in_the_Name)
             .test('no-leading-space', store.lang.Name_cannot_start_with_a_space, (value) => {
               if (value && value.startsWith(' ')) {

@@ -1,6 +1,6 @@
-import { StyleSheet, View } from 'react-native';
+import {Pressable, StyleSheet, View} from 'react-native';
 import React from 'react';
-import { RFPercentage } from 'react-native-responsive-fontsize';
+import {RFPercentage} from 'react-native-responsive-fontsize';
 import colors from '../config/colors';
 import JText from './JText';
 
@@ -13,22 +13,21 @@ export default function JSkip({
   fontWeight = 'bold',
 }) {
   return (
-    <View style={[styles.skip, containerStyle]}>
+    <Pressable onPress={onPress} style={[styles.skip, containerStyle]}>
       <JText
-        onPress={onPress}
         fontWeight={fontWeight}
         fontColor={fontColor}
         fontSize={fontSize}
         textDecorationLine="underline">
         {children}
       </JText>
-    </View>
+    </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   skip: {
     alignItems: 'flex-end',
-    paddingHorizontal: RFPercentage(1),
+    padding: RFPercentage(1),
   },
 });

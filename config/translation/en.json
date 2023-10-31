@@ -622,7 +622,17 @@
 "We_need_access_to_your_storage_so_you_can_upload_resumes_and_set_profile_pictures":"We need access to your storage so you can upload resumes and set profile pictures",
 "Allow":"Allow",
 "years":"years",
-"Name_cannot_start_with_a_space":"Name cannot start with a space"
+"Name_cannot_start_with_a_space":"Name cannot start with a space",
+"current_salary_is_required":"Current Salary is required",
+"expected_salary_is_required":"Expected Salary is required",
+"must_be_a_numeric_value":"Must be a numeric value",
+"no_of_offices_must_be_a_number":"Number of offices must be a number",
+"employeDetail_cannot_start_special_character":"Employee details cannot start with a special character",
+"Press_Delete_account_or_Canel":"Press 'Delete Account' to remove permanently or 'Cancel' if you want to continue using Job Skills",
+"are_you_sure_want_delete_Your_account_permanently":"Are you sure you want to delete Your account permanently?",
+"delete_account":"Delete Account"
+
+
     
      
     
