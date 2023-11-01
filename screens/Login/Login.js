@@ -87,7 +87,6 @@ const Login = ({ navigation, route }) => {
           });
         });
     } else {
-      // alert('not remember')
       store.setToken(token);
     }
   };
