@@ -29,9 +29,31 @@ import {
   LoginManager, AccessToken, GraphRequest, GraphRequestManager,
 } from 'react-native-fbsdk-next';
 import LinkedInModal from '@smuxx/react-native-linkedin';
+import { AppleButton,appleAuth,appleAuthAndroid} from '@invertase/react-native-apple-authentication';
 
 
 const Login = ({ navigation, route }) => {
+
+  async function onAppleButtonPress() {
+  // performs login request
+  const appleAuthRequestResponse = await appleAuth.performRequest({
+    requestedOperation: appleAuth.Operation.LOGIN,
+    requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+  });
+console.log("code auth",appleAuthRequestResponse.identityToken)
+console.log("code auth apple",appleAuthRequestResponse)
+  // get current authentication state for user
+  // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
+  const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
+
+  // use credentialState response to ensure the user is authenticated
+  if (credentialState === appleAuth.State.AUTHORIZED) {
+    // user is authenticated
+    // _storeToken(result, true),
+    _appleAccess(appleAuthRequestResponse.identityToken)
+  }
+}
+
 
   GoogleSignin.configure({
     // webClientId: '505367788352-ad42uav54vqdr5ronovee2k66qtvpl5q.apps.googleusercontent.com',
@@ -386,7 +408,40 @@ const gooleLogin = async () => {
         setSocialLoader(false)
       });
   };
+const _appleAccess = (token) => {
+    setSocialLoader(true)
+    var requestOptions = {
+      method: 'GET',
+      redirect: 'follow'
+    };
+    fetch(`${url.baseUrl}/login/sign-in-with-apple/callback?access_token=${token}&type=${type}`, requestOptions)
 
+      .then(response => response.json())
+      .then(result => {
+        console.log('Result__Linkdin===>', result);
+
+        if (result) {
+          _storeToken(result, true),
+            updateUserDeviceToken(),
+            JToast({
+              type: 'success',
+              text1: store.lang.login_successfully,
+              text2: store.lang.welcome,
+            });
+          setSocialLoader(false)
+        }
+      })
+      .catch(error => {
+        // logoutFromLinkedIn
+        console.log("error",error)
+        JToast({
+          type: 'danger',
+          text1: store.lang.eror,
+          text2: store.lang.cannot_proceed_your_request,
+        });
+        setSocialLoader(false)
+      });
+  };
   
 
   const googleSignOut = async () => {
@@ -491,6 +546,13 @@ const gooleLogin = async () => {
   //     console.error('LinkedIn logout error:', error);
   //   }
   // };
+
+    useEffect(() => {
+    // onCredentialRevoked returns a function that will remove the event listener. useEffect will call this function when the component unmounts
+    return appleAuth.onCredentialRevoked(async () => {
+      console.warn('If this function executes, User Credentials have been Revoked');
+    });
+  }, []); // passing in an empty array as the second argument ensures this is only ran once when component mounts initially.
   return (
     <JScreen>
       <View style={{ flex: 0.3, justifyContent: 'center', alignItems: 'center' }}>
@@ -648,6 +710,7 @@ const gooleLogin = async () => {
             flexDirection: 'row',
             marginTop: RFPercentage(3),
             justifyContent: 'space-evenly',
+            alignItems:"center",
             width: '80%',
           }}>
           {/* {['google', 'facebook', 'linkedin', 'twitter'].map((item, index) => (
@@ -675,12 +738,16 @@ const gooleLogin = async () => {
               color={colors.purple[0]}
             />
           ))} */}
-          {['google', 'facebook'].map((item, index) => (
+          {['google', 'facebook','apple'].map((item, index) => (
             <FontAwesome
               disabled={loader ? true : socialLoader ? true : false}
               onPress={() => {
                 if (item == 'google') {
                   gooleLogin()
+                }
+                else if (item == 'apple'){
+                  console.log("else")
+                onAppleButtonPress()
                 }
                 else {
                   console.log("else")
@@ -693,6 +760,23 @@ const gooleLogin = async () => {
               color={colors.purple[0]}
             />
           ))}
+         
+     {/* <FontAwesome
+       onPress={() => onAppleButtonPress()}
+                  name="apple"
+                  shield-key-outline
+                  style={{
+                    marginRight:
+                      store.lang.id == 0 ? RFPercentage(1.5) : RFPercentage(0),
+                    marginLeft:
+                      store.lang.id == 0 ? RFPercentage(0) : RFPercentage(1.5),
+                  }}
+                  size={RFPercentage(4)}
+                  color={colors.purple[0]}
+                />
+       */}
+     
+  
           <LinkedInModal
             ref={linkedRef}
             permissions={['openid', 'profile', 'email']}
