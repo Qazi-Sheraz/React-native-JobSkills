@@ -1,21 +1,16 @@
-import {
-  View,
-  Image,
-  StyleSheet
-} from 'react-native';
-import React, { useContext } from 'react';
+import {View, StyleSheet} from 'react-native';
+import React, {useContext} from 'react';
 import JRow from './JRow';
 import JText from './JText';
 import JDots from './JDots';
 import JSkip from './JSkip';
 import JScreen from './JScreen';
 import colors from '../config/colors';
-import JCircularLogo from './JCircularLogo';
-import { RFPercentage } from 'react-native-responsive-fontsize';
-import { widthPercentageToDP } from 'react-native-responsive-screen';
 import JChevronIcon from './JChevronIcon';
-import { StoreContext } from '../mobx/store';
-
+import {StoreContext} from '../mobx/store';
+import JCircularLogo from './JCircularLogo';
+import {RFPercentage} from 'react-native-responsive-fontsize';
+import {widthPercentageToDP} from 'react-native-responsive-screen';
 
 export default function JSplashScreen({
   img,
@@ -29,8 +24,7 @@ export default function JSplashScreen({
   containerStyle,
   onPreviousPress,
 }) {
-
-  const store=useContext(StoreContext)
+  const store = useContext(StoreContext);
   return (
     <JScreen style={containerStyle}>
       <JRow style={styles.header}>
@@ -42,18 +36,19 @@ export default function JSplashScreen({
         />
       </JRow>
 
-      <View style={{ alignItems: 'center', flex: 0.1 }}>
+      <View style={{alignItems: 'center', flex: 0.1}}>
         <JCircularLogo />
       </View>
-      <View style={{
-        flex: 0.4,
-        alignSelf: 'center',
-        // backgroundColor:"red",
-        justifyContent: "center",
-        paddingTop: RFPercentage(4),
-        // height: RFPercentage(27),
-        // width: RFPercentage(30),
-      }}>
+      <View
+        style={{
+          flex: 0.4,
+          alignSelf: 'center',
+          // backgroundColor:"red",
+          justifyContent: 'center',
+          paddingTop: RFPercentage(4),
+          // height: RFPercentage(27),
+          // width: RFPercentage(30),
+        }}>
         {svg}
       </View>
       {/* <Image
@@ -67,20 +62,18 @@ export default function JSplashScreen({
         resizeMode="contain"
         source={img}
       /> */}
-      <View style={{ alignItems: 'center', flex: 0.2, justifyContent: 'center' }}>
+      <View style={{alignItems: 'center', flex: 0.2, justifyContent: 'center'}}>
         <JText style={styles.heading}>{heading}</JText>
         <JText style={styles.detail}>{detail}</JText>
       </View>
-      <View
+      <JRow
         style={{
           flex: 0.1,
-          flexDirection: 'row',
-          alignItems: 'center',
           justifyContent: 'center',
+          alignItems: 'center',
         }}>
-        <JDots slide={slide}
-          count={count} />
-      </View>
+        <JDots slide={slide} count={count} />
+      </JRow>
       <JRow
         style={{
           flex: 0.1,
@@ -106,7 +99,12 @@ export default function JSplashScreen({
 }
 
 const styles = StyleSheet.create({
-  header: { flex: 0.1, justifyContent: 'space-between', alignItems: 'flex-start', paddingTop: RFPercentage(2)},
+  header: {
+    flex: 0.1,
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    paddingTop: RFPercentage(2),
+  },
   heading: {
     fontWeight: 'bold',
     fontSize: RFPercentage(2.5),

@@ -614,7 +614,17 @@
 "We_need_access_to_your_storage_so_you_can_upload_resumes_and_set_profile_pictures":"نحتاج إلى الوصول إلى مساحة التخزين الخاصة بك حتى تتمكن من تحميل السير الذاتية وتعيين صور الملف الشخصي",
 "Allow":"يسمح",
 "years":"سنين",
-"Name_cannot_start_with_a_space":"لا يمكن أن يبدأ الاسم بمسافة"
+"Name_cannot_start_with_a_space":"لا يمكن أن يبدأ الاسم بمسافة",
+"cannot_start_with_a_space":"لا يمكن البدء بمسافة",
+"current_salary_is_required":"الراتب الحالي مطلوب",
+"expected_salary_is_required":"الراتب المتوقع مطلوب",
+"must_be_a_numeric_value":"يجب أن تكون قيمة رقمية",
+"no_of_offices_must_be_a_number":"يجب أن يكون عدد المكاتب رقمًا",
+"employeDetail_cannot_start_special_character":"لا يمكن أن تبدأ تفاصيل الموظف بحرف خاص",
+"Press_Delete_account_or_Canel":"اضغط على 'حذف الحساب' لإزالته نهائيًا أو 'إلغاء' إذا كنت تريد الاستمرار في استخدام مهارات الوظيفة",
+"are_you_sure_want_delete_Your_account_permanently":"هل أنت متأكد أنك تريد حذف حسابك نهائيًا؟",
+"delete_account":"حذف الحساب",
+"must_be_a_number":"يجب أن يكون رقما"
 
 
 
