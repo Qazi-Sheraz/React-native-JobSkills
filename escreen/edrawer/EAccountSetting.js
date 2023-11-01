@@ -129,3 +129,4 @@ const EAccountSetting = () => {
 export default observer(EAccountSetting);
 
 const styles = StyleSheet.create({});
+// 
