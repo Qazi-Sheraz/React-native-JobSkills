@@ -177,7 +177,7 @@ const EducationInfo = () => {
                             _addEducation(values);
                         }}
                         validationSchema={yup.object().shape({
-                            title: yup.string().max(100, store.lang.Title_must_not_exceed_100_characters).required().label(store.lang.Title),
+                            title: yup.string().transform(value => value.trim()).max(100, store.lang.Title_must_not_exceed_100_characters).required().label(store.lang.Title),
                             level: yup.object().nullable().shape().required(store.lang.Level_is_required),
                             county: yup.object().nullable().shape().required(store.lang.Country_is_required),
                             city: yup.object().nullable().shape().required(store.lang.City_is_required),

@@ -496,6 +496,7 @@ const Resume = ({ navigation }) => {
                     </JText>
 
                     <Switch
+                    style={{marginHorizontal:RFPercentage(1.5)}}
                       trackColor={{ true: colors.purple[0] }}
                       onValueChange={e => {
                         setFieldValue('is_default', e);

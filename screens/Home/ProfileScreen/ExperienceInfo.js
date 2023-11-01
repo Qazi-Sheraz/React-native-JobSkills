@@ -175,8 +175,8 @@ const ExperienceInfo = () => {
                     _addExperince(values)
                 }}
                 validationSchema={yup.object().shape({
-                    title: yup.string().max(100, store.lang.Title_must_not_exceed_100_characters).required().label(store.lang.Title),
-                    company: yup.string().required().label(store.lang.Company),
+                    title: yup.string().transform(value => value.trim()).max(100, store.lang.Title_must_not_exceed_100_characters).required().label(store.lang.Title),
+                    company: yup.string().transform(value => value.trim()).required().label(store.lang.Company),
                     start: yup.string().required(store.lang.Start_Date_is_required).label(store.lang.start),
                     // end: yup.string().required('End Date is required').label('end'),
 
@@ -184,7 +184,7 @@ const ExperienceInfo = () => {
                     city: yup.object().nullable().shape().required(store.lang.City_is_required),
                     state: yup.object().nullable().shape().required(store.lang.State_is_required),
 
-                    description: yup.string().max(500, store.lang.Title_must_not_exceed_500_characters).required().label(store.lang.descriptions),
+                    description: yup.string().transform(value => value.trim()).max(500, store.lang.Title_must_not_exceed_500_characters).required().label(store.lang.descriptions),
                 })}>
                 {({
                     values,

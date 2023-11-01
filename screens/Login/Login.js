@@ -29,30 +29,30 @@ import {
   LoginManager, AccessToken, GraphRequest, GraphRequestManager,
 } from 'react-native-fbsdk-next';
 import LinkedInModal from '@smuxx/react-native-linkedin';
-import { AppleButton,appleAuth,appleAuthAndroid} from '@invertase/react-native-apple-authentication';
+// import { AppleButton,appleAuth,appleAuthAndroid} from '@invertase/react-native-apple-authentication';
 
 
 const Login = ({ navigation, route }) => {
 
-  async function onAppleButtonPress() {
-  // performs login request
-  const appleAuthRequestResponse = await appleAuth.performRequest({
-    requestedOperation: appleAuth.Operation.LOGIN,
-    requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
-  });
-console.log("code auth",appleAuthRequestResponse.identityToken)
-console.log("code auth apple",appleAuthRequestResponse)
-  // get current authentication state for user
-  // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
-  const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
+//   async function onAppleButtonPress() {
+//   // performs login request
+//   const appleAuthRequestResponse = await appleAuth.performRequest({
+//     requestedOperation: appleAuth.Operation.LOGIN,
+//     requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+//   });
+// console.log("code auth",appleAuthRequestResponse.identityToken)
+// console.log("code auth apple",appleAuthRequestResponse)
+//   // get current authentication state for user
+//   // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
+//   const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
 
-  // use credentialState response to ensure the user is authenticated
-  if (credentialState === appleAuth.State.AUTHORIZED) {
-    // user is authenticated
-    // _storeToken(result, true),
-    _appleAccess(appleAuthRequestResponse.identityToken)
-  }
-}
+//   // use credentialState response to ensure the user is authenticated
+//   if (credentialState === appleAuth.State.AUTHORIZED) {
+//     // user is authenticated
+//     // _storeToken(result, true),
+//     _appleAccess(appleAuthRequestResponse.identityToken)
+//   }
+// }
 
 
   GoogleSignin.configure({
@@ -408,40 +408,40 @@ const gooleLogin = async () => {
         setSocialLoader(false)
       });
   };
-const _appleAccess = (token) => {
-    setSocialLoader(true)
-    var requestOptions = {
-      method: 'GET',
-      redirect: 'follow'
-    };
-    fetch(`${url.baseUrl}/login/sign-in-with-apple/callback?access_token=${token}&type=${type}`, requestOptions)
+// const _appleAccess = (token) => {
+//     setSocialLoader(true)
+//     var requestOptions = {
+//       method: 'GET',
+//       redirect: 'follow'
+//     };
+//     fetch(`${url.baseUrl}/login/sign-in-with-apple/callback?access_token=${token}&type=${type}`, requestOptions)
 
-      .then(response => response.json())
-      .then(result => {
-        console.log('Result__Linkdin===>', result);
+//       .then(response => response.json())
+//       .then(result => {
+//         console.log('Result__Linkdin===>', result);
 
-        if (result) {
-          _storeToken(result, true),
-            updateUserDeviceToken(),
-            JToast({
-              type: 'success',
-              text1: store.lang.login_successfully,
-              text2: store.lang.welcome,
-            });
-          setSocialLoader(false)
-        }
-      })
-      .catch(error => {
-        // logoutFromLinkedIn
-        console.log("error",error)
-        JToast({
-          type: 'danger',
-          text1: store.lang.eror,
-          text2: store.lang.cannot_proceed_your_request,
-        });
-        setSocialLoader(false)
-      });
-  };
+//         if (result) {
+//           _storeToken(result, true),
+//             updateUserDeviceToken(),
+//             JToast({
+//               type: 'success',
+//               text1: store.lang.login_successfully,
+//               text2: store.lang.welcome,
+//             });
+//           setSocialLoader(false)
+//         }
+//       })
+//       .catch(error => {
+//         // logoutFromLinkedIn
+//         console.log("error",error)
+//         JToast({
+//           type: 'danger',
+//           text1: store.lang.eror,
+//           text2: store.lang.cannot_proceed_your_request,
+//         });
+//         setSocialLoader(false)
+//       });
+//   };
   
 
   const googleSignOut = async () => {
@@ -549,9 +549,9 @@ const _appleAccess = (token) => {
 
     useEffect(() => {
     // onCredentialRevoked returns a function that will remove the event listener. useEffect will call this function when the component unmounts
-    return appleAuth.onCredentialRevoked(async () => {
-      console.warn('If this function executes, User Credentials have been Revoked');
-    });
+    // return appleAuth.onCredentialRevoked(async () => {
+    //   console.warn('If this function executes, User Credentials have been Revoked');
+    // });
   }, []); // passing in an empty array as the second argument ensures this is only ran once when component mounts initially.
   return (
     <JScreen>
@@ -747,7 +747,7 @@ const _appleAccess = (token) => {
                 }
                 else if (item == 'apple'){
                   console.log("else")
-                onAppleButtonPress()
+                // onAppleButtonPress()
                 }
                 else {
                   console.log("else")
