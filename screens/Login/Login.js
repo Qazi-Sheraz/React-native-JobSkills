@@ -122,8 +122,6 @@ const Login = ({ navigation, route }) => {
 
   }, []);
 
-  // console.log('DeviceInfo', deviceName)
-
 
   const updateUserDeviceToken = (messagingInstance, userId, deviceName) => {
     return new Promise((resolve, reject) => {
