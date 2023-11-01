@@ -403,6 +403,7 @@ const ECompanyInformation = () => {
                   style={{
                     textAlign: store.lang.id == 0 ? 'left' : 'right',
                   }}
+                  maxLength={4}
                   containerStyle={{marginTop: RFPercentage(2)}}
                   heading={`${store.lang.no_of_office}:`}
                   value={values.no_of_offices}

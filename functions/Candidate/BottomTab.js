@@ -1,4 +1,4 @@
-import { JToast } from '../Toast';
+import {JToast} from '../Toast';
 import url from '../../config/url';
 
 export const _getHomeData = store => {
@@ -14,7 +14,6 @@ export const _getHomeData = store => {
   fetch(`${url.baseUrl}/home`, requestOptions)
     .then(res => res.json())
     .then(res => {
-
       store.setHomeApiLoader(true);
       store.setHomeData(res);
       store.setHomeApiLoader(false);
@@ -111,7 +110,6 @@ export const _saveToFavoriteList = (store, setLoader1, id) => {
     });
 };
 
-
 export const _getAppliedJobData = store => {
   var myHeaders = new Headers();
   myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
@@ -138,8 +136,8 @@ export const _getAppliedJobData = store => {
         text1: store.lang.eror,
         text2: error.response && error.response.data,
       });
-      setAppliedJobError(true);
-      setAppliedJobApiLoader(false);
+      store.setAppliedJobError(true);
+      store.setAppliedJobApiLoader(false);
     });
 };
 
@@ -150,7 +148,6 @@ export const _getAllJobData = store => {
   var requestOptions = {
     method: 'GET',
     headers: myHeaders,
-
     redirect: 'follow',
   };
 
@@ -236,17 +233,12 @@ export const _getAllFeatureCompanyData = store => {
     });
 };
 
-export const _dashboard = (store) => {
+export const _dashboard = store => {
   var myHeaders = new Headers();
-  myHeaders.append(
-
-    'Authorization',
-    `Bearer ${store.token?.token}`, {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json'
-
-  }
-  );
+  myHeaders.append('Authorization', `Bearer ${store.token?.token}`, {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  });
 
   fetch(`${url.baseUrl}/dashboardEmployer`, {
     method: 'GET',
@@ -255,7 +247,7 @@ export const _dashboard = (store) => {
   })
     .then(response => response.json())
     .then(result => {
-      store.setEHomeApiError(false)
+      store.setEHomeApiError(false);
       store.setEmployeHome(result);
     })
     .catch(error => {
@@ -272,12 +264,9 @@ export const _dashboard = (store) => {
     });
 };
 
-export const _addnewJob = (store) => {
+export const _addnewJob = store => {
   var myHeaders = new Headers();
-  myHeaders.append(
-    'Authorization',
-    `Bearer ${store.token?.token}`,
-  );
+  myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
   fetch(
     `${url.baseUrl}/employer/jobs/create`,
 
@@ -303,15 +292,13 @@ export const _addnewJob = (store) => {
         text2: store.lang.error_while_getting_data,
       });
       store.setCreateApiError(true);
-
     })
     .finally(() => {
       store.setCreateApiLoader(false);
-
     });
 };
 
-export const _country = (store) => {
+export const _country = store => {
   var myHeaders = new Headers();
   myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
 
@@ -337,8 +324,3 @@ export const _country = (store) => {
       store.setCountryApiLoader(false);
     });
 };
-
-
-
-
-

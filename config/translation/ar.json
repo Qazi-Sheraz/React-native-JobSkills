@@ -615,6 +615,7 @@
 "Allow":"يسمح",
 "years":"سنين",
 "Name_cannot_start_with_a_space":"لا يمكن أن يبدأ الاسم بمسافة",
+"cannot_start_with_a_space":"لا يمكن البدء بمسافة",
 "current_salary_is_required":"الراتب الحالي مطلوب",
 "expected_salary_is_required":"الراتب المتوقع مطلوب",
 "must_be_a_numeric_value":"يجب أن تكون قيمة رقمية",
@@ -622,7 +623,8 @@
 "employeDetail_cannot_start_special_character":"لا يمكن أن تبدأ تفاصيل الموظف بحرف خاص",
 "Press_Delete_account_or_Canel":"اضغط على 'حذف الحساب' لإزالته نهائيًا أو 'إلغاء' إذا كنت تريد الاستمرار في استخدام مهارات الوظيفة",
 "are_you_sure_want_delete_Your_account_permanently":"هل أنت متأكد أنك تريد حذف حسابك نهائيًا؟",
-"delete_account":"حذف الحساب"
+"delete_account":"حذف الحساب",
+"must_be_a_number":"يجب أن يكون رقما"
 
 
 

@@ -24,11 +24,11 @@ import JIcon from '../../customComponents/JIcon';
 import {useNavigation} from '@react-navigation/native';
 import JNewJobIcon from '../../customComponents/JNewJobIcon';
 import url from '../../config/url';
-import { observer } from 'mobx-react';
+import {observer} from 'mobx-react';
 import JChevronIcon from '../../customComponents/JChevronIcon';
-import { _addnewJob } from '../../functions/Candidate/BottomTab';
+import {_addnewJob} from '../../functions/Candidate/BottomTab';
 import JScrollView from '../../customComponents/JScrollView';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 const AddNew_Job = () => {
   const {navigate, goBack} = useNavigation();
   const store = useContext(StoreContext);
@@ -75,6 +75,17 @@ const AddNew_Job = () => {
             jobTilte: yup
               .string()
               .max(25, store.lang.Title_must_be_at_most_25_characters_long)
+              .transform(value => value.trim())
+              .test(
+                'no-leading-space',
+                store.lang.cannot_start_with_a_space,
+                value => {
+                  if (value && value.startsWith(' ')) {
+                    return false; // Return false to indicate a validation error
+                  }
+                  return true; // Return true if the validation passes
+                },
+              )
               .required(store.lang.Job_Title_is_required)
               .label(store.lang.Job_Title),
             jobCategory: yup
@@ -87,8 +98,12 @@ const AddNew_Job = () => {
               .nullable()
               .of(
                 yup.object().shape({
-                  id: yup.string().required(store.lang.Assessment_ID_is_required),
-                  name: yup.string().required(store.lang.Assessment_name_is_required),
+                  id: yup
+                    .string()
+                    .required(store.lang.Assessment_ID_is_required),
+                  name: yup
+                    .string()
+                    .required(store.lang.Assessment_name_is_required),
                 }),
               )
               .required(store.lang.Required_Assessment_is_required)
@@ -104,7 +119,9 @@ const AddNew_Job = () => {
               .of(
                 yup.object().shape({
                   id: yup.string().required(store.lang.Skill_ID_is_required),
-                  name: yup.string().required(store.lang.Skill_name_is_required),
+                  name: yup
+                    .string()
+                    .required(store.lang.Skill_name_is_required),
                 }),
               )
               .required(store.lang.Job_Skills_are_required)
@@ -120,7 +137,21 @@ const AddNew_Job = () => {
               )
               .required(store.lang.Job_Tags_are_required)
               .min(1, store.lang.At_least_one_Tag_is_required),
-            jobDescription: yup.string().required(store.lang.Job_Description_is_required).label('Description'),
+            jobDescription: yup
+              .string()
+              .transform(value => value.trim())
+              .test(
+                'no-leading-space',
+                store.lang.cannot_start_with_a_space,
+                value => {
+                  if (value && value.startsWith(' ')) {
+                    return false; // Return false to indicate a validation error
+                  }
+                  return true; // Return true if the validation passes
+                },
+              )
+              .required(store.lang.Job_Description_is_required)
+              .label('Description'),
           })}>
           {({
             values,
@@ -133,11 +164,9 @@ const AddNew_Job = () => {
             setFieldValue,
           }) => (
             <>
-        <KeyboardAwareScrollView
-          showsVerticalScrollIndicator={false}
-       >
-
+              <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
                 <JSelectInput
+                  isRequired
                   containerStyle={styles.container}
                   value={values.jobCategory?.name}
                   data={
@@ -168,12 +197,12 @@ const AddNew_Job = () => {
                   onBlur={() => setFieldTouched('jobTilte')}
                 />
                 {touched.jobTilte && errors.jobTilte && (
-                  <JErrorText style={{ }}>{errors.jobTilte}</JErrorText>
+                  <JErrorText style={{}}>{errors.jobTilte}</JErrorText>
                 )}
 
                 <JSelectInput
+                  isRequired
                   isMultiple={true}
-                  
                   containerStyle={styles.container}
                   header={store.lang.required_assessment}
                   heading={`${store.lang.required_assessment}:`}
@@ -192,6 +221,7 @@ const AddNew_Job = () => {
                   <JErrorText>{errors.assessment}</JErrorText>
                 )}
                 <JSelectInput
+                  isRequired
                   containerStyle={styles.container}
                   value={values.jobShift.name}
                   data={
@@ -210,6 +240,7 @@ const AddNew_Job = () => {
                   <JErrorText>{errors.jobShift}</JErrorText>
                 )}
                 <JSelectInput
+                  isRequired
                   isMultiple={true}
                   containerStyle={styles.container}
                   value={values.jobSkill?.map(item => item.name).join(', ')}
@@ -229,6 +260,7 @@ const AddNew_Job = () => {
                   <JErrorText>{errors.jobSkill}</JErrorText>
                 )}
                 <JSelectInput
+                  isRequired
                   isMultiple={true}
                   containerStyle={styles.container}
                   value={values.jobTag?.map(item => item.name).join(', ')}
@@ -267,19 +299,18 @@ const AddNew_Job = () => {
                 {touched.jobDescription && errors.jobDescription && (
                   <JErrorText>{errors.jobDescription}</JErrorText>
                 )}
-          
               </KeyboardAwareScrollView>
               <View>
-              <JButton
-                isValid={isValid}
-                onPress={() => handleSubmit()}
-                style={{
-                  // position: 'absolute',
-                  // bottom: RFPercentage(3),
-                  width: RFPercentage(20),
-                }}>
-                {store.lang.next}
-              </JButton>
+                <JButton
+                  isValid={isValid}
+                  onPress={() => handleSubmit()}
+                  style={{
+                    // position: 'absolute',
+                    // bottom: RFPercentage(3),
+                    width: RFPercentage(20),
+                  }}>
+                  {store.lang.next}
+                </JButton>
               </View>
             </>
           )}
