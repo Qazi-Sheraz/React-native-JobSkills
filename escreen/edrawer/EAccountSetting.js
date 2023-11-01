@@ -15,49 +15,77 @@ import JChevronIcon from '../../customComponents/JChevronIcon';
 import JGradientHeader from '../../customComponents/JGradientHeader';
 import JPasswordSetting from '../../customComponents/JPasswordSetting';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import url from '../../config/url';
+import {JToast} from '../../functions/Toast';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const EAccountSetting = () => {
   const navigation = useNavigation();
   const store = useContext(StoreContext);
   const [modalVisible, setModalVisible] = useState(false);
   const [loader, setLoader] = useState(false);
+  const userid = store.token?.user?.id;
+  console.log('userid', userid);
 
-  // const deleteAccount = () => {
-  //   setLoader(true);
-  //   var myHeaders = new Headers();
-  //   myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
+  const deleteAccount = () => {
+    var myHeaders = new Headers();
+    myHeaders.append('Accept', 'application/json');
+    myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
 
-  //   var requestOptions = {
-  //     method: 'DELETE',
-  //     headers: myHeaders,
-  //     redirect: 'follow',
-  //   };
-  //   fetch(`${url.baseUrl}/delete-resumes/${id}`, requestOptions)
-  //     .then(response => response.json())
-  //     .then(result => {
-  //       console.log(result);
-  //       googleSignOut();
-  //       JToast({
-  //         type: 'success',
-  //         text1: store.lang.logout_successfully,
-  //       });
-  //       store.setToken({});
-  //     })
-  //     .catch(error => console.log('error', error))
-  //     .finally(() => {
-  //       setLoader(false);
-  //     });
-  // };
+    var requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow',
+    };
 
-  // const googleSignOut = async () => {
-  //   try {
-  //     await GoogleSignin.revokeAccess(); // Revoke access to the app
-  //     await GoogleSignin.signOut(); // Sign out from the Google account
-  //     // Now, the user can sign in with a different Google account next time.
-  //   } catch (error) {
-  //     console.error('Error signing out:', error);
-  //   }
-  // };
+    fetch(
+      `${url.baseUrl}/delete-Account/${store.token?.user?.id}`,
+      requestOptions,
+    )
+      .then(response => response.json())
+      .then(result => {
+        setLoader(true);
+        if (result.success == true) {
+          AsyncStorage.removeItem('@login')
+          googleSignOut()
+            .then(res => {
+              if (res !== null) {
+                JToast({
+                  type: 'success',
+                  text1: result.message,
+                });
+                store.setToken({});
+              }
+            })
+            .catch(error => {
+              JToast({
+                type: 'danger',
+                text1: store.lang.eror,
+                text2: 'Error while removing token',
+              });
+            });
+        } else {
+          JToast({
+            type: 'danger',
+            text1: result.message,
+          });
+          setModalVisible(false);
+        }
+
+        setLoader(false);
+      })
+      .catch(error => console.log('error', error));
+  };
+
+  const googleSignOut = async () => {
+    try {
+      await GoogleSignin.revokeAccess(); // Revoke access to the app
+      await GoogleSignin.signOut(); // Sign out from the Google account
+      // Now, the user can sign in with a different Google account next time.
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
 
   useEffect(() => {}, []);
   return (
@@ -115,7 +143,7 @@ const EAccountSetting = () => {
         alertMsg={store.lang.are_you_sure_want_delete_Your_account_permanently}
         msg={store.lang.Press_Delete_account_or_Canel}
         onPressYes={() => {
-          // deleteAccount();
+          deleteAccount();
         }}
         onPressNo={() => {
           setLoader(false);
@@ -129,4 +157,4 @@ const EAccountSetting = () => {
 export default observer(EAccountSetting);
 
 const styles = StyleSheet.create({});
-// 
+//
