@@ -33,7 +33,7 @@ import LinkedInModal from '@smuxx/react-native-linkedin';
 
 
 const Login = ({ navigation, route }) => {
-
+ 
 //   async function onAppleButtonPress() {
 //   // performs login request
 //   const appleAuthRequestResponse = await appleAuth.performRequest({
