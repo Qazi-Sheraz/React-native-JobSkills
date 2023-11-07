@@ -19,15 +19,7 @@ import {
   MenuOption,
   MenuTrigger,
 } from 'react-native-popup-menu';
-import moment from 'moment';
 import { _getAppliedJobData } from '../../functions/Candidate/BottomTab';
-import JButton from '../../customComponents/JButton';
-import { Formik } from 'formik';
-import * as yup from 'yup';
-import JIcon from './../../customComponents/JIcon';
-import DatePicker from 'react-native-date-picker';
-import url from '../../config/url';
-import { JToast } from '../../functions/Toast';
 
 function AppliedJobs({ navigation }) {
 
@@ -78,7 +70,7 @@ function AppliedJobs({ navigation }) {
           }
           right={
             // store.appliedJobList.appliedJob.length > 0 &&
-            store.appliedJobApiLoader === false && (
+            store.appliedJobApiLoader === false && store.appliedJobList?.appliedJob && (
               <Menu>
                 <MenuTrigger>
                   <Entypo

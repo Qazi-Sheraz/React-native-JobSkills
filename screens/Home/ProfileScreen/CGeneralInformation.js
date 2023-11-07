@@ -61,7 +61,7 @@ function CGeneralInformation({refRBSheet, data, user}) {
     fetch('https://dev.jobskills.digital/api/update-profile', requestOptions)
       .then(response => response.json())
       .then(result => {
-        console.log(result);
+        // console.log(result);
         if (result.success === false) {
           alert('Error while saving data');
         } else {
@@ -69,7 +69,7 @@ function CGeneralInformation({refRBSheet, data, user}) {
           JToast({
             type: 'success',
             text1: store.lang.success,
-            // text2: result,
+            text2: result.message,
           });
           navigation.navigate('Aboutme');
         }

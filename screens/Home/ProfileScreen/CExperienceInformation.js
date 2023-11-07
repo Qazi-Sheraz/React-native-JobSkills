@@ -142,13 +142,13 @@ function CExperienceInformation({refRBSheet, data}) {
               if (result.success === false) {
                 JToast({
                   type: 'danger',
-                  text1: result,
+                  text1: result.message,
                 });
               } else {
                 _getProfile(store);
                 JToast({
                   type: 'success',
-                  text1: result,
+                  text1: result.message,
                 });
                 navigation.navigate('Aboutme');
               }

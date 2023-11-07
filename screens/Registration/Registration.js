@@ -1,4 +1,4 @@
-import {StyleSheet, View, ScrollView} from 'react-native';
+import {StyleSheet, View, ScrollView, Platform} from 'react-native';
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import JScreen from '../../customComponents/JScreen';
 import JCircularLogo from '../../customComponents/JCircularLogo';
@@ -35,6 +35,7 @@ import {
 } from 'react-native-fbsdk-next';
 import url from '../../config/url';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { _appleAndroidAuth, _googleLogin, _onAppleAuth } from '../Login/LoginFunction';
 
 const Registration = ({navigation, route}) => {
   GoogleSignin.configure({
@@ -77,11 +78,10 @@ const Registration = ({navigation, route}) => {
     formdata.append('email', values.email);
     formdata.append('password', values.password);
     formdata.append('first_name', values.first_name);
-    formdata.append('last_name', values.last_name);
     formdata.append('password_confirmation', values.confirmPassword);
     formdata.append('privacyPolicy', values.policy ? '1' : '0');
-    route.params?.type !== 1 &&
-      formdata.append('company_name', values.company_name);
+    route.params?.type == 1 && formdata.append('last_name', values.last_name);
+    route.params?.type !== 1 && formdata.append('company_name', values.company_name);
     console.log(formdata);
 
     var requestOptions = {
@@ -165,7 +165,7 @@ const Registration = ({navigation, route}) => {
         setSocialLoader(false);
       });
   };
-  console.log('linkdinToken', store.linkdinToken?.access_token);
+  // console.log('linkdinToken', store.linkdinToken?.access_token);
 
   const _linkdinAccess = () => {
     setSocialLoader(true);
@@ -202,45 +202,48 @@ const Registration = ({navigation, route}) => {
       });
   };
 
-  const gooleLogin = async () => {
-    try {
-      await GoogleSignin.hasPlayServices();
-      const userInfo = await GoogleSignin.signIn();
+  const _appleAccess = (token) => {
+    setSocialLoader(true)
+    var formdata = new FormData();
+   
+      formdata.append('first_name', token.fullName?.givenName);
+      formdata.append('last_name', token.fullName?.familyName);
+      formdata.append('email', token?.email);
+      formdata.append('type', type);
+      formdata.append('provider_id', token?.user);
+  
+    console.log(formdata)
+    var requestOptions = {
+      method: 'POST',
+      body: formdata,
+      redirect: 'follow',
+    };
+    fetch(`${url.baseUrl}/login-with-apple`, requestOptions)
 
-      store.setGoogleUserInfo(userInfo);
-      const getToken = await GoogleSignin.getTokens();
-      store.setGoogleToken(getToken.accessToken);
-      _googleAccess();
-      console.log('getToken=====>', getToken.accessToken);
-    } catch (error) {
-      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        console.log('user cancelled the login flow', error);
-        alert('user cancelled the login flow', error);
-        // user cancelled the login flow
-      } else if (error.code === statusCodes.IN_PROGRESS) {
-        // operation (e.g. sign in) is in progress already
-        console.log('operation (e.g. sign in) is in progress already', error);
-        alert('operation (e.g. sign in) is in progress already', error);
-      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        console.log('play services not available or outdated', error);
-        alert('play services not available or outdated', error);
-        // play services not available or outdated
-      } else {
-        console.log('some other error happened', error);
-        alert('some other error happened', error);
-        // some other error happened
-      }
-    }
-  };
+      .then(response => response.json())
+      .then(result => {
+        console.log('Result__Apple===>', result);
 
-  const googleSignOut = async () => {
-    try {
-      await GoogleSignin.revokeAccess(); // Revoke access to the app
-      await GoogleSignin.signOut(); // Sign out from the Google account
-      // Now, the user can sign in with a different Google account next time.
-    } catch (error) {
-      console.error('Error signing out:', error);
-    }
+        if (result) {
+          _storeToken(result, true),
+            updateUserDeviceToken(),
+            JToast({
+              type: 'success',
+              text1: store.lang.login_successfully,
+              text2: store.lang.welcome,
+            });
+          setSocialLoader(false)
+        }
+      })
+      .catch(error => {
+        console.log("error",error)
+        JToast({
+          type: 'danger',
+          text1: store.lang.eror,
+          text2: store.lang.cannot_proceed_your_request,
+        });
+        setSocialLoader(false)
+      });
   };
 
   const facebookLogin = async () => {
@@ -330,7 +333,6 @@ const Registration = ({navigation, route}) => {
                 email: '',
                 password: '',
                 first_name: '',
-                last_name: '',
                 company_name: '',
                 confirmPassword: '',
                 hide: true,
@@ -404,10 +406,10 @@ const Registration = ({navigation, route}) => {
             : {
                 first_name: yup
                   .string()
-                  .min(3, store.lang.First_Name_Must_be_at_least_3_characters)
+                  .min(3, store.lang.Name_Must_be_at_least_3_characters)
                   .max(
                     100,
-                    store.lang.First_Name_must_be_at_most_100_characters_long,
+                    store.lang.Name_must_be_at_most_100_characters_long,
                   )
                   .transform(value => value.trim())
                   .matches(
@@ -418,21 +420,21 @@ const Registration = ({navigation, route}) => {
                     /^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/,
                     store.lang.Symbols_are_not_allowed_in_the_First_Name,
                   )
-                  .required(store.lang.First_Name_is_a_required_field),
-                last_name: yup
-                  .string()
-                  .min(3, store.lang.Last_Name_Must_be_at_least_3_characters)
-                  .max(100, store.lang.Name_must_be_at_most_100_characters_long)
-                  .transform(value => value.trim())
-                  .matches(
-                    /^[A-Za-z\u0600-\u06FF\s]+$/,
-                    store.lang.Name_must_contains_only_alphabets,
-                  )
-                  .matches(
-                    /^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/,
-                    store.lang.Symbols_are_not_allowed_in_the_Last_Name,
-                  )
-                  .required(store.lang.Last_Name_is_a_required_field),
+                  .required(store.lang.Name_is_a_required_field),
+                // last_name: yup
+                //   .string()
+                //   .min(3, store.lang.Last_Name_Must_be_at_least_3_characters)
+                //   .max(100, store.lang.Name_must_be_at_most_100_characters_long)
+                //   .transform(value => value.trim())
+                //   .matches(
+                //     /^[A-Za-z\u0600-\u06FF\s]+$/,
+                //     store.lang.Name_must_contains_only_alphabets,
+                //   )
+                //   .matches(
+                //     /^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/,
+                //     store.lang.Symbols_are_not_allowed_in_the_Last_Name,
+                //   )
+                //   .required(store.lang.Last_Name_is_a_required_field),
                 company_name: yup
                   .string()
                   .min(3, store.lang.Company_Name_Must_be_at_least_3_characters)
@@ -499,7 +501,7 @@ const Registration = ({navigation, route}) => {
                 maxLength={100}
                 style={{textAlign: store.lang.id === 0 ? 'left' : 'right'}}
                 value={values.first_name}
-                heading={store.lang.first_name}
+                heading={route.params?.type == 1?store.lang.first_name:store.lang.name}
                 error={touched.first_name && errors.first_name && true}
                 icon={
                   <Feather
@@ -518,13 +520,14 @@ const Registration = ({navigation, route}) => {
                     color={colors.purple[0]}
                   />
                 }
-                placeholder={store.lang.first_name}
+                placeholder={route.params?.type == 1?store.lang.first_name:store.lang.name}
                 onChangeText={handleChange('first_name')}
                 onBlur={() => setFieldTouched('first_name')}
               />
               {touched.first_name && errors.first_name && (
                 <JErrorText>{errors.first_name}</JErrorText>
               )}
+               {route.params?.type == 1 && (
               <JInput
                 maxLength={100}
                 style={{textAlign: store.lang.id === 0 ? 'left' : 'right'}}
@@ -552,7 +555,7 @@ const Registration = ({navigation, route}) => {
                 onChangeText={handleChange('last_name')}
                 onBlur={() => setFieldTouched('last_name')}
                 containerStyle={{marginTop: RFPercentage(3)}}
-              />
+              />)}
               {touched.last_name && errors.last_name && (
                 <JErrorText>{errors.last_name}</JErrorText>
               )}
@@ -751,40 +754,15 @@ const Registration = ({navigation, route}) => {
             justifyContent: 'space-evenly',
             width: '80%',
           }}>
-          {/* {['google', 'facebook', 'linkedin', 'twitter'].map((item, index) => (
+         {['google', 'facebook'].map((item, index) => (
             <FontAwesome
+              disabled={loader ? true : socialLoader ? true : false}
               onPress={() => {
                 if (item == 'google') {
-                  gooleLogin()
-                  // alert('google')
-                }
-                else if (item == 'facebook') {
-                  facebookLogin()
-                  // alert('facebook')
-                }
-                else if (item == 'linkedin') {
-                  handleLinkedInLogin()
-                  // alert('linkedin')
-                }
-                else {
-                  alert('twitter')
-                }
-              }}
-              key={index}
-              name={item}
-              size={RFPercentage(3.5)}
-              color={colors.purple[0]}
-            />
-          ))} */}
-          {['google', 'facebook'].map((item, index) => (
-            <FontAwesome
-              onPress={() => {
-                if (item == 'google') {
-                  gooleLogin();
-                  // alert('google')
+                  _googleLogin({store,_googleAccess});
                 } else {
+                  console.log('else');
                   facebookLogin();
-                  // alert('facebook')
                 }
               }}
               key={index}
@@ -793,6 +771,21 @@ const Registration = ({navigation, route}) => {
               color={colors.purple[0]}
             />
           ))}
+
+         { Platform.OS == 'ios' && 
+         <FontAwesome
+       onPress={() => _onAppleAuth({store,_appleAccess})}
+                  name="apple"
+                  shield-key-outline
+                  style={{
+                    marginRight:
+                      store.lang.id == 0 ? RFPercentage(1.5) : RFPercentage(0),
+                    marginLeft:
+                      store.lang.id == 0 ? RFPercentage(0) : RFPercentage(1.5),
+                  }}
+                  size={RFPercentage(3.7)}
+                  color={colors.purple[0]}
+                />}
           <LinkedInModal
             ref={linkedRef}
             permissions={['openid', 'profile', 'email']}

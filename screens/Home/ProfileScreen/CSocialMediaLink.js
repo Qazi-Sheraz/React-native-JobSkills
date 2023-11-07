@@ -67,7 +67,7 @@ function CSocialMediaLink({refRBSheet, data, user}) {
               JToast({
                 type: 'success',
                 text1: store.lang.success,
-                text2: result,
+                text2: result.message,
               })
               store.token?.user?.owner_type.includes('Candidate') == true&& _getProfile(store)
               navigation.goBack()

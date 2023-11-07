@@ -12,6 +12,8 @@ import DeleteWarning from '../assets/svg/DeleteWarning.svg';
 const JModal = ({
   msg,
   alertMsg,
+  msg2=false,
+  alertMsg2=false,
   modalVisible,
   loader,
   onPressYes,
@@ -22,20 +24,30 @@ const JModal = ({
   btn = true,
   btn2 = true,
   modalStyle,
+  headerStyle,
+  msgStyle,
   icon,
   HW = 6,
   WW = 6,
+  load,
+  
 }) => {
   const store = useContext(StoreContext);
   return (
     <Modal animationType="fade" transparent={true} visible={modalVisible}>
       <SafeAreaView style={styles.container}>
+        {load == true?
+        <ActivityIndicator/>:
         <View style={[styles.modal, modalStyle]}>
           {icon && (
             <DeleteWarning height={RFPercentage(HW)} width={RFPercentage(WW)} />
           )}
-          <JText style={styles.header}>{alertMsg}</JText>
-          <JText style={styles.menutxt}>{msg}</JText>
+          <JText style={[styles.header,headerStyle]}>{alertMsg}</JText>
+          {alertMsg2&&
+          <JText style={[styles.header2,headerStyle]}>{alertMsg2}</JText>}
+         { msg2 &&
+          <JText style={[styles.menutxt2]}>{msg2}</JText>}
+          <JText style={[styles.menutxt,msgStyle]}>{msg}</JText>
           <JRow style={{justifyContent: 'space-between'}}>
             {btn2 && (
               <JButton
@@ -66,7 +78,7 @@ const JModal = ({
               />
             )}
           </JRow>
-        </View>
+        </View>}
       </SafeAreaView>
     </Modal>
   );
@@ -110,5 +122,15 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     paddingHorizontal: RFPercentage(1),
     marginVertical: RFPercentage(1),
+  },
+  menutxt2: {
+    fontSize: RFPercentage(2),
+    paddingHorizontal: RFPercentage(1),
+  },
+  header2: {
+    textAlign: 'center',
+    fontSize: RFPercentage(2.5),
+    fontWeight: 'bold',
+    paddingHorizontal: RFPercentage(1),
   },
 });

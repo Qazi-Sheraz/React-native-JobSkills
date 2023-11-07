@@ -260,7 +260,7 @@ function CContactInformation({refRBSheet, user}) {
           JToast({
             type: 'success',
             text1: store.lang.success,
-            text2: result,
+            text2: result.message,
           });
           // alert(result);
           navigation.navigate('Aboutme')

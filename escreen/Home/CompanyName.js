@@ -63,7 +63,8 @@ const CompanyName = () => {
               if (result.success) {
                 JToast({
                   type: 'success',
-                  text1: store.lang.company_name_successfully_added,
+                  text1: store.lang.success,
+                  text12: store.lang.company_name_successfully_added,
                 });
                 setLoader1(false);
                 _dashboard(store);

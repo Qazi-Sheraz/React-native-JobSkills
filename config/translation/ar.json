@@ -624,7 +624,8 @@
 "Press_Delete_account_or_Canel":"اضغط على 'حذف الحساب' لإزالته نهائيًا أو 'إلغاء' إذا كنت تريد الاستمرار في استخدام مهارات الوظيفة",
 "are_you_sure_want_delete_Your_account_permanently":"هل أنت متأكد أنك تريد حذف حسابك نهائيًا؟",
 "delete_account":"حذف الحساب",
-"must_be_a_number":"يجب أن يكون رقما"
+"must_be_a_number":"يجب أن يكون رقما",
+"company_name_successfully_added":"تمت إضافة اسم الشركة بنجاح"
 
 
 

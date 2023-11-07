@@ -1074,7 +1074,7 @@ const JobDetails = ({ route }) => {
             </JScreen>
           </Modal>
           <Modal animationType="slide" transparent={true} visible={modalVisible1}>
-            <SafeAreaView style={styles.centeredView}>
+            <SafeAreaView style={[styles.centeredView,{backgroundColor:'#00000090'}]}>
               <JGradientHeader
                 center={
                   <JText
@@ -1127,7 +1127,7 @@ const JobDetails = ({ route }) => {
                 }) => (
                   <ScrollView
                     showsVerticalScrollIndicator={false}
-                    contentContainerStyle={styles.modalView1}>
+                    contentContainerStyle={[styles.modalView1,{backgroundColor:'#fff'}]}>
                     {heading == store.lang.email_to_friend ?
                       (<>
                         <JText style={{ fontWeight: '500', fontSize: RFPercentage(2.5), marginVertical: RFPercentage(1), }}>{store.lang.job_URL}</JText>

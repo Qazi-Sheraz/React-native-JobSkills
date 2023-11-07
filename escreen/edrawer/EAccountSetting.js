@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet,  View, NativeModules, ActivityIndicator} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import JScreen from '../../customComponents/JScreen';
 import {observer} from 'mobx-react';
@@ -23,7 +23,9 @@ const EAccountSetting = () => {
   const navigation = useNavigation();
   const store = useContext(StoreContext);
   const [modalVisible, setModalVisible] = useState(false);
+  const [checkUser, setCheckUser] = useState('');
   const [loader, setLoader] = useState(false);
+  const [loader1, setLoader1] = useState(false);
   const userid = store.token?.user?.id;
   console.log('userid', userid);
 
@@ -56,6 +58,7 @@ const EAccountSetting = () => {
                 });
                 store.setToken({});
               }
+              
             })
             .catch(error => {
               JToast({
@@ -64,17 +67,46 @@ const EAccountSetting = () => {
                 text2: 'Error while removing token',
               });
             });
+            setCheckUser('')
         } else {
           JToast({
             type: 'danger',
             text1: result.message,
           });
+          setCheckUser('')
           setModalVisible(false);
         }
 
         setLoader(false);
       })
       .catch(error => console.log('error', error));
+  };
+  const _checkUser = () => {
+    setLoader1(true);
+    var myHeaders = new Headers();
+    myHeaders.append('Accept', 'application/json');
+    myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
+
+    var requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow',
+    };
+
+    fetch(
+      `${url.baseUrl}/check-apple-user/${store.token?.user?.id}`,
+      requestOptions,
+    )
+      .then(response => response.json())
+      .then(result => {
+        console.log(result)
+        if (result) {
+         setCheckUser(result)
+        }
+        setLoader1(false)
+      })
+      .catch(error => {console.log('errorrrrrrrrr', error)
+      setLoader1(false)});
   };
 
   const googleSignOut = async () => {
@@ -87,7 +119,6 @@ const EAccountSetting = () => {
     }
   };
 
-  useEffect(() => {}, []);
   return (
     <JScreen
       style={{paddingHorizontal: RFPercentage(2)}}
@@ -125,13 +156,17 @@ const EAccountSetting = () => {
         />
 
         <JPasswordSetting
-          onPress={() => setModalVisible(true)}
+          onPress={() => {
+            _checkUser()
+          setModalVisible(true)
+          }}
           Svg={<Trash height={RFPercentage(3.5)} width={RFPercentage(3.5)} />}
           Header={store.lang.delete_account}
           txt={store.userInfo.email}
         />
       </View>
       <JModal
+       load={loader1}
         icon
         HW={8}
         WW={8}
@@ -142,14 +177,18 @@ const EAccountSetting = () => {
         setModalVisible={setModalVisible}
         alertMsg={store.lang.are_you_sure_want_delete_Your_account_permanently}
         msg={store.lang.Press_Delete_account_or_Canel}
+        alertMsg2={checkUser == "User Login From Apple Account"&& 'Log in With AppleID'}
+        msg2={checkUser == "User Login From Apple Account"&&`1: Go to Settings, then tap your name.\n2: Tap Sign-In & Security.\n3: Tap Sign in with Apple.`}
         onPressYes={() => {
           deleteAccount();
-        }}
+           }}
         onPressNo={() => {
           setLoader(false);
           setModalVisible(false);
         }}
+
       />
+       
     </JScreen>
   );
 };

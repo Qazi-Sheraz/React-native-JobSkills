@@ -1,4 +1,4 @@
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Platform, StyleSheet, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 
 import {heightPercentageToDP} from 'react-native-responsive-screen';
@@ -23,7 +23,10 @@ export default function CustomCandidateBottomTab({
   return (
     <JRow
       style={{
-        height:heightPercentageToDP(store.lang.id==0? 8:8.7),
+        height:heightPercentageToDP(8),
+        alignItems:'flex-start',
+        padding: RFPercentage(0.5),
+        // height:heightPercentageToDP(store.lang.id==0? 10:9),
         backgroundColor: colors.white[0],
         shadowColor: 'black',
         shadowOpacity: 0.26,
@@ -108,7 +111,7 @@ export default function CustomCandidateBottomTab({
             <JText
             fontSize={fontSize}
               fontColor={isFocused ? colors.purple[0] : colors.inputBorder[0]}
-              fontWeight={isFocused ? 'bold' : 'normal'}>
+              fontWeight={Platform.OS=='android'&&isFocused?'bold':'normal'}>
               {label}
             </JText>
           </TouchableOpacity>

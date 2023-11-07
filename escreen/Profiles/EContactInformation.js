@@ -332,7 +332,7 @@ function EContactInformation() {
       ) : (
         <Formik
           initialValues={{
-            name: store.token?.user?.first_name,
+            name: store.token?.user?.full_name,
             email: params?.user_email ? params?.user_email : '',
             countries:
               params?.country && params?.country_id
