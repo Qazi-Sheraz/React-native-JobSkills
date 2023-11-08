@@ -209,6 +209,7 @@ function CExperienceInformation({refRBSheet, data}) {
                   marginHorizontal: RFPercentage(2),
                 }}>
                 <JSelectInput
+                isRequired
                   containerStyle={{marginTop: RFPercentage(2)}}
                   value={values.experience?.name}
                   id={values.experience}
@@ -229,6 +230,7 @@ function CExperienceInformation({refRBSheet, data}) {
                 )}
 
                 <JSelectInput
+                isRequired
                   containerStyle={{marginTop: RFPercentage(2)}}
                   data={
                     store.lang.id == 0
@@ -254,6 +256,7 @@ function CExperienceInformation({refRBSheet, data}) {
                 )}
 
                 <JSelectInput
+                isRequired
                   containerStyle={{marginTop: RFPercentage(2)}}
                   value={values.industry?.name}
                   setValue={e => setFieldValue('industry', e)}
@@ -279,6 +282,7 @@ function CExperienceInformation({refRBSheet, data}) {
                 )}
 
                 <JSelectInput
+                isRequired
                   containerStyle={{marginTop: RFPercentage(2)}}
                   value={values.area?.name}
                   data={
@@ -303,6 +307,7 @@ function CExperienceInformation({refRBSheet, data}) {
                 )}
 
                 <JInput
+                isRequired
                   style={{
                     textAlign: store.lang.id == 0 ? 'left' : 'right',
                   }}
@@ -319,6 +324,7 @@ function CExperienceInformation({refRBSheet, data}) {
                   <JErrorText>{errors.current}</JErrorText>
                 )}
                 <JInput
+                isRequired
                   style={{
                     textAlign: store.lang.id == 0 ? 'left' : 'right',
                   }}
@@ -336,6 +342,7 @@ function CExperienceInformation({refRBSheet, data}) {
                 )}
 
                 <JSelectInput
+                isRequired
                   data={
                     store.lang.id == 0
                       ? experience?.dataEnglish?.currency

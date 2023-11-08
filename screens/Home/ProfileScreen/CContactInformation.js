@@ -338,6 +338,7 @@ function CContactInformation({refRBSheet, user}) {
               paddingHorizontal: RFPercentage(2),
             }}>
             <JInput
+            isRequired
               value={values.email}
               heading={`${store.lang.email}:`}
               maxLength={100}
@@ -357,6 +358,9 @@ function CContactInformation({refRBSheet, user}) {
                 <JText fontWeight="500" fontSize={RFPercentage(2.5)}>
                   {store.lang.phone_number}:
                 </JText>
+                <JText fontWeight="500" fontSize={RFPercentage(2.5)} fontColor='red'>
+                    {` *`}
+                    </JText>
               </JRow>
               <PhoneInput
               textInputProps={{maxLength:10}}

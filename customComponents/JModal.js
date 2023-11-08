@@ -30,6 +30,8 @@ const JModal = ({
   HW = 6,
   WW = 6,
   load,
+  menuStyle,
+  header2Style,
   
 }) => {
   const store = useContext(StoreContext);
@@ -42,12 +44,14 @@ const JModal = ({
           {icon && (
             <DeleteWarning height={RFPercentage(HW)} width={RFPercentage(WW)} />
           )}
-          <JText style={[styles.header,headerStyle]}>{alertMsg}</JText>
+          {alertMsg  &&
+          <JText style={[styles.header,headerStyle]}>{alertMsg}</JText>}
+          {msg &&
+          <JText style={[styles.menutxt,msgStyle]}>{msg}</JText>}
           {alertMsg2&&
-          <JText style={[styles.header2,headerStyle]}>{alertMsg2}</JText>}
+          <JText style={[styles.header2,header2Style]}>{alertMsg2}</JText>}
          { msg2 &&
-          <JText style={[styles.menutxt2]}>{msg2}</JText>}
-          <JText style={[styles.menutxt,msgStyle]}>{msg}</JText>
+          <JText style={[styles.menutxt2,menuStyle]}>{msg2}</JText>}
           <JRow style={{justifyContent: 'space-between'}}>
             {btn2 && (
               <JButton
@@ -121,16 +125,16 @@ const styles = StyleSheet.create({
     fontSize: RFPercentage(2.5),
     fontWeight: 'bold',
     paddingHorizontal: RFPercentage(1),
-    marginVertical: RFPercentage(1),
   },
   menutxt2: {
+    marginVertical: RFPercentage(1),
     fontSize: RFPercentage(2),
     paddingHorizontal: RFPercentage(1),
   },
   header2: {
-    textAlign: 'center',
-    fontSize: RFPercentage(2.5),
-    fontWeight: 'bold',
+    // textAlign: 'center',
+    fontSize: RFPercentage(2),
+    fontWeight: '600',
     paddingHorizontal: RFPercentage(1),
   },
 });

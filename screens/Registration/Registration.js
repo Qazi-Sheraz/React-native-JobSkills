@@ -35,7 +35,9 @@ import {
 } from 'react-native-fbsdk-next';
 import url from '../../config/url';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { _appleAndroidAuth, _googleLogin, _onAppleAuth } from '../Login/LoginFunction';
+import { _appleAndroidAuth, _googleLogin, _googleSignOut, _onAppleAuth } from '../Login/LoginFunction';
+import JModal from '../../customComponents/JModal';
+
 
 const Registration = ({navigation, route}) => {
   GoogleSignin.configure({
@@ -44,6 +46,7 @@ const Registration = ({navigation, route}) => {
   });
   const [loader, setLoader] = useState(false);
   const [socialLoader, setSocialLoader] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
   const store = useContext(StoreContext);
   const type = route?.params?.type;
   console.log('type', type);
@@ -156,7 +159,7 @@ const Registration = ({navigation, route}) => {
         }
       })
       .catch(error => {
-        googleSignOut();
+        _googleSignOut();
         JToast({
           type: 'danger',
           text1: store.lang.eror,
@@ -174,7 +177,7 @@ const Registration = ({navigation, route}) => {
       redirect: 'follow',
     };
     fetch(
-      `${url.baseUrl}/login/linkedin/callback?access_token=${store.linkdinToken?.access_token}&type=${type}`,
+      `${url.baseUrl}/login/linkedin-openid/callback?access_token=${store.linkdinToken?.access_token}&type=${type}`,
       requestOptions,
     )
       .then(response => response.json())
@@ -206,9 +209,9 @@ const Registration = ({navigation, route}) => {
     setSocialLoader(true)
     var formdata = new FormData();
    
-      formdata.append('first_name', token.fullName?.givenName);
-      formdata.append('last_name', token.fullName?.familyName);
-      formdata.append('email', token?.email);
+      formdata.append('first_name', token.fullName?.givenName?token.fullName?.givenName:'');
+      formdata.append('last_name', token.fullName?.familyName?token.fullName?.familyName:'');
+      formdata.append('email', token?.email?token?.email:'');
       formdata.append('type', type);
       formdata.append('provider_id', token?.user);
   
@@ -224,7 +227,7 @@ const Registration = ({navigation, route}) => {
       .then(result => {
         console.log('Result__Apple===>', result);
 
-        if (result) {
+        if (result.token) {
           _storeToken(result, true),
             updateUserDeviceToken(),
             JToast({
@@ -234,6 +237,11 @@ const Registration = ({navigation, route}) => {
             });
           setSocialLoader(false)
         }
+        else if(result=="Go to the setting and stop using apple id for Jobskills App")
+        {
+          setModalVisible(true)
+        }
+       
       })
       .catch(error => {
         console.log("error",error)
@@ -762,7 +770,8 @@ const Registration = ({navigation, route}) => {
                   _googleLogin({store,_googleAccess});
                 } else {
                   console.log('else');
-                  facebookLogin();
+                  // facebookLogin();
+                  alert('facebook')
                 }
               }}
               key={index}
@@ -811,6 +820,24 @@ const Registration = ({navigation, route}) => {
           navigation.navigate('CLogin', {type: route.params?.type})
         }
         children={store.lang.already_Login}
+      />
+      <JModal
+      //  load={loader1}
+        icon
+        HW={8}
+        WW={8}
+        header2Style={{marginTop: RFPercentage(-2),}}
+        menuStyle={{marginVertical: RFPercentage(1),}}
+        name2={store.lang.close}
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        alertMsg2={ `${store.lang.Please_follow_these_additional_steps}:`}
+        msg2={`1: ${store.lang.Go_to_Settings_then_tap_your_name}.\n2: ${store.lang.Tap_Sign_In_Security}.\n3: ${store.lang.Tap_Sign_in_with_apple}.`}
+        btn={false}
+        onPressNo={() => {
+          setModalVisible(false);
+        }}
+
       />
     </JScreen>
   );

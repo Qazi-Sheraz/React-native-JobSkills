@@ -296,6 +296,7 @@ function EContactInformation() {
       .then(result => {
         // console.log('result', result);
         store.setUserFirstName(result);
+        
         JToast({
           type: 'success',
           text1: store.lang.success,
@@ -316,6 +317,26 @@ function EContactInformation() {
         setLoader1(false);
       });
   };
+  
+  const phoneSchema = yup
+  .string()
+  .test('is-valid-phone', 'Invalid phone number', function (value) {
+    // Remove any non-digit characters from the input
+    const cleanValue = value.replace(/\D/g, '');
+
+    // Check if the resulting value is between 10 and 14 characters
+    if (cleanValue.length < 10 || cleanValue.length > 14) {
+      return this.createError({
+        path: this.path,
+        message: 'Phone number must be between 10 and 14 characters',
+      });
+    }
+
+    return true;
+  })
+  .matches(/^\+?[0-9]\d*$/, 'Phone number must consist of digits and optionally start with a plus sign')
+  .required('Phone number is a required field');
+
   useEffect(() => {
     _getcountry();
   }, []);
@@ -415,8 +436,7 @@ function EContactInformation() {
               .matches(/^\+?[0-9]\d*$/, store.lang.Phone_Number_must_be_a_digit)
               .min(10, store.lang.Phone_must_be_atleast_10_characters)
               // .max(14, store.lang.Phone_must_be_at_most_14_characters)
-              .required(store.lang.Phone_Name_is_a_required_field)
-              .label(store.lang.Phone),
+              .required(store.lang.Phone_Name_is_a_required_field),
           })}>
           {({
             values,
@@ -503,6 +523,9 @@ function EContactInformation() {
                     }}>
                     <JText fontWeight="500" fontSize={RFPercentage(2.5)}>
                       {store.lang.phone_number}:
+                    </JText>
+                    <JText fontWeight="500" fontSize={RFPercentage(2.5)} fontColor='red'>
+                    {` *`}
                     </JText>
                   </JRow>
                   <PhoneInput

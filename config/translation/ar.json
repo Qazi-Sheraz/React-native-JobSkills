@@ -621,11 +621,15 @@
 "must_be_a_numeric_value":"يجب أن تكون قيمة رقمية",
 "no_of_offices_must_be_a_number":"يجب أن يكون عدد المكاتب رقمًا",
 "employeDetail_cannot_start_special_character":"لا يمكن أن تبدأ تفاصيل الموظف بحرف خاص",
-"Press_Delete_account_or_Canel":"اضغط على 'حذف الحساب' لإزالته نهائيًا أو 'إلغاء' إذا كنت تريد الاستمرار في استخدام مهارات الوظيفة",
+"Press_Delete_account_or_Canel":"اضغط على 'حذف الحساب' لحذف حسابك وجميع البيانات. وإلا قم بـ 'إلغاء' لمواصلة استخدام JobSkills.",
 "are_you_sure_want_delete_Your_account_permanently":"هل أنت متأكد أنك تريد حذف حسابك نهائيًا؟",
 "delete_account":"حذف الحساب",
 "must_be_a_number":"يجب أن يكون رقما",
-"company_name_successfully_added":"تمت إضافة اسم الشركة بنجاح"
+"company_name_successfully_added":"تمت إضافة اسم الشركة بنجاح",
+"Please_follow_these_additional_steps":"يبدو أنك كنت تستخدم تسجيل الدخول باستخدام Apple لاستخدام JobSkills. يرجى اتباع هذه الخطوات الإضافية",
+"Go_to_Settings_then_tap_your_name":"على جهاز iPhone، انتقل إلى 'الإعدادات'، ثم اضغط على اسمك",
+"Tap_Sign_In_Security":"اضغط على تسجيل الدخول والأمان، ثم اضغط على تسجيل الدخول باستخدام Apple",
+"Tap_Sign_in_with_apple":"حدد التطبيق أو المطور، ثم اضغط على 'إيقاف استخدام Apple ID'."
 
 
 

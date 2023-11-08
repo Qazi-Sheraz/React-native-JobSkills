@@ -177,8 +177,8 @@ const EAccountSetting = () => {
         setModalVisible={setModalVisible}
         alertMsg={store.lang.are_you_sure_want_delete_Your_account_permanently}
         msg={store.lang.Press_Delete_account_or_Canel}
-        alertMsg2={checkUser == "User Login From Apple Account"&& 'Log in With AppleID'}
-        msg2={checkUser == "User Login From Apple Account"&&`1: Go to Settings, then tap your name.\n2: Tap Sign-In & Security.\n3: Tap Sign in with Apple.`}
+        alertMsg2={checkUser == "User Login From Apple Account"&& `${store.lang.Please_follow_these_additional_steps}:`}
+        msg2={checkUser == "User Login From Apple Account"&&`1: ${store.lang.Go_to_Settings_then_tap_your_name}.\n2: ${store.lang.Tap_Sign_In_Security}.\n3: ${store.lang.Tap_Sign_in_with_apple}.`}
         onPressYes={() => {
           deleteAccount();
            }}

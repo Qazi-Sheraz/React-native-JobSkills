@@ -41,6 +41,7 @@ import { AppleButton,
   AppleAuthRequestScope
 } from '@invertase/react-native-apple-authentication';
 import { _appleAndroidAuth, _googleLogin, _googleSignOut, _onAppleAuth } from './LoginFunction';
+import JModal from '../../customComponents/JModal';
 
 const Login = ({navigation, route}) => {
  
@@ -51,6 +52,8 @@ const Login = ({navigation, route}) => {
 
   const store = useContext(StoreContext);
   const [loader, setLoader] = useState(false);
+  const [loader1, setLoader1] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
   const [socialLoader, setSocialLoader] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState(null);
   const [edit, setEdit] = useState();
@@ -401,11 +404,9 @@ const Login = ({navigation, route}) => {
           }
           else if(result=="Go to the setting and stop using apple id for Jobskills App")
           {
-            alert('Go to the setting and stop using apple id for Jobskills App')
+            setModalVisible(true)
           }
-          else if(result.success==false){
-            alert('null')
-          }
+         
         })
         .catch(error => {
           console.log("error",error)
@@ -705,7 +706,8 @@ const Login = ({navigation, route}) => {
                   _googleLogin({store,_googleAccess});
                 } else {
                   console.log('else');
-                  facebookLogin();
+                  // facebookLogin();
+                  alert('facebook')
                 }
               }}
               key={index}
@@ -754,6 +756,24 @@ const Login = ({navigation, route}) => {
         disabled={socialLoader ? true : false}
         onPress={() => navigation.navigate('CRegister', {type: type})}
         children={store.lang.register_Btn}
+      />
+      <JModal
+      //  load={loader1}
+        icon
+        HW={8}
+        WW={8}
+        header2Style={{marginTop: RFPercentage(-2),}}
+        menuStyle={{marginVertical: RFPercentage(1),}}
+        name2={store.lang.close}
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        alertMsg2={ `${store.lang.Please_follow_these_additional_steps}:`}
+        msg2={`1: ${store.lang.Go_to_Settings_then_tap_your_name}.\n2: ${store.lang.Tap_Sign_In_Security}.\n3: ${store.lang.Tap_Sign_in_with_apple}.`}
+        btn={false}
+        onPressNo={() => {
+          setModalVisible(false);
+        }}
+
       />
     </JScreen>
   );

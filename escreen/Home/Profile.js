@@ -95,7 +95,7 @@ const Profile = () => {
     )
       .then(response => response.json())
       .then(result => {
-        // console.log(result.contact_information);
+        console.log(result);
         setProfile(result);
       })
       .catch(error => {

@@ -131,6 +131,62 @@ function CGeneralInformation({refRBSheet, data, user}) {
           _postData(values);
         }}
         validationSchema={yup.object().shape({
+          first_name: yup
+              .string()
+              .min(3, store.lang.First_Name_Must_be_at_least_3_characters)
+              .max(100, store.lang.Name_must_be_at_most_100_characters_long)
+              .transform(value => value.trim())
+              .matches(
+                /^[A-Za-z\u0600-\u06FF\s]+$/,
+                store.lang.Name_must_contains_only_alphabets,
+              )
+              .test(
+                'no-leading-space',
+                store.lang.Name_cannot_start_with_a_space,
+                value => {
+                  if (value && value.startsWith(' ')) {
+                    return false; // Return false to indicate a validation error
+                  }
+                  return true; // Return true if the validation passes
+                },
+              )
+              .required(store.lang.First_Name_is_a_required_field),
+              last_name: yup
+              .string()
+              .max(100, store.lang.Last_Name_must_be_at_most_100_characters_long)
+              .transform(value => value.trim())
+              .matches(
+                /^[A-Za-z\u0600-\u06FF\s]+$/,
+                store.lang.Name_must_contains_only_alphabets,
+              )
+              .test(
+                'no-leading-space',
+                store.lang.Name_cannot_start_with_a_space,
+                value => {
+                  if (value && value.startsWith(' ')) {
+                    return false; // Return false to indicate a validation error
+                  }
+                  return true; // Return true if the validation passes
+                },
+              ),
+              father: yup
+              .string()
+              .max(100, store.lang.Name_must_be_at_most_100_characters_long)
+              .transform(value => value.trim())
+              .matches(
+                /^[A-Za-z\u0600-\u06FF\s]+$/,
+                store.lang.Name_must_contains_only_alphabets,
+              )
+              .test(
+                'no-leading-space',
+                store.lang.Name_cannot_start_with_a_space,
+                value => {
+                  if (value && value.startsWith(' ')) {
+                    return false; // Return false to indicate a validation error
+                  }
+                  return true; // Return true if the validation passes
+                },
+              ),
           country: yup
             .object()
             .nullable()
@@ -202,6 +258,7 @@ function CGeneralInformation({refRBSheet, data, user}) {
                 marginHorizontal: RFPercentage(2),
               }}>
               <JInput
+              isRequired
                 style={{
                   textAlign: store.lang.id == 0 ? 'left' : 'right',
                 }}
@@ -217,6 +274,7 @@ function CGeneralInformation({refRBSheet, data, user}) {
                 <JErrorText>{errors.first_name}</JErrorText>
               )}
               <JInput
+              
                 style={{
                   textAlign: store.lang.id == 0 ? 'left' : 'right',
                 }}

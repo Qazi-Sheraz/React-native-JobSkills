@@ -138,6 +138,7 @@ function CSkills({data}) {
               paddingHorizontal: RFPercentage(2),
             }}>
             <JSelectInput
+            isRequired
             isMultiple={true}
               containerStyle={{marginTop: RFPercentage(2)}}
               value={values.skill?.map(i => i?.name)?.join(', ')}
