@@ -41,11 +41,13 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 // import url from '../../config/url';
 const JApplication = ({
   onPress,
+  routeItem,
   item,
   onPressStatus,
   update,
   setUpdate,
   api,
+  navigate,
 }) => {
   const [details, setDetails] = useState();
   const [error, setError] = useState(false);
@@ -58,8 +60,6 @@ const JApplication = ({
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
   const [links, setLink] = useState();
-
-  const [change, setChange] = useState(false);
   const store = useContext(StoreContext);
   const navigation = useNavigation();
   const [stat, setStat] = useState(parseInt(item.status_id));
@@ -90,7 +90,7 @@ const JApplication = ({
       : status1 == 9 && _applicantsStatus(9);
     // console.log(status1)
   };
-  // console.log('itemmmmmm', details)
+  console.log('itemmmmmm', routeItem?.applicantType)
   const _applicantsStatus = (id, selectedStatus) => {
     var myHeaders = new Headers();
     myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
@@ -263,10 +263,13 @@ const JApplication = ({
   // console.log('currentTime', currentTime.format('YYYY/MM/DD HH:mm'));
 
   useEffect(() => {
+
     _getScheduleDetails();
     _interviewScheduled();
-    // setStat(parseInt(item.status_id));
-  }, [item.status_id]);
+    setStat(parseInt(item.status_id));
+
+    // item.applicantType == 1 && setStat(6)
+  }, [item.status_id,]);
 
   // Replace the placeholders with the selected date and time
   const updatedDescription = (description, value) =>
@@ -348,19 +351,19 @@ const JApplication = ({
                 </JText>
               </MenuOption> */}
                 {/* {stat !== 6 && ( */}
-                  <MenuOption
-                    onSelect={() => {
-                      setModalVisible(true),
-                        {
-                          candidate_user_id: item.candidate_user_id,
-                          job_id: item.job_id,
-                          id: item.id,
-                        };
-                    }}>
-                    <JText style={styles.menutxt}>
-                      {store.lang.interview_scheduled}
-                    </JText>
-                  </MenuOption>
+                <MenuOption
+                  onSelect={() => {
+                    setModalVisible(true),
+                      {
+                        candidate_user_id: item.candidate_user_id,
+                        job_id: item.job_id,
+                        id: item.id,
+                      };
+                  }}>
+                  <JText style={styles.menutxt}>
+                    {store.lang.interview_scheduled}
+                  </JText>
+                </MenuOption>
                 {/* )} */}
 
                 {/* <MenuOption
@@ -420,11 +423,25 @@ const JApplication = ({
               alignItems: store.lang.id == 0 ? 'flex-end' : null,
               justifyContent: 'flex-end',
             }}>
+              {/* {console.log('candidate_user_id',item.candidate_user_id)}
+              {console.log('job_id',item?.job_id)}
+              {console.log('status2',stat)} */}
             <JStatusChecker
               onPressStatus={() => {
-                stat === 5 || (stat === 6 && !currentTime.isAfter(detail))
-                  ? setModalVisible(true)
-                  : onPressStatus;
+                if (
+                  stat === 5 ||
+                  (stat === 6 && !currentTime.isAfter(detail))
+                ) {
+                  setModalVisible(true);
+                } else if (stat === 8) {
+                  navigate('Reschedule', {
+                    cID: item.candidate_user_id,
+                    jobID: item?.job_id,
+                    applicant:true
+                  });
+                } else {
+                  onPressStatus;
+                }
               }}
               status={stat}
             />

@@ -336,7 +336,7 @@ function CustomDrawerContent(props) {
             />
           </View>
           <JText style={styles.text} fontSize={RFPercentage(2.4)}>
-            {user?.full_name}
+            {user?.full_name.length>25 ? `${user?.full_name.slice(0,25)}...`:user?.full_name}
           </JText>
           <JText style={styles.text}>{user?.email}</JText>
           {/* <JText style={styles.text}>Ui/Ux Designer</JText> */}
@@ -385,6 +385,7 @@ export default observer(CustomDrawerContent);
 const styles = StyleSheet.create({
   text: {
     marginVertical: RFPercentage(0.3),
+    marginHorizontal: RFPercentage(1),
     // color: colors.black[1],
   },
 });

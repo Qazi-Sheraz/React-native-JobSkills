@@ -83,7 +83,7 @@ export default function CBottomTab() {
         
       <Tab.Screen options={{tabBarLabel:store.lang.home}} name="Home" component={Home} />
       <Tab.Screen options={{tabBarLabel:store.lang.favourite}} name="Favourite" component={Favourite} />
-      <Tab.Screen options={{tabBarLabel:store.lang.applied_job}} name="Applied Jobs" component={AppliedJobs} />
+      <Tab.Screen options={{tabBarLabel:store.lang.applied_job}} name="AppliedJobs" component={AppliedJobs} />
       <Tab.Screen options={{tabBarLabel:store.lang.profile}} name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   );

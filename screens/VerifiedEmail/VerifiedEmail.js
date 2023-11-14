@@ -15,6 +15,9 @@ import { StoreContext } from '../../mobx/store';
 import { useRoute } from '@react-navigation/native';
 import url from '../../config/url';
 import { JToast } from '../../functions/Toast';
+import JChevronIcon from '../../customComponents/JChevronIcon';
+import JHeader from '../../customComponents/JHeader';
+import JRow from '../../customComponents/JRow';
 
 
 
@@ -135,7 +138,11 @@ const VerifiedEmail = ({ route, navigation }) => {
       });
   };
   return (
-    <JScreen>
+    <JScreen  header={
+      <JRow style={{marginHorizontal: RFPercentage(2), marginTop: RFPercentage(4)}}>
+        <JChevronIcon color={colors.black[0]} />
+      </JRow>
+    }>
       <View style={{ flex: 0.5, justifyContent: 'center', alignItems: 'center' }}>
         <Image
           style={{
@@ -253,7 +260,7 @@ const VerifiedEmail = ({ route, navigation }) => {
             />
           </View>
         </View>
-
+  
         <JButton
           isValid={
             value.d1.concat(value.d2).concat(value.d3).concat(value.d4)
@@ -311,19 +318,19 @@ export default observer(VerifiedEmail)
 
 const styles = StyleSheet.create({
   inputContainer: {
-    height: RFPercentage(6),
-    width: RFPercentage(6),
+    // height: RFPercentage(6),
+    // width: RFPercentage(6),
     backgroundColor: colors.footer[0],
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: RFPercentage(2),
   },
   input: {
-    width: RFPercentage(4),
-    height: RFPercentage(5),
+    width: RFPercentage(6),
     borderBottomWidth: RFPercentage(0.2),
     fontSize: RFPercentage(2.5),
-
+    paddingVertical:RFPercentage(1),
+    color:colors.black[0],
     textAlign: 'center',
   },
 });

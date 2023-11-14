@@ -40,10 +40,11 @@ const JobApplication = ({route}) => {
   const [error, setError] = useState(false);
   const [update, setUpdate] = useState(true);
   const [isRefreshing, setRefreshing] = useState(false);
-  const [selectedItem, setSelectedItem] = useState();
+
   const [searchQuery, setSearchQuery] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [filteredData1, setFilteredData1] = useState(store?.jApplication);
+  console.log('route', route.params);
 
   const _jobApplication = () => {
     var myHeaders = new Headers();
@@ -107,6 +108,13 @@ const JobApplication = ({route}) => {
       setRefreshing(false); // Set refreshing state back to false when done
     }, 1000);
   }, []);
+  useEffect(() => {
+    // Check if the 'type' parameter is present and has a value of 2
+    if (route.params?.applicantType === 1) {
+      // Call your function with the appropriate logic
+      onRefresh();
+    }
+  }, [route.params?.applicantType]);
 
   useEffect(() => {
     store.setJAppLoader(true);
@@ -194,23 +202,19 @@ const JobApplication = ({route}) => {
               <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
             }
             renderItem={({item, index}) => (
+              // console.log('status',item.status_id),
               <JApplication
-                update={update}
-                setUpdate={setUpdate}
-                api={() => _jobApplication()}
-                onPressStatus={() => {
-                  if (item.status_id == 8) {
-                    navigate('Reschedule', {
-                      cID: item.candidate_user_id,
-                      jobID: item?.job_id,
-                    });
-                  }
-                }}
                 onPress={() => {
                   setModalVisible(true);
                 }}
-                // onSelect={handleSelect}
                 item={item}
+                routeItem={route?.params}
+                navigate={navigate}
+                update={update}
+                setUpdate={setUpdate}
+                api={() => _jobApplication()}
+
+                // onSelect={handleSelect}
                 // date={moment(item.apply_date, 'DD-MM-YYYY').format('DD MMM,YYYY')}
               />
             )}

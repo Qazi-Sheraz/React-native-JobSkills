@@ -183,11 +183,24 @@ const ECompanyInformation = () => {
             company_name: yup
               .string()
               .transform(value => value.trim())
+              .matches(
+                /^[a-zA-Z0-9_].*$/,
+                `${store.lang.company_name} ${store.lang.cannot_start_special_character},`)
               .required(store.lang.Company_Name_is_a_required_field),
             location: yup
               .string()
               .transform(value => value.trim())
               .max(288)
+              .test(
+                'no-leading-space',
+                `${store.lang.location} ${store.lang.cannot_start_with_a_space}`,
+                value => {
+                  if (value && value.startsWith(' ')) {
+                    return false; // Return false to indicate a validation error
+                  }
+                  return true; // Return true if the validation passes
+                },
+              )
               .required(store.lang.Location_is_required),
             ceo_name: yup
               .string()

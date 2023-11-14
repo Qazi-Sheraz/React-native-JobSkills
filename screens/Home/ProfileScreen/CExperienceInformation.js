@@ -64,18 +64,18 @@ function CExperienceInformation({refRBSheet, data}) {
     <JScreen headerShown={false}>
       <Formik
         initialValues={{
-          experience: {
-            name: `${profile.experience !== null ? profile.experience : ''}`,
-          },
-          career: {name: params?.career_level, id: params?.career_id},
-          industry: {name: params?.industry, id: params?.industry_id},
-          area: {name: params?.functional_area, id: params?.functional_area_id},
-          current: `${profile.current_salary ? profile.current_salary : ''}`,
+          experience: profile.experience?{
+            name: `${profile.experience}`,
+          }:'',
+          career: params?.career_id?{name: params?.career_level, id: params?.career_id}:'',
+          industry: params?.industry_id?{name: params?.industry, id: params?.industry_id}:'',
+          area: params?.functional_area_id?{name: params?.functional_area, id: params?.functional_area_id}:'',
+          current: profile.current_salary?profile.current_salary : '',
           expected: `${profile.expected_salary ? profile.expected_salary : ''}`,
-          currency: {
+          currency: params?.salary_currency_id?{
             name: params?.salary_currency,
             id: params?.salary_currency_id,
-          },
+          } :'',
         }}
         validationSchema={yup.object().shape({
           experience: yup

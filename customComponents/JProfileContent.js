@@ -23,6 +23,7 @@ export default function JProfileContent({src, name, email, jd}) {
   const [loader, setLoader] = useState(false);
 
   const _uploadImage = res => {
+    setLoader(true);
     var myHeaders = new Headers();
     myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
     var formdata = new FormData();
@@ -40,7 +41,6 @@ export default function JProfileContent({src, name, email, jd}) {
       body: formdata,
       redirect: 'follow',
     };
-    setLoader(true);
     fetch(
       'https://dev.jobskills.digital/api/update-profile-picture',
       requestOptions,
@@ -123,6 +123,8 @@ export default function JProfileContent({src, name, email, jd}) {
           alignSelf: 'center',
           marginTop: RFPercentage(-10),
         }}
+        onLoadStart={()=>setLoader(true)}
+        onLoadEnd={()=>setLoader(false)}
         imageStyle={{
           borderRadius: RFPercentage(10),
           borderWidth: RFPercentage(0.5),
@@ -138,7 +140,7 @@ export default function JProfileContent({src, name, email, jd}) {
               bottom: 0,
               alignSelf: 'flex-end',
             }}
-            color={colors.black[0]}
+            color={colors.purple[0]}
           />
         ) : (
           <TouchableOpacity

@@ -20,6 +20,8 @@ import JProfileContent from '../../customComponents/JProfileContent';
 import {heightPercentageToDP} from 'react-native-responsive-screen';
 import JProfileSections from '../../customComponents/JProfileSections';
 import FontAwesome5Brands from 'react-native-vector-icons/FontAwesome5';
+import JIcon from '../../customComponents/JIcon';
+import Twitterx from '../../assets/svg/Icon/Twitterx.svg';
 
 function Profile({navigation}) {
   const store = useContext(StoreContext);
@@ -636,18 +638,17 @@ function Profile({navigation}) {
                             }}
                             style={{marginBottom: RFPercentage(2)}}>
                             <JRow>
-                              <FontAwesome5Brands
-                                size={RFPercentage(3)}
-                                name="twitter"
-                                color={colors.purple[0]}
-                                style={{marginHorizontal: RFPercentage(1)}}
-                              />
+                            <Twitterx  height={RFPercentage(2.5)}
+                              width={RFPercentage(2.5)}
+                              style={{marginHorizontal: RFPercentage(0.7)}}/>
 
                               <JText
-                                fontWeight="600"
-                                fontSize={RFPercentage(2)}>
-                                {store.lang.twitter}
-                              </JText>
+                              style={{
+                                marginHorizontal:RFPercentage(0.5),
+                                fontWeight:"600",
+                                fontSize:RFPercentage(2)
+                              }}
+                                >{`X (${store.lang.twitter})`}</JText>
                             </JRow>
                             <JText
                               fontWeight="600"
