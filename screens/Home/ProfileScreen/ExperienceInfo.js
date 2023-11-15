@@ -378,6 +378,7 @@ const ExperienceInfo = () => {
                     date1={values.end ? new Date(values.end) : new Date()}
                     // minimumDate={values?.start && moment(values?.start, 'MM/DD/YYYY').clone().add(1, 'day')}
                     minimumDate={new Date(endDate)}
+                    maximumDate={new Date()}
                     containerStyle={{marginTop: RFPercentage(2)}}
                     isDate={true}
                     value={

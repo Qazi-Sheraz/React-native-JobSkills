@@ -143,9 +143,9 @@ const JApplication = ({
     formdata.append('agenda', values.description);
     formdata.append(
       'interviewType',
-      values.interview_type === 'message.office.office_base'
+      values.interview_type === 'Office Based'
         ? 0
-        : 'message.meeting.manual_link'
+        : 'Manual Link'
         ? 1
         : 2,
     );
@@ -233,7 +233,7 @@ const JApplication = ({
     )
       .then(response => response.json())
       .then(result => {
-        // console.log(result)
+        console.log(result?.meeting_type[0])
         setMeetings(result);
         setLink(result?.meeting_type[0]);
       })
@@ -652,7 +652,7 @@ const JApplication = ({
                         fontSize={RFPercentage(2)}
                         style={{paddingHorizontal: RFPercentage(1)}}>
                         {/* {menu ? menu : meetings?.meeting_type[0]} */}
-                        {values.interview_type === 'message.office.office_base'
+                        {values.interview_type === 'Office Based'
                           ? store.lang.office_base
                           : store.lang.manual_link}
                       </JText>
@@ -674,7 +674,7 @@ const JApplication = ({
                           borderRadius: RFPercentage(1),
                           paddingVertical: RFPercentage(1),
                         }}>
-                        {console.log(meetings?.meeting_type)}
+                        {/* {console.log(meetings?.meeting_type)} */}
                         {meetings?.meeting_type.map((item, index) => (
                           <Pressable
                             key={index}
@@ -690,7 +690,7 @@ const JApplication = ({
                               setOption(false);
                             }}>
                             <JText fontSize={RFPercentage(2)}>
-                              {item === 'message.office.office_base'
+                              {item === 'Office Based'
                                 ? store.lang.office_base
                                 : store.lang.manual_link}
                             </JText>
@@ -700,7 +700,7 @@ const JApplication = ({
                     )}
                   </View>
 
-                  {values.interview_type === 'message.office.office_base' ? (
+                  {values.interview_type === 'Office Based' ? (
                     <JInput
                       style={{
                         textAlign: store.lang.id == 0 ? 'left' : 'right',
@@ -719,8 +719,9 @@ const JApplication = ({
                       onBlur={() => setFieldTouched('office_location')}
                     />
                   ) : (
-                    values.interview_type === 'message.meeting.manual_link' && (
+                    values.interview_type === 'Manual Link' && (
                       <JInput
+                      isRequired
                         style={{
                           textAlign: store.lang.id == 0 ? 'left' : 'right',
                         }}

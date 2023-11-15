@@ -15,9 +15,7 @@ import { StoreContext } from '../../mobx/store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect } from 'react';
 import { observer } from 'mobx-react';
-import url from '../../config/url';
-import RNRestart from 'react-native-restart';
-import { JToast } from '../../functions/Toast';
+import { _changeLanguage } from '../Login/LoginFunction';
 
 const ChangeLanguage = () => {
   const [selectedLanguage, setSelectedLanguage] = useState(null);
@@ -28,41 +26,42 @@ const ChangeLanguage = () => {
     // {id: 1, name: 'اردو', selected: false,short:"ur"},
     {id: 2, name:  'العربية', selected: false,short:"ar"},
   ]);
+  const token =store.token?.token;
   // console.log(data.short)
 
-  const _changeLanguage =  (selectedLanguage) => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization",`Bearer ${store.token?.token}`);
-// console.log(selectedLanguage)
-    var formdata = new FormData();
-    formdata.append("languageName",selectedLanguage);
-    // console.log(formdata);
-    fetch(`${url.baseUrl}/change-language`, {
-      method: 'POST',
-      headers: myHeaders,
-      body: formdata,
-      redirect: 'follow'
-    })
-      .then(response => response.json())
-      .then(result => {
-        if(result.success== true){
-          JToast({
-            type: 'success',
-            // text1: store.lang.success,
-            text1: result.message,
-          });
-            RNRestart.restart()
-        }
-        else{
-          JToast({
-            type: 'danger',
-            text1: store.lang.error,
-            text2: result.message,
-          });
-        }
-      })
-      .catch(error => console.log('error', error));
-  };
+//   const _changeLanguage =  (selectedLanguage) => {
+//     var myHeaders = new Headers();
+//     myHeaders.append("Authorization",`Bearer ${store.token?.token}`);
+// // console.log(selectedLanguage)
+//     var formdata = new FormData();
+//     formdata.append("languageName",selectedLanguage);
+//     // console.log(formdata);
+//     fetch(`${url.baseUrl}/change-language`, {
+//       method: 'POST',
+//       headers: myHeaders,
+//       body: formdata,
+//       redirect: 'follow'
+//     })
+//       .then(response => response.json())
+//       .then(result => {
+//         if(result.success== true){
+//           JToast({
+//             type: 'success',
+//             // text1: store.lang.success,
+//             text1: result.message,
+//           });
+//             RNRestart.restart()
+//         }
+//         else{
+//           JToast({
+//             type: 'danger',
+//             text1: store.lang.error,
+//             text2: result.message,
+//           });
+//         }
+//       })
+//       .catch(error => console.log('error', error));
+//   };
 
 
   // const handleSave = async () => {
@@ -86,7 +85,8 @@ const ChangeLanguage = () => {
       try {
         await AsyncStorage.setItem('selectedLanguage', selectedLanguage)
         store.setLang(selectedLanguage)
-        _changeLanguage(selectedLanguage)
+        _changeLanguage({selectedLanguage ,token,src:1})
+       
       } catch (error) {
         console.log('Error storing language:', error);
       }
@@ -113,7 +113,7 @@ const ChangeLanguage = () => {
 
   return (
     <JScreen
-      style={{paddingHorizontal: RFPercentage(2)}}
+      // style={{paddingHorizontal: RFPercentage(2)}}
       header={
         <JGradientHeader
           center={
@@ -173,5 +173,6 @@ const styles = StyleSheet.create({
     fontSize: RFPercentage(3),
     fontWeight: 'bold',
     marginBottom: RFPercentage(2),
+    paddingHorizontal:RFPercentage(2),
   },
 });

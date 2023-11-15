@@ -184,7 +184,7 @@ export default function MyDrawer() {
     _getLang('selectedLanguage');
     return () => { };
   }, []);
-
+console.log( 'store.langType',store.langType)
 
 
   return (

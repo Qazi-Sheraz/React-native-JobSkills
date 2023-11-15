@@ -51,11 +51,17 @@ const LngTranslation = () => {
   const getpermission = async () => {
     try {
       const permissionValue = await AsyncStorage.getItem('permission');
+      const authValue = await AsyncStorage.getItem('authVal');
 
-      if (permissionValue === 'true') {
+      if (permissionValue === 'true' && authValue === 'false') {
         // 'employerSplash' is true, take some action
         // For example, you can navigate to 'CLogin' here
         navigation.navigate('BoundingScreenStart')
+
+      } else if (authValue === 'true' ) {
+        // 'employerSplash' is true, take some action
+        // For example, you can navigate to 'CLogin' here
+        navigation.navigate('SelectionScreen')
       } else {
         // 'employerSplash' is false or not set, take another action
         // For example, you can navigate to 'FirstScreen' here

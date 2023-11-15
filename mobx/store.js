@@ -127,7 +127,7 @@ export const StoreProvider = props => {
     //token
     token: {},
     setToken: action(e => (store.token = e)),
-    setUserFirstName: action(e => (store.token.user = e)),
+    setUserFirstName: action(e => (store.token.user.full_name= e)),
     //userInfo
     userInfo: {},
     setUserInfo: action(e => (store.userInfo = e)),
@@ -185,6 +185,10 @@ export const StoreProvider = props => {
     //language Screen Stack
     langType: false,
     setLangType: action(e => (store.langType = e)),
+
+    //language Screen Stack
+    authType: false,
+    setAuthType: action(e => (store.authType = e)),
 
     //Bounding Screen
     splashShown: false,

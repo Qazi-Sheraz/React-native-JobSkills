@@ -639,7 +639,8 @@
 "Please_follow_these_additional_steps":"It seems you were using Login with Apple to use JobSkills. Please follow these additional steps",
 "Go_to_Settings_then_tap_your_name":"On your iPhone, go to Settings, then tap your name",
 "Tap_Sign_In_Security":"Tap Sign-In & Security, then tap Sign in with Apple",
-"Tap_Sign_in_with_apple":"Select the app or developer, then tap Stop Using Apple ID"
+"Tap_Sign_in_with_apple":"Select the app or developer, then tap Stop Using Apple ID",
+"user_signup_successfully":"User Signup Successfully"
 
 
 

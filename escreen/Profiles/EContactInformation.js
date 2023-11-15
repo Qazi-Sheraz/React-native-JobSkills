@@ -294,8 +294,8 @@ function EContactInformation() {
     )
       .then(response => response?.json())
       .then(result => {
-        // console.log('result', result);
-        store.setUserFirstName(result);
+        // console.log('result', result.full_name);
+        store.setUserFirstName(result?.full_name);
         
         JToast({
           type: 'success',
@@ -434,7 +434,7 @@ function EContactInformation() {
             phone: yup
               .string()
               .matches(/^\+?[0-9]\d*$/, store.lang.Phone_Number_must_be_a_digit)
-              .min(10, store.lang.Phone_must_be_atleast_10_characters)
+              // .min(10, store.lang.Phone_must_be_atleast_10_characters)
               // .max(14, store.lang.Phone_must_be_at_most_14_characters)
               .required(store.lang.Phone_Name_is_a_required_field),
           })}>
@@ -529,7 +529,7 @@ function EContactInformation() {
                     </JText>
                   </JRow>
                   <PhoneInput
-                    textInputProps={{maxLength: 10}}
+                    textInputProps={{maxLength: 14}}
                     ref={phoneInput}
                     defaultValue={values.phone}
                     // defaultCode={code?.cca2?code?.cca2:"SA"}

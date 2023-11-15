@@ -35,7 +35,7 @@ import {
 } from 'react-native-fbsdk-next';
 import url from '../../config/url';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { _appleAndroidAuth, _googleLogin, _googleSignOut, _onAppleAuth } from '../Login/LoginFunction';
+import { _appleAndroidAuth, _changeLanguage, _googleLogin, _googleSignOut, _onAppleAuth } from '../Login/LoginFunction';
 import JModal from '../../customComponents/JModal';
 
 
@@ -47,6 +47,7 @@ const Registration = ({navigation, route}) => {
   const [loader, setLoader] = useState(false);
   const [socialLoader, setSocialLoader] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState(null);
   const store = useContext(StoreContext);
   const type = route?.params?.type;
   console.log('type', type);
@@ -108,7 +109,7 @@ const Registration = ({navigation, route}) => {
         } else {
           JToast({
             type: 'success',
-            text1: result,
+            text1: store.lang.user_signup_successfully,
             text2: store.lang.kindly_check_your_email,
           });
           navigation.navigate('CLogin', {
@@ -150,6 +151,7 @@ const Registration = ({navigation, route}) => {
 
         if (result.token) {
           _storeToken(result, true),
+          _changeLanguage({selectedLanguage ,token:result.token})
             JToast({
               type: 'success',
               text1: store.lang.login_successfully,
@@ -184,8 +186,10 @@ const Registration = ({navigation, route}) => {
       .then(result => {
         console.log('Result__Linkdin===>', result);
 
+
         if (result) {
           _storeToken(result, true),
+          _changeLanguage({selectedLanguage ,token:result.token})
             JToast({
               type: 'success',
               text1: store.lang.login_successfully,
@@ -229,6 +233,7 @@ const Registration = ({navigation, route}) => {
 
         if (result.token) {
           _storeToken(result, true),
+          _changeLanguage({selectedLanguage ,token:result.token})
             updateUserDeviceToken(),
             JToast({
               type: 'success',
@@ -310,6 +315,19 @@ const Registration = ({navigation, route}) => {
       console.error('LinkedIn logout error:', error);
     }
   };
+  const getStoredLanguage = async () => {
+    try {
+      const storedLanguage = await AsyncStorage.getItem('selectedLanguage');
+      if (storedLanguage) {
+        setSelectedLanguage(storedLanguage);
+      }
+    } catch (error) {
+      console.log('Error retrieving stored language:', error);
+    }
+  };
+  useEffect(() => {
+    getStoredLanguage();
+  }, [])
   console.log('GoogleData========>', store.googleUserInfo?.user?.email);
 
   return (
@@ -712,6 +730,7 @@ const Registration = ({navigation, route}) => {
                   paddingLeft: RFPercentage(1),
                 }}>
                 <CheckBox
+                style={{ width: RFPercentage(Platform.OS=='ios'?2.5:4.5), height: RFPercentage(Platform.OS=='ios'?2.5:4.5) }}
                   tintColor={'gray'}
                   onCheckColor={colors.purple[0]}
                   onFillColor={colors.white[0]}

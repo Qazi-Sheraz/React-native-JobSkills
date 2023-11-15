@@ -47,10 +47,10 @@ export default function JProfileContent({src, name, email, jd}) {
     )
       .then(response => response.json())
       .then(result => {
-        console.log('result', result);
-        setSingleFile(res[0]);
-        _getProfile(store);
-        store.setUserAvatar(res[0]?.uri);
+        console.log('result', result)
+        setSingleFile(res[0])
+        store.setUserAvatar(res[0]?.uri)
+        _getProfile(store)
         JToast({
           type: 'success',
           text1: result.message,
@@ -59,7 +59,6 @@ export default function JProfileContent({src, name, email, jd}) {
       })
       .catch(error => {
         console.log('error', error);
-
         setLoader(false);
       });
   };

@@ -40,9 +40,8 @@ import { AppleButton,
   AppleAuthRequestOperation,
   AppleAuthRequestScope
 } from '@invertase/react-native-apple-authentication';
-import { _appleAndroidAuth, _googleLogin, _googleSignOut, _onAppleAuth } from './LoginFunction';
+import { _appleAndroidAuth, _changeLanguage, _googleLogin, _googleSignOut, _onAppleAuth } from './LoginFunction';
 import JModal from '../../customComponents/JModal';
-
 const Login = ({navigation, route}) => {
  
   GoogleSignin.configure({
@@ -191,33 +190,14 @@ const Login = ({navigation, route}) => {
         if (result.token) {
           _storeToken(result, values.remember);
           updateUserDeviceToken();
+          _changeLanguage({selectedLanguage ,token:result.token})
           JToast({
             type: 'success',
             text1: store.lang.login_successfully,
             text2: store.lang.welcome,
           });
 
-          var myHeaders = new Headers();
-          myHeaders.append('Authorization', `Bearer ${result.token}`);
-          var formdata = new FormData();
-          formdata.append('languageName', selectedLanguage);
-          console.log(formdata);
-          fetch(`${url.baseUrl}/change-language`, {
-            method: 'POST',
-            headers: myHeaders,
-            body: formdata,
-            redirect: 'follow',
-          })
-            .then(response => response.json())
-            .then(result => {
-              if (result.success) {
-                console.log(result.message);
-                // RNRestart.restart()
-              } else {
-                console.log(result.message);
-              }
-            })
-            .catch(error => console.log('error', error));
+        
         } else {
           if (result == 'Incorrect Password!') {
             JToast({
@@ -313,6 +293,7 @@ const Login = ({navigation, route}) => {
 
         if (result.token) {
           _storeToken(result, true),
+          _changeLanguage({selectedLanguage ,token:result.token})
             updateUserDeviceToken(),
             JToast({
               type: 'success',
@@ -349,6 +330,7 @@ const Login = ({navigation, route}) => {
 
         if (result) {
           _storeToken(result, true),
+          _changeLanguage({selectedLanguage ,token:result.token})
             updateUserDeviceToken(),
             JToast({
               type: 'success',
@@ -394,6 +376,7 @@ const Login = ({navigation, route}) => {
 
           if (result.token) {
             _storeToken(result, true),
+            _changeLanguage({selectedLanguage ,token:result.token})
               updateUserDeviceToken(),
               JToast({
                 type: 'success',
@@ -646,6 +629,7 @@ const Login = ({navigation, route}) => {
               }}>
               <JRow>
                 <CheckBox
+                style={{ width: RFPercentage(Platform.OS=='ios'?2.5:4.5), height: RFPercentage(Platform.OS=='ios'?2.5:4.5) }}
                   tintColor={'gray'}
                   onCheckColor={colors.purple[0]}
                   onFillColor={colors.white[0]}

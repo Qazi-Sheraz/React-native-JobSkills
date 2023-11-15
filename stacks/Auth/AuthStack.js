@@ -13,6 +13,7 @@ import ResetLoginPassword from '../../screens/forgetPassword/ResetLoginPassword'
 import DeviceInfo from 'react-native-device-info';
 import FirstScreen from '../../screens/SplashScreen/Candidate/FirstScreen';
 import EFirstScreen from '../../screens/SplashScreen/Employee/EFirstScreen';
+import LngTranslation from '../../screens/LngTranslation/LngTranslation';
 
 const Stack = createStackNavigator();
 
@@ -41,6 +42,7 @@ function AuthStack({navigation}) {
     return () => {};
   }, []);
   useEffect(() => {
+    AsyncStorage.setItem('authVal', 'true');
     const fetchDeviceName = async () => {
       try {
         const name = await DeviceInfo.getDeviceName();
@@ -62,7 +64,10 @@ function AuthStack({navigation}) {
           headerShown: false,
           // gestureEnabled: false,
         }}
-        initialRouteName={'SelectionScreen'}>
+        initialRouteName={
+          store.authType === 'true' ? 'SelectionScreen' : 'LngTçranslation'
+        }>
+        <Stack.Screen name="LngTçranslation" component={LngTranslation} />
         <Stack.Screen name="SelectionScreen" component={SelectionScreen} />
         <Stack.Screen name="CLogin" component={Login} />
         <Stack.Screen name="CRegister" component={Registration} />
