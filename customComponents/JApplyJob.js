@@ -75,7 +75,7 @@ const JApplyJob = ({ token, jobId, id, setStatus, status }) => {
         setLoader(false);
       })
       .catch(error => {
-        console.log('GET APPLIED JOB STATUS', error);
+        // console.log('GET APPLIED JOB STATUS', error);
         setLoader(false);
       });
   };
@@ -199,7 +199,7 @@ const JApplyJob = ({ token, jobId, id, setStatus, status }) => {
             note: '',
           }}
           onSubmit={values => {
-            console.log(values);
+            // console.log(values);
             //  setModalVisible(!modalVisible);
 
             // console.log(token);
@@ -214,7 +214,7 @@ const JApplyJob = ({ token, jobId, id, setStatus, status }) => {
             formdata.append('questionnaire_answer', questions[option]);
             formdata.append('application_type', 'apply');
 
-            console.log(formdata);
+            // console.log(formdata);
             var requestOptions = {
               method: 'POST',
               headers: myHeaders,

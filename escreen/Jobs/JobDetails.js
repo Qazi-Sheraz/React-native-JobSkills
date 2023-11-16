@@ -113,6 +113,7 @@ const JobDetails = ({route}) => {
   const [code, setCode] = useState('');
   const [phone, setPhone] = useState('');
   const refRBSheet = useRef();
+  const jId = route.params?.jid;
 
   const _addCandidate = values => {
     setLoader1(true);
@@ -136,12 +137,12 @@ const JobDetails = ({route}) => {
       // values?.resume?.uri,
     );
     formdata.append('no_preference', '1');
-    formdata.append('jobid', JSON.stringify(route.params.jid));
+    formdata.append('jobid', JSON.stringify(jId));
     formdata.append('is_default', '1');
     formdata.append('title', values.resume?.name);
     formdata.append('type', '1');
 
-    console.log('formdata', formdata);
+    // console.log('formdata', formdata);
     fetch(
       `${url.baseUrl}/employer/add-candidate`,
 
@@ -174,13 +175,13 @@ const JobDetails = ({route}) => {
         }
       })
       .catch(error => {
-        console.log('error===>>>>>', error);
+        // console.log('error===>>>>>', error);
       })
       .finally(() => {
         setLoader1(false);
       });
   };
-  // console.log('id:',route.params?.id)
+  // console.log('params:',route.params)
   const _getjobDetail = () => {
     var myHeaders = new Headers();
     myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
@@ -546,7 +547,6 @@ const JobDetails = ({route}) => {
                 )}
               </JText>
             </JRow>
-            {console.log('image', store.jobDetail?.company_image)}
             <JRow>
               {store.jobDetail?.company_image && (
                 <Image
@@ -554,11 +554,11 @@ const JobDetails = ({route}) => {
                   source={{uri: store.jobDetail?.company_image}}
                   // onLoad={() => setImageLoader(false)}
                   onLoadStart={() => {
-                    console.log('Image loading started');
+                    // console.log('Image loading started');
                     setImageLoader(true);
                   }}
                   onLoadEnd={() => {
-                    console.log('Image loading ended');
+                    // console.log('Image loading ended');
                     setImageLoader(false);
                   }}
                 />
@@ -721,7 +721,6 @@ const JobDetails = ({route}) => {
         </JScrollView>
 
         <>
-          {/* {console.log('status',!loader&& status.message)} */}
           <View style={styles.bottomV}>
             {store.token?.user?.owner_type.includes('Candidate') === false ? (
               <JButton
@@ -1195,29 +1194,45 @@ const JobDetails = ({route}) => {
                         .string()
                         .matches(
                           /^[A-Za-z\u0600-\u06FF\s]+$/,
-                          'Friend Name must contain at least 1 alphabet character and can include English, Urdu, Arabic, and spaces',
+                          `${store.lang.friend_name} ${store.lang.Name_must_contains_only_alphabets}`,
                         )
                         .matches(
                           /^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/,
-                          'Symbols are not allowed in the Friend Name',
+                          `${store.lang.Symbols_are_not_allowed_in_the_Name}`,
                         )
-                        .required('Friend Name is required')
-                        .label('Friend Name'),
+                        .test(
+                          'no-leading-space',
+                          store.lang.Name_cannot_start_with_a_space,
+                          value => {
+                            if (value && value.startsWith(' ')) {
+                              return false; // Return false to indicate a validation error
+                            }
+                            return true; // Return true if the validation passes
+                          },
+                        )
+                        .required(
+                          `${store.lang.friend_name} ${store.lang.is_a_required_field}`,
+                        ),
                       friendEmail: yup
                         .string()
                         .max(
                           100,
-                          'Email address must be at most 100 characters long',
+                          store.lang
+                            .Email_address_must_be_at_most_100_characters_long,
                         )
-                        .email('Must be a valid email')
-                        .required('Friend Email is required')
-                        .label('Friend Email'),
+                        .email(store.lang.Must_be_a_valid_email)
+                        .required(
+                          `${store.lang.friend_email} ${store.lang.is_a_required_field}`,
+                        )
+                        .label(store.lang.friend_email),
                     }
                   : {
                       note: yup
                         .string()
-                        .required('Note is required')
-                        .label('Note'),
+                        .required(
+                          `${store.lang.add_note} ${store.lang.is_a_required_field}`,
+                        )
+                        .label(store.lang.add_note),
                     },
               )}>
               {({
@@ -1261,6 +1276,9 @@ const JobDetails = ({route}) => {
                         onChangeText={handleChange('friendName')}
                         onBlur={() => setFieldTouched('friendName')}
                       />
+                      {touched.friendName && errors.friendName && (
+                        <JErrorText>{errors.friendName}</JErrorText>
+                      )}
                       <JInput
                         containerStyle={{marginVertical: RFPercentage(2)}}
                         style={{
@@ -1276,21 +1294,29 @@ const JobDetails = ({route}) => {
                         onChangeText={handleChange('friendEmail')}
                         onBlur={() => setFieldTouched('friendEmail')}
                       />
+                      {touched.friendEmail && errors.friendEmail && (
+                        <JErrorText>{errors.friendEmail}</JErrorText>
+                      )}
                     </>
                   ) : (
-                    <JInput
-                      containerStyle={{marginVertical: RFPercentage(2)}}
-                      style={{
-                        textAlign: store.lang.id == 0 ? 'left' : 'right',
-                      }}
-                      isRequired
-                      heading={store.lang.add_note}
-                      value={values.note}
-                      error={touched.note && errors.note && true}
-                      multiline={true}
-                      onChangeText={handleChange('note')}
-                      onBlur={() => setFieldTouched('note')}
-                    />
+                    <>
+                      <JInput
+                        containerStyle={{marginVertical: RFPercentage(2)}}
+                        style={{
+                          textAlign: store.lang.id == 0 ? 'left' : 'right',
+                        }}
+                        isRequired
+                        heading={store.lang.add_note}
+                        value={values.note}
+                        error={touched.note && errors.note && true}
+                        multiline={true}
+                        onChangeText={handleChange('note')}
+                        onBlur={() => setFieldTouched('note')}
+                      />
+                      {touched.note && errors.note && (
+                        <JErrorText>{errors.note}</JErrorText>
+                      )}
+                    </>
                   )}
                   <JRow
                     style={{

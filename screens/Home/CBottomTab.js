@@ -48,9 +48,9 @@ export default function CBottomTab() {
          await AsyncStorage.setItem('selectedLanguage', lang);
          store.setLang(lang);
         
-         console.log('lang',lang)
+        //  console.log('lang',lang)
        } catch (error) {
-         console.log('Error storing language:', error);
+        //  console.log('Error storing language:', error);
        }
      };
   useEffect(() => {

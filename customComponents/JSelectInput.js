@@ -370,7 +370,7 @@ function JSelectInput({
         setLoader(false);
       })
       .catch(error => {
-        console.log('error-1', error);
+        // console.log('error-1', error);
         setLoader(false);
       });
   };

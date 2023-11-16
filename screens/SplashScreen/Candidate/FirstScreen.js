@@ -12,7 +12,6 @@ export default function FirstScreen() {
   const store = useContext(StoreContext);
   const navigation = useNavigation();
   const [splashSlid, setSplashSlid] = useState(1);
-  console.log(splashSlid)
 
   const _setSplashShown = async () => {
     try {

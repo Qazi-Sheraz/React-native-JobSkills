@@ -95,7 +95,8 @@ function CExperienceInformation({refRBSheet, data}) {
             .required(store.lang.Industries_is_required),
           current: yup
             .string()
-            .matches(/^[0-9]+$/, store.lang.must_be_a_numeric_value)
+            .matches(/^[1-9]\d*(\.\d+)?$/, `${store.lang.Current} ${store.lang.must_be_a_num_greater_than_0},`)
+            // .matches(/^(0\.[1-9]\d*|[1-9]\d*(\.\d+)?)$/, `${store.lang.Current} ${store.lang.must_be_a_num_greater_than_0},`)
             .required(store.lang.current_salary_is_required)
             .label(store.lang.Current),
           area: yup
@@ -105,7 +106,7 @@ function CExperienceInformation({refRBSheet, data}) {
             .required(store.lang.Area_is_required),
           expected: yup
             .string()
-            .matches(/^[0-9]+$/, store.lang.must_be_a_numeric_value)
+            .matches(/^[1-9]\d*(\.\d+)?$/, `${store.lang.Expected} ${store.lang.must_be_a_num_greater_than_0},`)
             .required(store.lang.expected_salary_is_required)
             .label(store.lang.Expected),
           currency: yup

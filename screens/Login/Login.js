@@ -59,7 +59,6 @@ const Login = ({navigation, route}) => {
 
   // console.log('edit', edit);
   const type = route?.params?.type;
-  console.log('type', type);
 
   const _storeToken = (token, remember) => {
     if (remember === true) {
@@ -67,7 +66,7 @@ const Login = ({navigation, route}) => {
       AsyncStorage.setItem('@login', JSON.stringify(token))
         .then(res => {
           store.setToken(token);
-          console.log('res', token);
+          // console.log('res', token);
         })
         .catch(error => {
           JToast({
@@ -100,7 +99,7 @@ const Login = ({navigation, route}) => {
         const name = await DeviceInfo.getDeviceName();
         store.setDeviceName(name);
       } catch (error) {
-        console.log('Error fetching device name:', error);
+        // console.log('Error fetching device name:', error);
       }
     };
 
@@ -113,7 +112,7 @@ const Login = ({navigation, route}) => {
         messagingInstance
           ?.getToken()
           .then(fcmToken => {
-            console.log('FCM Token -> ', fcmToken);
+            // console.log('FCM Token -> ', fcmToken);
             var formdata = new FormData();
             formdata.append('user_id', userId);
             formdata.append('token', fcmToken);
@@ -136,17 +135,17 @@ const Login = ({navigation, route}) => {
                 resolve(result); // Resolve the promise with the result
               })
               .catch(error => {
-                console.log('error', error);
+                // console.log('error', error);
                 reject(error); // Reject the promise with the error
               });
 
             messagingInstance.onTokenRefresh(newToken => {
-              console.log('Updated FCM Token -> ', newToken);
+              // console.log('Updated FCM Token -> ', newToken);
               // Optionally, you can do something with the newToken here
             });
           })
           .catch(error => {
-            console.log('Error while getting FCM token', error);
+            // console.log('Error while getting FCM token', error);
             reject(error); // Reject the promise if there's an error
           });
       } else {
@@ -271,7 +270,7 @@ const Login = ({navigation, route}) => {
         setSelectedLanguage(storedLanguage);
       }
     } catch (error) {
-      console.log('Error retrieving stored language:', error);
+      // console.log('Error retrieving stored language:', error);
     }
   };
 
@@ -289,7 +288,7 @@ const Login = ({navigation, route}) => {
     )
       .then(response => response.json())
       .then(result => {
-        console.log('Result===>', result);
+        // console.log('Result===>', result);
 
         if (result.token) {
           _storeToken(result, true),
@@ -326,7 +325,7 @@ const Login = ({navigation, route}) => {
     )
       .then(response => response.json())
       .then(result => {
-        console.log('Result__Linkdin===>', result);
+        // console.log('Result__Linkdin===>', result);
 
         if (result) {
           _storeToken(result, true),
@@ -362,7 +361,7 @@ const Login = ({navigation, route}) => {
         formdata.append('type', type);
         formdata.append('provider_id', token?.user);
     
-      console.log(formdata)
+      // console.log(formdata)
       var requestOptions = {
         method: 'POST',
         body: formdata,
@@ -372,7 +371,7 @@ const Login = ({navigation, route}) => {
 
         .then(response => response.json())
         .then(result => {
-          console.log('Result__Apple===>', result);
+          // console.log('Result__Apple===>', result);
 
           if (result.token) {
             _storeToken(result, true),
@@ -392,7 +391,7 @@ const Login = ({navigation, route}) => {
          
         })
         .catch(error => {
-          console.log("error",error)
+          // console.log("error",error)
           JToast({
             type: 'danger',
             text1: store.lang.eror,
@@ -431,14 +430,14 @@ const Login = ({navigation, route}) => {
         'limited',
         'my_nonce'
       );
-      console.log(loginResult);
+      // console.log(loginResult);
   
       if (Platform.OS === 'ios') {
         const authResult = await AuthenticationToken.getAuthenticationTokenIOS();
-        console.log(authResult?.authenticationToken);
+        // console.log(authResult?.authenticationToken);
       } else {
         const accessTokenResult = await AccessToken.getCurrentAccessToken();
-        console.log(accessTokenResult?.accessToken);
+        // console.log(accessTokenResult?.accessToken);
       }
     } catch (error) {
       console.log(error);
@@ -450,7 +449,7 @@ const Login = ({navigation, route}) => {
       alert('Error fetching data: ' + error.toString());
     } else {
       alert('Result Name: ' + result.name);
-      console.log('result===================', result.name);
+      // console.log('result===================', result.name);
       setEdit(result);
     }
   };
@@ -498,11 +497,11 @@ const Login = ({navigation, route}) => {
       });
   
       // Handle the response here (e.g., send it to your server for authentication).
-      console.log('Apple Sign-In Response:', appleAuthRequestResponse);
+      // console.log('Apple Sign-In Response:', appleAuthRequestResponse);
   
       // You can access user information using appleAuthRequestResponse.user
     } catch (error) {
-      console.error('Apple Sign-In Error:', error);
+      // console.error('Apple Sign-In Error:', error);
       // Handle the error appropriately
     }
   }
@@ -689,7 +688,7 @@ const Login = ({navigation, route}) => {
                 if (item == 'google') {
                   _googleLogin({store,_googleAccess});
                 } else {
-                  console.log('else');
+                  // console.log('else');
                   // facebookLogin();
                   alert('facebook')
                 }
@@ -728,7 +727,7 @@ const Login = ({navigation, route}) => {
               'https://dev.jobskills.digital/login/linkedin-openid/callback'
             }
             onSuccess={token => {
-              console.log(token);
+              // console.log(token);
               store.setLinkdinToken(token);
               _linkdinAccess();
             }}

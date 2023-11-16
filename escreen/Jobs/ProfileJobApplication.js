@@ -105,7 +105,7 @@ const ProfileJobApplication = ({ route }) => {
       })
 
       .catch(error => {
-        console.log('error', error);
+        // console.log('error', error);
         setError(true);
       })
       .finally(() => {

@@ -24,7 +24,7 @@ const JNotification = ({item}) => {
   }
   // console.log('notii',data)
   // console.log('notii',data?.candidate_id)
-  console.log(data?.job_id);
+  // console.log(data?.job_id);
 
   return (
     <JRow

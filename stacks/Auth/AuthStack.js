@@ -48,7 +48,7 @@ function AuthStack({navigation}) {
         const name = await DeviceInfo.getDeviceName();
         store.setDeviceName(name);
       } catch (error) {
-        console.log('Error fetching device name:', error);
+        // console.log('Error fetching device name:', error);
       }
     };
 

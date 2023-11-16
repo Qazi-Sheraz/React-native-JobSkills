@@ -251,7 +251,7 @@ export const _dashboard = store => {
       store.setEmployeHome(result);
     })
     .catch(error => {
-      console.log('home==error', error);
+      // console.log('home==error', error);
       JToast({
         type: 'danger',
         text1: store.lang.eror,

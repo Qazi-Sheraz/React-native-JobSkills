@@ -37,7 +37,7 @@ export default function VerifiedPhone({navigation}) {
     formdata.append('phone', params?.phone);
     formdata.append('region_code', params?.region_code);
     formdata.append('code', `${value.d1}${value.d2}${value.d3}${value.d4}`);
-    console.log(formdata);
+    // console.log(formdata);
 
     var requestOptions = {
       method: 'POST',
@@ -89,7 +89,7 @@ export default function VerifiedPhone({navigation}) {
     fetch(`${url.baseUrl}/send-code`, requestOptions)
       .then(response => response.json())
       .then(result => {
-        console.log(result);
+        // console.log(result);
         JToast({
           type: 'success',
           text1: store.lang.sent_to_your_phone_number,

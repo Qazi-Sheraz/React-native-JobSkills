@@ -148,7 +148,6 @@ function Profile({navigation}) {
                             ?.email_address
                     }
                   />
-                  {/* {console.log(store.myProfile?.user[0]?.contact_information?.region_code)} */}
                   <JProfileInfo
                     title={`${store.lang.phone_number}:`}
                     text={

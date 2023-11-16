@@ -34,7 +34,7 @@ export default function JProfileContent({src, name, email, jd}) {
       name: res[0].name,
       type: res[0].type,
     });
-    console.log('FDFDFDFDFDF', formdata);
+    // console.log('FDFDFDFDFDF', formdata);
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
@@ -47,7 +47,7 @@ export default function JProfileContent({src, name, email, jd}) {
     )
       .then(response => response.json())
       .then(result => {
-        console.log('result', result)
+        // console.log('result', result)
         setSingleFile(res[0])
         store.setUserAvatar(res[0]?.uri)
         _getProfile(store)
@@ -58,7 +58,7 @@ export default function JProfileContent({src, name, email, jd}) {
         setLoader(false);
       })
       .catch(error => {
-        console.log('error', error);
+        // console.log('error', error);
         setLoader(false);
       });
   };

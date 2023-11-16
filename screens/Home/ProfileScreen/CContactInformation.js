@@ -252,7 +252,7 @@ function CContactInformation({refRBSheet, user}) {
     fetch(`${url.baseUrl}/update-profile`, requestOptions)
       .then(response => response.json())
       .then(result => {
-        console.log(result);
+        // console.log(result);
         if (result.success === false) {
           alert('Error while saving data');
         } else {
@@ -268,7 +268,7 @@ function CContactInformation({refRBSheet, user}) {
         setLoader(false);
       })
       .catch(error => {
-         console.log('error', error);
+        //  console.log('error', error);
         setLoader(false);
       });
   };

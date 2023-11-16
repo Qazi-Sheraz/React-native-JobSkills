@@ -72,7 +72,7 @@ function CSkills({data}) {
         )
           .then(response => response.json())
           .then(result => {
-          console.log(result)
+          // console.log(result)
               JToast({
                 type: 'success',
                 text1: store.lang.success,

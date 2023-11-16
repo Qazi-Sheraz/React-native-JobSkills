@@ -50,7 +50,7 @@ const Registration = ({navigation, route}) => {
   const [selectedLanguage, setSelectedLanguage] = useState(null);
   const store = useContext(StoreContext);
   const type = route?.params?.type;
-  console.log('type', type);
+  // console.log('type', type);
 
   const _storeToken = (token, remember) => {
     if (remember === true) {
@@ -58,7 +58,7 @@ const Registration = ({navigation, route}) => {
       AsyncStorage.setItem('@login', JSON.stringify(token))
         .then(res => {
           store.setToken(token);
-          console.log('res', token);
+          // console.log('res', token);
         })
         .catch(error => {
           JToast({
@@ -86,7 +86,7 @@ const Registration = ({navigation, route}) => {
     formdata.append('privacyPolicy', values.policy ? '1' : '0');
     route.params?.type == 1 && formdata.append('last_name', values.last_name);
     route.params?.type !== 1 && formdata.append('company_name', values.company_name);
-    console.log(formdata);
+    // console.log(formdata);
 
     var requestOptions = {
       method: 'POST',
@@ -126,7 +126,7 @@ const Registration = ({navigation, route}) => {
         // });
       })
       .catch(error => {
-        console.log('Error', error);
+        // console.log('Error', error);
         JToast({
           type: 'danger',
           text1: store.lang.eror,
@@ -147,7 +147,7 @@ const Registration = ({navigation, route}) => {
     )
       .then(response => response.json())
       .then(result => {
-        console.log('Result===>', result);
+        // console.log('Result===>', result);
 
         if (result.token) {
           _storeToken(result, true),
@@ -184,7 +184,7 @@ const Registration = ({navigation, route}) => {
     )
       .then(response => response.json())
       .then(result => {
-        console.log('Result__Linkdin===>', result);
+        // console.log('Result__Linkdin===>', result);
 
 
         if (result) {
@@ -219,7 +219,7 @@ const Registration = ({navigation, route}) => {
       formdata.append('type', type);
       formdata.append('provider_id', token?.user);
   
-    console.log(formdata)
+    // console.log(formdata)
     var requestOptions = {
       method: 'POST',
       body: formdata,
@@ -229,7 +229,7 @@ const Registration = ({navigation, route}) => {
 
       .then(response => response.json())
       .then(result => {
-        console.log('Result__Apple===>', result);
+        // console.log('Result__Apple===>', result);
 
         if (result.token) {
           _storeToken(result, true),
@@ -249,7 +249,7 @@ const Registration = ({navigation, route}) => {
        
       })
       .catch(error => {
-        console.log("error",error)
+        // console.log("error",error)
         JToast({
           type: 'danger',
           text1: store.lang.eror,
@@ -266,13 +266,13 @@ const Registration = ({navigation, route}) => {
         'email',
       ]);
       if (result.isCancelled) {
-        console.log('Login cancelled');
+        // console.log('Login cancelled');
       } else {
         const data = await AccessToken.getCurrentAccessToken();
         if (data) {
-          console.log('Logged in with Facebook!');
-          console.log('User ID:', data.userID);
-          console.log('Access Token:', data.accessToken);
+          // console.log('Logged in with Facebook!');
+          // console.log('User ID:', data.userID);
+          // console.log('Access Token:', data.accessToken);
         }
       }
     } catch (error) {
@@ -322,13 +322,13 @@ const Registration = ({navigation, route}) => {
         setSelectedLanguage(storedLanguage);
       }
     } catch (error) {
-      console.log('Error retrieving stored language:', error);
+      // console.log('Error retrieving stored language:', error);
     }
   };
   useEffect(() => {
     getStoredLanguage();
   }, [])
-  console.log('GoogleData========>', store.googleUserInfo?.user?.email);
+  // console.log('GoogleData========>', store.googleUserInfo?.user?.email);
 
   return (
     <JScreen>
@@ -788,7 +788,7 @@ const Registration = ({navigation, route}) => {
                 if (item == 'google') {
                   _googleLogin({store,_googleAccess});
                 } else {
-                  console.log('else');
+                  // console.log('else');
                   // facebookLogin();
                   alert('facebook')
                 }
@@ -825,7 +825,7 @@ const Registration = ({navigation, route}) => {
               'https://dev.jobskills.digital/login/linkedin-openid/callback'
             }
             onSuccess={token => {
-              console.log(token);
+              // console.log(token);
               store.setLinkdinToken(token);
               _linkdinAccess();
             }}

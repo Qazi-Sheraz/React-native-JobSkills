@@ -63,22 +63,22 @@ export async function _appleAndroidAuth({store, _appleAccess}) {
       const id_token = response.id_token; // Present if selected ResponseType.ALL / ResponseType.ID_TOKEN
       const user = response.user; // Present when user first logs in using appleId
       const state = response.state; // A copy of the state value that was passed to the initial request.
-      console.log('Got auth code', code);
-      console.log('Got id_token', id_token);
-      console.log('Got user', user);
-      console.log('Got state', state);
+      // console.log('Got auth code', code);
+      // console.log('Got id_token', id_token);
+      // console.log('Got user', user);
+      // console.log('Got state', state);
     }
   } catch (error) {
     if (error && error.message) {
       switch (error.message) {
         case appleAuthAndroid.Error.NOT_CONFIGURED:
-          console.log('appleAuthAndroid not configured yet.');
+          // console.log('appleAuthAndroid not configured yet.');
           break;
         case appleAuthAndroid.Error.SIGNIN_FAILED:
-          console.log('Apple signin failed.');
+          // console.log('Apple signin failed.');
           break;
         case appleAuthAndroid.Error.SIGNIN_CANCELLED:
-          console.log('User cancelled Apple signin.');
+          // console.log('User cancelled Apple signin.');
           break;
         default:
           break;
@@ -101,14 +101,14 @@ export async function _onAppleAuth({store, _appleAccess}) {
 
   // use credentialState response to ensure the user is authenticated
   if (credentialState === appleAuth.State.AUTHORIZED) {
-    console.log('code auth apple', appleAuthRequestResponse);
-    console.log('auth Token========>', appleAuthRequestResponse.identityToken);
-    console.log('auth Email========>', appleAuthRequestResponse.email);
-    console.log('auth fullName=======>', appleAuthRequestResponse.fullName);
-    console.log(
-      'auth givenName======>',
-      appleAuthRequestResponse.fullName.givenName,
-    );
+    // console.log('code auth apple', appleAuthRequestResponse);
+    // console.log('auth Token========>', appleAuthRequestResponse.identityToken);
+    // console.log('auth Email========>', appleAuthRequestResponse.email);
+    // console.log('auth fullName=======>', appleAuthRequestResponse.fullName);
+    // console.log(
+    //   'auth givenName======>',
+    //   appleAuthRequestResponse.fullName.givenName,
+    // );
     // console.log("auth user========>",appleAuthRequestResponse)
     _appleAccess(appleAuthRequestResponse);
     // user is authenticated
@@ -125,20 +125,20 @@ export const _googleLogin = async ({store, _googleAccess}) => {
     const getToken = await GoogleSignin.getTokens();
     store.setGoogleToken(getToken.accessToken);
     _googleAccess(); // You might need to define this function.
-    console.log('getToken=====>', getToken.accessToken);
+    // console.log('getToken=====>', getToken.accessToken);
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-      console.log('user cancelled the login flow', error);
+      // console.log('user cancelled the login flow', error);
       // user cancelled the login flow
     } else if (error.code === statusCodes.IN_PROGRESS) {
-      console.log('operation (e.g. sign in) is in progress already', error);
+      // console.log('operation (e.g. sign in) is in progress already', error);
       // operation (e.g. sign in) is in progress already
     } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-      console.log('play services not available or outdated', error);
+      // console.log('play services not available or outdated', error);
       // play services not available or outdated
     } else {
-      console.log('some other error happened', error);
+      // console.log('some other error happened', error);
       // some other error happened
     }
   }

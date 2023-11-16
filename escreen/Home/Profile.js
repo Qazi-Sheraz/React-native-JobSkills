@@ -103,11 +103,11 @@ const Profile = () => {
     )
       .then(response => response.json())
       .then(result => {
-        console.log(result);
+        // console.log(result);
         setProfile(result);
       })
       .catch(error => {
-        console.log('profile===error', error);
+        // console.log('profile===error', error);
         setError(true);
       })
 
@@ -263,7 +263,6 @@ const Profile = () => {
                   <JText fontColor={colors.shortlisted[0]}>
                     {store.lang.confirmed}
                   </JText>
-                  {/* {console.log(profile?.company[0]?.contact_information?.regional_code+profile?.company[0]?.contact_information?.phone_number)} */}
                   <JProfileInfo
                     title={`${store.lang.phone_number}:`}
                     text={

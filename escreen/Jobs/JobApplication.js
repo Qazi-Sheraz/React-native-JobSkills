@@ -44,7 +44,6 @@ const JobApplication = ({route}) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [filteredData1, setFilteredData1] = useState(store?.jApplication);
-  console.log('route', route.params);
 
   const _jobApplication = () => {
     var myHeaders = new Headers();
@@ -64,7 +63,7 @@ const JobApplication = ({route}) => {
         store.setJApplication(result?.job_application);
       })
       .catch(error => {
-        console.log('application===error', error);
+        // console.log('application===error', error);
         store.setJAppError(true);
       })
       .finally(() => {

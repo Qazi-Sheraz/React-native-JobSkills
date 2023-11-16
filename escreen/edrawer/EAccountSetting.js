@@ -27,7 +27,6 @@ const EAccountSetting = () => {
   const [loader, setLoader] = useState(false);
   const [loader1, setLoader1] = useState(false);
   const userid = store.token?.user?.id;
-  console.log('userid', userid);
 
   const deleteAccount = () => {
     var myHeaders = new Headers();
@@ -99,7 +98,7 @@ const EAccountSetting = () => {
     )
       .then(response => response.json())
       .then(result => {
-        console.log(result)
+        // console.log(result)
         if (result) {
          setCheckUser(result)
         }

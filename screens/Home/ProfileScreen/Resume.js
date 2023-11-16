@@ -61,9 +61,9 @@ const Resume = ({ navigation }) => {
         // DocumentPicker.types.pdf
       });
       // console.log('ressss', res[0])
-      console.log('URI : ' + res[0]?.uri);
+      // console.log('URI : ' + res[0]?.uri);
       // console.log('Type : ' + res[0]?.type);
-      console.log('File Name : ' + res[0]?.name);
+      // console.log('File Name : ' + res[0]?.name);
       // console.log('File Size : ' + res[0]?.size);
       //Setting the state to show single file attributes
 
@@ -149,7 +149,7 @@ const Resume = ({ navigation }) => {
   const readResume = async (uri) => {
     try {
       const base64String = await RNFS.readFile(uri, 'base64');
-      console.log(base64String);
+      // console.log(base64String);
       return base64String;
     } catch (error) {
       console.error('Error reading PDF:', error);

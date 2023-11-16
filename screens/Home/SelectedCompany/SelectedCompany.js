@@ -122,7 +122,7 @@ function SelectedJob({ route, navigation }) {
         }
       })
       .catch((error) => {
-        console.log('Error:', error);
+        // console.log('Error:', error);
         JToast({
           type: 'danger',
           text1: store.lang.eror,

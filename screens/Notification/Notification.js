@@ -20,7 +20,6 @@ function Notification({ navigation, route }) {
   const [loader, setLoader] = useState(true);
   const params = route.params || {};
   const { id } = params;
-  console.log(id)
 
 
   const _notify = () => {
@@ -37,7 +36,7 @@ function Notification({ navigation, route }) {
     })
       .then(response => response.json())
       .then(result => {
-        console.log(result);
+        // console.log(result);
         setData(result);
 
       })

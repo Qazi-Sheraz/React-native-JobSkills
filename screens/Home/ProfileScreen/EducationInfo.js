@@ -92,7 +92,7 @@ const EducationInfo = () => {
         navigation.goBack();
       })
       .catch(error => {
-        console.log('error', error);
+        // console.log('error', error);
         setLoader1(false);
       });
   };
@@ -102,7 +102,7 @@ const EducationInfo = () => {
       let arr = [...store.educationList];
       arr.unshift(e);
       store.setEducationList(arr);
-      console.log('Data added successfully:', e);
+      // console.log('Data added successfully:', e);
     } catch (error) {
       console.error('Error adding data:', error);
     }
@@ -130,8 +130,6 @@ const EducationInfo = () => {
       {apiLoader ? (
         <CLNotification />
       ) : (
-        (console.log(params?.degree_level_id),
-        (
           <Formik
             initialValues={{
               title: params?.title !== null ? params?.title : '',
@@ -430,7 +428,6 @@ const EducationInfo = () => {
               </>
             )}
           </Formik>
-        ))
       )}
     </JScreen>
   );

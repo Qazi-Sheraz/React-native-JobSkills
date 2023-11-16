@@ -40,7 +40,7 @@ const CompanyName = () => {
           setLoader1(true);
           var formdata = new FormData();
           formdata.append('companyName', values.companyname);
-          console.log('companyname form', formdata);
+          // console.log('companyname form', formdata);
 
           var myHeaders = new Headers();
           myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
@@ -51,14 +51,13 @@ const CompanyName = () => {
             body: formdata,
             redirect: 'follow',
           };
-          console.log(store.token?.token);
           fetch(
             'https://dev.jobskills.digital/api/update/employee/company',
             requestOptions,
           )
             .then(response => response.json())
             .then(result => {
-              console.log('Result company===>', result);
+              // console.log('Result company===>', result);
 
               if (result.success) {
                 JToast({
@@ -71,7 +70,6 @@ const CompanyName = () => {
               }
             })
             .catch(error => {
-              console.log('errorrrrr', error);
               // setModalVisible(false)
               JToast({
                 type: 'danger',

@@ -88,7 +88,7 @@ const ChangeLanguage = () => {
         _changeLanguage({selectedLanguage ,token,src:1})
        
       } catch (error) {
-        console.log('Error storing language:', error);
+        // console.log('Error storing language:', error);
       }
     }
   };
@@ -103,7 +103,7 @@ const ChangeLanguage = () => {
         setSelectedLanguage(data.find(item => item.selected).short)
       }
     } catch (error) {
-      console.log('Error retrieving stored language:', error);
+      // console.log('Error retrieving stored language:', error);
     }
   };
   useEffect(() => {

@@ -49,7 +49,7 @@ function CGeneralInformation({refRBSheet, data, user}) {
     formdata.append('candidateLanguage', values.language.id);
     formdata.append('marital_status_id', values.status.id);
     formdata.append('immediate_available', values.availability ? '1' : '0');
-    console.log(formdata);
+    // console.log(formdata);
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,

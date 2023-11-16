@@ -13,10 +13,8 @@ import { observer } from 'mobx-react';
 
 const JStatusbar = ({item}) => {
   const [index, setIndex] = useState(item);
-  const [loader, setLoader] = useState(true);
   const {params}= useRoute()
   const store = useContext(StoreContext);
-  console.log('statusssss========>',item)
  
   // useEffect(() => {
   // _getStatusbar();

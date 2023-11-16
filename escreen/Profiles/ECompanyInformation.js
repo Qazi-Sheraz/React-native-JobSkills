@@ -99,7 +99,7 @@ const ECompanyInformation = () => {
         setInfo(result);
       })
       .catch(error => {
-        console.log('error', error), setError(true);
+        // console.log('error', error), setError(true);
       })
       .finally(() => {
         setLoader(false);
@@ -255,7 +255,6 @@ const ECompanyInformation = () => {
                     disabled={!isValid || loader1 ? true : false}
                     onPress={() => {
                       isValid && handleSubmit();
-                      console.log('first');
                     }}
                     fontColor={
                       !isValid ? `${colors.white[0]}70` : colors.white[0]
@@ -298,7 +297,7 @@ const ECompanyInformation = () => {
                   style={{
                     textAlign: store.lang.id == 0 ? 'left' : 'right',
                   }}
-                  isRequired
+                  editable={false}
                   containerStyle={{marginTop: RFPercentage(2)}}
                   heading={`${store.lang.company_name}`}
                   value={values.company_name}

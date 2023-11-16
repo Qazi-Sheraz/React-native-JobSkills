@@ -24,15 +24,12 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 const ExperienceInfo = () => {
   const store = useContext(StoreContext);
   const {params} = useRoute();
-  console.log('params', params);
   const navigation = useNavigation();
   const start = new Date(params?.start);
   const [loader1, setLoader1] = useState(false);
 
   const currentDate = new Date();
   const current = moment();
-  console.log(currentDate);
-  console.log(current);
   // Calculate the maximum start date (1 day before the current date)
   const maximumStartDate = new Date(currentDate);
   maximumStartDate?.setDate(currentDate?.getDate() - 1);
@@ -62,7 +59,7 @@ const ExperienceInfo = () => {
     values.working == false &&
       formdata.append('end_date', moment(values.end).format('MM/DD/YYYY'));
 
-    console.log('formdata', formdata);
+    // console.log('formdata', formdata);
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
@@ -99,7 +96,7 @@ const ExperienceInfo = () => {
         }
       })
       .catch(error => {
-        console.log('error-post', error);
+        // console.log('error-post', error);
         setLoader1(false);
       });
   };
@@ -108,9 +105,9 @@ const ExperienceInfo = () => {
       let arr = [...store.experienceList];
       arr.unshift(e);
       store.setExperienceList(arr);
-      console.log('Data added successfully:', e);
+      // console.log('Data added successfully:', e);
     } catch (error) {
-      console.error('Error adding data:', error);
+      // console.error('Error adding data:', error);
     }
   };
 

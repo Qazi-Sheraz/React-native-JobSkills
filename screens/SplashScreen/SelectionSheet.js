@@ -18,7 +18,6 @@ const SelectionSheet = ({ navigation }) => {
     // Check the value of 'splashShown' in AsyncStorage
     try {
       const splashShown = await AsyncStorage.getItem('splashShown');
-      console.log(splashShown)
       if (splashShown === 'true') {
         // 'splashShown' is true, navigate to 'CLogin' with type 1
         navigation.navigate('CLogin', { type: 1 });

@@ -88,9 +88,9 @@ const JApplication = ({
       : status1 == 8
       ? _applicantsStatus(8)
       : status1 == 9 && _applicantsStatus(9);
-    // console.log(status1)
+   
   };
-  console.log('itemmmmmm', routeItem?.applicantType)
+ 
   const _applicantsStatus = (id, selectedStatus) => {
     var myHeaders = new Headers();
     myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
@@ -154,7 +154,7 @@ const JApplication = ({
     formdata.append('candidateID', item?.candidate_user_id);
     formdata.append('jobid', item?.job_id);
 
-    console.log('formdata', formdata);
+    // console.log('formdata', formdata);
 
     fetch(`${url.baseUrl}/meetings-submit`, {
       method: 'POST',
@@ -164,7 +164,7 @@ const JApplication = ({
     })
       .then(response => response.json())
       .then(result => {
-        console.log(result);
+        // console.log(result);
         if (result.success == true) {
           setStat(5);
           setUpdate(!update);
@@ -186,7 +186,7 @@ const JApplication = ({
       })
       .catch(error => {
         setBtnLoader(false);
-        console.log('error', error);
+        // console.log('error', error);
         JToast({
           type: 'danger',
           text1: store.lang.eror,
@@ -212,7 +212,7 @@ const JApplication = ({
         setDetails(result[0]?.start_time);
       })
       .catch(error => {
-        console.log('error', error);
+        // console.log('error', error);
       })
       .finally(() => {
         //FINAL
@@ -233,7 +233,7 @@ const JApplication = ({
     )
       .then(response => response.json())
       .then(result => {
-        console.log(result?.meeting_type[0])
+        // console.log(result?.meeting_type[0])
         setMeetings(result);
         setLink(result?.meeting_type[0]);
       })
@@ -423,9 +423,7 @@ const JApplication = ({
               alignItems: store.lang.id == 0 ? 'flex-end' : null,
               justifyContent: 'flex-end',
             }}>
-              {/* {console.log('candidate_user_id',item.candidate_user_id)}
-              {console.log('job_id',item?.job_id)}
-              {console.log('status2',stat)} */}
+          
             <JStatusChecker
               onPressStatus={() => {
                 if (
@@ -500,7 +498,6 @@ const JApplication = ({
                 manual_link: '',
               }}
               onSubmit={values => {
-                // console.log(values)
                 _meetingSubmit(values);
               }}
               validationSchema={yup.object().shape(
@@ -674,7 +671,6 @@ const JApplication = ({
                           borderRadius: RFPercentage(1),
                           paddingVertical: RFPercentage(1),
                         }}>
-                        {/* {console.log(meetings?.meeting_type)} */}
                         {meetings?.meeting_type.map((item, index) => (
                           <Pressable
                             key={index}

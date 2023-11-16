@@ -129,7 +129,7 @@ const jobTitle = encodeURIComponent(item?.job_title || "");
         }
       })
       .catch(error => {
-        console.log('error', error);
+        // console.log('error', error);
        
       })
       .finally(() => {

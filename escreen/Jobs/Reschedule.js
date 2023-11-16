@@ -32,8 +32,6 @@ const Reschedule = ({}) => {
   const [loader, setLoader] = useState(true);
   const [loader1, setLoader1] = useState(false);
 
-  console.log('api', params?.applicant);
-
   const _getScheduleDetails = () => {
     var myHeaders = new Headers();
     myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
@@ -48,11 +46,11 @@ const Reschedule = ({}) => {
     )
       .then(response => response.json())
       .then(result => {
-        console.log('result', result);
+        // console.log('result', result);
         setDetails(result[0]);
       })
       .catch(error => {
-        console.log('error', error);
+        // console.log('error', error);
       })
       .finally(() => {
         setLoader(false);
@@ -76,7 +74,7 @@ const Reschedule = ({}) => {
     fetch(`${url.baseUrl}/acceptSchedule`, requestOptions)
       .then(response => response.json())
       .then(result => {
-        console.log(result);
+        // console.log(result);
         if (result.success == true) {
           JToast({
             type: 'success',
@@ -94,7 +92,7 @@ const Reschedule = ({}) => {
         }
       })
       .catch(error => {
-        console.log('Error:', error);
+        // console.log('Error:', error);
         JToast({
           type: 'danger',
           text1: store.lang.eror,
@@ -153,7 +151,7 @@ const Reschedule = ({}) => {
         }
       })
       .catch(error => {
-        console.log('Error:', error);
+        // console.log('Error:', error);
       })
       .finally(() => {
         setLoader1(false);

@@ -107,7 +107,7 @@ const JobRequirement = () => {
     );
     formdata.append('hide_salary', isEnabled);
     formdata.append('is_freelance', isEnabled1);
-    console.log(formdata);
+    // console.log(formdata);
 
     fetch(`${url.baseUrl}/employer/jobs/store`, {
       method: 'POST',
@@ -135,7 +135,7 @@ const JobRequirement = () => {
         }
       })
       .catch(error => {
-        console.log('error/employer/jobs/store', error);
+        // console.log('error/employer/jobs/store', error);
         JToast({
           type: 'danger',
           text1: store.lang.eror,
@@ -208,7 +208,7 @@ const JobRequirement = () => {
             .string()
             .matches(
               /^[1-9]\d*$/,
-              store.lang.Position_must_be_a_integer_digits_greater_than_0,
+              `${store.lang.position} ${store.lang.must_be_a_integer_digits_greater_than_0},`
             )
             .nullable()
             .required(store.lang.Position_is_required),
