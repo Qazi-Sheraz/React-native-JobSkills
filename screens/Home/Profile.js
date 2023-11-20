@@ -96,6 +96,8 @@ function Profile({navigation}) {
         />
       }>
       <>
+      {console.log('profile',store.myProfile?.user[0]?.profile_picture?.avatar)}
+      {console.log('user',store.token?.user?.avatar)}
         <JProfileContent
           name={
             store.myProfileApiLoader === false &&
@@ -103,10 +105,9 @@ function Profile({navigation}) {
             +`${store.myProfile?.user[0]?.general_information?.last_name == null ?'' :store.myProfile?.user[0]?.general_information?.last_name }`
           }
           // email={store.token.user.email}
-          src={
-            store.myProfile?.user[0]
-              ? store.myProfile?.user[0]?.profile_picture?.avatar
-              : store.token?.user?.avatar
+          // src={store.myProfile?.user[0]?.profile_picture?.avatar}
+        
+          src={store.token?.user?.avatar
           }
         />
 

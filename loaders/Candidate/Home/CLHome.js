@@ -13,6 +13,7 @@ export default function CLHome() {
     <SkeletonPlaceholder speed="900" backgroundColor={colors.skeletonLoader[0]}>
       <View
         style={{
+         
           flexDirection: 'row',
           alignSelf: 'center',
         }}>

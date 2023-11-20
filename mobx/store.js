@@ -194,6 +194,10 @@ export const StoreProvider = props => {
     splashShown: false,
     setSplashShown: action(e => (store.splashShown = e)),
 
+    //Profile Image
+    profileImage: '',
+    setProfileImage: action(e => (store.profileImage = e)),
+
     // Search Find Job
     recentSearch: [],
     setRecentSearch: action(e => (store.recentSearch = e)),

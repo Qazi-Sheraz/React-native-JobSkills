@@ -4,6 +4,7 @@ pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
 pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 pod 'react-native-date-picker', :path => '../node_modules/react-native-date-picker'
 pod 'react-native-fbsdk-next', :path => '../node_modules/react-native-fbsdk-next'
+
 platform :ios, '13.0'
 install! 'cocoapods', :deterministic_uuids => false
 
@@ -27,6 +28,7 @@ target 'jobSkills' do
   pod 'RNDeviceInfo', :path => '../node_modules/react-native-device-info'
 
   pod 'react-native-webview', :path => '../node_modules/react-native-webview'
+
 
   # pod 'react-native-fbsdk-next', :path => '../node_modules/react-native-fbsdk-next'
   target 'jobSkillsTests' do

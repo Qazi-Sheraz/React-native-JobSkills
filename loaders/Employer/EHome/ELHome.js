@@ -1,12 +1,11 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {Platform, StyleSheet, View} from 'react-native';
 import React from 'react';
-import JScreen from '../../../customComponents/JScreen';
-import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {
   heightPercentageToDP,
   widthPercentageToDP,
 } from 'react-native-responsive-screen';
 import {RFPercentage} from 'react-native-responsive-fontsize';
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import colors from '../../../config/colors';
 export default function ELHome() {
   return (
@@ -17,7 +16,7 @@ export default function ELHome() {
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
-            marginTop:RFPercentage(2),
+            marginTop:RFPercentage(Platform.OS=='ios'? 10:2),
         }}>
             
             <View
