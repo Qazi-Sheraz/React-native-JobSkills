@@ -83,10 +83,18 @@ const JobPreference = () => {
             salaryFrom: yup
               .string()
               .max(14, store.lang.Maximum_14_digits_allowed)
+              .matches(
+                /^[1-9]\d*(\.\d+)?$/,
+                `${store.lang.salary_from} ${store.lang.must_be_a_num_greater_than_0},`,
+              )
               .required(store.lang.salaryFrom_is_required),
             salaryTo: yup
               .string()
               .max(15, store.lang.Maximum_15_digits_allowed)
+              .matches(
+                /^[1-9]\d*(\.\d+)?$/,
+                `${store.lang.salary_to} ${store.lang.must_be_a_num_greater_than_0},`,
+              )
               .required(store.lang.salaryTo_is_required)
               .test(
                 store.lang.is_greater_than_salaryFrom,
@@ -308,16 +316,14 @@ const JobPreference = () => {
               </KeyboardAwareScrollView>
               <View
                 style={{
-                  height: RFPercentage(6),
-                  paddingTop: RFPercentage(0.3),
+                  // height: RFPercentage(6),
+                  paddingVertical: RFPercentage(1),
                   backgroundColor: 'transparent',
                 }}>
                 <JButton
                   isValid={isValid}
                   onPress={() => handleSubmit()}
                   style={{
-                    // position: 'absolute',
-                    // bottom: RFPercentage(3),
                     width: RFPercentage(20),
                   }}>
                   {store.lang.next}

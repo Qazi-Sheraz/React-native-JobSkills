@@ -96,8 +96,9 @@ function Profile({navigation}) {
         />
       }>
       <>
-      {console.log('profile',store.myProfile?.user[0]?.profile_picture?.avatar)}
-      {console.log('user',store.token?.user?.avatar)}
+      {console.log('profilenumber',store.myProfile?.user[0]?.contact_information?.mobile_number)}
+      {console.log('usercode',store.myProfile?.user[0]?.contact_information?.region_code)}
+
         <JProfileContent
           name={
             store.myProfileApiLoader === false &&

@@ -37,6 +37,7 @@ function EContactInformation() {
   const [code, setCode] = useState(
     params?.region_code !== null && params?.region_code,
   );
+  console.log(params)
 
   const regionalCodeMappings = {
     93: 'AF', // Afghanistan
@@ -48,6 +49,7 @@ function EContactInformation() {
     54: 'AR', // Argentina
     374: 'AM', // Armenia
     61: 'AU', // Australia
+    672: "AQ",// Antarctica
     43: 'AT', // Austria
     994: 'AZ', // Azerbaijan
     '1-242': 'BS', // Bahamas
@@ -272,8 +274,8 @@ function EContactInformation() {
     myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
     var formdata = new FormData();
     formdata.append('name', values?.name);
-    formdata.append('phone', phone);
-    formdata.append('region_code', code !== false ? code : '966');
+    formdata.append('phone', values?.phone);
+    formdata.append('region_code', values?.regional_code?.code);
     formdata.append('industry_id', '2');
     formdata.append('country_id', values?.countries.id);
     formdata.append('state_id', values?.state.id);
@@ -296,7 +298,7 @@ function EContactInformation() {
       .then(result => {
         // console.log('result', result.full_name);
         store.setUserFirstName(result?.full_name);
-        
+
         JToast({
           type: 'success',
           text1: store.lang.success,
@@ -317,25 +319,6 @@ function EContactInformation() {
         setLoader1(false);
       });
   };
-  
-  const phoneSchema = yup
-  .string()
-  .test('is-valid-phone', 'Invalid phone number', function (value) {
-    // Remove any non-digit characters from the input
-    const cleanValue = value.replace(/\D/g, '');
-
-    // Check if the resulting value is between 10 and 14 characters
-    if (cleanValue.length < 10 || cleanValue.length > 14) {
-      return this.createError({
-        path: this.path,
-        message: 'Phone number must be between 10 and 14 characters',
-      });
-    }
-
-    return true;
-  })
-  .matches(/^\+?[0-9]\d*$/, 'Phone number must consist of digits and optionally start with a plus sign')
-  .required('Phone number is a required field');
 
   useEffect(() => {
     _getcountry();
@@ -388,10 +371,15 @@ function EContactInformation() {
                 : '',
             phone: params?.phone ? params?.phone : '',
             regional_code: params?.region_code
-              ? regionalCodeMappings[params?.region_code]
+              ? {
+                  code: params?.region_code,
+                  cca: regionalCodeMappings[params?.region_code],
+                }
+             
               : '',
           }}
           onSubmit={values => {
+            console.log(values.regional_code)
             _contactInfo(values);
           }}
           validationSchema={yup.object().shape({
@@ -434,9 +422,10 @@ function EContactInformation() {
             phone: yup
               .string()
               .matches(/^\+?[0-9]\d*$/, store.lang.Phone_Number_must_be_a_digit)
-              // .min(10, store.lang.Phone_must_be_atleast_10_characters)
-              // .max(14, store.lang.Phone_must_be_at_most_14_characters)
-              .required(store.lang.Phone_Name_is_a_required_field),
+              .min(10, store.lang.Phone_must_be_atleast_10_characters)
+              .max(14, store.lang.Phone_must_be_at_most_14_characters)
+              .required(store.lang.Phone_Name_is_a_required_field)
+              .label(store.lang.Phone),
           })}>
           {({
             values,
@@ -524,17 +513,19 @@ function EContactInformation() {
                     <JText fontWeight="500" fontSize={RFPercentage(2.5)}>
                       {store.lang.phone_number}:
                     </JText>
-                    <JText fontWeight="500" fontSize={RFPercentage(2.5)} fontColor='red'>
-                    {` *`}
+                    <JText
+                      fontWeight="500"
+                      fontSize={RFPercentage(2.5)}
+                      fontColor="red">
+                      {` *`}
                     </JText>
-                  </JRow>
+                  </JRow> 
                   <PhoneInput
-                    textInputProps={{maxLength: 14}}
+                    textInputProps={{maxLength: values.regional_code?.code?.length == 2 ? 11 : 14}}
                     ref={phoneInput}
                     defaultValue={values.phone}
-                    // defaultCode={code?.cca2?code?.cca2:"SA"}
                     defaultCode={
-                      values.regional_code ? values.regional_code : 'SA'
+                      values.regional_code ? values.regional_code.cca : 'SA'
                     }
                     placeholder={store.lang.phone_number}
                     containerStyle={{
@@ -546,20 +537,31 @@ function EContactInformation() {
                       fontSize: RFPercentage(2.1),
                       marginTop: RFPercentage(0.1),
                     }}
-                    textContainerStyle={{
+                    textContainerStyle={{color: 'black',
                       paddingVertical: 5,
                       backgroundColor: 'transparent',
                     }}
-                    onChangeFormattedText={(text, c) => {
-                      setFieldValue('phone', text);
-                      setFieldValue('regional_code', c);
-                    }}
+                    
+                    // onChangeFormattedText={(text, c) => {
+                    //   setFieldValue('phone', text);
+                    //   setFieldValue('regional_code', c);
+                    // }}
                     onChangeCountry={e => {
-                      setCode(e.callingCode[0]);
+                      setFieldValue('regional_code', 
+                      e.name=='Antarctica'?{
+                        code: 672,
+                        cca: e.cca2,
+                      }:{
+                        code: e.callingCode[0],
+                        cca: e.cca2,
+                      });
+                      // setCode(e.callingCode[0])
+                      // console.log(e)
                     }}
                     onChangeText={e => {
-                      setFieldValue(e);
-                      setPhone(e);
+                      setFieldValue('phone', e);
+                      // setPhone(e)
+                      // console.log(e)
                     }}
                   />
                   {touched.phone && errors.phone && (

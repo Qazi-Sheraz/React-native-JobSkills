@@ -124,8 +124,8 @@ const JobDetails = ({route}) => {
     formdata.append('first_name', values?.firstName);
     formdata.append('last_name', values?.lastName);
     formdata.append('email', values?.email);
-    formdata.append('phone', phone);
-    formdata.append('region_code', code ? code : '966');
+    formdata.append('phone', values.phone);
+    formdata.append('region_code', values?.regional_code?.code);
     formdata.append(
       'file',
       {
@@ -842,7 +842,10 @@ const JobDetails = ({route}) => {
                 lastName: '',
                 email: '',
                 phone: '',
-                regional_code: '',
+                regional_code: {
+                  code: '966',
+                  cca: 'SA',
+                },
                 is_default: false,
               }}
               onSubmit={values => {
@@ -914,7 +917,7 @@ const JobDetails = ({route}) => {
                 setFieldValue,
               }) => (
                 <>
-                  <JScrollView style={[styles.modalView, {borderRadius: 0}]}>
+                  <JScrollView style={[styles.modalView]}>
                     <JInput
                       style={{
                         textAlign: store.lang.id == 0 ? 'left' : 'right',
@@ -973,7 +976,10 @@ const JobDetails = ({route}) => {
                         </JText>
                       </JRow>
                       <PhoneInput
-                        textInputProps={{maxLength: 10}}
+                        textInputProps={{
+                          maxLength:
+                            values.regional_code?.code?.length == 2 ? 11 : 14,
+                        }}
                         ref={phoneInput}
                         defaultValue={values.phone}
                         defaultCode={'SA'}
@@ -991,17 +997,30 @@ const JobDetails = ({route}) => {
                           paddingVertical: 5,
                           backgroundColor: 'transparent',
                         }}
-                        onChangeFormattedText={(text, c) => {
-                          setFieldValue('phone', text);
-                          setFieldValue('regional_code', c);
-                        }}
+                        // onChangeFormattedText={(text, c) => {
+                        //   setFieldValue('phone', text);
+                        //   setFieldValue('regional_code', c);
+                        // }}
                         onChangeCountry={e => {
-                          setCode(e.callingCode[0]);
-                          // setFieldValue('regional_code', e.callingCode[0]);
+                          setFieldValue(
+                            'regional_code',
+                            e.name == 'Antarctica'
+                              ? {
+                                  code: 672,
+                                  cca: e.cca2,
+                                }
+                              : {
+                                  code: e.callingCode[0],
+                                  cca: e.cca2,
+                                },
+                          );
+                          // setCode(e.callingCode[0])
+                          // console.log(e)
                         }}
                         onChangeText={e => {
-                          // setFieldValue('phone', e);
-                          setPhone(e);
+                          setFieldValue('phone', e);
+                          // setPhone(e)
+                          // console.log(e)
                         }}
                       />
                     </View>
@@ -1128,11 +1147,8 @@ const JobDetails = ({route}) => {
                   </JScrollView>
                   <JRow
                     style={{
-                      marginTop: RFPercentage(5),
                       justifyContent: 'center',
-                      borderColor: colors.primary[1],
-                      // position:'absolute',
-                      // bottom:0
+                      marginVertical: RFPercentage(3),
                     }}>
                     <JButton
                       isValid={isValid}
@@ -1461,17 +1477,17 @@ const styles = StyleSheet.create({
   },
   modalView: {
     backgroundColor: colors.white[0],
-    borderRadius: RFPercentage(3),
     paddingHorizontal: RFPercentage(2),
+
     // width: '100%',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
+    // shadowColor: '#000',
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 2,
+    // },
+    // shadowOpacity: 0.25,
+    // shadowRadius: 4,
+    // elevation: 5,
   },
   centeredView: {
     flex: 1,

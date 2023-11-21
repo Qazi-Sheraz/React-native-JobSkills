@@ -279,7 +279,8 @@ const JobRequirement = () => {
           setFieldValue,
         }) => (
           <>
-            <View style={{height: '95%'}}>
+            <ScrollView 
+            showsVerticalScrollIndicator={false}>
               <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
                 <JSelectInput
                   isRequired
@@ -501,8 +502,13 @@ const JobRequirement = () => {
                   </JRow>
                 </View>
               </KeyboardAwareScrollView>
-            </View>
-
+            </ScrollView>
+            <View
+                style={{
+                  justifyContent:'flex-start',
+                  // paddingVertical: RFPercentage(2),
+                  // backgroundColor: 'transparent',
+                }}>
             <JButton
               disabled={loader ? true : false}
               isValid={isValid}
@@ -512,10 +518,12 @@ const JobRequirement = () => {
               style={{
                 // position: 'absolute',
                 // bottom: RFPercentage(3),
+                marginVertical: RFPercentage(1),
                 width: RFPercentage(20),
               }}>
               {loader ? store.lang.loading : store.lang.post_job}
             </JButton>
+            </View>
           </>
         )}
       </Formik>

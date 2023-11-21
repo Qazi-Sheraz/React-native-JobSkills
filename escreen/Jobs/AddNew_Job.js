@@ -300,18 +300,20 @@ const AddNew_Job = () => {
                   <JErrorText>{errors.jobDescription}</JErrorText>
                 )}
               </KeyboardAwareScrollView>
-              <View>
+              <View
+                style={{
+                  backgroundColor: 'transparent',
+                }}>
                 <JButton
                   isValid={isValid}
                   onPress={() => handleSubmit()}
                   style={{
-                    // position: 'absolute',
-                    // bottom: RFPercentage(3),
                     width: RFPercentage(20),
+                    marginVertical: RFPercentage(1),
                   }}>
                   {store.lang.next}
                 </JButton>
-              </View>
+                </View>
             </>
           )}
         </Formik>
