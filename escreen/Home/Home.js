@@ -268,7 +268,7 @@ const Home = () => {
                           }}>
                             <JRow style={{
                               // backgroundColor:'blue',
-                              width: RFPercentage(22)
+                              width: RFPercentage(21)
                             }}>
                               <Image
                                 style={{
@@ -288,7 +288,7 @@ const Home = () => {
                                   marginHorizontal: RFPercentage(1),
                                   fontSize: RFPercentage(1.9),
                                 }}>
-                                {item.employer_name}
+                                {item.employer_name.length>25?item.employer_name.slice(0,25)+'...':item.employer_name}
                               </JText>
                             </JRow>
 

@@ -557,6 +557,7 @@
 "Current":"حاضِر",
 "Name_must_contain_at_least_1_alphabet_character_and_can_include_English_Urdu_Arabic_and_spaces":"يجب أن يحتوي اسم Ceo على حرف أبجدي واحد على الأقل ويمكن أن يتضمن الإنجليزية والأردية والعربية ومسافات",
 "Symbols_are_not_allowed_in_the_Name":"لا يسمح بالرموز في الاسم",
+"Symbols_are_not_allowed":"الرموز غير مسموح بها",
 "Year_is_required":"السنة مطلوبة",
 "GPA":"المعدل التراكمي",
 "GPA_is_required":"المعدل التراكمي مطلوب",
@@ -633,7 +634,9 @@
 "Go_to_Settings_then_tap_your_name":"على جهاز iPhone، انتقل إلى 'الإعدادات'، ثم اضغط على اسمك",
 "Tap_Sign_In_Security":"اضغط على تسجيل الدخول والأمان، ثم اضغط على تسجيل الدخول باستخدام Apple",
 "Tap_Sign_in_with_apple":"حدد التطبيق أو المطور، ثم اضغط على 'إيقاف استخدام Apple ID'.",
-"user_signup_successfully":"تم تسجيل المستخدم بنجاح"
+"user_signup_successfully":"تم تسجيل المستخدم بنجاح",
+"missing_attributes_from_the_candidate_profile":"السمات المفقودة من الملف الشخصي للمرشح",
+"you_are_not_connected":"تبدو وكأنك ضائعة! ربما أنت غير متصل بالإنترنت."
 
 
 

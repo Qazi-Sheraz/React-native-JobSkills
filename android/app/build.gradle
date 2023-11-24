@@ -142,8 +142,8 @@ android {
         applicationId "com.jobskills"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionName "1.9.5"
-        versionCode 17
+        versionName "1.9.7"
+        versionCode 19
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
 
         if (isNewArchitectureEnabled()) {
@@ -290,6 +290,7 @@ dependencies {
     implementation 'com.facebook.android:facebook-login:latest.release'
     implementation 'com.facebook.android:facebook-android-sdk:[8,9)' 
     implementation project(':react-native-fs')
+    implementation project(':react-native-pdf')
     // implementation 'com.facebook.android:facebook-android-sdk:latest.release'
     implementation project(':react-native-restart')
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"

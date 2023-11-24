@@ -14,106 +14,69 @@ import url from '../../config/url';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function SplashScreen() {
   const store = useContext(StoreContext)
-  const requestUserPermission = async () => {
-    /**
-     * On iOS, messaging permission must be requested by
-     * the current application before messages can be
-     * received or sent
-     */
-    const authStatus = await messaging().requestPermission();
-    //console.log('Authorization status(authStatus):', authStatus);
-    return (
-      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-      authStatus === messaging.AuthorizationStatus.PROVISIONAL
-    );
-  };
-  const [deviceName, setDeviceName] = useState('');
-  // console.log(deviceName)
+  // const requestUserPermission = async () => {
+  //   /**
+  //    * On iOS, messaging permission must be requested by
+  //    * the current application before messages can be
+  //    * received or sent
+  //    */
+  //   const authStatus = await messaging().requestPermission();
+  //   //console.log('Authorization status(authStatus):', authStatus);
+  //   return (
+  //     authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+  //     authStatus === messaging.AuthorizationStatus.PROVISIONAL
+  //   );
+  // };
+  // const [deviceName, setDeviceName] = useState('');
+  // // console.log(deviceName)
 
-  const _getlangApi = () => {
-    var myHeaders = new Headers();
-    myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
+  // const _getlangApi = () => {
+  //   var myHeaders = new Headers();
+  //   myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
 
-    var requestOptions = {
-      method: 'GET',
-      headers: myHeaders,
-      redirect: 'follow'
-    };
-    fetch(`${url.baseUrl}/get-language`, requestOptions)
-      .then(response => response.json())
-      .then(result => {
-        // console.log(result)
-        handleSave(result)
-      })
-      .catch(error => console.log('error', error));
-  };
-  const handleSave = async lang => {
-    // Switch to the selected language
+  //   var requestOptions = {
+  //     method: 'GET',
+  //     headers: myHeaders,
+  //     redirect: 'follow'
+  //   };
+  //   fetch(`${url.baseUrl}/get-language`, requestOptions)
+  //     .then(response => response.json())
+  //     .then(result => {
+  //       // console.log(result)
+  //       handleSave(result)
+  //     })
+  //     .catch(error => console.log('error', error));
+  // };
+  // const handleSave = async lang => {
+  //   // Switch to the selected language
 
-    try {
-      await AsyncStorage.setItem('selectedLanguage', lang);
-      store.setLang(lang);
+  //   try {
+  //     await AsyncStorage.setItem('selectedLanguage', lang);
+  //     store.setLang(lang);
 
-      console.log('lang', lang)
-    } catch (error) {
-      console.log('Error storing language:', error);
-    }
-  };
-  useEffect(() => {
-    store.token?.token && _getlangApi()
-    const fetchDeviceName = async () => {
+  //     console.log('lang', lang)
+  //   } catch (error) {
+  //     console.log('Error storing language:', error);
+  //   }
+  // };
+  // useEffect(() => {
+  //   store.token?.token && _getlangApi()
+  //   const fetchDeviceName = async () => {
 
-      try {
-        const name = await DeviceInfo.getDeviceName();
-        store.setDeviceName(name);
-      } catch (error) {
-        console.log('Error fetching device name:', error);
-      }
-    };
+  //     try {
+  //       const name = await DeviceInfo.getDeviceName();
+  //       store.setDeviceName(name);
+  //     } catch (error) {
+  //       console.log('Error fetching device name:', error);
+  //     }
+  //   };
 
-    fetchDeviceName();
-  }, []);
+  //   fetchDeviceName();
+  // }, []);
 
-  // console.log('DeviceInfo', deviceName)
-
-  useEffect(() => {
-
-    // if (requestUserPermission()) {
-    //   /**
-    //    * Returns an FCM token for this device
-    //    */
-    //   messaging()
-    //     .getToken()
-    //     .then(fcmToken => {
-    //       console.log('FCM Token -> ', fcmToken);
-    //       var formdata = new FormData();
-    //       formdata.append("user_id", store.userInfo?.id);
-    //       formdata.append("token", fcmToken);
-    //       formdata.append("name", store.deviceName);
-    //       formdata.append("os", Platform.OS);
-    //       formdata.append("version", Platform.Version);
-    //       var requestOptions = {
-    //         method: 'POST',
-    //         body: formdata,
-    //         redirect: 'follow'
-    //       };
-    //       fetch("https://dev.jobskills.digital/api/device-token-update", requestOptions)
-    //         .then(response => response.json())
-    //         .then(result => console.log('result', result))
-    //         .catch(error => console.log('error', error));
-
-    //     });
-
-    //   messaging()
-    //     .onTokenRefresh((newToken) => {
-    //       console.log('Updated FCM Token -> ', newToken);
+  // // console.log('DeviceInfo', deviceName)
 
 
-    //     })
-
-    // } 
-
-  }, []);
   return (
     <JGradientScreen style={styles.container}>
 

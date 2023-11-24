@@ -565,6 +565,7 @@
      "Password":"Password",
      "Current":"Current",
      "Symbols_are_not_allowed_in_the_Name":"Symbols are not allowed in the Name",
+     "Symbols_are_not_allowed":"Symbols are not allowed",
      "Year_is_required":"Year is required",
      "GPA":"GPA",
      "GPA_is_required":"GPA is required",
@@ -641,7 +642,10 @@
 "Go_to_Settings_then_tap_your_name":"On your iPhone, go to Settings, then tap your name",
 "Tap_Sign_In_Security":"Tap Sign-In & Security, then tap Sign in with Apple",
 "Tap_Sign_in_with_apple":"Select the app or developer, then tap Stop Using Apple ID",
-"user_signup_successfully":"User Signup Successfully"
+"user_signup_successfully":"User Signup Successfully",
+"missing_attributes_from_the_candidate_profile":"Missing attributes from the candidate profile",
+"you_are_not_connected":"Look like you are lost! May be you are not connected to the internet."
+
 
 
 

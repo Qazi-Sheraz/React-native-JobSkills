@@ -75,6 +75,9 @@ const AddNew_Job = () => {
             jobTilte: yup
               .string()
               .max(25, store.lang.Title_must_be_at_most_25_characters_long)
+              .matches(
+                /^[A-Za-z\u0600-\u06FF\s]+$/,
+                `${store.lang.Job_Title} ${store.lang.Symbols_are_not_allowed},` )
               .transform(value => value.trim())
               .test(
                 'no-leading-space',
@@ -140,6 +143,9 @@ const AddNew_Job = () => {
             jobDescription: yup
               .string()
               .transform(value => value.trim())
+              .matches(
+                /^[a-zA-Z\u0600-\u06FF\0-9_].*$/,
+                `${store.lang.description} ${store.lang.cannot_start_special_character}`)
               .test(
                 'no-leading-space',
                 store.lang.cannot_start_with_a_space,

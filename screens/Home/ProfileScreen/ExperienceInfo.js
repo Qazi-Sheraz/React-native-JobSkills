@@ -168,17 +168,21 @@ const ExperienceInfo = () => {
         onSubmit={values => {
           _addExperince(values);
         }}
+      
         validationSchema={yup.object().shape({
           title: yup
             .string()
             .transform(value => value.trim())
+            .matches(
+              /^[A-Za-z\u0600-\u06FF\s]+$/,
+              `${store.lang.Title} ${store.lang.Symbols_are_not_allowed},` )
             .max(100, store.lang.Title_must_not_exceed_100_characters)
             .required(`${store.lang.Title} ${store.lang.is_a_required_field}`),
           company: yup
             .string()
             .transform(value => value.trim())
             .matches(
-              /^[a-zA-Z0-9_].*$/,
+              /^[a-zA-Z\u0600-\u06FF\0-9_].*$/,
               `${store.lang.Company} ${store.lang.cannot_start_special_character},` )
             .required(`${store.lang.Company} ${store.lang.is_a_required_field}`),
           start: yup
@@ -207,7 +211,7 @@ const ExperienceInfo = () => {
             .string()
             .transform(value => value.trim())
             .matches(
-              /^[a-zA-Z0-9_].*$/,
+              /^[a-zA-Z\u0600-\u06FF\0-9_].*$/,
               `${store.lang.description} ${store.lang.cannot_start_special_character}`,
             )
             .max(500, store.lang.Title_must_not_exceed_500_characters)

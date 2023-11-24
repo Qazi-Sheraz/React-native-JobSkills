@@ -65,7 +65,6 @@ const JApplication = ({
   const [stat, setStat] = useState(parseInt(item.status_id));
   const [selectedStatus, setSelectedStatus] = useState();
   const [modalVisible, setModalVisible] = useState(false);
-
   const handleStatusSelect = status1 => {
     setLoader1(true);
     setSelectedStatus(status1);
@@ -88,9 +87,8 @@ const JApplication = ({
       : status1 == 8
       ? _applicantsStatus(8)
       : status1 == 9 && _applicantsStatus(9);
-   
   };
- 
+
   const _applicantsStatus = (id, selectedStatus) => {
     var myHeaders = new Headers();
     myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
@@ -143,18 +141,19 @@ const JApplication = ({
     formdata.append('agenda', values.description);
     formdata.append(
       'interviewType',
-      values.interview_type === 'Office Based'
+      values.interview_type == meetings?.meeting_type[0]
         ? 0
-        : 'Manual Link'
+        : values.interview_type == meetings?.meeting_type[1]
         ? 1
         : 2,
     );
-    formdata.append('office_location', values?.office_location);
+formdata.append('office_location', values?.office_location);
     formdata.append('zoom_link', values?.manual_link);
     formdata.append('candidateID', item?.candidate_user_id);
     formdata.append('jobid', item?.job_id);
+  
 
-    // console.log('formdata', formdata);
+    console.log('formdata', formdata);
 
     fetch(`${url.baseUrl}/meetings-submit`, {
       method: 'POST',
@@ -164,7 +163,7 @@ const JApplication = ({
     })
       .then(response => response.json())
       .then(result => {
-        // console.log(result);
+        console.log(result);
         if (result.success == true) {
           setStat(5);
           setUpdate(!update);
@@ -186,7 +185,7 @@ const JApplication = ({
       })
       .catch(error => {
         setBtnLoader(false);
-        // console.log('error', error);
+        console.log('error', error);
         JToast({
           type: 'danger',
           text1: store.lang.eror,
@@ -233,7 +232,7 @@ const JApplication = ({
     )
       .then(response => response.json())
       .then(result => {
-        // console.log(result?.meeting_type[0])
+        // console.log(result?.meeting_type);
         setMeetings(result);
         setLink(result?.meeting_type[0]);
       })
@@ -263,13 +262,12 @@ const JApplication = ({
   // console.log('currentTime', currentTime.format('YYYY/MM/DD HH:mm'));
 
   useEffect(() => {
-
     _getScheduleDetails();
     _interviewScheduled();
     setStat(parseInt(item.status_id));
 
     // item.applicantType == 1 && setStat(6)
-  }, [item.status_id,]);
+  }, [item.status_id]);
 
   // Replace the placeholders with the selected date and time
   const updatedDescription = (description, value) =>
@@ -423,7 +421,6 @@ const JApplication = ({
               alignItems: store.lang.id == 0 ? 'flex-end' : null,
               justifyContent: 'flex-end',
             }}>
-          
             <JStatusChecker
               onPressStatus={() => {
                 if (
@@ -435,7 +432,7 @@ const JApplication = ({
                   navigate('Reschedule', {
                     cID: item.candidate_user_id,
                     jobID: item?.job_id,
-                    applicant:true
+                    applicant: true,
                   });
                 } else {
                   onPressStatus;
@@ -490,46 +487,75 @@ const JApplication = ({
                   : '',
                 interview_date_and_time: currentDate,
                 description: meetings?.description ? meetings?.description : '',
-                interview_type:
-                  meetings?.meeting_type && meetings?.meeting_type?.length > 0
-                    ? meetings?.meeting_type[0]
-                    : '',
+                interview_type: meetings?.meeting_type
+                  ? meetings?.meeting_type[0]
+                  : '',
                 office_location: '',
                 manual_link: '',
               }}
               onSubmit={values => {
                 _meetingSubmit(values);
+                // console.log('values', values);
               }}
-              validationSchema={yup.object().shape(
-                // interview_topic: yup
-                //   .string()
-                //   .required()
-                //   .label('interview_topic'),
-                // interview_date_and_time: yup
-                //   .string()
-                //   .required()
-                //   .label('interview_date_and_time'),
-                // description: yup.string().required().label('description'),
-                // interview_type: yup
-                //   .string()
-                //   .required()
-                //   .label('interview_topic'),
-                links === 'message.office.office_base'
-                  ? {
-                      office_location: yup
-                        .string()
-                        .url(store.lang.Invalid_URL_format)
-                        .required(store.lang.URL_is_required)
-                        .label(store.lang.office_location),
+              validationSchema={yup.object().shape({
+                interview_topic:yup.string()
+                .max(100, store.lang.Title_must_not_exceed_100_characters)
+                // .matches(
+                //   /^[A-Za-z\u0600-\u06FF\s]+$/,
+                //   `${store.lang.interview_topic} ${store.lang.Symbols_are_not_allowed},` )
+                .transform(value => value.trim())
+                .test(
+                  'no-leading-space',
+                  store.lang.cannot_start_with_a_space,
+                  value => {
+                    if (value && value.startsWith(' ')) {
+                      return false; // Return false to indicate a validation error
                     }
-                  : {
-                      manual_link: yup
-                        .string()
-                        .url(store.lang.Invalid_URL_format)
-                        .required(store.lang.URL_is_required)
-                        .label(store.lang.manual_link),
-                    },
-              )}>
+                    return true; // Return true if the validation passes
+                  },
+                )
+                .required(store.lang.interview_topic),
+                description:yup.string()
+                
+                .transform(value => value.trim())
+                .test(
+                  'no-leading-space',
+                  store.lang.cannot_start_with_a_space,
+                  value => {
+                    if (value && value.startsWith(' ')) {
+                      return false; // Return false to indicate a validation error
+                    }
+                    return true; // Return true if the validation passes
+                  },
+                )
+                .required(store.lang.Job_Description_is_required),
+                office_location: yup.string().when('interview_type', {
+                  is: (interviewType, schema) =>
+                    interviewType === meetings?.meeting_type[0],
+                  then: yup
+                    .string()
+                    .url(
+                      `${meetings?.meeting_type[0]} ${store.lang.Invalid_URL_format}`,
+                    )
+                    .required(
+                      `${meetings?.meeting_type[0]} ${store.lang.URL_is_required}`,
+                    )
+                    .label(meetings?.meeting_type[0]),
+                }),
+                manual_link: yup.string().when('interview_type', {
+                  is: (interviewType, schema) =>
+                    interviewType === meetings?.meeting_type[1],
+                  then: yup
+                    .string()
+                    .url(
+                      `${meetings?.meeting_type[1]} ${store.lang.Invalid_URL_format}`,
+                    )
+                    .required(
+                      `${meetings?.meeting_type[1]} ${store.lang.URL_is_required}`,
+                    )
+                    .label(meetings?.meeting_type[1]),
+                }),
+              })}>
               {({
                 values,
                 handleChange,
@@ -561,6 +587,8 @@ const JApplication = ({
                     onChangeText={handleChange('interview_topic')}
                     onBlur={() => setFieldTouched('interview_topic')}
                   />
+                   {touched.interview_topic &&errors.interview_topic && (
+                      <JErrorText>{errors.interview_topic}</JErrorText> )}
 
                   <JSelectInput
                     mode="datetime"
@@ -625,6 +653,8 @@ const JApplication = ({
                     }}
                     onBlur={() => setFieldTouched('description')}
                   />
+                   {touched.description &&errors.description && (
+                      <JErrorText>{errors.description}</JErrorText> )}
 
                   <View
                     style={{
@@ -649,9 +679,9 @@ const JApplication = ({
                         fontSize={RFPercentage(2)}
                         style={{paddingHorizontal: RFPercentage(1)}}>
                         {/* {menu ? menu : meetings?.meeting_type[0]} */}
-                        {values.interview_type === 'Office Based'
-                          ? store.lang.office_base
-                          : store.lang.manual_link}
+                        {values.interview_type === meetings?.meeting_type[0]
+                          ? meetings?.meeting_type[0]
+                          : meetings?.meeting_type[1]}
                       </JText>
                       <JIcon
                         icon={'en'}
@@ -683,12 +713,18 @@ const JApplication = ({
                             onPress={() => {
                               setFieldValue('interview_type', item);
                               setLink(item);
+                              item == meetings?.meeting_type[0]
+                                ? setFieldValue('manual_link', '')
+                                : item == meetings?.meeting_type[1] &&
+                                  setFieldValue('office_location', '');
                               setOption(false);
                             }}>
                             <JText fontSize={RFPercentage(2)}>
-                              {item === 'Office Based'
-                                ? store.lang.office_base
-                                : store.lang.manual_link}
+                              {item === meetings?.meeting_type[0]
+                                ? meetings?.meeting_type[0]
+                                : meetings?.meeting_type[1]}
+                              {/* ? store.lang.office_base
+                                : store.lang.manual_link} */}
                             </JText>
                           </Pressable>
                         ))}
@@ -696,7 +732,7 @@ const JApplication = ({
                     )}
                   </View>
 
-                  {values.interview_type === 'Office Based' ? (
+                  {values.interview_type === meetings?.meeting_type[0] ? (
                     <JInput
                       style={{
                         textAlign: store.lang.id == 0 ? 'left' : 'right',
@@ -704,7 +740,7 @@ const JApplication = ({
                       containerStyle={{marginTop: RFPercentage(1)}}
                       isRequired
                       placeholder={'https://map.app.goo.gl/B31Ubk'}
-                      heading={store.lang.office_location}
+                      heading={meetings?.meeting_type[0]}
                       value={values.office_location}
                       error={
                         touched.office_location &&
@@ -715,15 +751,15 @@ const JApplication = ({
                       onBlur={() => setFieldTouched('office_location')}
                     />
                   ) : (
-                    values.interview_type === 'Manual Link' && (
+                    values.interview_type === meetings?.meeting_type[1] && (
                       <JInput
-                      isRequired
+                        isRequired
                         style={{
                           textAlign: store.lang.id == 0 ? 'left' : 'right',
                         }}
                         containerStyle={{marginTop: RFPercentage(1)}}
                         placeholder={'https://map.app.goo.gl/B31Ubk'}
-                        heading={store.lang.manual_link}
+                        heading={meetings?.meeting_type[1]}
                         value={values.manual_link}
                         error={
                           touched.manual_link && errors.manual_link && true
@@ -733,11 +769,16 @@ const JApplication = ({
                       />
                     )
                   )}
-                  {touched.office_location && errors.office_location && (
+
+                  {values.interview_type === meetings?.meeting_type[0] &&
+                  touched.office_location &&
+                  errors.office_location ? (
                     <JErrorText>{errors.office_location}</JErrorText>
-                  )}
-                  {touched.manual_link && errors.manual_link && (
-                    <JErrorText>{errors.manual_link}</JErrorText>
+                  ) : (
+                    touched.manual_link &&
+                    errors.manual_link && (
+                      <JErrorText>{errors.manual_link}</JErrorText>
+                    )
                   )}
 
                   <JRow

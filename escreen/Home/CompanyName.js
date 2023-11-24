@@ -88,7 +88,7 @@ const CompanyName = () => {
             )
             .transform(value => value.trim()) // Remove leading and trailing spaces
             .matches(
-                /^[a-zA-Z0-9_].*$/,
+                /^[a-zA-Z\u0600-\u06FF\0-9_].*$/,
               store.lang.Company_Name_must_only_contain_alphabetic_characters,
             )
             .required(store.lang.Company_Name_is_a_required_field),

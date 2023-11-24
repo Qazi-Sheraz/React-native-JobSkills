@@ -224,9 +224,9 @@ function CustomDrawerContent(props) {
   //   }
   // };
   return store.token?.user?.owner_type.includes('Candidate') ? (
-    <DrawerContentScrollView {...props}>
+    <DrawerContentScrollView scrollEnabled={false} showsVerticalScrollIndicator={false} {...props}>
       {/* <DrawerItemList {...props} /> */}
-      <View style={{height: heightPercentageToDP(100)}}>
+      <View style={{height: heightPercentageToDP(96)}}>
         <View
           style={{
             paddingVertical: RFPercentage(2),
@@ -302,10 +302,10 @@ function CustomDrawerContent(props) {
       </View>
     </DrawerContentScrollView>
   ) : (
-    <DrawerContentScrollView {...props} showsVerticalScrollIndicator={false}>
+    <DrawerContentScrollView scrollEnabled={false} {...props} showsVerticalScrollIndicator={false}>
       {/* <DrawerItemList {...props} /> */}
       {/* <DrawerItem label="Help" onPress={() => alert('Link to help')} /> */}
-      <View style={{height: heightPercentageToDP(100)}}>
+      <View style={{height: heightPercentageToDP(96)}}>
         <View
           style={{
             paddingVertical: RFPercentage(2),
@@ -336,7 +336,9 @@ function CustomDrawerContent(props) {
             />
           </View>
           <JText style={styles.text} fontSize={RFPercentage(2.4)}>
-            {user?.full_name.length>25 ? `${user?.full_name.slice(0,25)}...`:user?.full_name}
+            {user?.full_name.length > 25
+              ? `${user?.full_name.slice(0, 25)}...`
+              : user?.full_name}
           </JText>
           <JText style={styles.text}>{user?.email}</JText>
           {/* <JText style={styles.text}>Ui/Ux Designer</JText> */}

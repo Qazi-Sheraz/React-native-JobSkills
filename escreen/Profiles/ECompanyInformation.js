@@ -164,7 +164,7 @@ const ECompanyInformation = () => {
             employeDetail: yup
               .string()
               .matches(
-                /^[a-zA-Z0-9_].*$/,
+                /^[a-zA-Z\u0600-\u06FF\0-9_].*$/,
                 store.lang.employeDetail_cannot_start_special_character,
               ),
             // .required('Employee details is required'),
@@ -184,7 +184,7 @@ const ECompanyInformation = () => {
               .string()
               .transform(value => value.trim())
               .matches(
-                /^[a-zA-Z0-9_].*$/,
+                /^[a-zA-Z\u0600-\u06FF\0-9_].*$/,
                 `${store.lang.company_name} ${store.lang.cannot_start_special_character},`)
               .required(store.lang.Company_Name_is_a_required_field),
             location: yup

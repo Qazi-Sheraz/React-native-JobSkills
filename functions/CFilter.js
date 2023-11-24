@@ -58,9 +58,9 @@ export const _searchFilter = (values, store, navigation) => {
 
   var formdata = new FormData();
 
-  values.type && formdata.append('job_type', `[${values.type?.id}]`);
-  values.category && formdata.append('categories', values.category?.id);
-  values.skill && formdata.append('skills', values.skill?.id);
+  values.type && formdata.append('job_type', values.type?`[${values.type?.id}]`:'');
+  values.category && formdata.append('categories', values.category?.id?values.category?.id:'');
+  values.skill && formdata.append('skills', values.skill?.id?values.skill?.id:'');
   values.gender &&
     formdata.append(
       'gender',
@@ -68,10 +68,10 @@ export const _searchFilter = (values, store, navigation) => {
         ? '1'
         : values.gender?.name === 'Female'
         ? '0'
-        : '2',
+        : '',
     );
-  values.level && formdata.append('career_level', values.level?.id);
-  values.area && formdata.append('functional_area', values.area?.id);
+  values.level && formdata.append('career_level', values.level?.id?values.level?.id:'');
+  values.area && formdata.append('functional_area', values.area?.id?values.area?.id:'');
   var requestOptions = {
     method: 'POST',
     headers: myHeaders,

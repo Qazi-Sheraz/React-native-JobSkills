@@ -268,8 +268,7 @@ const JobApplication = ({route}) => {
               <JText
                 style={styles.infotxt}
                 // style={{ paddingHorizontal: store?.jApplication[0]?.fit_score_information == null || [] ? RFPercentage(10) : RFPercentage(0) }}
-              >
-                Missing attributes from the candidate profile
+              >{store.lang.missing_attributes_from_the_candidate_profile}
                 {/* {store?.jApplication[0]?.fit_score_information == null || [] ? 'N/A' : store?.jApplication[0]?.fit_score_information} */}
               </JText>
             </View>

@@ -72,6 +72,20 @@ const Registration = ({navigation, route}) => {
       store.setToken(token);
     }
   };
+  const requestUserPermission = async () => {
+    /**
+     * On iOS, messaging permission must be requested by
+     * the current application before messages can be
+     * received or sent
+     */
+    const authStatus = await messaging().requestPermission();
+    //console.log('Authorization status(authStatus):', authStatus);
+    return (
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL
+    );
+
+  };
   const _register = values => {
     setLoader(true);
     var myHeaders = new Headers();
@@ -135,6 +149,57 @@ const Registration = ({navigation, route}) => {
         setLoader(false);
       });
   };
+
+  const updateUserDeviceToken = ({userId}) => {
+   
+    return new Promise((resolve, reject) => {
+      if (requestUserPermission()) {
+        messaging()?.getToken().then((fcmToken) => {
+            console.log('FCM Token -> ', fcmToken);
+            console.log('user_id -> ', userId);
+            console.log('name -> ', store.deviceName);
+            console.log('os -> ', Platform.OS);
+            console.log('version -> ', Platform.Version);
+            var formdata = new FormData();
+            formdata.append('user_id', userId);
+            formdata.append('token', fcmToken);
+            formdata.append('name', store.deviceName);
+            formdata.append('os', Platform.OS);
+            formdata.append('version', Platform.Version);
+            console.log(formdata);
+            var requestOptions = {
+              method: 'POST',
+              body: formdata,
+              redirect: 'follow',
+            };
+            fetch(
+              'https://dev.jobskills.digital/api/device-token-update',
+              requestOptions,
+            )
+              .then(response => response.json())
+              .then(result => {
+                // console.log('result', result);
+                resolve(result); // Resolve the promise with the result
+              })
+              .catch(error => {
+                // console.log('error', error);
+                reject(error); // Reject the promise with the error
+              });
+
+              messaging()?.onTokenRefresh(newToken => {
+              console.log('Updated FCM Token -> ', newToken);
+              // Optionally, you can do something with the newToken here
+            });
+          })
+          .catch(error => {
+            console.log('Error while getting FCM token', error);
+            reject(error); // Reject the promise if there's an error
+          });
+      } else {
+        reject(new Error('User permission not granted'));
+      }
+    });
+  };
   const _googleAccess = () => {
     setSocialLoader(true);
     var requestOptions = {
@@ -152,6 +217,7 @@ const Registration = ({navigation, route}) => {
         if (result.token) {
           _storeToken(result, true),
           _changeLanguage({selectedLanguage ,token:result.token})
+          updateUserDeviceToken({userId:result.user?.id});
             JToast({
               type: 'success',
               text1: store.lang.login_successfully,
@@ -190,6 +256,7 @@ const Registration = ({navigation, route}) => {
         if (result) {
           _storeToken(result, true),
           _changeLanguage({selectedLanguage ,token:result.token})
+          updateUserDeviceToken({userId:result.user?.id});
             JToast({
               type: 'success',
               text1: store.lang.login_successfully,
@@ -234,7 +301,7 @@ const Registration = ({navigation, route}) => {
         if (result.token) {
           _storeToken(result, true),
           _changeLanguage({selectedLanguage ,token:result.token})
-            updateUserDeviceToken(),
+          updateUserDeviceToken({userId:result.user?.id});
             JToast({
               type: 'success',
               text1: store.lang.login_successfully,
@@ -279,6 +346,8 @@ const Registration = ({navigation, route}) => {
       console.error('Facebook login error:', error);
     }
   };
+
+
 
   const linkedRef = useRef(null);
 
@@ -325,9 +394,21 @@ const Registration = ({navigation, route}) => {
       // console.log('Error retrieving stored language:', error);
     }
   };
+ 
   useEffect(() => {
+    requestUserPermission();
     getStoredLanguage();
-  }, [])
+    const fetchDeviceName = async () => {
+      try {
+        const name = await DeviceInfo.getDeviceName();
+        store.setDeviceName(name);
+      } catch (error) {
+        // console.log('Error fetching device name:', error);
+      }
+    };
+
+    fetchDeviceName();
+  }, []);
   // console.log('GoogleData========>', store.googleUserInfo?.user?.email);
 
   return (
@@ -470,7 +551,7 @@ const Registration = ({navigation, route}) => {
                   )
                   .transform(value => value.trim())
                   .matches(
-                    /^[A-Za-z\u0600-\u06FF\s]*[A-Za-z\u0600-\u06FF][A-Za-z\u0600-\u06FF\s\d\W]*$/,
+                    /^[a-zA-Z\u0600-\u06FF\0-9_].*$/,
                     store.lang
                       .Company_Name_must_only_contain_alphabetic_characters,
                   )
@@ -790,7 +871,7 @@ const Registration = ({navigation, route}) => {
                 } else {
                   // console.log('else');
                   // facebookLogin();
-                  alert('facebook')
+                  alert('Facebook is currently not available')
                 }
               }}
               key={index}

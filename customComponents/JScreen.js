@@ -6,12 +6,13 @@ import {
   StatusBar,
   SafeAreaView,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import JText from './JText';
 import JButton from './JButton';
 import colors from '../config/colors';
 import NetInfo from '@react-native-community/netinfo';
 import {RFPercentage} from 'react-native-responsive-fontsize';
+import {StoreContext} from '../mobx/store';
 export default function JScreen({
   style,
   left,
@@ -26,6 +27,7 @@ export default function JScreen({
   internet = true,
   headerShown = true,
 }) {
+  const store = useContext(StoreContext);
   const [netInfo, setNetInfo] = useState('');
   useEffect(() => {
     // Subscribe to network state updates
@@ -45,7 +47,14 @@ export default function JScreen({
         flex: 1,
         backgroundColor: '#ffffff',
       }}>
-      <StatusBar backgroundColor={colors.purple[0]} translucent={false} />
+      <StatusBar
+        barStyle={Platform.OS === 'ios' ? 'dark-content' : 'default'}
+       
+        hidden={false}
+        backgroundColor={colors.purple[0]}
+        translucent={false}
+      />
+      
       {headerShown && header}
 
       {internet === true && netInfo.isConnected === false ? (
@@ -66,14 +75,13 @@ export default function JScreen({
             <JText
               fontSize={RFPercentage(4)}
               style={{marginTop: RFPercentage(5)}}>
-              Ops
+              Oops
             </JText>
             <JText
               fontAlign="center"
               fontSize={RFPercentage(2)}
               style={{marginTop: RFPercentage(1), width: '70%'}}>
-              Look like you are lost! May be you are not connected to the
-              internet.
+              {store.lang.you_are_not_connected}
             </JText>
           </View>
           <View
@@ -84,7 +92,7 @@ export default function JScreen({
               paddingBottom: RFPercentage(3),
             }}>
             <JButton
-              children={'Try Again'}
+              children={store.lang.try_again}
               onPress={onTryAgainPress}
               style={{height: RFPercentage(5), width: RFPercentage(40)}}
             />
@@ -135,11 +143,6 @@ export default function JScreen({
         // )
         <View style={[styles.container, style]}>{children}</View>
       )}
-
-      <StatusBar
-        barStyle={Platform.OS === 'ios' ? 'dark-content' : 'default'}
-        hidden={false}
-      />
     </SafeAreaView>
   );
 }

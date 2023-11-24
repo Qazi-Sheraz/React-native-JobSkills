@@ -161,7 +161,7 @@ const JobDetails = ({route}) => {
             text1: store.lang.success,
             text2: result.message,
           });
-          setLoader1(false);
+          
           setModalVisible(!modalVisible);
           //  console.log(values)
         } else {
@@ -170,7 +170,7 @@ const JobDetails = ({route}) => {
             text1: store.lang.eror,
             text2: result.message,
           });
-          setLoader1(false);
+          
           setModalVisible(!modalVisible);
         }
       })
@@ -850,7 +850,6 @@ const JobDetails = ({route}) => {
               }}
               onSubmit={values => {
                 _addCandidate(values);
-                setLoader1(false);
               }}
               validationSchema={yup.object().shape({
                 resume: yup.object().shape({
@@ -1023,10 +1022,10 @@ const JobDetails = ({route}) => {
                           // console.log(e)
                         }}
                       />
-                    </View>
                     {touched.phone && errors.phone && (
                       <JErrorText>{errors.phone}</JErrorText>
                     )}
+                    </View>
                     <JRow style={{marginTop: RFPercentage(1)}}>
                       <JText fontSize={RFPercentage(2.5)}>
                         {store.lang.resume}
@@ -1208,6 +1207,7 @@ const JobDetails = ({route}) => {
                   ? {
                       friendName: yup
                         .string()
+                        .transform(value => value.trim())
                         .matches(
                           /^[A-Za-z\u0600-\u06FF\s]+$/,
                           `${store.lang.friend_name} ${store.lang.Name_must_contains_only_alphabets}`,
@@ -1245,6 +1245,17 @@ const JobDetails = ({route}) => {
                   : {
                       note: yup
                         .string()
+                        .transform(value => value.trim())
+                        .test(
+                          'no-leading-space',
+                          store.lang.Name_cannot_start_with_a_space,
+                          value => {
+                            if (value && value.startsWith(' ')) {
+                              return false; // Return false to indicate a validation error
+                            }
+                            return true; // Return true if the validation passes
+                          },
+                        )
                         .required(
                           `${store.lang.add_note} ${store.lang.is_a_required_field}`,
                         )
