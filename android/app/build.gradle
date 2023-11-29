@@ -142,8 +142,8 @@ android {
         applicationId "com.jobskills"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionName "1.9.7"
-        versionCode 19
+        versionName "1.9.8"
+        versionCode 20
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
 
         if (isNewArchitectureEnabled()) {

@@ -706,6 +706,7 @@ function JSelectInput({
         modal
         minimumDate={minimumDate}
         maximumDate={maximumDate}
+        locale={store.lang.id==0?'en':'ar'}
         mode={mode}
         open={open}
         date={date}
