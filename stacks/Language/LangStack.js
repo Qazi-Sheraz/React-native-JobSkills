@@ -119,6 +119,7 @@ const LangStack = () => {
             headerShown: false,
             // gestureEnabled: false,
           }}
+          
           initialRouteName={'LngTranslation'}>
           <Stack.Screen name="LngTranslation" component={LngTranslation} />
           <Stack.Screen name="PermissionScreen" component={PermissionScreen} />

@@ -20,6 +20,7 @@ const BoundingScreenStart = () => {
         try {
             await AsyncStorage.setItem('splash', 'true');
             store.setLangType('true');
+            store.setAuthType('true');
 
             setTimeout(() => {
                 store.setIsRefreshing(!store.isRefreshing);

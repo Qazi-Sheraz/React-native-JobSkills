@@ -127,6 +127,7 @@ const CSearch = ({ navigation }) => {
           }}
         />
       </JShadowView>
+     
       {store.filterDataApiLoader === true ? (
         <ActivityIndicator size={RFPercentage(3.5)} color={colors.black[0]} />
       ) : (

@@ -1,36 +1,33 @@
 import {
-  StyleSheet,
-  SafeAreaView,
-  StatusBar,
   View,
-  TouchableOpacity,
   Image,
   Platform,
+  StyleSheet,
+  StatusBar,
+  SafeAreaView,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import colors from '../config/colors';
+import React, {useContext, useEffect, useState} from 'react';
 import JText from './JText';
-import { RFPercentage } from 'react-native-responsive-fontsize';
 import JButton from './JButton';
-import JErrorText from './JErrorText';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import colors from '../config/colors';
 import NetInfo from '@react-native-community/netinfo';
-import FlashMessage from 'react-native-flash-message';
+import {RFPercentage} from 'react-native-responsive-fontsize';
+import {StoreContext} from '../mobx/store';
 export default function JScreen({
-  children,
   style,
   left,
-  center,
   right,
-  headerShown = true,
   header,
-  isError = false,
-  onReloadPress,
+  center,
+  children,
   errorText,
+  onReloadPress,
   onTryAgainPress,
+  isError = false,
   internet = true,
-  
+  headerShown = true,
 }) {
+  const store = useContext(StoreContext);
   const [netInfo, setNetInfo] = useState('');
   useEffect(() => {
     // Subscribe to network state updates
@@ -43,7 +40,6 @@ export default function JScreen({
       unsubscribe();
     };
   }, []);
-  
 
   return (
     <SafeAreaView
@@ -51,11 +47,18 @@ export default function JScreen({
         flex: 1,
         backgroundColor: '#ffffff',
       }}>
-      <StatusBar backgroundColor={colors.purple[0]} translucent={false} />
+      <StatusBar
+        barStyle={Platform.OS === 'ios' ? 'dark-content' : 'default'}
+       
+        hidden={false}
+        backgroundColor={colors.purple[0]}
+        translucent={false}
+      />
+      
       {headerShown && header}
 
       {internet === true && netInfo.isConnected === false ? (
-        <View style={[{ flex: 9 }, style]}>
+        <View style={[{flex: 9}, style]}>
           <View
             style={{
               height: '70%',
@@ -71,15 +74,14 @@ export default function JScreen({
             />
             <JText
               fontSize={RFPercentage(4)}
-              style={{ marginTop: RFPercentage(5) }}>
-              Ops
+              style={{marginTop: RFPercentage(5)}}>
+              Oops
             </JText>
             <JText
               fontAlign="center"
               fontSize={RFPercentage(2)}
-              style={{ marginTop: RFPercentage(1), width: '70%' }}>
-              Look like you are lost! May be you are not connected to the
-              internet.
+              style={{marginTop: RFPercentage(1), width: '70%'}}>
+              {store.lang.you_are_not_connected}
             </JText>
           </View>
           <View
@@ -90,13 +92,13 @@ export default function JScreen({
               paddingBottom: RFPercentage(3),
             }}>
             <JButton
-              children={'Try Again'}
+              children={store.lang.try_again}
               onPress={onTryAgainPress}
-              style={{ height: RFPercentage(5), width: RFPercentage(40) }}
+              style={{height: RFPercentage(5), width: RFPercentage(40)}}
             />
           </View>
         </View>
-      )
+      ) : (
         // ) : isError === true ? (
         //   <View style={[{flex: 9}, style]}>
         //     <View
@@ -138,15 +140,9 @@ export default function JScreen({
         //       />
         //     </View>
         //   </View>
-        // ) 
-        : (
-          <View style={[styles.container, style]}>{children}</View>
-        )}
-
-      <StatusBar
-        barStyle={Platform.OS === 'ios' ? 'dark-content' : 'default'}
-        hidden={false}
-      />
+        // )
+        <View style={[styles.container, style]}>{children}</View>
+      )}
     </SafeAreaView>
   );
 }
@@ -155,5 +151,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 9,
   },
-  views: { justifyContent: 'center', alignItems: 'center' },
+  views: {justifyContent: 'center', alignItems: 'center'},
 });

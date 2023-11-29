@@ -90,7 +90,7 @@ const CareerInformation = ({ navigation }) => {
         }
       })
       .catch(error => {
-        console.log('error', error)
+        // console.log('error', error)
         setDeletLoader(false)
       });
   };
@@ -126,7 +126,7 @@ const CareerInformation = ({ navigation }) => {
 
       })
       .catch(error => {
-        console.log('error', error)
+        // console.log('error', error)
         setDeletLoader(false)
       });
   };
@@ -182,6 +182,7 @@ const CareerInformation = ({ navigation }) => {
         </ScrollView>
       )}
       <JModal
+      icon
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         loader={deletLoader}

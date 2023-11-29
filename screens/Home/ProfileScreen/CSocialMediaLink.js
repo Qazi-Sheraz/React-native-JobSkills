@@ -15,20 +15,20 @@ import {_getProfile} from '../../../functions/Candidate/MyProfile';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import url from '../../../config/url';
 import JChevronIcon from '../../../customComponents/JChevronIcon';
-import { JToast } from '../../../functions/Toast';
-
+import {JToast} from '../../../functions/Toast';
+import Twitterx from '../../../assets/svg/Icon/Twitterx.svg';
 function CSocialMediaLink({refRBSheet, data, user}) {
   const store = useContext(StoreContext);
   const [loader, setLoader] = useState(false);
   const navigation = useNavigation();
-  const {params}=useRoute()
-// console.log(params.fb)
+  const {params} = useRoute();
+  // console.log(params.fb)
   return (
     <Formik
       initialValues={{
-        facebook_url: params?.fb!==null?params?.fb:'',
-        linkedin_url: params?.ln!==null?params?.ln:'',
-        twitter_url: params?.tw!==null?params?.tw:'',
+        facebook_url: params?.fb !== null ? params?.fb : '',
+        linkedin_url: params?.ln !== null ? params?.ln : '',
+        twitter_url: params?.tw !== null ? params?.tw : '',
       }}
       onSubmit={values => {
         // console.log(values);
@@ -47,7 +47,12 @@ function CSocialMediaLink({refRBSheet, data, user}) {
         };
 
         setLoader(true);
-        fetch(store.token?.user?.owner_type.includes('Candidate') == false?`${url.baseUrl}/companyUpdate/${store.token?.user?.owner_id}`:`${url.baseUrl}/update-profile`, requestOptions)
+        fetch(
+          store.token?.user?.owner_type.includes('Candidate') == false
+            ? `${url.baseUrl}/companyUpdate/${store.token?.user?.owner_id}`
+            : `${url.baseUrl}/update-profile`,
+          requestOptions,
+        )
           .then(response => response.json())
           .then(result => {
             if (result.success === false) {
@@ -58,20 +63,20 @@ function CSocialMediaLink({refRBSheet, data, user}) {
               });
               setLoader(false);
             } else {
-              store.token?.user?.owner_type.includes('Candidate') == false?
-              JToast({
-                type: 'success',
-                text1: store.lang.success,
-                text2: store.lang.successfully_update,
-              }):
-              JToast({
-                type: 'success',
-                text1: store.lang.success,
-                text2: result,
-              })
-              store.token?.user?.owner_type.includes('Candidate') == true&& _getProfile(store)
-              navigation.goBack()
-
+              store.token?.user?.owner_type.includes('Candidate') == false
+                ? JToast({
+                    type: 'success',
+                    text1: store.lang.success,
+                    text2: store.lang.successfully_update,
+                  })
+                : JToast({
+                    type: 'success',
+                    text1: store.lang.success,
+                    text2: result.message,
+                  });
+              store.token?.user?.owner_type.includes('Candidate') == true &&
+                _getProfile(store);
+              navigation.goBack();
             }
             setLoader(false);
           })
@@ -80,15 +85,53 @@ function CSocialMediaLink({refRBSheet, data, user}) {
             setLoader(false);
           });
       }}
-      // validationSchema={yup.object().shape({
-      //   facebook_url: yup.string().url().required().label('Facebook'),
-      //   linkedin_url: yup.string().url().required().label('LinkedIn'),
-      //   twitter_url: yup.string().url().required().label('Twitter'),
-      // })}
-    >
-      
-   
-
+      validationSchema={yup.object().shape({
+        facebook_url: yup
+          .string()
+          .transform(value => value.trim())
+          .max(288)
+          .test(
+            'no-leading-space',
+            `${store.lang.facebook} ${store.lang.cannot_start_with_a_space}`,
+            value => {
+              if (value && value.startsWith(' ')) {
+                return false; // Return false to indicate a validation error
+              }
+              return true; // Return true if the validation passes
+            },
+          )
+          .url(`${store.lang.facebook} ${store.lang.the_URL_is_not_valid}`),
+        linkedin_url: yup
+          .string()
+          .transform(value => value.trim())
+          .max(288)
+          .test(
+            'no-leading-space',
+            `${store.lang.linkedIn} ${store.lang.cannot_start_with_a_space}`,
+            value => {
+              if (value && value.startsWith(' ')) {
+                return false; // Return false to indicate a validation error
+              }
+              return true; // Return true if the validation passes
+            },
+          )
+          .url(`${store.lang.linkedIn} ${store.lang.the_URL_is_not_valid}`),
+        twitter_url: yup
+          .string()
+          .transform(value => value.trim())
+          .max(288)
+          .test(
+            'no-leading-space',
+            `X (${store.lang.twitter} ${store.lang.cannot_start_with_a_space}`,
+            value => {
+              if (value && value.startsWith(' ')) {
+                return false; // Return false to indicate a validation error
+              }
+              return true; // Return true if the validation passes
+            },
+          )
+          .url(`X (${store.lang.twitter}) ${store.lang.the_URL_is_not_valid}`),
+      })}>
       {({
         values,
         handleChange,
@@ -110,32 +153,30 @@ function CSocialMediaLink({refRBSheet, data, user}) {
               </JText>
             }
             right={
-              
-                <JText
-                disabled={loader?true:false}
-                  onPress={() => {
-                    isValid && handleSubmit()}}
-                  fontColor={
-                    !isValid ? `${colors.white[0]}70` : colors.white[0]
-                  }>
-                  {loader ? 
-                <ActivityIndicator
-                  color={colors.white[0]}
-                  size={RFPercentage(2)}
-                />:store.lang.save}
-                </JText>
-              
+              <JText
+                disabled={loader ? true : false}
+                onPress={() => {
+                  handleSubmit();
+                }}
+                fontColor={!isValid ? `${colors.white[0]}70` : colors.white[0]}>
+                {loader ? (
+                  <ActivityIndicator
+                    color={colors.white[0]}
+                    size={RFPercentage(2)}
+                  />
+                ) : (
+                  store.lang.save
+                )}
+              </JText>
             }
-            left={
-              <JChevronIcon/>
-            }
+            left={<JChevronIcon />}
           />
 
           <View style={{paddingHorizontal: RFPercentage(2)}}>
             <JInput
-            style={{
-              textAlign: store.lang.id == 0 ? 'left' : 'right',
-            }}
+              style={{
+                textAlign: store.lang.id == 0 ? 'left' : 'right',
+              }}
               value={values.facebook_url}
               maxLength={255}
               heading={`${store.lang.facebook_url}:`}
@@ -145,38 +186,45 @@ function CSocialMediaLink({refRBSheet, data, user}) {
               onChangeText={handleChange('facebook_url')}
               onBlur={() => setFieldTouched('facebook_url')}
             />
-            {touched.facebook_url && errors.facebook_url && <JErrorText>{errors.facebook_url}</JErrorText>}
+            {touched.facebook_url && errors.facebook_url && (
+              <JErrorText>{errors.facebook_url}</JErrorText>
+            )}
 
             <JInput
-            style={{
-              textAlign: store.lang.id == 0 ? 'left' : 'right',
-            }}
+              style={{
+                textAlign: store.lang.id == 0 ? 'left' : 'right',
+              }}
               value={values.linkedin_url}
               containerStyle={styles.input}
               maxLength={255}
               heading={`${store.lang.linkedIn_url}:`}
               error={touched.linkedin_url && errors.linkedin_url && true}
               //   autoFocus
-              placeholder={"https://www.linkdin.com"}
+              placeholder={'https://www.linkdin.com'}
               onChangeText={handleChange('linkedin_url')}
               onBlur={() => setFieldTouched('linkedin_url')}
             />
-            {touched.linkedin_url && errors.linkedin_url && <JErrorText>{errors.linkedin_url}</JErrorText>}
+            {touched.linkedin_url && errors.linkedin_url && (
+              <JErrorText>{errors.linkedin_url}</JErrorText>
+            )}
 
             <JInput
-            style={{
-              textAlign: store.lang.id == 0 ? 'left' : 'right',
-            }}
+              style={{
+                textAlign: store.lang.id == 0 ? 'left' : 'right',
+              }}
               value={values.twitter_url}
               maxLength={255}
-              heading={`${store.lang.twitter_url}:`}
+              // icon={<Twitterx height={RFPercentage(2)} width={RFPercentage(2)} fill={colors.black[0]}/>}
+              heading={` ${store.lang.twitter_url}:`}
               error={touched.twitter_url && errors.twitter_url && true}
               containerStyle={styles.input}
-              placeholder="https://www.twitter.com"
+              placeholder="https://www.x.com"
               onChangeText={handleChange('twitter_url')}
               onBlur={() => setFieldTouched('twitter_url')}
             />
-            {touched.twitter_url && errors.twitter_url && <JErrorText>{errors.twitter_url}</JErrorText>}
+            {touched.twitter_url && errors.twitter_url && (
+              <JErrorText>{errors.twitter_url}</JErrorText>
+            )}
           </View>
         </JScreen>
       )}

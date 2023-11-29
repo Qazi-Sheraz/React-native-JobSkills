@@ -6,7 +6,7 @@ export default function JShadowView({
   containerStyle,
   children,
   row = 'column',
-  shadowColor = colors.black[0],
+  shadowColor = '#3C3C43',
   onPress,
   isPressable = true,
 }) {
@@ -19,13 +19,13 @@ export default function JShadowView({
           flexDirection: row,
           backgroundColor: colors.white[0],
           shadowColor: shadowColor,
-          elevation: 4,
-          shadowOpacity: 0.6,
-          shadowRadius: 3,
-          shadowOffset: {
-            height: 1,
-            width: 1,
-          },
+          // elevation: 4,
+          // shadowOpacity: 0.6,
+          // shadowRadius: 3,
+          // shadowOffset: {
+          //   height: 1,
+          //   width: 1,
+          // },
         },
         containerStyle,
       ]}>
@@ -38,13 +38,13 @@ export default function JShadowView({
           flexDirection: row,
           backgroundColor: colors.white[0],
           shadowColor: shadowColor,
-          elevation: 4,
-          shadowOpacity: 0.6,
-          shadowRadius: 3,
-          shadowOffset: {
-            height: 1,
-            width: 1,
-          },
+          // elevation: 4,
+          // shadowOpacity: 0.6,
+          // shadowRadius: 3,
+          // shadowOffset: {
+          //   height: 1,
+          //   width: 1,
+          // },
         },
         containerStyle,
       ]}>

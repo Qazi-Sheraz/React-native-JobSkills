@@ -45,16 +45,16 @@ const PermissionScreen = () => {
                 authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
                 authStatus === messaging.AuthorizationStatus.PROVISIONAL
             ) {
-                console.log('Notification permission granted.');
+                // console.log('Notification permission granted.');
                 setNotification(true)
                 setLoader(false)
             } else {
-                console.log('Notification permission denied.');
+                // console.log('Notification permission denied.');
                 setNotification(true)
                 setLoader(false)
             }
         } catch (error) {
-            console.error('Error requesting notification permission:', error);
+            // console.error('Error requesting notification permission:', error);
             setLoader(false)
         }
     };
@@ -67,16 +67,16 @@ const PermissionScreen = () => {
             );
 
             if (storagePermission === PermissionsAndroid.RESULTS.GRANTED) {
-                console.log('Storage permission granted.');
+                // console.log('Storage permission granted.');
                 handleSave();
 
             } else {
-                console.log('Storage permission denied.');
+                // console.log('Storage permission denied.');
                 handleSave();
                 setLoader(false)
             }
         } catch (error) {
-            console.error('Error requesting storage permission:', error);
+            // console.error('Error requesting storage permission:', error);
             setLoader(false)
         }
     };
@@ -89,7 +89,7 @@ const PermissionScreen = () => {
             authStatus === messaging.AuthorizationStatus.PROVISIONAL
         ) {
             const token = await messaging().getToken();
-            console.log('FCM Token -> ', token);
+            // console.log('FCM Token -> ', token);
             var formdata = new FormData();
             formdata.append("token", token);
             formdata.append("name", store.deviceName);
@@ -103,11 +103,11 @@ const PermissionScreen = () => {
             fetch("https://dev.jobskills.digital/api/device-token", requestOptions)
                 .then(response => response.json())
                 .then(result => {
-                    console.log(result)
+                    // console.log(result)
                     setLoader(false)
                 })
                 .catch(error => {
-                    console.log('Token Added Api Error', error)
+                    // console.log('Token Added Api Error', error)
                     setLoader(false)
                 });
 
@@ -118,7 +118,7 @@ const PermissionScreen = () => {
             const name = await DeviceInfo.getDeviceName();
             store.setDeviceName(name);
         } catch (error) {
-            console.log('Error fetching device name:', error);
+            // console.log('Error fetching device name:', error);
         }
     };
 

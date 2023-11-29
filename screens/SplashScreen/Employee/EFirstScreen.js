@@ -17,7 +17,6 @@ import { StoreContext } from '../../../mobx/store';
 const EFirstScreen = () => {
   const navigation = useNavigation();
   const [splashSlid, setSplashSlid] = useState(1);
-  console.log(splashSlid)
 const store=useContext(StoreContext)
   const _employerSplashShown = async () => {
     try {

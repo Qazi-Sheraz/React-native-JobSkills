@@ -48,9 +48,9 @@ export default function CBottomTab() {
          await AsyncStorage.setItem('selectedLanguage', lang);
          store.setLang(lang);
         
-         console.log('lang',lang)
+        //  console.log('lang',lang)
        } catch (error) {
-         console.log('Error storing language:', error);
+        //  console.log('Error storing language:', error);
        }
      };
   useEffect(() => {
@@ -83,7 +83,7 @@ export default function CBottomTab() {
         
       <Tab.Screen options={{tabBarLabel:store.lang.home}} name="Home" component={Home} />
       <Tab.Screen options={{tabBarLabel:store.lang.favourite}} name="Favourite" component={Favourite} />
-      <Tab.Screen options={{tabBarLabel:store.lang.applied_job}} name="Applied Jobs" component={AppliedJobs} />
+      <Tab.Screen options={{tabBarLabel:store.lang.applied_job}} name="AppliedJobs" component={AppliedJobs} />
       <Tab.Screen options={{tabBarLabel:store.lang.profile}} name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   );

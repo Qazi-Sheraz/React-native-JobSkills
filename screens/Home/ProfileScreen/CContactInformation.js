@@ -1,4 +1,4 @@
-import {ActivityIndicator, Alert, StyleSheet, View} from 'react-native';
+import {ActivityIndicator, Alert, Platform, StyleSheet, View} from 'react-native';
 import React, {useRef,useState,useContext} from 'react';
 import {observer} from 'mobx-react';
 import JScreen from '../../../customComponents/JScreen';
@@ -28,6 +28,9 @@ function CContactInformation({refRBSheet, user}) {
   const [loader, setLoader] = useState(false);
   const [phone, setPhone] = useState(params?.phone);
   const [code, setCode] = useState(params?.region_code!==null&&params?.region_code);
+  console.log(params)
+ 
+
 
   const regionalCodeMappings = {
     "93": "AF", // Afghanistan
@@ -39,6 +42,7 @@ function CContactInformation({refRBSheet, user}) {
     "54": "AR", // Argentina
     "374": "AM", // Armenia
     "61": "AU", // Australia
+    "672": "AQ",// Antarctica
     "43": "AT", // Austria
     "994": "AZ", // Azerbaijan
     "1-242": "BS", // Bahamas
@@ -239,9 +243,9 @@ function CContactInformation({refRBSheet, user}) {
     myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
     var formdata = new FormData();
 
-    formdata.append('phone', phone);
-    formdata.append('region_code', code!==false?code:'966');
-    // console.log(formdata)
+    formdata.append('phone', values?.phone);
+    formdata.append('region_code', values?.regional_code?.code);
+    console.log(formdata)
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
@@ -260,7 +264,7 @@ function CContactInformation({refRBSheet, user}) {
           JToast({
             type: 'success',
             text1: store.lang.success,
-            text2: result,
+            text2: result.message,
           });
           // alert(result);
           navigation.navigate('Aboutme')
@@ -268,7 +272,7 @@ function CContactInformation({refRBSheet, user}) {
         setLoader(false);
       })
       .catch(error => {
-        // console.log('error', error);
+        //  console.log('error', error);
         setLoader(false);
       });
   };
@@ -279,26 +283,32 @@ function CContactInformation({refRBSheet, user}) {
         email: store.myProfile.user[0]?.contact_information?.email_address,
         // phone: params.phone?params.phone?.slice(3):'',
         phone:params?.phone?params?.phone:'',
-        regional_code:params?.region_code?regionalCodeMappings[params?.region_code]:'',
+        regional_code:params?.region_code?
+        {
+          code:params?.region_code,
+          cca:regionalCodeMappings[params?.region_code]
+        }:'',
+        // regional_code:params?.region_code?regionalCodeMappings[params?.region_code]:'',
       }}
       onSubmit={values => {
-        // console.log('regional;;;;;;;',values.regional_code);
+        // console.log('phone;;;;;;;',values.phone);
+        // console.log('regional;;;;;;;',values.regional_code.code.length);
         _postData(values);
       }}
       validationSchema={yup.object().shape({
         email: yup.string().max(100, store.lang.Email_address_must_be_at_most_100_characters_long).email(store.lang.Must_be_a_valid_email),
-        phone: yup.string().max(15).matches(/^\+?[0-9]\d*$/, store.lang.Phone_Number_must_be_a_digit).required().label(store.lang.Phone),
-        // regional_code: yup.string().min(2).required().label('code'),
+        phone: yup.string().matches(/^\+?[0-9]\d*$/, store.lang.Phone_Number_must_be_a_digit).min(10,store.lang.Phone_must_be_atleast_10_characters).max(14,store.lang.Phone_must_be_at_most_14_characters).required(store.lang.Phone_Name_is_a_required_field).label(store.lang.Phone),
+
       })}>
       {({
         values,
-        handleChange,
         errors,
-        setFieldTouched,
         touched,
         isValid,
         handleSubmit,
+        handleChange,
         setFieldValue,
+        setFieldTouched,
       }) => (
         <JScreen headerShown={false}>
           <JGradientHeader
@@ -337,6 +347,7 @@ function CContactInformation({refRBSheet, user}) {
               paddingHorizontal: RFPercentage(2),
             }}>
             <JInput
+            isRequired
               value={values.email}
               heading={`${store.lang.email}:`}
               maxLength={100}
@@ -353,16 +364,20 @@ function CContactInformation({refRBSheet, user}) {
                 style={{
                   marginTop: RFPercentage(2),
                 }}>
-                <JText fontWeight="500" fontSize={RFPercentage(2.5)}>
+                <JText fontWeight={Platform.OS=='ios' ?"400":'500'} fontSize={RFPercentage(2.5)}>
                   {store.lang.phone_number}:
                 </JText>
+                <JText fontWeight="400" fontSize={RFPercentage(2.5)} fontColor='red'>
+                    {` *`}
+                    </JText>
               </JRow>
               <PhoneInput
-              textInputProps={{maxLength:15}}
+              textInputProps={{maxLength:values.regional_code?.code?.length == 2 ? 11 : 14}}
                   ref={phoneInput}
                   defaultValue={values.phone}
                   // defaultCode={code?.cca2?code?.cca2:"SA"}
-                  defaultCode={values.regional_code? values.regional_code:"SA"}
+                  codeTextStyle={{fontWeight:'400'}}
+                  defaultCode={values.regional_code? values.regional_code.cca:"SA"}
                   placeholder={store.lang.phone_number}
                   containerStyle={{
                     width: '100%',
@@ -380,16 +395,20 @@ function CContactInformation({refRBSheet, user}) {
                     
                   }}
                 
-                  onChangeFormattedText={(text,c) => {
-                    setFieldValue('phone', text);
-                    setFieldValue('regional_code', c);
-                  }}
+                  // onChangeFormattedText={(text,c) => {
+                  //   setFieldValue('phone', text);
+                  //   setFieldValue('regional_code', c);
+                  // }}
                   onChangeCountry={(e)=>{
-                    setCode(e.callingCode[0])
+                    setFieldValue('regional_code', {code:e.callingCode[0],cca:e.cca2});
+                    // setCode(e.callingCode[0])
+                    // console.log(e)
                   }}
                   onChangeText={(e)=>{
-                    setFieldValue(e);
-                    setPhone(e)
+                    setFieldValue('phone', e);
+                    // setPhone(e)
+                    // console.log(e)
+
                   }}
                 />
                 {touched.phone && errors.phone && (

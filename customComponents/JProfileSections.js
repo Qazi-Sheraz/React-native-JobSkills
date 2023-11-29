@@ -22,20 +22,20 @@ export default function JProfileSections({
       <JRow
         style={{
           justifyContent: 'space-between',
-          marginBottom: RFPercentage(1),
+          // marginBottom: RFPercentage(1),
           alignItems: 'center',
           backgroundColor: '#EDF2F7',
           paddingVertical: RFPercentage(2),
           paddingHorizontal: RFPercentage(1.5),
           justifyContent: 'space-between',
-          shadowColor: '#000000',
-          shadowOpacity: 0.3,
-          shadowRadius: 2,
-          shadowOffset: {
-            height: 1,
-            width: 1,
-          },
-          elevation: 4,
+          // shadowColor: '#000000',
+          // shadowOpacity: 0.3,
+          // shadowRadius: 2,
+          // shadowOffset: {
+          //   height: 1,
+          //   width: 1,
+          // },
+          // elevation: 4,
         }}>
         <JText fontSize={RFPercentage(2.5)}>{heading}</JText>
 

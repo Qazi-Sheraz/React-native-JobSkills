@@ -72,7 +72,7 @@ function CSkills({data}) {
         )
           .then(response => response.json())
           .then(result => {
-          console.log(result)
+          // console.log(result)
               JToast({
                 type: 'success',
                 text1: store.lang.success,
@@ -119,7 +119,7 @@ function CSkills({data}) {
                 />
               ) : (
                 <JText
-                  onPress={() => isValid && handleSubmit(values)}
+                  onPress={() => handleSubmit(values)}
                   fontColor={
                     !isValid ? `${colors.white[0]}70` : colors.white[0]
                   }>
@@ -138,6 +138,7 @@ function CSkills({data}) {
               paddingHorizontal: RFPercentage(2),
             }}>
             <JSelectInput
+            isRequired
             isMultiple={true}
               containerStyle={{marginTop: RFPercentage(2)}}
               value={values.skill?.map(i => i?.name)?.join(', ')}

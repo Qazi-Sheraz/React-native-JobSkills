@@ -120,7 +120,7 @@ const ChangePassword = () => {
           password_confirmation: yup
             .string()
             .required(store.lang.Confirm_Password_is_a_required_field)
-            .oneOf([yup.ref(store.lang.password), null], store.lang.Password_must_match),
+            .oneOf([yup.ref('password'), null], store.lang.Password_must_match),
         })}>
         {({
           values,

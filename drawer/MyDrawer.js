@@ -1,43 +1,38 @@
-import React, { useEffect, useState } from 'react';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import React, {useEffect, useState} from 'react';
+import {createDrawerNavigator} from '@react-navigation/drawer';
 import CHomeStack from '../stacks/Candidate/CHomeStack';
 import CustomDrawerContent from './CustomDrawerContent';
-// import EDrawerContent from './EDrawerContent';
 import EmployeStack from '../stacks/Employee/EmployeStack';
-import { StoreContext } from '../mobx/store';
-import { useContext } from 'react';
+import {StoreContext} from '../mobx/store';
+import {useContext} from 'react';
 import AuthStack from '../stacks/Auth/AuthStack';
-import { Observer } from 'mobx-react';
+import {Observer} from 'mobx-react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LangStack from '../stacks/Language/LangStack';
-import EAccountSetting from '../escreen/edrawer/EAccountSetting';
 import messaging from '@react-native-firebase/messaging';
-import DeviceInfo from 'react-native-device-info';
-import { Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import JobDetails from '../escreen/Jobs/JobDetails';
+import {_getAppliedJobData} from '../functions/Candidate/BottomTab';
+import JModal from '../customComponents/JModal';
+import moment from 'moment';
+import frLocale from 'moment/locale/ar-ly';
+import esLocale from 'moment/locale/en-au';
 export default function MyDrawer() {
-  const navigation = useNavigation();
-  useEffect(() => {
+  const store = useContext(StoreContext);
+  moment.locale(store.lang.id == 0 ? 'en-au' : 'ar-ly', [frLocale, esLocale]);
 
+  const Drawer = createDrawerNavigator();
+  const [loader, setLoader] = useState(true);
+  const navigation = useNavigation();
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalRemoteMessage, setModalRemoteMessage] = useState('');
+  useEffect(() => {
     messaging()
       .getInitialNotification()
       .then(async remoteMessage => {
-
         if (remoteMessage) {
-            if(remoteMessage.data?.type=='candidate-details'){
-            navigation.navigate('ProfileApplication', {
-              candidate_id: remoteMessage.data && remoteMessage.data?.candidate_id,
-            });}
-            else{
-              navigation.navigate('CJobDetails', {
-                id: remoteMessage.data &&remoteMessage.data?.job_id,
-              });
-            
-          }
-
-          // console.log('initialMessageeeeeeeeee', remoteMessage)
-          // alert('hellooooo')
+          setModalRemoteMessage(remoteMessage);
+          setModalVisible(true);
         }
       });
 
@@ -50,17 +45,8 @@ export default function MyDrawer() {
      */
     messaging().onNotificationOpenedApp(async remoteMessage => {
       if (remoteMessage) {
-        if(remoteMessage.data?.type=='candidate-details'){
-          navigation.navigate('ProfileApplication', {
-            candidate_id: remoteMessage.data && remoteMessage.data?.candidate_id,
-          });}
-          else{
-            navigation.navigate('CJobDetails', {
-              id: remoteMessage.data &&remoteMessage.data?.job_id,
-            });
-          
-        }
-
+        setModalRemoteMessage(remoteMessage);
+        setModalVisible(true);
       }
       // if (remoteMessage) {
       //   console.log(
@@ -88,17 +74,8 @@ export default function MyDrawer() {
       // onMessageReceived(remoteMessage);
 
       if (remoteMessage) {
-        if(remoteMessage.data?.type=='candidate-details'){
-          navigation.navigate('ProfileApplication', {
-            candidate_id: remoteMessage.data && remoteMessage.data?.candidate_id,
-          });}
-          else{
-            navigation.navigate('CJobDetails', {
-              id: remoteMessage.data &&remoteMessage.data?.job_id,
-            });
-          
-        }
-
+        setModalRemoteMessage(remoteMessage);
+        setModalVisible(true);
       }
     });
 
@@ -110,7 +87,6 @@ export default function MyDrawer() {
     messaging().onMessage(async remoteMessage => {
       if (remoteMessage) {
         onMessageReceived(remoteMessage);
-
       }
     });
 
@@ -131,50 +107,51 @@ export default function MyDrawer() {
   const onMessageReceived = async remoteMessage => {
     // console.log('remoteMessage', remoteMessage)
     if (remoteMessage) {
-      Alert.alert(
-        remoteMessage.notification.title,
-        remoteMessage.notification.body,
-        [
-          {
-            text: 'Cancel',
-            // onPress: () => console.log('Cancel Pressed'),
-            style: 'cancel',
-          },
-          {
-            text: 'Visit',
-            onPress: () => {
-              if(remoteMessage.data?.type=='candidate-details'){
-              navigation.navigate('ProfileApplication', {
-                candidate_id: remoteMessage.data && remoteMessage.data?.candidate_id,
-              });}
-              else{
-                navigation.navigate('CJobDetails', {
-                  id: remoteMessage.data &&remoteMessage.data?.job_id,
-                });
-              }
-            },
-          },
-        ],
-      );
+      setModalRemoteMessage(remoteMessage);
+      setModalVisible(true);
+      // Alert.alert(
+      //   remoteMessage.notification.title,
+      //   remoteMessage.notification.body,
+      //   [
+      //     {
+      //       text: 'Cancel',
+      //       // onPress: () => console.log('Cancel Pressed'),
+      //       style: 'cancel',
+      //     },
 
+      //     {
+      //       text: 'Visit',
+      //       onPress: () => {
+      //         if(remoteMessage.data?.type=='candidate-details'){
+      //         navigation.navigate('ProfileApplication', {
+      //           candidate_id: remoteMessage.data && remoteMessage.data?.candidate_id,
+      //         });}
+      //         else{
+      //           navigation.navigate('CJobDetails', {
+      //             id: remoteMessage.data &&remoteMessage.data?.job_id,
+      //           });
+      //         }
+      //       },
+      //     },
+      //   ],
+      // );
     }
   };
 
-
-  const store = useContext(StoreContext);
-  const Drawer = createDrawerNavigator();
-  const [loader, setLoader] = useState(true);
-
-
   const _getLang = async () => {
     try {
-
-      const _store = await AsyncStorage.multiGet(['selectedLanguage', 'splash'])
+      const _store = await AsyncStorage.multiGet([
+        'selectedLanguage',
+        'splash',
+      ]);
       // console.log(_store[0][1])
       // console.log(_store[1][1])
-      _store[0][1] != null ? store?.setLang(_store[0][1]) : store?.setLang('en')
-      _store[1][1] != null ? store?.setLangType(_store[1][1]) : store?.setLangType('false')
-
+      _store[0][1] != null
+        ? store?.setLang(_store[0][1])
+        : store?.setLang('en');
+      _store[1][1] != null
+        ? store?.setLangType(_store[1][1])
+        : store?.setLangType('false');
     } catch (error) {
       // console.log('Error retrieving stored language:', error);
     } finally {
@@ -183,23 +160,18 @@ export default function MyDrawer() {
   };
   useEffect(() => {
     _getLang('selectedLanguage');
-    return () => { };
+    return () => {};
   }, []);
 
-
-
   return (
-    
     <Observer>
-      
-      {() =>
-        store.langType == 'false' && !store?.token  ? (
-          <LangStack />
-
-        ) : store.langType == 'true' && !store?.token ? (
-          <AuthStack />
-        )
-          : store.token?.user?.owner_type.includes('Candidate') ? (
+      {() => (
+        <>
+          {store.langType == 'false' && !store?.token ? (
+            <LangStack />
+          ) : store.langType == 'true' && !store?.token ? (
+            <AuthStack />
+          ) : store.token?.user?.owner_type.includes('Candidate') ? (
             <Drawer.Navigator
               screenOptions={{
                 headerShown: false,
@@ -220,10 +192,43 @@ export default function MyDrawer() {
               drawerContent={props => <CustomDrawerContent {...props} />}>
               <Drawer.Screen name="HomeStack" component={EmployeStack} />
               <Drawer.Screen name="CJobDetails" component={JobDetails} />
-              
             </Drawer.Navigator>
-          )
-      }
+          )}
+          <JModal
+            icon={false}
+            name1={store.lang.visit}
+            name2={store.lang.cancel}
+            modalVisible={modalVisible}
+            setModalVisible={setModalVisible}
+            alertMsg={modalRemoteMessage?.notification?.title}
+            msg={modalRemoteMessage?.notification?.body}
+            onPressYes={() => {
+              if (modalRemoteMessage?.data?.type == 'candidate-details') {
+                navigation.navigate('ProfileApplication', {
+                  id: modalRemoteMessage?.data?.id,
+                  job_id: modalRemoteMessage?.data?.job_id,
+                  candidate_id: modalRemoteMessage?.data?.candidate_id,
+                });
+              } else if (modalRemoteMessage?.data?.type == 'applied-jobs') {
+                _getAppliedJobData(store);
+                navigation.navigate('AppliedJobs');
+              } else if (modalRemoteMessage?.data?.type == 'job-application') {
+                navigation.navigate('JobApplication', {
+                  id: modalRemoteMessage?.data?.job_id,
+                });
+              } else {
+                navigation.navigate('CJobDetails', {
+                  id: modalRemoteMessage?.data?.job_id,
+                });
+              }
+              setModalVisible(false);
+            }}
+            onPressNo={() => {
+              setModalVisible(false);
+            }}
+          />
+        </>
+      )}
     </Observer>
   );
 }

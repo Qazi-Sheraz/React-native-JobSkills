@@ -1,25 +1,25 @@
-import { StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
-import React, { useState, useRef } from 'react';
+import {StyleSheet, ScrollView, ActivityIndicator} from 'react-native';
+import React, {useState, useRef} from 'react';
 import JScreen from '../../customComponents/JScreen';
 import JGradientHeader from '../../customComponents/JGradientHeader';
 import JText from '../../customComponents/JText';
 import JInput from '../../customComponents/JInput';
 import * as yup from 'yup';
 import JSelectInput from '../../customComponents/JSelectInput';
-import { Formik } from 'formik';
+import {Formik} from 'formik';
 import Feather from 'react-native-vector-icons/Feather';
 import colors from '../../config/colors';
-import { RFPercentage } from 'react-native-responsive-fontsize';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import {RFPercentage} from 'react-native-responsive-fontsize';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import JChevronIcon from '../../customComponents/JChevronIcon';
-import { useEffect } from 'react';
+import {useEffect} from 'react';
 import Toast from 'react-native-toast-message';
 import url from '../../config/url';
-import { useContext } from 'react';
-import { StoreContext } from '../../mobx/store';
+import {useContext} from 'react';
+import {StoreContext} from '../../mobx/store';
 import JErrorText from '../../customComponents/JErrorText';
-import { JToast } from '../../functions/Toast';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import {JToast} from '../../functions/Toast';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const ECompanyInformation = () => {
   const [loader, setLoader] = useState(true);
@@ -29,15 +29,12 @@ const ECompanyInformation = () => {
   const navigation = useNavigation();
   const phoneInput = useRef(null);
   const store = useContext(StoreContext);
-  const { params } = useRoute();
+  const {params} = useRoute();
   // console.log(params?.details)
   const _companyInfo = values => {
-    setLoader1(true)
+    setLoader1(true);
     var myHeaders = new Headers();
-    myHeaders.append(
-      'Authorization',
-      `Bearer ${store.token?.token}`,
-    );
+    myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
     // console.log(values.industries.id);
     var formdata = new FormData();
     formdata.append('ceo', values?.ceo_name);
@@ -58,7 +55,10 @@ const ECompanyInformation = () => {
       body: formdata,
       redirect: 'follow',
     };
-    fetch(`${url.baseUrl}/companyUpdate/${store.token?.user?.owner_id}`, requestOptions)
+    fetch(
+      `${url.baseUrl}/companyUpdate/${store.token?.user?.owner_id}`,
+      requestOptions,
+    )
       .then(response => response.json())
       .then(result => {
         // console.log(result)
@@ -67,9 +67,9 @@ const ECompanyInformation = () => {
           type: 'success',
           text1: store.lang.success,
           text2: store.lang.successfully_update,
-        })
-        setLoader1(false)
-        navigation.goBack()
+        });
+        setLoader1(false);
+        navigation.goBack();
       })
       .catch(error => {
         // console.log('error====',error)
@@ -77,17 +77,14 @@ const ECompanyInformation = () => {
           type: 'danger',
           text1: store.lang.eror,
           text2: store.lang.an_error_occurred_please_try_again_later,
-        })
-        setLoader1(false)
-      })
+        });
+        setLoader1(false);
+      });
   };
 
   const _getcompanyInfo = () => {
     var myHeaders = new Headers();
-    myHeaders.append(
-      'Authorization',
-      `Bearer ${store.token?.token}`,
-    );
+    myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
 
     var requestOptions = {
       method: 'GET',
@@ -95,16 +92,15 @@ const ECompanyInformation = () => {
       redirect: 'follow',
     };
 
-    fetch(
-      `${url.baseUrl}/company/company-information`,
-      requestOptions,
-    )
+    fetch(`${url.baseUrl}/company/company-information`, requestOptions)
       .then(response => response.json())
       .then(result => {
         // console.log(result);
         setInfo(result);
       })
-      .catch(error => { console.log('error', error), setError(true) })
+      .catch(error => {
+        // console.log('error', error), setError(true);
+      })
       .finally(() => {
         setLoader(false);
       });
@@ -114,7 +110,6 @@ const ECompanyInformation = () => {
     _getcompanyInfo();
   }, []);
 
-
   return (
     <JScreen
       headerShown={false}
@@ -122,34 +117,37 @@ const ECompanyInformation = () => {
       onTryAgainPress={() => {
         _getcompanyInfo(), setError(false);
       }}>
-      {loader ? (<ActivityIndicator />) : (
+      {loader ? (
+        <ActivityIndicator />
+      ) : (
         <Formik
           initialValues={{
             ceo_name: params?.ceo_name ? params?.ceo_name : '',
             ownerShipTypes:
               params?.ownership && params?.ownership_id
                 ? {
-                  name: params?.ownership,
-                  id: params?.ownership_id,
-                }
+                    name: params?.ownership,
+                    id: params?.ownership_id,
+                  }
                 : '',
             industries:
               params?.industry && params?.industry_id
                 ? {
-                  name: params?.industry,
-                  id: params?.industry_id,
-                }
+                    name: params?.industry,
+                    id: params?.industry_id,
+                  }
                 : '',
             companySize:
               params?.company_size && params?.company_size_id
                 ? {
-                  name: params?.company_size,
-                  id: params?.company_size_id,
-                }
+                    name: params?.company_size,
+                    id: params?.company_size_id,
+                  }
                 : '',
             location: params?.location ? params?.location : '',
             company_name: params?.company_name ? params?.company_name : '',
-            no_of_offices: params?.offices == null ? '' : JSON.stringify(params?.offices),
+            no_of_offices:
+              params?.offices == null ? '' : JSON.stringify(params?.offices),
             website: params?.website ? params?.website : '',
             // fax: params?.fax ? params?.fax : '',
             employeDetail: params?.details == null ? '' : params?.details,
@@ -160,7 +158,16 @@ const ECompanyInformation = () => {
             _companyInfo(values);
           }}
           validationSchema={yup.object().shape({
-
+            no_of_offices: yup
+              .number()
+              .typeError(store.lang.no_of_offices_must_be_a_number),
+            employeDetail: yup
+              .string()
+              .matches(
+                /^[a-zA-Z\u0600-\u06FF\0-9_].*$/,
+                store.lang.employeDetail_cannot_start_special_character,
+              ),
+            // .required('Employee details is required'),
             ownerShipTypes: yup
               .object()
               .shape()
@@ -173,20 +180,56 @@ const ECompanyInformation = () => {
               .object()
               .shape()
               .required(store.lang.CompanySize_is_required),
-            company_name: yup.string().required(store.lang.Company_Name_is_a_required_field),
-            location: yup.string().max(288).required(store.lang.Location_is_required),
-            ceo_name: yup.string()
+            company_name: yup
+              .string()
               .transform(value => value.trim())
-              .matches(/^[A-Za-z\u0600-\u06FF\s]+$/, store.lang.Ceo_Name_must_contain_at_least_1_alphabet_character_and_can_include_English_Urdu_Arabic_and_spaces)
-              .matches(/^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/, store.lang.Symbols_are_not_allowed_in_the_Ceo_Name)
+              .matches(
+                /^[a-zA-Z\u0600-\u06FF\0-9_].*$/,
+                `${store.lang.company_name} ${store.lang.cannot_start_special_character},`)
+              .required(store.lang.Company_Name_is_a_required_field),
+            location: yup
+              .string()
+              .transform(value => value.trim())
+              .max(288)
+              .test(
+                'no-leading-space',
+                `${store.lang.location} ${store.lang.cannot_start_with_a_space}`,
+                value => {
+                  if (value && value.startsWith(' ')) {
+                    return false; // Return false to indicate a validation error
+                  }
+                  return true; // Return true if the validation passes
+                },
+              )
+              .required(store.lang.Location_is_required),
+            ceo_name: yup
+              .string()
+              .transform(value => value.trim())
+              .matches(
+                /^[A-Za-z\u0600-\u06FF\s]+$/,
+                store.lang.Name_must_contains_only_alphabets,
+              )
+              .matches(
+                /^[^!@#$%^&*()_+={}|[\]\\:';"<>?,./0-9]+$/,
+                store.lang.Symbols_are_not_allowed_in_the_Ceo_Name,
+              )
+              // .test(
+              //   'no-leading-space',
+              //   store.lang.Name_cannot_start_with_a_space,
+              //   value => {
+              //     if (value && value.startsWith(' ')) {
+              //       return false; // Return false to indicate a validation error
+              //     }
+              //     return true; // Return true if the validation passes
+              //   },
+              // )
               .required(store.lang.The_CEO_name_is_required),
             website: yup
               .string()
               .url(store.lang.Invalid_URL_format)
               .required(store.lang.Website_URL_is_required),
             // fax: yup.string().max(14).required(),
-          })}
-        >
+          })}>
           {({
             values,
             handleChange,
@@ -209,34 +252,37 @@ const ECompanyInformation = () => {
                 }
                 right={
                   <JText
-                    disabled={loader1 ? true : false}
+                    disabled={!isValid || loader1 ? true : false}
                     onPress={() => {
-                      isValid && handleSubmit();
+                      handleSubmit();
                     }}
                     fontColor={
                       !isValid ? `${colors.white[0]}70` : colors.white[0]
                     }>
-                    {loader1 ?
+                    {loader1 ? (
                       <ActivityIndicator
                         color={colors.white[0]}
                         size={RFPercentage(2)}
-                      /> : store.lang.save}
+                      />
+                    ) : (
+                      store.lang.save
+                    )}
                   </JText>
-
                 }
                 left={JChevronIcon}
               />
               <KeyboardAwareScrollView
                 showsVerticalScrollIndicator={false}
-               
                 style={{
                   marginHorizontal: RFPercentage(2),
+                  marginBottom: RFPercentage(5),
                 }}>
                 <JInput
                   style={{
                     textAlign: store.lang.id == 0 ? 'left' : 'right',
                   }}
-                  containerStyle={{ marginTop: RFPercentage(2) }}
+                  isRequired
+                  containerStyle={{marginTop: RFPercentage(2)}}
                   heading={`${store.lang.CEO_name}:`}
                   maxLength={100}
                   value={values.ceo_name}
@@ -251,7 +297,8 @@ const ECompanyInformation = () => {
                   style={{
                     textAlign: store.lang.id == 0 ? 'left' : 'right',
                   }}
-                  containerStyle={{ marginTop: RFPercentage(2) }}
+                  editable={false}
+                  containerStyle={{marginTop: RFPercentage(2)}}
                   heading={`${store.lang.company_name}`}
                   value={values.company_name}
                   error={touched.company_name && errors.company_name && true}
@@ -266,16 +313,23 @@ const ECompanyInformation = () => {
                   style={{
                     textAlign: store.lang.id == 0 ? 'left' : 'right',
                   }}
-                  containerStyle={{ marginTop: RFPercentage(2) }}
+                  isRequired
+                  containerStyle={{marginTop: RFPercentage(2)}}
                   value={values?.ownerShipTypes?.name}
-                  data={store.lang.id == 0 ? info?.english?.ownerShipTypes : info?.arabic?.ownerShipTypes}
+                  data={
+                    store.lang.id == 0
+                      ? info?.english?.ownerShipTypes
+                      : info?.arabic?.ownerShipTypes
+                  }
                   id={values.ownerShipTypes?.id}
                   header={store.lang.ownership_type}
                   heading={`${store.lang.ownership_type}:`}
                   setValue={e => {
                     setFieldValue('ownerShipTypes', e);
                   }}
-                  error={touched.ownerShipTypes && errors.ownerShipTypes && true}
+                  error={
+                    touched.ownerShipTypes && errors.ownerShipTypes && true
+                  }
                   rightIcon={
                     <Feather
                       name="chevron-down"
@@ -288,9 +342,14 @@ const ECompanyInformation = () => {
                   <JErrorText>{errors.ownerShipTypes}</JErrorText>
                 )}
                 <JSelectInput
-                  containerStyle={{ marginTop: RFPercentage(2) }}
+                  isRequired
+                  containerStyle={{marginTop: RFPercentage(2)}}
                   value={values.industries?.name}
-                  data={store.lang.id == 0 ? info?.english?.industries : info?.arabic?.industries}
+                  data={
+                    store.lang.id == 0
+                      ? info?.english?.industries
+                      : info?.arabic?.industries
+                  }
                   id={values.industries?.id}
                   header={store.lang.Industry}
                   heading={`${store.lang.Industry}:`}
@@ -310,9 +369,14 @@ const ECompanyInformation = () => {
                   <JErrorText>{errors.industries}</JErrorText>
                 )}
                 <JSelectInput
-                  containerStyle={{ marginTop: RFPercentage(2) }}
+                  isRequired
+                  containerStyle={{marginTop: RFPercentage(2)}}
                   value={values.companySize.name}
-                  data={store.lang.id == 0 ? info?.english?.companySize : info?.arabic?.companySize}
+                  data={
+                    store.lang.id == 0
+                      ? info?.english?.companySize
+                      : info?.arabic?.companySize
+                  }
                   id={values.companySize?.id}
                   header={store.lang.size}
                   heading={`${store.lang.size}:`}
@@ -336,7 +400,8 @@ const ECompanyInformation = () => {
                   style={{
                     textAlign: store.lang.id == 0 ? 'left' : 'right',
                   }}
-                  containerStyle={{ marginTop: RFPercentage(2) }}
+                  isRequired
+                  containerStyle={{marginTop: RFPercentage(2)}}
                   heading={`${store.lang.location}:`}
                   value={values.location}
                   error={touched.location && errors.location && true}
@@ -350,7 +415,8 @@ const ECompanyInformation = () => {
                   style={{
                     textAlign: store.lang.id == 0 ? 'left' : 'right',
                   }}
-                  containerStyle={{ marginTop: RFPercentage(2) }}
+                  maxLength={4}
+                  containerStyle={{marginTop: RFPercentage(2)}}
                   heading={`${store.lang.no_of_office}:`}
                   value={values.no_of_offices}
                   error={touched.no_of_offices && errors.no_of_offices && true}
@@ -365,7 +431,8 @@ const ECompanyInformation = () => {
                   style={{
                     textAlign: store.lang.id == 0 ? 'left' : 'right',
                   }}
-                  containerStyle={{ marginTop: RFPercentage(2) }}
+                  isRequired
+                  containerStyle={{marginTop: RFPercentage(2)}}
                   heading={`${store.lang.website}:`}
                   placeholder={'https://map.app.goo.gl/B31Ubk'}
                   value={values.website}
@@ -394,7 +461,7 @@ const ECompanyInformation = () => {
                   style={{
                     textAlign: store.lang.id == 0 ? 'left' : 'right',
                   }}
-                  containerStyle={{ marginTop: RFPercentage(2) }}
+                  containerStyle={{marginTop: RFPercentage(2)}}
                   heading={`${store.lang.employe_detail}:`}
                   value={values.employeDetail}
                   error={touched.employeDetail && errors.employeDetail && true}
@@ -407,7 +474,8 @@ const ECompanyInformation = () => {
               </KeyboardAwareScrollView>
             </>
           )}
-        </Formik>)}
+        </Formik>
+      )}
     </JScreen>
   );
 };

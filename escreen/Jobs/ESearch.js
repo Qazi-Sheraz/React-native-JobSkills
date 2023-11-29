@@ -73,7 +73,6 @@ const ESearch = ({ navigation }) => {
       });
   
       store.setRecentSearch(filteredData);
-      console.log("job===>>>", store.recentSearch);
     } catch (e) {
       // Handle error reading value
     }
@@ -183,7 +182,6 @@ const ESearch = ({ navigation }) => {
           />
         )}
       </JShadowView>
-
       <JScrollView>
         {store.filterData?.length > 0 ? (
           store.filterData.map((item, index) => (
@@ -194,6 +192,7 @@ const ESearch = ({ navigation }) => {
                 onPress={() =>
                   navigation.navigate('CJobDetails', {
                     id: item.job_id,
+                    jid: item.id,
                   })
                 }
                 onIconPress={() => alert('Icon Press')}

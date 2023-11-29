@@ -92,7 +92,7 @@ const Meeting = ({isempty=false,}) => {
       })
 
       .catch(error => {
-        console.log('error===meeting', error);
+        // console.log('error===meeting', error);
    
       })
 

@@ -105,7 +105,7 @@ const ProfileJobApplication = ({ route }) => {
       })
 
       .catch(error => {
-        console.log('error', error);
+        // console.log('error', error);
         setError(true);
       })
       .finally(() => {
@@ -310,7 +310,7 @@ const ProfileJobApplication = ({ route }) => {
                 {details?.candidateDetails[0]?.region_code &&
                   details?.candidateDetails[0]?.phone && (
                     <JText style={styles.txtRow}>
-                      {`+${details?.candidateDetails[0]?.region_code}${details?.candidateDetails[0]?.phone}`}
+                      {`+${details?.candidateDetails[0]?.region_code} ${details?.candidateDetails[0]?.phone}`}
                     </JText>
                   )}
                 <JText style={styles.txtRow}>

@@ -1,16 +1,16 @@
-import { StatusBar, StyleSheet, View } from 'react-native';
-import React, { useContext, useEffect } from 'react';
-import { heightPercentageToDP } from 'react-native-responsive-screen';
+import {StatusBar, StyleSheet, View} from 'react-native';
+import React, {useContext, useEffect} from 'react';
+import {heightPercentageToDP} from 'react-native-responsive-screen';
 import colors from '../../config/colors';
-import { RFPercentage } from 'react-native-responsive-fontsize';
+import {RFPercentage} from 'react-native-responsive-fontsize';
 import JButton from '../../customComponents/JButton';
 import JDivider from '../../customComponents/JDivider';
 import * as Animatable from 'react-native-animatable';
-import { StoreContext } from '../../mobx/store';
-import { observer } from 'mobx-react';
+import {StoreContext} from '../../mobx/store';
+import {observer} from 'mobx-react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const SelectionSheet = ({ navigation }) => {
+const SelectionSheet = ({navigation}) => {
   const store = useContext(StoreContext);
 
   // AsyncStorage.removeItem('splashShown')
@@ -18,15 +18,13 @@ const SelectionSheet = ({ navigation }) => {
     // Check the value of 'splashShown' in AsyncStorage
     try {
       const splashShown = await AsyncStorage.getItem('splashShown');
-      console.log(splashShown)
       if (splashShown === 'true') {
         // 'splashShown' is true, navigate to 'CLogin' with type 1
-        navigation.navigate('CLogin', { type: 1 });
+        navigation.navigate('CLogin', {type: 1});
       } else {
         // 'splashShown' is false or not set, navigate to 'BoundingScreenStart'
-        navigation.navigate('FirstScreen', { type: 1 });
+        navigation.navigate('FirstScreen', {type: 1});
       }
-
     } catch (error) {
       // Handle error if AsyncStorage retrieval fails
       console.error('Error retrieving splashShown from AsyncStorage: ', error);
@@ -40,44 +38,50 @@ const SelectionSheet = ({ navigation }) => {
       if (employerSplashValue === 'true') {
         // 'employerSplash' is true, take some action
         // For example, you can navigate to 'CLogin' here
-        navigation.navigate('CLogin', { type: 2 });
+        navigation.navigate('CLogin', {type: 2});
       } else {
         // 'employerSplash' is false or not set, take another action
         // For example, you can navigate to 'FirstScreen' here
-        navigation.navigate('EFirstScreen', { type: 2 });
+        navigation.navigate('EFirstScreen', {type: 2});
       }
     } catch (error) {
-      console.error('Error retrieving employerSplash value from AsyncStorage: ', error);
+      console.error(
+        'Error retrieving employerSplash value from AsyncStorage: ',
+        error,
+      );
       // You may choose to handle the error here or return a default value.
       return null; // Return a default value or handle the error as needed
     }
   };
-
-
 
   // useEffect(() => {
   //   AsyncStorage.removeItem('employerSplash')
   // }, [])
 
   return (
-    <Animatable.View style={styles.sheetContainer} animation="slideInUp">
-
+    <Animatable.View
+      style={styles.sheetContainer}
+      animation={store.authType==false?'slideInRight':'slideInUp'}
+      duration={200}>
+    
       <View style={styles.sheetItemContainer}>
-
         <JButton
           fontStyle={styles.buttonStyle}
           // onPress={() => store.setLang('ar')}
-          onPress={() => { getEmployerSplashValue() }}
-        >
+          onPress={() => {
+            getEmployerSplashValue();
+          }}>
           {store.lang.employer}
         </JButton>
         <JDivider
-          containerStyle={{ marginVertical: RFPercentage(2) }}
+          containerStyle={{marginVertical: RFPercentage(2)}}
           children={store.lang.or}
         />
         <JButton
           fontStyle={styles.buttonStyle}
-          onPress={() => { navigateToLoginOrBounding() }}
+          onPress={() => {
+            navigateToLoginOrBounding();
+          }}
           borderColor={colors.black[0]}
           backgroundColor={colors.white[0]}>
           {store.lang.jobseeker}
@@ -85,8 +89,8 @@ const SelectionSheet = ({ navigation }) => {
       </View>
     </Animatable.View>
   );
-}
-export default observer(SelectionSheet)
+};
+export default observer(SelectionSheet);
 const styles = StyleSheet.create({
   buttonStyle: {
     fontWeight: '600',

@@ -1,20 +1,30 @@
-import {StyleSheet, ImageBackground, SafeAreaView, StatusBar} from 'react-native';
-import React from 'react';
+import {
+  StyleSheet,
+  ImageBackground,
+  SafeAreaView,
+  StatusBar,
+} from 'react-native';
+import React, {useEffect} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
-import { RFPercentage } from 'react-native-responsive-fontsize';
+import {RFPercentage} from 'react-native-responsive-fontsize';
+import colors from '../config/colors';
 
 export default function JGradientScreen({
   containerStyle,
   children,
   style,
   background = true,
+  heading,
 }) {
-
-  
-
   return (
     <SafeAreaView style={[styles.container, containerStyle]}>
-      <StatusBar backgroundColor={'transparent'} translucent />
+      <StatusBar
+        barStyle={Platform.OS === 'ios' ? 'dark-content' : 'default'}
+        hidden={false}
+        backgroundColor={colors.purple[0]}
+        translucent
+      />
+      {heading}
       <ImageBackground
         style={styles.imageBackground}
         source={
@@ -41,7 +51,6 @@ export default function JGradientScreen({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    
   },
   imageBackground: {
     // width: '100%',

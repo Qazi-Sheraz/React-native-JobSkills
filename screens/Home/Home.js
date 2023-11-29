@@ -1,7 +1,8 @@
 import {
   FlatList,
   StyleSheet,
-  ActivityIndicator
+  ActivityIndicator,
+  View
 } from 'react-native';
 import React, {
   useContext,
@@ -87,7 +88,7 @@ function Home({ navigation }) {
 
           <JFindTitle JobTitle={store.lang.jobTitle_Skills_Company} onPress={() => navigation.navigate('ESearch')} />
 
-
+ 
           <JScrollView refreshing={store.isRefreshing} onRefresh={onRefresh}>
             <JSideHeading
               leftHeading={store.lang.popular_categories}
@@ -120,15 +121,19 @@ function Home({ navigation }) {
                   containerStyle={{
                     alignItems: 'center',
                     justifyContent: 'center',
-                    width: RFPercentage(14),
-                    height: RFPercentage(14),
-                    marginRight: RFPercentage(0.5),
+                    width: RFPercentage(13),
+                    height: RFPercentage(13),
+                    marginHorizontal : RFPercentage(0.3),
+                   
                   }}>
-                  <JText fontColor={colors.white[0]} style={{ textAlign: 'center' }}>{item.name}</JText>
-                  <JText fontColor={colors.white[0]}>({item.job_count})</JText>
+                    <View style={{width: RFPercentage(12),height:RFPercentage(6),justifyContent:'center',}}>
+                  <JText fontColor={colors.white[0]} style={{fontSize:RFPercentage(2), textAlign: 'center',}}>{store.lang.id==0?item.name:item.arabic_title}</JText>
+                 </View> 
+                 <JText fontColor={colors.white[0]}>({item.job_count})</JText>
                 </JGradientView>
               )}
               keyExtractor={data => data.name}
+              inverted={store.lang.id == 0 ? false : true}
             />
             <JSideHeading
               rightHeading={store.lang.see_all}
@@ -162,7 +167,7 @@ function Home({ navigation }) {
             {data?.featuredCompanies?.length > 0 ? (
               <JCompanyTile
                 type={'company'}
-                OpenJob={`${data?.jobCount} Open Job`}
+                OpenJob={`${data?.jobCount} ${data?.jobCount==1? store.lang.open_job :store.lang.open_jobs} `}
                 followingList={store.followingList}
                 companyId={data?.featuredCompanies[0]?.id}
                 onPress={() =>
