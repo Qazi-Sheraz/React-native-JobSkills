@@ -113,11 +113,11 @@ const Login = ({navigation, route}) => {
     return new Promise((resolve, reject) => {
       if (requestUserPermission()) {
         messaging()?.getToken().then((fcmToken) => {
-            console.log('FCM Token -> ', fcmToken);
-            console.log('user_id -> ', userId);
-            console.log('name -> ', store.deviceName);
-            console.log('os -> ', Platform.OS);
-            console.log('version -> ', Platform.Version);
+            // console.log('FCM Token -> ', fcmToken);
+            // console.log('user_id -> ', userId);
+            // console.log('name -> ', store.deviceName);
+            // console.log('os -> ', Platform.OS);
+            // console.log('version -> ', Platform.Version);
             var formdata = new FormData();
             formdata.append('user_id', userId);
             formdata.append('token', fcmToken);

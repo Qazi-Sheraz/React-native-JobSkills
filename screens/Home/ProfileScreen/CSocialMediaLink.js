@@ -156,7 +156,7 @@ function CSocialMediaLink({refRBSheet, data, user}) {
               <JText
                 disabled={loader ? true : false}
                 onPress={() => {
-                  isValid && handleSubmit();
+                  handleSubmit();
                 }}
                 fontColor={!isValid ? `${colors.white[0]}70` : colors.white[0]}>
                 {loader ? (

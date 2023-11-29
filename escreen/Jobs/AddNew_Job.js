@@ -157,7 +157,7 @@ const AddNew_Job = () => {
                 },
               )
               .required(store.lang.Job_Description_is_required)
-              .label('Description'),
+              .label(store.lang.description),
           })}>
           {({
             values,

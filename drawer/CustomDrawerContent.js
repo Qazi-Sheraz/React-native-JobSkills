@@ -27,11 +27,13 @@ import {JToast} from '../functions/Toast';
 import JIcon from '../customComponents/JIcon';
 import FlashMessage from 'react-native-flash-message';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import { convertToArabicNumeric } from '../functions/ChangeNumber';
 
 function CustomDrawerContent(props) {
   const store = useContext(StoreContext);
   const user = store.token?.user;
   const [loader, setLoader] = useState(false);
+ 
   // const linkedRef = useRef(null);
   const _navigateToScreen = index => {
     // props.navigation.closeDrawer()
@@ -224,7 +226,10 @@ function CustomDrawerContent(props) {
   //   }
   // };
   return store.token?.user?.owner_type.includes('Candidate') ? (
-    <DrawerContentScrollView scrollEnabled={false} showsVerticalScrollIndicator={false} {...props}>
+    <DrawerContentScrollView
+      scrollEnabled={false}
+      showsVerticalScrollIndicator={false}
+      {...props}>
       {/* <DrawerItemList {...props} /> */}
       <View style={{height: heightPercentageToDP(96)}}>
         <View
@@ -297,12 +302,15 @@ function CustomDrawerContent(props) {
             bottom: RFPercentage(5),
             alignSelf: 'center',
           }}>
-          Version: {pkg.version}
+          {`${store.lang.version}: ${pkg.version}`}
         </JText>
       </View>
     </DrawerContentScrollView>
   ) : (
-    <DrawerContentScrollView scrollEnabled={false} {...props} showsVerticalScrollIndicator={false}>
+    <DrawerContentScrollView
+      scrollEnabled={false}
+      {...props}
+      showsVerticalScrollIndicator={false}>
       {/* <DrawerItemList {...props} /> */}
       {/* <DrawerItem label="Help" onPress={() => alert('Link to help')} /> */}
       <View style={{height: heightPercentageToDP(96)}}>
@@ -377,7 +385,7 @@ function CustomDrawerContent(props) {
             bottom: RFPercentage(5),
             alignSelf: 'center',
           }}>
-          Version: {pkg.version}
+          {`${store.lang.version}: ${pkg.version}`}
         </JText>
       </View>
     </DrawerContentScrollView>

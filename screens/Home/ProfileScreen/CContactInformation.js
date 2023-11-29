@@ -1,4 +1,4 @@
-import {ActivityIndicator, Alert, StyleSheet, View} from 'react-native';
+import {ActivityIndicator, Alert, Platform, StyleSheet, View} from 'react-native';
 import React, {useRef,useState,useContext} from 'react';
 import {observer} from 'mobx-react';
 import JScreen from '../../../customComponents/JScreen';
@@ -364,10 +364,10 @@ function CContactInformation({refRBSheet, user}) {
                 style={{
                   marginTop: RFPercentage(2),
                 }}>
-                <JText fontWeight="500" fontSize={RFPercentage(2.5)}>
+                <JText fontWeight={Platform.OS=='ios' ?"400":'500'} fontSize={RFPercentage(2.5)}>
                   {store.lang.phone_number}:
                 </JText>
-                <JText fontWeight="500" fontSize={RFPercentage(2.5)} fontColor='red'>
+                <JText fontWeight="400" fontSize={RFPercentage(2.5)} fontColor='red'>
                     {` *`}
                     </JText>
               </JRow>
@@ -376,6 +376,7 @@ function CContactInformation({refRBSheet, user}) {
                   ref={phoneInput}
                   defaultValue={values.phone}
                   // defaultCode={code?.cca2?code?.cca2:"SA"}
+                  codeTextStyle={{fontWeight:'400'}}
                   defaultCode={values.regional_code? values.regional_code.cca:"SA"}
                   placeholder={store.lang.phone_number}
                   containerStyle={{

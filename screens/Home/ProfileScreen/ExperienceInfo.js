@@ -20,6 +20,7 @@ import JChevronIcon from '../../../customComponents/JChevronIcon';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import JGradientHeader from '../../../customComponents/JGradientHeader';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { Platform } from 'react-native';
 
 const ExperienceInfo = () => {
   const store = useContext(StoreContext);
@@ -431,7 +432,7 @@ const ExperienceInfo = () => {
                   justifyContent: 'space-between',
                   marginVertical: RFPercentage(2),
                 }}>
-                <JText fontWeight={'500'} fontSize={RFPercentage(2.5)}>
+                <JText fontWeight={Platform.OS=='ios'?'400' :'500'} fontSize={RFPercentage(2.5)}>
                   {store.lang.currently_working}
                 </JText>
 

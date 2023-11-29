@@ -204,6 +204,13 @@ const Reschedule = ({}) => {
         setDetails('');
       });
   };
+
+  const currentTime = moment();
+  const startTime = moment(details?.start_time, 'YYYY/MM/DD HH:mm');
+
+  const isAfterStartTime = reschedule? false : currentTime.isAfter(startTime);
+
+  // console.log(isAfterStartTime);
   useEffect(() => {
     _getScheduleDetails();
   }, []);
@@ -272,7 +279,7 @@ const Reschedule = ({}) => {
                   <JText style={styles.date}>
                     {!details
                       ? '--/--/--'
-                      : moment(details?.start_time).format('DD/MM/YYYY')}
+                      : moment(details?.start_time).format('DD MMM,YYYY')}
                   </JText>
 
                   <JText style={styles.headers}>
@@ -286,14 +293,6 @@ const Reschedule = ({}) => {
                   <JSelectInput
                     mode="datetime"
                     isDate={true}
-                    // date1={details&&moment(details?.start_time).add(30, 'minutes')}
-                    // date1={moment(details?.start_time).add(30, 'minutes').toDate()}
-                    // minimumDate={()=>{moment().format() === details?.start_time && moment(details?.start_time).format()
-                    //     ? moment().add(30, 'minutes').toDate()
-                    //     : moment().format() < details?.start_time && moment(details?.start_time).format()
-                    //         ? moment(details?.start_time).add(30, 'minutes').format('HH:mm A')
-                    //         : moment().format() >details?.start_time && moment(details?.start_time).format()
-                    //         && moment().add(30, 'minutes').toDate()}}
                     date1={
                       moment().isBefore(details?.start_time)
                         ? moment(details?.start_time)
@@ -349,7 +348,7 @@ const Reschedule = ({}) => {
                   <JText style={styles.date}>
                     {!details
                       ? '--/--/--'
-                      : moment(details?.start_time).format('DD/MM/YYYY')}
+                      : moment(details?.start_time).format('DD MMM,YYYY')}
                   </JText>
 
                   <JText style={styles.headers}>
@@ -362,6 +361,7 @@ const Reschedule = ({}) => {
                   </JText>
                 </View>
               )}
+              {console.log(isAfterStartTime)}
               {store.token?.user?.owner_type.includes('Candidate') === false ? (
                 <View>
                   {details?.scheduled_by == 1 && (
@@ -418,29 +418,29 @@ const Reschedule = ({}) => {
                 </View>
               ) : (
                 <View>
-                  {details?.scheduled_by == 0 && (
-                    <JButton
-                      disabled={loader1 ? true : false}
-                      style={{
-                        backgroundColor: colors.success[0],
-                        marginVertical: RFPercentage(1),
-                        borderColor: 'transparent',
-                        alignSelf: 'flex-end',
-                      }}
-                      onPress={() => {
-                        if (reschedule) {
-                          handleSubmit();
-                        } else {
-                          _acceptSchedule();
-                        }
-                      }}>
-                      {loader1
-                        ? store.lang.loading
-                        : reschedule == true
-                        ? store.lang.submit
-                        : store.lang.accept}
-                    </JButton>
-                  )}
+                  {details?.scheduled_by == 0 && !isAfterStartTime &&
+                     (<JButton
+                        disabled={loader1 ? true : false}
+                        style={{
+                          backgroundColor: colors.success[0],
+                          marginVertical: RFPercentage(1),
+                          borderColor: 'transparent',
+                          alignSelf: 'flex-end',
+                        }}
+                        onPress={() => {
+                          if (reschedule) {
+                            handleSubmit();
+                          } else {
+                            _acceptSchedule();
+                          }
+                        }}>
+                        {loader1
+                          ? store.lang.loading
+                          : reschedule == true
+                          ? store.lang.submit
+                          : store.lang.accept}
+                      </JButton>
+                    )}
                   {!reschedule && details?.scheduled_by == 0 && (
                     <JButton
                       style={{

@@ -40,7 +40,7 @@ import JButton from './JButton';
 import {useEffect} from 'react';
 import Toast from 'react-native-toast-message';
 import url from '../config/url';
-import { Share } from 'react-native';
+import {Share} from 'react-native';
 import JNotfoundData from './JNotfoundData';
 import { JToast } from '../functions/Toast';
 
@@ -60,7 +60,6 @@ function JRecentJobTile({
   onSelect,
   disabled = false,
 }) {
- 
   const [loader, setLoader] = useState();
   const [en, setEn] = useState({});
   const [error, setError] = useState();
@@ -68,40 +67,34 @@ function JRecentJobTile({
   const navigation = useNavigation();
   const [stat, setStat] = useState(parseInt(item?.status_id));
   const [modalVisible, setModalVisible] = useState(false);
-  const[status1,setStatus1] = useState();
+  const [status1, setStatus1] = useState();
   const isFoucs = useIsFocused();
-// console.log()
+  // console.log()
 
-
-const id = item?.job_id;
-const companyName = encodeURIComponent(item.company_name || "");
-const jobTitle = encodeURIComponent(item?.job_title || "");
+  const id = item?.job_id;
+  const companyName = encodeURIComponent(item.company_name || '');
+  const jobTitle = encodeURIComponent(item?.job_title || '');
 
   const shareItem = async () => {
     try {
       await Share.share({
-        message: `https://dev.jobskills.digital/${companyName}/job-details/${id}/${jobTitle}`,// The content you want to share
+        message: `https://dev.jobskills.digital/${companyName}/job-details/${id}/${jobTitle}`, // The content you want to share
         // url: `https://dev.jobskills.digital/${item?.id}/${item?.job_title}`, // Optional URL to share
-        title: item?.job_title,// Optional title for the message
+        title: item?.job_title, // Optional title for the message
       });
     } catch (error) {
       console.error(error.message);
     }
   };
 
-  const _getjobStatus = (id,status1) => {
+  const _getjobStatus = (id, status1) => {
     var myHeaders = new Headers();
-    myHeaders.append(
-      'Authorization',
-      `Bearer ${store.token?.token}`,
-      {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+    myHeaders.append('Authorization', `Bearer ${store.token?.token}`, {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    });
 
-      }
-    );
-    
-// console.log(`${baseUrl}/employer/job/${item.id}/status/${id}`,item)
+    // console.log(`${baseUrl}/employer/job/${item.id}/status/${id}`,item)
     fetch(`${url.baseUrl}/employer/job/${item?.id}/status/${id}`, {
       method: 'GET',
       headers: myHeaders,
@@ -112,15 +105,14 @@ const jobTitle = encodeURIComponent(item?.job_title || "");
         // console.log(result.jobs);
 
         if (result.success === true) {
-           setStat(id),
-           JToast({
-            type: 'success',
-            text1: store.lang.success,
-            text2: result?.message,});
-            setUpdate(!update)
-        }
-        else{
-
+          setStat(id),
+            JToast({
+              type: 'success',
+              text1: store.lang.success,
+              text2: result?.message,
+            });
+          setUpdate(!update);
+        } else {
           JToast({
             type: 'danger',
             text1: store.lang.eror,
@@ -130,7 +122,6 @@ const jobTitle = encodeURIComponent(item?.job_title || "");
       })
       .catch(error => {
         // console.log('error', error);
-       
       })
       .finally(() => {
         setLoader(false);
@@ -139,10 +130,10 @@ const jobTitle = encodeURIComponent(item?.job_title || "");
   useEffect(() => {
     setStat(parseInt(item?.status_id));
   }, [item?.status_id]);
-// console.log(stat)
-// console.log(item?.company_name)
+  // console.log(stat)
+  // console.log(item?.company_name)
   return isempty == true ? (
-   <JNotfoundData/>
+    <JNotfoundData />
   ) : (
     <Observer>
       {() => (
@@ -152,7 +143,7 @@ const jobTitle = encodeURIComponent(item?.job_title || "");
           style={[
             {
               // height: heightPercentageToDP(12),
-              paddingVertical:RFPercentage(0.5),
+              paddingVertical: RFPercentage(0.5),
               borderBottomWidth: RFPercentage(0.1),
               borderBottomColor: colors.border[0],
               // marginBottom: RFPercentage(1),
@@ -165,13 +156,18 @@ const jobTitle = encodeURIComponent(item?.job_title || "");
                 // width: '28%',
                 justifyContent: 'center',
                 alignItems: 'center',
-                paddingRight: store.lang.id==0?RFPercentage(1):RFPercentage(0),
-                paddingLeft: store.lang.id==0?RFPercentage(0):RFPercentage(1),
+                paddingRight:
+                  store.lang.id == 0 ? RFPercentage(1) : RFPercentage(0),
+                paddingLeft:
+                  store.lang.id == 0 ? RFPercentage(0) : RFPercentage(1),
                 // backgroundColor:'green',
               }}>
               <TouchableOpacity
                 onPress={() =>
-                  navigation.navigate('CJobDetails', {id: item?.job_id,jid:item?.id})
+                  navigation.navigate('CJobDetails', {
+                    id: item?.job_id,
+                    jid: item?.id,
+                  })
                 }
                 style={{
                   // height: RFPercentage(12),
@@ -196,22 +192,21 @@ const jobTitle = encodeURIComponent(item?.job_title || "");
           <View
             style={{
               width: image ? '72%' : '100%',
-              
-
 
               // justifyContent: 'center',
             }}>
-              <JRow>
-            <JText style={{width: '80%'}} fontWeight="bold">
-              {item?.job_title?.length > 60 ? item?.job_title?.slice(0, 60) + " . . . .":item?.job_title}
-            </JText>
+            <JRow>
+              <JText style={{width: '80%'}} fontWeight="bold">
+                {item?.job_title?.length > 60
+                  ? item?.job_title?.slice(0, 60) + ' . . . .'
+                  : item?.job_title}
+              </JText>
             </JRow>
-            
+
             <JRow
               style={{
                 marginTop: RFPercentage(0.4),
-                alignItems:'center',
-                
+                alignItems: 'center',
               }}>
               <JText fontColor={colors.danger[0]}>{`${store.lang.expire_on} `}</JText>
               <JText style={{marginTop:store.lang.id==0?RFPercentage(0.2): RFPercentage(0.4)}}>
@@ -222,7 +217,6 @@ const jobTitle = encodeURIComponent(item?.job_title || "");
               style={{
                 justifyContent: 'space-between',
                 marginTop: RFPercentage(0.4),
-
               }}>
               <JRow
                 disabled={false}
@@ -233,7 +227,6 @@ const jobTitle = encodeURIComponent(item?.job_title || "");
                 <JText style={{marginHorizontal:RFPercentage(0.5) }}>
                   {item?.applicant?item?.applicant:'0'} {store.lang.applicant}
                 </JText>
-               
               </JRow>
               {/* {respponce.condition === close ? ( */}
               {stat == 2 ? (
@@ -286,27 +279,28 @@ const jobTitle = encodeURIComponent(item?.job_title || "");
                   </MenuTrigger>
 
                   <MenuOptions style={{paddingVertical: RFPercentage(0.5)}}>
-                    {[{name: store.lang.paused,id:3}, {name: store.lang.closed,id:2}].map(
-                      (item, index) => (
-                        <MenuOption
-                          style={{
-                            marginLeft: RFPercentage(1),
-                          }}
-                          key={index}
-                          onSelect={() => {
-                            setStatus1(item.id);
-                            setModalVisible(true);
-                          }}>
-                          <JRow>
-                            <JText
-                              style={{marginLeft: RFPercentage(2)}}
-                              fontSize={RFPercentage(2)}>
-                              {item.name}
-                            </JText>
-                          </JRow>
-                        </MenuOption>
-                      ),
-                    )}
+                    {[
+                      {name: store.lang.paused, id: 3},
+                      {name: store.lang.closed, id: 2},
+                    ].map((item, index) => (
+                      <MenuOption
+                        style={{
+                          marginLeft: RFPercentage(1),
+                        }}
+                        key={index}
+                        onSelect={() => {
+                          setStatus1(item.id);
+                          setModalVisible(true);
+                        }}>
+                        <JRow>
+                          <JText
+                            style={{marginLeft: RFPercentage(2)}}
+                            fontSize={RFPercentage(2)}>
+                            {item.name}
+                          </JText>
+                        </JRow>
+                      </MenuOption>
+                    ))}
                   </MenuOptions>
                 </Menu>
               ) : stat == 3 ? (
@@ -343,27 +337,28 @@ const jobTitle = encodeURIComponent(item?.job_title || "");
                   </MenuTrigger>
 
                   <MenuOptions style={{paddingVertical: RFPercentage(0.5)}}>
-                    {[{name: store.lang.live,id:1}, {name: store.lang.closed,id:2}].map(
-                      (item, index) => (
-                        <MenuOption
-                          style={{
-                            marginLeft: RFPercentage(1),
-                          }}
-                          key={index}
-                          onSelect={() => {
-                            setStatus1(item.id);
-                            setModalVisible(true);
-                          }}>
-                          <JRow>
-                            <JText
-                              style={{marginLeft: RFPercentage(2)}}
-                              fontSize={RFPercentage(2)}>
-                              {item?.name}
-                            </JText>
-                          </JRow>
-                        </MenuOption>
-                      ),
-                    )}
+                    {[
+                      {name: store.lang.live, id: 1},
+                      {name: store.lang.closed, id: 2},
+                    ].map((item, index) => (
+                      <MenuOption
+                        style={{
+                          marginLeft: RFPercentage(1),
+                        }}
+                        key={index}
+                        onSelect={() => {
+                          setStatus1(item.id);
+                          setModalVisible(true);
+                        }}>
+                        <JRow>
+                          <JText
+                            style={{marginLeft: RFPercentage(2)}}
+                            fontSize={RFPercentage(2)}>
+                            {item?.name}
+                          </JText>
+                        </JRow>
+                      </MenuOption>
+                    ))}
                   </MenuOptions>
                 </Menu>
               ) : (
@@ -396,8 +391,7 @@ const jobTitle = encodeURIComponent(item?.job_title || "");
                 }}
                 color={colors.purple[0]}
               />
-            ) : (
-              star===true?
+            ) : star === true ? (
               <MaterialCommunityIcons
                 onPress={() => {
                   _saveToFavoriteList(store, setLoader, jobId);
@@ -416,8 +410,8 @@ const jobTitle = encodeURIComponent(item?.job_title || "");
                 }
                 size={RFPercentage(3)}
                 color={colors.purple[0]}
-              />:null
-            )}
+              />
+            ) : null}
             {option == true && (
               // <Menu
               //   style={{
@@ -451,16 +445,15 @@ const jobTitle = encodeURIComponent(item?.job_title || "");
               //   </MenuOptions>
               // // </Menu>
               <JRow
-              onPress={()=>{
-                // JToast({
-                //   type: 'success',
-                //   text1: 'Icon pressd',
-                // })
-                shareItem()
-              }}
-             disabled={false}
+                onPress={() => {
+                  // JToast({
+                  //   type: 'success',
+                  //   text1: 'Icon pressd',
+                  // })
+                  shareItem();
+                }}
+                disabled={false}
                 style={{
-
                   width: RFPercentage(5),
                   height: RFPercentage(4),
                   alignItems: 'center',
@@ -469,8 +462,12 @@ const jobTitle = encodeURIComponent(item?.job_title || "");
                   right: store.lang.id == 0 ? 0 : null,
                   top: 2,
                 }}>
-                 
-                <JIcon   icon="io" name={'share-social-outline'} size={25} color={colors.purple[0]} />
+                <JIcon
+                  icon="io"
+                  name={'share-social-outline'}
+                  size={25}
+                  color={colors.purple[0]}
+                />
               </JRow>
             )}
           </View>
@@ -478,9 +475,7 @@ const jobTitle = encodeURIComponent(item?.job_title || "");
             <SafeAreaView style={styles.container}>
               <View style={styles.modal}>
                 <JText style={styles.header}>{store.lang.attention}</JText>
-                <JText style={styles.msg}>
-                  {store.lang.areYouSure}
-                </JText>
+                <JText style={styles.msg}>{store.lang.areYouSure}</JText>
                 <JRow style={{justifyContent: 'space-between'}}>
                   <JButton
                     onPress={() => setModalVisible(false)}
@@ -527,7 +522,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: RFPercentage(2),
     justifyContent: 'space-between',
-    shadowColor: '#000',  
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -541,6 +536,5 @@ const styles = StyleSheet.create({
     fontSize: RFPercentage(2),
     marginVertical: RFPercentage(0.5),
     paddingHorizontal: RFPercentage(1),
-    
   },
 });

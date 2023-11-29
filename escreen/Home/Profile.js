@@ -4,6 +4,7 @@ import {
   View,
   ActivityIndicator,
   Pressable,
+  Platform,
 } from 'react-native';
 import React, {useEffect, useState, useContext} from 'react';
 import JScreen from '../../customComponents/JScreen';
@@ -73,7 +74,7 @@ const Profile = () => {
           borderColor: colors.border[0],
           borderWidth: RFPercentage(0.2),
           padding: RFPercentage(1),
-          marginVertical: RFPercentage(2),
+          marginVertical: RFPercentage(1),
         }}>
         {children}
       </View>
@@ -268,9 +269,7 @@ const Profile = () => {
                     text={
                       profile?.company[0]?.contact_information?.phone_number &&
                       profile?.company[0]?.contact_information?.regional_code
-                        ? profile?.company[0]?.contact_information
-                            ?.regional_code +
-                          profile?.company[0]?.contact_information?.phone_number
+                        ? `${profile?.company[0]?.contact_information?.regional_code} ${profile?.company[0]?.contact_information?.phone_number}`
                         : 'N/A'
                     }
                   />
@@ -531,7 +530,7 @@ const Profile = () => {
                               style={{marginHorizontal: RFPercentage(1)}}
                             />
 
-                            <JText fontWeight="600" fontSize={RFPercentage(2)}>
+                            <JText fontWeight={Platform.OS=='ios'?'500':'600'} fontSize={RFPercentage(2)}>
                               {store.lang.facebook}
                             </JText>
                           </JRow>

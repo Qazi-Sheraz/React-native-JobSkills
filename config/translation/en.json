@@ -644,7 +644,9 @@
 "Tap_Sign_in_with_apple":"Select the app or developer, then tap Stop Using Apple ID",
 "user_signup_successfully":"User Signup Successfully",
 "missing_attributes_from_the_candidate_profile":"Missing attributes from the candidate profile",
-"you_are_not_connected":"Look like you are lost! May be you are not connected to the internet."
+"you_are_not_connected":"Look like you are lost! May be you are not connected to the internet.",
+"version":"Version"
+
 
 
 

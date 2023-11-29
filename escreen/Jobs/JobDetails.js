@@ -161,7 +161,7 @@ const JobDetails = ({route}) => {
             text1: store.lang.success,
             text2: result.message,
           });
-          
+
           setModalVisible(!modalVisible);
           //  console.log(values)
         } else {
@@ -170,7 +170,7 @@ const JobDetails = ({route}) => {
             text1: store.lang.eror,
             text2: result.message,
           });
-          
+
           setModalVisible(!modalVisible);
         }
       })
@@ -540,11 +540,11 @@ const JobDetails = ({route}) => {
               </JText>
 
               <JText style={{fontSize: RFPercentage(1.8), color: '#ffff'}}>
-                {'\r'}
-                {store.lang.date_posted}{' '}
-                {moment(store.jobDetail.job_publish_date, 'DD-MM-YYYY').format(
+                {`${store.lang.date_posted} ${moment(
+                  store.jobDetail.job_publish_date,
                   'DD-MM-YYYY',
-                )}
+                ).format('DD-MM-YYYY')}`}
+               
               </JText>
             </JRow>
             <JRow>
@@ -605,18 +605,15 @@ const JobDetails = ({route}) => {
                 <Calendar />
 
                 <JText style={styles.txt}>
-                  {store.lang.expire_on}{' '}
-                  {moment(
-                    store.jobDetail?.job_expiry_date,
-                    'DD-MM-YYYY',
-                  ).format('DD-MM-YYYY')}
+                  {`${store.lang.expire_on} ${moment(store.jobDetail?.job_expiry_date,'DD-MM-YYYY',).format('DD-MM-YYYY')}`}
                 </JText>
               </JRow>
               <JText style={styles.txt}>
-                {jobCount?.jobCount}{' '}
-                {jobCount?.jobCount == 1
-                  ? store.lang.open_job
-                  : store.lang.open_jobs}
+                {`${jobCount?.jobCount} ${
+                  jobCount?.jobCount == 1
+                    ? store.lang.open_job
+                    : store.lang.open_jobs
+                }`}
               </JText>
             </JRow>
           </View>
@@ -1022,9 +1019,9 @@ const JobDetails = ({route}) => {
                           // console.log(e)
                         }}
                       />
-                    {touched.phone && errors.phone && (
-                      <JErrorText>{errors.phone}</JErrorText>
-                    )}
+                      {touched.phone && errors.phone && (
+                        <JErrorText>{errors.phone}</JErrorText>
+                      )}
                     </View>
                     <JRow style={{marginTop: RFPercentage(1)}}>
                       <JText fontSize={RFPercentage(2.5)}>

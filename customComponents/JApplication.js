@@ -38,7 +38,6 @@ import JSelectInput from './JSelectInput';
 import {_jobApplication} from '../escreen/Jobs/JobApplication';
 import JErrorText from './JErrorText';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-// import url from '../../config/url';
 const JApplication = ({
   onPress,
   routeItem,
@@ -169,7 +168,7 @@ formdata.append('office_location', values?.office_location);
           setUpdate(!update);
           JToast({
             type: 'success',
-            text1: 'Success!',
+            text1: store.lang.success,
             text2: result.message,
           });
           setBtnLoader(false);
@@ -398,14 +397,11 @@ formdata.append('office_location', values?.office_location);
             paddingVertical: RFPercentage(1),
           }}>
           <View>
-            <JText style={styles.txt}>
-              {store.lang.apply_date}{' '}
-              {moment(item.apply_date, 'DD-MM-YYYY').format('DD MMM,YYYY')}
+            <JText style={styles.txt}>{moment(item.apply_date, 'DD-MM-YYYY').format('DD MMM,YYYY')}
             </JText>
             <JRow>
               <JText style={styles.txt}>
-                {store.lang.fit_score}{' '}
-                {item.fit_score == null ? 'N/A' : item.fit_score}{' '}
+                {`${store.lang.fit_score} ${item.fit_score == null ? 'N/A' : item.fit_score} `}
               </JText>
               <JIcon
                 onPress={onPress}
@@ -465,7 +461,7 @@ formdata.append('office_location', values?.office_location);
                   {store.lang.interview_date} :
                 </JText>
                 <JText style={styles.date}>
-                  {moment(details).format('YYYY/MM/DD')}
+                  {moment(details).format('DD MMM,YYYY')}
                 </JText>
 
                 <JText style={styles.headers}>
@@ -596,9 +592,7 @@ formdata.append('office_location', values?.office_location);
                     date1={currentDate}
                     minimumDate={currentDate}
                     containerStyle={{marginTop: RFPercentage(2)}}
-                    value={moment(values.interview_date_and_time).format(
-                      'YYYY/MM/DD HH:mm',
-                    )}
+                    value={moment(values.interview_date_and_time).format('YYYY/MM/DD HH:mm')}
                     setValue={e => {
                       setFieldValue('interview_date_and_time', e);
                     }}
@@ -780,7 +774,6 @@ formdata.append('office_location', values?.office_location);
                       <JErrorText>{errors.manual_link}</JErrorText>
                     )
                   )}
-
                   <JRow
                     style={{
                       justifyContent: 'flex-end',

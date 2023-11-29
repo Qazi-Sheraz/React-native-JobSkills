@@ -31,15 +31,7 @@ export default function JProfileContent({src, name, email, jd}) {
 
   const _uploadImage = async ({resUri, image}) => {
     setLoader(true);
-    // console.log('image', image);
-    // console.log('singleFileApi',singleFile)
-    // const fileUrl = `file://${res?.path}`.replace('.jpg', '.JPG');
-    // const uri = resUri
-    //   ? resUri
-    //   : Platform.OS=='ios' && image
-    //   ? image?.sourceURL
-    //   : image?.path;
-    // console.log('uri', uri);
+    
     var myHeaders = new Headers();
     myHeaders.append('Authorization', `Bearer ${store.token?.token}`);
     var formdata = new FormData();
@@ -73,7 +65,7 @@ export default function JProfileContent({src, name, email, jd}) {
           _getProfile(store);
         JToast({
           type: 'success',
-          text1: result.message,
+          text1: result?.message,
         });
         setLoader(false);
       })
@@ -94,25 +86,18 @@ export default function JProfileContent({src, name, email, jd}) {
       },
       response => {
         // Check if the user selected an image
-        console.log('Image Path: ', response?.assets[0]?.originalPath);
-            console.log('Image Size: ', response?.assets[0]?.fileSize);
-            console.log('Image sourceURL: ', response?.assets[0]?.uri);
-            console.log('Image type: ',response?.assets[0]?.type);
-            console.log('Image filename: ', response?.assets[0]?.fileName);
-        if (response.didCancel) {
-          console.log('Image selection cancelled');
-        } else if (response?.error) {
-          console.log('ImagePicker Error: ', response.error);
+        // console.log('Image Path: ', response.didCancel);
+        //     console.log('Image Size: ', response.assets[0]?.fileSize);
+        //     console.log('Image sourceURL: ', response.assets[0]?.uri);
+        //     console.log('Image type: ',response.assets[0]?.type);
+        //     console.log('Image filename: ', response.assets[0]?.fileName);
+        if (response?.didCancel==true) {
+          console.log('Image selection cancelled',response.didCancel);
+        } else if (response.errorCode) {
+          console.log('ImagePicker Error: ', response.errorMessage);
         } else if (response?.assets[0]?.fileSize <= 500000) {
-          // console.log('Selected Image URI: ', response.assets[0]);
-
-          // const imageDate = response.assets[0]?.base64;
-          // const imagePath = `${RNFS.TemporaryDirectoryPath}image.jpg`;
-
-          // RNFS.writeFile(imagePath, imageDate, 'base64').then(() =>''
-          //   // console.log('Image converted to jpg and saved at ' + imagePath),
-          // );
-          _uploadImage({resUri: null, image: response.assets[0]});
+        
+          _uploadImage({resUri: null, image: response?.assets[0]});
         // } else if (response?.assets[0]?.fileSize > 2097152) {
         } else if (response?.assets[0]?.fileSize > 500000) {
           console.log(response?.assets[0]?.fileSize)

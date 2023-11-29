@@ -241,7 +241,7 @@ function CGeneralInformation({refRBSheet, data, user}) {
                   />
                 ) : (
                   <JText
-                    onPress={() => isValid && handleSubmit()}
+                    onPress={() => handleSubmit()}
                     fontColor={
                       !isValid ? `${colors.white[0]}70` : colors.white[0]
                     }>

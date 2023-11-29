@@ -254,7 +254,7 @@ const ECompanyInformation = () => {
                   <JText
                     disabled={!isValid || loader1 ? true : false}
                     onPress={() => {
-                      isValid && handleSubmit();
+                      handleSubmit();
                     }}
                     fontColor={
                       !isValid ? `${colors.white[0]}70` : colors.white[0]

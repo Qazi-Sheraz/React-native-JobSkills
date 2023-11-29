@@ -11,6 +11,7 @@ import { useContext } from 'react'
 import { StoreContext } from '../mobx/store'
 import { observer } from 'mobx-react-lite'
 import JIcon from './JIcon'
+
 const JMeetingJob = ({item,startonPress,onPress}) => {
   const store = useContext(StoreContext);
   return (
@@ -42,7 +43,7 @@ const JMeetingJob = ({item,startonPress,onPress}) => {
           <JIcon icon={'ev'} name="calendar" size={RFPercentage(2.5)} />
 
           <JText style={{marginHorizontal: RFPercentage(0.5)}}>
-            {`${moment(item.start_date_and_time).format('DD MMM,YYYY')} ${moment(item.start_date_and_time).format('HH:mm')} ${item.meridiem}`}
+           {`${moment(item.start_date_and_time).format('DD MMM,YYYY')} ${moment(item.start_date_and_time).format('HH:mm A')}`}
           </JText>
          
         </JRow>

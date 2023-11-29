@@ -13,9 +13,9 @@ import {v4 as uuid} from 'uuid';
 import 'react-native-get-random-values';
 import url from '../../config/url';
 import {JToast} from '../../functions/Toast';
-
 import RNRestart from 'react-native-restart';
-
+import moment from 'moment';
+import 'moment/min/moment-with-locales'
 export async function _appleAndroidAuth({store, _appleAccess}) {
   // Generate secure, random values for state and nonce
   // Generate secure, random values for state and nonce
@@ -160,7 +160,7 @@ export const _changeLanguage = ({store, selectedLanguage, token, src}) => {
 
   var formdata = new FormData();
   formdata.append('languageName', selectedLanguage);
-  // console.log(formdata);
+  console.log(formdata);
   fetch(`${url.baseUrl}/change-language`, {
     method: 'POST',
     headers: myHeaders,
@@ -170,6 +170,8 @@ export const _changeLanguage = ({store, selectedLanguage, token, src}) => {
     .then(response => response.json())
     .then(result => {
       if (result.success == true && src == 1) { 
+        // moment.locale('ar');
+        //  moment().format("ll");
           JToast({
             type: 'success',
             // text1: store.lang.success,

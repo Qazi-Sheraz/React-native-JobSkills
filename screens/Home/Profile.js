@@ -96,20 +96,23 @@ function Profile({navigation}) {
         />
       }>
       <>
-      {console.log('profilenumber',store.myProfile?.user[0]?.contact_information?.mobile_number)}
-      {console.log('usercode',store.myProfile?.user[0]?.contact_information?.region_code)}
+        {/* {console.log('profilenumber',store.myProfile?.user[0]?.contact_information?.mobile_number)}
+      {console.log('usercode',store.myProfile?.user[0]?.contact_information?.region_code)} */}
 
         <JProfileContent
           name={
             store.myProfileApiLoader === false &&
-            `${store.myProfile?.user[0]?.general_information?.first_name} `
-            +`${store.myProfile?.user[0]?.general_information?.last_name == null ?'' :store.myProfile?.user[0]?.general_information?.last_name }`
+            `${store.myProfile?.user[0]?.general_information?.first_name} ` +
+              `${
+                store.myProfile?.user[0]?.general_information?.last_name == null
+                  ? ''
+                  : store.myProfile?.user[0]?.general_information?.last_name
+              }`
           }
           // email={store.token.user.email}
           // src={store.myProfile?.user[0]?.profile_picture?.avatar}
-        
-          src={store.token?.user?.avatar
-          }
+
+          src={store.token?.user?.avatar}
         />
 
         <JScrollView
@@ -154,15 +157,20 @@ function Profile({navigation}) {
                     title={`${store.lang.phone_number}:`}
                     text={
                       store.myProfile?.user[0]?.contact_information
-                        ?.mobile_number !== null &&
-                      store.myProfile?.user[0]?.contact_information
-                        ?.region_code !== null
-                        ? store.myProfile?.user[0]?.contact_information
-                            ?.region_code +
-                          store.myProfile?.user[0]?.contact_information
-                            ?.mobile_number
+                        ?.mobile_number &&
+                      store.myProfile?.user[0]?.contact_information?.region_code
+                        ? `${store.myProfile?.user[0]?.contact_information?.region_code} ${store.myProfile?.user[0]?.contact_information?.mobile_number}`
                         : 'N/A'
                     }
+                    // text={
+                    //   store.myProfile?.user[0]?.contact_information?.mobile_number && store.myProfile?.user[0]?.contact_information?.region_code
+                    //     ? `${store.lang.id == 0
+                    //       ? store.myProfile?.user[0]?.contact_information?.region_code
+                    //       : convertToArabicNumeric(store.myProfile?.user[0]?.contact_information?.region_code)} ${store.lang.id == 0
+                    //         ? store.myProfile?.user[0]?.contact_information?.mobile_number
+                    //         : convertToArabicNumeric(store.myProfile?.user[0]?.contact_information?.mobile_number)}`
+                    //     : 'N/A'
+                    // }
                   />
                 </BorderView>
               )
@@ -236,10 +244,7 @@ function Profile({navigation}) {
                       (store.myProfile?.user[0]?.general_information
                         ?.date_of_birth == null
                         ? 'N/A'
-                        : moment(
-                            store.myProfile?.user[0]?.general_information
-                              ?.date_of_birth,
-                          ).format('MMM,DD YYYY'))
+                        : moment(store.myProfile?.user[0]?.general_information?.date_of_birth).format('DD MMM YYYY'))
                     }
                   />
                   <JProfileInfo
@@ -639,17 +644,18 @@ function Profile({navigation}) {
                             }}
                             style={{marginBottom: RFPercentage(2)}}>
                             <JRow>
-                            <Twitterx  height={RFPercentage(2.5)}
-                              width={RFPercentage(2.5)}
-                              style={{marginHorizontal: RFPercentage(0.7)}}/>
+                              <Twitterx
+                                height={RFPercentage(2.5)}
+                                width={RFPercentage(2.5)}
+                                style={{marginHorizontal: RFPercentage(0.7)}}
+                              />
 
                               <JText
-                              style={{
-                                marginHorizontal:RFPercentage(0.5),
-                                fontWeight:"600",
-                                fontSize:RFPercentage(2)
-                              }}
-                                >{`X (${store.lang.twitter})`}</JText>
+                                style={{
+                                  marginHorizontal: RFPercentage(0.5),
+                                  fontWeight: '600',
+                                  fontSize: RFPercentage(2),
+                                }}>{`X (${store.lang.twitter})`}</JText>
                             </JRow>
                             <JText
                               fontWeight="600"

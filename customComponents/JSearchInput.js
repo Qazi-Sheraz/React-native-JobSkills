@@ -25,16 +25,15 @@ import { Observer, observer } from 'mobx-react';
   return length > 0 ? (
     
     <JShadowView
-      shadowColor={colors.purple[0]}
+      shadowColor={'#3C3C43'}
       containerStyle={[
         {
           height: heightPercentageToDP(6),
           marginVertical: RFPercentage(2),
           backgroundColor: colors.white[0],
           borderWidth: RFPercentage(0.1),
-          borderColor: `${colors.purple[0]}50`,
+          borderColor: `${'#3C3C43'}50`,
           paddingHorizontal: RFPercentage(1),
-          
           
         },
         containerStyle,

@@ -119,7 +119,7 @@ function CSkills({data}) {
                 />
               ) : (
                 <JText
-                  onPress={() => isValid && handleSubmit(values)}
+                  onPress={() => handleSubmit(values)}
                   fontColor={
                     !isValid ? `${colors.white[0]}70` : colors.white[0]
                   }>

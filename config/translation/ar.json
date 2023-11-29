@@ -321,7 +321,7 @@
     "applied_job": "الوظيفة التطبيقية",
     "followings": "أتباع",
     "following_company": "الشركة التالية",
-    "favourite_job": "الوظيفةالمفضلة",
+    "favourite_job": "الوظيفة المفضلة",
     "favourite": "المفضلة",
     "is_default": "افتراضي",
     "my_profile": "ملفي",
@@ -636,7 +636,8 @@
 "Tap_Sign_in_with_apple":"حدد التطبيق أو المطور، ثم اضغط على 'إيقاف استخدام Apple ID'.",
 "user_signup_successfully":"تم تسجيل المستخدم بنجاح",
 "missing_attributes_from_the_candidate_profile":"السمات المفقودة من الملف الشخصي للمرشح",
-"you_are_not_connected":"تبدو وكأنك ضائعة! ربما أنت غير متصل بالإنترنت."
+"you_are_not_connected":"تبدو وكأنك ضائعة! ربما أنت غير متصل بالإنترنت.",
+"version":"إصدار"
 
 
 
